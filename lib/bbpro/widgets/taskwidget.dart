@@ -336,7 +336,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                                         fontSize: 13,
                                         color: widget
                                             .project.status.backgroundColor
-                                            .withOpacity(1.0),
+                                            .withValues(alpha: 1.0),
                                         fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(
@@ -346,7 +346,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                                     'assets/svgs/dropdown.svg',
                                     colorFilter: ColorFilter.mode(
                                         widget.project.status.backgroundColor
-                                            .withOpacity(1.0),
+                                            .withValues(alpha: 1.0),
                                         BlendMode.srcIn),
                                   )
                                 ]),

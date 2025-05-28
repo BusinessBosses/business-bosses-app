@@ -110,28 +110,28 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                          Container(
-                            width: 25.0,
-                            height: 25.0,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: const BoxDecoration(
-                            color: Colors.transparent,
-                            shape: BoxShape.circle,
+                            Container(
+                              width: 25.0,
+                              height: 25.0,
+                              clipBehavior: Clip.antiAlias,
+                              decoration: const BoxDecoration(
+                                color: Colors.transparent,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Image.asset(
+                                'assets/images/app_logo_2.png',
+                                height: 40,
+                              ),
                             ),
-                            child: Image.asset(
-                            'assets/images/app_logo_2.png',
-                            height: 40,
+                            const SizedBox(
+                              width: 5,
                             ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          if (widget.isForyou == true)
-                            const Text(
-                            'Boss of the week',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900, fontSize: 20),
-                            ),
+                            if (widget.isForyou == true)
+                              const Text(
+                                'Boss of the week',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w900, fontSize: 20),
+                              ),
                           ],
                         ),
                         if (widget.isForyou == true)
@@ -817,7 +817,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
               children: <Widget>[
                 CircleAvatar(
                     radius: 48 / 2,
-                    backgroundColor: primaryColorLT.withOpacity(0.1),
+                    backgroundColor: primaryColorLT.withValues(alpha: 0.1),
                     child: SvgPicture.asset(
                       'assets/app/app_icon_only.svg',
                     )),

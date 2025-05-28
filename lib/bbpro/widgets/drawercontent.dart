@@ -483,8 +483,8 @@ class DrawerContent extends StatelessWidget {
                                                                       ? 30
                                                                       : 22,
                                                               color: textColor
-                                                                  .withOpacity(
-                                                                      1),
+                                                                  .withValues(
+                                                                      alpha: 1),
                                                             ),
                                                   title: Text(
                                                     index == 0

@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                           'Free Promotion App - Sell, Network & Grow Globally',
                           style: TextStyle(
                               fontSize: 14,
-                              color: textColor.withOpacity(0.8),
+                              color: textColor.withValues(alpha: 0.8),
                               fontWeight: FontWeight.w700)),
                     )
                   ],
@@ -70,7 +70,8 @@ class LoginScreen extends StatelessWidget {
                           height: 6,
                         ),
                         CircleAvatar(
-                          backgroundColor: primaryColorLT,                         radius: 3,
+                          backgroundColor: primaryColorLT,
+                          radius: 3,
                         )
                       ],
                     ),

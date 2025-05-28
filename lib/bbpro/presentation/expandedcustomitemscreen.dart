@@ -59,7 +59,7 @@ class _ExpandedCustomItemScreenState extends State<ExpandedCustomItemScreen> {
                                         ? 'You will see posts and comments related to user on your feed'
                                         : 'You will no longer see undefined posts and comments on your feed',
                                     centralize: true,
-                                    color: Colors.black.withOpacity(.6),
+                                    color: Colors.black.withValues(alpha: .6),
                                   ),
                                   actions: <Widget>[
                                     TextButton(
@@ -148,7 +148,7 @@ class _ExpandedCustomItemScreenState extends State<ExpandedCustomItemScreen> {
                                     text:
                                         'The user will be reported to admin to evaluate if it violates any community policy',
                                     centralize: true,
-                                    color: Colors.black.withOpacity(.6),
+                                    color: Colors.black.withValues(alpha: .6),
                                   ),
                                   actions: <Widget>[
                                     TextButton(

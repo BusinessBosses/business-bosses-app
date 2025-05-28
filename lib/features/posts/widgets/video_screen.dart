@@ -211,7 +211,7 @@ class _VideoScreenState extends State<VideoScreen> {
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
-                        color: Colors.black.withOpacity(.3)),
+                        color: Colors.black.withValues(alpha: .3)),
                     child: const Icon(
                       Icons.arrow_back,
                       color: Colors.white,
@@ -229,7 +229,7 @@ class _VideoScreenState extends State<VideoScreen> {
                 onDoubleTap: onLikeTap,
                 child: Container(
                   padding: const EdgeInsets.all(10),
-                  color: const Color(0XFF000000).withOpacity(.3),
+                  color: const Color(0XFF000000).withValues(alpha: .3),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -319,7 +319,7 @@ class _VideoScreenState extends State<VideoScreen> {
           //   // bottom: 10,
           //   child: Container(
           // padding: const EdgeInsets.all(20),
-          // color: const Color(0xFFCBC3BC).withOpacity(.3),
+          // color: const Color(0xFFCBC3BC).withValues(alpha: .3),
           //     child: Column(
           //       children: [
           // MyPostItemText(

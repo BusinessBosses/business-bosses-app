@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../navigation/routes.dart';
-import '../../../services/api_service.dart';
+// import '../../../services/api_service.dart';
 
 /// Initialize Auth controller
 class AuthController extends GetxController {
@@ -22,11 +22,11 @@ class AuthController extends GetxController {
   // ignore: unused_field
   final GlobalKey<State> _key = GlobalKey<State>();
 
-  final ApiService _apiService = ApiService();
+  // final ApiService _apiService = ApiService();
 
   int randomNumber = Random().nextInt(9000) + 1000;
 
-  String? _authCred, _password, _authusername;
+  // String? _authCred, _password, _authusername;
 
   static bool isValidEmail(String email) {
     if (email.isEmpty) return false;
@@ -198,26 +198,26 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<dynamic> _handleLogin() async {
-    dynamic user = await _apiService.googleLogin(
-      _authCred!,
-      _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
-    );
-    return user;
-  }
+  // Future<dynamic> _handleLogin() async {
+  //   dynamic user = await _apiService.googleLogin(
+  //     _authCred!,
+  //     _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
+  //   );
+  //   return user;
+  // }
 
-  Future<dynamic> _handleRegister() async {
-    if (emailValidatorExists(_authCred!, isUnique: false)) {
-      _handleLogin();
-    } else {
-      dynamic user = await _apiService.register(
-          _authCred!,
-          _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
-          _authusername!,
-          '');
-      return user;
-    }
-  }
+  // Future<dynamic> _handleRegister() async {
+  //   if (emailValidatorExists(_authCred!, isUnique: false)) {
+  //     _handleLogin();
+  //   } else {
+  //     dynamic user = await _apiService.register(
+  //         _authCred!,
+  //         _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
+  //         _authusername!,
+  //         '');
+  //     return user;
+  //   }
+  // }
 
   Future<void> logEvents(dynamic event, dynamic method) async {
     await FirebaseAnalytics.instance.logEvent(

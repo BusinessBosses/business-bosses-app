@@ -623,7 +623,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                             fontSize: 13,
                                             color: widget
                                                 .order.status.backgroundColor
-                                                .withOpacity(1.0),
+                                                .withValues(alpha: 1.0),
                                             fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(
@@ -633,7 +633,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                         'assets/svgs/dropdown.svg',
                                         colorFilter: ColorFilter.mode(
                                             widget.order.status.backgroundColor
-                                                .withOpacity(1.0),
+                                                .withValues(alpha: 1.0),
                                             BlendMode.srcIn),
                                       )
                                     ]),

@@ -130,7 +130,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                           boxShadow: <BoxShadow>[
                                             BoxShadow(
                                               color: Colors.black
-                                                  .withOpacity(0.03),
+                                                  .withValues(alpha: 0.03),
                                               blurRadius: 50.0,
                                               spreadRadius: 0.0,
                                             ),

@@ -176,7 +176,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: <Color>[Colors.white, Colors.white.withOpacity(0.2)],
+                colors: <Color>[
+                  Colors.white,
+                  Colors.white.withValues(alpha: 0.2)
+                ],
               ),
             ),
           ),

@@ -141,7 +141,7 @@ class HomeController extends GetxController {
           ),
           content: TextWidget(
             text: notificationDescription,
-            color: Colors.black.withOpacity(.8),
+            color: Colors.black.withValues(alpha: .8),
           ),
           actions: <Widget>[
             TextButton(
@@ -819,7 +819,7 @@ class HomeController extends GetxController {
         ),
         content: TextWidget(
           text: 'You have earned 1 coin for logging into Business Bosses today',
-          color: Colors.black.withOpacity(.8),
+          color: Colors.black.withValues(alpha: .8),
         ),
         actions: <Widget>[
           TextButton(
@@ -847,7 +847,7 @@ class HomeController extends GetxController {
         content: TextWidget(
           text:
               'You have earned 100 coins for upgrading your Business Bosses App',
-          color: Colors.black.withOpacity(.8),
+          color: Colors.black.withValues(alpha: .8),
         ),
         actions: <Widget>[
           TextButton(

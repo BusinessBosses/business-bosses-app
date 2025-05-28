@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,27 +17,27 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
   final OrderController orderController = Get.put(OrderController());
   final ShopController shopController = Get.find();
 
-  String _formatNumber(int number) {
-    if (number >= 1000) {
-      double numberInK = number / 1000;
-      if (numberInK >= 1000) {
-        return '${(numberInK / 1000).toStringAsFixed(1)}K';
-      } else {
-        return '${numberInK.toStringAsFixed(1)}K';
-      }
-    } else {
-      return number.toString();
-    }
-  }
+  // String _formatNumber(int number) {
+  //   if (number >= 1000) {
+  //     double numberInK = number / 1000;
+  //     if (numberInK >= 1000) {
+  //       return '${(numberInK / 1000).toStringAsFixed(1)}K';
+  //     } else {
+  //       return '${numberInK.toStringAsFixed(1)}K';
+  //     }
+  //   } else {
+  //     return number.toString();
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
   }
 
-  void _navigateToOrders() {
-    Bottomnavscreen.of(context)?.onTabTapped(2);
-  }
+  // void _navigateToOrders() {
+  //   Bottomnavscreen.of(context)?.onTabTapped(2);
+  // }
 
   @override
   Widget build(BuildContext context) {

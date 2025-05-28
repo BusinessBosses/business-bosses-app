@@ -59,7 +59,7 @@ class _SettingsItemState extends State<SettingsItem> {
                                 width: 48.0,
                                 padding: 3,
                                 activeColor: Theme.of(context).primaryColor,
-                                inactiveColor: iconColor.withOpacity(0.4),
+                                inactiveColor: iconColor.withValues(alpha: 0.4),
                                 value: widget.switchValue,
                                 onToggle: (_) {
                                   setState(() {
@@ -69,7 +69,7 @@ class _SettingsItemState extends State<SettingsItem> {
                           )
                         : Icon(
                             Icons.keyboard_arrow_right,
-                            color: textColor.withOpacity(0.8),
+                            color: textColor.withValues(alpha: 0.8),
                           ),
                   ),
                 ),

@@ -91,7 +91,7 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                                 .bodyMedium
                                 ?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(1),
+                                    color: textColor.withValues(alpha: 1),
                                     fontSize: 9),
                           ),
                         ],
@@ -142,7 +142,7 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: textColor.withOpacity(0.8)),
+                      color: textColor.withValues(alpha: 0.8)),
                 ),
                 widget.myProfile.companyName != null &&
                         widget.myProfile.companyName != ''
@@ -153,8 +153,8 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.normal,
-                            color: textColor.withOpacity(
-                              0.8,
+                            color: textColor.withValues(
+                              alpha: 0.8,
                             )),
                       )
                     : Container(),
@@ -165,7 +165,7 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: textColor.withOpacity(0.6),
+                              color: textColor.withValues(alpha: 0.6),
                             ),
                       )
                     : Container(),

@@ -1,4 +1,3 @@
-
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profile_picture_display.dart';
@@ -88,7 +87,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                       'Boss of the week',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(1),
+                            color: textColor.withValues(alpha: 1),
                             fontSize: 9,
                           ),
                     ),
@@ -150,7 +149,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: textColor.withOpacity(0.8)),
+                          color: textColor.withValues(alpha: 0.8)),
                     ),
                     widget.myProfile.companyName != null &&
                             widget.myProfile.companyName != ''
@@ -161,8 +160,8 @@ class _UserProfileTileState extends State<UserProfileTile> {
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.normal,
-                                color: textColor.withOpacity(
-                                  0.8,
+                                color: textColor.withValues(
+                                  alpha: 0.8,
                                 )),
                           )
                         : Container(),
@@ -176,7 +175,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                                  color: textColor.withOpacity(0.6),
+                                  color: textColor.withValues(alpha: 0.6),
                                 ),
                           )
                         : Container(),
@@ -189,7 +188,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.09),
+                              color: Colors.black.withValues(alpha: 0.09),
                               blurRadius: 500.0,
                               spreadRadius: 0.0,
                             ),

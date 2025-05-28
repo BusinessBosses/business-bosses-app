@@ -639,9 +639,9 @@ class _PostTileState extends State<PostTile> {
                                 userVotedOptionId: selectedVote,
                                 pollOptionsSplashColor: Colors.grey,
                                 votedProgressColor:
-                                    Colors.grey.withOpacity(0.3),
+                                    Colors.grey.withValues(alpha: 0.3),
                                 votedBackgroundColor:
-                                    Colors.grey.withOpacity(0.2),
+                                    Colors.grey.withValues(alpha: 0.2),
                                 pollOptions: pollOptions,
                                 votedCheckmark: const Icon(
                                   Icons.check_circle,
@@ -1090,8 +1090,9 @@ class _PostTileState extends State<PostTile> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
                                   color: const Color.fromARGB(255, 0, 0, 0)
-                                      .withOpacity(
-                                          0.5), // Adjust the opacity as needed
+                                      .withValues(
+                                          alpha:
+                                              0.5), // Adjust the opacity as needed
                                 ),
                               ),
                             ),
@@ -1271,7 +1272,7 @@ class _PostTileState extends State<PostTile> {
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
+                                    color: textColor.withValues(alpha: 0.8),
                                   ),
                         ),
                       ),
@@ -1296,7 +1297,7 @@ class _PostTileState extends State<PostTile> {
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
+                                    color: textColor.withValues(alpha: 0.8),
                                   ),
                         ),
                       ),
@@ -1332,7 +1333,7 @@ class _PostTileState extends State<PostTile> {
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
+                                    color: textColor.withValues(alpha: 0.8),
                                   ),
                         ),
                       ),
@@ -1345,7 +1346,7 @@ class _PostTileState extends State<PostTile> {
                         formatCount(widget.post.views!),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(0.8),
+                              color: textColor.withValues(alpha: 0.8),
                             ),
                       ),
                     ),
@@ -1477,7 +1478,8 @@ class _PostTileState extends State<PostTile> {
                                                                 ? 18
                                                                 : 25,
                                                             color: textColor
-                                                                .withOpacity(1),
+                                                                .withValues(
+                                                                    alpha: 1),
                                                           ),
                                                           title: Text(
                                                             index == 0
@@ -1523,7 +1525,8 @@ class _PostTileState extends State<PostTile> {
                                         .textTheme
                                         .bodySmall
                                         ?.copyWith(
-                                          color: textColor.withOpacity(0.4),
+                                          color:
+                                              textColor.withValues(alpha: 0.4),
                                         ),
                                   ),
                                 )
@@ -1589,8 +1592,8 @@ class _PostTileState extends State<PostTile> {
                                                       ? 'assets/svgs/share.svg'
                                                       : 'assets/svgs/repost.svg',
                                                   height: index == 0 ? 18 : 25,
-                                                  color:
-                                                      textColor.withOpacity(1),
+                                                  color: textColor.withValues(
+                                                      alpha: 1),
                                                 ),
                                                 title: Text(
                                                   index == 0
@@ -1633,7 +1636,7 @@ class _PostTileState extends State<PostTile> {
                               : TimeFormat.formatString(widget.post.timestamp),
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: textColor.withOpacity(0.4),
+                                    color: textColor.withValues(alpha: 0.4),
                                   ),
                         ),
                       )
@@ -1685,7 +1688,7 @@ class _PostTileState extends State<PostTile> {
                       text:
                           'You will no longer see undefined posts and comments on your feed',
                       centralize: true,
-                      color: Colors.black.withOpacity(.6),
+                      color: Colors.black.withValues(alpha: .6),
                     ),
                     actions: <Widget>[
                       TextButton(
@@ -1749,7 +1752,7 @@ class _PostTileState extends State<PostTile> {
                       text:
                           'The post will be reported to admin to evaluate if it violates any community policy',
                       centralize: true,
-                      color: Colors.black.withOpacity(.6),
+                      color: Colors.black.withValues(alpha: .6),
                     ),
                     actions: <Widget>[
                       TextButton(

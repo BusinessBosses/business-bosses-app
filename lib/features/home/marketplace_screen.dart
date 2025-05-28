@@ -588,7 +588,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                 : 'assets/svgs/addclient.svg',
                                                             height: 25,
                                                             color: textColor
-                                                                .withOpacity(1),
+                                                                .withValues(
+                                                                    alpha: 1),
                                                           ),
                                                           title: Text(
                                                             index == 0
@@ -684,8 +685,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                     : 'assets/svgs/addservice.svg',
                                                                 height: 25,
                                                                 color: textColor
-                                                                    .withOpacity(
-                                                                        1),
+                                                                    .withValues(
+                                                                        alpha:
+                                                                            1),
                                                               ),
                                                               title: Text(
                                                                 index == 0
@@ -1047,7 +1049,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                           tabAlignment: TabAlignment.start,
                                           padding: EdgeInsets.zero,
                                           unselectedLabelColor:
-                                              textColor.withOpacity(0.8),
+                                              textColor.withValues(alpha: 0.8),
                                           labelStyle: const TextStyle(
                                               fontWeight: FontWeight.w400),
                                           controller: _marketplaceTabController,

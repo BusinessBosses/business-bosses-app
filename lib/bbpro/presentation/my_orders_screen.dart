@@ -37,31 +37,31 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
     filteredOrders = _marketController.orders;
   }
 
-  void _showFilterMenu(BuildContext context, Offset position) {
-    showMenu(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      context: context,
-      shadowColor: Colors.black,
-      position: RelativeRect.fromLTRB(position.dx, position.dy,
-          MediaQuery.of(context).size.width - position.dx, 0),
-      items: <String>[
-        'All Products',
-        'Low Stock',
-        'Out of Stock',
-        'Most Popular',
-        'Newest First',
-      ].map((String option) {
-        return PopupMenuItem<String>(
-          value: option,
-          child: Text(option),
-        );
-      }).toList(),
-    ).then((String? selected) {
-      if (selected != null) {
-        // Implement filter logic here
-      }
-    });
-  }
+  // void _showFilterMenu(BuildContext context, Offset position) {
+  //   showMenu(
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+  //     context: context,
+  //     shadowColor: Colors.black,
+  //     position: RelativeRect.fromLTRB(position.dx, position.dy,
+  //         MediaQuery.of(context).size.width - position.dx, 0),
+  //     items: <String>[
+  //       'All Products',
+  //       'Low Stock',
+  //       'Out of Stock',
+  //       'Most Popular',
+  //       'Newest First',
+  //     ].map((String option) {
+  //       return PopupMenuItem<String>(
+  //         value: option,
+  //         child: Text(option),
+  //       );
+  //     }).toList(),
+  //   ).then((String? selected) {
+  //     if (selected != null) {
+  //       // Implement filter logic here
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -251,7 +251,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium
-                          ?.copyWith(color: textColor.withOpacity(0.6)),
+                          ?.copyWith(color: textColor.withValues(alpha: 0.6)),
                     ),
                   ),
                   previousScreen == '/marketPlaceScreen'
@@ -1016,16 +1016,16 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   //   String chatRoomPath = '${Constants.CHAT_ROOMS}/$_chatRoomId';
   // }
 
-  Future<void> _sendNotification(MessageModel message) async {}
+  // Future<void> _sendNotification(MessageModel message) async {}
 
-  void _setLastMessage(MessageModel message) {}
+  // void _setLastMessage(MessageModel message) {}
 
-  void DeleteLastMessage(MessageModel message) {
-    // ignore: unused_local_variable
-    String senderPath = '${Constants.USERS_CHATS}/${message.senderUid}';
-  }
+  // void DeleteLastMessage(MessageModel message) {
+  //   // ignore: unused_local_variable
+  //   String senderPath = '${Constants.USERS_CHATS}/${message.senderUid}';
+  // }
 
-  Future<void> _readMessages() async {}
+  // Future<void> _readMessages() async {}
 
   Future<void> deleteChat() async {}
 

@@ -69,7 +69,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: <Color>[Colors.white, Colors.white.withOpacity(0.2)],
+                  colors: <Color>[
+                    Colors.white,
+                    Colors.white.withValues(alpha: 0.2)
+                  ],
                 ),
               ),
             ),
@@ -265,7 +268,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                             Divider(
                               height: 0.5,
-                              color: Colors.grey.withOpacity(0.3),
+                              color: Colors.grey.withValues(alpha: 0.3),
                             ),
                             Expanded(
                               child: ListView.builder(
@@ -283,7 +286,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                             horizontal: 15.0),
                                         child: Divider(
                                           height: 0.5,
-                                          color: Colors.grey.withOpacity(0.3),
+                                          color: Colors.grey
+                                              .withValues(alpha: 0.3),
                                         ),
                                       ),
                                     ],
@@ -530,7 +534,8 @@ class _ChatItemState extends State<ChatItem> {
                                           .textTheme
                                           .bodyMedium
                                           ?.copyWith(
-                                            color: textColor.withOpacity(0.8),
+                                            color: textColor.withValues(
+                                                alpha: 0.8),
                                           ),
                                     ),
                             ),

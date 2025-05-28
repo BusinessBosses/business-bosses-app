@@ -166,8 +166,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             caption: 'Boost Your Post',
                             subtext:
                                 'Reach a wider audience and get more views',
-                            color:
-                                Colors.grey.withOpacity(0.2), // Changed color
+                            color: Colors.grey
+                                .withValues(alpha: 0.2), // Changed color
                           ),
                         ),
                       ),
@@ -333,8 +333,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                               .textTheme
                                               .bodyMedium!
                                               .copyWith(
-                                                color:
-                                                    textColor.withOpacity(0.2),
+                                                color: textColor.withValues(
+                                                    alpha: 0.2),
                                               ),
                                         ),
                                       ),

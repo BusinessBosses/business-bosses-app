@@ -460,7 +460,8 @@ class _EventItemState extends State<EventItem> {
                                               height: 15.0,
                                               width: 15.0,
                                               // ignore: deprecated_member_use
-                                              color: textColor.withOpacity(1.0),
+                                              color: textColor.withValues(
+                                                  alpha: 1.0),
                                             ),
                                           ),
                                           backgroundColor: Colors.white,

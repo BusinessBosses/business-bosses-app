@@ -4,12 +4,12 @@ import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
 import 'package:business_bosses_v2/bbpro/widgets/menubutton.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/chat/ai_chat.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
@@ -91,7 +91,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: <Color>[Colors.white, Colors.white.withOpacity(0.2)],
+                colors: <Color>[
+                  Colors.white,
+                  Colors.white.withValues(alpha: 0.2)
+                ],
               ),
             ),
           ),

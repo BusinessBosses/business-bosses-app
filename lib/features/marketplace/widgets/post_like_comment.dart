@@ -50,7 +50,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
         body: Column(
           children: <Widget>[
             Material(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               child: TabBar(
                 tabs: <Widget>[
                   Tab(

@@ -110,8 +110,8 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                               text:
                                                   'You will no longer see Donations, posts and comments from this user on your feed',
                                               centralize: true,
-                                              color:
-                                                  Colors.black.withOpacity(.6),
+                                              color: Colors.black
+                                                  .withValues(alpha: .6),
                                             ),
                                             actions: <Widget>[
                                               TextButton(
@@ -204,8 +204,8 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                               text:
                                                   'The Donation will be reported to admin to evaluate if it violates any community policy',
                                               centralize: true,
-                                              color:
-                                                  Colors.black.withOpacity(.6),
+                                              color: Colors.black
+                                                  .withValues(alpha: .6),
                                             ),
                                             actions: <Widget>[
                                               TextButton(
@@ -573,7 +573,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                     //       child: Text(
                     //         TimeFormat.formatString(widget.market.timestamp),
                     //         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    //               color: textColor.withOpacity(0.4),
+                    //               color: textColor.withValues(alpha: 0.4),
                     //             ),
                     //       ),
                     //     ),
@@ -652,7 +652,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                         '${widget.market.likes?.length ?? 0}',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(0.8),
+                              color: textColor.withValues(alpha: 0.8),
                             ),
                       ),
                     ),
@@ -677,7 +677,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                         '${widget.market.comments?.length ?? 0}',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(0.8),
+                              color: textColor.withValues(alpha: 0.8),
                             ),
                       ),
                     ),
@@ -711,7 +711,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                   .bodyMedium
                                   ?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
+                                    color: textColor.withValues(alpha: 0.8),
                                   ),
                             ),
                           )
@@ -729,7 +729,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                       .bodyLarge
                                       ?.copyWith(
                                         fontWeight: FontWeight.w700,
-                                        color: textColor.withOpacity(0.8),
+                                        color: textColor.withValues(alpha: 0.8),
                                       ),
                                 ),
                               ],
@@ -743,7 +743,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                         formatCount(widget.market.views!),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(0.8),
+                              color: textColor.withValues(alpha: 0.8),
                             ),
                       ),
                     ),

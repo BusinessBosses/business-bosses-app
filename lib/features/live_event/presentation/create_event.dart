@@ -425,8 +425,8 @@ class _CreateEventState extends State<CreateEvent> {
                     child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle, // Make it a circle
-                        color: Colors.red
-                            .withOpacity(0.5), // Choose your desired color
+                        color: Colors.red.withValues(
+                            alpha: 0.5), // Choose your desired color
                       ),
                       child: IconButton(
                         icon: const Icon(

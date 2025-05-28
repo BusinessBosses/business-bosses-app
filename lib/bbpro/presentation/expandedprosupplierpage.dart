@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -95,7 +94,7 @@ class _FilterUsersState extends State<ExpandedProSuppliersPage> {
       children: <Widget>[
         widget.supplier.images.isEmpty
             ? CircleAvatar(
-                backgroundColor: Colors.grey.withOpacity(0.5),
+                backgroundColor: Colors.grey.withValues(alpha: 0.5),
                 radius: 64.0,
                 child: SvgPicture.asset('assets/svgs/person.svg'),
               )
@@ -114,35 +113,35 @@ class _FilterUsersState extends State<ExpandedProSuppliersPage> {
     );
   }
 
-  Future<void> _contactUs() async {
-    String? encodeQueryParameters(Map<String, String> params) {
-      return params.entries
-          .map((MapEntry<String, String> e) =>
-              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-          .join('&');
-    }
+  // Future<void> _contactUs() async {
+  //   String? encodeQueryParameters(Map<String, String> params) {
+  //     return params.entries
+  //         .map((MapEntry<String, String> e) =>
+  //             '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+  //         .join('&');
+  //   }
 
-    final Uri mailUrl = Uri(
-      scheme: 'mailto',
-      path: 'support@businessbosses.co.uk',
-      query: encodeQueryParameters(<String, String>{
-        'subject': 'Contact Business Bosses',
-      }),
-    );
+  //   final Uri mailUrl = Uri(
+  //     scheme: 'mailto',
+  //     path: 'support@businessbosses.co.uk',
+  //     query: encodeQueryParameters(<String, String>{
+  //       'subject': 'Contact Business Bosses',
+  //     }),
+  //   );
 
-    try {
-      if (await canLaunchUrl(mailUrl)) {
-        await launchUrl(mailUrl);
-      } else {
-        throw 'Could not launch $mailUrl';
-      }
-    } catch (e) {
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
-    }
-  }
+  //   try {
+  //     if (await canLaunchUrl(mailUrl)) {
+  //       await launchUrl(mailUrl);
+  //     } else {
+  //       throw 'Could not launch $mailUrl';
+  //     }
+  //   } catch (e) {
+  //     showSnackbar(
+  //         title: 'OOPS!',
+  //         message: 'An error occurred, please try again!',
+  //         error: true);
+  //   }
+  // }
 
   Future<void> _launchURL(String urlString) async {
     // Ensure the URL has a valid scheme
@@ -190,6 +189,7 @@ class _FilterUsersState extends State<ExpandedProSuppliersPage> {
             );
 
             // Show toast
+            // ignore: use_build_context_synchronously
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Website Url copied to clipboard')),
             );
@@ -210,6 +210,7 @@ class _FilterUsersState extends State<ExpandedProSuppliersPage> {
             );
 
             // Show toast
+            // ignore: use_build_context_synchronously
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Email copied to clipboard')),
             );
@@ -230,6 +231,7 @@ class _FilterUsersState extends State<ExpandedProSuppliersPage> {
             );
 
             // Show toast
+            // ignore: use_build_context_synchronously
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Phone copied to clipboard')),
             );
@@ -252,6 +254,7 @@ class _FilterUsersState extends State<ExpandedProSuppliersPage> {
               );
 
               // Show toast
+              // ignore: use_build_context_synchronously
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Location copied to clipboard')),
               );

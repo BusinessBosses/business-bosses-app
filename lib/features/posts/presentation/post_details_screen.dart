@@ -255,8 +255,10 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           hasVoted: hasVoted,
                           userVotedOptionId: selectedVote,
                           pollOptionsSplashColor: Colors.white,
-                          votedProgressColor: Colors.grey.withOpacity(0.3),
-                          votedBackgroundColor: Colors.grey.withOpacity(0.2),
+                          votedProgressColor:
+                              Colors.grey.withValues(alpha: 0.3),
+                          votedBackgroundColor:
+                              Colors.grey.withValues(alpha: 0.2),
                           pollOptions: pollOptions,
                           votedCheckmark: const Icon(
                             Icons.check_circle,

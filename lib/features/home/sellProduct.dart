@@ -139,7 +139,7 @@ void showSupplierOptionsBottomSheet(
                             : 'assets/svgs/addservice.svg',
                         height: 25,
                         colorFilter: ColorFilter.mode(
-                          textColor.withOpacity(1),
+                          textColor.withValues(alpha: 1),
                           BlendMode.srcIn,
                         ),
                       ),
@@ -270,7 +270,7 @@ void sellProduct(BuildContext context) {
                         svgAsset,
                         height: 25,
                         colorFilter: ColorFilter.mode(
-                          textColor.withOpacity(1),
+                          textColor.withValues(alpha: 1),
                           BlendMode.srcIn,
                         ),
                       ),

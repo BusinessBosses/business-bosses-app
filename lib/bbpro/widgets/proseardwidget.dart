@@ -65,7 +65,7 @@ class ProSearchbar extends StatelessWidget {
               vertical: contentPadding ?? 0.0),
           hintText: hintText,
           hintStyle: TextStyle(
-            color: textColor.withOpacity(0.6),
+            color: textColor.withValues(alpha: 0.6),
             fontSize: 15.0,
             fontWeight: FontWeight.w700,
           ),

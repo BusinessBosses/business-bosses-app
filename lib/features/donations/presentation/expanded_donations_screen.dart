@@ -102,7 +102,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                                     'You will no longer see Donations, posts and comments from this user on your feed',
                                                 centralize: true,
                                                 color: Colors.black
-                                                    .withOpacity(.6),
+                                                    .withValues(alpha: .6),
                                               ),
                                               actions: <Widget>[
                                                 TextButton(
@@ -197,7 +197,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                                     'The Donation will be reported to admin to evaluate if it violates any community policy',
                                                 centralize: true,
                                                 color: Colors.black
-                                                    .withOpacity(.6),
+                                                    .withValues(alpha: .6),
                                               ),
                                               actions: <Widget>[
                                                 TextButton(
@@ -911,7 +911,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                   .bodyMedium
                                   ?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
+                                    color: textColor.withValues(alpha: 0.8),
                                   ),
                             ),
                           ),
@@ -940,7 +940,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                   .bodyMedium
                                   ?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
+                                    color: textColor.withValues(alpha: 0.8),
                                   ),
                             ),
                           ),
@@ -955,7 +955,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                   .bodyMedium
                                   ?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
+                                    color: textColor.withValues(alpha: 0.8),
                                   ),
                             ),
                           ),
@@ -967,7 +967,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                   'assets/svgs/share.svg',
                                   height: 15.0,
                                   width: 15.0,
-                                  color: textColor.withOpacity(1.0),
+                                  color: textColor.withValues(alpha: 1.0),
                                 ),
                                 const SizedBox(
                                   width: 15,

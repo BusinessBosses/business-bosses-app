@@ -21,7 +21,10 @@ class ReviewTile extends StatefulWidget {
 
   ///
   const ReviewTile(
-      {super.key, required this.post, required this.process, required this.edit});
+      {super.key,
+      required this.post,
+      required this.process,
+      required this.edit});
 
   @override
   State<ReviewTile> createState() => _ReviewTileState();
@@ -257,7 +260,7 @@ class _ReviewTileState extends State<ReviewTile> {
                                     .textTheme
                                     .bodyMedium
                                     ?.copyWith(
-                                      color: textColor.withOpacity(0.4),
+                                      color: textColor.withValues(alpha: 0.4),
                                     ) // Your content here
                                 ),
                           ),

@@ -103,8 +103,8 @@ class _GenericSliderState extends State<GenericSlider> {
                             color: _activeIndex == i
                                 ? widget.iconcolor ?? primaryColorLT
                                 : widget.iconcolor == null
-                                    ? widget.iconcolor!.withOpacity(0.5)
-                                    : primaryColorLT.withOpacity(0.5),
+                                    ? widget.iconcolor!.withValues(alpha: 0.5)
+                                    : primaryColorLT.withValues(alpha: 0.5),
                             borderRadius: BorderRadius.circular(10.0)),
                       );
                     }),

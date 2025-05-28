@@ -67,7 +67,7 @@ class _AIPromoteButtonState extends State<AIPromoteButton>
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             offset: Offset(0, 4),
             blurRadius: 8,
           ),

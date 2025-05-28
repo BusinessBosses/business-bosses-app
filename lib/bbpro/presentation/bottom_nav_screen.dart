@@ -110,7 +110,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                 decoration: BoxDecoration(
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
+                      color: Colors.black.withValues(alpha: 0.08),
                       spreadRadius: 10,
                       blurRadius: 50,
                       offset: const Offset(0, 7), // changes position of shadow

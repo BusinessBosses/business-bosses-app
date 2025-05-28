@@ -17,29 +17,33 @@ class AiChatScreen extends GetView<AiChatController> {
   void _send() {
     final String txt = _inputCtrl.text.trim();
     if (txt.isEmpty) return;
+
     controller.sendMessage(txt);
     _inputCtrl.clear();
-    if (_scrollCtrl.position.pixels >=
-        _scrollCtrl.position.maxScrollExtent - 50) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+    _focusNode.unfocus();
+
+    // Use post-frame callback to wait until the UI updates
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollCtrl.hasClients) {
         _scrollCtrl.animateTo(
           _scrollCtrl.position.maxScrollExtent,
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
         );
-      });
-    }
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
           leading: IconButton(
             onPressed: Get.back,
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
-          title: const Text('AI Chat')),
+          title: const Text('BB SmartChat')),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -64,27 +68,29 @@ class AiChatScreen extends GetView<AiChatController> {
             ),
 
             // status footer
-            Obx(() {
-              if (controller.isLoading.value) {
-                return const SizedBox(
-                  height: 48,
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
-              if (controller.errorMessage.value != null) {
-                return SizedBox(
-                  height: 48,
-                  child: Center(
-                    child: Text(
-                      controller.errorMessage.value!,
-                      style:
-                          TextStyle(color: Theme.of(context).colorScheme.error),
+            Obx(
+              () {
+                if (controller.isLoading.value) {
+                  return const SizedBox(
+                    height: 48,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                if (controller.errorMessage.value != null) {
+                  return SizedBox(
+                    height: 48,
+                    child: Center(
+                      child: Text(
+                        controller.errorMessage.value!,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error),
+                      ),
                     ),
-                  ),
-                );
-              }
-              return const Divider(height: 1);
-            }),
+                  );
+                }
+                return const Divider(height: 1);
+              },
+            ),
 
             // input bar
             _buildInputBar(context),
@@ -128,9 +134,11 @@ class AiChatScreen extends GetView<AiChatController> {
                     Widget? child) {
                   final bool enabled = value.text.trim().isNotEmpty;
                   return IconButton(
-                    icon: const Icon(Icons.send),
-                    color:
-                        enabled ? Theme.of(context).primaryColor : Colors.grey,
+                    icon: Icon(
+                      Icons.send,
+                      color: enabled ? Colors.grey : Colors.red,
+                    ),
+                    color: enabled ? Colors.red : Colors.grey,
                     onPressed: enabled ? _send : null,
                   );
                 },

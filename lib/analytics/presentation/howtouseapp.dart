@@ -239,7 +239,10 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                                                 : index == 2
                                                     ? 30
                                                     : 22,
-                                            color: textColor.withOpacity(1),
+                                            colorFilter: ColorFilter.mode(
+                                              textColor.withValues(alpha: 1),
+                                              BlendMode.srcIn,
+                                            ),
                                           ),
                                 title: Text(
                                   index == 0

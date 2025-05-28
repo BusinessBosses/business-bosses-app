@@ -84,7 +84,10 @@ class _OrdersScreenState extends State<OrdersScreen>
                   ),
                   child: ProIconButton(
                     radius: 50,
-                    icon: const Icon(Icons.add, color: Colors.white,),
+                    icon: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
                     onPressed: () {
                       Get.to(() => const CreateOrder());
                     },
@@ -130,9 +133,9 @@ class _OrdersScreenState extends State<OrdersScreen>
               proprimaryColor: proprimaryColor,
               backgroundColor: <Color>[
                 backgroundColor,
-                Colors.amber.withOpacity(0.1),
-                Colors.blue.withOpacity(0.1),
-                Colors.green.withOpacity(0.1)
+                Colors.amber.withValues(alpha: 0.1),
+                Colors.blue.withValues(alpha: 0.1),
+                Colors.green.withValues(alpha: 0.1)
               ],
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) =>

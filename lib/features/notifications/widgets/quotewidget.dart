@@ -29,7 +29,7 @@ Widget QuoteWidget(Quote quote) {
             children: <Widget>[
               CircleAvatar(
                   radius: 48 / 2,
-                  backgroundColor: primaryColorLT.withOpacity(0.1),
+                  backgroundColor: primaryColorLT.withValues(alpha: 0.1),
                   child: SvgPicture.asset(
                     'assets/app/app_icon_only.svg',
                   )),

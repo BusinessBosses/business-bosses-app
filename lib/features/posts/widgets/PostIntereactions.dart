@@ -86,7 +86,7 @@ class _PostInteractionsState extends State<PostInteractions> {
                       '${postLikes.length}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(0.8),
+                            color: textColor.withValues(alpha: 0.8),
                           ),
                     ),
                   ),
@@ -108,7 +108,7 @@ class _PostInteractionsState extends State<PostInteractions> {
                       '${postComments.length}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(0.8),
+                            color: textColor.withValues(alpha: 0.8),
                           ),
                     ),
                   ),
@@ -150,7 +150,7 @@ class _PostInteractionsState extends State<PostInteractions> {
                       '${postCoins.length}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(0.8),
+                            color: textColor.withValues(alpha: 0.8),
                           ),
                     ),
                   ),
@@ -162,7 +162,7 @@ class _PostInteractionsState extends State<PostInteractions> {
                       '${widget.post.views ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(0.8),
+                            color: textColor.withValues(alpha: 0.8),
                           ),
                     ),
                   ),
@@ -232,7 +232,8 @@ class _PostInteractionsState extends State<PostInteractions> {
                                                     ? 'assets/svgs/undo_repost.svg'
                                                     : 'assets/svgs/repost.svg',
                                             height: index == 0 ? 18 : 25,
-                                            color: textColor.withOpacity(1),
+                                            color:
+                                                textColor.withValues(alpha: 1),
                                           ),
                                           title: Text(
                                             index == 0
@@ -274,7 +275,7 @@ class _PostInteractionsState extends State<PostInteractions> {
                           TimeFormat.formatString(widget.post.timestamp),
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: textColor.withOpacity(0.4),
+                                    color: textColor.withValues(alpha: 0.4),
                                   ),
                         ),
                       ),

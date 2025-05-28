@@ -204,8 +204,8 @@ class _ForumItemState extends State<ForumItem> {
                                                                 'You will no longer see undefined posts and comments on your feed',
                                                             centralize: true,
                                                             color: Colors.black
-                                                                .withOpacity(
-                                                                    .6),
+                                                                .withValues(
+                                                                    alpha: .6),
                                                           ),
                                                           actions: <Widget>[
                                                             TextButton(
@@ -330,8 +330,8 @@ class _ForumItemState extends State<ForumItem> {
                                                                 'The post will be reported to admin to evaluate if it violates any community policy',
                                                             centralize: true,
                                                             color: Colors.black
-                                                                .withOpacity(
-                                                                    .6),
+                                                                .withValues(
+                                                                    alpha: .6),
                                                           ),
                                                           actions: <Widget>[
                                                             TextButton(
@@ -464,7 +464,7 @@ class _ForumItemState extends State<ForumItem> {
                                   //             ?.copyWith(
                                   //                 fontWeight: FontWeight.w700,
                                   //                 color:
-                                  //                     textColor.withOpacity(1),
+                                  //                     textColor.withValues(alpha: 1),
                                   //                 fontSize: 7.5),
                                   //       ),
                                   //     ],
@@ -691,7 +691,7 @@ class _ForumItemState extends State<ForumItem> {
                                 .bodyMedium
                                 ?.copyWith(
                                   fontWeight: FontWeight.w700,
-                                  color: textColor.withOpacity(0.8),
+                                  color: textColor.withValues(alpha: 0.8),
                                 ),
                           ),
                         ),
@@ -729,7 +729,7 @@ class _ForumItemState extends State<ForumItem> {
                                 .bodyMedium
                                 ?.copyWith(
                                   fontWeight: FontWeight.w700,
-                                  color: textColor.withOpacity(0.8),
+                                  color: textColor.withValues(alpha: 0.8),
                                 ),
                           ),
                         ),
@@ -763,7 +763,7 @@ class _ForumItemState extends State<ForumItem> {
                                       .bodyMedium
                                       ?.copyWith(
                                         fontWeight: FontWeight.w700,
-                                        color: textColor.withOpacity(0.8),
+                                        color: textColor.withValues(alpha: 0.8),
                                       ),
                                 ))
                             : Padding(
@@ -780,7 +780,8 @@ class _ForumItemState extends State<ForumItem> {
                                           .bodyLarge
                                           ?.copyWith(
                                             fontWeight: FontWeight.w700,
-                                            color: textColor.withOpacity(0.8),
+                                            color: textColor.withValues(
+                                                alpha: 0.8),
                                           ),
                                     ),
                                   ],
@@ -797,7 +798,7 @@ class _ForumItemState extends State<ForumItem> {
                                 .bodyMedium
                                 ?.copyWith(
                                   fontWeight: FontWeight.w700,
-                                  color: textColor.withOpacity(0.8),
+                                  color: textColor.withValues(alpha: 0.8),
                                 ),
                           ),
                         ),
@@ -808,7 +809,7 @@ class _ForumItemState extends State<ForumItem> {
                             'assets/svgs/share.svg',
                             height: 15.0,
                             width: 15.0,
-                            color: textColor.withOpacity(1.0),
+                            color: textColor.withValues(alpha: 1.0),
                           ),
                         ),
                         const Spacer(),
@@ -819,7 +820,8 @@ class _ForumItemState extends State<ForumItem> {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
-                                ?.copyWith(color: textColor.withOpacity(0.4)),
+                                ?.copyWith(
+                                    color: textColor.withValues(alpha: 0.4)),
                           ),
                         )
                       ],

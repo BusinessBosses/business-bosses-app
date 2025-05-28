@@ -278,8 +278,8 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle, // Make it a circle
-                            color: Colors.red
-                                .withOpacity(0.5), // Choose your desired color
+                            color: Colors.red.withValues(
+                                alpha: 0.5), // Choose your desired color
                           ),
                           child: IconButton(
                             icon: const Icon(
@@ -319,7 +319,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           border: InputBorder.none,
                           hintStyle:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    color: textColor.withOpacity(0.2),
+                                    color: textColor.withValues(alpha: 0.2),
                                   ),
                         ),
                       ),

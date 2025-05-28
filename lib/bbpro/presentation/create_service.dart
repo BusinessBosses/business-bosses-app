@@ -1221,7 +1221,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                         : DateTime.now(),
                     selectionDecoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: primaryColorLT.withOpacity(0.5),
+                      color: primaryColorLT.withValues(alpha: 0.5),
                     ),
                     todayTextStyle: const TextStyle(color: Colors.black),
                     todayHighlightColor: Colors.transparent,

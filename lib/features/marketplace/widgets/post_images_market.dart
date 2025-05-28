@@ -180,78 +180,70 @@ class PostImagesMarket extends StatelessWidget {
                                 height: 116.0,
                                 child: Row(
                                   children: <Widget>[
-                                    ...<int>[3]
-                                        .map(
-                                          (int i) => Expanded(
-                                            flex: 1,
-                                            child: post.images!.length >= i
-                                                ? GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.of(context)
-                                                          .push(
-                                                        MaterialPageRoute(
-                                                          builder: (BuildContext
-                                                                  context) =>
-                                                              ImagesViewerScreen(
-                                                            urls: post.images,
-                                                            index: i - 1,
-                                                            text: post
-                                                                .description,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                    child: Stack(
-                                                      children: <Widget>[
-                                                        Container(
-                                                          child:
-                                                              NetworkImageWithPlaceHolder(
-                                                            borderColor:
-                                                                Colors.black12,
-                                                            imageUrl: post
-                                                                .images![i - 1],
-                                                            width:
-                                                                double.infinity,
-                                                            height:
-                                                                double.infinity,
-                                                            placeHolder:
-                                                                Icons.photo,
-                                                            iconSize: 18.0,
-                                                            radius: 8.0,
-                                                          ),
-                                                        ),
-                                                        if (post.images!
-                                                                    .length >
-                                                                3 &&
-                                                            i == 3)
-                                                          Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(0.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            color: Colors.white
-                                                                .withOpacity(
-                                                                    0.5),
-                                                            child: Text(
-                                                              '+${post.images!.length - 3}',
-                                                              style: headline6
-                                                                  .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        else
-                                                          Container()
-                                                      ],
+                                    ...<int>[3].map(
+                                      (int i) => Expanded(
+                                        flex: 1,
+                                        child: post.images!.length >= i
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          ImagesViewerScreen(
+                                                        urls: post.images,
+                                                        index: i - 1,
+                                                        text: post.description,
+                                                      ),
                                                     ),
-                                                  )
-                                                : Container(),
-                                          ),
-                                        )
-                                        
+                                                  );
+                                                },
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    Container(
+                                                      child:
+                                                          NetworkImageWithPlaceHolder(
+                                                        borderColor:
+                                                            Colors.black12,
+                                                        imageUrl:
+                                                            post.images![i - 1],
+                                                        width: double.infinity,
+                                                        height: double.infinity,
+                                                        placeHolder:
+                                                            Icons.photo,
+                                                        iconSize: 18.0,
+                                                        radius: 8.0,
+                                                      ),
+                                                    ),
+                                                    if (post.images!.length >
+                                                            3 &&
+                                                        i == 3)
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(0.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        color: Colors.white
+                                                            .withValues(
+                                                                alpha: 0.5),
+                                                        child: Text(
+                                                          '+${post.images!.length - 3}',
+                                                          style: headline6
+                                                              .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    else
+                                                      Container()
+                                                  ],
+                                                ),
+                                              )
+                                            : Container(),
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),

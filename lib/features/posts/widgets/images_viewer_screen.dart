@@ -66,7 +66,7 @@ class _ImagesViewerScreenState extends State<ImagesViewerScreen> {
               left: 0.0,
               right: 0.0,
               child: Container(
-                color: Colors.black.withOpacity(0.4),
+                color: Colors.black.withValues(alpha: 0.4),
                 padding: const EdgeInsets.all(8.0),
                 child: RichText(
                   textAlign: TextAlign.center,
@@ -120,7 +120,7 @@ class _ImagesViewerScreenState extends State<ImagesViewerScreen> {
                 width: 36.0,
                 height: 36.0,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(40.0),
                 ),
                 child: const Icon(Icons.close),

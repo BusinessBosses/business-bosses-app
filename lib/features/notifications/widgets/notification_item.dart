@@ -30,7 +30,7 @@ class NotificationItem extends StatelessWidget {
           children: <Widget>[
             CircleAvatar(
                 radius: 48 / 3,
-                backgroundColor: primaryColorLT.withOpacity(0.1),
+                backgroundColor: primaryColorLT.withValues(alpha: 0.1),
                 child: myNotification.title.contains('New Message')
                     ? SvgPicture.asset(
                         'assets/svgs/message.svg',

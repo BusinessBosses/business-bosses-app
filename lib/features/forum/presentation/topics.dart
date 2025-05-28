@@ -182,7 +182,7 @@ class _TopicsPageState extends State<TopicsPage> {
                           decoration: BoxDecoration(
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.09),
+                                color: Colors.black.withValues(alpha: 0.09),
                                 blurRadius: 100.0, // soften the shadow
                                 spreadRadius: 5, //extend the shadow
                               )

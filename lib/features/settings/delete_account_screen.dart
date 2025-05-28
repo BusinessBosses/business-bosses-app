@@ -219,7 +219,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
             Container(
               height: SizeConfig.screenHeight,
               width: SizeConfig.screenWidth,
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
               child: Center(
                 child: SafetyModel(
                   isLoading: _isLoading,

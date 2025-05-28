@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import 'package:business_bosses_v2/features/aipromote/components/aipromotebutton.dart';
 import 'package:business_bosses_v2/features/aipromote/components/aipromotesheet.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
@@ -50,7 +49,7 @@ class BottomBar extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               spreadRadius: 10,
               blurRadius: 50,
               offset: const Offset(0, 7), // changes position of shadow
@@ -236,8 +235,9 @@ class BottomBar extends StatelessWidget {
                                                                         ? 30
                                                                         : 22,
                                                                 color: textColor
-                                                                    .withOpacity(
-                                                                        1),
+                                                                    .withValues(
+                                                                        alpha:
+                                                                            1),
                                                               ),
                                                     title: Text(
                                                       index == 0
@@ -283,7 +283,7 @@ class BottomBar extends StatelessWidget {
                                             boxShadow: <BoxShadow>[
                                               BoxShadow(
                                                 color: Colors.black
-                                                    .withOpacity(0.3),
+                                                    .withValues(alpha: 0.3),
                                                 offset: Offset(0, 4),
                                                 blurRadius: 8,
                                               ),

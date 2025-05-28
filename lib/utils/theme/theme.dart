@@ -98,7 +98,7 @@ final InputDecoration inputDecoration = InputDecoration(
 );
 final InputDecoration messageBoxDecoration = InputDecoration(
   hintStyle: bodyText2.copyWith(
-    color: textColor.withOpacity(0.6),
+    color: textColor.withValues(alpha: 0.6),
   ),
   contentPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
   fillColor: hintColor,

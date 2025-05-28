@@ -143,7 +143,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
       children: <Widget>[
         widget.supplier.images!.isEmpty
             ? CircleAvatar(
-                backgroundColor: Colors.grey.withOpacity(0.5),
+                backgroundColor: Colors.grey.withValues(alpha: 0.5),
                 radius: 64.0,
                 child: SvgPicture.asset('assets/svgs/person.svg'),
               )

@@ -490,9 +490,9 @@ class _ClientsScreenState extends State<ClientsScreen>
               proprimaryColor: proprimaryColor,
               backgroundColor: <Color>[
                 backgroundColor,
-                Colors.green.withOpacity(0.1),
-                Colors.blue.withOpacity(0.1),
-                primaryColorLT.withOpacity(0.1),
+                Colors.green.withValues(alpha: 0.1),
+                Colors.blue.withValues(alpha: 0.1),
+                primaryColorLT.withValues(alpha: 0.1),
               ],
               listofitems: <String>[
                 ...ClientType.values.map((ClientType e) => e.name),
@@ -797,7 +797,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                                               boxShadow: <BoxShadow>[
                                                 BoxShadow(
                                                   color: backgroundColor
-                                                      .withOpacity(0.6),
+                                                      .withValues(alpha: 0.6),
                                                   offset: const Offset(-5, 0),
                                                   blurRadius: 10,
                                                   spreadRadius: 2,
@@ -1043,7 +1043,7 @@ class _RowStatusCardState extends State<RowStatusCard> {
                       final ClientWidget clientWidget = ClientWidget(
                         client: widget.allclients[index],
                         bgcolor: widget.allclients[index].type.backgroundColor
-                            .withOpacity(0.1),
+                            .withValues(alpha: 0.1),
                       );
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
@@ -1099,7 +1099,7 @@ class ListStatusColumnWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         final ClientWidget clientWidget = ClientWidget(
           client: clients[index],
-          bgcolor: clients[index].type.backgroundColor.withOpacity(0.1),
+          bgcolor: clients[index].type.backgroundColor.withValues(alpha: 0.1),
         );
 
         return Padding(

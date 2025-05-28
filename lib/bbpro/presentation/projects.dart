@@ -154,9 +154,9 @@ class _ProjectsState extends State<Projects>
             proprimaryColor: proprimaryColor,
             backgroundColor: <Color>[
               probackgroundColor,
-              Colors.black.withOpacity(0.1),
-              Colors.amber.withOpacity(0.1),
-              Colors.green.withOpacity(0.1),
+              Colors.black.withValues(alpha: 0.1),
+              Colors.amber.withValues(alpha: 0.1),
+              Colors.green.withValues(alpha: 0.1),
             ],
             listofitems: ProjectStatus.values.toList(),
             itemToString: (ProjectStatus status) =>

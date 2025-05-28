@@ -209,7 +209,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                 borderRadius: BorderRadius.circular(15),
                                 color: Colors.white,
                                 border: Border.all(
-                                  color: Colors.grey.withOpacity(0.12),
+                                  color: Colors.grey.withValues(alpha: 0.12),
                                   width: 2,
                                 ),
                               ),

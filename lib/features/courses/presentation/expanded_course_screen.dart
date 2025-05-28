@@ -555,7 +555,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                                               true,
                                                                           color: Colors
                                                                               .black
-                                                                              .withOpacity(.6),
+                                                                              .withValues(alpha: .6),
                                                                         ),
                                                                         actions: <Widget>[
                                                                           TextButton(
@@ -660,7 +660,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                                               true,
                                                                           color: Colors
                                                                               .black
-                                                                              .withOpacity(.6),
+                                                                              .withValues(alpha: .6),
                                                                         ),
                                                                         actions: <Widget>[
                                                                           TextButton(
@@ -810,8 +810,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                 child: SvgPicture.asset(
                                                   'assets/svgs/person.svg',
                                                   height: 20,
-                                                  color: textColor
-                                                      .withOpacity(1.0),
+                                                  color: textColor.withValues(
+                                                      alpha: 1.0),
                                                 ),
                                               ),
                                               backgroundColor: Colors.white,
@@ -835,8 +835,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                 height: 20.0,
 
                                                 // ignore: deprecated_member_use
-                                                color:
-                                                    textColor.withOpacity(1.0),
+                                                color: textColor.withValues(
+                                                    alpha: 1.0),
                                               ),
                                             ),
                                             backgroundColor: Colors.white,
@@ -898,7 +898,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                             .bodyMedium
                                             ?.copyWith(
                                               fontWeight: FontWeight.w700,
-                                              color: textColor.withOpacity(0.8),
+                                              color: textColor.withValues(
+                                                  alpha: 0.8),
                                             ),
                                       ),
                                     ),
@@ -1028,7 +1029,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                                         ? Icon(
                                                                             Icons.play_circle_outlined,
                                                                             color:
-                                                                                Colors.black.withOpacity(0.5),
+                                                                                Colors.black.withValues(alpha: 0.5),
                                                                             size:
                                                                                 30,
                                                                           )

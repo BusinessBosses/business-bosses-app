@@ -40,7 +40,7 @@ class YTTextInput extends StatelessWidget {
                     hintText: 'Paste a Youtube Video link here',
                     border: InputBorder.none,
                     hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: textColor.withOpacity(0.2),
+                          color: textColor.withValues(alpha: 0.2),
                         ),
                   ),
                 ),

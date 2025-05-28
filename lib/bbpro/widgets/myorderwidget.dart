@@ -162,7 +162,8 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                           : 'You will no longer see undefined posts and comments on your feed',
                                                       centralize: true,
                                                       color: Colors.black
-                                                          .withOpacity(.6),
+                                                          .withValues(
+                                                              alpha: .6),
                                                     ),
                                                     actions: <Widget>[
                                                       TextButton(
@@ -273,7 +274,8 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                           'The user will be reported to admin to evaluate if it violates any community policy',
                                                       centralize: true,
                                                       color: Colors.black
-                                                          .withOpacity(.6),
+                                                          .withValues(
+                                                              alpha: .6),
                                                     ),
                                                     actions: <Widget>[
                                                       TextButton(
@@ -913,7 +915,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                             fontSize: 13,
                                             color: widget
                                                 .order.status.backgroundColor
-                                                .withOpacity(1.0),
+                                                .withValues(alpha: 1.0),
                                             fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(
@@ -923,7 +925,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                         'assets/svgs/dropdown.svg',
                                         colorFilter: ColorFilter.mode(
                                             widget.order.status.backgroundColor
-                                                .withOpacity(1.0),
+                                                .withValues(alpha: 1.0),
                                             BlendMode.srcIn),
                                       )
                                     ]),

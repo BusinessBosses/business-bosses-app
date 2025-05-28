@@ -67,7 +67,7 @@ class _ForgotPasswordVerificationScreenState
               Text(
                 'Enter the 6 digits code that you received on your email so you can continue to reset your account password. ',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: textColor.withOpacity(0.8),
+                      color: textColor.withValues(alpha: 0.8),
                       fontWeight: FontWeight.normal,
                     ),
               ),

@@ -37,7 +37,7 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
               child: Text(
                 formatDate(widget.history['date']),
                 style: TextStyle(
-                    color: textColor.withOpacity(0.4),
+                    color: textColor.withValues(alpha: 0.4),
                     fontWeight: FontWeight.w700),
               ),
             ),
@@ -105,7 +105,7 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
                           style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 18,
-                              color: textColor.withOpacity(0.4)))
+                              color: textColor.withValues(alpha: 0.4)))
                     ],
                   ),
                 ],
@@ -137,7 +137,7 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
                   Text(
                     formatDateTimeToAgo(widget.history['date']),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: textColor.withOpacity(0.4),
+                          color: textColor.withValues(alpha: 0.4),
                         ),
                   ),
                 ],

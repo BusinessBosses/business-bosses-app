@@ -29,7 +29,7 @@ class _QuickActionCardState extends State<QuickActionCard> {
         CircleAvatar(
             radius: 30,
             backgroundColor: widget.color != null
-                ? widget.color!.withOpacity(0.1)
+                ? widget.color!.withValues(alpha: 0.1)
                 : prosemibackColor,
             child: SvgPicture.asset(
               widget.assetlocation!,

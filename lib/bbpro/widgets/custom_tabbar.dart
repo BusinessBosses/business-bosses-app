@@ -91,7 +91,8 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
                         color: widget._tabController.index == index
                             ? index == 0
                                 ? Colors.black54
-                                : widget.backgroundColor[index].withOpacity(1)
+                                : widget.backgroundColor[index]
+                                    .withValues(alpha: 1)
                             : widget.backgroundColor[index],
                         borderRadius: BorderRadius.circular(100),
                       ),

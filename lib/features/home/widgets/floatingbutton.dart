@@ -1,17 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:business_bosses_v2/features/chat/ai_chat.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
-import 'package:business_bosses_v2/features/forum/models/industry.dart';
-import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
-import 'package:business_bosses_v2/features/home/sellProduct.dart';
-import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 
-import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 
 class Floatingbutton extends StatefulWidget {
@@ -102,7 +96,7 @@ class _FloatingbuttonState extends State<Floatingbutton> {
         //                                     : index == 2
         //                                         ? 30
         //                                         : 22,
-        //                                 color: textColor.withOpacity(1),
+        //                                 color: textColor.withValues(alpha: 1),
         //                               ),
         //                     title: Text(
         //                       index == 0

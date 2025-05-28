@@ -93,7 +93,7 @@ class UserProfileImageItem extends StatelessWidget {
   /// MODEL CHILD
   Widget modelChild() {
     return CircleAvatar(
-      backgroundColor: primaryColorLT.withOpacity(0.2),
+      backgroundColor: primaryColorLT.withValues(alpha: 0.2),
       radius: height / 2,
       child: SizedBox(
         height: 100,
@@ -101,7 +101,7 @@ class UserProfileImageItem extends StatelessWidget {
         child: SvgPicture.asset(
           'assets/svgs/person.svg',
           // ignore: deprecated_member_use
-          color: primaryColorLT.withOpacity(0.5),
+          color: primaryColorLT.withValues(alpha: 0.5),
         ),
       ),
     );

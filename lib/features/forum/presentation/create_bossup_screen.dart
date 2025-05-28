@@ -3,7 +3,8 @@ import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
-import 'package:business_bosses_v2/features/posts/widgets/preview.dart' as custom_preview;
+import 'package:business_bosses_v2/features/posts/widgets/preview.dart'
+    as custom_preview;
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/material.dart' hide Preview;
@@ -243,7 +244,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                                   .textTheme
                                   .bodyMedium!
                                   .copyWith(
-                                    color: textColor.withOpacity(0.2),
+                                    color: textColor.withValues(alpha: 0.2),
                                   ),
                             ),
                           ),

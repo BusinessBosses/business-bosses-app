@@ -171,7 +171,7 @@ class _ManageServicesState extends State<ManageServices> {
                               borderRadius: BorderRadius.circular(7),
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
-                                  color: backgroundColor.withOpacity(0.6),
+                                  color: backgroundColor.withValues(alpha: 0.6),
                                   offset: const Offset(-5, 0),
                                   blurRadius: 10,
                                   spreadRadius: 2,

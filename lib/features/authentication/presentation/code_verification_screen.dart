@@ -77,7 +77,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
               Text(
                 'Enter the 6 digits code that you received on your email so you can continue your account creation. ',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: textColor.withOpacity(0.8),
+                      color: textColor.withValues(alpha: 0.8),
                       fontWeight: FontWeight.normal,
                     ),
               ),

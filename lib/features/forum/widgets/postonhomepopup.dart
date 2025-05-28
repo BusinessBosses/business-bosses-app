@@ -16,7 +16,8 @@ class PostonhomePopUp extends StatelessWidget {
   final bool isBossUp;
 
   /// Boss Up Challenge Pop Up
-  const PostonhomePopUp({super.key, required this.forum, required this.isBossUp});
+  const PostonhomePopUp(
+      {super.key, required this.forum, required this.isBossUp});
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +94,7 @@ class PostonhomePopUp extends StatelessWidget {
                   decoration: BoxDecoration(
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.01),
+                          color: Colors.black.withValues(alpha: 0.01),
                           spreadRadius: 5,
                           blurRadius: 7,
                           offset:

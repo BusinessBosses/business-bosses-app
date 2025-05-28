@@ -116,7 +116,8 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                   decoration: BoxDecoration(
                                     boxShadow: <BoxShadow>[
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.09),
+                                        color: Colors.black
+                                            .withValues(alpha: 0.09),
                                         blurRadius: 500.0,
                                         spreadRadius: 0.0,
                                       ),

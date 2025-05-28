@@ -358,7 +358,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                                   .textTheme
                                   .bodyMedium!
                                   .copyWith(
-                                    color: textColor.withOpacity(0.2),
+                                    color: textColor.withValues(alpha: 0.2),
                                   ),
                             ),
                           ),

@@ -53,7 +53,7 @@ class RegisterScreen extends StatelessWidget {
                           'Free Promotion App - Sell, Network & Grow Globally',
                           style: TextStyle(
                               fontSize: 14,
-                              color: textColor.withOpacity(0.8),
+                              color: textColor.withValues(alpha: 0.8),
                               fontWeight: FontWeight.w700)),
                     )
                   ],

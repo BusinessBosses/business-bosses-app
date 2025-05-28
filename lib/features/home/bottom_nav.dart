@@ -60,7 +60,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         ),
         content: TextWidget(
           text: 'You have earned 1 coin for logging into Business Bosses today',
-          color: Colors.black.withOpacity(.8),
+          color: Colors.black.withValues(alpha: .8),
         ),
         actions: <Widget>[
           TextButton(
@@ -148,7 +148,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                 decoration: BoxDecoration(
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
+                      color: Colors.black.withValues(alpha: 0.08),
                       spreadRadius: 10,
                       blurRadius: 50,
                       offset: const Offset(0, 7), // changes position of shadow

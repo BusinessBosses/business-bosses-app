@@ -88,7 +88,7 @@ class UserAvatarWithBadge extends StatelessWidget {
                         'Boss of the week',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(1),
+                              color: textColor.withValues(alpha: 1),
                               height: 3,
                               fontSize: 5,
                             ),

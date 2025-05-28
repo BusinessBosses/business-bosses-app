@@ -29,7 +29,7 @@ class CoinTile extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: Colors.orange.withOpacity(0.2)
+                      color: Colors.orange.withValues(alpha: 0.2)
                       // image: const DecorationImage(
                       //   image: AssetImage(
                       //       'assets/images/bossoftheweekback.png'), // Replace with your image path

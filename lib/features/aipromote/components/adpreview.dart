@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AdPreview extends StatefulWidget {
@@ -18,7 +15,7 @@ class AdPreview extends StatefulWidget {
   });
 
   @override
-  _AdPreviewState createState() => _AdPreviewState();
+  State<AdPreview> createState() => _AdPreviewState();
 }
 
 class _AdPreviewState extends State<AdPreview> {
@@ -124,7 +121,7 @@ class _AdPreviewState extends State<AdPreview> {
             ),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 offset: Offset(0, 2),
                 blurRadius: 4,
               ),

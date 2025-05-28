@@ -758,8 +758,8 @@ class _MarketTileState extends State<MarketTile> {
                                               .bodyMedium
                                               ?.copyWith(
                                                 fontWeight: FontWeight.w700,
-                                                color:
-                                                    textColor.withOpacity(0.8),
+                                                color: textColor.withValues(
+                                                    alpha: 0.8),
                                               ),
                                         ),
                                       ),
@@ -795,8 +795,8 @@ class _MarketTileState extends State<MarketTile> {
                                               .bodyMedium
                                               ?.copyWith(
                                                 fontWeight: FontWeight.w700,
-                                                color:
-                                                    textColor.withOpacity(0.8),
+                                                color: textColor.withValues(
+                                                    alpha: 0.8),
                                               ),
                                         ),
                                       ),
@@ -844,8 +844,9 @@ class _MarketTileState extends State<MarketTile> {
                                                     ?.copyWith(
                                                       fontWeight:
                                                           FontWeight.w700,
-                                                      color: textColor
-                                                          .withOpacity(0.8),
+                                                      color:
+                                                          textColor.withValues(
+                                                              alpha: 0.8),
                                                     ),
                                               ),
                                             )
@@ -866,7 +867,8 @@ class _MarketTileState extends State<MarketTile> {
                                                           fontWeight:
                                                               FontWeight.w700,
                                                           color: textColor
-                                                              .withOpacity(0.8),
+                                                              .withValues(
+                                                                  alpha: 0.8),
                                                         ),
                                                   ),
                                                 ],
@@ -892,8 +894,8 @@ class _MarketTileState extends State<MarketTile> {
                                               .bodyMedium
                                               ?.copyWith(
                                                 fontWeight: FontWeight.w700,
-                                                color:
-                                                    textColor.withOpacity(0.8),
+                                                color: textColor.withValues(
+                                                    alpha: 0.8),
                                               ),
                                         ),
                                       ),
@@ -905,7 +907,7 @@ class _MarketTileState extends State<MarketTile> {
                                       //     child: SvgPicture.asset(
                                       //       'assets/svgs/share.svg',
                                       //       height: 13.0,
-                                      //       color: textColor.withOpacity(1.0),
+                                      //       color: textColor.withValues(alpha: 1.0),
                                       //     ),
                                       //   ),
                                       // ),
@@ -981,7 +983,7 @@ class _MarketTileState extends State<MarketTile> {
                           //   child: Text(
                           //     TimeFormat.formatString(_post),
                           //     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          //           color: textColor.withOpacity(0.4),
+                          //           color: textColor.withValues(alpha: 0.4),
                           //         ),
                           //   ),
                           // )
@@ -1033,7 +1035,7 @@ class _MarketTileState extends State<MarketTile> {
                       text:
                           'You will no longer see undefined posts and comments on your feed',
                       centralize: true,
-                      color: Colors.black.withOpacity(.6),
+                      color: Colors.black.withValues(alpha: .6),
                     ),
                     actions: <Widget>[
                       TextButton(
@@ -1095,7 +1097,7 @@ class _MarketTileState extends State<MarketTile> {
                       text:
                           'The post will be reported to admin to evaluate if it violates any community policy',
                       centralize: true,
-                      color: Colors.black.withOpacity(.6),
+                      color: Colors.black.withValues(alpha: .6),
                     ),
                     actions: <Widget>[
                       TextButton(

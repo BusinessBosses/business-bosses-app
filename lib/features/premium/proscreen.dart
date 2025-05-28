@@ -146,7 +146,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                   subtext:
                                       'Partner with us, list your deals and gets customers',
                                   color: Colors.grey
-                                      .withOpacity(0.2), // Changed color
+                                      .withValues(alpha: 0.2), // Changed color
                                 ),
                               ),
                             ),
@@ -300,7 +300,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.white,
                       border: Border.all(
-                        color: Colors.grey.withOpacity(0.12),
+                        color: Colors.grey.withValues(alpha: 0.12),
                         width: 2,
                       ),
                     ),

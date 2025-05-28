@@ -23,34 +23,34 @@ class BossUpTopSection extends StatelessWidget {
                 runSpacing: 10.0, // Space between rows vertically
                 children: <Widget>[
                   _buildButton(context, 'Challenge',
-                      Colors.grey.shade800.withOpacity(0.1), () {
+                      Colors.grey.shade800.withValues(alpha: 0.1), () {
                     Get.to(() => const BossupChallenge(
                           ishome: false,
                         ));
                   }),
                   _buildButton(context, 'Learning',
-                      Colors.green.shade700.withOpacity(0.1), () {
+                      Colors.green.shade700.withValues(alpha: 0.1), () {
                     Get.to(() => const LearningPage());
                   }),
                   _buildButton(context, 'Crowdfund',
-                      Colors.purple.shade700.withOpacity(0.1), () {
+                      Colors.purple.shade700.withValues(alpha: 0.1), () {
                     Get.to(() => const DonationsPage(ishome: false));
                   }),
                   // _buildButton(context, 'Community',
-                  //     Colors.red.shade700.withOpacity(0.1), () {
+                  //     Colors.red.shade700.withValues(alpha: 0.1), () {
                   //   Get.to(() =>
                   //       const AllLearningPostsScreen(isCoursesTile: true));
                   // }),
                   // _buildButton(context, 'Events',
-                  //     Colors.orange.shade900.withOpacity(0.1), () {
+                  //     Colors.orange.shade900.withValues(alpha: 0.1), () {
                   //   Get.toNamed(Routes.liveEvents);
                   // }),
                   // _buildButton(context, 'Crowdfund',
-                  //     Colors.purple.shade700.withOpacity(0.1), () {
+                  //     Colors.purple.shade700.withValues(alpha: 0.1), () {
                   //   Get.to(()=> DonationsPage(ishome: false));
                   // }),
                   // _buildButton(
-                  //     context, 'Upgrade +', proprimaryColor.withOpacity(0.1),
+                  //     context, 'Upgrade +', proprimaryColor.withValues(alpha: 0.1),
                   //     () {
                   //   // Action for Upgrade + button
                   //   print('Upgrade + button tapped');
@@ -80,7 +80,8 @@ class BossUpTopSection extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              color: color.withOpacity(1.0), // Fully opaque color for the text
+              color: color.withValues(
+                  alpha: 1.0), // Fully opaque color for the text
               fontSize: 13,
               fontWeight: FontWeight.w700,
             ),

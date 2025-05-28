@@ -26,7 +26,7 @@ class CustomChildButton extends StatelessWidget {
           Text(
             caption,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: textColor.withOpacity(0.52),
+                  color: textColor.withValues(alpha: 0.52),
                   fontSize: 12.0,
                   fontWeight: FontWeight.bold,
                 ),

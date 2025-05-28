@@ -14,7 +14,7 @@ class DonationHistoryItem extends StatefulWidget {
   const DonationHistoryItem({
     super.key,
     this.item,
-     this.previousDate,
+    this.previousDate,
   });
 
   @override
@@ -42,7 +42,7 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
               child: Text(
                 formatDate(dateTimeString),
                 style: TextStyle(
-                    color: textColor.withOpacity(0.4),
+                    color: textColor.withValues(alpha: 0.4),
                     fontWeight: FontWeight.w700),
               ),
             ),
@@ -144,13 +144,13 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 18,
-                                color: textColor.withOpacity(0.4)))
+                                color: textColor.withValues(alpha: 0.4)))
                       ],
                     ),
                     Text(
                       formatDateTimeToAgo(dateTimeString),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: textColor.withOpacity(0.4),
+                            color: textColor.withValues(alpha: 0.4),
                           ),
                     ),
                   ],

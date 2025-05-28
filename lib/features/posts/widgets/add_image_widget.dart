@@ -65,7 +65,7 @@
 // //                     child: CircleAvatar(
 // //                         radius: 26 / 1.38,
 // //                         backgroundColor:
-// //                             const Color(0xff00CD98).withOpacity(0.2),
+// //                             const Color(0xff00CD98).withValues(alpha: 0.2),
 // //                         child: SvgPicture.asset(
 // //                           'assets/svgs/addvideopost.svg',
 // //                           height: 18,
@@ -282,7 +282,7 @@
 //                                             .textTheme
 //                                             .bodyMedium!
 //                                             .copyWith(
-//                                               color: textColor.withOpacity(0.2),
+//                                               color: textColor.withValues(alpha: 0.2),
 //                                             ),
 //                                       ),
 //                                     ),

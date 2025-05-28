@@ -35,7 +35,10 @@ class MyProfileHeader extends StatelessWidget {
                         child: CustomChildButton(
                       onPressed: () {
                         Get.toNamed(Routes.allconnectionsscreen,
-                            arguments: <String, Object>{'uid': myProfile.uid, 'pageIndex': 0});
+                            arguments: <String, Object>{
+                              'uid': myProfile.uid,
+                              'pageIndex': 0
+                            });
                         // return navigateTo(
                         //   context,
                         //   routeName: AllConnectionsScreen.routeName,
@@ -49,7 +52,10 @@ class MyProfileHeader extends StatelessWidget {
                         child: CustomChildButton(
                       onPressed: () {
                         Get.toNamed(Routes.allconnectionsscreen,
-                            arguments: <String, Object>{'uid': myProfile.uid, 'pageIndex': 1});
+                            arguments: <String, Object>{
+                              'uid': myProfile.uid,
+                              'pageIndex': 1
+                            });
                         // Get.toNamed(Routes.allconnectionsscreen);
                         // navigateTo(
                         //   context,
@@ -116,7 +122,7 @@ class MyProfileHeader extends StatelessWidget {
         Text(
           caption,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: textColor.withOpacity(0.52),
+                color: textColor.withValues(alpha: 0.52),
                 fontSize: 12.0,
                 fontWeight: FontWeight.bold,
               ),

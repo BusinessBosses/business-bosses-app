@@ -352,7 +352,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                           boxShadow: <BoxShadow>[
                                             BoxShadow(
                                               color: Colors.black
-                                                  .withOpacity(0.09),
+                                                  .withValues(alpha: 0.09),
                                               blurRadius:
                                                   100.0, // soften the shadow
                                               spreadRadius:

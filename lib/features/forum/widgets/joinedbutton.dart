@@ -12,7 +12,7 @@ Widget JoinedButton(bool joined, VoidCallback onTap) {
       alignment: Alignment.center,
       child: Material(
         elevation: 4.0,
-        shadowColor: Colors.black.withOpacity(0.2),
+        shadowColor: Colors.black.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(10),
         child: SizedBox(
           height: 38,

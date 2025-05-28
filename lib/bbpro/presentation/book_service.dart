@@ -297,7 +297,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                         ? 'You will see posts and comments related to user on your feed'
                                         : 'You will no longer see undefined posts and comments on your feed',
                                     centralize: true,
-                                    color: Colors.black.withOpacity(.6),
+                                    color: Colors.black.withValues(alpha: .6),
                                   ),
                                   actions: <Widget>[
                                     TextButton(
@@ -396,7 +396,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                     text:
                                         'The user will be reported to admin to evaluate if it violates any community policy',
                                     centralize: true,
-                                    color: Colors.black.withOpacity(.6),
+                                    color: Colors.black.withValues(alpha: .6),
                                   ),
                                   actions: <Widget>[
                                     TextButton(
@@ -678,7 +678,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                         selectionDecoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          color: Colors.green.withOpacity(0.7),
+                                          color: Colors.green
+                                              .withValues(alpha: 0.7),
                                         ),
                                         todayTextStyle: const TextStyle(
                                             color: Colors.black),
@@ -775,7 +776,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                         BoxDecoration decoration;
                                         if (isBlackoutDate) {
                                           textStyle = TextStyle(
-                                            color: Colors.grey.withOpacity(0.5),
+                                            color: Colors.grey
+                                                .withValues(alpha: 0.5),
                                             decoration:
                                                 TextDecoration.lineThrough,
                                             fontStyle: FontStyle.italic,
@@ -803,8 +805,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                             fontWeight: FontWeight.bold,
                                           );
                                           decoration = BoxDecoration(
-                                            color:
-                                                Colors.green.withOpacity(0.1),
+                                            color: Colors.green
+                                                .withValues(alpha: 0.1),
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           );
@@ -847,7 +849,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                       cellBorderColor: Colors.transparent,
                                       blackoutDates: _getNonAvailableDates(),
                                       blackoutDatesTextStyle: TextStyle(
-                                        color: Colors.grey.withOpacity(0.5),
+                                        color:
+                                            Colors.grey.withValues(alpha: 0.5),
                                         decoration: TextDecoration.lineThrough,
                                       ),
                                       onTap: (CalendarTapDetails details) {
@@ -917,7 +920,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                         BoxDecoration decoration;
                                         if (isBlackoutDate) {
                                           textStyle = TextStyle(
-                                            color: Colors.grey.withOpacity(0.5),
+                                            color: Colors.grey
+                                                .withValues(alpha: 0.5),
                                             decoration:
                                                 TextDecoration.lineThrough,
                                             fontStyle: FontStyle.italic,
@@ -945,8 +949,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                             fontWeight: FontWeight.bold,
                                           );
                                           decoration = BoxDecoration(
-                                            color:
-                                                Colors.green.withOpacity(0.1),
+                                            color: Colors.green
+                                                .withValues(alpha: 0.1),
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           );
@@ -989,7 +993,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                       cellBorderColor: Colors.transparent,
                                       blackoutDates: _getAllDatesExceptStart(),
                                       blackoutDatesTextStyle: TextStyle(
-                                        color: Colors.black12.withOpacity(0.08),
+                                        color: Colors.black12
+                                            .withValues(alpha: 0.08),
                                         decoration: TextDecoration.lineThrough,
                                       ),
                                       onTap: (CalendarTapDetails details) {

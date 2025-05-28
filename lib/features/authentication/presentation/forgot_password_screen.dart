@@ -77,7 +77,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(color: textColor.withOpacity(0.8)),
+                        .copyWith(color: textColor.withValues(alpha: 0.8)),
                   ),
                   const SizedBox(height: 36.0),
                   Text(

@@ -280,7 +280,7 @@ class _SetupState extends State<Setup> {
                   //                 style: TextStyle(
                   //                   fontSize: 15,
                   //                   fontWeight: FontWeight.w700,
-                  //                   color: textColor.withOpacity(0.7),
+                  //                   color: textColor.withValues(alpha: 0.7),
                   //                 ),
                   //               ),
                   //               onTap: () {

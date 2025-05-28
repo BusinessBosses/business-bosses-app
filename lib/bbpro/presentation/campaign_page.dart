@@ -237,6 +237,7 @@ class _CampaignpageState extends State<Campaignpage> {
                   showSnackbar(message: 'Campaign Sent Successfully!');
                   await clientsController
                       .initCampaigns(profileController.myProfile.uid);
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 } else {
                   showSnackbar(message: 'Error sending campaign!', error: true);
@@ -270,18 +271,18 @@ class _CampaignpageState extends State<Campaignpage> {
     }
   }
 
-  void _onClientSelect(String name) {
-    final Map<String, dynamic>? client = clients.firstWhereOrNull(
-      (Map<String, dynamic> client) => client['name'] == name,
-    );
+  // void _onClientSelect(String name) {
+  //   final Map<String, dynamic>? client = clients.firstWhereOrNull(
+  //     (Map<String, dynamic> client) => client['name'] == name,
+  //   );
 
-    if (client != null && !selectedClient.contains(client['id'])) {
-      setState(() {
-        selectedClient.add(client['id']);
-        selectedClientsName.add(name);
-      });
-    }
-  }
+  //   if (client != null && !selectedClient.contains(client['id'])) {
+  //     setState(() {
+  //       selectedClient.add(client['id']);
+  //       selectedClientsName.add(name);
+  //     });
+  //   }
+  // }
 
   void _removeClient(String name) {
     final Map<String, dynamic> client = clients.firstWhere(

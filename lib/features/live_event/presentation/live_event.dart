@@ -223,7 +223,7 @@ class _LiveEventState extends State<LiveEvent> {
             //                                         : index == 1
             //                                             ? 30
             //                                             : 22,
-            //                                     color: textColor.withOpacity(1),
+            //                                     color: textColor.withValues(alpha: 1),
             //                                   ),
             //                                   title: Text(
             //                                     index == 0

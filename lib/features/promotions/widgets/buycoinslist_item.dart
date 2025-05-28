@@ -29,14 +29,16 @@ class BuyCoinsListItem extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
-                Text(
-                  coinamount ?? '100',
-                  style: const TextStyle(fontWeight: FontWeight.bold)
+                Text(coinamount ?? '100',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(
+                  width: 5,
                 ),
-                const SizedBox(width: 5,),
                 Text(
                   '(\$${coinprice ?? '4.99'})',
-                  style:  TextStyle(fontWeight: FontWeight.w700, color: textColor.withOpacity(0.4)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: textColor.withValues(alpha: 0.4)),
                 ),
               ],
             ),

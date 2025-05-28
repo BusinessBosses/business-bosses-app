@@ -281,8 +281,8 @@ class _CourseItemState extends State<CourseItem> {
                                             onTap: () {},
                                             child: Icon(
                                               Icons.play_circle_outlined,
-                                              color:
-                                                  Colors.white.withOpacity(0.5),
+                                              color: Colors.white
+                                                  .withValues(alpha: 0.5),
                                               size: 70,
                                             ),
                                           ),
@@ -598,7 +598,7 @@ class _CourseItemState extends State<CourseItem> {
                                                         'You will no longer see courses, posts and comments from this user on your feed',
                                                     centralize: true,
                                                     color: Colors.black
-                                                        .withOpacity(.6),
+                                                        .withValues(alpha: .6),
                                                   ),
                                                   actions: <Widget>[
                                                     TextButton(
@@ -702,7 +702,7 @@ class _CourseItemState extends State<CourseItem> {
                                                         'The course will be reported to admin to evaluate if it violates any community policy',
                                                     centralize: true,
                                                     color: Colors.black
-                                                        .withOpacity(.6),
+                                                        .withValues(alpha: .6),
                                                   ),
                                                   actions: <Widget>[
                                                     TextButton(
@@ -845,7 +845,7 @@ class _CourseItemState extends State<CourseItem> {
                     '${widget.course.likes?.length ?? 0}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: textColor.withOpacity(0.8),
+                          color: textColor.withValues(alpha: 0.8),
                         ),
                   ),
                 ),
@@ -871,7 +871,7 @@ class _CourseItemState extends State<CourseItem> {
                     '${widget.course.comments?.length}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: textColor.withOpacity(0.8),
+                          color: textColor.withValues(alpha: 0.8),
                         ),
                   ),
                 ),
@@ -905,7 +905,7 @@ class _CourseItemState extends State<CourseItem> {
                       '${widget.course.coins?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(0.8),
+                            color: textColor.withValues(alpha: 0.8),
                           ),
                     ),
                   ),
@@ -918,7 +918,7 @@ class _CourseItemState extends State<CourseItem> {
                     widget.course.views.toString(),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: textColor.withOpacity(0.8),
+                          color: textColor.withValues(alpha: 0.8),
                         ),
                   ),
                 ),
@@ -929,7 +929,7 @@ class _CourseItemState extends State<CourseItem> {
                 //       '0',
                 //       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 //             fontWeight: FontWeight.w700,
-                //             color: textColor.withOpacity(0.8),
+                //             color: textColor.withValues(alpha: 0.8),
                 //           ),
                 //     )),
                 const SizedBox(width: 8.0),
@@ -939,7 +939,7 @@ class _CourseItemState extends State<CourseItem> {
                     'assets/svgs/share.svg',
                     height: 15.0,
                     width: 15.0,
-                    color: textColor.withOpacity(1.0),
+                    color: textColor.withValues(alpha: 1.0),
                   ),
                 ),
                 const Spacer(),
@@ -950,7 +950,7 @@ class _CourseItemState extends State<CourseItem> {
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
-                        ?.copyWith(color: textColor.withOpacity(0.4)),
+                        ?.copyWith(color: textColor.withValues(alpha: 0.4)),
                   ),
                 )
               ],

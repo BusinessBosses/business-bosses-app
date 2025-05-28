@@ -60,22 +60,25 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
             fit: fit,
             errorWidget: (_, __, ___) => Container(
               color: color == null
-                  ? Theme.of(context).iconTheme.color!.withOpacity(0.1)
-                  : color!.withOpacity(0.1),
+                  ? Theme.of(context).iconTheme.color!.withValues(alpha: 0.1)
+                  : color!.withValues(alpha: 0.1),
               child: placeHolder == null
                   ? myProgressIndicator(context)
                   : Icon(
                       placeHolder,
                       size: iconSize,
                       color: color == null
-                          ? Theme.of(context).iconTheme.color!.withOpacity(0.3)
-                          : color!.withOpacity(0.3),
+                          ? Theme.of(context)
+                              .iconTheme
+                              .color!
+                              .withValues(alpha: 0.3)
+                          : color!.withValues(alpha: 0.3),
                     ),
             ),
             placeholder: (_, __) => Container(
               color: color == null
-                  ? Theme.of(context).iconTheme.color!.withOpacity(0.1)
-                  : color!.withOpacity(0.1),
+                  ? Theme.of(context).iconTheme.color!.withValues(alpha: 0.1)
+                  : color!.withValues(alpha: 0.1),
               child: PlaceHolderType.icon == placeHolderType
                   ? placeHolder == null
                       ? myProgressIndicator(context)
@@ -86,8 +89,8 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
                               ? Theme.of(context)
                                   .iconTheme
                                   .color!
-                                  .withOpacity(0.3)
-                              : color!.withOpacity(0.3),
+                                  .withValues(alpha: 0.3)
+                              : color!.withValues(alpha: 0.3),
                         )
                   : myProgressIndicator(context),
             ),
