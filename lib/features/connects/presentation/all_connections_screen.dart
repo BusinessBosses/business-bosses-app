@@ -230,7 +230,8 @@ class AllConnectionsScreen extends StatelessWidget {
                               isLoading: controller.loadingSearch,
                               icon: SvgPicture.asset(
                                 'assets/svgs/search.svg',
-                                color: hintColor,
+                                colorFilter: ColorFilter.mode(
+                                    hintColor, BlendMode.srcIn),
                                 height: 80.0,
                               ),
                               title: 'Search users',
@@ -272,7 +273,7 @@ class AllConnectionsScreen extends StatelessWidget {
       isLoading: false,
       icon: SvgPicture.asset(
         'assets/svgs/group.svg',
-        color: hintColor,
+        colorFilter: ColorFilter.mode(hintColor, BlendMode.srcIn),
         height: 80.0,
       ),
       title: title,
@@ -280,9 +281,9 @@ class AllConnectionsScreen extends StatelessWidget {
     );
   }
 
-  void _sendNotification(UserModel specificUser) {}
+  // void _sendNotification(UserModel specificUser) {}
 
-  void _onChangeSearching() {}
+  // void _onChangeSearching() {}
 
   void _onChange(String val) {}
 }

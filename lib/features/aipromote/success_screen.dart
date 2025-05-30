@@ -1,5 +1,5 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 
 class SuccessScreen extends StatelessWidget {
   final VoidCallback onCreateAnother;
@@ -8,10 +8,8 @@ class SuccessScreen extends StatelessWidget {
 
   void _handleShare() async {
     try {
-      await Share.share(
-        'Check out my business! I just created a promotion for my business.',
-        subject: 'Check out my business!',
-      );
+      socialShare(
+          'Check out my business! I just created a promotion for my business.');
     } catch (e) {
       print('Error sharing: $e');
     }

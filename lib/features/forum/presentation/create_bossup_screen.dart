@@ -46,7 +46,6 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
       DetectableTextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     descriptionController.text = forum.description ?? '';
     if (Get.arguments == null) {
@@ -320,7 +319,8 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                       children: <Widget>[
                         SvgPicture.asset(
                           'assets/svgs/report.svg',
-                          color: primaryColorLT,
+                          colorFilter:
+                              ColorFilter.mode(primaryColorLT, BlendMode.srcIn),
                           height: 18,
                         ),
                         const SizedBox(
@@ -364,7 +364,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
     );
   }
 
-  void _onImagePicker() {}
+  // void _onImagePicker() {}
 
-  void _onChangeForum() {}
+  // void _onChangeForum() {}
 }

@@ -97,7 +97,7 @@ class _BoostPostState extends State<BoostPost> {
           .then((PaymentSheetPaymentOption? value) async {
         await updatePost('card');
 
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(Get.context!).push(MaterialPageRoute(
           builder: (BuildContext context) => const Confirmation(),
         ));
 
@@ -107,7 +107,7 @@ class _BoostPostState extends State<BoostPost> {
           _isProcessing = false;
         });
         print('❌ StripeException: code=$error}');
-        showSnackBar(context,
+        showSnackBar(Get.context!,
             message: 'Opps!! Something went wrong. Try again');
       });
     } on StripeException catch (e) {
@@ -125,7 +125,8 @@ class _BoostPostState extends State<BoostPost> {
       });
       print('Here ->>>>>> $e');
       print('❌ Unknown error in presentPaymentSheet: $e\n$st');
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackBar(Get.context!,
+          message: 'Opps!! Something went wrong. Try again');
     }
   }
 
@@ -190,7 +191,7 @@ class _BoostPostState extends State<BoostPost> {
         setState(() {
           _isProcessing = false;
         });
-        Navigator.of(context).push(MaterialPageRoute<dynamic>(
+        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => const Confirmation(),
         ));
       } catch (e) {
@@ -291,7 +292,7 @@ class _BoostPostState extends State<BoostPost> {
       onSuccess: (_) async {
         await updatePost('paystack');
         Navigator.push(
-            context, MaterialPageRoute(builder: (_) => Confirmation()));
+            Get.context!, MaterialPageRoute(builder: (_) => Confirmation()));
       },
       onCancelled: (_) => showSnackBar(context, message: 'Payment cancelled'),
       callbackUrl: 'https://your-domain.com/callback',

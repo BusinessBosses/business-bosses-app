@@ -80,20 +80,13 @@ Future<void> onDetectableTextTap(
 Future<void> socialShare(String message) async {
   try {
     // grab the nearest context via GetX
-    final BuildContext? ctx = Get.context;
-    // on iPads (large screens) Share.share requires an origin rect, so we derive it if we can
-    final RenderBox? box = ctx?.findRenderObject() as RenderBox?;
 
-    await Share.share(
-      message,
-      sharePositionOrigin:
-          box != null ? box.localToGlobal(Offset.zero) & box.size : null,
-    );
+    await SharePlus.instance.share(ShareParams(text: message));
   } catch (e) {
     debugPrint('Error sharing content: $e');
     // optional: surface an error to the user
     if (Get.context != null) {
-      showSnackBar(Get.context!, message: 'Couldn’t share content');
+      showSnackBar(Get.context!, message: 'Couldn\'t share content');
     }
   }
 }

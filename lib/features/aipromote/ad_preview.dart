@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AdPreview extends StatefulWidget {
   final String content;
   final Function(String) onEdit;
-  final VoidCallback onPost;
+  final Function(List<String> platforms) onPost;
   final bool isLoading;
 
   const AdPreview({
@@ -187,7 +187,6 @@ class _AdPreviewState extends State<AdPreview> {
         Wrap(
           children: <Widget>[
             _buildPlatformChip('homepage', 'Homepage'),
-            _buildPlatformChip('marketplace', 'Marketplace'),
             _buildPlatformChip('challenge', 'Boss Up Challenge'),
           ],
         ),
@@ -207,7 +206,14 @@ class _AdPreviewState extends State<AdPreview> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: (_isAnyPlatformSelected && !widget.isLoading)
-                ? widget.onPost
+                ? () {
+                    // collect keys with true value
+                    final List<String> selected = _selectedPlatforms.entries
+                        .where((MapEntry<String, bool> e) => e.value)
+                        .map((MapEntry<String, bool> e) => e.key)
+                        .toList();
+                    widget.onPost(selected);
+                  }
                 : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF6366F1),

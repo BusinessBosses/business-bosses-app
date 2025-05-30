@@ -1,7 +1,13 @@
-import 'package:business_bosses_v2/features/aipromote/components/adpreview.dart';
-import 'package:business_bosses_v2/features/aipromote/components/businessform.dart';
-import 'package:business_bosses_v2/features/aipromote/components/successscreen.dart';
+import 'package:business_bosses_v2/features/aipromote/ad_preview.dart';
+import 'package:business_bosses_v2/features/aipromote/business_form.dart';
+import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
+import 'package:business_bosses_v2/features/aipromote/models/business_info_model.dart';
+import 'package:business_bosses_v2/features/aipromote/success_screen.dart';
+import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
+import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 enum PromoteStep { info, preview, success }
 
@@ -9,7 +15,7 @@ class AIPromoteSheet extends StatefulWidget {
   const AIPromoteSheet({super.key});
 
   @override
-  _AIPromoteSheetState createState() => _AIPromoteSheetState();
+  State<AIPromoteSheet> createState() => _AIPromoteSheetState();
 }
 
 class _AIPromoteSheetState extends State<AIPromoteSheet>
@@ -18,11 +24,16 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   BusinessInfo _businessInfo = BusinessInfo(
     name: 'Your Business Name',
     industry: 'Your Industry',
-    bio: 'Your business tagline or bio',
+    bio: 'Your business tagline or description',
     website: 'https://yourwebsite.com',
   );
   String _adContent = '';
   bool _loading = false;
+  final AiPromoteController aiPromoteController =
+      Get.put(AiPromoteController());
+  final ProfileController profileController = Get.find();
+  final CreatePostController createPostController = Get.find();
+  final CreateBossUpController createBossUpController = Get.find();
 
   void _handleInfoSubmit(BusinessInfo info) async {
     setState(() {
@@ -31,11 +42,12 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     });
 
     // Simulate AI generation
-    await Future.delayed(Duration(seconds: 2));
+    await aiPromoteController.generateAd();
 
     setState(() {
-      _adContent =
-          'Introducing ${info.name} - The premier ${info.industry} solution for your needs! ${info.bio} Visit us at ${info.website} today and transform your experience!';
+      _adContent = aiPromoteController.adCopy.value.isNotEmpty
+          ? aiPromoteController.adCopy.value
+          : 'AI generated ad content will appear here.';
       _loading = false;
       _currentStep = PromoteStep.preview;
     });
@@ -47,12 +59,54 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     });
   }
 
-  void _handlePostAd() async {
+  void _handlePostAd(List<String> platforms) async {
     setState(() {
       _loading = true;
     });
 
-    await Future.delayed(Duration(milliseconds: 1500));
+    // await Future<dynamic>.delayed(Duration(milliseconds: 1500));
+    try {
+      // if you need a ProfileController, retrieve it here:
+
+      for (String platform in platforms) {
+        if (platform == 'homepage') {
+          // your GetX controller method
+          await createPostController.createPost(
+            <String, dynamic>{
+              'title': _adContent.trim(),
+              'timestamp': DateTime.now().millisecondsSinceEpoch,
+            },
+            profileController,
+          );
+        } else {
+          await createBossUpController.createForum(<String, dynamic>{
+            'title': 'AI Generated Ad for ${_businessInfo.name}',
+            'description': _adContent.trim(),
+            'timestamp': DateTime.now().millisecondsSinceEpoch,
+            'industryId': 'industryId',
+          });
+        }
+      }
+      // final List<void> results = await Future.wait(futures);
+
+      // inspect any http.Response failures
+      // final Iterable<dynamic> httpFails = results
+      //     .whereType<http.Response>()
+      //     .where((Object? r) => r.statusCode < 200 || r.statusCode >= 300);
+      // if (httpFails.isNotEmpty) {
+      //   final r = httpFails.first;
+      //   throw Exception('Challenge post failed (${r.statusCode})');
+      // }
+
+      // success!
+      _currentStep = PromoteStep.success;
+    } catch (err) {
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        SnackBar(content: Text('Error posting ad: $err')),
+      );
+    } finally {
+      setState(() => _loading = false);
+    }
 
     setState(() {
       _loading = false;

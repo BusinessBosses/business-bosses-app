@@ -57,20 +57,20 @@ class _SignUpFormState extends State<SignUpForm> {
   String countryCode = '+447';
 
   void onChangeCountry(Country value) {
-    List spl = value.displayName.toString().split(' ');
+    List<dynamic> spl = value.displayName.toString().split(' ');
     setState(() {
       countryCode = spl[spl.length - 1].toString().split('[')[1].split(']')[0];
     });
   }
 
-  Future<GoogleSignInAccount?> _handleGoogleAuth() async {
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      return googleUser;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  // Future<GoogleSignInAccount?> _handleGoogleAuth() async {
+  //   try {
+  //     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+  //     return googleUser;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
   Future<void> saveToSharedPreferences(String value, String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -235,7 +235,8 @@ class _SignUpFormState extends State<SignUpForm> {
     } catch (error) {
       // Error oc'${_authCred!} ${_authusername!}'og('Here ->>>>>> $error');
 
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackBar(Get.context!,
+          message: 'Opps!! Something went wrong. Try again');
     }
 
     setState(() {

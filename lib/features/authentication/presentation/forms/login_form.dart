@@ -152,7 +152,8 @@ class _LoginFormState extends State<LoginForm> {
       // Error occurred during sign in
       // log('Here ->>>>>> $error');
 
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackBar(Get.context!,
+          message: 'Opps!! Something went wrong. Try again');
     }
 
     setState(() {
@@ -199,7 +200,7 @@ class _LoginFormState extends State<LoginForm> {
         });
       } else {
         // Sign in was canceled by the user
-        showSnackBar(context,
+        showSnackBar(Get.context!,
             message: 'Opps!! Something went wrong. Try again');
         setState(() {
           _isProcessing = false;
@@ -209,18 +210,13 @@ class _LoginFormState extends State<LoginForm> {
       // Error occurred during sign in
       // log('Here ->>>>>> $error');
 
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackBar(Get.context!,
+          message: 'Opps!! Something went wrong. Try again');
     }
 
     setState(() {
       _isProcessing = false;
     });
-
-    @override
-    void initState() {
-      super.initState();
-      // GetStorage().write('isFirstTime', false);
-    }
   }
 
   @override
@@ -324,7 +320,6 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 30.0),
 
             CustomButton(
-              
               margin: const EdgeInsets.all(2.0),
               label: 'Login',
               onPressed: () async {

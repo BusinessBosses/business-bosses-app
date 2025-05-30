@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import 'package:business_bosses_v2/features/aipromote/components/aipromotesheet.dart';
+import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';

@@ -16,7 +16,7 @@ class RelevantPeopleTile extends StatefulWidget {
 
 class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
   late ProfileController profileController;
-  String _filtertitle = '';
+  final String _filtertitle = '';
   final CompleteSearchController controller =
       Get.put(CompleteSearchController());
 
@@ -38,11 +38,11 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
                 element.category?.toString() == _filtertitle)
             .toList();
 
-        void refreshScreen() {
-          setState(() {
-            _filtertitle = '';
-          });
-        }
+        // void refreshScreen() {
+        //   setState(() {
+        //     _filtertitle = '';
+        //   });
+        // }
 
         filteredConnections.sort((UserModel a, UserModel b) {
           return _compareUsersByPhotoUrl(a, b);

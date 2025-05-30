@@ -1,11 +1,11 @@
-import 'package:business_bosses_v2/features/aipromote/components/aipromotesheet.dart';
+import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:flutter/material.dart';
 
 class AIPromoteButton extends StatefulWidget {
   const AIPromoteButton({super.key});
 
   @override
-  _AIPromoteButtonState createState() => _AIPromoteButtonState();
+  State<AIPromoteButton> createState() => _AIPromoteButtonState();
 }
 
 class _AIPromoteButtonState extends State<AIPromoteButton>
