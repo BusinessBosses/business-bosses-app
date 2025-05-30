@@ -32,8 +32,8 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   final AiPromoteController aiPromoteController =
       Get.put(AiPromoteController());
   final ProfileController profileController = Get.find();
-  final CreatePostController createPostController = Get.find();
-  final CreateBossUpController createBossUpController = Get.find();
+  final CreatePostController createPostController = Get.put(CreatePostController());
+  final CreateBossUpController createBossUpController = Get.put(CreateBossUpController());
 
   void _handleInfoSubmit(BusinessInfo info) async {
     setState(() {
