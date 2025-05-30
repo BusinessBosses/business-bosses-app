@@ -189,7 +189,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                               ),
                                               Flexible(
                                                 child: Text(
-                                                  feature,
+                                                  'feature',
                                                   style: const TextStyle(
                                                       fontSize: 14),
                                                 ),
