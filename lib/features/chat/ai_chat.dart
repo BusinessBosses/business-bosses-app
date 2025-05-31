@@ -7,12 +7,107 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class AiChatScreen extends GetView<AiChatController> {
-  AiChatScreen({super.key});
+class AiChatScreen extends StatefulWidget {
+  const AiChatScreen({super.key});
+
+  @override
+  _AiChatScreenState createState() => _AiChatScreenState();
+}
+
+class _AiChatScreenState extends State<AiChatScreen>
+    with TickerProviderStateMixin {
+  final AiChatController controller = Get.find<AiChatController>();
 
   final TextEditingController _inputCtrl = TextEditingController();
   final ScrollController _scrollCtrl = ScrollController();
   final FocusNode _focusNode = FocusNode();
+
+  // Animation controller and animations
+  late AnimationController _animationController;
+  late Animation<double> _shadowBlurAnimation;
+  late Animation<double> _shadowOpacityAnimation;
+  late Animation<Offset> _shadowOffsetAnimation;
+  late Animation<Color?> _shadowColorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _initAnimations();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _inputCtrl.dispose();
+    _scrollCtrl.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _initAnimations() {
+    _animationController = AnimationController(
+      duration: Duration(seconds: 8),
+      vsync: this,
+    );
+
+    _shadowBlurAnimation = Tween<double>(
+      begin: 12.0,
+      end: 20.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOutSine,
+    ));
+
+    _shadowOpacityAnimation = Tween<double>(
+      begin: 0.25,
+      end: 0.45,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOutSine,
+    ));
+
+    _shadowOffsetAnimation = Tween<Offset>(
+      begin: Offset(0, 5),
+      end: Offset(0, 10),
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOutSine,
+    ));
+
+    // Colorful shadow animation
+    _shadowColorAnimation = TweenSequence<Color?>(<TweenSequenceItem<Color?>>[
+      TweenSequenceItem(
+        tween: ColorTween(begin: Color(0xFF6366F1), end: Color(0xFFEC4899)),
+        weight: 1.0,
+      ),
+      TweenSequenceItem(
+        tween: ColorTween(begin: Color(0xFFEC4899), end: Color(0xFF10B981)),
+        weight: 1.0,
+      ),
+      TweenSequenceItem(
+        tween: ColorTween(begin: Color(0xFF10B981), end: Color(0xFFF59E0B)),
+        weight: 1.0,
+      ),
+      TweenSequenceItem(
+        tween: ColorTween(begin: Color(0xFFF59E0B), end: Color(0xFF8B5CF6)),
+        weight: 1.0,
+      ),
+      TweenSequenceItem(
+        tween: ColorTween(begin: Color(0xFF8B5CF6), end: Color(0xFF06B6D4)),
+        weight: 1.0,
+      ),
+      TweenSequenceItem(
+        tween: ColorTween(begin: Color(0xFF06B6D4), end: Color(0xFF6366F1)),
+        weight: 1.0,
+      ),
+    ]).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOutSine,
+    ));
+
+    // Start the animation and repeat
+    _animationController.repeat();
+  }
 
   void _send() {
     final String txt = _inputCtrl.text.trim();
@@ -61,8 +156,85 @@ class AiChatScreen extends GetView<AiChatController> {
                   controller: _scrollCtrl,
                   padding:
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  itemCount: msgs.length,
-                  itemBuilder: (_, int i) => ChatBubble(msg: msgs[i]),
+                  itemCount: msgs.length + 1, // +1 for the header
+                  itemBuilder: (_, int i) {
+                    if (i == 0) {
+                      // Show the bot avatar and description at the top
+                      return Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: AnimatedBuilder(
+                              animation: _animationController,
+                              builder: (BuildContext context, Widget? child) {
+                                return Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(300),
+                                    gradient: LinearGradient(
+                                      colors: <Color>[
+                                        Color(0xFF6366F1),
+                                        Color(0xFF818CF8)
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                        color: (_shadowColorAnimation.value ??
+                                                Colors.purple)
+                                            .withOpacity(
+                                                _shadowOpacityAnimation.value),
+                                        blurRadius: _shadowBlurAnimation.value,
+                                        offset: _shadowOffsetAnimation.value,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Center(
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/bot.svg',
+                                      width: 20,
+                                      height: 35,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 2.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.info_outline,
+                                  size: 16,
+                                  color: Colors.grey[500],
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'AI assistant',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.grey[600],
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                              height: 16), // Add some space before messages
+                        ],
+                      );
+                    }
+                    // Return the actual chat message (adjust index by -1)
+                    return ChatBubble(msg: msgs[i - 1]);
+                  },
                 );
               }),
             ),
@@ -134,11 +306,20 @@ class AiChatScreen extends GetView<AiChatController> {
                     Widget? child) {
                   final bool enabled = value.text.trim().isNotEmpty;
                   return IconButton(
-                    icon: Icon(
-                      Icons.send,
-                      color: enabled ? Colors.grey : Colors.red,
+                    icon: ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return LinearGradient(
+                          colors: <Color>[Color(0xFF6366F1), Color(0xFF818CF8)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ).createShader(bounds);
+                      },
+                      blendMode: BlendMode.srcIn,
+                      child: Icon(
+                        Icons.send,
+                        color: enabled ? Colors.white : Colors.grey,
+                      ),
                     ),
-                    color: enabled ? Colors.red : Colors.grey,
                     onPressed: enabled ? _send : null,
                   );
                 },
