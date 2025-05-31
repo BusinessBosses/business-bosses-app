@@ -236,15 +236,6 @@ class _AdPreviewState extends State<AdPreview> {
           ),
         ),
         SizedBox(height: 16),
-        Center(
-          child: Text(
-            'Free users: 4 ads/month | Premium users: 12 ads/month',
-            style: TextStyle(
-              fontSize: 12,
-              color: Color(0xFF6B7280),
-            ),
-          ),
-        ),
       ],
     );
   }

@@ -187,13 +187,7 @@ class BottomBar extends StatelessWidget {
                                                     onTap: () {
                                                       Navigator.pop(context);
                                                       if (index == 0) {
-                                                        Get.to(
-                                                            () => BossUpSection(
-                                                                  industry:
-                                                                      category,
-                                                                  bossUp: controller
-                                                                      .categories[0],
-                                                                ));
+                                                        showPromoteSheet();
                                                       } else if (index == 1) {
                                                         Get.toNamed(
                                                             Routes.createPost);
@@ -217,10 +211,51 @@ class BottomBar extends StatelessWidget {
                                                             color: textColor,
                                                           )
                                                         : index == 0
-                                                            ? const Icon(
-                                                                Icons.star,
-                                                                color:
-                                                                    textColor,
+                                                            ? Container(
+                                                                width: 30,
+                                                                height: 30,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              30),
+                                                                  gradient:
+                                                                      LinearGradient(
+                                                                    colors: <Color>[
+                                                                      Color(
+                                                                          0xFF6366F1),
+                                                                      Color(
+                                                                          0xFF818CF8)
+                                                                    ],
+                                                                    begin: Alignment
+                                                                        .topLeft,
+                                                                    end: Alignment
+                                                                        .bottomRight,
+                                                                  ),
+                                                                ),
+                                                                child: Material(
+                                                                  color: Colors
+                                                                      .transparent,
+                                                                  child:
+                                                                      InkWell(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            30),
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .star,
+                                                                        color: Colors
+                                                                            .white,
+                                                                        size:
+                                                                            24,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               )
                                                             : SvgPicture.asset(
                                                                 index == 1
@@ -241,7 +276,7 @@ class BottomBar extends StatelessWidget {
                                                               ),
                                                     title: Text(
                                                       index == 0
-                                                          ? 'Enter free business promotion'
+                                                          ? 'Ai Promote'
                                                           : index == 1
                                                               ? 'Post content, discussion, etc'
                                                               : index == 2
@@ -263,48 +298,48 @@ class BottomBar extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    Positioned(
-                                        bottom: 25,
-                                        right: 15,
-                                        child: Container(
-                                          width: 60,
-                                          height: 60,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            gradient: LinearGradient(
-                                              colors: <Color>[
-                                                Color(0xFF6366F1),
-                                                Color(0xFF818CF8)
-                                              ],
-                                              begin: Alignment.topLeft,
-                                              end: Alignment.bottomRight,
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withValues(alpha: 0.3),
-                                                offset: Offset(0, 4),
-                                                blurRadius: 8,
-                                              ),
-                                            ],
-                                          ),
-                                          child: Material(
-                                            color: Colors.transparent,
-                                            child: InkWell(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              onTap: showPromoteSheet,
-                                              child: Center(
-                                                child: Icon(
-                                                  Icons.auto_fix_high,
-                                                  color: Colors.white,
-                                                  size: 24,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )),
+                                    // Positioned(
+                                    //     bottom: 25,
+                                    //     right: 15,
+                                    //     child: Container(
+                                    //       width: 60,
+                                    //       height: 60,
+                                    //       decoration: BoxDecoration(
+                                    //         borderRadius:
+                                    //             BorderRadius.circular(30),
+                                    //         gradient: LinearGradient(
+                                    //           colors: <Color>[
+                                    //             Color(0xFF6366F1),
+                                    //             Color(0xFF818CF8)
+                                    //           ],
+                                    //           begin: Alignment.topLeft,
+                                    //           end: Alignment.bottomRight,
+                                    //         ),
+                                    //         boxShadow: <BoxShadow>[
+                                    //           BoxShadow(
+                                    //             color: Colors.black
+                                    //                 .withValues(alpha: 0.3),
+                                    //             offset: Offset(0, 4),
+                                    //             blurRadius: 8,
+                                    //           ),
+                                    //         ],
+                                    //       ),
+                                    //       child: Material(
+                                    //         color: Colors.transparent,
+                                    //         child: InkWell(
+                                    //           borderRadius:
+                                    //               BorderRadius.circular(30),
+                                    //           onTap: showPromoteSheet,
+                                    //           child: Center(
+                                    //             child: Icon(
+                                    //               Icons.auto_fix_high,
+                                    //               color: Colors.white,
+                                    //               size: 24,
+                                    //             ),
+                                    //           ),
+                                    //         ),
+                                    //       ),
+                                    //     )),
                                   ],
                                 );
                               },

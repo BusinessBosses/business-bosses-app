@@ -32,8 +32,10 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   final AiPromoteController aiPromoteController =
       Get.put(AiPromoteController());
   final ProfileController profileController = Get.find();
-  final CreatePostController createPostController = Get.put(CreatePostController());
-  final CreateBossUpController createBossUpController = Get.put(CreateBossUpController());
+  final CreatePostController createPostController =
+      Get.put(CreatePostController());
+  final CreateBossUpController createBossUpController =
+      Get.put(CreateBossUpController());
 
   void _handleInfoSubmit(BusinessInfo info) async {
     setState(() {
@@ -183,9 +185,9 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.6,
+      initialChildSize: 0.9,
       maxChildSize: 0.9,
-      minChildSize: 0.4,
+      minChildSize: 0.9,
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
           decoration: BoxDecoration(
@@ -205,10 +207,12 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
                     bottom: BorderSide(color: Color(0xFFF3F4F6)),
                   ),
                 ),
-                child: Stack(
-                  children: <Widget>[
-                    Center(
-                      child: Text(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
                         'AI Promote',
                         style: TextStyle(
                           fontSize: 18,
@@ -216,8 +220,17 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
                           color: Color(0xFF1F2937),
                         ),
                       ),
-                    ),
-                  ],
+                      CircleAvatar(
+                        backgroundColor: Color(0xFFF3F4F6),
+                        radius: 18,
+                        child: IconButton(
+                          icon: Icon(Icons.close, color: Color(0xFF6B7280)),
+                          onPressed: () => Navigator.of(context).maybePop(),
+                          splashRadius: 20,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               // Progress Indicator
