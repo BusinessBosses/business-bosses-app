@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:business_bosses_v2/features/chat/ai_chat.dart';
@@ -125,20 +126,33 @@ class _FloatingbuttonState extends State<Floatingbutton> {
         // );
       },
       child: Padding(
-        padding: EdgeInsets.only(
-            bottom: widget.isEvent == true ? 15 : 90, right: 15),
+        padding:
+            EdgeInsets.only(bottom: widget.isEvent == true ? 15 : 50, right: 5),
         child: Align(
           alignment: Alignment.bottomRight,
           child: Container(
-            decoration: BoxDecoration(
-              color: primaryColorLT,
-              borderRadius: BorderRadius.circular(50),
-            ),
             width: 50,
             height: 50,
-            child: const Center(
-              child: Icon(
-                Icons.chat_bubble_outline,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              gradient: LinearGradient(
+                colors: <Color>[Color(0xFF6366F1), Color(0xFF818CF8)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Center(
+              child: SvgPicture.asset(
+                'assets/svgs/bot.svg',
+                width: 20,
+                height: 22,
                 color: Colors.white,
               ),
             ),

@@ -49,7 +49,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
       _bioController =
           TextEditingController(text: shopController.shop!.description);
       _websiteController =
-          TextEditingController(text: shopController.shop!.url);
+          TextEditingController(text: shopController.shop!.url ?? 'Online');
     }
   }
 
@@ -134,7 +134,12 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
   @override
   Widget build(BuildContext context) {
     return shopController.shop == null
-        ? CircularProgressIndicator()
+        ? SizedBox(
+            height: 20,
+            width: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+            ))
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -174,7 +179,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
               _buildInputGroup(
                 'Website or Contact Link',
                 _websiteController,
-                placeholder: 'Enter your website URL',
+                placeholder: 'Enter your website URL / contact link',
                 keyboardType: TextInputType.url,
               ),
               SizedBox(height: 24),
@@ -191,7 +196,13 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                     ),
                   ),
                   child: widget.isLoading
-                      ? CircularProgressIndicator(color: Colors.white)
+                      ? SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ))
                       : Text(
                           'Generate Mini Ad',
                           style: TextStyle(
@@ -202,6 +213,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                         ),
                 ),
               ),
+              SizedBox(height: 300),
             ],
           );
   }

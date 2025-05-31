@@ -19,12 +19,36 @@ class AiChatController extends GetxController {
   final RxnString errorMessage = RxnString();
   final ProfileController profileController = Get.find();
 
-  // Your OpenAI key – inject this from env/secure storage instead of hard-coding!
-  final String _apiKey = dotenv.env['OPENAI_KEY']!;
+  // Safe API key initialization
+  String? _apiKey;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _initializeApiKey();
+  }
+
+  void _initializeApiKey() {
+    _apiKey = dotenv.env['OPENAI_KEY'];
+    if (_apiKey == null || _apiKey!.isEmpty) {
+      errorMessage.value =
+          'OpenAI API key not configured. Please check your .env file.';
+      print('ERROR: OPENAI_KEY not found in environment variables');
+    } else {
+      print('OpenAI API key loaded successfully');
+    }
+  }
 
   /// Call this to send a new user message and fetch a reply.
   Future<void> sendMessage(String text) async {
     if (text.trim().isEmpty) return;
+
+    // Check if API key is available
+    if (_apiKey == null || _apiKey!.isEmpty) {
+      errorMessage.value =
+          'OpenAI API key not configured. Please add OPENAI_KEY to your .env file.';
+      return;
+    }
 
     // 1) add the user's message to the list
     messages.add(AiChatMessage(text: text, isMe: true));
@@ -48,22 +72,22 @@ You are **BB Smartchat**, a friendly and expert business advisor. You specialize
 When you respond, follow these guidelines:
 
 1. **Focus.**  Only answer questions about business topics.  
-2. **Personalize.**  Use the user’s profile data below to tailor your advice:  
+2. **Personalize.**  Use the user's profile data below to tailor your advice:  
    ${profileController.myProfile.toMap()}  
 3. **Tone.**  Be clear, concise, and actionable. Use a professional yet approachable style.  
-4. **Off-topic fallback.**  If the user’s request isn’t business-related, reply **exactly**:  
-   “❌ I’m sorry, but I can only answer business-related questions.”  
+4. **Off-topic fallback.**  If the user's request isn't business-related, reply **exactly**:  
+   "❌ I'm sorry, but I can only answer business-related questions."  
 5. **Allowed digressions.**  You may graciously accept:  
-   - **Compliments** (e.g. “Thanks!”)  
-   - **Meta-questions** (e.g. “Who are you?”)  
-   - **Casual greetings** (e.g. “hi,” “hello,” “good morning”)  
+   - **Compliments** (e.g. "Thanks!")  
+   - **Meta-questions** (e.g. "Who are you?")  
+   - **Casual greetings** (e.g. "hi," "hello," "good morning")  
 
    For greetings, respond with a brief, friendly welcome.  
    _Example_:  
-   **User**: “Hi!”  
-   **BizBot**: “Hello there! 👋 How can I help you with your business today?”
+   **User**: "Hi!"  
+   **BizBot**: "Hello there! 👋 How can I help you with your business today?"
 
-Now, let’s help the user with their next request!
+Now, let's help the user with their next request!
 '''
       },
       // then all chat so far
@@ -113,15 +137,43 @@ Now, let’s help the user with their next request!
               text: content.first['text'] as String,
               isMe: false,
             ));
+          } else {
+            errorMessage.value = 'No valid response content received from API';
           }
+        } else {
+          errorMessage.value = 'Empty response received from API';
         }
       } else {
         errorMessage.value = 'Error ${resp.statusCode}: ${resp.body}';
+        print('API Error: ${resp.statusCode} - ${resp.body}');
       }
     } catch (e) {
-      errorMessage.value = 'Exception: $e';
+      errorMessage.value = 'Network error: ${e.toString()}';
+      print('Exception in sendMessage: $e');
     } finally {
       isLoading.value = false;
     }
+  }
+
+  /// Helper method to check if the controller is properly configured
+  bool get isConfigured => _apiKey != null && _apiKey!.isNotEmpty;
+
+  /// Method to manually set API key (for testing or dynamic configuration)
+  void setApiKey(String apiKey) {
+    _apiKey = apiKey;
+    if (errorMessage.value?.contains('API key not configured') == true) {
+      errorMessage.value = null;
+    }
+  }
+
+  /// Clear all messages and reset to initial state
+  void clearChat() {
+    messages.clear();
+    messages.add(AiChatMessage(
+      text:
+          'Hi, I\'m BB SmartChat. Here to help you make smarter decisions and elevate your business.',
+      isMe: false,
+    ));
+    errorMessage.value = null;
   }
 }

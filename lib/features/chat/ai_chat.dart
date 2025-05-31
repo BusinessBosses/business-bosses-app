@@ -104,7 +104,7 @@ class AiChatScreen extends GetView<AiChatController> {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
