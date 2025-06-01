@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:business_bosses_v2/features/aipromote/ad_preview.dart';
 import 'package:business_bosses_v2/features/aipromote/business_form.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
@@ -29,11 +31,31 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   );
   String _adContent = '';
   bool _loading = false;
-  final AiPromoteController aiPromoteController =
-      Get.put(AiPromoteController());
-  final ProfileController profileController = Get.find();
-  final CreatePostController createPostController = Get.put(CreatePostController());
-  final CreateBossUpController createBossUpController = Get.put(CreateBossUpController());
+
+  // Safe controller initialization
+  late final AiPromoteController aiPromoteController;
+  ProfileController? profileController;
+  late final CreatePostController createPostController;
+  late final CreateBossUpController createBossUpController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers safely
+    aiPromoteController = Get.put(AiPromoteController());
+
+    // Safe way to get ProfileController - it might not exist
+    try {
+      profileController = Get.find<ProfileController>();
+    } catch (e) {
+      debugPrint('ProfileController not found: $e');
+      // You might want to initialize it here or handle the absence
+      // profileController = Get.put(ProfileController());
+    }
+
+    createPostController = Get.put(CreatePostController());
+    createBossUpController = Get.put(CreateBossUpController());
+  }
 
   void _handleInfoSubmit(BusinessInfo info) async {
     setState(() {
@@ -41,16 +63,30 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
       _loading = true;
     });
 
-    // Simulate AI generation
-    await aiPromoteController.generateAd();
+    try {
+      // Simulate AI generation with error handling
+      await aiPromoteController.generateAd();
 
-    setState(() {
-      _adContent = aiPromoteController.adCopy.value.isNotEmpty
-          ? aiPromoteController.adCopy.value
-          : 'AI generated ad content will appear here.';
-      _loading = false;
-      _currentStep = PromoteStep.preview;
-    });
+      setState(() {
+        // Safe access to adCopy with null check
+        _adContent = (aiPromoteController.adCopy.value.isNotEmpty)
+            ? aiPromoteController.adCopy.value
+            : 'AI generated ad content will appear here.';
+        _loading = false;
+        _currentStep = PromoteStep.preview;
+      });
+    } catch (e) {
+      setState(() {
+        _loading = false;
+      });
+
+      // Show error to user
+      if (mounted && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error generating ad: $e')),
+        );
+      }
+    }
   }
 
   void _handleAdEdit(String content) {
@@ -60,23 +96,28 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   }
 
   void _handlePostAd(List<String> platforms) async {
+    // Check if profileController is available when needed
+    if (platforms.contains('homepage') && profileController == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile controller not available')),
+      );
+      return;
+    }
+
     setState(() {
       _loading = true;
     });
 
-    // await Future<dynamic>.delayed(Duration(milliseconds: 1500));
     try {
-      // if you need a ProfileController, retrieve it here:
-
       for (String platform in platforms) {
         if (platform == 'homepage') {
-          // your GetX controller method
+          // Safe call with null check
           await createPostController.createPost(
             <String, dynamic>{
               'title': _adContent.trim(),
               'timestamp': DateTime.now().millisecondsSinceEpoch,
             },
-            profileController,
+            profileController!, // Using ! since we checked above
           );
         } else {
           await createBossUpController.createForum(<String, dynamic>{
@@ -87,42 +128,44 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
           });
         }
       }
-      // final List<void> results = await Future.wait(futures);
 
-      // inspect any http.Response failures
-      // final Iterable<dynamic> httpFails = results
-      //     .whereType<http.Response>()
-      //     .where((Object? r) => r.statusCode < 200 || r.statusCode >= 300);
-      // if (httpFails.isNotEmpty) {
-      //   final r = httpFails.first;
-      //   throw Exception('Challenge post failed (${r.statusCode})');
-      // }
-
-      // success!
-      _currentStep = PromoteStep.success;
+      // Success - only update state if widget is still mounted
+      if (mounted) {
+        setState(() {
+          _currentStep = PromoteStep.success;
+          _loading = false;
+        });
+      }
     } catch (err) {
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        SnackBar(content: Text('Error posting ad: $err')),
-      );
-    } finally {
-      setState(() => _loading = false);
-    }
+      debugPrint('Error posting ad: $err');
 
-    setState(() {
-      _loading = false;
-      _currentStep = PromoteStep.success;
-    });
+      if (mounted && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error posting ad: $err')),
+        );
+      }
+
+      if (mounted) {
+        setState(() => _loading = false);
+      }
+    }
   }
 
   void _handleCreateAnother() {
-    setState(() {
-      _currentStep = PromoteStep.info;
-    });
+    if (mounted) {
+      setState(() {
+        _currentStep = PromoteStep.info;
+      });
+    }
   }
 
   Widget _buildProgressIndicator() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1), // Translucent white
+        borderRadius: BorderRadius.circular(16),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -143,7 +186,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
       height: 12,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isActive ? Color(0xFF6366F1) : Color(0xFFE5E7EB),
+        color: isActive ? const Color(0xFF6366F1) : const Color(0xFFE5E7EB),
       ),
     );
   }
@@ -152,8 +195,8 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     return Expanded(
       child: Container(
         height: 2,
-        margin: EdgeInsets.symmetric(horizontal: 8),
-        color: Color(0xFFE5E7EB),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        color: const Color(0xFFE5E7EB),
       ),
     );
   }
@@ -183,12 +226,12 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.6,
+      initialChildSize: 0.9,
       maxChildSize: 0.9,
-      minChildSize: 0.4,
+      minChildSize: 0.9,
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(24),
@@ -199,16 +242,18 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
             children: <Widget>[
               // Header
               Container(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: const BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: Color(0xFFF3F4F6)),
                   ),
                 ),
-                child: Stack(
-                  children: <Widget>[
-                    Center(
-                      child: Text(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      const Text(
                         'AI Promote',
                         style: TextStyle(
                           fontSize: 18,
@@ -216,17 +261,26 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
                           color: Color(0xFF1F2937),
                         ),
                       ),
-                    ),
-                  ],
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).maybePop(),
+                        child: CircleAvatar(
+                          backgroundColor: const Color(0xFFF3F4F6),
+                          radius: 18,
+                          child: Icon(Icons.close, color: Color(0xFF6B7280)),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               // Progress Indicator
               _buildProgressIndicator(),
+
               // Content
               Expanded(
                 child: SingleChildScrollView(
                   controller: scrollController,
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(20),
                   child: _buildContent(),
                 ),
               ),
