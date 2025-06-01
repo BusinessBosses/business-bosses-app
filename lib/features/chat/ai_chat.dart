@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/controllers/ai_chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/ai_chat_message.dart';
 import 'package:business_bosses_v2/features/chat/widgets/chat_bubble.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ class AiChatScreen extends StatefulWidget {
 class _AiChatScreenState extends State<AiChatScreen>
     with TickerProviderStateMixin {
   final AiChatController controller = Get.find<AiChatController>();
+  final ProfileController profileController = Get.find<ProfileController>();
 
   final TextEditingController _inputCtrl = TextEditingController();
   final ScrollController _scrollCtrl = ScrollController();
@@ -32,6 +34,13 @@ class _AiChatScreenState extends State<AiChatScreen>
   @override
   void initState() {
     super.initState();
+    if (controller.messages.isEmpty) {
+      controller.messages.add(AiChatMessage(
+        text:
+            'Hi ${profileController.myProfile.name}. I\'m your go-to AI assistant for business advice. How can I assist you today?',
+        isMe: false,
+      ));
+    }
     _initAnimations();
   }
 
@@ -138,7 +147,7 @@ class _AiChatScreenState extends State<AiChatScreen>
             onPressed: Get.back,
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
-          title: const Text('BB SmartChat')),
+          title: const Text('SmartChat AI')),
       body: SafeArea(
         child: Column(
           children: <Widget>[

@@ -8,13 +8,7 @@ import '../models/ai_chat_message.dart';
 
 class AiChatController extends GetxController {
   // The conversation: user messages (isMe=true) & bot replies (isMe=false)
-  final RxList<AiChatMessage> messages = <AiChatMessage>[
-    AiChatMessage(
-      text:
-          'Hi, I\'m BB SmartChat. Here to help you make smarter decisions and elevate your business.',
-      isMe: false,
-    ),
-  ].obs;
+  final RxList<AiChatMessage> messages = <AiChatMessage>[].obs;
   final RxBool isLoading = false.obs;
   final RxnString errorMessage = RxnString();
   final ProfileController profileController = Get.find();
@@ -61,7 +55,7 @@ class AiChatController extends GetxController {
       <String, String>{
         'role': 'system',
         'content': '''
-You are **BB Smartchat**, a friendly and expert business advisor. You specialize in:
+You are **Smartchat AI**, a friendly and expert business advisor. You specialize in:
 
   • Strategy  
   • Finance  
@@ -85,7 +79,7 @@ When you respond, follow these guidelines:
    For greetings, respond with a brief, friendly welcome.  
    _Example_:  
    **User**: "Hi!"  
-   **BizBot**: "Hello there! 👋 How can I help you with your business today?"
+   **SmartChat AI**: "Hello there! 👋 How can I help you with your business today?"
 
 Now, let's help the user with their next request!
 '''
@@ -171,7 +165,7 @@ Now, let's help the user with their next request!
     messages.clear();
     messages.add(AiChatMessage(
       text:
-          'Hi, I\'m BB SmartChat. Here to help you make smarter decisions and elevate your business.',
+          'Hi ${profileController.myProfile.name}. I\'m your go-to AI assistant for business advice. How can I assist you today?',
       isMe: false,
     ));
     errorMessage.value = null;

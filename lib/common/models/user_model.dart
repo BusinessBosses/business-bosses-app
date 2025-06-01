@@ -371,4 +371,9 @@ class UserModel {
   void incrementCoinsCount(int incrementBy) {
     coinscount = (coinscount ?? 0) + incrementBy;
   }
+
+  String get firstName {
+    if (name == null || name!.trim().isEmpty) return '';
+    return name!.trim().split(RegExp(r'\s+')).first;
+  }
 }
