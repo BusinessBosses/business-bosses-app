@@ -116,8 +116,8 @@ class _BoostPostState extends State<BoostPost> {
       });
       print(
           '❌ StripeException: code=${e.error.code}, message=${e.error.localizedMessage}');
-      // ignore: use_build_context_synchronously
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+     
+      showSnackBar(Get.context!, message: 'Opps!! Something went wrong. Try again');
       // print('Here ->>>>>> $e');
     } catch (e, st) {
       setState(() {
@@ -285,7 +285,7 @@ class _BoostPostState extends State<BoostPost> {
   Future<void> _makePaystackPayment() async {
     setState(() => _isProcessing = true);
     await PaystackFlutter().pay(
-      context: context,
+      context: Get.context!,
       secretKey: dotenv.env['PAYSTACK_SECRET_KEY']!,
       amount: int.parse(initPlan) * 100000,
       email: profileController.myProfile.email,
@@ -294,7 +294,7 @@ class _BoostPostState extends State<BoostPost> {
         Navigator.push(
             Get.context!, MaterialPageRoute(builder: (_) => Confirmation()));
       },
-      onCancelled: (_) => showSnackBar(context, message: 'Payment cancelled'),
+      onCancelled: (_) => showSnackBar(Get.context!, message: 'Payment cancelled'),
       callbackUrl: 'https://your-domain.com/callback',
     );
     setState(() => _isProcessing = false);
@@ -332,7 +332,7 @@ class _BoostPostState extends State<BoostPost> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(Get.context!).size;
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(

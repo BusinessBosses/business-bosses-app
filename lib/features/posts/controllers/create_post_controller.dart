@@ -11,7 +11,6 @@ import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../common/widgets/gallery_screen.dart';
@@ -468,27 +467,27 @@ class CreatePostController extends GetxController {
   Future<void> onPickImage(GalleryType type, {bool isUpdating = false}) async {
     // print(" $updatingImageFileList $isUpdating");
     if (type == GalleryType.videos) {
-      final XFile? video = await _picker.pickVideo(source: ImageSource.gallery);
-      if (video != null) {
-        try {
-          final String? uint8list = await VideoThumbnail.thumbnailFile(
-            video: File(video.path).path,
-            imageFormat: ImageFormat.PNG,
-            maxWidth:
-                128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-            quality: 10,
-          );
+      // final XFile? video = await _picker.pickVideo(source: ImageSource.gallery);
+      // if (video != null) {
+      //   try {
+      //     final String? uint8list = await VideoThumbnail.thumbnailFile(
+      //       video: File(video.path).path,
+      //       imageFormat: ImageFormat.PNG,
+      //       maxWidth:
+      //           128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      //       quality: 10,
+      //     );
 
-          selectedVid = File(video.path);
-          vidThumbnail = File(uint8list!);
-          print('++++++>>>>>>>>>>>>>>>this is the video $selectedVid');
-          print('++++++>>>>>>>>>>>>>>>this is the video $vidThumbnail');
+      //     selectedVid = File(video.path);
+      //     vidThumbnail = File(uint8list!);
+      //     print('++++++>>>>>>>>>>>>>>>this is the video $selectedVid');
+      //     print('++++++>>>>>>>>>>>>>>>this is the video $vidThumbnail');
 
-          update();
-        } catch (e) {
-          //handle error
-        }
-      }
+      //     update();
+      //   } catch (e) {
+      //     //handle error
+      //   }
+      // }
     } else {
       try {
         final List<XFile> pickedFileList = await _picker.pickMultiImage();

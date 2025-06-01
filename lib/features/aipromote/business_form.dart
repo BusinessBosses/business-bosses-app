@@ -69,13 +69,13 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
       bio: _bioController.text,
       website: _websiteController.text,
     );
-    widget.onSubmit(info);
     aiPromoteController.setBusinessDetails(
       name: _nameController.text.trim(),
       desc: _bioController.text.trim(),
       loc: _websiteController.text.trim(), // pass website as “location”
       ind: _industryController.text.trim(),
     );
+    widget.onSubmit(info);
   }
 
   Widget _buildInputGroup(
