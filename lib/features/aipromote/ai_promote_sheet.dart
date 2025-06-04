@@ -254,7 +254,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       const Text(
-                        'AI Promote',
+                        'Free Business Promotion',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,

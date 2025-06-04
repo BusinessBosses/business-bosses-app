@@ -276,7 +276,7 @@ class BottomBar extends StatelessWidget {
                                                               ),
                                                     title: Text(
                                                       index == 0
-                                                          ? 'Ai Promote'
+                                                          ? 'Enter Free Business Promotion'
                                                           : index == 1
                                                               ? 'Post content, discussion, etc'
                                                               : index == 2

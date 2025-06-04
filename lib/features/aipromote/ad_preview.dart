@@ -1,4 +1,10 @@
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class AdPreview extends StatefulWidget {
   final String content;
@@ -21,6 +27,9 @@ class AdPreview extends StatefulWidget {
 class _AdPreviewState extends State<AdPreview> {
   bool _editMode = false;
   late TextEditingController _editController;
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+
   final Map<String, bool> _selectedPlatforms = <String, bool>{
     'homepage': true,
     'marketplace': false,
@@ -50,6 +59,34 @@ class _AdPreviewState extends State<AdPreview> {
     });
   }
 
+  Future<void> _pickImage() async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1200,
+        maxHeight: 1200,
+        imageQuality: 85,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _selectedImage = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      // Handle error - you might want to show a snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to pick image: $e')),
+      );
+    }
+  }
+
+  void _removeImage() {
+    setState(() {
+      _selectedImage = null;
+    });
+  }
+
   void _togglePlatform(String platform) {
     setState(() {
       _selectedPlatforms[platform] = !_selectedPlatforms[platform]!;
@@ -68,6 +105,8 @@ class _AdPreviewState extends State<AdPreview> {
   bool get _isAnyPlatformSelected =>
       _selectedPlatforms.values.any((bool v) => v);
   bool get _areAllSelected => _selectedPlatforms.values.every((bool v) => v);
+
+  ProfileController profileController = Get.find<ProfileController>();
 
   Widget _buildPlatformChip(String key, String label) {
     bool isSelected = _selectedPlatforms[key]!;
@@ -139,52 +178,138 @@ class _AdPreviewState extends State<AdPreview> {
             child: Container(
               padding: EdgeInsets.all(20),
               constraints: BoxConstraints(minHeight: 120),
-              child: _editMode
-                  ? TextFormField(
-                      controller: _editController,
-                      maxLines: null,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        height: 1.5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // Image section
+                  if (_selectedImage != null) ...<Widget>[
+                    Container(
+                      width: double.infinity,
+                      height: 150,
+                      margin: EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: FileImage(_selectedImage!),
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Edit your ad content...',
-                        hintStyle: TextStyle(color: Colors.white70),
-                      ),
-                      // Add this to handle keyboard dismissal on done
-                      textInputAction: TextInputAction.done,
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).unfocus();
-                      },
-                    )
-                  : Text(
-                      _editController.text,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        height: 1.5,
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: GestureDetector(
+                              onTap: _removeImage,
+                              child: Container(
+                                padding: EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: Colors.black54,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-            ),
-          ),
-          SizedBox(height: 16),
-          TextButton(
-            onPressed: _toggleEdit,
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-                side: BorderSide(color: Color(0xFF6366F1)),
-              ),
-            ),
-            child: Text(
-              _editMode ? 'Save Changes' : 'Edit Copy',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF6366F1),
-                fontWeight: FontWeight.w500,
+                  ],
+
+                  // Text content
+                  _editMode
+                      ? TextFormField(
+                          controller: _editController,
+                          maxLines: null,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            height: 1.5,
+                          ),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Edit your ad content...',
+                            hintStyle: TextStyle(color: Colors.white70),
+                          ),
+                          textInputAction: TextInputAction.done,
+                          onFieldSubmitted: (_) {
+                            FocusScope.of(context).unfocus();
+                          },
+                        )
+                      : Text(
+                          _editController.text,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            height: 1.5,
+                          ),
+                        ),
+
+                  SizedBox(height: 16),
+
+                  // Action buttons row
+                  Row(
+                    children: <Widget>[
+                      // Edit/Save button
+                      TextButton.icon(
+                        onPressed: _toggleEdit,
+                        icon: Icon(
+                          _editMode ? Icons.save : Icons.edit,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                        label: Text(
+                          _editMode ? 'Save' : 'Edit',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          backgroundColor: Colors.white.withValues(alpha: 0.2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(width: 8),
+
+                      // Add image button
+                      TextButton.icon(
+                        onPressed: _pickImage,
+                        icon: Icon(
+                          Icons.add_photo_alternate,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                        label: Text(
+                          _selectedImage != null ? 'Change' : 'Add Image',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          backgroundColor: Colors.white.withValues(alpha: 0.2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
@@ -255,6 +380,54 @@ class _AdPreviewState extends State<AdPreview> {
                     ),
             ),
           ),
+          !profileController.myProfile.isSubscribed
+              ? GestureDetector(
+                  onTap: () => <Future>{
+                    Get.bottomSheet(
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          topRight: Radius.circular(20.0),
+                        ),
+                      ),
+                      Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20.0),
+                            topRight: Radius.circular(20.0),
+                          ),
+                        ),
+                        height: Get.height * 0.9,
+                        child: const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              PremiumScreen(),
+                            ],
+                          ),
+                        ),
+                      ),
+                      backgroundColor: Colors.white,
+                    )
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Center(
+                      child: Text(
+                        'Upgrade to Pro',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: textColor,
+                          fontWeight: FontWeight.w700,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
           SizedBox(height: 16),
         ],
       ),
