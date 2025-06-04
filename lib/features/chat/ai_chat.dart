@@ -84,36 +84,7 @@ class _AiChatScreenState extends State<AiChatScreen>
     ));
 
     // Colorful shadow animation
-    _shadowColorAnimation = TweenSequence<Color?>(<TweenSequenceItem<Color?>>[
-      TweenSequenceItem(
-        tween: ColorTween(begin: Color(0xFF6366F1), end: Color(0xFFEC4899)),
-        weight: 1.0,
-      ),
-      TweenSequenceItem(
-        tween: ColorTween(begin: Color(0xFFEC4899), end: Color(0xFF10B981)),
-        weight: 1.0,
-      ),
-      TweenSequenceItem(
-        tween: ColorTween(begin: Color(0xFF10B981), end: Color(0xFFF59E0B)),
-        weight: 1.0,
-      ),
-      TweenSequenceItem(
-        tween: ColorTween(begin: Color(0xFFF59E0B), end: Color(0xFF8B5CF6)),
-        weight: 1.0,
-      ),
-      TweenSequenceItem(
-        tween: ColorTween(begin: Color(0xFF8B5CF6), end: Color(0xFF06B6D4)),
-        weight: 1.0,
-      ),
-      TweenSequenceItem(
-        tween: ColorTween(begin: Color(0xFF06B6D4), end: Color(0xFF6366F1)),
-        weight: 1.0,
-      ),
-    ]).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOutSine,
-    ));
-
+  
     // Start the animation and repeat
     _animationController.repeat();
   }
@@ -189,16 +160,7 @@ class _AiChatScreenState extends State<AiChatScreen>
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
                                     ),
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                        color: (_shadowColorAnimation.value ??
-                                                Colors.purple)
-                                            .withOpacity(
-                                                _shadowOpacityAnimation.value),
-                                        blurRadius: _shadowBlurAnimation.value,
-                                        offset: _shadowOffsetAnimation.value,
-                                      ),
-                                    ],
+                                    
                                   ),
                                   child: Center(
                                     child: SvgPicture.asset(
