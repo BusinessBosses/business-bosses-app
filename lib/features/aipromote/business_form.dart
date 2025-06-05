@@ -100,11 +100,6 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           ),
           SizedBox(height: 6),
           TextFormField(
-            enabled: label == 'Website or Contact Link' &&
-                    (shopController.shop!.url == null ||
-                        shopController.shop!.url!.isEmpty)
-                ? true
-                : false,
             controller: controller,
             maxLines: maxLines,
             keyboardType: keyboardType,

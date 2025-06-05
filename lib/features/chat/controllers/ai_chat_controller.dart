@@ -164,8 +164,7 @@ Now, let's help the user with their next request!
   void clearChat() {
     messages.clear();
     messages.add(AiChatMessage(
-      text:
-          'Hi ${profileController.myProfile.name}. I\'m your go-to AI assistant for business advice. How can I assist you today?',
+      text: 'Hello👋How can I assist you with your business today?',
       isMe: false,
     ));
     errorMessage.value = null;

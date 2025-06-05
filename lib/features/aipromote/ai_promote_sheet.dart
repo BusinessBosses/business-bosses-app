@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/aipromote/ad_preview.dart';
 import 'package:business_bosses_v2/features/aipromote/business_form.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
@@ -8,6 +10,7 @@ import 'package:business_bosses_v2/features/aipromote/success_screen.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -95,7 +98,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     });
   }
 
-  void _handlePostAd(List<String> platforms) async {
+  void _handlePostAd(List<String> platforms, File? selectedImage) async {
     // Check if profileController is available when needed
     if (platforms.contains('homepage') && profileController == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -110,12 +113,29 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
 
     try {
       for (String platform in platforms) {
+        String? image;
+        if (selectedImage != null) {
+          dynamic response = await ApiService.uploadFile(selectedImage);
+          if (response['success']) {
+            image = response['fileUrl'];
+          } else {
+            showSnackbar(
+              message: 'Error while creating supplier!',
+              error: true,
+            );
+            setState(() {
+              _loading = false;
+            });
+            return;
+          }
+        }
         if (platform == 'homepage') {
           // Safe call with null check
           await createPostController.createPost(
             <String, dynamic>{
               'title': _adContent.trim(),
               'timestamp': DateTime.now().millisecondsSinceEpoch,
+              'images': image != null ? <String>[image] : <dynamic>[],
             },
             profileController!, // Using ! since we checked above
           );
@@ -125,6 +145,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
             'description': _adContent.trim(),
             'timestamp': DateTime.now().millisecondsSinceEpoch,
             'industryId': 'industryId',
+            'images': image != null ? <String>[image] : <dynamic>[],
           });
         }
       }

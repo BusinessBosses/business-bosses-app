@@ -45,7 +45,8 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
       },
       borderRadius: BorderRadius.circular(radius),
       child: Padding(
-        padding: EdgeInsets.only(right: widget.color != null ? 10.0 : 0),
+        padding:
+            EdgeInsets.only(right: widget.color != null ? 10.0 : 0, bottom: 10),
         child: Container(
           width: widget.color != null ? 150 : null,
           height: widget.color != null ? 190 : null,

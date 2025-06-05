@@ -36,8 +36,7 @@ class _AiChatScreenState extends State<AiChatScreen>
     super.initState();
     if (controller.messages.isEmpty) {
       controller.messages.add(AiChatMessage(
-        text:
-            'Hi ${profileController.myProfile.name}. I\'m your go-to AI assistant for business advice. How can I assist you today?',
+        text: 'Hello👋 How can I assist you with your business today?',
         isMe: false,
       ));
     }
@@ -84,7 +83,7 @@ class _AiChatScreenState extends State<AiChatScreen>
     ));
 
     // Colorful shadow animation
-  
+
     // Start the animation and repeat
     _animationController.repeat();
   }
@@ -160,7 +159,6 @@ class _AiChatScreenState extends State<AiChatScreen>
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
                                     ),
-                                    
                                   ),
                                   child: Center(
                                     child: SvgPicture.asset(

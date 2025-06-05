@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 class AdPreview extends StatefulWidget {
   final String content;
   final Function(String) onEdit;
-  final Function(List<String> platforms) onPost;
+  final Function(List<String> platforms, File? selectedImage) onPost;
   final bool isLoading;
 
   const AdPreview({
@@ -32,7 +32,6 @@ class _AdPreviewState extends State<AdPreview> {
 
   final Map<String, bool> _selectedPlatforms = <String, bool>{
     'homepage': true,
-    'marketplace': false,
     'challenge': false,
   };
 
@@ -51,7 +50,7 @@ class _AdPreviewState extends State<AdPreview> {
   void _toggleEdit() {
     if (_editMode) {
       // Dismiss keyboard when saving
-      FocusScope.of(context).unfocus();
+      FocusScope.of(Get.context!).unfocus();
       widget.onEdit(_editController.text);
     }
     setState(() {
@@ -75,7 +74,7 @@ class _AdPreviewState extends State<AdPreview> {
       }
     } catch (e) {
       // Handle error - you might want to show a snackbar
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
         SnackBar(content: Text('Failed to pick image: $e')),
       );
     }
@@ -89,22 +88,32 @@ class _AdPreviewState extends State<AdPreview> {
 
   void _togglePlatform(String platform) {
     setState(() {
-      _selectedPlatforms[platform] = !_selectedPlatforms[platform]!;
+      final bool currentlySelected = _selectedPlatforms[platform]!;
+      if (!currentlySelected) {
+        // User is trying to select this platform → unselect all others first
+        _selectedPlatforms.forEach((String key, _) {
+          _selectedPlatforms[key] = false;
+        });
+        _selectedPlatforms[platform] = true;
+      } else {
+        // If it’s already selected, tapping will unselect it
+        _selectedPlatforms[platform] = false;
+      }
     });
   }
 
-  void _selectAll() {
-    bool allSelected = _selectedPlatforms.values.every((bool v) => v);
-    setState(() {
-      _selectedPlatforms.forEach((String key, bool value) {
-        _selectedPlatforms[key] = !allSelected;
-      });
-    });
-  }
+  // void _selectAll() {
+  //   bool allSelected = _selectedPlatforms.values.every((bool v) => v);
+  //   setState(() {
+  //     _selectedPlatforms.forEach((String key, bool value) {
+  //       _selectedPlatforms[key] = !allSelected;
+  //     });
+  //   });
+  // }
 
   bool get _isAnyPlatformSelected =>
       _selectedPlatforms.values.any((bool v) => v);
-  bool get _areAllSelected => _selectedPlatforms.values.every((bool v) => v);
+  // bool get _areAllSelected => _selectedPlatforms.values.every((bool v) => v);
 
   ProfileController profileController = Get.find<ProfileController>();
 
@@ -136,7 +145,7 @@ class _AdPreviewState extends State<AdPreview> {
       // Add GestureDetector to dismiss keyboard on tap outside
       onTap: () {
         if (_editMode) {
-          FocusScope.of(context).unfocus();
+          FocusScope.of(Get.context!).unfocus();
         }
       },
       child: Column(
@@ -237,7 +246,7 @@ class _AdPreviewState extends State<AdPreview> {
                           ),
                           textInputAction: TextInputAction.done,
                           onFieldSubmitted: (_) {
-                            FocusScope.of(context).unfocus();
+                            FocusScope.of(Get.context!).unfocus();
                           },
                         )
                       : Text(
@@ -329,17 +338,17 @@ class _AdPreviewState extends State<AdPreview> {
               _buildPlatformChip('challenge', 'Boss Up Challenge'),
             ],
           ),
-          TextButton(
-            onPressed: _selectAll,
-            child: Text(
-              _areAllSelected ? 'Deselect All' : 'Select All',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF6366F1),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
+          // TextButton(
+          //   onPressed: _selectAll,
+          //   child: Text(
+          //     _areAllSelected ? 'Deselect All' : 'Select All',
+          //     style: TextStyle(
+          //       fontSize: 14,
+          //       color: Color(0xFF6366F1),
+          //       fontWeight: FontWeight.w500,
+          //     ),
+          //   ),
+          // ),
           SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
@@ -351,7 +360,7 @@ class _AdPreviewState extends State<AdPreview> {
                           .where((MapEntry<String, bool> e) => e.value)
                           .map((MapEntry<String, bool> e) => e.key)
                           .toList();
-                      widget.onPost(selected);
+                      widget.onPost(selected, _selectedImage);
                     }
                   : null,
               style: ElevatedButton.styleFrom(
@@ -382,7 +391,7 @@ class _AdPreviewState extends State<AdPreview> {
           ),
           !profileController.myProfile.isSubscribed
               ? GestureDetector(
-                  onTap: () => <Future>{
+                  onTap: () => <Future<void>>{
                     Get.bottomSheet(
                       isScrollControlled: true,
                       shape: const RoundedRectangleBorder(

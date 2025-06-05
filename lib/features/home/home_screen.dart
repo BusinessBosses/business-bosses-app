@@ -13,6 +13,7 @@ import 'package:business_bosses_v2/features/live_event/controller/live_event_con
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,21 +55,16 @@ class _HomeScreenState extends State<HomeScreen>
   final SupplierController supplierController = Get.put(SupplierController());
   final AiChatController ctrl = Get.put(AiChatController());
   late io.Socket socket;
-  bool isScrolled = true;
-  bool isTabVisible = false;
+
   late TabController _tabController;
-
-  // List<TargetFocus> targets = [];
-
-  // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
-  // final GetStorage sandBox = GetStorage();
   final ScrollController _scrollController = ScrollController();
   final MarketController marketController = Get.put(MarketController());
   final ShopController shopController =
       Get.put(ShopController(), permanent: true);
 
-  int marketIndex = 0;
-  // final GlobalKey<NavigatorState> postButtonKey = GlobalKey<NavigatorState>();
+  // Instead of plain bools, use ValueNotifiers so we don't call setState on every scroll.
+  final ValueNotifier<bool> _isScrolledNotifier = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> _isTabVisibleNotifier = ValueNotifier<bool>(false);
 
   @override
   void initState() {
@@ -76,32 +72,18 @@ class _HomeScreenState extends State<HomeScreen>
     _tabController = TabController(vsync: this, length: 2, initialIndex: 0);
 
     WidgetsBinding.instance.addObserver(this);
-    // showTutorial();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? tutorialShown = prefs.getString('tutorialShown');
-      if (tutorialShown == null || tutorialShown.isEmpty) {
-        // showTutorial();
-        await prefs.setString('tutorialShown', 'true');
+
+    // Run checkOrderVisit and shop init once, after first frame:
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkOrderVisit();
+      if (shopController.shop == null) {
+        shopController.initShop();
       }
     });
-    final HomeController homeController = Get.find();
 
-    void checkScrollPosition() {
-      if (_scrollController.position.pixels >= 230) {
-        setState(() {
-          isTabVisible = true;
-        });
-      } else {
-        setState(() {
-          isTabVisible = false;
-        });
-      }
-    }
+    // Listen to scroll events to update both notifiers:
+    _scrollController.addListener(_onScrollChanged);
 
-    _scrollController.addListener(() {
-      checkScrollPosition();
-    });
     // Function to establish the WebSocket connection
     void connectSocket() {
       socket = io.io(Constants.socketUrl, <String, dynamic>{
@@ -130,12 +112,10 @@ class _HomeScreenState extends State<HomeScreen>
 
       socket.onConnectError((dynamic err) {
         print(err);
-        // Handle connection errors as needed
       });
 
       socket.onError((dynamic err) {
         print(err);
-        // Handle socket errors as needed
       });
     }
 
@@ -143,11 +123,28 @@ class _HomeScreenState extends State<HomeScreen>
     connectSocket();
   }
 
+  void _onScrollChanged() {
+    // Hide/show bottom bar based on scroll direction:
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      _isScrolledNotifier.value = true;
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      _isScrolledNotifier.value = false;
+    }
+
+    // Show/hide tabs in the app bar based on scroll offset:
+    if (_scrollController.hasClients &&
+        _scrollController.position.pixels >= 230) {
+      _isTabVisibleNotifier.value = true;
+    } else {
+      _isTabVisibleNotifier.value = false;
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final HomeController homeController = Get.find();
-
-    if (state.index == 0) {
+    if (state == AppLifecycleState.resumed) {
       homeController.fetchPosts(fromBackground: true);
     }
     super.didChangeAppLifecycleState(state);
@@ -156,15 +153,18 @@ class _HomeScreenState extends State<HomeScreen>
   void _scrollToTop() {
     _scrollController.animateTo(
       0.0,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
   }
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScrollChanged);
     _scrollController.dispose();
-    socket.off('newPostEvent'); // Remove the listener
+    _isScrolledNotifier.dispose();
+    _isTabVisibleNotifier.dispose();
+    socket.off('newPostEvent');
     WidgetsBinding.instance.removeObserver(this);
     _tabController.dispose();
     super.dispose();
@@ -180,122 +180,102 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    _tabController.addListener(() {
-      setState(() {}); // Update the state when the tab is changed
-    });
-
     return WillPopScope(
       onWillPop: () async {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Exit App'),
-                content: const Text('Are you sure you want to exit?'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: const Text('No'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                    child: const Text('Yes'),
-                  ),
-                ],
-              );
-            }).then((dynamic exit) {
-          if (exit == true) {
-            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-          }
-        });
-        return false;
+        return await showDialog<bool>(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Exit App'),
+                  content: const Text('Are you sure you want to exit?'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text('No'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: const Text('Yes'),
+                    ),
+                  ],
+                );
+              },
+            ) ==
+            true;
       },
-      child: GetBuilder<HomeController>(
-        builder: (HomeController controller) {
-          checkOrderVisit();
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (shopController.shop == null) {
-              shopController.initShop();
-            }
-          });
-          return UpgradeAlert(
-            upgrader: Upgrader(
-              durationUntilAlertAgain: const Duration(minutes: 1),
-            ),
-            showIgnore: false,
-            child: AdvancedDrawer(
-              backdrop: Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: <Color>[
-                      Colors.white,
-                      Colors.white.withValues(alpha: 0.2)
-                    ],
-                  ),
-                ),
-              ),
-              controller: _advancedDrawerController,
-              animationCurve: Curves.easeInOut,
-              animationDuration: const Duration(milliseconds: 300),
-              animateChildDecoration: true,
-              rtlOpening: false,
-              // openScale: 1.0,
-              disabledGestures: false,
-              childDecoration: const BoxDecoration(
-                // NOTICE: Uncomment if you want to add shadow behind the page.
-                // Keep in mind that it may cause animation jerks.
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 3,
-                  ),
+      child: UpgradeAlert(
+        upgrader: Upgrader(
+          durationUntilAlertAgain: const Duration(minutes: 1),
+        ),
+        child: AdvancedDrawer(
+          backdrop: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[
+                  Colors.white,
+                  Colors.white.withOpacity(0.2),
                 ],
-                borderRadius: BorderRadius.all(Radius.circular(16)),
               ),
-
-              drawer: DrawerContent(
-                oncloseclick: () {
-                  _advancedDrawerController.hideDrawer();
-                },
-                currentuser: homeController.profileController.myProfile,
-                hasUnreadNotification:
-                    _profileController.myProfile.unReadCount != null &&
-                        _profileController.myProfile.unReadCount! > 0,
+            ),
+          ),
+          controller: _advancedDrawerController,
+          animationCurve: Curves.easeInOut,
+          animationDuration: const Duration(milliseconds: 300),
+          animateChildDecoration: true,
+          rtlOpening: false,
+          disabledGestures: false,
+          childDecoration: const BoxDecoration(
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 3,
               ),
+            ],
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+          drawer: DrawerContent(
+            oncloseclick: () {
+              _advancedDrawerController.hideDrawer();
+            },
+            currentuser: homeController.profileController.myProfile,
+            hasUnreadNotification:
+                _profileController.myProfile.unReadCount != null &&
+                    _profileController.myProfile.unReadCount! > 0,
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            floatingActionButton: Obx(() {
+              return homeController.loading.value
+                  ? Container()
+                  : Floatingbutton();
+            }),
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(kToolbarHeight),
+              child: Obx(() {
+                if (homeController.loading.value) {
+                  return Container();
+                }
+                return ValueListenableBuilder<bool>(
+                  valueListenable: _isTabVisibleNotifier,
+                  builder: (BuildContext context, bool isTabVisible, _) {
+                    return GetBuilder<ChatController>(
+                      builder: (ChatController chatController) {
+                        final List<MessageModel> unseenChats =
+                            chatController.chats.where((MessageModel msg) {
+                          return msg.receiverUid ==
+                                  homeController
+                                      .profileController.myProfile.uid &&
+                              !msg.seen;
+                        }).toList();
+                        final bool hasBadge = unseenChats.isNotEmpty;
 
-              child: Scaffold(
-                floatingActionButton:
-                    controller.loading.value ? Container() : Floatingbutton(),
-                backgroundColor: Colors.white,
-                appBar: PreferredSize(
-                  preferredSize: controller.loading.value
-                      ? const Size.fromHeight(0)
-                      : const Size.fromHeight(kToolbarHeight),
-                  child: controller.loading.value
-                      ? Container()
-                      : GetBuilder<ChatController>(
-                          builder: (ChatController chatController) {
-                          final List<MessageModel> unseenChats = chatController
-                              .chats
-                              .where((MessageModel element) =>
-                                  element.receiverUid ==
-                                      controller
-                                          .profileController.myProfile.uid &&
-                                  !element.seen)
-                              .toList();
-                          final bool hasBadge = unseenChats.isNotEmpty;
-
-                          return GetBuilder<ProfileController>(
-                            builder: (ProfileController profileController) =>
-                                HomeAppBar(
+                        return GetBuilder<ProfileController>(
+                          builder: (ProfileController profileController) {
+                            return HomeAppBar(
                               onMenuClick: () {
                                 _advancedDrawerController.showDrawer();
                               },
@@ -309,167 +289,152 @@ class _HomeScreenState extends State<HomeScreen>
                                       null &&
                                   profileController.myProfile.unReadCount! > 0,
                               controller: _tabController,
-                            ),
-                          );
-                        }),
-                ),
-                body: controller.loading.value
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Stack(
-                              children: <Widget>[
-                                Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: Image.asset(
-                                      'assets/app/app_logo_2.png',
-                                      height: 40,
-                                      width: 40,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 45,
-                                  height: 45,
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ],
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 20.0),
-                              child: Text(
-                                'Promote your Business, Network & Grow Globally',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    : controller.noConnection.value
-                        ? SafetyModel(
-                            isLoading: false,
-                            title:
-                                'Error While Loading Data\nCheck your Internet Connection',
-                            subTitle: 'Try Reloading Again',
-                            clickableText: 'Refresh',
-                            onTap: () {
-                              controller.loadData();
-                              _profileController.fetchData();
-                              marketController.initMarket();
-                              // marketController.initUsers();
-                              _communitiesController.fetchIndustries();
-                              liveEventController.initEvents();
-                            },
-                            icon: const Icon(
-                              Icons.warning,
-                              size: 60,
-                            ),
-                          )
-                        : controller.error.value
-                            ? SafetyModel(
-                                isLoading: false,
-                                title: 'Error While Loading Data',
-                                subTitle: 'Try Reloading Again',
-                                clickableText: 'Refresh',
-                                onTap: () {
-                                  controller.loadData();
-                                  _profileController.fetchData();
-                                  marketController.initMarket();
-                                  // marketController.initUsers();
-                                  _communitiesController.fetchIndustries();
-                                  liveEventController.initEvents();
-                                },
-                                icon: const Icon(
-                                  Icons.warning,
-                                  size: 60,
-                                ),
-                              )
-                            : SizedBox(
-                                height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                child: Stack(
-                                  children: <Widget>[
-                                    Container(
-                                      height:
-                                          MediaQuery.of(context).size.height,
-                                      width: MediaQuery.of(context).size.width,
-                                      color: backgroundColor,
-                                      child: RefreshIndicator(
-                                        onRefresh: controller.loadData,
-                                        child: NotificationListener<
-                                            ScrollNotification>(
-                                          onNotification: (ScrollNotification
-                                              notification) {
-                                            if (notification
-                                                is ScrollUpdateNotification) {
-                                              if (notification.dragDetails !=
-                                                      null &&
-                                                  notification.dragDetails!
-                                                          .primaryDelta !=
-                                                      null) {
-                                                double primaryDelta =
-                                                    notification.dragDetails!
-                                                        .primaryDelta!;
-
-                                                if (primaryDelta > 0) {
-                                                  // Scrolling downward
-                                                  setState(() {
-                                                    isScrolled = true;
-                                                  });
-                                                } else if (primaryDelta < 0) {
-                                                  // Scrolling upward
-                                                  setState(() {
-                                                    isScrolled = false;
-                                                  });
-                                                }
-                                              }
-                                            }
-
-                                            return true;
-                                          },
-                                          child: TabBarView(
-                                              controller: _tabController,
-                                              children: <Widget>[
-                                                // const DiscoverSection(),
-                                                PostsWidget(
-                                                  onPageChange:
-                                                      widget.onPageChange,
-                                                  scrollController:
-                                                      _scrollController,
-                                                ),
-                                                ListView.builder(
-                                                  shrinkWrap: true,
-                                                  itemCount:
-                                                      controller.forums.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return ForumItem(
-                                                      forum: controller
-                                                          .forums[index],
-                                                      controller:
-                                                          homeController,
-                                                    );
-                                                  },
-                                                ),
-                                              ]),
-                                        ),
-                                      ),
-                                    ),
-                                    BottomBar(
-                                      activeIndex: 0,
-                                      scrollControl: _scrollToTop,
-                                    ),
-                                    // const Floatingbutton(),
-                                  ],
-                                ),
-                              ),
-              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              }),
             ),
-          );
-        },
+            body: Obx(() {
+              if (homeController.loading.value) {
+                return _buildLoading();
+              } else if (homeController.noConnection.value) {
+                return _buildNoConnection();
+              } else if (homeController.error.value) {
+                return _buildError();
+              } else {
+                return _buildMainContent();
+              }
+            }),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMainContent() {
+    return Stack(
+      children: <Widget>[
+        Container(
+          color: backgroundColor,
+          child: RefreshIndicator(
+            onRefresh: homeController.loadData,
+            child: TabBarView(
+              controller: _tabController,
+              children: <Widget>[
+                PostsWidget(
+                  onPageChange: widget.onPageChange,
+                  scrollController: _scrollController,
+                ),
+                _buildForumList(homeController),
+              ],
+            ),
+          ),
+        ),
+        BottomBar(
+          activeIndex: 0,
+          scrollControl: _scrollToTop,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildForumList(HomeController controller) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return SizedBox(
+          height: constraints.maxHeight,
+          width: constraints.maxWidth,
+          child: ListView.builder(
+            controller: _scrollController,
+            itemCount: controller.forums.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ForumItem(
+                forum: controller.forums[index],
+                controller: homeController,
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLoading() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/app/app_logo_2.png',
+                    height: 40,
+                    width: 40,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 45,
+                height: 45,
+                child: CircularProgressIndicator(),
+              ),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 20.0),
+            child: Text(
+              'Promote your Business, Network & Grow Globally',
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNoConnection() {
+    return SafetyModel(
+      isLoading: false,
+      title: 'Error While Loading Data\nCheck your Internet Connection',
+      subTitle: 'Try Reloading Again',
+      clickableText: 'Refresh',
+      onTap: () {
+        homeController.loadData();
+        _profileController.fetchData();
+        marketController.initMarket();
+        _communitiesController.fetchIndustries();
+        liveEventController.initEvents();
+      },
+      icon: const Icon(
+        Icons.warning,
+        size: 60,
+      ),
+    );
+  }
+
+  Widget _buildError() {
+    return SafetyModel(
+      isLoading: false,
+      title: 'Error While Loading Data',
+      subTitle: 'Try Reloading Again',
+      clickableText: 'Refresh',
+      onTap: () {
+        homeController.loadData();
+        _profileController.fetchData();
+        marketController.initMarket();
+        _communitiesController.fetchIndustries();
+        liveEventController.initEvents();
+      },
+      icon: const Icon(
+        Icons.warning,
+        size: 60,
       ),
     );
   }
