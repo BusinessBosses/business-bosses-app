@@ -180,137 +180,155 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return await showDialog<bool>(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Exit App'),
-                  content: const Text('Are you sure you want to exit?'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text('No'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      child: const Text('Yes'),
-                    ),
-                  ],
-                );
-              },
-            ) ==
-            true;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (didPop) return;
+
+        showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Exit App'),
+              content: const Text('Are you sure you want to exit?'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text('No'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text('Yes'),
+                ),
+              ],
+            );
+          },
+        ).then((bool? shouldExit) {
+          if (shouldExit == true && context.mounted) {
+            SystemNavigator.pop(); // This exits the app completely
+          }
+        });
       },
       child: UpgradeAlert(
         upgrader: Upgrader(
           durationUntilAlertAgain: const Duration(minutes: 1),
         ),
-        child: AdvancedDrawer(
-          backdrop: Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  Colors.white,
-                  Colors.white.withOpacity(0.2),
-                ],
+        child: Obx(() {
+          // Check if we should disable drawer interactions
+          bool shouldDisableDrawer = homeController.loading.value ||
+              homeController.noConnection.value ||
+              homeController.error.value;
+
+          return AdvancedDrawer(
+            backdrop: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[
+                    Colors.white,
+                    Colors.white.withOpacity(0.2),
+                  ],
+                ),
               ),
             ),
-          ),
-          controller: _advancedDrawerController,
-          animationCurve: Curves.easeInOut,
-          animationDuration: const Duration(milliseconds: 300),
-          animateChildDecoration: true,
-          rtlOpening: false,
-          disabledGestures: false,
-          childDecoration: const BoxDecoration(
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 3,
-              ),
-            ],
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-          drawer: DrawerContent(
-            oncloseclick: () {
-              _advancedDrawerController.hideDrawer();
-            },
-            currentuser: homeController.profileController.myProfile,
-            hasUnreadNotification:
-                _profileController.myProfile.unReadCount != null &&
-                    _profileController.myProfile.unReadCount! > 0,
-          ),
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            floatingActionButton: Obx(() {
-              return homeController.loading.value
-                  ? Container()
-                  : Floatingbutton();
-            }),
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
-              child: Obx(() {
-                if (homeController.loading.value) {
-                  return Container();
-                }
-                return ValueListenableBuilder<bool>(
-                  valueListenable: _isTabVisibleNotifier,
-                  builder: (BuildContext context, bool isTabVisible, _) {
-                    return GetBuilder<ChatController>(
-                      builder: (ChatController chatController) {
-                        final List<MessageModel> unseenChats =
-                            chatController.chats.where((MessageModel msg) {
-                          return msg.receiverUid ==
-                                  homeController
-                                      .profileController.myProfile.uid &&
-                              !msg.seen;
-                        }).toList();
-                        final bool hasBadge = unseenChats.isNotEmpty;
+            controller: _advancedDrawerController,
+            animationCurve: Curves.easeInOut,
+            animationDuration: const Duration(milliseconds: 300),
+            animateChildDecoration: true,
+            rtlOpening: false,
+            // Disable gestures when in loading/error states
+            disabledGestures: shouldDisableDrawer,
+            childDecoration: const BoxDecoration(
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 3,
+                ),
+              ],
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+            ),
+            drawer: DrawerContent(
+              oncloseclick: () {
+                _advancedDrawerController.hideDrawer();
+              },
+              currentuser: homeController.profileController.myProfile,
+              hasUnreadNotification:
+                  _profileController.myProfile.unReadCount != null &&
+                      _profileController.myProfile.unReadCount! > 0,
+            ),
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              floatingActionButton: Obx(() {
+                return homeController.loading.value
+                    ? Container()
+                    : Floatingbutton();
+              }),
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: Obx(() {
+                  if (homeController.loading.value) {
+                    return Container();
+                  }
+                  return ValueListenableBuilder<bool>(
+                    valueListenable: _isTabVisibleNotifier,
+                    builder: (BuildContext context, bool isTabVisible, _) {
+                      return GetBuilder<ChatController>(
+                        builder: (ChatController chatController) {
+                          final List<MessageModel> unseenChats =
+                              chatController.chats.where((MessageModel msg) {
+                            return msg.receiverUid ==
+                                    homeController
+                                        .profileController.myProfile.uid &&
+                                !msg.seen;
+                          }).toList();
+                          final bool hasBadge = unseenChats.isNotEmpty;
 
-                        return GetBuilder<ProfileController>(
-                          builder: (ProfileController profileController) {
-                            return HomeAppBar(
-                              onMenuClick: () {
-                                _advancedDrawerController.showDrawer();
-                              },
-                              isTabVisible: isTabVisible,
-                              hasBadge: hasBadge,
-                              coinsCount: profileController.myProfile.coinscount
-                                      ?.toString() ??
-                                  '0',
-                              hasUnreadNotification: profileController
-                                          .myProfile.unReadCount !=
-                                      null &&
-                                  profileController.myProfile.unReadCount! > 0,
-                              controller: _tabController,
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                );
+                          return GetBuilder<ProfileController>(
+                            builder: (ProfileController profileController) {
+                              return HomeAppBar(
+                                onMenuClick: shouldDisableDrawer
+                                    ? null
+                                    : () {
+                                        _advancedDrawerController.showDrawer();
+                                      },
+                                isTabVisible: isTabVisible,
+                                hasBadge: hasBadge,
+                                coinsCount: profileController
+                                        .myProfile.coinscount
+                                        ?.toString() ??
+                                    '0',
+                                hasUnreadNotification: profileController
+                                            .myProfile.unReadCount !=
+                                        null &&
+                                    profileController.myProfile.unReadCount! >
+                                        0,
+                                controller: _tabController,
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                  );
+                }),
+              ),
+              body: Obx(() {
+                if (homeController.loading.value) {
+                  return _buildLoading();
+                } else if (homeController.noConnection.value) {
+                  return _buildNoConnection();
+                } else if (homeController.error.value) {
+                  return _buildError();
+                } else {
+                  return _buildMainContent();
+                }
               }),
             ),
-            body: Obx(() {
-              if (homeController.loading.value) {
-                return _buildLoading();
-              } else if (homeController.noConnection.value) {
-                return _buildNoConnection();
-              } else if (homeController.error.value) {
-                return _buildError();
-              } else {
-                return _buildMainContent();
-              }
-            }),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
