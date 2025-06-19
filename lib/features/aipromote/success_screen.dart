@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +11,9 @@ class SuccessScreen extends StatelessWidget {
   void _handleShare() async {
     try {
       socialShare(
-          'Check out my business! I just created a promotion for my business.');
+          'Check out my business! I just created a promotion for my business on BusinessBosses.\nhttps://businessbosses.page.link');
     } catch (e) {
-      print('Error sharing: $e');
+      log('Error sharing: $e');
     }
   }
 

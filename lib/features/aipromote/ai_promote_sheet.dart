@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/aipromote/ad_preview.dart';
@@ -183,7 +182,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   Widget _buildProgressIndicator() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1), // Translucent white
+        color: Colors.white.withValues(alpha: 0.1), // Translucent white
         borderRadius: BorderRadius.circular(16),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
