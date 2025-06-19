@@ -1,4 +1,6 @@
 // lib/features/chat/screens/ai_chat_screen.dart
+// ignore_for_file: unused_field
+
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/controllers/ai_chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/ai_chat_message.dart';
@@ -12,7 +14,7 @@ class AiChatScreen extends StatefulWidget {
   const AiChatScreen({super.key});
 
   @override
-  _AiChatScreenState createState() => _AiChatScreenState();
+  State<AiChatScreen> createState() => _AiChatScreenState();
 }
 
 class _AiChatScreenState extends State<AiChatScreen>
@@ -165,7 +167,10 @@ class _AiChatScreenState extends State<AiChatScreen>
                                       'assets/svgs/bot.svg',
                                       width: 20,
                                       height: 35,
-                                      color: Colors.white,
+                                      colorFilter: ColorFilter.mode(
+                                        Colors.white,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                   ),
                                 );
