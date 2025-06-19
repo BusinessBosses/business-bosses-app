@@ -145,6 +145,7 @@ class _TopicsPageState extends State<TopicsPage> {
                                     padding: const EdgeInsets.only(right: 15),
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
                                           minimumSize: const Size(150, 45)),
                                       onPressed: () {
                                         Get.toNamed(Routes.createForum,
@@ -263,7 +264,9 @@ class _TopicsPageState extends State<TopicsPage> {
                                               child: SvgPicture.asset(
                                                 'assets/svgs/members.svg',
                                                 height: 15,
-                                                color: primaryColorLT,
+                                                colorFilter: ColorFilter.mode(
+                                                    primaryColorLT,
+                                                    BlendMode.srcIn),
                                               ),
                                             ),
                                             Padding(
@@ -311,7 +314,8 @@ class _TopicsPageState extends State<TopicsPage> {
                                                   left: 8.0, top: 5, right: 2),
                                               child: SvgPicture.asset(
                                                 'assets/svgs/topics.svg',
-                                                color: textColor,
+                                                colorFilter: ColorFilter.mode(
+                                                    textColor, BlendMode.srcIn),
                                                 height: 11.5,
                                               ),
                                             ),
@@ -427,7 +431,8 @@ class _TopicsPageState extends State<TopicsPage> {
                             child: ForumItem(
                               isLearningpost: true,
                               forum: controller.forums[i],
-                              key: ValueKey(controller.forums[i].forumId),
+                              key: ValueKey<String>(
+                                  controller.forums[i].forumId),
                               controller: controller,
                               isBossUp: true,
                             ),

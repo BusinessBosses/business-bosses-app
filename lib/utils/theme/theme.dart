@@ -130,6 +130,7 @@ final OutlinedButtonThemeData outlinedButtonThemeData = OutlinedButtonThemeData(
 
 final ElevatedButtonThemeData elevatedButtonThemeData = ElevatedButtonThemeData(
   style: ElevatedButton.styleFrom(
+    backgroundColor: primaryColorLT,
     textStyle: const TextStyle(),
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     shape: const RoundedRectangleBorder(

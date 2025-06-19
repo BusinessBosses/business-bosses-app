@@ -111,7 +111,9 @@ class _CoursesPageState extends State<CoursesPage> {
                                 padding: const EdgeInsets.only(right: 15),
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      minimumSize: const Size(150, 45)),
+                                    minimumSize: const Size(150, 45),
+                                    backgroundColor: primaryColorLT,
+                                  ),
                                   onPressed: () {
                                     Get.to(() => CreateCourseScreen(
                                         industryId: industry.industryId!));

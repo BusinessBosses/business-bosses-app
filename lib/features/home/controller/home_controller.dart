@@ -260,12 +260,6 @@ class HomeController extends GetxController {
 
     // Add the first promoted post, if available
     if (promotedPostIndex < promotedPosts.length) {
-      mixedPosts.add({
-        'type': 'promotedPost',
-        'index': promotedPostIndex,
-        'id': promotedPosts[promotedPostIndex].postId
-      });
-      promotedPostIndex++;
     } else if (promotedMarketIndex < promotedMarkets.length) {
       mixedPosts.add({'type': 'market', 'index': promotedMarketIndex});
       promotedMarketIndex++;
@@ -1205,7 +1199,7 @@ class HomeController extends GetxController {
     update();
   }
 
-  initSocket() {
+  void initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
       'transports': ['websocket'],

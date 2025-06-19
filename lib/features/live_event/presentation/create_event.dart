@@ -610,8 +610,7 @@ class _CreateEventState extends State<CreateEvent> {
                         ));
                   }
                 },
-                child: Text(
-                    widget.event != null ? 'Update Event' : 'Create Event'),
+                label: widget.event != null ? 'Update Event' : 'Create Event',
               ),
             ),
           ],

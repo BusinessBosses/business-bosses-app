@@ -142,13 +142,13 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      homeController.fetchPosts(fromBackground: true);
-    }
-    super.didChangeAppLifecycleState(state);
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.resumed) {
+  //     homeController.fetchPosts(fromBackground: true);
+  //   }
+  //   super.didChangeAppLifecycleState(state);
+  // }
 
   void _scrollToTop() {
     _scrollController.animateTo(
@@ -229,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen>
                   end: Alignment.bottomRight,
                   colors: <Color>[
                     Colors.white,
-                    Colors.white.withOpacity(0.2),
+                    Colors.white.withValues(alpha: 0.2),
                   ],
                 ),
               ),
@@ -338,18 +338,15 @@ class _HomeScreenState extends State<HomeScreen>
       children: <Widget>[
         Container(
           color: backgroundColor,
-          child: RefreshIndicator(
-            onRefresh: homeController.loadData,
-            child: TabBarView(
-              controller: _tabController,
-              children: <Widget>[
-                PostsWidget(
-                  onPageChange: widget.onPageChange,
-                  scrollController: _scrollController,
-                ),
-                _buildForumList(homeController),
-              ],
-            ),
+          child: TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              PostsWidget(
+                onPageChange: widget.onPageChange,
+                scrollController: _scrollController,
+              ),
+              _buildForumList(homeController),
+            ],
           ),
         ),
         BottomBar(

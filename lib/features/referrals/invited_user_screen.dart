@@ -40,7 +40,7 @@ class _InvitedUsersScreenState extends State<InvitedUsersScreen> {
   }
 
   // ignore: always_declare_return_types
-  _scrollListener() {
+  void _scrollListener() {
     if (_controller.position.atEdge) {
       if (_controller.position.pixels == 0) {
       } else {

@@ -607,7 +607,7 @@ class _ChatItemState extends State<ChatItem> {
   }
 
   // ignore: always_declare_return_types
-  showSnackBAr(String message) {
+  void showSnackBAr(String message) {
     Navigator.pop(context);
     showSnackbar(message: message);
   }

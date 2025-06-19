@@ -32,7 +32,6 @@ class _DonationsPageState extends State<DonationsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -128,7 +127,9 @@ class _DonationsPageState extends State<DonationsPage> {
                                                         .styleFrom(
                                                             minimumSize:
                                                                 const Size(
-                                                                    150, 45)),
+                                                                    150, 45),
+                                                            backgroundColor:
+                                                                primaryColorLT),
                                                     onPressed: () {
                                                       if (!donationsController
                                                           .userIds

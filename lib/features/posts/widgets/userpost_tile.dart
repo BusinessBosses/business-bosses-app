@@ -178,7 +178,7 @@ class _PostTileState extends State<PostTile> {
     if (widget.post.livedata != null) {
       try {
         if (widget.post.livedata!.toString().contains('roomId')) {
-          final jsonData = jsonDecode(widget.post.livedata!.toString());
+          final dynamic jsonData = jsonDecode(widget.post.livedata!.toString());
           eventId = jsonData['id'];
           title = jsonData['title'];
           roomid = jsonData['roomId'];
@@ -1255,6 +1255,7 @@ class _PostTileState extends State<PostTile> {
                               widget.post.postId,
                               'post',
                               widget.post.user!.uid);
+                          setState(() {});
                         },
                         icon: widget.post.likes?.contains(
                                     profileController.myProfile.uid) ==
