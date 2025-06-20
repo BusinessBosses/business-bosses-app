@@ -299,7 +299,7 @@ class _AiChatScreenState extends State<AiChatScreen>
                     icon: ShaderMask(
                       shaderCallback: (Rect bounds) {
                         return LinearGradient(
-                          colors: <Color>[primaryColorLT],
+                          colors: <Color>[primaryColorLT, primaryColorLT],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ).createShader(bounds);
