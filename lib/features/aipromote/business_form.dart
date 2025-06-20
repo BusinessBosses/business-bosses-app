@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
 import 'package:business_bosses_v2/features/aipromote/models/business_info_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -183,8 +184,8 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                 child: ElevatedButton(
                   onPressed: widget.isLoading ? null : _handleSubmit,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF6366F1),
-                    disabledBackgroundColor: Color(0xFFA5B4FC),
+                    backgroundColor: primaryColorLT,
+                    disabledBackgroundColor: backgroundColor,
                     padding: EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),

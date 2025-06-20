@@ -365,7 +365,7 @@ class _AdPreviewState extends State<AdPreview> {
                   : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryColorLT,
-                disabledBackgroundColor: Color(0xFFA5B4FC),
+                disabledBackgroundColor: backgroundColor,
                 padding: EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
