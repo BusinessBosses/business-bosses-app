@@ -112,6 +112,7 @@ class _AiChatScreenState extends State<AiChatScreen>
 
   @override
   Widget build(BuildContext context) {
+    bool ishellotext = false;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -206,8 +207,16 @@ class _AiChatScreenState extends State<AiChatScreen>
                         ],
                       );
                     }
+
+                    if (!msgs[i - 1].text.contains(
+                        'Hello👋 How can I assist you with your business today?')) {
+                      ishellotext = true;
+                    } else {
+                      ishellotext = false;
+                    }
                     // Return the actual chat message (adjust index by -1)
-                    return ChatBubble(msg: msgs[i - 1]);
+                    return ChatBubble(
+                        msg: msgs[i - 1], ishellotext: ishellotext);
                   },
                 );
               }),

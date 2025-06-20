@@ -6,7 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ChatBubble extends StatelessWidget {
   final AiChatMessage msg;
-  const ChatBubble({required this.msg, super.key});
+  final bool ishellotext;
+  const ChatBubble({required this.msg, this.ishellotext = false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -72,17 +73,18 @@ class ChatBubble extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.copy, size: 18),
-                    tooltip: 'Copy',
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(text: msg.text));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Message copied to clipboard')),
-                      );
-                    },
-                  ),
+                  if (ishellotext == true)
+                    IconButton(
+                      icon: const Icon(Icons.copy, size: 18),
+                      tooltip: 'Copy',
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: msg.text));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Message copied to clipboard')),
+                        );
+                      },
+                    ),
                 ],
               ),
             }
