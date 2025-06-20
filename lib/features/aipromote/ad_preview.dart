@@ -172,7 +172,7 @@ class _AdPreviewState extends State<AdPreview> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               gradient: LinearGradient(
-                colors: <Color>[Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                colors: <Color>[backgroundColor, backgroundColor],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -253,7 +253,7 @@ class _AdPreviewState extends State<AdPreview> {
                           _editController.text,
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white,
+                            color: Colors.black,
                             height: 1.5,
                           ),
                         ),
@@ -269,20 +269,20 @@ class _AdPreviewState extends State<AdPreview> {
                         icon: Icon(
                           _editMode ? Icons.save : Icons.edit,
                           size: 16,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                         label: Text(
                           _editMode ? 'Save' : 'Edit',
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         style: TextButton.styleFrom(
                           padding:
                               EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          backgroundColor: Colors.white.withValues(alpha: 0.2),
+                          backgroundColor: Colors.black.withValues(alpha: 0.2),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -297,20 +297,20 @@ class _AdPreviewState extends State<AdPreview> {
                         icon: Icon(
                           Icons.add_photo_alternate,
                           size: 16,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                         label: Text(
                           _selectedImage != null ? 'Change' : 'Add Image',
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         style: TextButton.styleFrom(
                           padding:
                               EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          backgroundColor: Colors.white.withValues(alpha: 0.2),
+                          backgroundColor: Colors.black.withValues(alpha: 0.2),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -364,7 +364,7 @@ class _AdPreviewState extends State<AdPreview> {
                     }
                   : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF6366F1),
+                backgroundColor: primaryColorLT,
                 disabledBackgroundColor: Color(0xFFA5B4FC),
                 padding: EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
