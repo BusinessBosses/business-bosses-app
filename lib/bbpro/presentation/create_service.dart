@@ -1633,7 +1633,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                         }
                       }
                     },
-                    child: const Text('Yes'),
+                    child: const Text(
+                      'Yes',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   const SizedBox(
                     width: 10,

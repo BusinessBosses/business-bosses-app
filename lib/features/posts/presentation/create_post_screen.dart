@@ -542,7 +542,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             widget.postDetail, _titleCtrl.text.trim());
                       }
                     },
-                    child: const Text('Yes'),
+                    child: const Text(
+                      'Yes',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   const SizedBox(
                     width: 10,

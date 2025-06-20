@@ -341,7 +341,10 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                             _titleCtrl.text.trim(), nonEmptyOptions);
                       }
                     },
-                    child: const Text('Yes'),
+                    child: const Text(
+                      'Yes',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   const SizedBox(
                     width: 10,
