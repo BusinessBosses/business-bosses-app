@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/chat/controllers/ai_chat_controller.
 import 'package:business_bosses_v2/features/chat/models/ai_chat_message.dart';
 import 'package:business_bosses_v2/features/chat/widgets/chat_bubble.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -298,7 +299,7 @@ class _AiChatScreenState extends State<AiChatScreen>
                     icon: ShaderMask(
                       shaderCallback: (Rect bounds) {
                         return LinearGradient(
-                          colors: <Color>[Color(0xFF6366F1), Color(0xFF818CF8)],
+                          colors: <Color>[primaryColorLT],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ).createShader(bounds);
