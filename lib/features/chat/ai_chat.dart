@@ -116,11 +116,75 @@ class _AiChatScreenState extends State<AiChatScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+          titleSpacing: 0,
           leading: IconButton(
             onPressed: Get.back,
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
-          title: const Text('SmartChat AI')),
+          title: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (BuildContext context, Widget? child) {
+                    return Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(300),
+                        gradient: LinearGradient(
+                          colors: <Color>[Color(0xFF6366F1), Color(0xFF818CF8)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: Center(
+                        child: SvgPicture.asset(
+                          'assets/svgs/bot.svg',
+                          width: 10,
+                          height: 18,
+                          colorFilter: ColorFilter.mode(
+                            Colors.white,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const Text('SmartChat AI'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.info_outline,
+                          size: 16,
+                          color: Colors.grey[500],
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          'AI assistant',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[600],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          )),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -144,64 +208,6 @@ class _AiChatScreenState extends State<AiChatScreen>
                       // Show the bot avatar and description at the top
                       return Column(
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: AnimatedBuilder(
-                              animation: _animationController,
-                              builder: (BuildContext context, Widget? child) {
-                                return Container(
-                                  width: 100,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(300),
-                                    gradient: LinearGradient(
-                                      colors: <Color>[
-                                        Color(0xFF6366F1),
-                                        Color(0xFF818CF8)
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      'assets/svgs/bot.svg',
-                                      width: 20,
-                                      height: 35,
-                                      colorFilter: ColorFilter.mode(
-                                        Colors.white,
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 2.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.info_outline,
-                                  size: 16,
-                                  color: Colors.grey[500],
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  'AI assistant',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.grey[600],
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                           const SizedBox(
                               height: 16), // Add some space before messages
                         ],
