@@ -39,9 +39,11 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
       if (profileController.myProfile.hasShop) {
         shopController.initShop();
       } else {
-        Get.off(() => const Setupshop(
-              backToHome: true,
-            ));
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Get.off(() => const Setupshop(
+                backToHome: true,
+              ));
+        });
       }
     } else {
       _nameController = TextEditingController(text: shopController.shop!.name);

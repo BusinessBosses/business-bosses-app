@@ -282,7 +282,11 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => Navigator.of(context).maybePop(),
+                        onTap: () {
+                          if (Navigator.canPop(context)) {
+                            Navigator.of(context).pop();
+                          }
+                        },
                         child: CircleAvatar(
                           backgroundColor: const Color(0xFFF3F4F6),
                           radius: 18,
@@ -299,6 +303,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
               // Content
               Expanded(
                 child: SingleChildScrollView(
+                  key: UniqueKey(),
                   controller: scrollController,
                   padding: const EdgeInsets.all(20),
                   child: _buildContent(),

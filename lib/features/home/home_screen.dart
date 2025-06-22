@@ -76,9 +76,6 @@ class _HomeScreenState extends State<HomeScreen>
     // Run checkOrderVisit and shop init once, after first frame:
     WidgetsBinding.instance.addPostFrameCallback((_) {
       checkOrderVisit();
-      if (shopController.shop == null) {
-        shopController.initShop();
-      }
     });
 
     // Listen to scroll events to update both notifiers:
