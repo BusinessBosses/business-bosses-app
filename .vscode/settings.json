@@ -3,7 +3,7 @@
   "gradle.autoDetect": "off",
 
   // if you have the Java Extension Pack, also stop Java import from Gradle:
-  "java.import.gradle.enabled": "never",
+  "java.import.gradle.enabled": false,
   "java.import.gradle.offline.enabled": true,
   "java.configuration.updateBuildConfiguration": "interactive",
   "cmake.configureOnOpen": true,
@@ -20,6 +20,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
-  "java.home": "C:\\Users\\Eawuku\\OpenJDK\\jdk-17.0.12",
-  "android.sdk.path": "C:\\Users\\Eawuku\\AppData\\Local\\AndroidSdk" 
+  "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-24",
+  "android.sdk.path": "C:\\Users\\wadas\\AppData\\Local\\Android\\Sdk"
 }
