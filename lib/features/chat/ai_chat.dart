@@ -206,11 +206,27 @@ class _AiChatScreenState extends State<AiChatScreen>
                   itemCount: msgs.length + 1, // +1 for the header
                   itemBuilder: (_, int i) {
                     if (i == 0) {
-                      // Show the bot avatar and description at the top
+                    
                       return Column(
                         children: <Widget>[
-                          const SizedBox(
-                              height: 16), // Add some space before messages
+                          const SizedBox(height: 16),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.indigo.withOpacity(0.07),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Text(
+                              'SmartChat AI is your intelligent business assistant. Ask questions, get advice, and boost your productivity with instant, AI-powered responses.',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black87,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
                         ],
                       );
                     }
