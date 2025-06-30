@@ -402,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen>
           const Padding(
             padding: EdgeInsets.only(top: 20.0),
             child: Text(
-              'Promote your Business, Network & Grow Globally',
+              'Promote and Grow Your Business Globally',
               style: TextStyle(fontSize: 16),
             ),
           )

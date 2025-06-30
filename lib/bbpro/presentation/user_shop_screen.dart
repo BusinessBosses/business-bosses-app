@@ -300,7 +300,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                       '',
                                                   radius: radius,
                                                   placeHolder: Icons.person,
-                                                  iconSize: 22.0,
+                                                  iconSize: 50.0,
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -343,7 +343,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                       '',
                                                   radius: 0,
                                                   placeHolder: Icons.person,
-                                                  iconSize: 22.0,
+                                                  iconSize: 50.0,
                                                   fit: BoxFit
                                                       .cover, // Ensures the image fills the width properly
                                                 ),

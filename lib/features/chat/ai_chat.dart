@@ -156,32 +156,32 @@ class _AiChatScreenState extends State<AiChatScreen>
                 ),
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const Text('SmartChat AI'),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(
-                          Icons.info_outline,
-                          size: 16,
-                          color: Colors.grey[500],
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          'AI assistant',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(vertical: 2.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: <Widget>[
+                  //       Icon(
+                  //         Icons.info_outline,
+                  //         size: 16,
+                  //         color: Colors.grey[500],
+                  //       ),
+                  //       const SizedBox(width: 6),
+                  //       Text(
+                  //         'AI assistant',
+                  //         textAlign: TextAlign.center,
+                  //         style: TextStyle(
+                  //           fontSize: 13,
+                  //           color: Colors.grey[600],
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ],
@@ -206,13 +206,13 @@ class _AiChatScreenState extends State<AiChatScreen>
                   itemCount: msgs.length + 1, // +1 for the header
                   itemBuilder: (_, int i) {
                     if (i == 0) {
-                    
                       return Column(
                         children: <Widget>[
                           const SizedBox(height: 16),
                           Container(
                             margin: const EdgeInsets.symmetric(horizontal: 16),
-                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 12),
                             decoration: BoxDecoration(
                               color: Colors.indigo.withOpacity(0.07),
                               borderRadius: BorderRadius.circular(12),
