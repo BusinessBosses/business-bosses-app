@@ -129,6 +129,7 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
                       ),
                     ),
                   ),
+            const SizedBox(height: 10),
           ],
         );
       },

@@ -46,7 +46,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
       borderRadius: BorderRadius.circular(radius),
       child: Padding(
         padding:
-            EdgeInsets.only(right: widget.color != null ? 10.0 : 0, bottom: 10),
+            EdgeInsets.only(right: widget.color != null ? 10.0 : 0, bottom: 0),
         child: Container(
           width: widget.color != null ? 150 : null,
           height: widget.color != null ? 190 : null,
@@ -87,7 +87,8 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                               SvgPicture.asset(
                                 'assets/svgs/premiumbadge.svg',
                                 height: 9,
-                                color: primaryColorLT,
+                                colorFilter: ColorFilter.mode(
+                                    primaryColorLT, BlendMode.srcIn),
                               )
                             ],
                           ),
@@ -143,6 +144,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                   ),
                 ),
               ),
+              const SizedBox(height: 10),
             ],
           ),
         ),

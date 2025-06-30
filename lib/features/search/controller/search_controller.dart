@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
@@ -138,7 +140,7 @@ class CompleteSearchController extends GetxController {
 
     final ApiResponseModel response = await SearchRepository.getData(
         title: selectedFilter.value, page: page.value);
-
+    log('data is here: ${response.data.toString()}');
     if (response.success) {
       if (isPagination) {
         page(page.value + 1);
@@ -148,12 +150,12 @@ class CompleteSearchController extends GetxController {
       final List<UserModel> newUsers;
       if (selectedFilter.value.isEmpty) {
         newUsers = response.data['recommendedUsers']
-            .map<UserModel>((data) => UserModel.fromMap(data))
+            .map<UserModel>((dynamic data) => UserModel.fromMap(data))
             .toList();
         recommendedConnections.addAll(newUsers);
       } else {
         newUsers = response.data['categoryPosts']
-            .map<UserModel>((data) => UserModel.fromMap(data))
+            .map<UserModel>((dynamic data) => UserModel.fromMap(data))
             .toList();
         recommendedConnections.addAll(newUsers);
       }

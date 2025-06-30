@@ -5,7 +5,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 
 class SearchRepository {
   static Future<ApiResponseModel> getData({String? title, int page = 0}) async {
-    String path = '/search/get-recommended-data-with-category?page=$page';
+    String path = 'search/get-recommended-data-with-category?page=$page';
 
     if (title != null && title.isNotEmpty) {
       path += '&title=$title';
