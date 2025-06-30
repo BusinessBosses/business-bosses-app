@@ -7,7 +7,6 @@
   "java.configuration.updateBuildConfiguration": "interactive",
   "cmake.configureOnOpen": true,
   "editor.inlineSuggest.showToolbar": "always",
-  "dart.flutterSdkPath": "/Users/eawuku/flutter",
   "cSpell.words": [
     "backgroundcolorinterface",
     "Campaigncardwidget",
