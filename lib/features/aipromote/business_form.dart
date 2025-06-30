@@ -198,7 +198,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: primaryColorLT,
                             strokeWidth: 2,
                           ))
                       : Text(

@@ -20,7 +20,10 @@ class SellerReviewScreen extends StatefulWidget {
   final UserModel user;
   final bool? isShop;
   const SellerReviewScreen(
-      {super.key, required this.user, this.isShop = false, this.refreshCallback});
+      {super.key,
+      required this.user,
+      this.isShop = false,
+      this.refreshCallback});
 
   @override
   State<SellerReviewScreen> createState() => _SellerReviewScreenState();
@@ -195,7 +198,8 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                         width: 200,
                         child: const Text(
                           'Rate Seller',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ),
                     const SizedBox(
@@ -738,7 +742,10 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                   widget.user.uid, currentRating);
                               Get.back();
                             },
-                            child: const Text('Rate'),
+                            child: const Text(
+                              'Rate',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       ],
@@ -792,9 +799,9 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                             const Text(
                               'Rate Seller',
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
                             IconButton(
                               icon: const Icon(Icons.close),
