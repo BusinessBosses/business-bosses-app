@@ -62,7 +62,7 @@ class AiPromoteController extends GetxController {
           'role': 'system',
           'content': '''
 You are **AiPromoBot**, an expert at writing punchy, high-converting business ads.
-Focus on clarity, engagement, and a strong call-to-action.
+Focus on clarity, engagement, and a strong call-to-action. Leave no placeholders in the output and also no dummy data. Don't use brackets too for businesses name and website.
 '''
         },
         <String, String>{'role': 'user', 'content': prompt.value},

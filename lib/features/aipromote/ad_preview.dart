@@ -29,7 +29,7 @@ class _AdPreviewState extends State<AdPreview> {
   late TextEditingController _editController;
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
-
+  late FocusNode _editFocusNode;
   final Map<String, bool> _selectedPlatforms = <String, bool>{
     'homepage': true,
     'challenge': false,
@@ -39,22 +39,32 @@ class _AdPreviewState extends State<AdPreview> {
   void initState() {
     super.initState();
     _editController = TextEditingController(text: widget.content);
+    _editFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
     _editController.dispose();
+    _editFocusNode.dispose();
     super.dispose();
   }
 
   void _toggleEdit() {
     if (_editMode) {
-      // Dismiss keyboard when saving
-      FocusScope.of(Get.context!).unfocus();
+      // Save mode
+      FocusScope.of(context).unfocus();
       widget.onEdit(_editController.text);
     }
+
     setState(() {
       _editMode = !_editMode;
+    });
+
+    // Request focus after frame is built
+    if (!_editMode) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _editFocusNode.requestFocus();
     });
   }
 
@@ -142,10 +152,13 @@ class _AdPreviewState extends State<AdPreview> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // Add GestureDetector to dismiss keyboard on tap outside
+      behavior: HitTestBehavior.translucent,
       onTap: () {
-        if (_editMode) {
-          FocusScope.of(Get.context!).unfocus();
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          currentFocus
+              .unfocus(); // Only unfocus if something is actually focused
         }
       },
       child: Column(
@@ -233,10 +246,11 @@ class _AdPreviewState extends State<AdPreview> {
                   _editMode
                       ? TextFormField(
                           controller: _editController,
+                          focusNode: _editFocusNode,
                           maxLines: null,
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white,
+                            color: Colors.black,
                             height: 1.5,
                           ),
                           decoration: InputDecoration(
@@ -246,7 +260,7 @@ class _AdPreviewState extends State<AdPreview> {
                           ),
                           textInputAction: TextInputAction.done,
                           onFieldSubmitted: (_) {
-                            FocusScope.of(Get.context!).unfocus();
+                            FocusScope.of(context).unfocus();
                           },
                         )
                       : Text(
