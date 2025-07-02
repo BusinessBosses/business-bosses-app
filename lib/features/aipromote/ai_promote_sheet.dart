@@ -303,7 +303,6 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
               // Content
               Expanded(
                 child: SingleChildScrollView(
-                  key: UniqueKey(),
                   controller: scrollController,
                   padding: const EdgeInsets.all(20),
                   child: _buildContent(),

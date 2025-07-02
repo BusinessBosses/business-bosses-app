@@ -43,6 +43,14 @@ class _AdPreviewState extends State<AdPreview> {
   }
 
   @override
+  void didUpdateWidget(covariant AdPreview oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.content != widget.content && !_editMode) {
+      _editController.text = widget.content;
+    }
+  }
+
+  @override
   void dispose() {
     _editController.dispose();
     _editFocusNode.dispose();
@@ -50,21 +58,22 @@ class _AdPreviewState extends State<AdPreview> {
   }
 
   void _toggleEdit() {
-    if (_editMode) {
-      // Save mode
-      FocusScope.of(context).unfocus();
-      widget.onEdit(_editController.text);
-    }
-
     setState(() {
       _editMode = !_editMode;
     });
 
-    // Request focus after frame is built
-    if (!_editMode) return;
+    if (_editMode) {
+      // Focus the field after the frame is drawn
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _editFocusNode.requestFocus();
+      });
+    }
+  }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _editFocusNode.requestFocus();
+  void _saveEdit() {
+    widget.onEdit(_editController.text);
+    setState(() {
+      _editMode = false;
     });
   }
 
@@ -279,7 +288,7 @@ class _AdPreviewState extends State<AdPreview> {
                     children: <Widget>[
                       // Edit/Save button
                       TextButton.icon(
-                        onPressed: _toggleEdit,
+                        onPressed: _editMode ? _saveEdit : _toggleEdit,
                         icon: Icon(
                           _editMode ? Icons.save : Icons.edit,
                           size: 16,
