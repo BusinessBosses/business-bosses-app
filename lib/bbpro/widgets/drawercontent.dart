@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
@@ -38,6 +39,15 @@ class DrawerContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void showPromoteSheet() {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) => AIPromoteSheet(),
+      );
+    }
+
     ProfileController profileController = Get.find();
     ChallengeController controller = Get.put(ChallengeController());
     final Industry category = controller.categories.isNotEmpty
@@ -438,12 +448,7 @@ class DrawerContent extends StatelessWidget {
                                                   onTap: () {
                                                     Navigator.pop(context);
                                                     if (index == 0) {
-                                                      Get.to(() =>
-                                                          BossUpSection(
-                                                            industry: category,
-                                                            bossUp: controller
-                                                                .categories[0],
-                                                          ));
+                                                      showPromoteSheet();
                                                     } else if (index == 1) {
                                                       Get.toNamed(
                                                           Routes.createPost);
@@ -467,9 +472,48 @@ class DrawerContent extends StatelessWidget {
                                                           color: textColor,
                                                         )
                                                       : index == 0
-                                                          ? const Icon(
-                                                              Icons.star,
-                                                              color: textColor,
+                                                          ? Container(
+                                                              width: 30,
+                                                              height: 30,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            30),
+                                                                gradient:
+                                                                    LinearGradient(
+                                                                  colors: <Color>[
+                                                                    Color(
+                                                                        0xFF6366F1),
+                                                                    Color(
+                                                                        0xFF818CF8)
+                                                                  ],
+                                                                  begin: Alignment
+                                                                      .topLeft,
+                                                                  end: Alignment
+                                                                      .bottomRight,
+                                                                ),
+                                                              ),
+                                                              child: Material(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                child: InkWell(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              30),
+                                                                  child: Center(
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .star,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      size: 24,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
                                                             )
                                                           : SvgPicture.asset(
                                                               index == 1

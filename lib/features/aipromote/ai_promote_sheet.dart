@@ -128,6 +128,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
             return;
           }
         }
+
         if (platform == 'homepage') {
           // Safe call with null check
           await createPostController.createPost(
