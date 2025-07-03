@@ -52,7 +52,7 @@ class _SignUpFormState extends State<SignUpForm> {
   bool _invisibleCPassword = true, _invisiblePassword = true;
   bool agreedToTerms = true;
   final ApiService _apiService = ApiService();
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
   String countryCode = '+447';
 
@@ -97,7 +97,13 @@ class _SignUpFormState extends State<SignUpForm> {
   @override
   void initState() {
     super.initState();
-    // GetStorage().write('isFirstTime', false);
+    _googleSignIn.initialize(
+      clientId: null, // Android/iOS: typically null
+      serverClientId:
+          '346913891380-jc6ue1tk6jb1urt1r7sv6rg65eucjot5.apps.googleusercontent.com', // Required for ID tokens
+      hostedDomain: null,
+      nonce: null,
+    );
   }
 
   /// Returns the sha156 hash of [input] in hex notation.
@@ -250,36 +256,32 @@ class _SignUpFormState extends State<SignUpForm> {
     });
 
     // Attempt to sign in with Google
-    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
 
-    if (googleUser != null) {
-      // Sign in was successful
-      setState(() {
-        _isProcessing = false;
-      });
-      _authCred = googleUser.email;
-      _username = googleUser.displayName;
-      _password = googleUser.serverAuthCode;
+    final GoogleSignInAuthentication auth = googleUser.authentication;
+    // Sign in was successful
+    setState(() {
+      _isProcessing = false;
+    });
+    _authCred = googleUser.email;
+    _username = googleUser.displayName;
+    _password = auth.idToken;
 
-      // showPasswordDialog();
-      // await _handleRegister();
-      dynamic user = await _handleRegister();
-      if (user['success'] == false) {
-        Get.snackbar('Error', user['error']);
-      } else {
-        Get.snackbar('Success', 'You have registered succesfully!');
-        Get.off(() => UpdateProfileScreen(
-                user: UserModel(
-              name: _username!,
-              username: _username!,
-              email: _authCred!,
-            )));
-      }
-      await _googleSignIn.disconnect();
+    // showPasswordDialog();
+    // await _handleRegister();
+    dynamic user = await _handleRegister();
+    if (user['success'] == false) {
+      Get.snackbar('Error', user['error']);
     } else {
-      // ignore: use_build_context_synchronously
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      Get.snackbar('Success', 'You have registered succesfully!');
+      Get.off(() => UpdateProfileScreen(
+              user: UserModel(
+            name: _username!,
+            username: _username!,
+            email: _authCred!,
+          )));
     }
+    await _googleSignIn.disconnect();
 
     setState(() {
       _isProcessing = false;

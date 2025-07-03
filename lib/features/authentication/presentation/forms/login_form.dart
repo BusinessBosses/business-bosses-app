@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
+import 'dart:math' show Random;
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 
@@ -44,7 +45,7 @@ class _LoginFormState extends State<LoginForm> {
   bool _invisiblePassword = true;
   String countryCode = '+447';
   final ApiService _apiService = ApiService();
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
   String? _authCred, _password, _authusername;
 
   static bool isValidEmail(String email) {
@@ -60,6 +61,18 @@ class _LoginFormState extends State<LoginForm> {
     } else {
       return true;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _googleSignIn.initialize(
+      clientId: null, // Android/iOS: typically null
+      serverClientId:
+          '346913891380-jc6ue1tk6jb1urt1r7sv6rg65eucjot5.apps.googleusercontent.com', // Required for ID tokens
+      hostedDomain: null,
+      nonce: null,
+    );
   }
 
   ///  COUNTRY CHANGE HANDLER
@@ -168,47 +181,38 @@ class _LoginFormState extends State<LoginForm> {
 
     try {
       // Attempt to sign in with Google
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-
-      if (googleUser != null) {
-        // Sign in was successful
-        _email = googleUser.email;
-        _token = googleUser.serverAuthCode;
-        dynamic user = await _handleGoogleLogin();
-        if (user['success'] == false) {
-          Get.snackbar('Error', user['error']);
-          await _googleSignIn.disconnect();
-        } else {
-          await logEvents('login', 'apple');
-          FirebaseMessaging.instance.getToken().then((String? value) async {
-            Map<String, dynamic> data = <String, dynamic>{
-              'deviceToken': value,
-            };
-            await ApiService.post(path: 'users/add-device-token', body: data);
-          });
-          if (user['data']['bio'] != null) {
-            // GetStorage().write('isFirstTime', false);
-            Get.offAndToNamed(Routes.home);
-          } else {
-            Get.off(() =>
-                UpdateProfileScreen(user: UserModel.fromMap(user['data'])));
-          }
-        }
-
-        setState(() {
-          _isProcessing = false;
-        });
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+      final GoogleSignInAuthentication auth = googleUser.authentication;
+      // Sign in was successful
+      _email = googleUser.email;
+      _token = auth.idToken;
+      dynamic user = await _handleGoogleLogin();
+      if (user['success'] == false) {
+        Get.snackbar('Error', user['error']);
+        await _googleSignIn.disconnect();
       } else {
-        // Sign in was canceled by the user
-        showSnackBar(Get.context!,
-            message: 'Opps!! Something went wrong. Try again');
-        setState(() {
-          _isProcessing = false;
+        await logEvents('login', 'apple');
+        FirebaseMessaging.instance.getToken().then((String? value) async {
+          Map<String, dynamic> data = <String, dynamic>{
+            'deviceToken': value,
+          };
+          await ApiService.post(path: 'users/add-device-token', body: data);
         });
+        if (user['data']['bio'] != null) {
+          // GetStorage().write('isFirstTime', false);
+          Get.offAndToNamed(Routes.home);
+        } else {
+          Get.off(
+              () => UpdateProfileScreen(user: UserModel.fromMap(user['data'])));
+        }
       }
+
+      setState(() {
+        _isProcessing = false;
+      });
     } catch (error) {
       // Error occurred during sign in
-      // log('Here ->>>>>> $error');
+      log('Here ->>>>>> ${error.toString()}');
 
       showSnackBar(Get.context!,
           message: 'Opps!! Something went wrong. Try again');

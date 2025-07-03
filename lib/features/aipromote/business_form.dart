@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
 import 'package:business_bosses_v2/features/aipromote/models/business_info_model.dart';
@@ -70,9 +69,9 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
 
   void _setShopData() {
     if (shopController.shop != null) {
-      _nameController.text = shopController.shop!.name ?? '';
-      _industryController.text = shopController.shop!.category ?? '';
-      _bioController.text = shopController.shop!.description ?? '';
+      _nameController.text = shopController.shop!.name;
+      _industryController.text = shopController.shop!.category;
+      _bioController.text = shopController.shop!.description;
       _websiteController.text = shopController.shop!.url ?? '';
     }
   }

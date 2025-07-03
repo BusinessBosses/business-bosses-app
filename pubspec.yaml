@@ -60,7 +60,7 @@ dependencies:
   get: ^4.6.5
   get_storage: ^2.1.1
   google_fonts: ^6.2.1
-  google_sign_in: ^6.1.4
+  google_sign_in: ^7.1.0
   http: ^1.3.0
   image_picker: ^1.0.4
   intl: ^0.20.2
@@ -75,7 +75,7 @@ dependencies:
   sign_in_with_apple: ^7.0.1
   # social_share: ^2.3.1
   socket_io_client: ^3.0.2
-  syncfusion_flutter_charts: ^29.1.40
+  syncfusion_flutter_charts: ^30.1.38
   text_scroll: ^0.2.0
   timezone: ^0.10.0
   # uni_links: ^0.5.1
@@ -90,7 +90,7 @@ dependencies:
   # zego_uikit_prebuilt_live_audio_room:
   flutter_speed_dial: ^7.0.0
   purchases_flutter: ^8.7.4
-  syncfusion_flutter_calendar: ^29.1.40
+  syncfusion_flutter_calendar: ^30.1.38
   # add_2_calendar:
   # tutorial_coach_mark: ^1.2.11
   # zego_uikit_signaling_plugin: ^2.7.4
@@ -110,7 +110,7 @@ dependencies:
   app_links: ^6.4.0
   paystack_for_flutter: ^1.0.4
   flutter_markdown_plus: ^1.0.3
-  paystack_flutter_sdk: ^0.0.1-alpha.2
+  
 dev_dependencies:
   flutter_launcher_icons: ^0.14.3
   flutter_lints: ^6.0.0

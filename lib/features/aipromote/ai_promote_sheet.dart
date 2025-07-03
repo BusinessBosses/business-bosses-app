@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum PromoteStep { info, preview, success }
 
@@ -59,7 +60,50 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     createBossUpController = Get.put(CreateBossUpController());
   }
 
+  Future<bool> _canUsePromotion() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final DateTime now = DateTime.now();
+    final int count = prefs.getInt('promo_count') ?? 0;
+    final String? lastResetStr = prefs.getString('promo_last_reset');
+
+    DateTime? lastReset;
+    if (lastResetStr != null) {
+      lastReset = DateTime.tryParse(lastResetStr);
+    }
+
+    // Reset monthly
+    if (lastReset == null ||
+        lastReset.month != now.month ||
+        lastReset.year != now.year) {
+      await prefs.setInt('promo_count', 1);
+      await prefs.setString('promo_last_reset', now.toIso8601String());
+      return true;
+    }
+
+    if (count >= 4) {
+      return false;
+    }
+
+    await prefs.setInt('promo_count', count + 1);
+    return true;
+  }
+
   void _handleInfoSubmit(BusinessInfo info) async {
+    final bool isSubscribed = profileController?.myProfile.isSubscribed ?? true;
+
+    if (!isSubscribed) {
+      final bool allowed = await _canUsePromotion();
+      if (!allowed) {
+        if (mounted) {
+          showSnackbar(
+            message: 'Free promotion limit reached. Upgrade to continue.',
+            error: true,
+          );
+        }
+        return;
+      }
+    }
+
     setState(() {
       _businessInfo = info;
       _loading = true;
