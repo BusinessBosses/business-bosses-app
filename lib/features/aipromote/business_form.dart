@@ -34,6 +34,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
 
   bool hasShop = false;
   List<String> missingFields = <String>[];
+  bool infoClicked = false;
 
   @override
   void initState() {
@@ -298,12 +299,30 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          'Business Info Confirmation',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF1F2937),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              infoClicked = !infoClicked;
+            });
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Business Info Confirmation',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1F2937),
+                ),
+              ),
+              SizedBox(width: 5),
+              Icon(
+                Icons.info_outline,
+                color: Color(0xFF0EA5E9),
+                size: 20,
+              ),
+            ],
           ),
         ),
         SizedBox(height: 8),
@@ -315,7 +334,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           ),
         ),
         SizedBox(height: 24),
-        _buildInfoCard(),
+        infoClicked ? _buildInfoCard() : SizedBox.shrink(),
         _buildInputGroup(
           'Business Name',
           _nameController,
