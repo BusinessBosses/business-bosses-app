@@ -816,7 +816,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                           'userId': profileController.myProfile.uid,
                           'shopId': shopController.shop?.id,
                           'name': _productNameController.text,
-                          'price': _priceController.text,
+                          'price': _priceController.text.replaceAll(RegExp(r'[^0-9.]'), ''),
                           'discount': _discountController.text.isEmpty
                               ? 0
                               : _discountController.text,
