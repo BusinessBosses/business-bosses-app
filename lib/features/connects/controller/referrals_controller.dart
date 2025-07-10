@@ -26,7 +26,7 @@ class ReferralsController extends GetxController {
     update();
 
     final ApiResponseModel res =
-        await ApiService.get(path: '/users/name/$query');
+        await ApiService.get(path: 'users/name/$query');
     for (int i = 0; i < res.data.length; i++) {
       final mapData = res.data[i];
       final UserModel modelizedData = UserModel.fromMap(mapData);
@@ -39,7 +39,7 @@ class ReferralsController extends GetxController {
 
   Future<void> getReferrals() async {
     final ApiResponseModel res =
-        await ApiService.get(path: '/referal/${Get.arguments}');
+        await ApiService.get(path: 'referal/${Get.arguments}');
     if (res.success) {
       for (int i = 0; i < res.data.length; i++) {
         final mapData = res.data[i];
@@ -55,14 +55,14 @@ class ReferralsController extends GetxController {
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
     final ApiResponseModel res = await ApiService.post(
-        path: '/connection/connect',
+        path: 'connection/connect',
         body: <String, dynamic>{'connectedId': userId});
   }
 
   Future<void> disconnect(String userId) async {
     // ignore: unused_local_variable
     final ApiResponseModel res = await ApiService.post(
-        path: '/connection/disconnect',
+        path: 'connection/disconnect',
         body: <String, dynamic>{'connectedId': userId});
   }
 

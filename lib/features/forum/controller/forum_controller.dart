@@ -295,7 +295,7 @@ class ForumController extends GetxController {
   }
 
   Future<void> connect(String userId) async {
-    await ApiService.post(path: '/connection/connect', body: <String, dynamic>{
+    await ApiService.post(path: 'connection/connect', body: <String, dynamic>{
       'userId': _profileController.myProfile.uid,
       'connectedId': userId,
       'timestamp': DateTime.now().millisecondsSinceEpoch
@@ -304,7 +304,7 @@ class ForumController extends GetxController {
 
   Future<void> disconnect(String userId) async {
     await ApiService.post(
-        path: '/connection/disconnect',
+        path: 'connection/disconnect',
         body: <String, dynamic>{
           'userId': _profileController.myProfile.uid,
           'connectedId': userId,

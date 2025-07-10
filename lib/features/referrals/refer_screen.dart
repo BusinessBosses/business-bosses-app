@@ -38,7 +38,7 @@ class _ReferScreenState extends State<ReferScreen> {
       _isLoading = true;
     });
     final ApiResponseModel res = await ApiService.get(
-        path: '/connection/connecteds/referals/$referredUserUid');
+        path: 'connection/connecteds/referals/$referredUserUid');
 
     for (int i = 0; i < res.data.length; i++) {
       final dynamic mapData = res.data[i];
@@ -180,7 +180,7 @@ class _ReferScreenState extends State<ReferScreen> {
       _isProcessing = true;
     });
     final ApiResponseModel res =
-        await ApiService.post(path: '/referal/refer', body: <String, dynamic>{
+        await ApiService.post(path: 'referal/refer', body: <String, dynamic>{
       'referredUserUid': _specificUser.uid,
       'referBy': _profileController.myProfile.uid,
       'referTo': _selectedUsers

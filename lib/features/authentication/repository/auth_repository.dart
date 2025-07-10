@@ -12,7 +12,7 @@ class AuthRepository {
   static Future<void> login(Map<String, dynamic> body) async {
     final GetStorage sandBox = GetStorage();
     final ApiResponseModel response =
-        await ApiService.post(path: '/auth/sign-in', body: body);
+        await ApiService.post(path: 'auth/sign-in', body: body);
     if (response.success) {
       sandBox.write(Constants.ACCESS_TOKEN, response.data['accessToken']);
       if (response.data['hasUpdatedProfile']) {

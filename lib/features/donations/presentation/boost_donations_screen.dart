@@ -6,7 +6,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-// import 'package:flutter_paystack/flutter_paystack.dart';
+import 'package:flutter_paystack_plus/flutter_paystack_plus.dart';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -218,22 +218,38 @@ class _BoostDonationState extends State<BoostDonation> {
   final String reference =
       'unique_transaction_ref_${Random().nextInt(1000000)}';
 
+  // <-- Add this at the top
+
   void _makePayment() async {
-    // final Charge charge = Charge()
-    //   ..email = profileController.myProfile.email
-    //   ..amount = (int.parse(initPlan) * 100000)
-    //   // ..amount = 10000
-    //   ..reference = reference;
+    final String? secretKey = dotenv.env['PAYSTACK_SECRET_KEY'];
 
-    // final CheckoutResponse response = await payStackClient.checkout(context,
-    //     charge: charge, method: CheckoutMethod.card);
+    if (secretKey == null || secretKey.isEmpty) {
+      showSnackBar(context, message: 'Paystack secret key not found.');
+      return;
+    }
 
-    // if (response.status && response.reference == reference) {
-    //   showSnackBar(context,
-    //       message: 'Payment Successful, Thanks for your patronage !');
-    // } else {
-    //   showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
-    // }
+    try {
+      await FlutterPaystackPlus.openPaystackPopup(
+        context: context,
+        secretKey: secretKey,
+        customerEmail: profileController.myProfile.email,
+        amount: (int.parse(initPlan) * 100000).toString(), // Amount in Kobo
+        reference: 'ref_${DateTime.now().millisecondsSinceEpoch}',
+        currency: 'NGN',
+        onClosed: () {
+          showSnackBar(context, message: 'Payment cancelled');
+        },
+        onSuccess: () async {
+          await updatePost('paystack');
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => const Confirmation(),
+          ));
+          showSnackBar(context, message: 'Payment Successful, Thanks!');
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, message: 'Error: ${e.toString()}');
+    }
   }
 
   @override

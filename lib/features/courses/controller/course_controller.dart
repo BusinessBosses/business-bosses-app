@@ -263,7 +263,7 @@ class CourseController extends GetxController {
 
   Future<void> payforcourse(String courseid, num amount) async {
     final ApiResponseModel response = await ApiService.post(
-        path: '/course-transactions',
+        path: 'course-transactions',
         body: <String, dynamic>{
           'userId': profileController.myProfile.uid,
           'courseId': courseid,
@@ -378,7 +378,7 @@ class CourseController extends GetxController {
   }
 
   Future<void> connect(String userId) async {
-    await ApiService.post(path: '/connection/connect', body: <String, dynamic>{
+    await ApiService.post(path: 'connection/connect', body: <String, dynamic>{
       'userId': profileController.myProfile.uid,
       'connectedId': userId,
       'timestamp': DateTime.now().millisecondsSinceEpoch
@@ -387,7 +387,7 @@ class CourseController extends GetxController {
 
   Future<void> disconnect(String userId) async {
     await ApiService.post(
-        path: '/connection/disconnect',
+        path: 'connection/disconnect',
         body: <String, dynamic>{
           'userId': profileController.myProfile.uid,
           'connectedId': userId,

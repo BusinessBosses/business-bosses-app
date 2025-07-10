@@ -54,7 +54,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       },
     );
     final ApiResponseModel res = await ApiService.get(
-        path: '/connection/connecteds/referals/${publicUser.uid}');
+        path: 'connection/connecteds/referals/${publicUser.uid}');
     Get.back();
 
     if (res.success) {
@@ -957,7 +957,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   }
 
   Future<void> disconnect(String userId) async {
-    ApiService.post(path: '/connection/disconnect', body: <String, dynamic>{
+    ApiService.post(path: 'connection/disconnect', body: <String, dynamic>{
       'userId': _profileController.myProfile.uid,
       'connectedId': userId,
       'timestamp': DateTime.now().millisecondsSinceEpoch
@@ -972,7 +972,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   }
 
   Future<void> connect(String userId) async {
-    ApiService.post(path: '/connection/connect', body: <String, dynamic>{
+    ApiService.post(path: 'connection/connect', body: <String, dynamic>{
       'userId': _profileController.myProfile.uid,
       'connectedId': userId,
       'timestamp': DateTime.now().millisecondsSinceEpoch

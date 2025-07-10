@@ -16,7 +16,7 @@ class SearchRepository {
   }
   // static Future<ApiResponseModel> searchUsers(String query) async {
   //   final ApiResponseModel response =
-  //       await ApiService.get(path: '/users/name/$query');
+  //       await ApiService.get(path: 'users/name/$query');
 
   //   return response;
   // }

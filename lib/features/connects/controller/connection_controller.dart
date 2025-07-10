@@ -26,7 +26,7 @@ class ConnectionController extends GetxController {
     update();
 
     final ApiResponseModel res =
-        await ApiService.get(path: '/users/name/$query');
+        await ApiService.get(path: 'users/name/$query');
     for (int i = 0; i < res.data.length; i++) {
       final mapData = res.data[i];
       final UserModel modelizedData = UserModel.fromMap(mapData);
@@ -71,7 +71,7 @@ class ConnectionController extends GetxController {
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
     final ApiResponseModel res = await ApiService.post(
-        path: '/connection/connect',
+        path: 'connection/connect',
         body: <String, dynamic>{
           'connectedId': userId,
           'timestamp': DateTime.now().millisecondsSinceEpoch
@@ -81,7 +81,7 @@ class ConnectionController extends GetxController {
   Future<void> disconnect(String userId) async {
     // ignore: unused_local_variable
     final ApiResponseModel res = await ApiService.post(
-        path: '/connection/disconnect',
+        path: 'connection/disconnect',
         body: <String, dynamic>{
           'connectedId': userId,
           'timestamp': DateTime.now().millisecondsSinceEpoch

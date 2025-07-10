@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-// import 'package:flutter_paystack/flutter_paystack.dart';
+import 'package:flutter_paystack_plus/flutter_paystack_plus.dart';
 
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:paystack_for_flutter/paystack_for_flutter.dart';
 
 import '../../../action/action.dart';
 // import '../../../common/diaprints/snackbar.dart';
@@ -42,7 +43,6 @@ class _BoostPostState extends State<BoostPost> {
   bool isCoin = false;
   late Map<String, dynamic>? paymantIntent;
   final ProfileController profileController = Get.find();
-  // final PaystackPlugin payStackClient = PaystackPlugin();
 
   late String duration;
   List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
@@ -97,7 +97,7 @@ class _BoostPostState extends State<BoostPost> {
           .then((PaymentSheetPaymentOption? value) async {
         await updatePost('card');
 
-        Navigator.of(Get.context!).push(MaterialPageRoute(
+        Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => const Confirmation(),
         ));
 
@@ -106,27 +106,23 @@ class _BoostPostState extends State<BoostPost> {
         setState(() {
           _isProcessing = false;
         });
-        print('❌ StripeException: code=$error}');
-        showSnackBar(Get.context!,
+        showSnackBar(context,
             message: 'Opps!! Something went wrong. Try again');
       });
-    } on StripeException catch (e) {
+    } on StripeException {
       setState(() {
         _isProcessing = false;
       });
-      print(
-          '❌ StripeException: code=${e.error.code}, message=${e.error.localizedMessage}');
-     
-      showSnackBar(Get.context!, message: 'Opps!! Something went wrong. Try again');
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
       // print('Here ->>>>>> $e');
-    } catch (e, st) {
+    } catch (e) {
       setState(() {
         _isProcessing = false;
       });
       print('Here ->>>>>> $e');
-      print('❌ Unknown error in presentPaymentSheet: $e\n$st');
-      showSnackBar(Get.context!,
-          message: 'Opps!! Something went wrong. Try again');
+
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
   }
 
@@ -137,22 +133,23 @@ class _BoostPostState extends State<BoostPost> {
         'currency': currency,
         'payment_method_types[]': 'card',
         'receipt_email': profileController.myProfile.email, // Add user email
-        'description': widget.postId.toString(),
-        // 'metadata': <String, dynamic>{
-        //   'user_id': profileController.myProfile.uid.toString(),
-        //   'user_name': profileController.myProfile.name.toString(),
-        //   'post_id': widget.postId.toString(),
-        // },
+        'metadata': <String, dynamic>{
+          'user_id': profileController.myProfile.uid, // Store user ID
+          'user_name': profileController.myProfile.name, // Store user name
+          'post_id': widget.postId,
+        }
       };
+
       http.Response res = await http.post(
           Uri.parse('https://api.stripe.com/v1/payment_intents'),
           body: body,
           headers: <String, String>{
             'Authorization': 'Bearer ${dotenv.env['STRIPE_SEC_KEY']}',
-            'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded'
           });
-      print('Stripe key: ${dotenv.env['STRIPE_SEC_KEY']}');
+
+      // print(res.body);
+
       return jsonDecode(res.body);
     } catch (e) {
       setState(() {
@@ -191,7 +188,7 @@ class _BoostPostState extends State<BoostPost> {
         setState(() {
           _isProcessing = false;
         });
-        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
+        Navigator.of(context).push(MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => const Confirmation(),
         ));
       } catch (e) {
@@ -203,7 +200,6 @@ class _BoostPostState extends State<BoostPost> {
           _isProcessing = true;
         });
         paymantIntent = await createPaymentIntent(initPlan, 'USD');
-        print('Stripe PaymentIntent response: $paymantIntent');
         await Stripe.instance
             .initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
@@ -228,111 +224,50 @@ class _BoostPostState extends State<BoostPost> {
     });
   }
 
-  // void _startPaystack() async {
-  //   // String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
-  //   // await payStackClient.initialize(publicKey: publicKey!);
-  // }
+  void _startPaystack() async {
+    String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
+  }
 
   final String reference =
       'unique_transaction_ref_${Random().nextInt(1000000)}';
 
-  // void _makePayment() async {
-  // final Charge charge = Charge()
-  //   ..email = profileController.myProfile.email
-  //   ..amount = (int.parse(initPlan) * 100000)
-  //   // ..amount = 10000
-  //   ..reference = reference;
+  void _makePayment() async {
+    final String? publicKey = dotenv.env['PAYSTACK_SECRET_KEY'];
 
-  // final CheckoutResponse response = await payStackClient.checkout(context,
-  //     charge: charge, method: CheckoutMethod.card);
-
-  // if (response.status && response.reference == reference) {
-  //   showSnackBar(context,
-  //       message: 'Payment Successful, Thanks for your patronage !');
-  // } else {
-  //   showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
-  // }
-  // }
+    await FlutterPaystackPlus.openPaystackPopup(
+      context: context,
+      secretKey: publicKey!,
+      customerEmail: profileController.myProfile.email,
+      amount: (int.parse(initPlan) * 100000).toString(), // amount in kobo
+      reference: 'ref_${DateTime.now().millisecondsSinceEpoch}',
+      currency: 'NGN',
+      onClosed: () {
+        showSnackBar(context, message: 'Payment cancelled');
+      },
+      onSuccess: () async {
+        await updatePost('paystack');
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => const Confirmation(),
+        ));
+        showSnackBar(context, message: 'Payment Successful, Thanks!');
+      },
+    );
+  }
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     initPlan = plans[0]['amount'];
     myPlan = options[0]['optionname'];
-  }
+    _startPaystack();
 
-  Future<String> _createPaystackTransaction() async {
-    final http.Response resp = await http.post(
-      Uri.parse('https://api.paystack.co/transaction/initialize'),
-      headers: <String, String>{
-        'Authorization': 'Bearer ${dotenv.env['PAYSTACK_SECRET_KEY']}',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, Object>{
-        'email': profileController.myProfile.email,
-        // Paystack expects amount in kobo (₦) or cents ($), so multiply by 100
-        'amount': int.parse(initPlan) * 100000,
-        // Optional: 'currency': 'NGN' or 'USD'
-      }),
-    );
-    final dynamic body = jsonDecode(resp.body);
-    if (body['status'] != true) {
-      throw Exception(body['message']);
-    }
-    return body['data']['access_code'];
-  }
-
-  Future<void> _makePaystackPayment() async {
-    setState(() => _isProcessing = true);
-    await PaystackFlutter().pay(
-      context: Get.context!,
-      secretKey: dotenv.env['PAYSTACK_SECRET_KEY']!,
-      amount: int.parse(initPlan) * 100000,
-      email: profileController.myProfile.email,
-      onSuccess: (_) async {
-        await updatePost('paystack');
-        Navigator.push(
-            Get.context!, MaterialPageRoute(builder: (_) => Confirmation()));
-      },
-      onCancelled: (_) => showSnackBar(Get.context!, message: 'Payment cancelled'),
-      callbackUrl: 'https://your-domain.com/callback',
-    );
-    setState(() => _isProcessing = false);
-  }
-
-  Future<void> _makePayment() async {
-    setState(() => _isProcessing = true);
-
-    // try {
-    // 1. Get an access code from your server
-    // final String accessCode = await _createPaystackTransaction();
-
-    // 2. Launch the native Paystack UI
-    //   final TransactionResponse response = await _paystack.launch(accessCode);
-
-    //   // 3. Handle the result
-    //   if (response.status == 'success') {
-    //     await updatePost('paystack');
-    //     showSnackBar(context, message: 'Payment Successful!');
-    //     Navigator.of(context).push(
-    //       MaterialPageRoute(builder: (_) => const Confirmation()),
-    //     );
-    //   } else if (response.status == 'cancelled') {
-    //     showSnackBar(context, message: 'Payment Cancelled');
-    //   } else {
-    //     showSnackBar(context,
-    //         message: 'Error: ${response.message ?? "Unknown error"}');
-    //   }
-    // } catch (e) {
-    //   showSnackBar(context, message: 'Payment failed: ${e.toString()}');
-    // } finally {
-    //   setState(() => _isProcessing = false);
-    // }
+    // print(widget.postId);
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(Get.context!).size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
@@ -347,6 +282,7 @@ class _BoostPostState extends State<BoostPost> {
         actions: <Widget>[
           GestureDetector(
             onTap: () {
+              Get.back();
               Get.offNamed(Routes.home);
             },
             child: const Padding(
@@ -359,14 +295,12 @@ class _BoostPostState extends State<BoostPost> {
                     size: 14,
                   ),
                   SizedBox(width: 2),
-                  Text(
-                    'Cancel Boost',
-                    style: TextStyle(
-                      color: primaryColorLT,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+                  Text('Cancel'),
+                  Text('Cancel Boost',
+                      style: TextStyle(
+                          color: primaryColorLT,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)),
                 ],
               ),
             ),
@@ -607,7 +541,7 @@ class _BoostPostState extends State<BoostPost> {
                   ] else if (myPlan == 'PayStack') ...<Widget>[
                     MyButton(
                       onPressed: () async {
-                        _makePaystackPayment();
+                        _makePayment();
                       },
                       labelStyle: const TextStyle(
                         color: Colors.white,

@@ -401,7 +401,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                     ),
                                                   )
                                                 : const Text(
-                                                    'Cancel Subscription'),
+                                                    'Cancel Subscription',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
                                           ),
                                           const SizedBox(
                                             width: 10,
