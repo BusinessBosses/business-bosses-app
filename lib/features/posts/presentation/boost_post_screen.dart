@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_paystack_plus/flutter_paystack_plus.dart';
 
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -224,9 +222,9 @@ class _BoostPostState extends State<BoostPost> {
     });
   }
 
-  void _startPaystack() async {
-    String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
-  }
+  // void _startPaystack() async {
+  //   String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
+  // }
 
   final String reference =
       'unique_transaction_ref_${Random().nextInt(1000000)}';
@@ -243,6 +241,7 @@ class _BoostPostState extends State<BoostPost> {
       currency: 'NGN',
       onClosed: () {
         showSnackBar(context, message: 'Payment cancelled');
+        return null;
       },
       onSuccess: () async {
         await updatePost('paystack');
@@ -250,6 +249,7 @@ class _BoostPostState extends State<BoostPost> {
           builder: (_) => const Confirmation(),
         ));
         showSnackBar(context, message: 'Payment Successful, Thanks!');
+        return null;
       },
     );
   }
@@ -260,7 +260,7 @@ class _BoostPostState extends State<BoostPost> {
     super.initState();
     initPlan = plans[0]['amount'];
     myPlan = options[0]['optionname'];
-    _startPaystack();
+    // _startPaystack();
 
     // print(widget.postId);
   }

@@ -238,6 +238,7 @@ class _BoostDonationState extends State<BoostDonation> {
         currency: 'NGN',
         onClosed: () {
           showSnackBar(context, message: 'Payment cancelled');
+          return null;
         },
         onSuccess: () async {
           await updatePost('paystack');
@@ -245,6 +246,7 @@ class _BoostDonationState extends State<BoostDonation> {
             builder: (_) => const Confirmation(),
           ));
           showSnackBar(context, message: 'Payment Successful, Thanks!');
+          return null;
         },
       );
     } catch (e) {

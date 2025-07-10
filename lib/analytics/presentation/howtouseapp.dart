@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
-import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
@@ -42,6 +41,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
     }
 
     final ChallengeController controller = Get.put(ChallengeController());
+    // ignore: unused_local_variable
     final Industry category = controller.categories[0];
     List<Map<String, dynamic>> tilesData = <Map<String, dynamic>>[
       {
