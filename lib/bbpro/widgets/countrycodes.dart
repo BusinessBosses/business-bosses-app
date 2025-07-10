@@ -104,6 +104,6 @@ class CountryCodes {
   };
 
   // Optional: Reverse map for name-to-code lookup
-  static final Map<String, String> nameToCode =
-      codeToName.map((String code, String name) => MapEntry(name, code));
+  static final Map<String, String> nameToCode = codeToName
+      .map((String code, String name) => MapEntry<String, String>(name, code));
 }

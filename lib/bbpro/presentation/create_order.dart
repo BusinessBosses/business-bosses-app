@@ -170,7 +170,6 @@ class _CreateOrderState extends State<CreateOrder> {
       'notes': notesController.text,
       'invoiceOption': invoiceOption
     };
-    print('==========>>>>>$orderData');
     bool response;
     // Call the addOrder method from the GetX controller
     if (widget.order != null) {

@@ -112,8 +112,6 @@ class _UserShopScreenState extends State<UserShopScreen> {
               _shareBizCenter();
             } else if (action['text'] == 'Follow' ||
                 action['text'] == 'Following') {
-              print('Follow');
-
               Future<void> connectToUser() async {
                 final int checkConnected =
                     profileController.myProfile.connecteds == null

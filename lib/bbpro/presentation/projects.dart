@@ -64,8 +64,6 @@ class _ProjectsState extends State<Projects>
           projectController.loading.value = false;
         });
       }
-      // Log the error or show a dialog/snackbar to the user
-      print('Error loading tasks: $error');
     });
   }
 
@@ -170,7 +168,6 @@ class _ProjectsState extends State<Projects>
               setState(() {
                 selectedFilterOption = selectedFilter!;
               });
-              print(selectedFilter);
               filterProjects();
             },
           ),

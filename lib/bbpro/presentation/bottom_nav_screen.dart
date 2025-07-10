@@ -99,8 +99,13 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
   Widget build(BuildContext context) {
     return Obx(() => shopController.loading.value
         ? const SafetyModel(isLoading: true)
-        : WillPopScope(
-            onWillPop: _onWillPop,
+        : PopScope(
+            canPop: true, // Set false to block back navigation
+            onPopInvoked: (bool didPop) async {
+              if (!didPop) {
+                await _onWillPop(); // Custom logic on back press
+              }
+            },
             child: Scaffold(
               body: Center(
                 child: _widgetOptions.elementAt(_selectedIndex),
