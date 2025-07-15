@@ -403,7 +403,7 @@ class _AdPreviewState extends State<AdPreview> {
                         strokeWidth: 2,
                       ))
                   : Text(
-                      'Post Ad',
+                      'Generate free Ad',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

@@ -239,7 +239,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
   }
 
   Widget _buildInfoCard() {
-    if (hasShop) return SizedBox.shrink();
+    // if (hasShop) return SizedBox.shrink();
 
     return Container(
       margin: EdgeInsets.only(bottom: 24),
@@ -261,7 +261,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
               ),
               SizedBox(width: 8),
               Text(
-                'Using Profile Data',
+                hasShop ? 'Using Shop Data' : 'Using Profile Data',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -272,7 +272,9 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           ),
           SizedBox(height: 8),
           Text(
-            'We\'ve pre-filled your information from your profile. Please review and edit any fields as needed for better AI-generated promotions.',
+            hasShop
+                ? 'We\'ve pre-filled your information from your shop. Please review and edit any fields as needed for better AI-generated promotions.'
+                : 'We\'ve pre-filled your information from your profile. Please review and edit any fields as needed for better AI-generated promotions.',
             style: TextStyle(
               fontSize: 12,
               color: Color(0xFF0369A1),

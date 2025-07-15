@@ -531,7 +531,7 @@ class DrawerContent extends StatelessWidget {
                                                           ),
                                                 title: Text(
                                                   index == 0
-                                                      ? 'Enter free business promotion'
+                                                      ? 'Generate free promotion'
                                                       : index == 1
                                                           ? 'Post content, discussion, etc'
                                                           : index == 2
