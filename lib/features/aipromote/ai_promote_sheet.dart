@@ -60,7 +60,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     createBossUpController = Get.put(CreateBossUpController());
   }
 
-  Future<bool> _canUsePromotion() async {
+  Future<bool> _canUsePromotion({required bool isSubscribed}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final DateTime now = DateTime.now();
     final int count = prefs.getInt('promo_count') ?? 0;
@@ -80,7 +80,9 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
       return true;
     }
 
-    if (count >= 4) {
+    final int maxUses = isSubscribed ? 12 : 4;
+
+    if (count >= maxUses) {
       return false;
     }
 
@@ -92,11 +94,26 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     final bool isSubscribed = profileController?.myProfile.isSubscribed ?? true;
 
     if (!isSubscribed) {
-      final bool allowed = await _canUsePromotion();
+      final bool allowed = await _canUsePromotion(isSubscribed: isSubscribed);
+
       if (!allowed) {
         if (mounted) {
           showSnackbar(
             message: 'Free promotion limit reached. Upgrade to continue.',
+            error: true,
+          );
+        }
+        return;
+      }
+    } else {
+      // Subscribed user
+      final bool allowed = await _canUsePromotion(isSubscribed: isSubscribed);
+
+      if (!allowed) {
+        if (mounted) {
+          showSnackbar(
+            message:
+                'You’ve reached your monthly promotion limit (12). Please wait until next month.',
             error: true,
           );
         }
@@ -267,6 +284,19 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   }
 
   Widget _buildContent() {
+    int remaining = 0;
+    if (_currentStep == PromoteStep.preview) {
+      final bool isSubscribed =
+          profileController?.myProfile.isSubscribed ?? true;
+      final SharedPreferences? prefs =
+          SharedPreferences.getInstance() as SharedPreferences?;
+      int count = 0;
+      if (prefs != null) {
+        count = prefs.getInt('promo_count') ?? 0;
+      }
+      final int maxUses = isSubscribed ? 12 : 4;
+      remaining = (count >= maxUses) ? 0 : (maxUses - count);
+    }
     switch (_currentStep) {
       case PromoteStep.info:
         return BusinessInfoForm(
@@ -280,6 +310,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
           onEdit: _handleAdEdit,
           onPost: _handlePostAd,
           isLoading: _loading,
+          remainingPromos: remaining,
         );
       case PromoteStep.success:
         return SuccessScreen(

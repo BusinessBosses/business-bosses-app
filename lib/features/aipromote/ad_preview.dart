@@ -11,6 +11,7 @@ class AdPreview extends StatefulWidget {
   final Function(String) onEdit;
   final Function(List<String> platforms, File? selectedImage) onPost;
   final bool isLoading;
+  final int remainingPromos;
 
   const AdPreview({
     super.key,
@@ -18,6 +19,7 @@ class AdPreview extends StatefulWidget {
     required this.onEdit,
     required this.onPost,
     required this.isLoading,
+    required this.remainingPromos,
   });
 
   @override
@@ -403,7 +405,7 @@ class _AdPreviewState extends State<AdPreview> {
                         strokeWidth: 2,
                       ))
                   : Text(
-                      'Generate free Ad',
+                      'Generate Ad',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -415,13 +417,16 @@ class _AdPreviewState extends State<AdPreview> {
           SizedBox(height: 15),
           Center(
             child: Text(
-              'Free users: 4 ads/month | Premium users: 12 ads/month',
+              profileController.myProfile.isSubscribed
+                  ? 'Remaining promotions this month: ${widget.remainingPromos} of 12'
+                  : 'Remaining free promotions: ${widget.remainingPromos} of 4',
               style: TextStyle(
                 fontSize: 12,
                 color: Color(0xFF6B7280),
               ),
             ),
           ),
+
           !profileController.myProfile.isSubscribed
               ? GestureDetector(
                   onTap: () => <Future<void>>{

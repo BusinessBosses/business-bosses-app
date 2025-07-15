@@ -1697,11 +1697,11 @@ class _BookServiceScreenState extends State<BookServiceScreen>
         DateTime.parse(widget.service.availability!['startDate']);
 
     // Convert selectedDates to DateTime objects for easier comparison
-    final List<DateTime> selectedDates =
-        widget.service.selectedDates.map((dateString) {
-      return DateTime.parse(
-          dateString.split(' ')[0]); // Extract only the date part
-    }).toList();
+    final List<DateTime> selectedDates = widget.service.selectedDates
+        .map((dynamic dateString) =>
+            DateTime.parse((dateString as String).split(' ')[0]))
+        .toList()
+        .cast<DateTime>();
 
     for (DateTime date = now;
         date.isBefore(endDate);

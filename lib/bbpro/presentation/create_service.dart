@@ -1492,7 +1492,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 children: <Widget>[
                   ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(
+                        backgroundColor: WidgetStatePropertyAll<Color>(
                             widget.isMarketplace == true
                                 ? primaryColorLT
                                 : proprimaryColor)),
