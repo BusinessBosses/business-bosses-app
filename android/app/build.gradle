@@ -50,7 +50,7 @@ android {
 
     defaultConfig {
         applicationId "xyz.codexia.businessbosses"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -91,5 +91,5 @@ dependencies {
     // Core Flutter / Kotlin stdlib is added by the plugins automatically
     implementation "com.google.firebase:firebase-analytics-ktx"
     implementation "com.facebook.android:facebook-android-sdk:latest.release"
-    implementation "com.android.billingclient:billing:6.0.1"
+    implementation "com.android.billingclient:billing:8.0.0"
 }
