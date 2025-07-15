@@ -307,7 +307,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                                                                                         bool success = await shopController.addSupplier(supplierData);
                                                                                         if (success) {
                                                                                           showSnackbar(message: 'Supplier Added Successfully!');
-                                                                                          await Future.delayed(const Duration(seconds: 1)); // Optional delay for visibility
+                                                                                          await Future<dynamic>.delayed(const Duration(seconds: 1)); // Optional delay for visibility
                                                                                           // ignore: use_build_context_synchronously
                                                                                         } else {
                                                                                           showSnackbar(message: 'Error Adding Supplier!', error: true);

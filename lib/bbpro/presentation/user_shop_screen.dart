@@ -731,11 +731,13 @@ class _UserShopScreenState extends State<UserShopScreen> {
               );
 
               // Show toast
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Virtual Address copied to clipboard'),
-                ),
-              );
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Virtual Address copied to clipboard'),
+                  ),
+                );
+              }
             },
           ),
           _buildDivider(),

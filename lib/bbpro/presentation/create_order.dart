@@ -446,7 +446,11 @@ class _CreateOrderState extends State<CreateOrder> {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2101),
                             );
-                            if (picked != null && picked != selectedOrderDate) {
+                            if (picked != null &&
+                                (selectedOrderDate == null ||
+                                    picked !=
+                                        DateTime.tryParse(
+                                            selectedOrderDate!))) {
                               setState(() {
                                 selectedOrderDate =
                                     picked.toString().split(' ')[0];

@@ -217,7 +217,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
   void _selectCategory(
       CompleteSearchController controller, StateSetter setState) async {
     final MyResponse? res = await Navigator.of(context).push(
-      MaterialPageRoute(
+      MaterialPageRoute<MyResponse>(
         builder: (BuildContext context) =>
             const DataSelectionScreen(analyser: Analyser.category),
       ),
