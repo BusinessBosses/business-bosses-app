@@ -109,7 +109,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                       const Tab(
                         child: FittedBox(
                           child: Text(
-                            'Post Ad',
+                            'Generate free Ad',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 14),
                           ),
