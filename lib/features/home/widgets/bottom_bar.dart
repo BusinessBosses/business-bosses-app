@@ -235,24 +235,30 @@ class BottomBar extends StatelessWidget {
                                                                 child: Material(
                                                                   color: Colors
                                                                       .transparent,
-                                                                  child:
-                                                                      InkWell(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            30),
-                                                                    child:
-                                                                        Center(
-                                                                      child:
-                                                                          Icon(
-                                                                        Icons
-                                                                            .star,
-                                                                        color: Colors
-                                                                            .white,
-                                                                        size:
-                                                                            24,
-                                                                      ),
-                                                                    ),
-                                                                  ),
+                                                                  child: InkWell(
+                                                                      borderRadius: BorderRadius.circular(30),
+                                                                      child: Center(
+                                                                        child:
+                                                                            Stack(
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          children: <Widget>[
+                                                                            Icon(
+                                                                              Icons.star,
+                                                                              color: Colors.white,
+                                                                              size: 24,
+                                                                            ),
+                                                                            Text(
+                                                                              'ai',
+                                                                              style: TextStyle(
+                                                                                color: Colors.black, // Choose a contrasting color
+                                                                                fontSize: 10, // Adjust size to fit within the icon
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      )),
                                                                 ),
                                                               )
                                                             : SvgPicture.asset(
