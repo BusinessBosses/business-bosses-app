@@ -40,6 +40,8 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   ProfileController? profileController;
   late final CreatePostController createPostController;
   late final CreateBossUpController createBossUpController;
+  int _promoCount = 0;
+  bool _prefsLoaded = false;
 
   @override
   void initState() {
@@ -58,6 +60,16 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
 
     createPostController = Get.put(CreatePostController());
     createBossUpController = Get.put(CreateBossUpController());
+
+    _loadPromoPrefs();
+  }
+
+  Future<void> _loadPromoPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _promoCount = prefs.getInt('promo_count') ?? 0;
+      _prefsLoaded = true;
+    });
   }
 
   Future<bool> _canUsePromotion({required bool isSubscribed}) async {
@@ -284,19 +296,18 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   }
 
   Widget _buildContent() {
+    if (!_prefsLoaded && _currentStep == PromoteStep.preview) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     int remaining = 0;
     if (_currentStep == PromoteStep.preview) {
       final bool isSubscribed =
           profileController?.myProfile.isSubscribed ?? true;
-      final SharedPreferences? prefs =
-          SharedPreferences.getInstance() as SharedPreferences?;
-      int count = 0;
-      if (prefs != null) {
-        count = prefs.getInt('promo_count') ?? 0;
-      }
       final int maxUses = isSubscribed ? 12 : 4;
-      remaining = (count >= maxUses) ? 0 : (maxUses - count);
+      remaining = (_promoCount >= maxUses) ? 0 : (maxUses - _promoCount);
     }
+
     switch (_currentStep) {
       case PromoteStep.info:
         return BusinessInfoForm(
@@ -313,9 +324,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
           remainingPromos: remaining,
         );
       case PromoteStep.success:
-        return SuccessScreen(
-          onCreateAnother: _handleCreateAnother,
-        );
+        return SuccessScreen(onCreateAnother: _handleCreateAnother);
     }
   }
 
