@@ -91,5 +91,6 @@ dependencies {
     // Core Flutter / Kotlin stdlib is added by the plugins automatically
     implementation "com.google.firebase:firebase-analytics-ktx"
     implementation "com.facebook.android:facebook-android-sdk:latest.release"
-    implementation "com.android.billingclient:billing:8.0.0"
+    implementation "com.android.billingclient:billing:8.0.0" 
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1")) // Use the latest version
 }
