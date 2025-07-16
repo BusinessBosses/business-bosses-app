@@ -385,7 +385,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                       strokeWidth: 2,
                     ))
                 : Text(
-                    'Generate Mini Ad',
+                    'Generate free promotion',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
