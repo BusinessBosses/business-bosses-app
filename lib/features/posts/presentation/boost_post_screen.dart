@@ -295,7 +295,6 @@ class _BoostPostState extends State<BoostPost> {
                     size: 14,
                   ),
                   SizedBox(width: 2),
-                  Text('Cancel'),
                   Text('Cancel Boost',
                       style: TextStyle(
                           color: primaryColorLT,
