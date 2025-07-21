@@ -171,13 +171,6 @@ class SuccessScreen extends StatelessWidget {
           ),
         ),
         SizedBox(height: 24),
-        Text(
-          '3 ads remaining this month',
-          style: TextStyle(
-            fontSize: 14,
-            color: Color(0xFF6B7280),
-          ),
-        ),
       ],
     );
   }

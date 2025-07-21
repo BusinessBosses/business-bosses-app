@@ -1,525 +1,527 @@
-import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
+// import 'dart:math';
+// import 'dart:typed_data';
 
-class GalleryPhotosScreen extends StatefulWidget {
-  final GalleryType galleryType;
-  final int maxLength;
-  final List<MyAssetEntity> selectedMyAssetEntities;
+// import 'package:flutter/material.dart';
+// import 'package:photo_manager/photo_manager.dart';
 
-  const GalleryPhotosScreen({
-    super.key,
-    this.galleryType = GalleryType.all,
-    this.maxLength = 10,
-    required this.selectedMyAssetEntities,
-  });
+// class GalleryPhotosScreen extends StatefulWidget {
+//   final GalleryType galleryType;
+//   final int maxLength;
+//   final List<MyAssetEntity> selectedMyAssetEntities;
 
-  @override
-  _GalleryPhotosScreenState createState() => _GalleryPhotosScreenState();
-}
+//   const GalleryPhotosScreen({
+//     super.key,
+//     this.galleryType = GalleryType.all,
+//     this.maxLength = 10,
+//     required this.selectedMyAssetEntities,
+//   });
 
-class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
-  List<AssetEntity> _asImages = <AssetEntity>[];
-  List<AssetEntity> _asVideos = <AssetEntity>[];
-  List<MyAssetEntity> _selectedAssetEntities = <MyAssetEntity>[];
-  final ValueKey<String> _keyVideo = const ValueKey('video');
-  final ValueKey<String> _keyImage = const ValueKey('Image');
-  late PermissionState _permissionState;
+//   @override
+//   _GalleryPhotosScreenState createState() => _GalleryPhotosScreenState();
+// }
 
-  List<File> files = <File>[];
-  int _selectedTabIndex = 0;
-  bool _isInit = false;
-  bool _isLoadingImages = true;
-  bool _isLoadingVideos = true;
-  final ScrollController _ctrlImages = ScrollController();
-  final ScrollController _ctrlVideos = ScrollController();
+// class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
+//   List<AssetEntity> _asImages = <AssetEntity>[];
+//   List<AssetEntity> _asVideos = <AssetEntity>[];
+//   List<MyAssetEntity> _selectedAssetEntities = <MyAssetEntity>[];
+//   final ValueKey<String> _keyVideo = const ValueKey('video');
+//   final ValueKey<String> _keyImage = const ValueKey('Image');
+//   late PermissionState _permissionState;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInit) {
-      _checkPermission();
-      _selectedAssetEntities = widget.selectedMyAssetEntities;
-      if (widget.galleryType == GalleryType.images) {
-        _selectedTabIndex = 0;
-        _getGalleryData(RequestType.image);
-      } else if (widget.galleryType == GalleryType.videos) {
-        _selectedTabIndex = 1;
-        _getGalleryData(RequestType.video);
-      } else {
-        _getGalleryData(RequestType.image);
-      }
-      _ctrlImages.addListener(_scrollListenerImg);
-      _ctrlVideos.addListener(_scrollListenerVid);
+//   List<File> files = <File>[];
+//   int _selectedTabIndex = 0;
+//   bool _isInit = false;
+//   bool _isLoadingImages = true;
+//   bool _isLoadingVideos = true;
+//   final ScrollController _ctrlImages = ScrollController();
+//   final ScrollController _ctrlVideos = ScrollController();
 
-      _isInit = true;
-    }
-  }
+//   @override
+//   void didChangeDependencies() {
+//     super.didChangeDependencies();
+//     if (!_isInit) {
+//       _checkPermission();
+//       _selectedAssetEntities = widget.selectedMyAssetEntities;
+//       if (widget.galleryType == GalleryType.images) {
+//         _selectedTabIndex = 0;
+//         _getGalleryData(RequestType.image);
+//       } else if (widget.galleryType == GalleryType.videos) {
+//         _selectedTabIndex = 1;
+//         _getGalleryData(RequestType.video);
+//       } else {
+//         _getGalleryData(RequestType.image);
+//       }
+//       _ctrlImages.addListener(_scrollListenerImg);
+//       _ctrlVideos.addListener(_scrollListenerVid);
 
-  Future<void> _checkPermission() async {
-    _permissionState = await PhotoManager.requestPermissionExtend();
-  }
+//       _isInit = true;
+//     }
+//   }
 
-  void _scrollListenerImg() {
-    if (_ctrlImages.position.atEdge) {
-      if (_ctrlImages.position.pixels == 0) {
-      } else {
-        _fetchNextImages();
-      }
-    }
-  }
+//   Future<void> _checkPermission() async {
+//     _permissionState = await PhotoManager.requestPermissionExtend();
+//   }
 
-  void _scrollListenerVid() {
-    if (_ctrlVideos.position.atEdge) {
-      if (_ctrlVideos.position.pixels == 0) {
-      } else {
-        _fetchNextVideos();
-      }
-    }
-  }
+//   void _scrollListenerImg() {
+//     if (_ctrlImages.position.atEdge) {
+//       if (_ctrlImages.position.pixels == 0) {
+//       } else {
+//         _fetchNextImages();
+//       }
+//     }
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gallery'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'gallaryButton',
-        child: (const Icon(Icons.done_all)),
-        onPressed: () {
-          Navigator.of(context).pop(_selectedAssetEntities);
-        },
-      ),
-      body: Stack(
-        children: <Widget>[
-          _selectedTabIndex == 0
-              ? _myAssetEntitiesImages.isEmpty
-                  ? GallerySafety(title: 'image', isLoading: _isLoadingImages)
-                  : GridView.builder(
-                      key: _keyImage,
-                      controller: _ctrlImages,
-                      padding: EdgeInsets.only(
-                          top: widget.galleryType == GalleryType.all
-                              ? 64.0
-                              : 0.0),
-                      itemCount: _myAssetEntitiesImages.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: MediaQuery.of(context).orientation ==
-                                Orientation.landscape
-                            ? 5
-                            : 3,
-                        // crossAxisSpacing: 8,
-                        // mainAxisSpacing: 8,
-                        childAspectRatio: (1 / 1),
-                      ),
-                      itemBuilder: (BuildContext context, int i) {
-                        return Container(
-                          margin: const EdgeInsets.all(1.0),
-                          child: Stack(
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () =>
-                                    _onSelect(_myAssetEntitiesImages[i]),
-                                child: AssetViewer(
-                                  image: _myAssetEntitiesImages[i].thumbnail,
-                                  height: 150.0,
-                                  width: 150.0,
-                                  fit: BoxFit.cover,
-                                  isSelected:
-                                      _isSelected(_myAssetEntitiesImages[i]),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    )
-              : _myAssetEntitiesVideos.isEmpty
-                  ? GallerySafety(title: 'video', isLoading: _isLoadingVideos)
-                  : GridView.builder(
-                      key: _keyVideo,
-                      controller: _ctrlVideos,
-                      padding: EdgeInsets.only(
-                          top: widget.galleryType == GalleryType.all
-                              ? 64.0
-                              : 0.0),
-                      itemCount: _myAssetEntitiesVideos.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: MediaQuery.of(context).orientation ==
-                                Orientation.landscape
-                            ? 5
-                            : 3,
-                        // crossAxisSpacing: 8,
-                        // mainAxisSpacing: 8,
-                        childAspectRatio: (1 / 1),
-                      ),
-                      itemBuilder: (BuildContext context, int i) {
-                        return Container(
-                          margin: const EdgeInsets.all(1.0),
-                          child: Stack(
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () =>
-                                    _onSelect(_myAssetEntitiesVideos[i]),
-                                child: AssetViewer(
-                                  image: _myAssetEntitiesVideos[i].thumbnail,
-                                  height: 150.0,
-                                  width: 150.0,
-                                  fit: BoxFit.cover,
-                                  isImage: _myAssetEntitiesVideos[i].isImage,
-                                  isSelected:
-                                      _isSelected(_myAssetEntitiesVideos[i]),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-          if ((_isLoadingNextImages && _myAssetEntitiesImages.isNotEmpty) ||
-              (_isLoadingNextVideos && _myAssetEntitiesVideos.isNotEmpty))
-            Positioned(
-              bottom: 10.0,
-              left: 0.0,
-              right: 0.0,
-              child: Center(
-                child: Container(
-                  height: 24.0,
-                  width: 24.0,
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(),
-                ),
-              ),
-            ),
-          if (Platform.isIOS && _permissionState == PermissionState.limited)
-            Positioned(
-              bottom: 10.0,
-              left: 0.0,
-              right: 0.0,
-              child: Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.all(8),
-                child: TextButton(
-                  onPressed: () {
-                    PhotoManager.openSetting();
-                    _getGalleryData(RequestType.image);
-                  },
-                  child: const Text('Show more photos'),
-                ),
-              ),
-            ),
-          if (widget.galleryType == GalleryType.all)
-            Positioned(
-              top: 12.0,
-              left: 0.0,
-              right: 0.0,
-              child: Center(
-                child: SizedBox(
-                    width: min(MediaQuery.of(context).size.width * 0.8, 600),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              if (_asImages.isEmpty) {
-                                _getGalleryData(RequestType.image);
-                              }
-                              setState(() {
-                                _selectedTabIndex = 0;
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  color: _selectedTabIndex == 0
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.white,
-                                  border: Border.all(
-                                      color: Theme.of(context).primaryColor),
-                                  borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(8.0),
-                                    topLeft: Radius.circular(8.0),
-                                  )),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Photos',
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: _selectedTabIndex == 0
-                                      ? Colors.white
-                                      : Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              if (_asVideos.isEmpty) {
-                                _getGalleryData(RequestType.video);
-                              }
-                              setState(() {
-                                _selectedTabIndex = 1;
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                color: _selectedTabIndex == 1
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.white,
-                                border: Border.all(
-                                    color: Theme.of(context).primaryColor),
-                                borderRadius: const BorderRadius.only(
-                                  bottomRight: Radius.circular(8.0),
-                                  topRight: Radius.circular(8.0),
-                                ),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Videos',
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: _selectedTabIndex == 1
-                                      ? Colors.white
-                                      : Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-              ),
-            )
-        ],
-      ),
-    );
-  }
+//   void _scrollListenerVid() {
+//     if (_ctrlVideos.position.atEdge) {
+//       if (_ctrlVideos.position.pixels == 0) {
+//       } else {
+//         _fetchNextVideos();
+//       }
+//     }
+//   }
 
-  void _onSelect(MyAssetEntity myAssetEntity) {
-    int l = _selectedAssetEntities.length;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Gallery'),
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         heroTag: 'gallaryButton',
+//         child: (const Icon(Icons.done_all)),
+//         onPressed: () {
+//           Navigator.of(context).pop(_selectedAssetEntities);
+//         },
+//       ),
+//       body: Stack(
+//         children: <Widget>[
+//           _selectedTabIndex == 0
+//               ? _myAssetEntitiesImages.isEmpty
+//                   ? GallerySafety(title: 'image', isLoading: _isLoadingImages)
+//                   : GridView.builder(
+//                       key: _keyImage,
+//                       controller: _ctrlImages,
+//                       padding: EdgeInsets.only(
+//                           top: widget.galleryType == GalleryType.all
+//                               ? 64.0
+//                               : 0.0),
+//                       itemCount: _myAssetEntitiesImages.length,
+//                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                         crossAxisCount: MediaQuery.of(context).orientation ==
+//                                 Orientation.landscape
+//                             ? 5
+//                             : 3,
+//                         // crossAxisSpacing: 8,
+//                         // mainAxisSpacing: 8,
+//                         childAspectRatio: (1 / 1),
+//                       ),
+//                       itemBuilder: (BuildContext context, int i) {
+//                         return Container(
+//                           margin: const EdgeInsets.all(1.0),
+//                           child: Stack(
+//                             children: <Widget>[
+//                               GestureDetector(
+//                                 onTap: () =>
+//                                     _onSelect(_myAssetEntitiesImages[i]),
+//                                 child: AssetViewer(
+//                                   image: _myAssetEntitiesImages[i].thumbnail,
+//                                   height: 150.0,
+//                                   width: 150.0,
+//                                   fit: BoxFit.cover,
+//                                   isSelected:
+//                                       _isSelected(_myAssetEntitiesImages[i]),
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         );
+//                       },
+//                     )
+//               : _myAssetEntitiesVideos.isEmpty
+//                   ? GallerySafety(title: 'video', isLoading: _isLoadingVideos)
+//                   : GridView.builder(
+//                       key: _keyVideo,
+//                       controller: _ctrlVideos,
+//                       padding: EdgeInsets.only(
+//                           top: widget.galleryType == GalleryType.all
+//                               ? 64.0
+//                               : 0.0),
+//                       itemCount: _myAssetEntitiesVideos.length,
+//                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                         crossAxisCount: MediaQuery.of(context).orientation ==
+//                                 Orientation.landscape
+//                             ? 5
+//                             : 3,
+//                         // crossAxisSpacing: 8,
+//                         // mainAxisSpacing: 8,
+//                         childAspectRatio: (1 / 1),
+//                       ),
+//                       itemBuilder: (BuildContext context, int i) {
+//                         return Container(
+//                           margin: const EdgeInsets.all(1.0),
+//                           child: Stack(
+//                             children: <Widget>[
+//                               GestureDetector(
+//                                 onTap: () =>
+//                                     _onSelect(_myAssetEntitiesVideos[i]),
+//                                 child: AssetViewer(
+//                                   image: _myAssetEntitiesVideos[i].thumbnail,
+//                                   height: 150.0,
+//                                   width: 150.0,
+//                                   fit: BoxFit.cover,
+//                                   isImage: _myAssetEntitiesVideos[i].isImage,
+//                                   isSelected:
+//                                       _isSelected(_myAssetEntitiesVideos[i]),
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         );
+//                       },
+//                     ),
+//           if ((_isLoadingNextImages && _myAssetEntitiesImages.isNotEmpty) ||
+//               (_isLoadingNextVideos && _myAssetEntitiesVideos.isNotEmpty))
+//             Positioned(
+//               bottom: 10.0,
+//               left: 0.0,
+//               right: 0.0,
+//               child: Center(
+//                 child: Container(
+//                   height: 24.0,
+//                   width: 24.0,
+//                   alignment: Alignment.center,
+//                   child: const CircularProgressIndicator(),
+//                 ),
+//               ),
+//             ),
+//           if (Platform.isIOS && _permissionState == PermissionState.limited)
+//             Positioned(
+//               bottom: 10.0,
+//               left: 0.0,
+//               right: 0.0,
+//               child: Container(
+//                 alignment: Alignment.center,
+//                 margin: const EdgeInsets.all(8),
+//                 child: TextButton(
+//                   onPressed: () {
+//                     PhotoManager.openSetting();
+//                     _getGalleryData(RequestType.image);
+//                   },
+//                   child: const Text('Show more photos'),
+//                 ),
+//               ),
+//             ),
+//           if (widget.galleryType == GalleryType.all)
+//             Positioned(
+//               top: 12.0,
+//               left: 0.0,
+//               right: 0.0,
+//               child: Center(
+//                 child: SizedBox(
+//                     width: min(MediaQuery.of(context).size.width * 0.8, 600),
+//                     child: Row(
+//                       children: <Widget>[
+//                         Expanded(
+//                           child: GestureDetector(
+//                             onTap: () {
+//                               if (_asImages.isEmpty) {
+//                                 _getGalleryData(RequestType.image);
+//                               }
+//                               setState(() {
+//                                 _selectedTabIndex = 0;
+//                               });
+//                             },
+//                             child: Container(
+//                               padding: const EdgeInsets.all(8.0),
+//                               decoration: BoxDecoration(
+//                                   color: _selectedTabIndex == 0
+//                                       ? Theme.of(context).primaryColor
+//                                       : Colors.white,
+//                                   border: Border.all(
+//                                       color: Theme.of(context).primaryColor),
+//                                   borderRadius: const BorderRadius.only(
+//                                     bottomLeft: Radius.circular(8.0),
+//                                     topLeft: Radius.circular(8.0),
+//                                   )),
+//                               alignment: Alignment.center,
+//                               child: Text(
+//                                 'Photos',
+//                                 style: TextStyle(
+//                                   fontSize: 14.0,
+//                                   fontWeight: FontWeight.bold,
+//                                   color: _selectedTabIndex == 0
+//                                       ? Colors.white
+//                                       : Theme.of(context).primaryColor,
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                         ),
+//                         Expanded(
+//                           child: GestureDetector(
+//                             onTap: () {
+//                               if (_asVideos.isEmpty) {
+//                                 _getGalleryData(RequestType.video);
+//                               }
+//                               setState(() {
+//                                 _selectedTabIndex = 1;
+//                               });
+//                             },
+//                             child: Container(
+//                               padding: const EdgeInsets.all(8.0),
+//                               decoration: BoxDecoration(
+//                                 color: _selectedTabIndex == 1
+//                                     ? Theme.of(context).primaryColor
+//                                     : Colors.white,
+//                                 border: Border.all(
+//                                     color: Theme.of(context).primaryColor),
+//                                 borderRadius: const BorderRadius.only(
+//                                   bottomRight: Radius.circular(8.0),
+//                                   topRight: Radius.circular(8.0),
+//                                 ),
+//                               ),
+//                               alignment: Alignment.center,
+//                               child: Text(
+//                                 'Videos',
+//                                 style: TextStyle(
+//                                   fontSize: 14.0,
+//                                   fontWeight: FontWeight.bold,
+//                                   color: _selectedTabIndex == 1
+//                                       ? Colors.white
+//                                       : Theme.of(context).primaryColor,
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                         ),
+//                       ],
+//                     )),
+//               ),
+//             )
+//         ],
+//       ),
+//     );
+//   }
 
-    int index = _selectedAssetEntities.indexWhere((MyAssetEntity ae) =>
-        ae.assetEntity.id == myAssetEntity.assetEntity.id);
-    if (index == -1) {
-      setState(() {
-        if (l >= widget.maxLength) return;
-        _selectedAssetEntities.add(myAssetEntity);
-      });
-    } else {
-      setState(() {
-        _selectedAssetEntities.removeAt(index);
-      });
-    }
-  }
+//   void _onSelect(MyAssetEntity myAssetEntity) {
+//     int l = _selectedAssetEntities.length;
 
-  bool _isSelected(MyAssetEntity myAssetEntity) {
-    int? index = _selectedAssetEntities.indexWhere((MyAssetEntity ae) =>
-        ae.assetEntity.id == myAssetEntity.assetEntity.id);
-    if (index > -1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+//     int index = _selectedAssetEntities.indexWhere((MyAssetEntity ae) =>
+//         ae.assetEntity.id == myAssetEntity.assetEntity.id);
+//     if (index == -1) {
+//       setState(() {
+//         if (l >= widget.maxLength) return;
+//         _selectedAssetEntities.add(myAssetEntity);
+//       });
+//     } else {
+//       setState(() {
+//         _selectedAssetEntities.removeAt(index);
+//       });
+//     }
+//   }
 
-  Future<void> _getGalleryData(RequestType requestType) async {
-    try {
-      setState(() {
-        if (requestType == RequestType.image) {
-          _isLoadingImages = true;
-        } else if (requestType == RequestType.image) {
-          _isLoadingVideos = true;
-        }
-      });
-      final List<AssetPathEntity> assets =
-          await PhotoManager.getAssetPathList(onlyAll: true, type: requestType);
-      final AssetPathEntity recentAlbums = assets.first;
+//   bool _isSelected(MyAssetEntity myAssetEntity) {
+//     int? index = _selectedAssetEntities.indexWhere((MyAssetEntity ae) =>
+//         ae.assetEntity.id == myAssetEntity.assetEntity.id);
+//     if (index > -1) {
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   }
 
-      List<AssetEntity> data =
-          await recentAlbums.getAssetListPaged(page: 0, size: 80);
-      data.sort((AssetEntity a, AssetEntity b) =>
-          b.createDateTime.compareTo(a.createDateTime));
-      if (requestType == RequestType.image) {
-        setState(() {
-          _asImages = data;
-          _fetchNextImages();
-        });
-      } else {
-        setState(() {
-          _asVideos = data;
-          _fetchNextVideos();
-        });
-      }
-    } catch (e) {}
-  }
+//   Future<void> _getGalleryData(RequestType requestType) async {
+//     try {
+//       setState(() {
+//         if (requestType == RequestType.image) {
+//           _isLoadingImages = true;
+//         } else if (requestType == RequestType.image) {
+//           _isLoadingVideos = true;
+//         }
+//       });
+//       final List<AssetPathEntity> assets =
+//           await PhotoManager.getAssetPathList(onlyAll: true, type: requestType);
+//       final AssetPathEntity recentAlbums = assets.first;
 
-  final List<MyAssetEntity> _myAssetEntitiesImages = <MyAssetEntity>[];
-  bool _isLoadingNextImages = false;
-  int _loadedImages = 0;
+//       List<AssetEntity> data =
+//           await recentAlbums.getAssetListPaged(page: 0, size: 80);
+//       data.sort((AssetEntity a, AssetEntity b) =>
+//           b.createDateTime.compareTo(a.createDateTime));
+//       if (requestType == RequestType.image) {
+//         setState(() {
+//           _asImages = data;
+//           _fetchNextImages();
+//         });
+//       } else {
+//         setState(() {
+//           _asVideos = data;
+//           _fetchNextVideos();
+//         });
+//       }
+//     } catch (e) {}
+//   }
 
-  void _fetchNextImages() async {
-    _loadedImages += 30;
-    if (_asImages.length < _myAssetEntitiesImages.length ||
-        _isLoadingNextImages) {
-      setState(() {
-        _isLoadingImages = false;
-      });
-      return;
-    }
-    final List<MyAssetEntity> newImages = <MyAssetEntity>[];
-    setState(() {
-      _isLoadingNextImages = true;
-    });
-    for (int i = _myAssetEntitiesImages.length;
-        i < min(_asImages.length, _loadedImages);
-        i++) {
-      Uint8List? thumbnail = await _asImages[i]
-          .thumbnailDataWithSize(const ThumbnailSize.square(100), quality: 80);
-      AssetEntity assetEntity = _asImages[i];
+//   final List<MyAssetEntity> _myAssetEntitiesImages = <MyAssetEntity>[];
+//   bool _isLoadingNextImages = false;
+//   int _loadedImages = 0;
 
-      newImages.add(MyAssetEntity(
-          assetEntity: assetEntity, thumbnail: thumbnail!, isImage: true));
-    }
-    if (mounted) {
-      setState(() {
-        _isLoadingNextImages = false;
-        _myAssetEntitiesImages.addAll(newImages);
-        _isLoadingImages = false;
-      });
-    }
-  }
+//   void _fetchNextImages() async {
+//     _loadedImages += 30;
+//     if (_asImages.length < _myAssetEntitiesImages.length ||
+//         _isLoadingNextImages) {
+//       setState(() {
+//         _isLoadingImages = false;
+//       });
+//       return;
+//     }
+//     final List<MyAssetEntity> newImages = <MyAssetEntity>[];
+//     setState(() {
+//       _isLoadingNextImages = true;
+//     });
+//     for (int i = _myAssetEntitiesImages.length;
+//         i < min(_asImages.length, _loadedImages);
+//         i++) {
+//       Uint8List? thumbnail = await _asImages[i]
+//           .thumbnailDataWithSize(const ThumbnailSize.square(100), quality: 80);
+//       AssetEntity assetEntity = _asImages[i];
 
-  final List<MyAssetEntity> _myAssetEntitiesVideos = <MyAssetEntity>[];
-  bool _isLoadingNextVideos = false;
-  int _loadedVideos = 0;
+//       newImages.add(MyAssetEntity(
+//           assetEntity: assetEntity, thumbnail: thumbnail!, isImage: true));
+//     }
+//     if (mounted) {
+//       setState(() {
+//         _isLoadingNextImages = false;
+//         _myAssetEntitiesImages.addAll(newImages);
+//         _isLoadingImages = false;
+//       });
+//     }
+//   }
 
-  void _fetchNextVideos() async {
-    _loadedVideos += 20;
-    if (_asVideos.length < _myAssetEntitiesVideos.length ||
-        _isLoadingNextVideos) {
-      setState(() {
-        _isLoadingVideos = false;
-      });
-      return;
-    }
-    final List<MyAssetEntity> newVideos = <MyAssetEntity>[];
-    setState(() {
-      _isLoadingNextVideos = true;
-    });
-    for (int i = _myAssetEntitiesVideos.length;
-        i < min(_asVideos.length, _loadedVideos);
-        i++) {
-      Uint8List? thumbnail = await _asVideos[i]
-          .thumbnailDataWithSize(const ThumbnailSize.square(100), quality: 50);
-      AssetEntity assetEntity = _asVideos[i];
+//   final List<MyAssetEntity> _myAssetEntitiesVideos = <MyAssetEntity>[];
+//   bool _isLoadingNextVideos = false;
+//   int _loadedVideos = 0;
 
-      newVideos.add(MyAssetEntity(
-        assetEntity: assetEntity,
-        thumbnail: thumbnail!,
-        isImage: false,
-      ));
-    }
-    setState(() {
-      _isLoadingNextVideos = false;
-      _myAssetEntitiesVideos.addAll(newVideos);
-      _isLoadingVideos = false;
-    });
-  }
-}
+//   void _fetchNextVideos() async {
+//     _loadedVideos += 20;
+//     if (_asVideos.length < _myAssetEntitiesVideos.length ||
+//         _isLoadingNextVideos) {
+//       setState(() {
+//         _isLoadingVideos = false;
+//       });
+//       return;
+//     }
+//     final List<MyAssetEntity> newVideos = <MyAssetEntity>[];
+//     setState(() {
+//       _isLoadingNextVideos = true;
+//     });
+//     for (int i = _myAssetEntitiesVideos.length;
+//         i < min(_asVideos.length, _loadedVideos);
+//         i++) {
+//       Uint8List? thumbnail = await _asVideos[i]
+//           .thumbnailDataWithSize(const ThumbnailSize.square(100), quality: 50);
+//       AssetEntity assetEntity = _asVideos[i];
 
-class AssetViewer extends StatelessWidget {
-  // final AssetEntity assetEntity;
-  final Uint8List? image;
-  final double? width;
-  final double? height;
-  final BoxFit? fit;
-  final bool isImage;
-  final bool isSelected;
-  final File? file;
-  const AssetViewer(
-      {super.key,
-      // Key key,
-      // @required this.assetEntity,
-      this.image,
-      this.width,
-      this.height,
-      this.fit,
-      this.isImage = true,
-      this.isSelected = false,
-      this.file});
+//       newVideos.add(MyAssetEntity(
+//         assetEntity: assetEntity,
+//         thumbnail: thumbnail!,
+//         isImage: false,
+//       ));
+//     }
+//     setState(() {
+//       _isLoadingNextVideos = false;
+//       _myAssetEntitiesVideos.addAll(newVideos);
+//       _isLoadingVideos = false;
+//     });
+//   }
+// }
 
-  // : super(key: key);
+// class AssetViewer extends StatelessWidget {
+//   // final AssetEntity assetEntity;
+//   final Uint8List? image;
+//   final double? width;
+//   final double? height;
+//   final BoxFit? fit;
+//   final bool isImage;
+//   final bool isSelected;
+//   final File? file;
+//   const AssetViewer(
+//       {super.key,
+//       // Key key,
+//       // @required this.assetEntity,
+//       this.image,
+//       this.width,
+//       this.height,
+//       this.fit,
+//       this.isImage = true,
+//       this.isSelected = false,
+//       this.file});
 
-  @override
-  Widget build(BuildContext context) {
-    if (image == null && file == null) {
-      return _buildContainer();
-    }
-    return Stack(
-      children: <Widget>[
-        if (!isImage)
-          const Center(
-              child: Icon(Icons.image, color: Colors.grey, size: 48.0)),
-        Container(
-          decoration: BoxDecoration(
-              border: isSelected
-                  ? Border.all(
-                      color: Theme.of(context).primaryColor, width: 2.0)
-                  : Border.all(
-                      color: Colors.transparent,
-                    )),
-          child: file == null
-              ? Image.memory(
-                  image!,
-                  width: width,
-                  height: height,
-                  fit: fit,
-                )
-              : Image.file(
-                  file!,
-                  width: width,
-                  height: height,
-                  fit: fit,
-                ),
-        ),
-        if (isSelected)
-          Positioned(
-            right: 4.0,
-            top: 4.0,
-            child: Icon(
-              Icons.check,
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-        if (!isImage)
-          const Center(
-            child: Icon(
-              Icons.play_arrow,
-              color: Colors.black54,
-              size: 40.0,
-            ),
-          )
-      ],
-    );
-  }
+//   // : super(key: key);
 
-  Widget _buildContainer({Widget? child}) {
-    return SizedBox(
-      width: width,
-      height: height,
-      child: child,
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     if (image == null && file == null) {
+//       return _buildContainer();
+//     }
+//     return Stack(
+//       children: <Widget>[
+//         if (!isImage)
+//           const Center(
+//               child: Icon(Icons.image, color: Colors.grey, size: 48.0)),
+//         Container(
+//           decoration: BoxDecoration(
+//               border: isSelected
+//                   ? Border.all(
+//                       color: Theme.of(context).primaryColor, width: 2.0)
+//                   : Border.all(
+//                       color: Colors.transparent,
+//                     )),
+//           child: file == null
+//               ? Image.memory(
+//                   image!,
+//                   width: width,
+//                   height: height,
+//                   fit: fit,
+//                 )
+//               : Image.file(
+//                   file!,
+//                   width: width,
+//                   height: height,
+//                   fit: fit,
+//                 ),
+//         ),
+//         if (isSelected)
+//           Positioned(
+//             right: 4.0,
+//             top: 4.0,
+//             child: Icon(
+//               Icons.check,
+//               color: Theme.of(context).primaryColor,
+//             ),
+//           ),
+//         if (!isImage)
+//           const Center(
+//             child: Icon(
+//               Icons.play_arrow,
+//               color: Colors.black54,
+//               size: 40.0,
+//             ),
+//           )
+//       ],
+//     );
+//   }
+
+//   Widget _buildContainer({Widget? child}) {
+//     return SizedBox(
+//       width: width,
+//       height: height,
+//       child: child,
+//     );
+//   }
+// }
 
 class MyAssetEntity {
   AssetEntity assetEntity;
@@ -533,65 +535,65 @@ class MyAssetEntity {
   });
 }
 
-class GallerySafety extends StatelessWidget {
-  final bool isLoading;
-  final String? title;
+// class GallerySafety extends StatelessWidget {
+//   final bool isLoading;
+//   final String? title;
 
-  const GallerySafety({
-    super.key,
-    this.isLoading = false,
-    this.title,
-  });
+//   const GallerySafety({
+//     super.key,
+//     this.isLoading = false,
+//     this.title,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          isLoading
-              ? const SizedBox(
-                  height: 24.0,
-                  width: 24.0,
-                  child: CircularProgressIndicator(),
-                )
-              : Column(
-                  children: <Widget>[
-                    getIcon(title: title!),
-                    const SizedBox(height: 16.0),
-                    Text(
-                      'There is not $title to select',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    const SizedBox(height: 4.0),
-                  ],
-                )
-        ],
-      ),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: <Widget>[
+//           isLoading
+//               ? const SizedBox(
+//                   height: 24.0,
+//                   width: 24.0,
+//                   child: CircularProgressIndicator(),
+//                 )
+//               : Column(
+//                   children: <Widget>[
+//                     getIcon(title: title!),
+//                     const SizedBox(height: 16.0),
+//                     Text(
+//                       'There is not $title to select',
+//                       style: Theme.of(context).textTheme.bodyLarge,
+//                     ),
+//                     const SizedBox(height: 4.0),
+//                   ],
+//                 )
+//         ],
+//       ),
+//     );
+//   }
 
-  Icon getIcon({String title = 'image'}) {
-    Icon icon = title.toLowerCase() == 'video'
-        ? const Icon(
-            Icons.play_arrow,
-            size: 80.0,
-            color: Colors.grey,
-          )
-        : const Icon(
-            Icons.photo_library,
-            size: 80.0,
-            color: Colors.grey,
-          );
-    return icon;
-  }
-}
+//   Icon getIcon({String title = 'image'}) {
+//     Icon icon = title.toLowerCase() == 'video'
+//         ? const Icon(
+//             Icons.play_arrow,
+//             size: 80.0,
+//             color: Colors.grey,
+//           )
+//         : const Icon(
+//             Icons.photo_library,
+//             size: 80.0,
+//             color: Colors.grey,
+//           );
+//     return icon;
+//   }
+// }
 
 enum GalleryType { videos, images, all }
 
-Future<File?> toFile(MyAssetEntity myAssetEntity) async {
-  AssetEntity? ae = myAssetEntity.assetEntity;
+// Future<File?> toFile(MyAssetEntity myAssetEntity) async {
+//   AssetEntity? ae = myAssetEntity.assetEntity;
 
-  Future<File?>? file = ae.file;
-  return file;
-}
+//   Future<File?>? file = ae.file;
+//   return file;
+// }

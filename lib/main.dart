@@ -16,7 +16,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -127,14 +127,14 @@ void processDeepLink(Uri uri) {
 void processPostDeeplink(Uri uri) async {
   log('processPostDeeplink: $uri');
 
-  Fluttertoast.showToast(
-    msg: 'Welcome back to BusinessBosses',
-    toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.BOTTOM,
-    timeInSecForIosWeb: 1,
-    backgroundColor: Colors.green,
-    textColor: Colors.white,
-  );
+  // Fluttertoast.showToast(
+  //   msg: 'Welcome back to BusinessBosses',
+  //   toastLength: Toast.LENGTH_SHORT,
+  //   gravity: ToastGravity.BOTTOM,
+  //   timeInSecForIosWeb: 1,
+  //   backgroundColor: Colors.green,
+  //   textColor: Colors.white,
+  // );
 
   if (uri.queryParameters.isNotEmpty) {
     final String orderId = uri.queryParameters['orderId']!;

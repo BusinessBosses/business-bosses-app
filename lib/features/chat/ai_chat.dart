@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AiChatScreen extends StatefulWidget {
   const AiChatScreen({super.key});
@@ -33,6 +34,25 @@ class _AiChatScreenState extends State<AiChatScreen>
   late Animation<double> _shadowOpacityAnimation;
   late Animation<Offset> _shadowOffsetAnimation;
   late Animation<Color?> _shadowColorAnimation;
+  final List<String> _randomBusinessPrompts = <String>[
+    'What are three ways I can grow my business sustainably over the next 12 months?',
+    'Analyze the biggest strengths and weaknesses of my business, based on general small business trends.',
+    'What marketing strategies would be most effective for promoting my business with a limited budget?',
+    'Give me creative ideas to improve customer retention in my business.',
+    'What are some common mistakes businesses like mine make, and how can I avoid them?',
+    'Suggest five ways to make my business stand out in a competitive market.',
+    'What key performance indicators (KPIs) should I track to measure the success of my business?',
+    'How can I use technology to automate or streamline operations in my business?',
+    'What are some low-cost ideas to build brand awareness for my business?',
+    'Based on general business principles, what steps should I take to prepare my business for scaling?',
+  ];
+
+  List<String> _shownPrompts = <String>[];
+  static const String _promptCountKey = 'daily_prompt_count';
+  static const String _lastPromptDateKey = 'last_prompt_date';
+  void _initPrompts() {
+    _shownPrompts = (_randomBusinessPrompts..shuffle()).take(5).toList();
+  }
 
   @override
   void initState() {
@@ -43,7 +63,38 @@ class _AiChatScreenState extends State<AiChatScreen>
         isMe: false,
       ));
     }
+    if (controller.messages.length == 1 &&
+        controller.messages.first.text ==
+            'Hello👋 How can I assist you with your business today?') {
+      _initPrompts();
+    }
     _initAnimations();
+  }
+
+  Future<bool> _canSendPrompt() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool isSubscribed = profileController.myProfile.isSubscribed;
+
+    if (isSubscribed) return true; // No limit for subscribed
+
+    final DateTime now = DateTime.now();
+    final String today = '${now.year}-${now.month}-${now.day}';
+    final String lastUsed = prefs.getString(_lastPromptDateKey) ?? '';
+    int count = prefs.getInt(_promptCountKey) ?? 0;
+
+    // Reset if it's a new day
+    if (lastUsed != today) {
+      await prefs.setInt(_promptCountKey, 0);
+      await prefs.setString(_lastPromptDateKey, today);
+      count = 0;
+    }
+
+    if (count >= 5) return false;
+
+    // Increment and save
+    await prefs.setInt(_promptCountKey, count + 1);
+    await prefs.setString(_lastPromptDateKey, today);
+    return true;
   }
 
   @override
@@ -91,9 +142,22 @@ class _AiChatScreenState extends State<AiChatScreen>
     _animationController.repeat();
   }
 
-  void _send() {
+  void _send() async {
     final String txt = _inputCtrl.text.trim();
     if (txt.isEmpty) return;
+
+    final bool allowed = await _canSendPrompt();
+    if (!allowed) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+              'You\'ve reached your daily free limit. Upgrade to continue.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
     controller.sendMessage(txt);
     _inputCtrl.clear();
@@ -214,7 +278,7 @@ class _AiChatScreenState extends State<AiChatScreen>
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 12),
                             decoration: BoxDecoration(
-                              color: Colors.indigo.withOpacity(0.07),
+                              color: Colors.indigo.withValues(alpha: 0.07),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Text(
@@ -238,8 +302,51 @@ class _AiChatScreenState extends State<AiChatScreen>
                       ishellotext = false;
                     }
                     // Return the actual chat message (adjust index by -1)
-                    return ChatBubble(
-                        msg: msgs[i - 1], ishellotext: ishellotext);
+                    return Column(
+                      children: <Widget>[
+                        ChatBubble(msg: msgs[i - 1], ishellotext: ishellotext),
+                        // 👇 Insert this block here
+                        if (_shownPrompts.isNotEmpty &&
+                            i == 1 &&
+                            controller.messages.length == 1)
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: _shownPrompts
+                                  .map(
+                                    (String prompt) => GestureDetector(
+                                      onTap: () {
+                                        _inputCtrl.text = prompt;
+                                        _focusNode.requestFocus();
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 6),
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: Colors.indigo
+                                              .withAlpha((0.05 * 255).toInt()),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: Colors.indigo
+                                                .withAlpha((0.2 * 255).toInt()),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          prompt,
+                                          style: const TextStyle(fontSize: 13),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                      ],
+                    );
                   },
                 );
               }),

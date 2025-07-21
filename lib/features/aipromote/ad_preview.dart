@@ -418,7 +418,7 @@ class _AdPreviewState extends State<AdPreview> {
           Center(
             child: Text(
               profileController.myProfile.isSubscribed
-                  ? 'Remaining promotions this month: ${widget.remainingPromos} of 12'
+                  ? ''
                   : 'Remaining free promotions: ${widget.remainingPromos} of 4',
               style: TextStyle(
                 fontSize: 12,

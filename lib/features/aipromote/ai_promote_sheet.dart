@@ -65,7 +65,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   }
 
   Future<void> _loadPromoPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _promoCount = prefs.getInt('promo_count') ?? 0;
       _prefsLoaded = true;
@@ -73,6 +73,11 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   }
 
   Future<bool> _canUsePromotion({required bool isSubscribed}) async {
+    if (isSubscribed) {
+      // No limit for subscribed users
+      return true;
+    }
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final DateTime now = DateTime.now();
     final int count = prefs.getInt('promo_count') ?? 0;
@@ -92,8 +97,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
       return true;
     }
 
-    final int maxUses = isSubscribed ? 12 : 4;
-
+    const int maxUses = 4;
     if (count >= maxUses) {
       return false;
     }
@@ -304,7 +308,8 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     if (_currentStep == PromoteStep.preview) {
       final bool isSubscribed =
           profileController?.myProfile.isSubscribed ?? true;
-      final int maxUses = isSubscribed ? 12 : 4;
+      final int maxUses = isSubscribed ? 9999 : 4; // Or hide UI completely for subscribed
+
       remaining = (_promoCount >= maxUses) ? 0 : (maxUses - _promoCount);
     }
 
