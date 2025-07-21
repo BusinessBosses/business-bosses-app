@@ -1,6 +1,7 @@
 // lib/features/chat/screens/ai_chat_screen.dart
 // ignore_for_file: unused_field
 
+import 'package:business_bosses_v2/bbpro/widgets/typingindicator.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/controllers/ai_chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/ai_chat_message.dart';
@@ -33,6 +34,18 @@ class _AiChatScreenState extends State<AiChatScreen>
   late Animation<double> _shadowOpacityAnimation;
   late Animation<Offset> _shadowOffsetAnimation;
   late Animation<Color?> _shadowColorAnimation;
+
+  // Suggested questions for business and entrepreneurship
+  final List<String> suggestedQuestions = <String>[
+    'How to create a business plan?',
+    'What are the key marketing strategies?',
+    'How to manage cash flow effectively?',
+    'What legal structure should I choose?',
+    'How to find investors for my startup?',
+    'What are the best productivity tools?',
+    'How to build a strong team?',
+    'What are current market trends?',
+  ];
 
   @override
   void initState() {
@@ -85,18 +98,18 @@ class _AiChatScreenState extends State<AiChatScreen>
       curve: Curves.easeInOutSine,
     ));
 
-    // Colorful shadow animation
-
     // Start the animation and repeat
     _animationController.repeat();
   }
 
-  void _send() {
-    final String txt = _inputCtrl.text.trim();
+  void _send({String? predefinedText}) {
+    final String txt = predefinedText ?? _inputCtrl.text.trim();
     if (txt.isEmpty) return;
 
     controller.sendMessage(txt);
-    _inputCtrl.clear();
+    if (predefinedText == null) {
+      _inputCtrl.clear();
+    }
     _focusNode.unfocus();
 
     // Use post-frame callback to wait until the UI updates
@@ -111,6 +124,99 @@ class _AiChatScreenState extends State<AiChatScreen>
     });
   }
 
+  bool _shouldShowSuggestions() {
+    // Show suggestions only if we have exactly 1 message (the hello message)
+    // and it's the initial greeting
+    return controller.messages.length == 1 &&
+        controller.messages.first.text
+            .contains('Hello👋 How can I assist you with your business today?');
+  }
+
+  Widget _buildSuggestedQuestions() {
+    // Arrange questions into exactly 3 rows
+    List<List<String>> questionRows = <List<String>>[];
+    int questionsPerRow = (suggestedQuestions.length / 3).ceil();
+
+    for (int i = 0; i < suggestedQuestions.length; i += questionsPerRow) {
+      int endIndex = (i + questionsPerRow > suggestedQuestions.length)
+          ? suggestedQuestions.length
+          : i + questionsPerRow;
+      questionRows.add(suggestedQuestions.sublist(i, endIndex));
+    }
+
+    // If we have less than 3 rows, pad with empty lists
+    while (questionRows.length < 3) {
+      questionRows.add(<String>[]);
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: const Text(
+              'Ask a question',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Create 3 horizontal scrollable rows
+          ...questionRows.map((List<String> rowQuestions) {
+            if (rowQuestions.isEmpty) return const SizedBox.shrink();
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              height: 36,
+              child: ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                scrollDirection: Axis.horizontal,
+                itemCount: rowQuestions.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    child: GestureDetector(
+                      onTap: () => _send(predefinedText: rowQuestions[index]),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.indigo.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(18),
+                          border: Border.all(
+                            color: Colors.indigo.withOpacity(0.2),
+                            width: 1,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            rowQuestions[index],
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool ishellotext = false;
@@ -118,6 +224,7 @@ class _AiChatScreenState extends State<AiChatScreen>
       backgroundColor: Colors.white,
       appBar: AppBar(
           titleSpacing: 0,
+          surfaceTintColor: Colors.transparent,
           leading: IconButton(
             onPressed: Get.back,
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
@@ -159,29 +266,6 @@ class _AiChatScreenState extends State<AiChatScreen>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const Text('SmartChat AI'),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(vertical: 2.0),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: <Widget>[
-                  //       Icon(
-                  //         Icons.info_outline,
-                  //         size: 16,
-                  //         color: Colors.grey[500],
-                  //       ),
-                  //       const SizedBox(width: 6),
-                  //       Text(
-                  //         'AI assistant',
-                  //         textAlign: TextAlign.center,
-                  //         style: TextStyle(
-                  //           fontSize: 13,
-                  //           color: Colors.grey[600],
-                  //           fontWeight: FontWeight.w500,
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                 ],
               ),
             ],
@@ -202,15 +286,18 @@ class _AiChatScreenState extends State<AiChatScreen>
                 return ListView.builder(
                   controller: _scrollCtrl,
                   padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  itemCount: msgs.length + 1, // +1 for the header
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+                  itemCount: msgs.length +
+                      1 + // for header
+                      (_shouldShowSuggestions() ? 1 : 0) +
+                      (controller.shouldShowFollowUps ? 1 : 0),
                   itemBuilder: (_, int i) {
                     if (i == 0) {
                       return Column(
                         children: <Widget>[
                           const SizedBox(height: 16),
                           Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            margin: const EdgeInsets.symmetric(horizontal: 15),
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 12),
                             decoration: BoxDecoration(
@@ -231,27 +318,45 @@ class _AiChatScreenState extends State<AiChatScreen>
                       );
                     }
 
-                    if (!msgs[i - 1].text.contains(
-                        'Hello👋 How can I assist you with your business today?')) {
-                      ishellotext = true;
-                    } else {
-                      ishellotext = false;
+                    // Handle suggestions
+                    if (_shouldShowSuggestions() && i == 1) {
+                      return _buildSuggestedQuestions();
                     }
-                    // Return the actual chat message (adjust index by -1)
-                    return ChatBubble(
-                        msg: msgs[i - 1], ishellotext: ishellotext);
+
+                    // Handle follow-ups
+                    if (controller.shouldShowFollowUps &&
+                        i == msgs.length + 1) {
+                      return _buildFollowUpQuestions();
+                    }
+
+                    // Adjust index for messages
+                    int msgIndex = i - 1;
+                    if (_shouldShowSuggestions() && msgIndex >= msgs.length) {
+                      msgIndex -= 1;
+                    }
+
+                    bool ishellotext = !msgs[msgIndex].text.contains(
+                        'Hello👋 How can I assist you with your business today?');
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: ChatBubble(
+                          msg: msgs[msgIndex], ishellotext: ishellotext),
+                    );
                   },
                 );
               }),
             ),
-
             // status footer
             Obx(
               () {
                 if (controller.isLoading.value) {
-                  return const SizedBox(
-                    height: 48,
-                    child: Center(child: CircularProgressIndicator()),
+                  return Container(
+                    color: Colors.transparent,
+                    child: Center(
+                        child: TypingIndicator(
+                      showIndicator: true,
+                    )),
                   );
                 }
                 if (controller.errorMessage.value != null) {
@@ -278,16 +383,72 @@ class _AiChatScreenState extends State<AiChatScreen>
     );
   }
 
+  Widget _buildFollowUpQuestions() {
+    return Obx(() {
+      if (!controller.shouldShowFollowUps) {
+        return const SizedBox.shrink();
+      }
+
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text(
+              'Ask a follow-up question',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: controller.followUpQuestions
+                  .map((String question) => GestureDetector(
+                        onTap: () => _send(predefinedText: question),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.indigo.withOpacity(0.08),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: Colors.indigo.withOpacity(0.2),
+                              width: 1,
+                            ),
+                          ),
+                          child: Text(
+                            question,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
+                      ))
+                  .toList(),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
   Widget _buildInputBar(BuildContext context) {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 0),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(12),
             boxShadow: <BoxShadow>[
               BoxShadow(blurRadius: 4, color: Colors.black12)
             ],
