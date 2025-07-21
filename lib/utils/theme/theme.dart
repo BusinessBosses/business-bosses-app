@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 /// APP THEME
 final ThemeData appTheme = ThemeData(
   appBarTheme: const AppBarTheme(
+    surfaceTintColor: Colors.transparent,
     centerTitle: false,
     backgroundColor: Colors.white,
     elevation: 0.0,
