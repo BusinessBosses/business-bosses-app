@@ -1,13 +1,4 @@
 PODS:
-  - facebook_app_events (0.20.0):
-    - FBSDKCoreKit (~> 18.0)
-    - Flutter
-  - FBAEMKit (18.0.0):
-    - FBSDKCoreKit_Basics (= 18.0.0)
-  - FBSDKCoreKit (18.0.0):
-    - FBAEMKit (= 18.0.0)
-    - FBSDKCoreKit_Basics (= 18.0.0)
-  - FBSDKCoreKit_Basics (18.0.0)
   - Flutter (1.0.0)
   - flutter_downloader (0.0.1):
     - Flutter
@@ -18,11 +9,7 @@ PODS:
   - flutter_inappwebview_ios/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 6.0.3)
-  - fluttertoast (0.0.2):
-    - Flutter
   - OrderedSet (6.0.3)
-  - pay_ios (0.0.1):
-    - Flutter
   - pdfx (1.0.0):
     - Flutter
   - photo_manager (3.7.1):
@@ -38,12 +25,9 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - facebook_app_events (from `.symlinks/plugins/facebook_app_events/ios`)
   - Flutter (from `Flutter`)
   - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
   - flutter_inappwebview_ios (from `.symlinks/plugins/flutter_inappwebview_ios/ios`)
-  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - pay_ios (from `.symlinks/plugins/pay_ios/ios`)
   - pdfx (from `.symlinks/plugins/pdfx/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
   - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
@@ -51,26 +35,17 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - FBAEMKit
-    - FBSDKCoreKit
-    - FBSDKCoreKit_Basics
     - OrderedSet
     - PurchasesHybridCommon
     - RevenueCat
 
 EXTERNAL SOURCES:
-  facebook_app_events:
-    :path: ".symlinks/plugins/facebook_app_events/ios"
   Flutter:
     :path: Flutter
   flutter_downloader:
     :path: ".symlinks/plugins/flutter_downloader/ios"
   flutter_inappwebview_ios:
     :path: ".symlinks/plugins/flutter_inappwebview_ios/ios"
-  fluttertoast:
-    :path: ".symlinks/plugins/fluttertoast/ios"
-  pay_ios:
-    :path: ".symlinks/plugins/pay_ios/ios"
   pdfx:
     :path: ".symlinks/plugins/pdfx/ios"
   photo_manager:
@@ -81,16 +56,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
 
 SPEC CHECKSUMS:
-  facebook_app_events: cfa07e73912a052992b5f218f79a19a66a99bf1a
-  FBAEMKit: e34530df538b8eb8aeb53c35867715ba6c63ef0c
-  FBSDKCoreKit: d3f479a69127acebb1c6aad91c1a33907bcf6c2f
-  FBSDKCoreKit_Basics: 017b6dc2a1862024815a8229e75661e627ac1e29
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_downloader: 78da0da1084e709cbfd3b723c7ea349c71681f09
   flutter_inappwebview_ios: b89ba3482b96fb25e00c967aae065701b66e9b99
-  fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1
   OrderedSet: e539b66b644ff081c73a262d24ad552a69be3a94
-  pay_ios: 2c48d76615ded0cfaff66185669501b8b1dfc55e
   pdfx: 77f4dddc48361fbb01486fa2bdee4532cbb97ef3
   photo_manager: 1d80ae07a89a67dfbcae95953a1e5a24af7c3e62
   purchases_flutter: 7f2f923fde8ab75125c3e85522a43f6ed1253580

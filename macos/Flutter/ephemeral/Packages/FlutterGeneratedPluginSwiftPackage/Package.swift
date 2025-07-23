@@ -22,7 +22,6 @@ let package = Package(
         .package(name: "firebase_analytics", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/firebase_analytics-11.5.2/macos/firebase_analytics"),
         .package(name: "firebase_core", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/firebase_core-3.15.1/macos/firebase_core"),
         .package(name: "firebase_messaging", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/firebase_messaging-15.2.9/macos/firebase_messaging"),
-        .package(name: "flutter_secure_storage_darwin", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/flutter_secure_storage_darwin-0.1.0/darwin/flutter_secure_storage_darwin"),
         .package(name: "google_sign_in_ios", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/google_sign_in_ios-6.0.1/darwin/google_sign_in_ios"),
         .package(name: "package_info_plus", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/package_info_plus-8.3.0/macos/package_info_plus"),
         .package(name: "path_provider_foundation", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.1/darwin/path_provider_foundation"),
@@ -30,7 +29,6 @@ let package = Package(
         .package(name: "shared_preferences_foundation", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.5.4/darwin/shared_preferences_foundation"),
         .package(name: "sqflite_darwin", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/sqflite_darwin-2.4.2/darwin/sqflite_darwin"),
         .package(name: "url_launcher_macos", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/url_launcher_macos-3.2.2/macos/url_launcher_macos"),
-        .package(name: "video_player_avfoundation", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/video_player_avfoundation-2.8.0/darwin/video_player_avfoundation"),
         .package(name: "webview_flutter_wkwebview", path: "/Users/eawuku/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.22.1/darwin/webview_flutter_wkwebview")
     ],
     targets: [
@@ -44,7 +42,6 @@ let package = Package(
                 .product(name: "firebase-analytics", package: "firebase_analytics"),
                 .product(name: "firebase-core", package: "firebase_core"),
                 .product(name: "firebase-messaging", package: "firebase_messaging"),
-                .product(name: "flutter-secure-storage-darwin", package: "flutter_secure_storage_darwin"),
                 .product(name: "google-sign-in-ios", package: "google_sign_in_ios"),
                 .product(name: "package-info-plus", package: "package_info_plus"),
                 .product(name: "path-provider-foundation", package: "path_provider_foundation"),
@@ -52,7 +49,6 @@ let package = Package(
                 .product(name: "shared-preferences-foundation", package: "shared_preferences_foundation"),
                 .product(name: "sqflite-darwin", package: "sqflite_darwin"),
                 .product(name: "url-launcher-macos", package: "url_launcher_macos"),
-                .product(name: "video-player-avfoundation", package: "video_player_avfoundation"),
                 .product(name: "webview-flutter-wkwebview", package: "webview_flutter_wkwebview")
             ]
         )

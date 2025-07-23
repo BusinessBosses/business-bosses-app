@@ -181,25 +181,6 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                   color: Color(0xFF4B5563),
                 ),
               ),
-              if (isMissing) ...<Widget>[
-                SizedBox(width: 8),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFEF3C7),
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: Color.fromARGB(255, 217, 38, 6)),
-                  ),
-                  child: Text(
-                    'Missing',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromARGB(255, 217, 38, 6),
-                    ),
-                  ),
-                ),
-              ],
             ],
           ),
           SizedBox(height: 6),
@@ -335,6 +316,18 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
             color: Color(0xFF6B7280),
           ),
         ),
+        if (!hasShop)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            child: Text(
+              'Tip: Setup BizCentre for quick promotion!',
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xFFD92606),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
         SizedBox(height: 24),
         infoClicked ? _buildInfoCard() : SizedBox.shrink(),
         _buildInputGroup(
