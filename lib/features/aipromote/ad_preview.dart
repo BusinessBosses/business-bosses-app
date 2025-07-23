@@ -463,7 +463,7 @@ class _AdPreviewState extends State<AdPreview> {
                     padding: const EdgeInsets.only(top: 16),
                     child: Center(
                       child: Text(
-                        'Upgrade to Pro',
+                        'Upgrade to Pro to generate unlimited promotions',
                         style: TextStyle(
                           fontSize: 14,
                           color: textColor,

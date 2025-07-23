@@ -308,7 +308,8 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     if (_currentStep == PromoteStep.preview) {
       final bool isSubscribed =
           profileController?.myProfile.isSubscribed ?? true;
-      final int maxUses = isSubscribed ? 9999 : 4; // Or hide UI completely for subscribed
+      final int maxUses =
+          isSubscribed ? 9999 : 4; // Or hide UI completely for subscribed
 
       remaining = (_promoCount >= maxUses) ? 0 : (maxUses - _promoCount);
     }
