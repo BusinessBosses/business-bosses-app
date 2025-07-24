@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
 import 'package:business_bosses_v2/features/aipromote/models/business_info_model.dart';
@@ -28,16 +31,18 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
   final TextEditingController _industryController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
-  final ProfileController profileController = ProfileController();
+  final ProfileController profileController = Get.find();
   final ShopController shopController = Get.find();
   final AiPromoteController aiPromoteController = Get.find();
 
   bool hasShop = false;
   List<String> missingFields = <String>[];
   bool infoClicked = false;
+  UserModel profile = UserModel();
 
   @override
   void initState() {
+    profile = profileController.myProfile;
     super.initState();
     _initializeControllers();
     _setupListeners();
@@ -50,21 +55,17 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     _websiteController.addListener(() => _updateMissingFields());
   }
 
-  void _initializeControllers() {
-    if (shopController.shop == null) {
-      if (profileController.myProfile.hasShop) {
-        shopController.initShop();
-        hasShop = true;
-        // Set controllers with shop data after shop is initialized
-        _setShopData();
-      } else {
-        hasShop = false;
-        // Use profile data as fallback
-        _setProfileData();
-      }
-    } else {
+  void _initializeControllers() async {
+    if (shopController.shop == null && profileController.myProfile.hasShop) {
+      hasShop = true;
+      await shopController.initShop(); // make sure this is async
+      _setShopData();
+    } else if (shopController.shop != null) {
       hasShop = true;
       _setShopData();
+    } else {
+      hasShop = false;
+      _setProfileData();
     }
   }
 
@@ -78,11 +79,11 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
   }
 
   void _setProfileData() {
-    final UserModel profile = profileController.myProfile;
     missingFields.clear();
 
     // Set name from profile
     _nameController.text = profile.name ?? '';
+    log('Profile Name: ${profile.name}');
     if (profile.name == null || profile.name!.isEmpty) {
       missingFields.add('Business Name');
     }
@@ -279,6 +280,79 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
 
   @override
   Widget build(BuildContext context) {
+    if (!hasShop) {
+      // ⛔ No Shop: show message + generate button only
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            SizedBox(
+              height: 100,
+            ),
+            Center(
+              child: Text(
+                'We’ll generate your promotion using the business info in your profile. You can edit this by updating your profile.\n\n\n\n\nFor more accurate promotions, we recommend setting up a shop in BizCentre.',
+                style: TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: TextButton(
+                style: ButtonStyle(),
+                onPressed: () {
+                  Get.off(() => const Setupshop(
+                        backToHome: true,
+                      ));
+                },
+                child: Text('Setup Shop'),
+              ),
+            ),
+            SizedBox(
+              height: 100,
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: widget.isLoading
+                    ? null
+                    : _handleSubmit, // ✅ Use the profile handler
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColorLT,
+                  disabledBackgroundColor: backgroundColor,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: widget.isLoading
+                    ? SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(
+                        'Generate Free Promotion',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+              ),
+            ),
+            SizedBox(height: 24),
+          ],
+        ),
+      );
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
