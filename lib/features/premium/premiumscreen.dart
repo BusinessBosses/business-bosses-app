@@ -566,123 +566,89 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                       setState(() {
                                                         loading = true;
                                                       });
-                                                      if (paymentMethodId ==
-                                                          'Proyear') {
-                                                        try {
-                                                          final bool response =
-                                                              await makePayment();
-                                                          if (response) {
-                                                            final List<
-                                                                    StoreProduct>
-                                                                product =
-                                                                await Purchases
-                                                                    .getProducts(<String>[
-                                                              'xyz.codexia.businessbosses.proyear'
-                                                            ]);
-                                                            final CustomerInfo
-                                                                customerInfo =
-                                                                await Purchases
-                                                                    .purchaseStoreProduct(
-                                                                        product[
-                                                                            0]);
-                                                            if (customerInfo
-                                                                    .entitlements
-                                                                    .all[
-                                                                        'xyz.codexia.businessbosses.proyear']
-                                                                    ?.isActive ??
-                                                                false) {
-                                                              // Grant access to premium features
-                                                              print(
-                                                                  'User subscribed!');
-                                                              profileController
-                                                                  .updateProfile(<String,
-                                                                      dynamic>{
-                                                                ...profileController
-                                                                    .myProfile
-                                                                    .toMap(),
-                                                                'isSubscribed':
-                                                                    true
-                                                              });
-                                                              Get.off(() =>
-                                                                  const SubscriptionConfirmation());
-                                                            }
+
+                                                      final String productId =
+                                                          paymentMethodId ==
+                                                                  'Proyear'
+                                                              ? 'xyz.codexia.businessbosses.proyear'
+                                                              : 'xyz.codexia.businessbosses.promonth';
+
+                                                      try {
+                                                        final bool response =
+                                                            await makePayment();
+
+                                                        if (response) {
+                                                          final List<
+                                                                  StoreProduct>
+                                                              products =
+                                                              await Purchases
+                                                                  .getProducts(<String>[
+                                                            productId
+                                                          ]);
+                                                          final PurchaseResult
+                                                              purchaseResult =
+                                                              await Purchases
+                                                                  .purchaseStoreProduct(
+                                                                      products[
+                                                                          0]);
+                                                          final CustomerInfo
+                                                              customerInfo =
+                                                              purchaseResult
+                                                                  .customerInfo;
+
+                                                          final bool isActive =
+                                                              customerInfo
+                                                                      .entitlements
+                                                                      .all[
+                                                                          productId]
+                                                                      ?.isActive ??
+                                                                  false;
+
+                                                          if (isActive) {
+                                                            print(
+                                                                'User subscribed!');
+                                                            profileController
+                                                                .updateProfile(<String,
+                                                                    dynamic>{
+                                                              ...profileController
+                                                                  .myProfile
+                                                                  .toMap(),
+                                                              'isSubscribed':
+                                                                  true,
+                                                            });
+
+                                                            Get.off(() =>
+                                                                const SubscriptionConfirmation());
                                                           } else {
                                                             showSnackbar(
-                                                              title: 'OOPS!',
+                                                              title:
+                                                                  'Subscription Inactive',
                                                               message:
-                                                                  'An error occurred, please try again!',
+                                                                  'Something went wrong after purchase. Please contact support.',
                                                               error: true,
                                                             );
                                                           }
-                                                        } catch (e) {
-                                                          // Handle error
+                                                        } else {
                                                           showSnackbar(
                                                             title: 'OOPS!',
                                                             message:
                                                                 'An error occurred, please try again!',
                                                             error: true,
                                                           );
-                                                        } finally {
-                                                          setState(() {
-                                                            loading = false;
-                                                          });
                                                         }
-                                                      } else {
-                                                        try {
-                                                          final bool response =
-                                                              await makePayment();
-                                                          if (response) {
-                                                            final List<
-                                                                    StoreProduct>
-                                                                product =
-                                                                await Purchases
-                                                                    .getProducts(<String>[
-                                                              'xyz.codexia.businessbosses.promonth'
-                                                            ]);
-                                                            final CustomerInfo
-                                                                customerInfo =
-                                                                await Purchases
-                                                                    .purchaseStoreProduct(
-                                                                        product[
-                                                                            0]);
-                                                            if (customerInfo
-                                                                    .entitlements
-                                                                    .all[
-                                                                        'xyz.codexia.businessbosses.promonth']
-                                                                    ?.isActive ??
-                                                                false) {
-                                                              // Grant access to premium features
-                                                              print(
-                                                                  'User subscribed!');
-                                                              profileController
-                                                                  .updateProfile(<String,
-                                                                      dynamic>{
-                                                                ...profileController
-                                                                    .myProfile
-                                                                    .toMap(),
-                                                                'isSubscribed':
-                                                                    true
-                                                              });
-                                                              Get.off(() =>
-                                                                  const SubscriptionConfirmation());
-                                                            }
-                                                          } else {
-                                                            showSnackbar(
-                                                              title: 'OOPS!',
-                                                              message:
-                                                                  'An error occurred, please try again!',
-                                                              error: true,
-                                                            );
-                                                          }
-                                                        } catch (e) {
-                                                          // Handle error
-                                                          print(
-                                                              'Error purchasing product: $e');
-                                                        } finally {
-                                                          setState(() {
-                                                            loading = false;
-                                                          });
-                                                        }
+                                                      } catch (e, stackTrace) {
+                                                        log('Error purchasing product: $e\n$stackTrace');
+                                                        showSnackbar(
+                                                          title:
+                                                              'Purchase Failed',
+                                                          message:
+                                                              'An unexpected error occurred. Please try again.',
+                                                          error: true,
+                                                        );
+                                                      } finally {
+                                                        setState(() {
+                                                          loading = false;
+                                                        });
                                                       }
                                                     },
                                                   )),
