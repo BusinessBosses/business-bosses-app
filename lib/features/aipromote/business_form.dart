@@ -320,7 +320,8 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
         _buildInputGroup(
           '${profileController.myProfile.isSubscribed ? 'Business ' : ''}Name',
           _nameController,
-          placeholder: 'Enter your business name',
+          placeholder:
+              'Enter your ${profileController.myProfile.isSubscribed ? 'business ' : ''}name',
           isMissing: missingFields.contains('Business Name'),
         ),
         _buildInputGroup(
