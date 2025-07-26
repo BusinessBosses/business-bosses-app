@@ -1,6 +1,7 @@
 // lib/features/promotion/controllers/ai_promote_controller.dart
 import 'dart:convert';
 import 'dart:developer';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -25,6 +26,7 @@ class AiPromoteController extends GetxController {
 
   /// Your OpenAI key from `.env`
   final String _apiKey = dotenv.env['OPENAI_KEY']!;
+  final ProfileController profileController = Get.find();
 
   /// Call this once BusinessForm is valid
   void setBusinessDetails({
@@ -39,9 +41,13 @@ class AiPromoteController extends GetxController {
     industry.value = ind;
 
     // build a default prompt
-    prompt.value = 'Write a catchy Facebook ad for a $industry business '
-        'called "$businessName" located in $location that: '
-        '$description.';
+    prompt.value = profileController.myProfile.isSubscribed
+        ? 'Write a catchy ad for a $industry business '
+            'called "$businessName" located in $location that: '
+            '$description.'
+        : 'Write a catchy ad for a $industry business '
+            'for the person named "$businessName" located in $location that: '
+            '$description.';
   }
 
   /// If the user tweaked the prompt in AiPromoteSheet, call this
@@ -55,7 +61,9 @@ class AiPromoteController extends GetxController {
     isGenerating.value = true;
     errorMessage.value = null;
 
-    final Map<String, Object> body = <String, Object>{
+    Map<String, Object> body = <String, Object>{};
+
+    body = <String, Object>{
       'model': 'gpt-4o',
       'input': <Map<String, String>>[
         <String, String>{

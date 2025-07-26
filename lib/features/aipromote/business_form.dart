@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
 import 'package:business_bosses_v2/features/aipromote/models/business_info_model.dart';
@@ -83,28 +82,15 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
 
     // Set name from profile
     _nameController.text = profile.name ?? '';
-    log('Profile Name: ${profile.name}');
-    if (profile.name == null || profile.name!.isEmpty) {
-      missingFields.add('Business Name');
-    }
 
     // Set industry from profile (you might need to adjust this based on your profile model)
     _industryController.text = profile.industry ?? '';
-    if (profile.industry == null || profile.industry!.isEmpty) {
-      missingFields.add('Industry');
-    }
 
     // Set bio from profile
     _bioController.text = profile.bio ?? '';
-    if (profile.bio == null || profile.bio!.isEmpty) {
-      missingFields.add('Description/Tagline');
-    }
 
     // Set website from profile
     _websiteController.text = profile.website ?? '';
-    if (profile.website == null || profile.website!.isEmpty) {
-      missingFields.add('Website/Contact Link');
-    }
   }
 
   void _updateMissingFields() {
@@ -280,79 +266,6 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
 
   @override
   Widget build(BuildContext context) {
-    if (!hasShop) {
-      // ⛔ No Shop: show message + generate button only
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(
-              height: 100,
-            ),
-            Center(
-              child: Text(
-                'We’ll generate your promotion using the business info in your profile. You can edit this by updating your profile.\n\n\n\n\nFor more accurate promotions, we recommend setting up a shop in BizCentre.',
-                style: TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: TextButton(
-                style: ButtonStyle(),
-                onPressed: () {
-                  Get.off(() => const Setupshop(
-                        backToHome: true,
-                      ));
-                },
-                child: Text('Setup Shop'),
-              ),
-            ),
-            SizedBox(
-              height: 100,
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: widget.isLoading
-                    ? null
-                    : _handleSubmit, // ✅ Use the profile handler
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryColorLT,
-                  disabledBackgroundColor: backgroundColor,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: widget.isLoading
-                    ? SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : Text(
-                        'Generate Free Promotion',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-              ),
-            ),
-            SizedBox(height: 24),
-          ],
-        ),
-      );
-    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -405,7 +318,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
         SizedBox(height: 24),
         infoClicked ? _buildInfoCard() : SizedBox.shrink(),
         _buildInputGroup(
-          'Business Name',
+          '${profileController.myProfile.isSubscribed ? 'Business ' : ''}Name',
           _nameController,
           placeholder: 'Enter your business name',
           isMissing: missingFields.contains('Business Name'),
