@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
