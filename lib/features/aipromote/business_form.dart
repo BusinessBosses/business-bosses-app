@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
 import 'package:business_bosses_v2/features/aipromote/models/business_info_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -277,7 +278,9 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Business Info Confirmation',
+                hasShop
+                    ? 'Business Info Confirmation'
+                    : 'Profile Info Confirmation',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -295,7 +298,9 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
         ),
         SizedBox(height: 8),
         Text(
-          'Confirm your business information below to create your AI-generated promotion',
+          hasShop
+              ? 'Confirm your business information below to create your AI-generated promotion'
+              : 'Confirm your profile information below to create your AI-generated promotion',
           style: TextStyle(
             fontSize: 14,
             color: Color(0xFF6B7280),
@@ -304,12 +309,37 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
         if (!hasShop)
           Padding(
             padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-            child: Text(
-              'Tip: Setup BizCentre for quick promotion!',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFFD92606),
-                fontWeight: FontWeight.w600,
+            child: GestureDetector(
+              onTap: () {
+                Get.to(() => const MyProfileScreen(
+                      currentIndex: 1,
+                    ));
+              },
+              child: Text.rich(
+                TextSpan(
+                  text: 'Tip: ',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: textColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  children: <InlineSpan>[
+                    WidgetSpan(
+                      child: Text(
+                        'Setup BizCentre',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationColor: primaryColorLT, // underline color
+                          color: primaryColorLT,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' for quick promotion!',
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
