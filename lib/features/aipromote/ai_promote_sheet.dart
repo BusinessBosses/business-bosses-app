@@ -317,6 +317,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     switch (_currentStep) {
       case PromoteStep.info:
         return BusinessInfoForm(
+          limitReached: _promoCount >= 4,
           initialInfo: _businessInfo,
           onSubmit: _handleInfoSubmit,
           isLoading: _loading,
