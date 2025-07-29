@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
 import 'package:business_bosses_v2/features/aipromote/models/business_info_model.dart';
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -14,12 +15,14 @@ class BusinessInfoForm extends StatefulWidget {
   final BusinessInfo initialInfo;
   final Function(BusinessInfo) onSubmit;
   final bool isLoading;
+  final bool limitReached;
 
   const BusinessInfoForm({
     super.key,
     required this.initialInfo,
     required this.onSubmit,
     required this.isLoading,
+    required this.limitReached,
   });
 
   @override
@@ -31,6 +34,13 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
   final TextEditingController _industryController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
+
+  // Add FocusNodes
+  final FocusNode _nameFocus = FocusNode();
+  final FocusNode _industryFocus = FocusNode();
+  final FocusNode _bioFocus = FocusNode();
+  final FocusNode _websiteFocus = FocusNode();
+
   final ProfileController profileController = Get.find();
   final ShopController shopController = Get.find();
   final AiPromoteController aiPromoteController = Get.find();
@@ -66,7 +76,24 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     } else {
       hasShop = false;
       _setProfileData();
+      // Auto-focus the first empty field when using profile data
+      _autoFocusFirstEmptyField();
     }
+  }
+
+  void _autoFocusFirstEmptyField() {
+    // Use WidgetsBinding to ensure this runs after the build is complete
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_nameController.text.trim().isEmpty) {
+        _nameFocus.requestFocus();
+      } else if (_industryController.text.trim().isEmpty) {
+        _industryFocus.requestFocus();
+      } else if (_bioController.text.trim().isEmpty) {
+        _bioFocus.requestFocus();
+      } else if (_websiteController.text.trim().isEmpty) {
+        _websiteFocus.requestFocus();
+      }
+    });
   }
 
   void _setShopData() {
@@ -127,6 +154,13 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     _industryController.dispose();
     _bioController.dispose();
     _websiteController.dispose();
+
+    // Dispose FocusNodes
+    _nameFocus.dispose();
+    _industryFocus.dispose();
+    _bioFocus.dispose();
+    _websiteFocus.dispose();
+
     super.dispose();
   }
 
@@ -153,6 +187,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     int maxLines = 1,
     TextInputType? keyboardType,
     bool isMissing = false,
+    FocusNode? focusNode, // Add focusNode parameter
   }) {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
@@ -174,6 +209,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           SizedBox(height: 6),
           TextFormField(
             controller: controller,
+            focusNode: focusNode, // Add focusNode to TextFormField
             maxLines: maxLines,
             keyboardType: keyboardType,
             decoration: InputDecoration(
@@ -353,12 +389,14 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           placeholder:
               'Enter your ${profileController.myProfile.isSubscribed ? 'business ' : ''}name',
           isMissing: missingFields.contains('Business Name'),
+          focusNode: _nameFocus, // Pass focusNode
         ),
         _buildInputGroup(
           'Industry',
           _industryController,
           placeholder: 'Enter your industry',
           isMissing: missingFields.contains('Industry'),
+          focusNode: _industryFocus, // Pass focusNode
         ),
         _buildInputGroup(
           'Tagline/Description',
@@ -366,6 +404,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           placeholder: 'Enter a short description or tagline',
           maxLines: 3,
           isMissing: missingFields.contains('Description/Tagline'),
+          focusNode: _bioFocus, // Pass focusNode
         ),
         _buildInputGroup(
           'Website or Contact Link',
@@ -373,6 +412,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           placeholder: 'Enter your website URL / contact link',
           keyboardType: TextInputType.url,
           isMissing: missingFields.contains('Website/Contact Link'),
+          focusNode: _websiteFocus, // Pass focusNode
         ),
         SizedBox(height: 24),
         SizedBox(
@@ -380,7 +420,8 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           child: ElevatedButton(
             onPressed: widget.isLoading ? null : _handleSubmit,
             style: ElevatedButton.styleFrom(
-              backgroundColor: primaryColorLT,
+              backgroundColor:
+                  widget.limitReached == true ? Colors.grey : primaryColorLT,
               disabledBackgroundColor: backgroundColor,
               padding: EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
@@ -396,7 +437,9 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                       strokeWidth: 2,
                     ))
                 : Text(
-                    'Generate free promotion',
+                    widget.limitReached == true
+                        ? 'Limit reached'
+                        : 'Generate free promotion',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -405,6 +448,65 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                   ),
           ),
         ),
+        SizedBox(height: 10),
+        if (!profileController.myProfile.isSubscribed)
+          Center(
+            child: GestureDetector(
+              onTap: () {
+                Get.bottomSheet(
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0),
+                    ),
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                      ),
+                    ),
+                    height: Get.height * 0.9,
+                    child: const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          PremiumScreen(),
+                        ],
+                      ),
+                    ),
+                  ),
+                  backgroundColor: Colors.white,
+                );
+              },
+              child: RichText(
+                text: TextSpan(
+                  children: <InlineSpan>[
+                    TextSpan(
+                      text: 'Upgrade to Pro,',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: primaryColorLT,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' Get Unlimited Promotion',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                        color: Color(0xFF6B7280),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         SizedBox(height: 300),
       ],
     );
