@@ -462,13 +462,27 @@ class _AdPreviewState extends State<AdPreview> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: Center(
-                      child: Text(
-                        'Upgrade to Pro to generate unlimited promotions',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: textColor,
-                          fontWeight: FontWeight.w700,
-                          decoration: TextDecoration.underline,
+                      child: RichText(
+                        text: TextSpan(
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: 'Upgrade to Pro,',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: primaryColorLT,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' Get Unlimited Promotion',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15,
+                                color: Color(0xFF6B7280),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
