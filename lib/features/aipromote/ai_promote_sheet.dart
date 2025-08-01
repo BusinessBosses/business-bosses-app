@@ -284,7 +284,9 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
       height: 12,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isActive ? const Color(0xFF6366F1) : const Color(0xFFE5E7EB),
+        color: isActive
+            ? const Color.fromARGB(255, 0, 0, 0)
+            : const Color(0xFFE5E7EB),
       ),
     );
   }
@@ -317,6 +319,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     switch (_currentStep) {
       case PromoteStep.info:
         return BusinessInfoForm(
+          remainingPromos: remaining,
           limitReached: profileController!.myProfile.isSubscribed
               ? false
               : _promoCount >= 4,

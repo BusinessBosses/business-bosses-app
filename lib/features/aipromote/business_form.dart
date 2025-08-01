@@ -14,6 +14,7 @@ class BusinessInfoForm extends StatefulWidget {
   final Function(BusinessInfo) onSubmit;
   final bool isLoading;
   final bool limitReached;
+  final int? remainingPromos;
 
   const BusinessInfoForm({
     super.key,
@@ -21,6 +22,7 @@ class BusinessInfoForm extends StatefulWidget {
     required this.onSubmit,
     required this.isLoading,
     required this.limitReached,
+    this.remainingPromos,
   });
 
   @override
@@ -377,6 +379,16 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                   ],
                 ),
               ),
+            ),
+          ),
+        if (!hasShop)
+          Text(
+            profileController.myProfile.isSubscribed
+                ? ''
+                : 'Remaining free promotions: ${widget.remainingPromos} of 4',
+            style: TextStyle(
+              fontSize: 12,
+              color: Color(0xFF6B7280),
             ),
           ),
         SizedBox(height: 24),
