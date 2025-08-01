@@ -13,7 +13,7 @@ class OrderPreviewCard extends StatelessWidget {
   final String deliveryDays;
   final String deliveryLocation;
   final String imageUrl;
-  final Function? OnTap;
+  final Function? onTap;
   final Shop? shop;
 
   const OrderPreviewCard({
@@ -25,7 +25,7 @@ class OrderPreviewCard extends StatelessWidget {
     required this.deliveryDays,
     required this.deliveryLocation,
     required this.imageUrl,
-    this.OnTap,
+    this.onTap,
     this.shop,
   });
 
@@ -98,7 +98,7 @@ class OrderPreviewCard extends StatelessWidget {
           Align(
             alignment: Alignment.topRight,
             child: GestureDetector(
-              onTap: OnTap!(),
+              onTap: onTap!(),
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,

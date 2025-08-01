@@ -23,7 +23,7 @@ class GenericSlider extends StatefulWidget {
   });
 
   @override
-  _GenericSliderState createState() => _GenericSliderState();
+  State<GenericSlider> createState() => _GenericSliderState();
 }
 
 class _GenericSliderState extends State<GenericSlider> {

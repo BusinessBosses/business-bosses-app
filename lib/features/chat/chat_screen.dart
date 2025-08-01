@@ -36,10 +36,10 @@ class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  ChatScreenState createState() => ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class ChatScreenState extends State<ChatScreen> {
   final ChatController _chatController = Get.find();
   final ProfileController _profileController = Get.find();
   final AdvancedDrawerController _advancedDrawerController =

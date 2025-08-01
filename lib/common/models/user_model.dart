@@ -292,8 +292,8 @@ class UserModel {
           ? List<String>.from((map['postChallenges']))
           : null,
       interests: map['interests'] != null
-          ? List.from(map['interests'])
-              .map((e) => Industry.toObject(e as Map<String, dynamic>))
+          ? List<dynamic>.from(map['interests'])
+              .map((dynamic e) => Industry.toObject(e as Map<String, dynamic>))
               .toList()
           : null,
       productsandservices: map['productsandservices'] == null ||
@@ -302,8 +302,9 @@ class UserModel {
           : List<String>.from((map['productsandservices'])),
 
       referals: map['referals'] != null
-          ? List.from(map['referals'])
-              .map((e) => ReferralsModel.fromMap(e as Map<String, dynamic>))
+          ? List<dynamic>.from(map['referals'])
+              .map((dynamic e) =>
+                  ReferralsModel.fromMap(e as Map<String, dynamic>))
               .toList()
           : null,
 

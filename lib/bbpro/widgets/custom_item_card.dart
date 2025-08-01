@@ -259,10 +259,10 @@ class _CustomItemCardState extends State<CustomItemCard> {
 
               if (delete) {
                 showSnackbar(message: 'Product deleted successfully!');
-                Navigator.pop(context);
+                Navigator.pop(Get.context!);
               } else {
                 showSnackbar(message: 'Error deleting product!', error: true);
-                Navigator.pop(context);
+                Navigator.pop(Get.context!);
               }
               setState(() {});
             },

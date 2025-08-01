@@ -33,7 +33,7 @@ class _AIPromoteButtonState extends State<AIPromoteButton>
   void _startRotationLoop() async {
     while (mounted) {
       await _rotationController.forward();
-      await Future.delayed(Duration(seconds: 2));
+      await Future<dynamic>.delayed(Duration(seconds: 2));
       _rotationController.reset();
     }
   }

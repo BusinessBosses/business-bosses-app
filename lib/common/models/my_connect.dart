@@ -15,7 +15,7 @@ class MyConnect {
     // this.status,
   });
 
-  Map toMap() {
+  Map<dynamic, dynamic> toMap() {
     return <dynamic, dynamic>{
       'id': id,
       // 'connectedBy': connectedBy,
@@ -25,7 +25,7 @@ class MyConnect {
     };
   }
 
-  factory MyConnect.fromMap(Map map) {
+  factory MyConnect.fromMap(Map<dynamic, dynamic> map) {
     return MyConnect(
       id: map['id'].toString(),
       // connectedBy: map['connectedBy'] as String,
@@ -68,11 +68,11 @@ class MyConnect {
   // }
 
   static List<MyConnect> toListFormMap({
-    @required Map? map,
+    @required Map<dynamic, dynamic>? map,
   }) {
     if (map?.isEmpty ?? false) return <MyConnect>[];
     List<MyConnect> items = <MyConnect>[];
-    map?.forEach((key, data) {
+    map?.forEach((dynamic key, dynamic data) {
       final MyConnect item = MyConnect.fromMap(data);
       items.add(item);
     });

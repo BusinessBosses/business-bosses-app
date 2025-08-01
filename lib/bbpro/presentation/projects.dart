@@ -56,7 +56,7 @@ class _ProjectsState extends State<Projects>
         projectController.loading.value = false;
         filteredProjects = projectController.allProjects;
       });
-    }).catchError((error) {
+    }).catchError((dynamic error) {
       // Handle error
       if (mounted) {
         setState(() {

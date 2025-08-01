@@ -333,11 +333,11 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
 
               if (delete) {
                 showSnackbar(message: 'Product deleted successfully!');
-                Navigator.pop(context);
-                Navigator.pop(context);
+                Navigator.pop(Get.context!);
+                Navigator.pop(Get.context!);
               } else {
                 showSnackbar(message: 'Error deleting product!', error: true);
-                Navigator.pop(context);
+                Navigator.pop(Get.context!);
               }
               setState(() {});
             },

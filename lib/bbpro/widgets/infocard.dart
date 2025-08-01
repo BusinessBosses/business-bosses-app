@@ -12,7 +12,7 @@ class InfoCard extends StatefulWidget {
   });
 
   @override
-  _InfoCardState createState() => _InfoCardState();
+  State<InfoCard> createState() => _InfoCardState();
 }
 
 class _InfoCardState extends State<InfoCard> {

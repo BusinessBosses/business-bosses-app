@@ -245,8 +245,9 @@ class _ProNotificationSettingsState extends State<ProNotificationSettings> {
                           const SizedBox(width: 8),
                           DropdownButton<int>(
                             value: reminderDays,
-                            items: List.generate(7, (int index) => index + 1)
-                                .map((int value) {
+                            items:
+                                List<int>.generate(7, (int index) => index + 1)
+                                    .map((int value) {
                               return DropdownMenuItem<int>(
                                 value: value,
                                 child: Text(value.toString()),

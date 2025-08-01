@@ -7,7 +7,7 @@ import '../../analytics/presentation/analysescreen.dart';
 import '../../features/forum/models/industry.dart';
 import '../models/my_title.dart';
 import 'safety_model.dart';
-import 'search/search_bar.dart' as searchBar;
+import 'search/search_bar.dart' as search_bar;
 
 class DataSelectionScreen extends StatefulWidget {
   final Analyser analyser;
@@ -21,10 +21,10 @@ class DataSelectionScreen extends StatefulWidget {
   });
 
   @override
-  _DataSelectionScreenState createState() => _DataSelectionScreenState();
+  DataSelectionScreenState createState() => DataSelectionScreenState();
 }
 
-class _DataSelectionScreenState extends State<DataSelectionScreen> {
+class DataSelectionScreenState extends State<DataSelectionScreen> {
   List<MyTitle> _categories = <MyTitle>[];
 
   List<Industry> _industries = <Industry>[];
@@ -114,7 +114,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
               ? Container()
               : Container(
                   margin: const EdgeInsets.all(16.0),
-                  child: searchBar.SearchBarWidget(
+                  child: search_bar.SearchBarWidget(
                     hintText: _title,
                     onChange: onChange,
                     onSubmit: (String val) {},

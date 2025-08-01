@@ -32,9 +32,8 @@ class _OrderPaymentMethodsWidgetState extends State<OrderPaymentMethodsWidget> {
               ...widget.paymentMethods!
                   .map((dynamic payment) => _buildPaymentMethod(
                         title: payment['paymentMethod'],
-                        details: 'Details: ' + payment['details'],
-                      ))
-                  ,
+                        details: 'Details:   ${payment['details']}',
+                      )),
           ],
         ),
       ),

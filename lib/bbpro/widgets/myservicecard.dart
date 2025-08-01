@@ -310,8 +310,8 @@ class _MyServiceCardState extends State<MyServiceCard> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.pop(Get.context!);
+              Navigator.pop(Get.context!);
             },
             child: const Text('No'),
           ),
@@ -321,11 +321,11 @@ class _MyServiceCardState extends State<MyServiceCard> {
                   await shopController.deleteService(widget.service.id);
               if (delete) {
                 showSnackbar(message: 'Service deleted successfully!');
-                Navigator.pop(context);
-                Navigator.pop(context);
+                Navigator.pop(Get.context!);
+                Navigator.pop(Get.context!);
               } else {
                 showSnackbar(message: 'Error deleting service!', error: true);
-                Navigator.pop(context);
+                Navigator.pop(Get.context!);
               }
               setState(() {});
             },

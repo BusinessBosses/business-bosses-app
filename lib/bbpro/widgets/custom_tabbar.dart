@@ -32,10 +32,10 @@ class CustomTabBarWidget<T> extends StatefulWidget {
         _scrollToSection = scrollToSection;
 
   @override
-  _CustomTabBarWidgetState<T> createState() => _CustomTabBarWidgetState<T>();
+  CustomTabBarWidgetState<T> createState() => CustomTabBarWidgetState<T>();
 }
 
-class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
+class CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
   String? selectedFilter;
 
   @override

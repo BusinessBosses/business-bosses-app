@@ -15,7 +15,7 @@ class SelectionSection extends StatefulWidget {
   });
 
   @override
-  _SelectionSectionState createState() => _SelectionSectionState();
+  State<SelectionSection> createState() => _SelectionSectionState();
 }
 
 class _SelectionSectionState extends State<SelectionSection> {

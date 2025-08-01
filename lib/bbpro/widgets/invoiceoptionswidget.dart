@@ -35,7 +35,7 @@ class _InvoiceOptionsWidgetState extends State<InvoiceOptionsWidget> {
               ),
             ),
             const SizedBox(height: 16.0),
-            RadioListTile(
+            RadioListTile<int>(
               contentPadding: EdgeInsets.zero,
               activeColor: proprimaryColor, // Set selected thumb color
               value: 0,
@@ -49,7 +49,7 @@ class _InvoiceOptionsWidgetState extends State<InvoiceOptionsWidget> {
               title: const Text('Don\'t send invoice',
                   style: TextStyle(fontSize: 13)),
             ),
-            RadioListTile(
+            RadioListTile<int>(
               contentPadding: EdgeInsets.zero,
               activeColor: proprimaryColor, // Set selected thumb color
               value: 1,
@@ -65,7 +65,7 @@ class _InvoiceOptionsWidgetState extends State<InvoiceOptionsWidget> {
                 style: TextStyle(fontSize: 13),
               ),
             ),
-            RadioListTile(
+            RadioListTile<int>(
               contentPadding: EdgeInsets.zero,
               activeColor: proprimaryColor, // Set selected thumb color
               value: 2,

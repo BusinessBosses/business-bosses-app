@@ -123,8 +123,8 @@ class LoginScreen extends StatelessWidget {
   Future<dynamic> navigateTo(
     BuildContext context, {
     String? routeName,
-    var arguments,
-    isRemoveUntil = false,
+    dynamic arguments,
+    bool isRemoveUntil = false,
   }) async {
     // print("=====>>>> $routeName");
     if (routeName == null) {
@@ -132,7 +132,7 @@ class LoginScreen extends StatelessWidget {
       Navigator.of(context).pop(arguments);
     } else if (isRemoveUntil) {
       return await Navigator.of(context).pushNamedAndRemoveUntil(
-          routeName, (Route route) => false,
+          routeName, (Route<dynamic> route) => false,
           arguments: arguments);
     } else {
       return await Navigator.of(context)

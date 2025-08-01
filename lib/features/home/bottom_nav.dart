@@ -266,9 +266,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   }
 
   void logScreenView(String screenName) {
-    _analytics.setCurrentScreen(
+    _analytics.logScreenView(
       screenName: screenName,
-      screenClassOverride: screenName,
+      screenClass: screenName, // Optional, for Android screen_class override
     );
   }
 

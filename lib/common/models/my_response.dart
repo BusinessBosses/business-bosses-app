@@ -1,7 +1,7 @@
 class MyResponse {
   bool success;
   String message;
-  var data;
+  dynamic data;
 
   MyResponse({
     this.success = false,

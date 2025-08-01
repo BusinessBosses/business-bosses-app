@@ -283,16 +283,16 @@ Generate exactly 3 follow-up questions as a JSON array:
         .toList();
   }
 
-  List<String> _parseTextFollowUps(String content) {
-    // Extract questions between quotes if JSON parsing failed
-    final RegExp exp = RegExp(r'"([^"]*)"');
-    return exp
-        .allMatches(content)
-        .map((RegExpMatch match) => match.group(1)!)
-        .where((String q) => q.length > 10 && q.length < 100)
-        .take(3)
-        .toList();
-  }
+  // List<String> _parseTextFollowUps(String content) {
+  //   // Extract questions between quotes if JSON parsing failed
+  //   final RegExp exp = RegExp(r'"([^"]*)"');
+  //   return exp
+  //       .allMatches(content)
+  //       .map((RegExpMatch match) => match.group(1)!)
+  //       .where((String q) => q.length > 10 && q.length < 100)
+  //       .take(3)
+  //       .toList();
+  // }
 
   /// Send a follow-up question
   Future<void> sendFollowUpQuestion(String question) async {

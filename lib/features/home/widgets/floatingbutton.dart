@@ -15,10 +15,10 @@ class Floatingbutton extends StatefulWidget {
   });
 
   @override
-  State<Floatingbutton> createState() => _FloatingbuttonState();
+  State<Floatingbutton> createState() => FloatingbuttonState();
 }
 
-class _FloatingbuttonState extends State<Floatingbutton> {
+class FloatingbuttonState extends State<Floatingbutton> {
   ChallengeController controller = Get.put(ChallengeController());
 
   @override
@@ -140,7 +140,7 @@ class _FloatingbuttonState extends State<Floatingbutton> {
               ),
               boxShadow: <BoxShadow>[
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   blurRadius: 8,
                   offset: Offset(0, 4),
                 ),

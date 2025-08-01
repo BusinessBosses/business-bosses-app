@@ -311,7 +311,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.of(context).push(
-                                            MaterialPageRoute(
+                                            MaterialPageRoute<dynamic>(
                                               builder: (BuildContext context) =>
                                                   ImagesViewerScreen(
                                                 urls: <String>[
@@ -757,7 +757,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                 );
 
                 // Show toast
-                ScaffoldMessenger.of(context).showSnackBar(
+                ScaffoldMessenger.of(Get.context!).showSnackBar(
                   const SnackBar(content: Text('Email copied to clipboard')),
                 );
                 final Uri uri =
@@ -784,7 +784,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                 );
 
                 // Show toast
-                ScaffoldMessenger.of(context).showSnackBar(
+                ScaffoldMessenger.of(Get.context!).showSnackBar(
                   const SnackBar(
                       content: Text('Phone number copied to clipboard')),
                 );

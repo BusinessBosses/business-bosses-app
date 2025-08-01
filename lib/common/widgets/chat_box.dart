@@ -82,7 +82,7 @@ class ChatBox extends StatelessWidget {
                                               return;
                                             }
                                             Navigator.of(context).push(
-                                              MaterialPageRoute(
+                                              MaterialPageRoute<dynamic>(
                                                 builder:
                                                     (BuildContext context) =>
                                                         ImagesViewerScreen(
@@ -212,7 +212,7 @@ class ChatBox extends StatelessWidget {
                                               return;
                                             }
                                             Navigator.of(context).push(
-                                              MaterialPageRoute(
+                                              MaterialPageRoute<dynamic>(
                                                 builder:
                                                     (BuildContext context) =>
                                                         ImagesViewerScreen(

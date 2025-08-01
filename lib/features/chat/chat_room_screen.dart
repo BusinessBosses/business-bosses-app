@@ -41,10 +41,10 @@ class ChatRoomScreen extends StatefulWidget {
   });
 
   @override
-  _ChatRoomScreenState createState() => _ChatRoomScreenState();
+  ChatRoomScreenState createState() => ChatRoomScreenState();
 }
 
-class _ChatRoomScreenState extends State<ChatRoomScreen> {
+class ChatRoomScreenState extends State<ChatRoomScreen> {
   final ProfileController _profileController = Get.find();
   // ignore: unused_field
   final HomeController _homeController = Get.find();
@@ -67,7 +67,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (Get.arguments == null) {
       Get.back();

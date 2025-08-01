@@ -217,10 +217,10 @@ class _AiChatScreenState extends State<AiChatScreen>
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.indigo.withOpacity(0.08),
+                          color: Colors.indigo.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(18),
                           border: Border.all(
-                            color: Colors.indigo.withOpacity(0.2),
+                            color: Colors.indigo.withValues(alpha: 0.2),
                             width: 1,
                           ),
                         ),
@@ -324,7 +324,7 @@ class _AiChatScreenState extends State<AiChatScreen>
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 12),
                             decoration: BoxDecoration(
-                              color: Colors.indigo.withOpacity(0.07),
+                              color: Colors.indigo.withValues(alpha: 0.07),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Text(
@@ -422,10 +422,10 @@ class _AiChatScreenState extends State<AiChatScreen>
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.indigo.withOpacity(0.08),
+                      color: Colors.indigo.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: Colors.indigo.withOpacity(0.2),
+                        color: Colors.indigo.withValues(alpha: 0.2),
                         width: 1,
                       ),
                     ),

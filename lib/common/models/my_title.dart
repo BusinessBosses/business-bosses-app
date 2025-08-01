@@ -31,7 +31,7 @@ class MyTitle {
   }
 
   static List<MyTitle> toCategoriesList({
-    required List snapshot,
+    required List<dynamic> snapshot,
   }) {
     // ignore: unnecessary_null_comparison
     if (snapshot == null) return <MyTitle>[];

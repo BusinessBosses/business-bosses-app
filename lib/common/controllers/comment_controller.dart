@@ -2,10 +2,10 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class CommentController extends GetxController {
-  late IO.Socket socket;
+  late io.Socket socket;
   List<CommentModel> comments = <CommentModel>[];
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
@@ -33,13 +33,13 @@ class CommentController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
+    //
     super.onInit();
   }
 
   @override
   void dispose() {
-    // TODO: implement onInit
+    //
     super.dispose();
   }
 }

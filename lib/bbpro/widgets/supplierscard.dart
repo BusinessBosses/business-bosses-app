@@ -156,7 +156,7 @@ class _SuppliersCardState extends State<SuppliersCard> {
                 showSnackbar(message: 'Error deleting supplier!', error: true);
               }
               setState(() {});
-              Navigator.pop(context);
+              Navigator.pop(Get.context!);
             },
             child: const Text('Yes'),
           ),

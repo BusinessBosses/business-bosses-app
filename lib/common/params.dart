@@ -1,9 +1,9 @@
 // ignore: public_member_api_docs
 class Params {
-  // ignore: always_specify_types, public_member_api_docs, prefer_typing_uninitialized_variables
-  var arg1;
-  // ignore: always_specify_types, public_member_api_docs, prefer_typing_uninitialized_variables
-  var arg2;
+  // ignore: public_member_api_docs, prefer_typing_uninitialized_variables
+  dynamic arg1;
+  // ignore: public_member_api_docs, prefer_typing_uninitialized_variables
+  dynamic arg2;
 
   // ignore: public_member_api_docs
   Params({

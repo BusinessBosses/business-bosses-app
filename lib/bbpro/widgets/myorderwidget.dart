@@ -780,7 +780,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                       ];
                                       break;
                                     case OrderStatus.allorders:
-                                      // TODO: Handle this case.
+                                      //
                                       break;
                                   }
                                   return SizedBox(

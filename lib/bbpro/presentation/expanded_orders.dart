@@ -174,7 +174,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                     : <String>[];
 
             // Generate a list of ListTiles based on the ORDER quantity
-            return List.generate(widget.order.quantity!, (int index) {
+            return List<Widget>.generate(widget.order.quantity!, (int index) {
               // Get the order detail for the current index
               final String orderDetail = orderDetailsList.length > index
                   ? orderDetailsList[index]

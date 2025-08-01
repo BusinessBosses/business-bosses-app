@@ -318,7 +318,7 @@ class _ExpandedCustomItemScreenState extends State<ExpandedCustomItemScreen> {
                             try {
                               await _launchURL(widget.customitem!.link!);
                             } catch (e) {
-                              showSnackBar(context,
+                              showSnackBar(Get.context!,
                                   message: 'Could not open the link.');
                             }
                           }),

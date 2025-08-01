@@ -279,7 +279,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     } else {
       shopController.initShopData().then((bool value) {
         if (value) {
-          Navigator.pop(context);
+          Navigator.pop(Get.context!);
         } else {
           if (mounted) {
             loading = false;
@@ -488,7 +488,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                 children: <Widget>[
                   SvgPicture.asset(
                     'assets/svgs/info.svg',
-                    color: primaryColorLT,
+                    colorFilter:
+                        ColorFilter.mode(primaryColorLT, BlendMode.srcIn),
                     height: 18,
                   ),
                   const SizedBox(

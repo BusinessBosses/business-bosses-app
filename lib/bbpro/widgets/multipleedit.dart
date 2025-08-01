@@ -23,7 +23,7 @@ class MultipleEditTextWidget extends StatefulWidget {
   });
 
   @override
-  _MultipleEditTextWidgetState createState() => _MultipleEditTextWidgetState();
+  State<MultipleEditTextWidget> createState() => _MultipleEditTextWidgetState();
 }
 
 class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {

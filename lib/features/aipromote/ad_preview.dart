@@ -419,7 +419,7 @@ class _AdPreviewState extends State<AdPreview> {
             child: Text(
               profileController.myProfile.isSubscribed
                   ? ''
-                  : 'Remaining free promotions: ${widget.remainingPromos} of 4',
+                  : 'Remaining free promotions per month: ${widget.remainingPromos} of 4',
               style: TextStyle(
                 fontSize: 12,
                 color: Color(0xFF6B7280),

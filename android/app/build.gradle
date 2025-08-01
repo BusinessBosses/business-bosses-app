@@ -31,8 +31,8 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "xyz.codexia.businessbosses"
-    compileSdkVersion 35
+    namespace = "xyz.codexia.businessbosses"
+    compileSdkVersion = 36
     //ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -51,9 +51,9 @@ android {
     defaultConfig {
         applicationId "xyz.codexia.businessbosses"
         minSdkVersion 23
-        targetSdkVersion 35
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        targetSdk = 36
+        versionCode = flutterVersionCode.toInteger()
+        versionName = flutterVersionName
         multiDexEnabled true
     }
 
@@ -61,7 +61,7 @@ android {
         debug {
             keyAlias keystoreProperties["keyAlias"]
             keyPassword keystoreProperties["keyPassword"]
-            storeFile keystoreProperties["storeFile"] ? file(keystoreProperties["storeFile"]) : null
+            storeFile = keystoreProperties["storeFile"] != null ? file(keystoreProperties["storeFile"]) : null
             storePassword keystoreProperties["storePassword"]
         }
         release {
@@ -90,9 +90,12 @@ flutter {
 }
 
 dependencies {
-    // Core Flutter / Kotlin stdlib is added by the plugins automatically
-    implementation "com.google.firebase:firebase-analytics-ktx"
-    implementation "com.facebook.android:facebook-android-sdk:latest.release"
-    implementation "com.android.billingclient:billing:8.0.0" 
-    implementation(platform("com.google.firebase:firebase-bom:33.1.1")) // Use the latest version
+    implementation platform('com.google.firebase:firebase-bom:34.0.0')
+    
+    // Firebase SDKs (now use the version declared in the BOM above)
+    implementation 'com.google.firebase:firebase-analytics-ktx:22.5.0'
+
+    // Other dependencies
+    implementation 'com.facebook.android:facebook-android-sdk:18.0.3'
+    implementation "com.android.billingclient:billing:8.0.0"
 }

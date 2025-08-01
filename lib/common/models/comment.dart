@@ -21,7 +21,7 @@ class Comment {
     this.user,
   });
 
-  factory Comment.toObject(Map map) {
+  factory Comment.toObject(Map<dynamic, dynamic> map) {
     return Comment(
       commentId: map['commentId'] as String,
       uid: map['uid'] as String,
@@ -59,17 +59,17 @@ class Comment {
     } as Map<String, dynamic>;
   }
 
-  static List<Comment> toCommentList(Map map) {
+  static List<Comment> toCommentList(Map<dynamic, dynamic> map) {
     List<Comment> comments = <Comment>[];
-    map.forEach((key, data) {
+    map.forEach((dynamic key, dynamic data) {
       final Comment comment = Comment.toObject(data);
       comments.add(comment);
     });
     return comments;
   }
 
-  static Map toMapList(List<Comment> items) {
-    Map map = <dynamic, dynamic>{};
+  static Map<dynamic, dynamic> toMapList(List<Comment> items) {
+    Map<dynamic, dynamic> map = <dynamic, dynamic>{};
     for (Comment element in items) {
       map[element.commentId] = element.toMap();
     }
