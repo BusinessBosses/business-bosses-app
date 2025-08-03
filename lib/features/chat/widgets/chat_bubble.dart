@@ -9,6 +9,27 @@ class ChatBubble extends StatelessWidget {
   final bool ishellotext;
   const ChatBubble({required this.msg, this.ishellotext = false, super.key});
 
+  bool _shouldShowCopyButton() {
+    // Check if the message contains the hello text pattern
+    final String messageText = msg.text.toLowerCase();
+
+    // Don't show copy button for hello messages
+    if (messageText.contains(
+            'hello👋 how can i assist you with your business today?') ||
+        messageText.contains('hello how can i assist you with your business')) {
+      return false;
+    }
+
+    // Alternative: You can also use the ishellotext parameter
+    // If ishellotext is true and the message contains "hello", don't show copy button
+    if (ishellotext && messageText.contains('hello')) {
+      return false;
+    }
+
+    // For all other AI messages, show the copy button
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Color bg =
@@ -67,24 +88,24 @@ class ChatBubble extends StatelessWidget {
                 },
               ),
             ),
-            if (!msg.isMe) ...<Widget>{
+            // Show copy button for AI messages (not user messages) and only if it's not a hello message
+            if (!msg.isMe && _shouldShowCopyButton()) ...<Widget>{
               const SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  if (ishellotext == true)
-                    IconButton(
-                      icon: const Icon(Icons.copy, size: 18),
-                      tooltip: 'Copy',
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: msg.text));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Message copied to clipboard')),
-                        );
-                      },
-                    ),
+                  IconButton(
+                    icon: const Icon(Icons.copy, size: 18),
+                    tooltip: 'Copy',
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: msg.text));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Message copied to clipboard')),
+                      );
+                    },
+                  ),
                 ],
               ),
             }

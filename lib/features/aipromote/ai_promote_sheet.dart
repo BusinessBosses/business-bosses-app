@@ -397,9 +397,11 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              hasShop
-                                  ? 'Business Info Confirmation'
-                                  : 'Profile Info Confirmation',
+                              _currentStep == PromoteStep.preview
+                                  ? 'Preview Promotion'
+                                  : hasShop
+                                      ? 'Business Info Confirmation'
+                                      : 'Profile Info Confirmation',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
@@ -407,11 +409,13 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
                               ),
                             ),
                             SizedBox(width: 5),
-                            Icon(
-                              Icons.info_outline,
-                              color: Color(0xFF0EA5E9),
-                              size: 20,
-                            ),
+                            _currentStep != PromoteStep.preview
+                                ? Icon(
+                                    Icons.info_outline,
+                                    color: Color(0xFF0EA5E9),
+                                    size: 20,
+                                  )
+                                : Container(),
                           ],
                         ),
                       ),
