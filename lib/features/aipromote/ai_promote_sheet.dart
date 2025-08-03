@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/aipromote/ad_preview.dart';
 import 'package:business_bosses_v2/features/aipromote/business_form.dart';
@@ -26,6 +27,7 @@ class AIPromoteSheet extends StatefulWidget {
 class _AIPromoteSheetState extends State<AIPromoteSheet>
     with TickerProviderStateMixin {
   PromoteStep _currentStep = PromoteStep.info;
+  final ShopController shopController = Get.find();
   BusinessInfo _businessInfo = BusinessInfo(
     name: 'Your Business Name',
     industry: 'Your Industry',
@@ -42,12 +44,16 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   late final CreateBossUpController createBossUpController;
   int _promoCount = 0;
   bool _prefsLoaded = false;
+  bool hasShop = false;
+  bool infoClicked = false;
 
   @override
   void initState() {
     super.initState();
     // Initialize controllers safely
     aiPromoteController = Get.put(AiPromoteController());
+
+    _initializeControllers();
 
     // Safe way to get ProfileController - it might not exist
     try {
@@ -70,6 +76,16 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
       _promoCount = prefs.getInt('promo_count') ?? 0;
       _prefsLoaded = true;
     });
+  }
+
+  void _initializeControllers() async {
+    if (shopController.shop == null && profileController!.myProfile.hasShop) {
+      hasShop = true;
+    } else if (shopController.shop != null) {
+      hasShop = true;
+    } else {
+      hasShop = false;
+    }
   }
 
   Future<bool> _canUsePromotion({required bool isSubscribed}) async {
@@ -319,6 +335,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     switch (_currentStep) {
       case PromoteStep.info:
         return BusinessInfoForm(
+          infoClicked: infoClicked,
           remainingPromos: remaining,
           limitReached: profileController!.myProfile.isSubscribed
               ? false
@@ -370,12 +387,32 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      const Text(
-                        'Free Business Promotion',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF1F2937),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            infoClicked = !infoClicked;
+                          });
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              hasShop
+                                  ? 'Business Info Confirmation'
+                                  : 'Profile Info Confirmation',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFF1F2937),
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            Icon(
+                              Icons.info_outline,
+                              color: Color(0xFF0EA5E9),
+                              size: 20,
+                            ),
+                          ],
                         ),
                       ),
                       GestureDetector(
@@ -395,7 +432,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
                 ),
               ),
               // Progress Indicator
-              _buildProgressIndicator(),
+              // _buildProgressIndicator(),
 
               // Content
               Expanded(

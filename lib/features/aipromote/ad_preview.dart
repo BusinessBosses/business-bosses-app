@@ -175,14 +175,6 @@ class _AdPreviewState extends State<AdPreview> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            'AI-Generated Mini Ad',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF1F2937),
-            ),
-          ),
           SizedBox(height: 8),
           Text(
             'Review and edit your ad before posting it to selected platforms',
@@ -405,7 +397,7 @@ class _AdPreviewState extends State<AdPreview> {
                         strokeWidth: 2,
                       ))
                   : Text(
-                      'Post Ad',
+                      'Post Promotion',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

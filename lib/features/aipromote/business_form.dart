@@ -15,6 +15,7 @@ class BusinessInfoForm extends StatefulWidget {
   final bool isLoading;
   final bool limitReached;
   final int? remainingPromos;
+  final bool infoClicked;
 
   const BusinessInfoForm({
     super.key,
@@ -23,6 +24,7 @@ class BusinessInfoForm extends StatefulWidget {
     required this.isLoading,
     required this.limitReached,
     this.remainingPromos,
+    required this.infoClicked,
   });
 
   @override
@@ -47,7 +49,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
 
   bool hasShop = false;
   List<String> missingFields = <String>[];
-  bool infoClicked = false;
+
   UserModel profile = UserModel();
 
   @override
@@ -306,34 +308,6 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              infoClicked = !infoClicked;
-            });
-          },
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                hasShop
-                    ? 'Business Info Confirmation'
-                    : 'Profile Info Confirmation',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF1F2937),
-                ),
-              ),
-              SizedBox(width: 5),
-              Icon(
-                Icons.info_outline,
-                color: Color(0xFF0EA5E9),
-                size: 20,
-              ),
-            ],
-          ),
-        ),
         SizedBox(height: 8),
         Text(
           hasShop
@@ -392,7 +366,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
             ),
           ),
         SizedBox(height: 24),
-        infoClicked ? _buildInfoCard() : SizedBox.shrink(),
+        widget.infoClicked ? _buildInfoCard() : SizedBox.shrink(),
         _buildInputGroup(
           '${profileController.myProfile.isSubscribed ? 'Business ' : ''}Name',
           _nameController,

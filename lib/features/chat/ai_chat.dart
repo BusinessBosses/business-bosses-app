@@ -3,6 +3,7 @@
 
 import 'package:business_bosses_v2/bbpro/widgets/typingindicator.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/chat/controllers/ai_chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/ai_chat_message.dart';
 import 'package:business_bosses_v2/features/chat/widgets/chat_bubble.dart';
@@ -41,23 +42,62 @@ class _AiChatScreenState extends State<AiChatScreen>
     'How to create a business plan?',
     'What are the key marketing strategies?',
     'How to manage cash flow effectively?',
-    'What legal structure should I choose?',
+    'What business structure should I choose?',
     'How to find investors for my startup?',
-    'What are the best productivity tools?',
-    'How to build a strong team?',
-    'What are current market trends?',
+    'How to promote your business for free?',
   ];
 
   @override
   void initState() {
     super.initState();
+    _initializeChat();
+    _initAnimations();
+  }
+
+  void _initializeChat() {
     if (controller.messages.isEmpty) {
       controller.messages.add(AiChatMessage(
         text: 'Hello👋 How can I assist you with your business today?',
         isMe: false,
       ));
     }
-    _initAnimations();
+  }
+
+  void _resetChat() {
+    // Clear all messages
+    controller.messages.clear();
+
+    // Reset any error messages and loading states
+    controller.errorMessage.value = null;
+    controller.isLoading.value = false;
+
+    // Reset follow-up questions if they exist
+    if (controller.followUpQuestions.isNotEmpty) {
+      controller.followUpQuestions.clear();
+    }
+
+    // Clear input field
+    _inputCtrl.clear();
+
+    // Unfocus input field
+    _focusNode.unfocus();
+
+    // Add initial welcome message back
+    controller.messages.add(AiChatMessage(
+      text: 'Hello👋 How can I assist you with your business today?',
+      isMe: false,
+    ));
+
+    // Scroll to top
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollCtrl.hasClients) {
+        _scrollCtrl.animateTo(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   Future<bool> _canSendPrompt() async {
@@ -166,7 +206,7 @@ class _AiChatScreenState extends State<AiChatScreen>
 
   Widget _buildSuggestedQuestions() {
     List<List<String>> questionRows = <List<String>>[];
-    int questionsPerRow = (suggestedQuestions.length / 3).ceil();
+    int questionsPerRow = (suggestedQuestions.length / 4).ceil();
 
     for (int i = 0; i < suggestedQuestions.length; i += questionsPerRow) {
       int endIndex = (i + questionsPerRow > suggestedQuestions.length)
@@ -210,7 +250,12 @@ class _AiChatScreenState extends State<AiChatScreen>
                   return Container(
                     margin: const EdgeInsets.only(right: 8),
                     child: GestureDetector(
-                      onTap: () => _send(predefinedText: rowQuestions[index]),
+                      onTap: () => <void>{
+                        rowQuestions[index] ==
+                                'How to promote your business for free?'
+                            ? showPromoteSheet()
+                            : _send(predefinedText: rowQuestions[index])
+                      },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
@@ -246,6 +291,15 @@ class _AiChatScreenState extends State<AiChatScreen>
     );
   }
 
+  void showPromoteSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) => AIPromoteSheet(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -258,39 +312,60 @@ class _AiChatScreenState extends State<AiChatScreen>
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: AnimatedBuilder(
-                animation: _animationController,
-                builder: (BuildContext context, Widget? child) {
-                  return Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(300),
-                      gradient: const LinearGradient(
-                        colors: <Color>[Color(0xFF6366F1), Color(0xFF818CF8)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                    child: Center(
-                      child: SvgPicture.asset(
-                        'assets/svgs/bot.svg',
-                        width: 10,
-                        height: 18,
-                        colorFilter: const ColorFilter.mode(
-                          Colors.white,
-                          BlendMode.srcIn,
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: AnimatedBuilder(
+                    animation: _animationController,
+                    builder: (BuildContext context, Widget? child) {
+                      return Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(300),
+                          gradient: const LinearGradient(
+                            colors: <Color>[
+                              Color(0xFF6366F1),
+                              Color(0xFF818CF8)
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                },
+                        child: Center(
+                          child: SvgPicture.asset(
+                            'assets/svgs/bot.svg',
+                            width: 10,
+                            height: 18,
+                            colorFilter: const ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const Text('SmartChat AI'),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: GestureDetector(
+                onTap: _resetChat,
+                child: const Text(
+                  'Clear Chat',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
               ),
             ),
-            const Text('SmartChat AI'),
           ],
         ),
       ),
@@ -315,6 +390,7 @@ class _AiChatScreenState extends State<AiChatScreen>
                       (_shouldShowSuggestions() ? 1 : 0) +
                       (controller.shouldShowFollowUps ? 1 : 0),
                   itemBuilder: (_, int i) {
+                    // Header section
                     if (i == 0) {
                       return Column(
                         children: <Widget>[
@@ -341,17 +417,41 @@ class _AiChatScreenState extends State<AiChatScreen>
                       );
                     }
 
-                    if (_shouldShowSuggestions() && i == 1) {
+                    // First message (Hello message)
+                    if (i == 1) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: ChatBubble(
+                          msg: msgs[0], // First message (hello message)
+                          ishellotext: true,
+                        ),
+                      );
+                    }
+
+                    // Suggested questions after hello message
+                    if (_shouldShowSuggestions() && i == 2) {
                       return _buildSuggestedQuestions();
                     }
 
+                    // Follow-up questions
                     if (controller.shouldShowFollowUps &&
-                        i == msgs.length + 1) {
+                        i == msgs.length + (_shouldShowSuggestions() ? 2 : 1)) {
                       return _buildFollowUpQuestions();
                     }
 
+                    // Regular messages
                     int msgIndex = i - 1;
                     if (_shouldShowSuggestions()) msgIndex -= 1;
+
+                    // Skip the first message since we already showed it at position 1
+                    if (msgIndex == 0) {
+                      msgIndex = 1;
+                    }
+
+                    // Make sure we don't go out of bounds
+                    if (msgIndex >= msgs.length) {
+                      return const SizedBox.shrink();
+                    }
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
