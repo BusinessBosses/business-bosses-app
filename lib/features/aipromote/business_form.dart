@@ -359,7 +359,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           Text(
             profileController.myProfile.isSubscribed
                 ? ''
-                : 'Remaining free promotions: ${widget.remainingPromos} of 4',
+                : 'Remaining free promotions per month: ${widget.remainingPromos}',
             style: TextStyle(
               fontSize: 12,
               color: Color(0xFF6B7280),

@@ -113,7 +113,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
       return true;
     }
 
-    const int maxUses = 4;
+    const int maxUses = 8;
     if (count >= maxUses) {
       return false;
     }
@@ -327,7 +327,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
       final bool isSubscribed =
           profileController?.myProfile.isSubscribed ?? true;
       final int maxUses =
-          isSubscribed ? 9999 : 4; // Or hide UI completely for subscribed
+          isSubscribed ? 9999 : 8; // Or hide UI completely for subscribed
 
       remaining = (_promoCount >= maxUses) ? 0 : (maxUses - _promoCount);
     }
@@ -339,7 +339,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
           remainingPromos: remaining,
           limitReached: profileController!.myProfile.isSubscribed
               ? false
-              : _promoCount >= 4,
+              : _promoCount >= 8,
           initialInfo: _businessInfo,
           onSubmit: _handleInfoSubmit,
           isLoading: _loading,
