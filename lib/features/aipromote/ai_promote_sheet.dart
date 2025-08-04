@@ -273,49 +273,49 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     }
   }
 
-  Widget _buildProgressIndicator() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.1), // Translucent white
-        borderRadius: BorderRadius.circular(16),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          _buildProgressStep(PromoteStep.info),
-          _buildProgressLine(),
-          _buildProgressStep(PromoteStep.preview),
-          _buildProgressLine(),
-          _buildProgressStep(PromoteStep.success),
-        ],
-      ),
-    );
-  }
+  // Widget _buildProgressIndicator() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //       color: Colors.white.withValues(alpha: 0.1), // Translucent white
+  //       borderRadius: BorderRadius.circular(16),
+  //     ),
+  //     padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: <Widget>[
+  //         _buildProgressStep(PromoteStep.info),
+  //         _buildProgressLine(),
+  //         _buildProgressStep(PromoteStep.preview),
+  //         _buildProgressLine(),
+  //         _buildProgressStep(PromoteStep.success),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  Widget _buildProgressStep(PromoteStep step) {
-    bool isActive = _currentStep.index >= step.index;
-    return Container(
-      width: 12,
-      height: 12,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: isActive
-            ? const Color.fromARGB(255, 0, 0, 0)
-            : const Color(0xFFE5E7EB),
-      ),
-    );
-  }
+  // Widget _buildProgressStep(PromoteStep step) {
+  //   bool isActive = _currentStep.index >= step.index;
+  //   return Container(
+  //     width: 12,
+  //     height: 12,
+  //     decoration: BoxDecoration(
+  //       shape: BoxShape.circle,
+  //       color: isActive
+  //           ? const Color.fromARGB(255, 0, 0, 0)
+  //           : const Color(0xFFE5E7EB),
+  //     ),
+  //   );
+  // }
 
-  Widget _buildProgressLine() {
-    return Expanded(
-      child: Container(
-        height: 2,
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        color: const Color(0xFFE5E7EB),
-      ),
-    );
-  }
+  // Widget _buildProgressLine() {
+  //   return Expanded(
+  //     child: Container(
+  //       height: 2,
+  //       margin: const EdgeInsets.symmetric(horizontal: 8),
+  //       color: const Color(0xFFE5E7EB),
+  //     ),
+  //   );
+  // }
 
   Widget _buildContent() {
     if (!_prefsLoaded && _currentStep == PromoteStep.preview) {
