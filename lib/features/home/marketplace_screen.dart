@@ -1221,7 +1221,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         supplierController
                             .searchSuppliers(_marketController.searchQuery);
                       },
-                      child: const Text('Apply Filter'),
+                      child: const Text(
+                        'Apply Filter',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ],
                 ),
