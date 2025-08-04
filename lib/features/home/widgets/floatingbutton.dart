@@ -124,8 +124,7 @@ class FloatingbuttonState extends State<Floatingbutton> {
         // );
       },
       child: Padding(
-        padding: EdgeInsets.only(
-            bottom: widget.isEvent == true ? 15 : 100, right: 5),
+        padding: EdgeInsets.only(bottom: 50, right: 5),
         child: Align(
           alignment: Alignment.bottomRight,
           child: Container(

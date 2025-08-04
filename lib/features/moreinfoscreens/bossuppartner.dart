@@ -98,6 +98,7 @@ class _BossuppartnerState extends State<Bossuppartner> {
                         child: const Text(
                           'Become a Partner',
                           style: TextStyle(
+                            color: Colors.white,
                             // fontWeight: FontWeight.w700,
                             fontSize: 15,
                           ),
