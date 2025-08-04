@@ -355,16 +355,6 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
               ),
             ),
           ),
-        if (!hasShop)
-          Text(
-            profileController.myProfile.isSubscribed
-                ? ''
-                : 'Remaining free promotions per month: ${widget.remainingPromos}',
-            style: TextStyle(
-              fontSize: 12,
-              color: Color(0xFF6B7280),
-            ),
-          ),
         SizedBox(height: 24),
         widget.infoClicked ? _buildInfoCard() : SizedBox.shrink(),
         _buildInputGroup(
@@ -402,7 +392,42 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: widget.isLoading ? null : _handleSubmit,
+            onPressed: widget.isLoading
+                ? null
+                : () {
+                    if (widget.limitReached) {
+                      Get.bottomSheet(
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20.0),
+                            topRight: Radius.circular(20.0),
+                          ),
+                        ),
+                        Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20.0),
+                              topRight: Radius.circular(20.0),
+                            ),
+                          ),
+                          height: Get.height * 0.9,
+                          child: const Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                PremiumScreen(),
+                              ],
+                            ),
+                          ),
+                        ),
+                        backgroundColor: Colors.white,
+                      );
+                      return;
+                    }
+                    _handleSubmit();
+                  },
             style: ElevatedButton.styleFrom(
               backgroundColor:
                   widget.limitReached == true ? Colors.grey : primaryColorLT,
@@ -422,7 +447,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                     ))
                 : Text(
                     widget.limitReached == true
-                        ? 'Limit reached'
+                        ? 'Limit reached For This Month'
                         : 'Generate free promotion',
                     style: TextStyle(
                       fontSize: 16,
