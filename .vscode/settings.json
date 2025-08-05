@@ -19,5 +19,6 @@
     "source.fixAll": "explicit"
   },
   "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-24",
-  "android.sdk.path": "C:\\Users\\wadas\\AppData\\Local\\Android\\Sdk"
+  "android.sdk.path": "C:\\Users\\wadas\\AppData\\Local\\Android\\Sdk",
+  "cmake.ignoreCMakeListsMissing": true
 }
