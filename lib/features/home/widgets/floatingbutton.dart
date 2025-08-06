@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -124,7 +126,7 @@ class FloatingbuttonState extends State<Floatingbutton> {
         // );
       },
       child: Padding(
-        padding: EdgeInsets.only(bottom: 50, right: 5),
+        padding: EdgeInsets.only(bottom: Platform.isIOS ? 50 : 80, right: 5),
         child: Align(
           alignment: Alignment.bottomRight,
           child: Container(
