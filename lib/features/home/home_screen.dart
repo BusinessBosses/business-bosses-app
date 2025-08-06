@@ -377,36 +377,39 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _buildLoading() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Stack(
-            children: <Widget>[
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    'assets/app/app_logo_2.png',
-                    height: 40,
-                    width: 40,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 120.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      'assets/app/app_logo_2.png',
+                      height: 40,
+                      width: 40,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 45,
-                height: 45,
-                child: CircularProgressIndicator(),
-              ),
-            ],
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 20.0),
-            child: Text(
-              'Promote and Grow Your Business Globally',
-              style: TextStyle(fontSize: 16),
+                const SizedBox(
+                  width: 45,
+                  height: 45,
+                  child: CircularProgressIndicator(),
+                ),
+              ],
             ),
-          )
-        ],
+            const Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: Text(
+                'Promote and Grow Your Business Globally',
+                style: TextStyle(fontSize: 16),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
