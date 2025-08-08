@@ -73,6 +73,8 @@
 	<string>598076672175742</string>
 	<key>FacebookAutoLogAppEventsEnabled</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is used to display nearby points of interest and provide accurate directions.</string>
 	<key>FacebookClientToken</key>
 	<string>4f489613093b285e5118251cb52c13cf</string>
 	<key>FacebookDisplayName</key>

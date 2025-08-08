@@ -45,6 +45,67 @@ class _PremiumScreenState extends State<PremiumScreen> {
     },
   ];
 
+  /// Debug full RevenueCat configuration
+  Future<void> debugFullConfiguration() async {
+    try {
+      log('=== DEBUGGING REVENUECAT CONFIGURATION ===');
+
+      // 1. Check RevenueCat connection
+      final CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+      log('✓ RevenueCat connected - User ID: ${customerInfo.originalAppUserId}');
+
+      // 2. Check current app bundle/package
+      log('App Bundle ID should match product prefix');
+
+      // 3. Check offerings
+      final Offerings offerings = await Purchases.getOfferings();
+      log('Available offerings count: ${offerings.all.length}');
+      log('Current offering: ${offerings.current?.identifier ?? "NONE"}');
+
+      if (offerings.current != null) {
+        log('Monthly package: ${offerings.current!.monthly?.identifier ?? "NONE"}');
+        log('Annual package: ${offerings.current!.annual?.identifier ?? "NONE"}');
+
+        // Log all packages in current offering
+        for (Package package in offerings.current!.availablePackages) {
+          log('Package: ${package.identifier} - Product: ${package.storeProduct.identifier}');
+        }
+      }
+
+      // 4. Try to get products with various IDs
+      final List<String> testProductIds = <String>[
+        'xyz.codexia.businessbosses.promonth',
+        'xyz.codexia.businessbosses.proyear',
+        'promonth',
+        'proyear',
+        'pro_monthly',
+        'pro_yearly',
+      ];
+
+      for (String productId in testProductIds) {
+        try {
+          final List<StoreProduct> products =
+              await Purchases.getProducts(<String>[productId]);
+          log('Product ID "$productId": ${products.length} found');
+
+          if (products.isNotEmpty) {
+            final StoreProduct product = products[0];
+            log('  - Title: ${product.title}');
+            log('  - Price: ${product.priceString}');
+            log('  - Description: ${product.description}');
+          }
+        } catch (e) {
+          log('Product ID "$productId": Error - $e');
+        }
+      }
+
+      log('=== END DEBUG ===');
+    } catch (e, stackTrace) {
+      log('Debug failed: $e');
+      log('Stack trace: $stackTrace');
+    }
+  }
+
   /// send the data to the backend
   Future<void> addSubscription() async {
     ApiService.post(path: 'subscription', body: <String, dynamic>{
@@ -74,7 +135,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
     }
   }
 
-  ///intialize the payment
+  /// Initialize the payment
   Future<bool> makePayment() async {
     final ApiResponseModel res =
         await ApiService.post(path: 'apple-sub', body: <String, dynamic>{
@@ -94,10 +155,184 @@ class _PremiumScreenState extends State<PremiumScreen> {
     }
   }
 
+  /// Main validation and purchase method
+  Future<void> validateAndPurchase() async {
+    setState(() {
+      loading = true;
+    });
+
+    try {
+      // First validate backend
+      final bool backendResponse = await makePayment();
+      if (!backendResponse) {
+        showSnackbar(
+          title: 'Backend Error',
+          message: 'Failed to initialize subscription on server.',
+          error: true,
+        );
+        return;
+      }
+
+      // Check RevenueCat configuration
+      log('Checking RevenueCat configuration...');
+      final CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+      log('RevenueCat User ID: ${customerInfo.originalAppUserId}');
+
+      // Try to get offerings first (recommended approach)
+      final Offerings offerings = await Purchases.getOfferings();
+      log('Available offerings: ${offerings.all.keys.toList()}');
+
+      if (offerings.current != null) {
+        // Use offerings approach
+        await purchaseUsingOfferings(offerings);
+      } else {
+        // Fallback to direct product purchase
+        await purchaseUsingProducts();
+      }
+    } catch (e, stackTrace) {
+      log('Purchase validation error: $e');
+      log('Stack trace: $stackTrace');
+
+      showSnackbar(
+        title: 'Configuration Error',
+        message:
+            'Subscription products are not available. Please contact support.',
+        error: true,
+      );
+    } finally {
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  Future<void> purchaseUsingOfferings(Offerings offerings) async {
+    try {
+      final Package? package = paymentMethodId == 'Proyear'
+          ? offerings.current!.annual
+          : offerings.current!.monthly;
+
+      if (package == null) {
+        throw Exception('Selected package not available in offerings');
+      }
+
+      log('Purchasing package: ${package.identifier}');
+      final PurchaseResult purchaseResult =
+          await Purchases.purchasePackage(package);
+
+      await handleSuccessfulPurchase(purchaseResult.customerInfo);
+    } catch (e) {
+      log('Offerings purchase failed: $e');
+      // Fallback to direct product purchase
+      await purchaseUsingProducts();
+    }
+  }
+
+  Future<void> purchaseUsingProducts() async {
+    final String productId = paymentMethodId == 'Proyear'
+        ? 'xyz.codexia.businessbosses.proyear'
+        : 'xyz.codexia.businessbosses.promonth';
+
+    log('Attempting to get product: $productId');
+
+    final List<StoreProduct> products =
+        await Purchases.getProducts(<String>[productId]);
+    log('Retrieved products: ${products.map((StoreProduct p) => p.identifier).toList()}');
+
+    if (products.isEmpty) {
+      // Try alternative product IDs or show configuration error
+      await tryAlternativeProductIds();
+      return;
+    }
+
+    final PurchaseResult purchaseResult =
+        await Purchases.purchaseStoreProduct(products[0]);
+    await handleSuccessfulPurchase(purchaseResult.customerInfo);
+  }
+
+  Future<void> tryAlternativeProductIds() async {
+    // Sometimes the product ID format might be different
+    final List<String> alternativeIds = <String>[
+      // Try without the full bundle path
+      'promonth',
+      'proyear',
+      // Try with different bundle format
+      'com.businessbosses.promonth',
+      'com.businessbosses.proyear',
+      'businessbosses.promonth',
+      'businessbosses.proyear',
+      // Try with underscores
+      'pro_monthly',
+      'pro_yearly',
+      // Add any other possible formats you might have used
+    ];
+
+    final String selectedType =
+        paymentMethodId == 'Proyear' ? 'yearly' : 'monthly';
+
+    for (String altId in alternativeIds) {
+      // Only try IDs that match the selected subscription type
+      if ((selectedType == 'yearly' &&
+              (altId.contains('year') || altId.contains('annual'))) ||
+          (selectedType == 'monthly' && (altId.contains('month')))) {
+        try {
+          log('Trying alternative product ID: $altId');
+          final List<StoreProduct> products =
+              await Purchases.getProducts(<String>[altId]);
+
+          if (products.isNotEmpty) {
+            log('Found product with alternative ID: $altId');
+            final PurchaseResult purchaseResult =
+                await Purchases.purchaseStoreProduct(products[0]);
+            await handleSuccessfulPurchase(purchaseResult.customerInfo);
+            return;
+          }
+        } catch (e) {
+          log('Alternative ID $altId failed: $e');
+          continue;
+        }
+      }
+    }
+
+    // If we get here, no products were found
+    showSnackbar(
+      title: 'Products Not Available',
+      message:
+          'Subscription products are not configured. Please check App Store Connect and RevenueCat configuration.',
+      error: true,
+    );
+  }
+
+  Future<void> handleSuccessfulPurchase(CustomerInfo customerInfo) async {
+    // Check if any subscription is active
+    if (customerInfo.entitlements.active.isNotEmpty) {
+      log('Subscription activated successfully');
+      log('Active entitlements: ${customerInfo.entitlements.active.keys.toList()}');
+
+      profileController.updateProfile(<String, dynamic>{
+        ...profileController.myProfile.toMap(),
+        'isSubscribed': true,
+      });
+
+      Navigator.pop(context); // Close the bottom sheet
+      Get.off(() => const SubscriptionConfirmation());
+    } else {
+      showSnackbar(
+        title: 'Subscription Inactive',
+        message:
+            'Purchase completed but subscription is not active. Please contact support.',
+        error: true,
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    Purchases.logIn(profileController.myProfile.uid.toString());
+    Purchases.logIn(profileController.myProfile.uid.toString()).then((_) {
+      // Add debug call
+      debugFullConfiguration();
+    });
   }
 
   @override
@@ -152,51 +387,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
                       ),
                     ],
                   ),
-                  // Padding(
-                  //   padding:
-                  //       const EdgeInsets.only(left: 50.0, right: 50, top: 50),
-                  //   child: RichText(
-                  //     textAlign: TextAlign.center,
-                  //     text: TextSpan(
-                  //       children: <InlineSpan>[
-                  //         const TextSpan(
-                  //           text: 'Upgrade to a pro boss experience at only, ',
-                  //           style: TextStyle(
-                  //               color: Colors.black,
-                  //               fontSize: 15,
-                  //               fontWeight: FontWeight.w500),
-                  //         ),
-                  //         TextSpan(
-                  //           text: _currentIndex == 0
-                  //               ? '\$9.99/month'
-                  //               : '\$99.99/year',
-                  //           style: const TextStyle(
-                  //               color: primaryColorLT,
-                  //               fontSize: 16,
-                  //               fontWeight: FontWeight.bold),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 20.0),
-                  //   child: Align(
-                  //     alignment: Alignment.topCenter,
-                  //     child: CupertinoSlidingSegmentedControl<int>(
-                  //       padding: const EdgeInsets.all(5),
-                  //       children: _segments,
-                  //       onValueChanged: (int? value) {
-                  //         setState(() {
-                  //           _currentIndex = value!;
-                  //           paymentMethodId =
-                  //               _currentIndex == 0 ? 'Promonth' : 'Proyear';
-                  //         });
-                  //       },
-                  //       groupValue: _currentIndex,
-                  //     ),
-                  //   ),
-                  // ),
                   const SizedBox(height: 30),
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0, right: 20),
@@ -401,9 +591,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
                               color: primaryColorLT,
                               text: 'Start your \$1/month trial',
                               onPressed: () async {
-                                // setState(() {
-                                //   loading = true;
-                                // });
                                 showModalBottomSheet<void>(
                                   context: context,
                                   shape: const RoundedRectangleBorder(
@@ -415,7 +602,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                     return StatefulBuilder(
                                       // Wrap the entire bottom sheet content with StatefulBuilder
                                       builder: (BuildContext context,
-                                          StateSetter setState) {
+                                          StateSetter setModalState) {
                                         return Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 20, vertical: 20),
@@ -451,7 +638,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                               ),
                                               InkWell(
                                                 onTap: () {
-                                                  setState(() {
+                                                  setModalState(() {
                                                     paymentMethodId =
                                                         'Promonth';
                                                   });
@@ -497,7 +684,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                     value: 'Promonth',
                                                     groupValue: paymentMethodId,
                                                     onChanged: (String? value) {
-                                                      setState(() {
+                                                      setModalState(() {
                                                         paymentMethodId =
                                                             value!;
                                                       });
@@ -545,7 +732,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                   value: 'Proyear',
                                                   groupValue: paymentMethodId,
                                                   onChanged: (String? value) {
-                                                    setState(() {
+                                                    setModalState(() {
                                                       paymentMethodId = value!;
                                                     });
                                                   },
@@ -563,93 +750,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                         'Start your \$1/month trial',
                                                     loading: loading,
                                                     onPressed: () async {
-                                                      setState(() {
-                                                        loading = true;
-                                                      });
-
-                                                      final String productId =
-                                                          paymentMethodId ==
-                                                                  'Proyear'
-                                                              ? 'xyz.codexia.businessbosses.proyear'
-                                                              : 'xyz.codexia.businessbosses.promonth';
-
-                                                      try {
-                                                        final bool response =
-                                                            await makePayment();
-
-                                                        if (response) {
-                                                          final List<
-                                                                  StoreProduct>
-                                                              products =
-                                                              await Purchases
-                                                                  .getProducts(<String>[
-                                                            productId
-                                                          ]);
-                                                          final PurchaseResult
-                                                              purchaseResult =
-                                                              await Purchases
-                                                                  .purchaseStoreProduct(
-                                                                      products[
-                                                                          0]);
-                                                          final CustomerInfo
-                                                              customerInfo =
-                                                              purchaseResult
-                                                                  .customerInfo;
-
-                                                          final bool isActive =
-                                                              customerInfo
-                                                                      .entitlements
-                                                                      .all[
-                                                                          productId]
-                                                                      ?.isActive ??
-                                                                  false;
-
-                                                          if (isActive) {
-                                                            print(
-                                                                'User subscribed!');
-                                                            profileController
-                                                                .updateProfile(<String,
-                                                                    dynamic>{
-                                                              ...profileController
-                                                                  .myProfile
-                                                                  .toMap(),
-                                                              'isSubscribed':
-                                                                  true,
-                                                            });
-
-                                                            Get.off(() =>
-                                                                const SubscriptionConfirmation());
-                                                          } else {
-                                                            showSnackbar(
-                                                              title:
-                                                                  'Subscription Inactive',
-                                                              message:
-                                                                  'Something went wrong after purchase. Please contact support.',
-                                                              error: true,
-                                                            );
-                                                          }
-                                                        } else {
-                                                          showSnackbar(
-                                                            title: 'OOPS!',
-                                                            message:
-                                                                'An error occurred, please try again!',
-                                                            error: true,
-                                                          );
-                                                        }
-                                                      } catch (e, stackTrace) {
-                                                        log('Error purchasing product: $e\n$stackTrace');
-                                                        showSnackbar(
-                                                          title:
-                                                              'Purchase Failed',
-                                                          message:
-                                                              'An unexpected error occurred. Please try again.',
-                                                          error: true,
-                                                        );
-                                                      } finally {
-                                                        setState(() {
-                                                          loading = false;
-                                                        });
-                                                      }
+                                                      await validateAndPurchase();
                                                     },
                                                   )),
                                               const SizedBox(
@@ -662,9 +763,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                     );
                                   },
                                 );
-                              }
-                              // },
-                              ),
+                              }),
                         ),
                         const SizedBox(
                           height: 8,
