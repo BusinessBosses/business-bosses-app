@@ -35,7 +35,7 @@ class TextInput extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
                 child: DetectableTextField(
-                  regExp: detectionRegExp(hashtag: false)!,
+                  controller: titleController,
                   keyboardType: TextInputType.multiline,
                   maxLines: 6,
                   textInputAction: TextInputAction.newline,
