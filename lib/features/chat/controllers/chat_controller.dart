@@ -141,7 +141,7 @@ class ChatController extends GetxController {
 
   /// MODELIZE RAW JSON DATA AND STORE TO STATE
   void processDataToState(dynamic cht, String myId) {
-    final List chts = cht;
+    final List<dynamic> chts = cht;
     for (int i = chts.length - 1; i >= 0; i--) {
       chatMessages.add(MessageModel.fromMap(chts[i]));
     }
@@ -243,7 +243,7 @@ class ChatController extends GetxController {
                 <String, dynamic>{...body, 'user': Get.arguments.toMap()}));
         extractChats(_profileController.myProfile.uid);
         update();
-        final uploadResponse = await ApiService.uploadFile(imageFile);
+        final dynamic uploadResponse = await ApiService.uploadFile(imageFile);
         if (uploadResponse == null) {
           final int messageIndex = chatMessages.indexWhere(
             (MessageModel element) => element.messageId == messageId,
@@ -297,7 +297,6 @@ class ChatController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     _picker = ImagePicker();
 
     super.onInit();

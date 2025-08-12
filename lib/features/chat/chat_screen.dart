@@ -493,7 +493,9 @@ class _ChatItemState extends State<ChatItem> {
                                           SvgPicture.asset(
                                             'assets/svgs/premiumbadge.svg',
                                             height: 9,
-                                            color: primaryColorLT,
+                                            colorFilter: ColorFilter.mode(
+                                                primaryColorLT,
+                                                BlendMode.srcIn),
                                           )
                                         ],
                                       ),

@@ -1103,7 +1103,7 @@ class SendMessageBox extends StatelessWidget {
   }
 }
 
-Future optionsDialog(BuildContext context, Function() ontap) {
+Future<void> optionsDialog(BuildContext context, Function() ontap) {
   return showDialog(
       context: context,
       builder: (BuildContext ctx) {
@@ -1142,7 +1142,7 @@ class StartCallDialog extends StatelessWidget {
         'Start Instant Call',
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
-      content: FutureBuilder(
+      content: FutureBuilder<String>(
         future: startCall(<String, dynamic>{
           'callerId': callerId,
           'recipientId': recipientId,

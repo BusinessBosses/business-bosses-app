@@ -36,7 +36,7 @@ class ExpandedCourseScreen extends StatefulWidget {
   const ExpandedCourseScreen({super.key, required this.course});
 
   @override
-  _ExpandedCourseScreenState createState() => _ExpandedCourseScreenState();
+  State<ExpandedCourseScreen> createState() => _ExpandedCourseScreenState();
 }
 
 class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
@@ -135,7 +135,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
     ScrollController scrollController = ScrollController();
     final List<String> urlslist = widget.course.youtubeUrls ?? <String>[];
     final List<String> fileslist = widget.course.documents ?? <String>[];
-    List<String> combinedList = List.from(urlslist)..addAll(fileslist);
+    List<String> combinedList = List<String>.from(urlslist)..addAll(fileslist);
     return Obx(
       () => Scaffold(
         backgroundColor: Colors.white,

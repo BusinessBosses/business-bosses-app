@@ -28,7 +28,7 @@ class ReferralsController extends GetxController {
     final ApiResponseModel res =
         await ApiService.get(path: 'users/name/$query');
     for (int i = 0; i < res.data.length; i++) {
-      final mapData = res.data[i];
+      final dynamic mapData = res.data[i];
       final UserModel modelizedData = UserModel.fromMap(mapData);
 
       searchedUsers.add(modelizedData);
@@ -42,7 +42,7 @@ class ReferralsController extends GetxController {
         await ApiService.get(path: 'referal/${Get.arguments}');
     if (res.success) {
       for (int i = 0; i < res.data.length; i++) {
-        final mapData = res.data[i];
+        final dynamic mapData = res.data[i];
         final UserModel modelizedConnection = UserModel.fromMap(mapData);
 
         referrals.add(modelizedConnection);
@@ -84,22 +84,18 @@ class ReferralsController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
-
     getReferrals();
     super.onInit();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     searchController.dispose();
     super.dispose();
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
     isSearching = false;
     searchedUsers.clear();
     super.onClose();

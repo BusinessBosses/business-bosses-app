@@ -1,6 +1,7 @@
 // lib/features/chat/controllers/ai_chat_controller.dart
 import 'dart:convert';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -31,9 +32,13 @@ class AiChatController extends GetxController {
     if (_apiKey == null || _apiKey!.isEmpty) {
       errorMessage.value =
           'OpenAI API key not configured. Please check your .env file.';
-      print('ERROR: OPENAI_KEY not found in environment variables');
+      if (kDebugMode) {
+        print('ERROR: OPENAI_KEY not found in environment variables');
+      }
     } else {
-      print('OpenAI API key loaded successfully');
+      if (kDebugMode) {
+        print('OpenAI API key loaded successfully');
+      }
     }
   }
 
@@ -151,11 +156,15 @@ Now, let's help the user with their next request!
         }
       } else {
         errorMessage.value = 'Error ${resp.statusCode}: ${resp.body}';
-        print('API Error: ${resp.statusCode} - ${resp.body}');
+        if (kDebugMode) {
+          print('API Error: ${resp.statusCode} - ${resp.body}');
+        }
       }
     } catch (e) {
       errorMessage.value = 'Network error: ${e.toString()}';
-      print('Exception in sendMessage: $e');
+      if (kDebugMode) {
+        print('Exception in sendMessage: $e');
+      }
     } finally {
       isLoading.value = false;
     }
@@ -220,11 +229,13 @@ Generate exactly 3 follow-up questions as a JSON array:
         // First try to parse as direct JSON array
         try {
           final List<dynamic> questions = jsonDecode(content) as List<dynamic>;
-          followUpQuestions
-              .assignAll(questions.take(3).map((q) => q.toString()).toList());
+          followUpQuestions.assignAll(
+              questions.take(3).map((dynamic q) => q.toString()).toList());
           return;
         } catch (e) {
-          print('Direct array parse failed, trying alternative methods: $e');
+          if (kDebugMode) {
+            print('Direct array parse failed, trying alternative methods: $e');
+          }
         }
 
         // Fallback 1: Try to find JSON array in text response
@@ -234,12 +245,14 @@ Generate exactly 3 follow-up questions as a JSON array:
           if (maybeJson != null) {
             final List<dynamic> questions =
                 jsonDecode(maybeJson) as List<dynamic>;
-            followUpQuestions
-                .assignAll(questions.take(3).map((q) => q.toString()).toList());
+            followUpQuestions.assignAll(
+                questions.take(3).map((dynamic q) => q.toString()).toList());
             return;
           }
         } catch (e) {
-          print('JSON array extraction failed: $e');
+          if (kDebugMode) {
+            print('JSON array extraction failed: $e');
+          }
         }
 
         // Fallback 2: Extract questions between quotes
@@ -250,7 +263,9 @@ Generate exactly 3 follow-up questions as a JSON array:
             return;
           }
         } catch (e) {
-          print('Text extraction failed: $e');
+          if (kDebugMode) {
+            print('Text extraction failed: $e');
+          }
         }
 
         // Final fallback: Use default questions
@@ -261,7 +276,9 @@ Generate exactly 3 follow-up questions as a JSON array:
         ]);
       }
     } catch (e) {
-      print('Error generating follow-ups: $e');
+      if (kDebugMode) {
+        print('Error generating follow-ups: $e');
+      }
       followUpQuestions.assignAll(<String>[
         'Could you explain this in more detail?',
         'What tools can help with this?',

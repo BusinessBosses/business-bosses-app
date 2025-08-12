@@ -864,7 +864,7 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
     );
   }
 
-  Future<void> editRating(int Id, int rate, String revText) async {
+  Future<void> editRating(int id, int rate, String revText) async {
     setState(
       () {
         rater = rate;
@@ -886,181 +886,179 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
             builder: (BuildContext context, StateSetter setState) {
               return FractionallySizedBox(
                 heightFactor: 0.5,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            const Text(
-                              'Rate Seller',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    rater = 0;
-                                    reviewText = '';
-                                  },
-                                );
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(
-                                Icons.star,
-                                color: rater >= 1
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  rater = 1;
-                                });
-                              },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          const Text(
+                            'Rate Seller',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.star,
-                                color: rater >= 2
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  rater = 2;
-                                });
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.star,
-                                color: rater >= 3
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  rater = 3;
-                                });
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.star,
-                                color: rater >= 4
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  rater = 4;
-                                });
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.star,
-                                color: rater >= 5
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  rater = 5;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: TextField(
-                          controller: textEditingController,
-                          maxLines: 4,
-                          onChanged: (String value) {
-                            reviewText = value;
-                          },
-                          decoration: const InputDecoration(
-                            hintText: 'Write your Review here...',
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(10),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: MCustomButton(
-                          isProcessing: isSending,
-                          buttonType: ButtonType.elevated,
-                          onPressed: () async {
-                            setState(() {
-                              isSending = true;
-                            });
-                            await ApiService.put(
-                              path: 'course-ratings/$Id',
-                              body: <String, dynamic>{
-                                'rating': rater,
-                                'review': reviewText,
-                              },
-                            );
-                            if (mounted) {
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
                               setState(
                                 () {
                                   rater = 0;
                                   reviewText = '';
-                                  isSending = false;
                                 },
                               );
-                            }
-                            Get.back();
-                          },
-                          child: const Text('Edit Rating'),
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(
+                              Icons.star,
+                              color: rater >= 1
+                                  ? const Color.fromRGBO(255, 202, 40, 1)
+                                  : const Color.fromRGBO(229, 229, 229, 1),
+                              size: 40,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                rater = 1;
+                              });
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.star,
+                              color: rater >= 2
+                                  ? const Color.fromRGBO(255, 202, 40, 1)
+                                  : const Color.fromRGBO(229, 229, 229, 1),
+                              size: 40,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                rater = 2;
+                              });
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.star,
+                              color: rater >= 3
+                                  ? const Color.fromRGBO(255, 202, 40, 1)
+                                  : const Color.fromRGBO(229, 229, 229, 1),
+                              size: 40,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                rater = 3;
+                              });
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.star,
+                              color: rater >= 4
+                                  ? const Color.fromRGBO(255, 202, 40, 1)
+                                  : const Color.fromRGBO(229, 229, 229, 1),
+                              size: 40,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                rater = 4;
+                              });
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.star,
+                              color: rater >= 5
+                                  ? const Color.fromRGBO(255, 202, 40, 1)
+                                  : const Color.fromRGBO(229, 229, 229, 1),
+                              size: 40,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                rater = 5;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: TextField(
+                        controller: textEditingController,
+                        maxLines: 4,
+                        onChanged: (String value) {
+                          reviewText = value;
+                        },
+                        decoration: const InputDecoration(
+                          hintText: 'Write your Review here...',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(10),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: MCustomButton(
+                        isProcessing: isSending,
+                        buttonType: ButtonType.elevated,
+                        onPressed: () async {
+                          setState(() {
+                            isSending = true;
+                          });
+                          await ApiService.put(
+                            path: 'course-ratings/$id',
+                            body: <String, dynamic>{
+                              'rating': rater,
+                              'review': reviewText,
+                            },
+                          );
+                          if (mounted) {
+                            setState(
+                              () {
+                                rater = 0;
+                                reviewText = '';
+                                isSending = false;
+                              },
+                            );
+                          }
+                          Get.back();
+                        },
+                        child: const Text('Edit Rating'),
+                      ),
+                    ),
+                  ],
                 ),
               );
             },

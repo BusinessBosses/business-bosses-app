@@ -28,7 +28,7 @@ class ConnectionController extends GetxController {
     final ApiResponseModel res =
         await ApiService.get(path: 'users/name/$query');
     for (int i = 0; i < res.data.length; i++) {
-      final mapData = res.data[i];
+      final dynamic mapData = res.data[i];
       final UserModel modelizedData = UserModel.fromMap(mapData);
 
       searchedUsers.add(modelizedData);
@@ -106,7 +106,6 @@ class ConnectionController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     if (Get.arguments == null) {
       Get.back();
     } else {
@@ -117,14 +116,12 @@ class ConnectionController extends GetxController {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     searchController.dispose();
     super.dispose();
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
     isSearching = false;
     suggestedUsers.clear();
     searchedUsers.clear();

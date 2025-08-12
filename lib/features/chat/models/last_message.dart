@@ -31,7 +31,7 @@ class LastMessage {
     return true;
   }
 
-  factory LastMessage.toObject(Map map) {
+  factory LastMessage.toObject(Map<dynamic, dynamic> map) {
     return LastMessage(
       text: map['text'] as String,
       deleted: map['deleted'] as bool,

@@ -11,10 +11,11 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class CourseController extends GetxController {
   RxList<CourseModel> courses = RxList<CourseModel>(<CourseModel>[]);
@@ -35,7 +36,7 @@ class CourseController extends GetxController {
   RxList<dynamic> reviews = <dynamic>[].obs;
   RxList<CourseModel> usercourses = <CourseModel>[].obs;
   final ProfileController profileController = Get.find();
-  late IO.Socket socket;
+  late io.Socket socket;
   late List<String> connecteds =
       profileController.myProfile.connecteds ?? <String>[];
   List<UserModel> searchedUsers = <UserModel>[];
@@ -508,20 +509,22 @@ class CourseController extends GetxController {
   }
 
   void initSocket() {
-    socket = IO.io(Constants.socketUrl, <String, dynamic>{
+    socket = io.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
       'transports': <String>['websocket'],
     });
     socket.connect();
     socket.onConnect((_) {
-      print('Connection established');
+      if (kDebugMode) {
+        print('Connection established');
+      }
     });
 
-    socket.on('handshake', (data) {
+    socket.on('handshake', (dynamic data) {
       // print(data);
     });
 
-    socket.on('new-notification', (data) {
+    socket.on('new-notification', (dynamic data) {
       // print(data);
       profileController.updateProfile(<String, dynamic>{
         ...profileController.myProfile.toMap(),
@@ -532,11 +535,25 @@ class CourseController extends GetxController {
     socket.onReconnect((_) {
       socket.emit('handshake', profileController.myProfile.uid);
 
-      print('reconnected');
+      if (kDebugMode) {
+        print('reconnected');
+      }
     });
 
-    socket.onDisconnect((_) => print('Connection Disconnection'));
-    socket.onConnectError((err) => print(err));
-    socket.onError((err) => print(err));
+    socket.onDisconnect((_) {
+      if (kDebugMode) {
+        print('Connection Disconnection');
+      }
+    });
+    socket.onConnectError((dynamic err) {
+      if (kDebugMode) {
+        print(err);
+      }
+    });
+    socket.onError((dynamic err) {
+      if (kDebugMode) {
+        print(err);
+      }
+    });
   }
 }
