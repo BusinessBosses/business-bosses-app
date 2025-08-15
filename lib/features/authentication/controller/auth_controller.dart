@@ -56,47 +56,61 @@ class AuthController extends GetxController {
     String? inviteId,
     required VoidCallback onError,
   }) async {
-    final int code = Random().nextInt(900000) + 100000;
-    final String apiKey = dotenv.env['SENDGRILL_API_KEY']!;
-    final String fromEmail = dotenv.env['SENDGRID_EMAIL_ADDRESS']!;
-    final String templateId = dotenv.env['SENDGRID_TEMPLATE_ID']!;
-    const String subject = 'OTP Verification Code';
+    try {
+      final int code = Random().nextInt(900000) + 100000;
+      final String? apiKey = dotenv.env['SENDGRILL_API_KEY'];
+      final String? fromEmail = dotenv.env['SENDGRID_EMAIL_ADDRESS'];
+      final String? templateId = dotenv.env['SENDGRID_TEMPLATE_ID'];
+      const String subject = 'OTP Verification Code';
 
-    final Uri uri = Uri.parse('https://api.sendgrid.com/v3/mail/send');
-    final http.Response response = await http.post(
-      uri,
-      headers: <String, String>{
-        'Authorization': 'Bearer $apiKey',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, Object>{
-        'personalizations': <Map<String, Object>>[
-          <String, Object>{
-            'to': <Map<String, String>>[
-              <String, String>{'email': emailAddress.trim()}
-            ],
-            'dynamic_template_data': <String, String>{
-              'username': userName,
-              'otp': code.toString(),
+      if (apiKey == null || fromEmail == null || templateId == null) {
+        throw Exception('Missing SendGrid environment variables.');
+      }
+
+      final Uri uri = Uri.parse('https://api.sendgrid.com/v3/mail/send');
+      final http.Response response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Authorization': 'Bearer $apiKey',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, Object>{
+          'personalizations': <Map<String, Object>>[
+            <String, Object>{
+              'to': <Map<String, String>>[
+                <String, String>{'email': emailAddress.trim()}
+              ],
+              'dynamic_template_data': <String, String>{
+                'username': userName,
+                'otp': code.toString(),
+              }
             }
-          }
-        ],
-        'from': <String, String>{'email': fromEmail},
-        'template_id': templateId,
-        'subject': subject,
-      }),
-    );
+          ],
+          'from': <String, String>{'email': fromEmail},
+          'template_id': templateId,
+          'subject': subject,
+        }),
+      );
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      Get.to(() => CodeVerificationScreen(
-            otp: code.toString(),
-            userName: userName,
-            emailAddress: emailAddress,
-            password: password,
-            inviteId: inviteId,
-          ));
-    } else {
-      debugPrint('SendGrid error ${response.statusCode}: ${response.body}');
+      // ✅ Always log full response info
+      debugPrint('--- SendGrid Response ---');
+      debugPrint('Status: ${response.statusCode}');
+      debugPrint('Body: ${response.body}');
+      debugPrint('-------------------------');
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        Get.to(() => CodeVerificationScreen(
+              otp: code.toString(),
+              userName: userName,
+              emailAddress: emailAddress,
+              password: password,
+              inviteId: inviteId,
+            ));
+      } else {
+        onError();
+      }
+    } catch (e, stack) {
+      debugPrint('sendOtp error: $e\n$stack');
       onError();
     }
   }
