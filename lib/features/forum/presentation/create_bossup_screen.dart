@@ -7,7 +7,7 @@ import 'package:business_bosses_v2/features/posts/widgets/preview.dart'
     as custom_preview;
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
-import 'package:flutter/material.dart' hide Preview;
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../action/action.dart';
