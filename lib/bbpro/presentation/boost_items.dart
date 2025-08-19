@@ -130,12 +130,16 @@ class _BoostItemState extends State<BoostItem> {
         'currency': currency,
         'payment_method_types[]': 'card',
         'receipt_email': profileController.myProfile.email, // Add user email
-        'metadata': <String, dynamic>{
-          'user_id': profileController.myProfile.uid, // Store user ID
-          'user_name': profileController.myProfile.name, // Store user name
-          'product_id': widget.product?.id ?? '',
-          'service_id': widget.service?.id ?? '',
-        }
+        // 'metadata': <String, dynamic>{
+        //   'user_id': profileController.myProfile.uid, // Store user ID
+        //   'user_name': profileController.myProfile.name, // Store user name
+        //   'product_id': widget.product?.id ?? '',
+        //   'service_id': widget.service?.id ?? '',
+        // }
+        'metadata[user_id]': profileController.myProfile.uid,
+        'metadata[user_name]': profileController.myProfile.name,
+        'metadata[product_id]': widget.product?.id ?? '',
+        'metadata[service_id]': widget.service?.id ?? '',
       };
 
       http.Response res = await http.post(

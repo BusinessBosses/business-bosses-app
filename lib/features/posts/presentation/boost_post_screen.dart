@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' hide log;
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -131,11 +132,14 @@ class _BoostPostState extends State<BoostPost> {
         'currency': currency,
         'payment_method_types[]': 'card',
         'receipt_email': profileController.myProfile.email, // Add user email
-        'metadata': <String, dynamic>{
-          'user_id': profileController.myProfile.uid, // Store user ID
-          'user_name': profileController.myProfile.name, // Store user name
-          'post_id': widget.postId,
-        }
+        // 'metadata': <String, dynamic>{
+        //   'user_id': profileController.myProfile.uid, // Store user ID
+        //   'user_name': profileController.myProfile.name, // Store user name
+        //   'post_id': widget.postId,
+        // }
+        'metadata[user_id]': profileController.myProfile.uid,
+        'metadata[user_name]': profileController.myProfile.name,
+        'metadata[post_id]': widget.postId,
       };
 
       http.Response res = await http.post(
@@ -146,14 +150,14 @@ class _BoostPostState extends State<BoostPost> {
             'Content-Type': 'application/x-www-form-urlencoded'
           });
 
-      // print(res.body);
+      log(res.body);
 
       return jsonDecode(res.body);
     } catch (e) {
       setState(() {
         _isProcessing = false;
       });
-      print('Here ->>>>>> $e');
+      print('Here Payment ->>>>>> $e');
 
       showSnackbar(
           title: 'OOPS!',
@@ -198,6 +202,7 @@ class _BoostPostState extends State<BoostPost> {
           _isProcessing = true;
         });
         paymantIntent = await createPaymentIntent(initPlan, 'USD');
+        log(paymantIntent.toString());
         await Stripe.instance
             .initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(

@@ -109,11 +109,14 @@ class _BoostForumScreenState extends State<BoostForumScreen> {
         'currency': currency,
         'payment_method_types[]': 'card',
         'receipt_email': profileController.myProfile.email, // Add user email
-        'metadata': <String, dynamic>{
-          'user_id': profileController.myProfile.uid, // Store user ID
-          'user_name': profileController.myProfile.name, // Store user name
-          'forum_id': widget.postId,
-        }
+        // 'metadata': <String, dynamic>{
+        //   'user_id': profileController.myProfile.uid, // Store user ID
+        //   'user_name': profileController.myProfile.name, // Store user name
+        //   'forum_id': widget.postId,
+        // }
+        'metadata[user_id]': profileController.myProfile.uid,
+        'metadata[user_name]': profileController.myProfile.name,
+        'metadata[post_id]': widget.postId,
       };
 
       http.Response res = await http.post(
