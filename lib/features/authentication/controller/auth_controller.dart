@@ -1,8 +1,11 @@
 import 'dart:convert';
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' hide log;
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
 import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/revenuecat_service.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -205,9 +208,28 @@ class AuthController extends GetxController {
       /// show popup
     } else {
       isLoading(true);
-      await AuthRepository.login(
-          <String, dynamic>{'email': authCred, 'password': password});
+
+      // Call your backend login
+      await AuthRepository.login(<String, dynamic>{
+        'email': authCred,
+        'password': password,
+      });
+
       isLoading(false);
+
+      // Get the ProfileController that holds the logged in user
+      final ProfileController profileController = Get.find<ProfileController>();
+
+      // Make sure UID exists before sending to RevenueCat
+      final String uid = profileController.myProfile.uid;
+      if (uid.isNotEmpty) {
+        await RevenueCatService.login(uid);
+        log('Logged in to RevenueCat with user: ${uid.toString()}');
+      } else {
+        log('⚠️ Profile UID not available yet, skipping RevenueCat login');
+      }
+
+      // Navigate to home
       Get.toNamed(Routes.home);
     }
   }

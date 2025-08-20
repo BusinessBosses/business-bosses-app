@@ -82,7 +82,7 @@ class _BoostForumScreenState extends State<BoostForumScreen> {
         setState(() {
           _isProcessing = false;
         });
-        log(' =>> $error');
+        // log(' =>> $error');
         showSnackBar(context,
             message: 'Opps!! Something went wrong. Try again');
       });
@@ -96,7 +96,7 @@ class _BoostForumScreenState extends State<BoostForumScreen> {
       setState(() {
         _isProcessing = false;
       });
-      log('Here ->>>>>> $e');
+      // log('Here ->>>>>> $e');
 
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
@@ -134,7 +134,7 @@ class _BoostForumScreenState extends State<BoostForumScreen> {
       setState(() {
         _isProcessing = false;
       });
-      log('Here ->>>>>> $e');
+      // log('Here ->>>>>> $e');
 
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }

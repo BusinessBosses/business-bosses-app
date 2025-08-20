@@ -212,7 +212,7 @@ class _LoginFormState extends State<LoginForm> {
       });
     } catch (error) {
       // Error occurred during sign in
-      log('Here ->>>>>> ${error.toString()}');
+      // log('Here ->>>>>> ${error.toString()}');
 
       showSnackBar(Get.context!,
           message: 'Opps!! Something went wrong. Try again');

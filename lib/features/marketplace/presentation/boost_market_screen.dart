@@ -81,7 +81,7 @@ class _BoostMarketState extends State<BoostMarket> {
         setState(() {
           _isProcessing = false;
         });
-        log(' =>> $error');
+        // log(' =>> $error');
         showSnackBar(context,
             message: 'Opps!! Something went wrong. Try again');
       });
@@ -95,7 +95,7 @@ class _BoostMarketState extends State<BoostMarket> {
       setState(() {
         _isProcessing = false;
       });
-      log('Here ->>>>>> $e');
+      // log('Here ->>>>>> $e');
 
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
@@ -124,7 +124,7 @@ class _BoostMarketState extends State<BoostMarket> {
       setState(() {
         _isProcessing = false;
       });
-      log('Here ->>>>>> $e');
+      // log('Here ->>>>>> $e');
 
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }

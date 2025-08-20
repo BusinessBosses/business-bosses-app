@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, library_private_types_in_public_api, always_specify_types, deprecated_member_use
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:business_bosses_v2/action/action.dart';
@@ -569,8 +570,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     try {
       // Await logout response
-      await Purchases.logOut();
+      // await Purchases.logOut();
+      // log('Logged out from RevenueCat');
+
       await _apiService.logout();
+
       // Delete ShopController after successful logout
     } catch (error) {
       // Handle error if needed

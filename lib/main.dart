@@ -76,12 +76,12 @@ Future<void> initAppLinks() async {
   // listen for subsequent links
   _appLinks.uriLinkStream.listen((Uri? uri) {
     if (uri != null) {
-      log('Received deep link: $uri');
+      // log('Received deep link: $uri');
       processDeepLink(uri);
       processPostDeeplink(uri);
     }
   }, onError: (dynamic err) {
-    log('Error listening for deep links: $err');
+    // log('Error listening for deep links: $err');
   });
 }
 
@@ -101,7 +101,7 @@ void _handleInitialMessage(RemoteMessage? message) {
 
 /// PROCESS DEEPLINK
 void processDeepLink(Uri uri) {
-  log('processDeepLink: $uri');
+  // log('processDeepLink: $uri');
   if (uri.scheme == 'myapp' && uri.host == 'app.subscription') {
     final String? successParam = uri.queryParameters['success'];
     final String? cancelParam = uri.queryParameters['cancel'];
@@ -125,7 +125,7 @@ void processDeepLink(Uri uri) {
 }
 
 void processPostDeeplink(Uri uri) async {
-  log('processPostDeeplink: $uri');
+  // log('processPostDeeplink: $uri');
 
   // Fluttertoast.showToast(
   //   msg: 'Welcome back to BusinessBosses',

@@ -13,7 +13,7 @@ class SuccessScreen extends StatelessWidget {
       socialShare(
           'Check out my business! I just created a promotion for my business on BusinessBosses.\nhttps://businessbosses.page.link');
     } catch (e) {
-      log('Error sharing: $e');
+      // log('Error sharing: $e');
     }
   }
 
