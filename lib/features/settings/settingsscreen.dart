@@ -569,8 +569,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     try {
       // Await logout response
+      await Purchases.logOut();
       await _apiService.logout();
-
       // Delete ShopController after successful logout
     } catch (error) {
       // Handle error if needed

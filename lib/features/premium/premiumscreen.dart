@@ -7,7 +7,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-
 import '../../../utils/theme/theme.dart';
 import '../../common/dialogs/snackbar.dart';
 import '../../common/models/api_response_model.dart';
@@ -339,9 +338,19 @@ class _PremiumScreenState extends State<PremiumScreen> {
   @override
   void initState() {
     super.initState();
-    Purchases.logIn(profileController.myProfile.uid.toString()).then((_) {
+    // Log in to RevenueCat with current user ID
+    _loginToRevenueCat();
+  }
+
+  // Function to log in to RevenueCat with current user
+  Future<void> _loginToRevenueCat() async {
+    try {
+      await Purchases.logIn(profileController.myProfile.uid.toString());
+      log('Logged in to RevenueCat with user ID: ${profileController.myProfile.uid}');
       debugFullConfiguration();
-    });
+    } catch (e) {
+      log('Error logging in to RevenueCat: $e');
+    }
   }
 
   @override
