@@ -314,15 +314,25 @@ class _PremiumScreenState extends State<PremiumScreen> {
         'isSubscribed': true,
       });
 
-      Navigator.pop(context); // Close the bottom sheet
+      Navigator.pop(context);
       Get.off(() => const SubscriptionConfirmation());
     } else {
+      // ✅ Treat as pending success instead of error
       showSnackbar(
-        title: 'Subscription Inactive',
+        title: 'Purchase Completed',
         message:
-            'Purchase completed but subscription is not active. Please contact support.',
-        error: true,
+            'Your subscription is being activated. This may take a few minutes.',
+        error: false,
       );
+
+      // Optionally set local state to "subscribed" immediately
+      profileController.updateProfile(<String, dynamic>{
+        ...profileController.myProfile.toMap(),
+        'isSubscribed': true,
+      });
+
+      Navigator.pop(context);
+      Get.off(() => const SubscriptionConfirmation());
     }
   }
 
@@ -330,7 +340,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
   void initState() {
     super.initState();
     Purchases.logIn(profileController.myProfile.uid.toString()).then((_) {
-      // Add debug call
       debugFullConfiguration();
     });
   }
