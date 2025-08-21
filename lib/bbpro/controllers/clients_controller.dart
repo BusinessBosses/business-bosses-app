@@ -108,7 +108,7 @@ class ClientsController extends GetxController {
       update();
       return true;
     } else {
-      log(response.toMap().toString());
+      // log(response.toMap().toString());
       return false;
     }
   }
@@ -134,7 +134,7 @@ class ClientsController extends GetxController {
       update();
       return true;
     } else {
-      log(response.toMap().toString());
+      // log(response.toMap().toString());
       return false;
     }
   }

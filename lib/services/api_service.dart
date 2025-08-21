@@ -85,14 +85,14 @@ class ApiService {
     http.MultipartRequest request =
         http.MultipartRequest('POST', Uri.parse(uploadUrl));
     request.files.add(await http.MultipartFile.fromPath('file', image.path));
-    log(image.path);
+    // log(image.path);
     try {
       final http.StreamedResponse streamedResponse = await request.send();
 
       Map<dynamic, dynamic> result =
           json.decode(await streamedResponse.stream.bytesToString());
       if (result['success']) {
-        log(result.toString());
+        // log(result.toString());
         return result;
       } else {
         print(result.toString());
@@ -249,7 +249,7 @@ class ApiService {
           'Authorization': 'bearer $token'
         },
       );
-      log(response.body);
+      // log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       print(e.toString());
@@ -279,7 +279,7 @@ class ApiService {
           'Authorization': 'bearer $token'
         },
       );
-      log(response.body);
+      // log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       showSnackbar(
@@ -297,7 +297,7 @@ class ApiService {
   }) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString(Constants.ACCESS_TOKEN);
-    log(token ?? '');
+    // log(token ?? '');
     try {
       final http.Response response = await http.get(
         Uri.parse('${Constants.baseUrl}/$path'),
@@ -307,7 +307,7 @@ class ApiService {
           'Authorization': 'bearer $token'
         },
       );
-      log(response.body.toString());
+      // log(response.body.toString());
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       return ApiResponseModel(
@@ -322,7 +322,7 @@ class ApiService {
   }) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString(Constants.ACCESS_TOKEN) ?? '';
-    log(token);
+    // log(token);
     try {
       final http.Response response = await http.put(
         Uri.parse('${Constants.baseUrl}/$path'),
@@ -333,7 +333,7 @@ class ApiService {
           'Authorization': 'bearer $token'
         },
       );
-      log(response.body);
+      // log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       return ApiResponseModel(
@@ -356,7 +356,7 @@ class ApiService {
           'Authorization': 'bearer $token'
         },
       );
-      log(response.body);
+      // log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       showSnackbar(

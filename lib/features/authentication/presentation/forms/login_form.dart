@@ -198,6 +198,7 @@ class _LoginFormState extends State<LoginForm> {
           };
           await ApiService.post(path: 'users/add-device-token', body: data);
         });
+        // Add RevenueCat login here
         if (user['data']['bio'] != null) {
           // GetStorage().write('isFirstTime', false);
           Get.offAndToNamed(Routes.home);
@@ -411,7 +412,7 @@ class _LoginFormState extends State<LoginForm> {
                   height: 40,
                   onPressed: _handleAppleSignIn,
                 ),
-              )
+              ),
           ],
         ),
       ),

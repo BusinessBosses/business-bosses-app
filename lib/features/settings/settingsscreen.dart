@@ -22,6 +22,7 @@ import '../../common/dialogs/snackbar.dart';
 import '../../common/models/api_response_model.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
+import '../../services/revenuecat_service.dart';
 import '../posts/widgets/settings_item.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -36,7 +37,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final ApiService _apiService = ApiService();
   ProfileController profileController = Get.find();
   bool _isProcessing = false;
-
   Future<void> cancelSubscription(String userId) async {
     // setState(() {
     //   _isProcessing = true;
@@ -480,7 +480,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const SizedBox(
               height: 40,
-            )
+            ),
           ],
         ),
       ),
@@ -570,12 +570,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     try {
       // Await logout response
-      // await Purchases.logOut();
-      // log('Logged out from RevenueCat');
-
       await _apiService.logout();
-
-      // Delete ShopController after successful logout
+      await RevenueCatService.logout();
     } catch (error) {
       // Handle error if needed
       // Optionally, show an error message here
