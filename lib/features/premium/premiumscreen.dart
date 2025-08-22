@@ -44,58 +44,72 @@ class _PremiumScreenState extends State<PremiumScreen> {
     },
   ];
 
+  Future<void> restorePurchases() async {
+    try {
+      final CustomerInfo customerInfo = await Purchases.restorePurchases();
+
+      if (customerInfo.entitlements.active.isNotEmpty) {
+        // Update local state
+        profileController.updateProfile(<String, dynamic>{
+          ...profileController.myProfile.toMap(),
+          'isSubscribed': true,
+        });
+
+        showSnackbar(
+          title: 'Purchases Restored',
+          message: 'Your subscription has been restored.',
+          error: false,
+        );
+      } else {
+        showSnackbar(
+          title: 'No Active Subscription',
+          message: 'No active subscription found.',
+          error: true,
+        );
+      }
+    } catch (e) {
+      log('Restore purchases failed: $e');
+      showSnackbar(
+        title: 'Restore Failed',
+        message: 'Failed to restore purchases. Please try again.',
+        error: true,
+      );
+    }
+  }
+
   /// Debug full RevenueCat configuration
+  // Update your debugFullConfiguration method
   Future<void> debugFullConfiguration() async {
     try {
       log('=== DEBUGGING REVENUECAT CONFIGURATION ===');
 
-      // 1. Check RevenueCat connection
       final CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-      log('✓ RevenueCat connected - User ID: ${customerInfo.originalAppUserId}');
+      log('RevenueCat User ID: ${customerInfo.originalAppUserId}');
+      log('Active entitlements: ${customerInfo.entitlements.active.keys.toList()}');
 
-      // 2. Check current app bundle/package
-      log('App Bundle ID should match product prefix');
-
-      // 3. Check offerings
+      // Check offerings
       final Offerings offerings = await Purchases.getOfferings();
-      log('Available offerings count: ${offerings.all.length}');
-      log('Current offering: ${offerings.current?.identifier ?? "NONE"}');
+      log('Available offerings: ${offerings.all.keys.toList()}');
 
       if (offerings.current != null) {
-        log('Monthly package: ${offerings.current!.monthly?.identifier ?? "NONE"}');
-        log('Annual package: ${offerings.current!.annual?.identifier ?? "NONE"}');
+        log('Current offering: ${offerings.current!.identifier}');
 
-        // Log all packages in current offering
+        // Log all available packages
         for (Package package in offerings.current!.availablePackages) {
           log('Package: ${package.identifier} - Product: ${package.storeProduct.identifier}');
-        }
-      }
+          log('  - Price: ${package.storeProduct.priceString}');
+          log('  - Title: ${package.storeProduct.title}');
 
-      // 4. Try to get products with various IDs
-      final List<String> testProductIds = <String>[
-        'xyz.codexia.businessbosses.promonth',
-        'xyz.codexia.businessbosses.proyear',
-        'promonth',
-        'proyear',
-        'pro_monthly',
-        'pro_yearly',
-      ];
-
-      for (String productId in testProductIds) {
-        try {
-          final List<StoreProduct> products =
-              await Purchases.getProducts(<String>[productId]);
-          log('Product ID "$productId": ${products.length} found');
-
-          if (products.isNotEmpty) {
-            final StoreProduct product = products[0];
-            log('  - Title: ${product.title}');
-            log('  - Price: ${product.priceString}');
-            log('  - Description: ${product.description}');
+          // Check if this is a subscription package
+          if (package.identifier == '\$rc_monthly' ||
+              package.identifier == '\$rc_annual') {
+            log('  - Type: Subscription');
           }
-        } catch (e) {
-          log('Product ID "$productId": Error - $e');
         }
+
+        // Check standard package identifiers
+        log('Monthly package available: ${offerings.current!.monthly != null}');
+        log('Annual package available: ${offerings.current!.annual != null}');
       }
 
       log('=== END DEBUG ===');
@@ -172,14 +186,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
         return;
       }
 
-      // Check RevenueCat configuration
-      log('Checking RevenueCat configuration...');
-      final CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-      log('RevenueCat User ID: ${customerInfo.originalAppUserId}');
-
-      // Try to get offerings first (recommended approach)
+      // Try to get offerings first
       final Offerings offerings = await Purchases.getOfferings();
-      log('Available offerings: ${offerings.all.keys.toList()}');
 
       if (offerings.current != null) {
         // Use offerings approach
@@ -193,9 +201,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
       log('Stack trace: $stackTrace');
 
       showSnackbar(
-        title: 'Configuration Error',
-        message:
-            'Subscription products are not available. Please contact support.',
+        title: 'Purchase Error',
+        message: 'An error occurred during purchase. Please try again.',
         error: true,
       );
     } finally {
@@ -205,48 +212,101 @@ class _PremiumScreenState extends State<PremiumScreen> {
     }
   }
 
+  // Replace your purchaseUsingOfferings method with this:
   Future<void> purchaseUsingOfferings(Offerings offerings) async {
     try {
-      final Package? package = paymentMethodId == 'Proyear'
-          ? offerings.current!.annual
-          : offerings.current!.monthly;
+      Package? package;
 
-      if (package == null) {
-        throw Exception('Selected package not available in offerings');
+      // Use RevenueCat's standard package identifiers
+      if (offerings.current != null) {
+        if (paymentMethodId == 'Proyear') {
+          // Use RevenueCat's annual package identifier
+          package = offerings.current!.annual ??
+              offerings.current!.getPackage('\$rc_annual');
+        } else {
+          // Use RevenueCat's monthly package identifier
+          package = offerings.current!.monthly ??
+              offerings.current!.getPackage('\$rc_monthly');
+        }
       }
 
-      log('Purchasing package: ${package.identifier}');
+      if (package == null) {
+        log('Subscription package not found in offerings');
+        // Fall back to direct product purchase
+        await purchaseUsingProducts();
+        return;
+      }
+
+      log('Purchasing subscription package: ${package.identifier} - ${package.storeProduct.identifier}');
       final PurchaseResult purchaseResult =
           await Purchases.purchasePackage(package);
-
       await handleSuccessfulPurchase(purchaseResult.customerInfo);
     } catch (e) {
       log('Offerings purchase failed: $e');
-      // Fallback to direct product purchase
+      // Fall back to direct product purchase
       await purchaseUsingProducts();
     }
   }
 
+  // Replace your purchaseUsingProducts method with this:
   Future<void> purchaseUsingProducts() async {
-    final String productId = paymentMethodId == 'Proyear'
-        ? 'xyz.codexia.businessbosses.proyear'
-        : 'xyz.codexia.businessbosses.promonth';
+    try {
+      // Use the correct product IDs from your debug log
+      final String productId = paymentMethodId == 'Proyear'
+          ? 'xyz.codexia.businessbosses.proyear'
+          : 'xyz.codexia.businessbosses.promonth';
 
-    log('Attempting to get product: $productId');
+      log('Attempting direct purchase of: $productId');
 
-    final List<StoreProduct> products =
-        await Purchases.getProducts(<String>[productId]);
-    log('Retrieved products: ${products.map((StoreProduct p) => p.identifier).toList()}');
+      final List<StoreProduct> products =
+          await Purchases.getProducts(<String>[productId]);
 
-    if (products.isEmpty) {
-      // Try alternative product IDs or show configuration error
-      await tryAlternativeProductIds();
-      return;
+      if (products.isEmpty) {
+        showSnackbar(
+          title: 'Product Not Available',
+          message: 'Subscription product is not available at the moment.',
+          error: true,
+        );
+        return;
+      }
+
+      log('Found product: ${products[0].identifier} - ${products[0].title}');
+      final PurchaseResult purchaseResult =
+          await Purchases.purchaseStoreProduct(products[0]);
+      await handleSuccessfulPurchase(purchaseResult.customerInfo);
+    } catch (e) {
+      log('Direct purchase failed: $e');
+      showSnackbar(
+        title: 'Purchase Failed',
+        message: 'Failed to complete purchase. Please try again.',
+        error: true,
+      );
     }
+  }
 
-    final PurchaseResult purchaseResult =
-        await Purchases.purchaseStoreProduct(products[0]);
-    await handleSuccessfulPurchase(purchaseResult.customerInfo);
+  Future<void> checkExistingSubscriptions() async {
+    try {
+      final CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+
+      if (customerInfo.entitlements.active.isNotEmpty) {
+        // User already has an active subscription
+        showSnackbar(
+          title: 'Active Subscription',
+          message: 'You already have an active subscription.',
+          error: false,
+        );
+
+        // Update local state
+        profileController.updateProfile(<String, dynamic>{
+          ...profileController.myProfile.toMap(),
+          'isSubscribed': true,
+        });
+
+        return;
+      }
+    } catch (e) {
+      log('Error checking existing subscriptions: $e');
+    }
   }
 
   Future<void> tryAlternativeProductIds() async {
@@ -338,18 +398,51 @@ class _PremiumScreenState extends State<PremiumScreen> {
   @override
   void initState() {
     super.initState();
+
     // Log in to RevenueCat with current user ID
     _loginToRevenueCat();
+    checkExistingSubscriptions();
   }
 
   // Function to log in to RevenueCat with current user
+  // Update your _loginToRevenueCat method:
+  // Update your _loginToRevenueCat method:
   Future<void> _loginToRevenueCat() async {
     try {
-      await Purchases.logIn(profileController.myProfile.uid.toString());
-      log('Logged in to RevenueCat with user ID: ${profileController.myProfile.uid}');
-      debugFullConfiguration();
+      final String userId = profileController.myProfile.uid.toString();
+      final CustomerInfo currentInfo = await Purchases.getCustomerInfo();
+
+      // Check if we're already logged in with the right user
+      if (currentInfo.originalAppUserId == userId) {
+        log('Already logged in with correct user ID: $userId');
+        await debugFullConfiguration();
+        return;
+      }
+
+      // Check if we have an anonymous ID that needs to be converted
+      if (currentInfo.originalAppUserId.contains('RCAnonymousID')) {
+        log('Converting anonymous user to logged-in user: $userId');
+        await Purchases.logIn(userId);
+
+        // Wait a moment for the login to complete
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        // Verify the login was successful
+        final CustomerInfo newInfo = await Purchases.getCustomerInfo();
+        log('Login successful. New User ID: ${newInfo.originalAppUserId}');
+
+        if (newInfo.originalAppUserId == userId) {
+          log('✓ User ID matches successfully');
+        } else {
+          log('⚠ User ID mismatch. Expected: $userId, Got: ${newInfo.originalAppUserId}');
+        }
+      } else {
+        log('Already logged in with different user ID: ${currentInfo.originalAppUserId}');
+      }
+
+      await debugFullConfiguration();
     } catch (e) {
-      log('Error logging in to RevenueCat: $e');
+      log('Error in RevenueCat login: $e');
     }
   }
 
