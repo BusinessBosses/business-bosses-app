@@ -26,7 +26,6 @@ import '../../../../common/dialogs/snackbar.dart';
 import '../../../../common/widgets/buttons/custom_button.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../services/api_service.dart';
-import '../../../../services/revenuecat_service.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../../utils/validators/phone_input.dart';
@@ -45,7 +44,7 @@ class _SignUpFormState extends State<SignUpForm> {
   bool _isProcessing = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _passwordFormKey = GlobalKey<FormState>();
-  final AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
+  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   String? _username, _authCred, _password, _inviteId, _authusername;
   bool? _isUniqueName = false;
   bool? _isUniqueEmail = false;
@@ -444,58 +443,43 @@ class _SignUpFormState extends State<SignUpForm> {
           CustomButton(
             label: 'Sign Up',
             onPressed: () async {
-              if (!_formKey.currentState!.validate()) {
-                Get.snackbar('Error', 'Please fill all fields correctly');
-                return;
-              }
+              _formKey.currentState!.save();
+              setState(() {
+                _autoValidateMode = AutovalidateMode.always;
+              });
+              if (!_formKey.currentState!.validate()) return;
 
-              if (!agreedToTerms) {
+              if (agreedToTerms) {
+                setState(() {
+                  _autoValidateMode = AutovalidateMode.always;
+                  _isProcessing = true;
+                });
+                AuthController().sendOtp(
+                    emailAddress: _authCred!,
+                    userName: _username!,
+                    password: _password!,
+                    inviteId: _inviteId,
+                    onError: () {
+                      setState(() {
+                        _isProcessing = false;
+                      });
+                    });
+              } else {
                 Get.snackbar('Error',
                     'Before signing up, you must agree to our Terms and Conditions');
-                return;
+                setState(() {
+                  _isProcessing = false;
+                });
               }
-
-              setState(() => _isProcessing = true);
-
-              try {
-                print('👉 Sending OTP with:');
-                print('username=$_username');
-                print('email=$_authCred');
-                print('password=$_password');
-
-                await AuthController().sendOtp(
-                  emailAddress: _authCred!,
-                  userName: _username!,
-                  password: _password!,
-                  inviteId: _inviteId,
-                  onError: () {
-                    Get.snackbar('Error', 'Failed to send OTP');
-                    setState(() => _isProcessing = false);
-                  },
-                );
-
-                // 👇 Add this so the user sees progress
-                Get.snackbar(
-                    'Success', 'OTP sent! Please check your email/phone');
-                // OR navigate:
-                // Get.to(() => OtpVerificationScreen(email: _authCred!));
-
-                // Register the user and get backend userId
-                final dynamic registration = await _handleRegister();
-                if (registration != null &&
-                    registration['success'] == true &&
-                    registration['data'] != null &&
-                    registration['data']['uid'] != null) {
-                  final String userId = registration['data']['uid'].toString();
-                  await RevenueCatService.login(userId);
-                  Get.snackbar('RevenueCat',
-                      'Logged in to RevenueCat with userId: $userId');
-                }
-              } catch (e) {
-                Get.snackbar('Error', 'Something went wrong: $e');
-              } finally {
-                setState(() => _isProcessing = false);
-              }
+              // } else {
+              //   Get.snackbar('Error', 'Invalid Entries in Form');
+              //   setState(() {
+              //     _isProcessing = false;
+              //   });
+              // }
+              setState(() {
+                _isProcessing = false;
+              });
             },
             isProcessing: _isProcessing,
             buttonType: ButtonType.elevated,
