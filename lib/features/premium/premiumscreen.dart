@@ -710,6 +710,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                     ),
                                   ),
                                   builder: (BuildContext context) {
+                                    bool modalLoading = false;
                                     return StatefulBuilder(
                                       // Wrap the entire bottom sheet content with StatefulBuilder
                                       builder: (BuildContext context,
@@ -859,9 +860,22 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                     color: primaryColorLT,
                                                     text:
                                                         'Start your \$1/month trial',
-                                                    loading: loading,
+                                                    loading: modalLoading,
                                                     onPressed: () async {
-                                                      await validateAndPurchase();
+                                                      setModalState(() {
+                                                        modalLoading = true;
+                                                      });
+
+                                                      try {
+                                                        await validateAndPurchase();
+                                                      } finally {
+                                                        if (mounted) {
+                                                          setModalState(() {
+                                                            modalLoading =
+                                                                false;
+                                                          });
+                                                        }
+                                                      }
                                                     },
                                                   )),
                                               const SizedBox(
