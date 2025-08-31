@@ -1,12 +1,16 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../utils/theme/theme.dart';
 import '../../common/dialogs/snackbar.dart';
 import '../../common/models/api_response_model.dart';
@@ -890,6 +894,75 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                 );
                               }),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              children: <InlineSpan>[
+                                TextSpan(
+                                  text:
+                                      'By upgrading to Pro, you hereby agree to our ',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                          color: const Color(0xff999797),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600),
+                                ),
+                                TextSpan(
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      launchPolicy();
+                                    },
+                                  text: 'Privacy Policy',
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      decoration: TextDecoration.underline,
+                                      color: primaryColorLT),
+                                ),
+                                if (Platform.isIOS)
+                                  TextSpan(
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {},
+                                      text: ' and ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              color: const Color(0xff999797),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600)),
+                                if (Platform.isIOS)
+                                  TextSpan(
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        launchTermsofService();
+                                      },
+                                    text: 'Terms of Service',
+                                    style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        decoration: TextDecoration.underline,
+                                        color: primaryColorLT),
+                                  ),
+                                TextSpan(
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {},
+                                    text: '  of Business Bosses ',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                            color: const Color(0xff999797),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                          ),
+                        ),
                         const SizedBox(
                           height: 8,
                         ),
@@ -906,5 +979,31 @@ class _PremiumScreenState extends State<PremiumScreen> {
         ),
       ],
     );
+  }
+}
+
+Future<void> launchPolicy() async {
+  String url = Constants.PRIVACY_POLICY_LINK;
+  bool canLunchLink = await canLaunchUrlString(url);
+  if (canLunchLink) {
+    await launchUrlString(url);
+  } else {
+    showSnackbar(
+        title: 'OOPS!',
+        message: 'An error occurred, please try again!',
+        error: true);
+  }
+}
+
+Future<void> launchTermsofService() async {
+  String url = Constants.TERMS_OF_SERVICE_LINK;
+  bool canLunchLink = await canLaunchUrlString(url);
+  if (canLunchLink) {
+    await launchUrlString(url);
+  } else {
+    showSnackbar(
+        title: 'OOPS!',
+        message: 'An error occurred, please try again!',
+        error: true);
   }
 }

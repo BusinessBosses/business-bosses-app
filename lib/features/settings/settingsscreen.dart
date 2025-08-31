@@ -502,6 +502,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // }
     else if ('Delete Account' == label) {
       Get.toNamed(Routes.deleteAccount);
+    } else if (label == 'Privacy Policy') {
+      _launchUrl('https://businessbosses.co.uk/privacypolicy/');
+    } else if (label == 'Terms of Service') {
+      _launchUrl(
+          'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
+    }
+  }
+
+  Future<void> _launchUrl(String url) async {
+    try {
+      if (await canLaunchUrlString(url)) {
+        await launchUrlString(url, mode: LaunchMode.externalApplication);
+      } else {
+        showSnackbar(
+            title: 'OOPS!',
+            message: 'Could not open the link. Please try again!',
+            error: true);
+      }
+    } catch (e) {
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred while opening the link!',
+          error: true);
     }
   }
 
@@ -556,6 +579,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     MySettingsItem(
       isTitle: false,
       label: 'Delete Account',
+      routeName: Routes.deleteAccount,
+    ),
+    MySettingsItem(
+      isTitle: false,
+      label: 'Privacy Policy',
+      routeName: Routes.deleteAccount,
+    ),
+    MySettingsItem(
+      isTitle: false,
+      label: 'Terms of Service',
       routeName: Routes.deleteAccount,
     ),
   ];

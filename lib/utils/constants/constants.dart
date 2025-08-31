@@ -18,7 +18,9 @@ class Constants {
   static const String TWITTER_BASE_URL = 'https://twitter.com/';
   static const String INSTAGRAM_BASE_URL = 'https://instagram.com/';
   static const String PRIVACY_POLICY_LINK =
-      'https://businessbosses.co.uk/privacy/';
+      'https://businessbosses.co.uk/privacypolicy/';
+  static const String TERMS_OF_SERVICE_LINK =
+      'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
   static const String HTTPS = 'https://';
   static const String HTTPS_WWW = 'https://www.';
 

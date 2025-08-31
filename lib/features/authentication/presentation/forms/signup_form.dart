@@ -601,11 +601,29 @@ class _SignUpFormState extends State<SignUpForm> {
                   decoration: TextDecoration.underline,
                   color: primaryColorLT),
             ),
-            TextSpan(
+            if (Platform.isIOS)
+              TextSpan(
+                  recognizer: TapGestureRecognizer()..onTap = () {},
+                  text: ' and ',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: const Color(0xff999797),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600)),
+            if (Platform.isIOS)
+              TextSpan(
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    // launchPolicy();
+                    launchTermsofService();
                   },
+                text: 'Terms of Service',
+                style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    decoration: TextDecoration.underline,
+                    color: primaryColorLT),
+              ),
+            TextSpan(
+                recognizer: TapGestureRecognizer()..onTap = () {},
                 text: '  of Business Bosses ',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: const Color(0xff999797),
@@ -633,6 +651,19 @@ class _SignUpFormState extends State<SignUpForm> {
 
   Future<void> launchPolicy() async {
     String url = Constants.PRIVACY_POLICY_LINK;
+    bool canLunchLink = await canLaunchUrlString(url);
+    if (canLunchLink) {
+      await launchUrlString(url);
+    } else {
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+    }
+  }
+
+  Future<void> launchTermsofService() async {
+    String url = Constants.TERMS_OF_SERVICE_LINK;
     bool canLunchLink = await canLaunchUrlString(url);
     if (canLunchLink) {
       await launchUrlString(url);
