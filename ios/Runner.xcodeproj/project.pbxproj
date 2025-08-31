@@ -61,6 +61,7 @@
 		A2EB29C42B28661A00C7621B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A2FEE9BF2A06963300F08A5F /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE8B55C52E45F1EA00850B3F /* BusinessBossesStoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = BusinessBossesStoreKit.storekit; sourceTree = "<group>"; };
+		78E0A7A72DC9AD7400C4905E /* FlutterGeneratedPluginSwiftPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FlutterGeneratedPluginSwiftPackage; path = Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +103,7 @@
 		9740EEB11CF90186004384FC /* Flutter */ = {
 			isa = PBXGroup;
 			children = (
+				78E0A7A72DC9AD7400C4905E /* FlutterGeneratedPluginSwiftPackage */,
 				3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */,
 				9740EEB21CF90195004384FC /* Debug.xcconfig */,
 				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
