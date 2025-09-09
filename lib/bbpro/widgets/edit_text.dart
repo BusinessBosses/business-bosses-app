@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CustomEditText extends StatelessWidget {
@@ -15,7 +16,7 @@ class CustomEditText extends StatelessWidget {
   final TextEditingController? pm2controller;
   final TextEditingController? pm3controller;
   final TextEditingController? pm4controller;
-
+  final List<TextInputFormatter>? inputFormatters;
   final TextEditingController? pm5controller;
   final String? pmh1;
   final String? pmh2;
@@ -66,6 +67,7 @@ class CustomEditText extends StatelessWidget {
     this.isorder,
     this.onTextChanged,
     this.isps,
+    this.inputFormatters,
   });
 
   void _updateQuantity(BuildContext context, int newValue) {
@@ -134,6 +136,7 @@ class CustomEditText extends StatelessWidget {
                         ),
                         Expanded(
                           child: TextFormField(
+                            inputFormatters: inputFormatters,
                             onChanged: (String value) {
                               final int intValue = int.tryParse(value) ?? 0;
                               if (intValue >= 1) {
@@ -223,6 +226,7 @@ class CustomEditText extends StatelessWidget {
             height: 30,
             width: 40,
             child: TextFormField(
+              inputFormatters: inputFormatters,
               controller: currencycontroller,
               style: const TextStyle(fontSize: 13),
               decoration: InputDecoration(
@@ -258,6 +262,7 @@ class CustomEditText extends StatelessWidget {
 
   Widget _buildMainTextField() {
     return TextFormField(
+      inputFormatters: inputFormatters,
       style: const TextStyle(fontSize: 13),
       maxLines: maxLength != null && maxLength! > 30 ? 5 : 1,
       decoration: InputDecoration(
@@ -302,6 +307,7 @@ class CustomEditText extends StatelessWidget {
         ],
         Expanded(
           child: TextFormField(
+            inputFormatters: inputFormatters,
             controller: controller,
             style: const TextStyle(fontSize: 13),
             maxLines: 1,

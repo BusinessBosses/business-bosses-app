@@ -19,6 +19,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/services/text_formatter.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -241,17 +242,34 @@ class _CreateProductListingState extends State<CreateProductListing> {
                           isps: true,
                           caption: 'Discount (%)',
                           hintText: 'Enter discount',
-                          maxLength: 15,
+                          maxLength: 3,
                           controller: _discountController,
                           inputType: TextInputType.number,
                           validator: (String? value) {
                             if (value != null && value.isNotEmpty) {
-                              if (double.tryParse(value) == null) {
+                              final double? number = double.tryParse(value);
+                              if (number == null) {
                                 return 'Please enter a valid number';
+                              }
+                              if (number < 0 || number > 100) {
+                                return 'Discount must be between 0 and 100';
                               }
                             }
                             return null;
                           },
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            TextInputFormatter.withFunction(
+                                (TextEditingValue oldValue,
+                                    TextEditingValue newValue) {
+                              if (newValue.text.isEmpty) return newValue;
+                              final int? number = int.tryParse(newValue.text);
+                              if (number == null || number > 100) {
+                                return oldValue; // block
+                              }
+                              return newValue;
+                            }),
+                          ],
                         ),
                       ),
                     ],

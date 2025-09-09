@@ -7,6 +7,7 @@ import 'package:country_list_pick/country_list_pick.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 // import 'package:photo_manager/photo_manager.dart';
@@ -204,6 +205,20 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         child: Stack(
                           children: <Widget>[
                             TextFormField(
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly,
+                                TextInputFormatter.withFunction(
+                                    (TextEditingValue oldValue,
+                                        TextEditingValue newValue) {
+                                  if (newValue.text.isEmpty) return newValue;
+                                  final int? number =
+                                      int.tryParse(newValue.text);
+                                  if (number == null || number > 100) {
+                                    return oldValue; // block
+                                  }
+                                  return newValue;
+                                }),
+                              ],
                               controller: _discountController,
                               onChanged: (String val) => discount = val,
                               textInputAction: TextInputAction.next,
