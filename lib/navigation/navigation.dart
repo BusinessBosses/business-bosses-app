@@ -23,6 +23,7 @@ import 'package:business_bosses_v2/features/marketplace/controllers/market_contr
 import 'package:business_bosses_v2/features/marketplace/presentation/renewconfirmation.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
+import 'package:business_bosses_v2/features/matchingfeature/presentation/expandedmatchesscreen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/confirmation.dart';
 import 'package:business_bosses_v2/features/settings/community_rules_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/my_ranking_screen.dart';
@@ -297,5 +298,9 @@ var routes = [
   GetPage(
     name: Routes.setupshopscreen,
     page: () => const Setupshop(),
+  ),
+  GetPage(
+    name: Routes.expandedmatchesscreen,
+    page: () => const ExpandedMatchesScreen(),
   ),
 ];

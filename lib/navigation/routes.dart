@@ -71,4 +71,5 @@ class Routes {
   static const String pdfscreen = '/pdf-screen';
   static const String alllearningpostsscreen = '/alllearningposts-screen';
   static const String setupshopscreen = '/setupshop-screen';
+  static const String expandedmatchesscreen = '/expandedmatchesscreen';
 }

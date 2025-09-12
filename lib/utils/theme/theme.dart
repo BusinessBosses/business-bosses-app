@@ -3,6 +3,10 @@
 import 'package:flutter/material.dart';
 
 /// APP THEME
+///
+///
+///
+
 final ThemeData appTheme = ThemeData(
   appBarTheme: const AppBarTheme(
     surfaceTintColor: Colors.transparent,
@@ -34,6 +38,7 @@ final ThemeData appTheme = ThemeData(
   colorScheme: ColorScheme.fromSwatch(primarySwatch: primarySwatch)
       .copyWith(surface: backgroundColor),
 );
+
 const double radius = 10.0;
 const double buttonHeight = 57.0;
 const double fieldHeight = 55.0;
@@ -53,6 +58,15 @@ const Color primaryotherColorLT = Color(0xffF7C844);
 const Color proprimaryColor = Color(hex);
 const Color probackgroundColor = Color(0xfff4f4f4);
 const Color prosemibackColor = Color(0xfff4f4f4);
+
+const Color primaryBlue = Color(0xFF3B82F6);
+const Color accentPurple = Color(0xFF8B5CF6);
+const Color successGreen = Color(0xFF10B981);
+const Color premiumGold = Color(0xFFF59E0B);
+const Color backgroundGray = Color(0xFFF8FAFC);
+const Color textDark = Color(0xFF1F2937);
+const Color textMedium = Color(0xFF6B7280);
+const Color textLight = Color(0xFF9CA3AF);
 
 // ignore: always_specify_types
 const MaterialColor primarySwatch = MaterialColor(hex, {
