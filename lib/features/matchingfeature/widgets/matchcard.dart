@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/features/matchingfeature/models/matchmodel.dart';
-import 'package:business_bosses_v2/features/matchingfeature/widgets/matchdetailmodal.dart';
 import 'package:business_bosses_v2/features/matchingfeature/widgets/prematchmodal.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +7,15 @@ import 'package:lucide_icons/lucide_icons.dart';
 class MatchCard extends StatelessWidget {
   final Matches match;
   final String userType;
+  final bool? showsavebutton;
+  final void Function()? saveontap;
 
   const MatchCard({
     super.key,
     required this.match,
     required this.userType,
+    this.showsavebutton,
+    this.saveontap,
   });
 
   @override
@@ -53,19 +56,40 @@ class MatchCard extends StatelessWidget {
             if (match.isVerified) _buildVerifiedBadge(),
           ],
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            'match.matchPercentage%',
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
+        const Spacer(),
+        Row(
+          spacing: 5,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20), color: Colors.green),
+              child: Text(
+                '90%',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
             ),
-          ),
+            if (showsavebutton == true)
+              GestureDetector(
+                onTap: saveontap,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: const BoxDecoration(
+                    color: textColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    LucideIcons.bookmark,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ),
+          ],
         ),
       ],
     );

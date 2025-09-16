@@ -72,4 +72,5 @@ class Routes {
   static const String alllearningpostsscreen = '/alllearningposts-screen';
   static const String setupshopscreen = '/setupshop-screen';
   static const String expandedmatchesscreen = '/expandedmatchesscreen';
+  static const String bookmarkedmatches = '/bookmarkedmatches';
 }

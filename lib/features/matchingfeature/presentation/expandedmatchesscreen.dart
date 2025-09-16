@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/matchingfeature/models/matchmodel.dart';
+import 'package:business_bosses_v2/features/matchingfeature/presentation/bookmarkedmatches.dart';
 import 'package:business_bosses_v2/features/matchingfeature/widgets/blurredmatchcard.dart';
 import 'package:business_bosses_v2/features/matchingfeature/widgets/matchcard.dart';
 import 'package:business_bosses_v2/features/matchingfeature/widgets/matchheader.dart';
@@ -6,6 +7,7 @@ import 'package:business_bosses_v2/features/matchingfeature/widgets/opportunityp
 import 'package:business_bosses_v2/features/matchingfeature/widgets/premiumprompt.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class ExpandedMatchesScreen extends StatefulWidget {
@@ -37,6 +39,20 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
           'Matches',
           textAlign: TextAlign.center,
         ),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              Get.to(() => const BookmarkedMatches());
+            },
+            icon: CircleAvatar(
+                backgroundColor: backgroundColor,
+                child: Icon(
+                  LucideIcons.bookmark,
+                  color: textColor,
+                  size: 20,
+                )),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
