@@ -134,33 +134,34 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
       body: Column(
         children: <Widget>[
           // Header Stats
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: _buildStatCard(
-                    'Total Saved',
-                    _bookmarkedMatches.length.toString(),
-                    LucideIcons.bookmark,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildStatCard(
-                    'This Week',
-                    '${_bookmarkedMatches.where((Matches m) => m.matchPercentage > 85).length}',
-                    LucideIcons.trendingUp,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   padding: const EdgeInsets.all(16),
+          //   child: Row(
+          //     children: <Widget>[
+          //       Expanded(
+          //         child: _buildStatCard(
+          //           'Total Saved',
+          //           _bookmarkedMatches.length.toString(),
+          //           LucideIcons.bookmark,
+          //         ),
+          //       ),
+          //       const SizedBox(width: 12),
+          //       Expanded(
+          //         child: _buildStatCard(
+          //           'This Week',
+          //           '${_bookmarkedMatches.where((Matches m) => m.matchPercentage > 85).length}',
+          //           LucideIcons.trendingUp,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
 
           // Search Bar
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Container(
+              margin: EdgeInsets.only(top: 15),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -287,7 +288,11 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: FilterChip(
-        label: Text(filter),
+        label: Text(
+          filter == 'All'
+              ? 'All (${_bookmarkedMatches.length})'
+              : '$filter (${_bookmarkedMatches.where((Matches m) => m.type == filter).length})',
+        ),
         selected: isSelected,
         onSelected: (bool selected) {
           setState(() {
