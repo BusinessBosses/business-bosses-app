@@ -177,7 +177,7 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
                 decoration: InputDecoration(
                   hintText: 'Search saved matches...',
                   prefixIcon: Icon(LucideIcons.search,
-                      color: textColor.withOpacity(0.6)),
+                      size: 20, color: textColor.withOpacity(0.6)),
                   suffixIcon: _searchQuery.isNotEmpty
                       ? IconButton(
                           icon: Icon(LucideIcons.x,
