@@ -91,9 +91,11 @@ class MatchDetailModal extends StatelessWidget {
                 Navigator.pop(context);
               },
               child: CircleAvatar(
+                radius: 18,
                 backgroundColor: backgroundColor,
                 child: const Icon(
                   LucideIcons.x,
+                  size: 20,
                   color: textColor,
                 ),
               ),
@@ -143,7 +145,6 @@ class MatchDetailModal extends StatelessWidget {
             color: textDark,
           ),
         ),
-        const SizedBox(height: 8),
         Text(
           'match.type',
           style: const TextStyle(
@@ -152,7 +153,6 @@ class MatchDetailModal extends StatelessWidget {
             color: primaryBlue,
           ),
         ),
-        const SizedBox(height: 12),
         Row(
           children: <Widget>[
             const Icon(Icons.star, size: 20, color: premiumGold),
@@ -177,7 +177,6 @@ class MatchDetailModal extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
         Text(
           'match.description',
           style: const TextStyle(
