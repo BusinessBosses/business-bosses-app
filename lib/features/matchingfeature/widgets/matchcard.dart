@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/matchingfeature/models/matchmodel.dart';
+import 'package:business_bosses_v2/features/matchingfeature/widgets/matchdetailmodal.dart';
 import 'package:business_bosses_v2/features/matchingfeature/widgets/prematchmodal.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -279,12 +280,13 @@ class MatchCard extends StatelessWidget {
 
   void _showMatchDetails(BuildContext context) {
     showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        builder: (BuildContext context) => Prematchmodal()
-        // MatchDetailModal(match: match, userType: userType),
-        );
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) =>
+          //  Prematchmodal()
+          MatchDetailModal(match: match, userType: userType),
+    );
   }
 
   void _sendProposal(BuildContext context) {

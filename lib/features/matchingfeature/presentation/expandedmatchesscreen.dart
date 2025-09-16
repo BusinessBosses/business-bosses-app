@@ -56,6 +56,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          spacing: 20,
           children: <Widget>[
             const MatchHeader(
               title: 'title',
@@ -63,13 +64,13 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
               weeklyMatches: 0,
               totalMatches: 0,
             ),
-            const SizedBox(height: 20),
-            OpportunityPrediction(predictions: <String>[
-              'Sample prediction 1',
-              'Sample prediction 2',
-              'Sample prediction 3',
-            ]),
-            const SizedBox(height: 20),
+
+            // OpportunityPrediction(predictions: <String>[
+            //   'Sample prediction 1',
+            //   'Sample prediction 2',
+            //   'Sample prediction 3',
+            // ]),
+
             MatchCard(
               match: Matches(
                 id: '2',
@@ -87,7 +88,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
               ),
               userType: 'buyer',
             ),
-            const SizedBox(height: 20),
+
             BlurredMatchCard(
               match: Matches(
                 id: '1',
@@ -115,6 +116,7 @@ Widget buildMatchesTab(BuildContext context, String userType) {
   return SingleChildScrollView(
     padding: const EdgeInsets.all(16),
     child: Column(
+      spacing: 20,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         MatchHeader(
@@ -123,11 +125,11 @@ Widget buildMatchesTab(BuildContext context, String userType) {
           weeklyMatches: 22,
           totalMatches: 30,
         ),
-        const SizedBox(height: 20),
+
         OpportunityPrediction(
           predictions: getPredictions(userType),
         ),
-        const SizedBox(height: 20),
+
         Text(
           'Your Top Matches This Week',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -135,7 +137,7 @@ Widget buildMatchesTab(BuildContext context, String userType) {
                 color: textDark,
               ),
         ),
-        const SizedBox(height: 16),
+
         // Uncomment and provide matches from your provider
         // ...matchProvider.matches.map(
         //   (match) => MatchCard(
@@ -143,7 +145,7 @@ Widget buildMatchesTab(BuildContext context, String userType) {
         //     userType: userType,
         //   ),
         // ),
-        const SizedBox(height: 20),
+
         PremiumPrompt(
           blurredMatches: <Matches>[], // matchProvider.blurredMatches,
           userType: userType,

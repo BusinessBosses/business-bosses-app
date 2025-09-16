@@ -34,7 +34,8 @@ class FloatingbuttonState extends State<Floatingbutton> {
     int previousStamp = myProfile.myProfile.bossOfTheWeekTimeStamp ?? 0;
     return GestureDetector(
       onTap: () {
-        Get.to(() => AiChatScreen());
+        //Get.to(() => AiChatScreen());
+        Get.to(() => ExpandedMatchesScreen());
       },
       child: Padding(
         padding: EdgeInsets.only(bottom: Platform.isIOS ? 50 : 80, right: 5),
