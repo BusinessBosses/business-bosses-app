@@ -158,7 +158,6 @@ class MatchCard extends StatelessWidget {
             color: textDark,
           ),
         ),
-        const SizedBox(height: 4),
         Text(
           'match.type',
           style: const TextStyle(
@@ -167,7 +166,6 @@ class MatchCard extends StatelessWidget {
             color: primaryBlue,
           ),
         ),
-        const SizedBox(height: 8),
         Row(
           children: <Widget>[
             const Icon(Icons.star, size: 16, color: premiumGold),
@@ -192,7 +190,6 @@ class MatchCard extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
         Text(
           'match.description',
           style: const TextStyle(
@@ -252,22 +249,23 @@ class MatchCard extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 12),
-        SizedBox(
-          height: 50,
-          child: OutlinedButton.icon(
-            onPressed: () => _saveOpportunity(context),
-            icon: const Icon(LucideIcons.bookmark, size: 16),
-            label: const Text('Save'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: primaryBlue,
-              side: const BorderSide(color: primaryBlue),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+        if (showsavebutton != true) const SizedBox(width: 12),
+        if (showsavebutton != true)
+          SizedBox(
+            height: 50,
+            child: OutlinedButton.icon(
+              onPressed: () => _saveOpportunity(context),
+              icon: const Icon(LucideIcons.bookmark, size: 16),
+              label: const Text('Save'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: primaryBlue,
+                side: const BorderSide(color: primaryBlue),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
