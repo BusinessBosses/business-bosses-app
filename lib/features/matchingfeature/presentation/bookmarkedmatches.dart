@@ -49,7 +49,7 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
     Matches(
       id: '3',
       name: 'TechStart Inc',
-      type: 'Startup',
+      type: 'Supplier',
       description: 'Emerging technology startup seeking partnerships.',
       rating: 4.0,
       location: 'Austin, TX',
@@ -207,8 +207,8 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
                 'All',
                 'Seller',
                 'Buyer',
-                'Startup',
-                'Investor'
+                'Supplier',
+                'Partner'
               ].map((String filter) => _buildFilterChip(filter)).toList(),
             ),
           ),
