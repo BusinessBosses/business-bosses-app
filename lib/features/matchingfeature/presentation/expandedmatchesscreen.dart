@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/features/matchingfeature/models/matchmodel.dart';
 import 'package:business_bosses_v2/features/matchingfeature/presentation/bookmarkedmatches.dart';
+import 'package:business_bosses_v2/features/matchingfeature/widgets/banner.dart';
 import 'package:business_bosses_v2/features/matchingfeature/widgets/blurredmatchcard.dart';
 import 'package:business_bosses_v2/features/matchingfeature/widgets/matchcard.dart';
 import 'package:business_bosses_v2/features/matchingfeature/widgets/matchheader.dart';
@@ -56,55 +57,73 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          spacing: 20,
           children: <Widget>[
-            const MatchHeader(
-              title: 'title',
-              subtitle: 'subtitle',
-              weeklyMatches: 0,
-              totalMatches: 0,
+            PersonalizationBanner(
+              onSetupPressed: () {
+                print('Setup pressed');
+              },
+              onClosePressed: () {
+                // Handle close button press
+                print('Close pressed');
+                // Hide banner or dismiss
+              },
             ),
+            Column(
+              spacing: 20,
+              children: <Widget>[
+                const MatchHeader(
+                  title: 'title',
+                  subtitle: 'subtitle',
+                  weeklyMatches: 0,
+                  totalMatches: 0,
+                ),
 
-            // OpportunityPrediction(predictions: <String>[
-            //   'Sample prediction 1',
-            //   'Sample prediction 2',
-            //   'Sample prediction 3',
-            // ]),
+                // OpportunityPrediction(predictions: <String>[
+                //   'Sample prediction 1',
+                //   'Sample prediction 2',
+                //   'Sample prediction 3',
+                // ]),
 
-            MatchCard(
-              match: Matches(
-                id: '2',
-                name: 'Beta Solutions',
-                type: 'Buyer',
-                description: 'Innovative buyer seeking tech solutions.',
-                rating: 4.2,
-                location: 'San Francisco, CA',
-                services: <String>['Procurement', 'IT Consulting'],
-                responseTime: '2 hours',
-                budget: '\$20,000 - \$100,000',
-                isPremium: false,
-                isVerified: true,
-                matchPercentage: 88,
-              ),
-              userType: 'buyer',
+                MatchCard(
+                  match: Matches(
+                    id: '2',
+                    name: 'Beta Solutions',
+                    type: 'Buyer',
+                    description: 'Innovative buyer seeking tech solutions.',
+                    rating: 4.2,
+                    location: 'San Francisco, CA',
+                    services: <String>['Procurement', 'IT Consulting'],
+                    responseTime: '2 hours',
+                    budget: '\$20,000 - \$100,000',
+                    isPremium: false,
+                    isVerified: true,
+                    matchPercentage: 88,
+                  ),
+                  userType: 'buyer',
+                ),
+
+                BlurredMatchCard(
+                  match: Matches(
+                    id: '1',
+                    name: 'Acme Corp',
+                    type: 'Seller',
+                    description: 'Leading provider of business solutions.',
+                    rating: 4.5,
+                    location: 'New York, NY',
+                    services: <String>[
+                      'Consulting',
+                      'Cloud Services',
+                      'Support'
+                    ],
+                    responseTime: '1 hour',
+                    budget: '\$10,000 - \$50,000',
+                    isPremium: true,
+                    isVerified: true,
+                    matchPercentage: 92,
+                  ),
+                ), // Provide a valid Matches instance here
+              ],
             ),
-
-            BlurredMatchCard(
-              match: Matches(
-                id: '1',
-                name: 'Acme Corp',
-                type: 'Seller',
-                description: 'Leading provider of business solutions.',
-                rating: 4.5,
-                location: 'New York, NY',
-                services: <String>['Consulting', 'Cloud Services', 'Support'],
-                responseTime: '1 hour',
-                budget: '\$10,000 - \$50,000',
-                isPremium: true,
-                isVerified: true,
-                matchPercentage: 92,
-              ),
-            ), // Provide a valid Matches instance here
           ],
         ),
       ),
