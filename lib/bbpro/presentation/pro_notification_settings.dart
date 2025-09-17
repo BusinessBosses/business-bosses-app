@@ -39,7 +39,7 @@ class _ProNotificationSettingsState extends State<ProNotificationSettings> {
             trailing: Switch(
               value: value,
               onChanged: onChanged,
-              activeColor: proprimaryColor,
+              activeThumbColor: proprimaryColor,
             ),
           ),
           if (sendNotification != null && onSendNotificationChanged != null)
@@ -234,7 +234,7 @@ class _ProNotificationSettingsState extends State<ProNotificationSettings> {
                         reminderEnabled = value;
                       });
                     },
-                    activeColor: proprimaryColor,
+                    activeThumbColor: proprimaryColor,
                   ),
                   if (reminderEnabled)
                     Padding(

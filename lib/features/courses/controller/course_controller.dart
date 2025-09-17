@@ -194,7 +194,7 @@ class CourseController extends GetxController {
 
     final ApiResponseModel response = await ApiService.get(
         path:
-            '/courses/get-industry-courses/${industry.value!.industryId}?size=1000');
+            'courses/get-industry-courses/${industry.value!.industryId}?size=1000');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         if (response.data['rows'][i]['user'] != null) {

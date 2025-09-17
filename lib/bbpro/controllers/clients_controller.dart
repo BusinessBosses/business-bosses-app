@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:business_bosses_v2/bbpro/models/campaign_model.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';

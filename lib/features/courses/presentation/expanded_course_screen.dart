@@ -293,7 +293,9 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                 SvgPicture.asset(
                                                   'assets/svgs/pdf.svg',
                                                   height: 50,
-                                                  color: Colors.white,
+                                                  colorFilter: ColorFilter.mode(
+                                                      Colors.white,
+                                                      BlendMode.srcIn),
                                                 ),
                                                 const SizedBox(height: 10),
                                                 GestureDetector(
@@ -617,7 +619,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                                               SvgPicture.asset(
                                                                                 'assets/svgs/premiumbadge.svg',
                                                                                 height: 9,
-                                                                                color: primaryColorLT,
+                                                                                colorFilter: ColorFilter.mode(primaryColorLT, BlendMode.srcIn),
                                                                               )
                                                                             ],
                                                                           )
@@ -775,7 +777,10 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                   SvgPicture.asset(
                                                     'assets/svgs/premiumbadge.svg',
                                                     height: 7,
-                                                    color: primaryColorLT,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            primaryColorLT,
+                                                            BlendMode.srcIn),
                                                   )
                                                 ])
                                               : Container()
@@ -810,8 +815,10 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                 child: SvgPicture.asset(
                                                   'assets/svgs/person.svg',
                                                   height: 20,
-                                                  color: textColor.withValues(
-                                                      alpha: 1.0),
+                                                  colorFilter: ColorFilter.mode(
+                                                      textColor.withValues(
+                                                          alpha: 1.0),
+                                                      BlendMode.srcIn),
                                                 ),
                                               ),
                                               backgroundColor: Colors.white,
@@ -835,8 +842,10 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                 height: 20.0,
 
                                                 // ignore: deprecated_member_use
-                                                color: textColor.withValues(
-                                                    alpha: 1.0),
+                                                colorFilter: ColorFilter.mode(
+                                                    textColor.withValues(
+                                                        alpha: 1.0),
+                                                    BlendMode.srcIn),
                                               ),
                                             ),
                                             backgroundColor: Colors.white,
@@ -1040,7 +1049,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                                                 30,
                                                                             child:
                                                                                 Center(
-                                                                              child: SvgPicture.asset('assets/svgs/pdf.svg', color: Colors.white),
+                                                                              child: SvgPicture.asset('assets/svgs/pdf.svg', colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn)),
                                                                             ),
                                                                           )),
                                                           ],
@@ -1165,7 +1174,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                                                 child: Center(
                                                                                   child: SvgPicture.asset(
                                                                                     'assets/svgs/pdf.svg',
-                                                                                    color: Colors.white,
+                                                                                    colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
                                                                                   ),
                                                                                 ),
                                                                               )),
