@@ -1,4 +1,6 @@
 import 'package:business_bosses_v2/features/matchingfeature/models/matchmodel.dart';
+import 'package:business_bosses_v2/features/matchingfeature/presentation/bookmarkedmatches.dart';
+import 'package:business_bosses_v2/features/matchingfeature/widgets/banner.dart';
 import 'package:business_bosses_v2/features/matchingfeature/widgets/blurredmatchcard.dart';
 import 'package:business_bosses_v2/features/matchingfeature/widgets/matchcard.dart';
 import 'package:business_bosses_v2/features/matchingfeature/widgets/matchheader.dart';
@@ -6,6 +8,7 @@ import 'package:business_bosses_v2/features/matchingfeature/widgets/opportunityp
 import 'package:business_bosses_v2/features/matchingfeature/widgets/premiumprompt.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class ExpandedMatchesScreen extends StatefulWidget {
@@ -37,57 +40,90 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
           'Matches',
           textAlign: TextAlign.center,
         ),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              Get.to(() => const BookmarkedMatches());
+            },
+            icon: CircleAvatar(
+                backgroundColor: backgroundColor,
+                child: Icon(
+                  LucideIcons.bookmark,
+                  color: textColor,
+                  size: 20,
+                )),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            const MatchHeader(
-              title: 'title',
-              subtitle: 'subtitle',
-              weeklyMatches: 0,
-              totalMatches: 0,
+            PersonalizationBanner(
+              onSetupPressed: () {
+                print('Setup pressed');
+              },
+              onClosePressed: () {
+                // Handle close button press
+                print('Close pressed');
+                // Hide banner or dismiss
+              },
             ),
-            const SizedBox(height: 20),
-            OpportunityPrediction(predictions: <String>[
-              'Sample prediction 1',
-              'Sample prediction 2',
-              'Sample prediction 3',
-            ]),
-            const SizedBox(height: 20),
-            MatchCard(
-              match: Matches(
-                id: '2',
-                name: 'Beta Solutions',
-                type: 'Buyer',
-                description: 'Innovative buyer seeking tech solutions.',
-                rating: 4.2,
-                location: 'San Francisco, CA',
-                services: <String>['Procurement', 'IT Consulting'],
-                responseTime: '2 hours',
-                budget: '\$20,000 - \$100,000',
-                isPremium: false,
-                isVerified: true,
-                matchPercentage: 88,
-              ),
-              userType: 'buyer',
+            Column(
+              spacing: 20,
+              children: <Widget>[
+                const MatchHeader(
+                  title: 'title',
+                  subtitle: 'subtitle',
+                  weeklyMatches: 0,
+                  totalMatches: 0,
+                ),
+
+                // OpportunityPrediction(predictions: <String>[
+                //   'Sample prediction 1',
+                //   'Sample prediction 2',
+                //   'Sample prediction 3',
+                // ]),
+
+                MatchCard(
+                  match: Matches(
+                    id: '2',
+                    name: 'Beta Solutions',
+                    type: 'Buyer',
+                    description: 'Innovative buyer seeking tech solutions.',
+                    rating: 4.2,
+                    location: 'San Francisco, CA',
+                    services: <String>['Procurement', 'IT Consulting'],
+                    responseTime: '2 hours',
+                    budget: '\$20,000 - \$100,000',
+                    isPremium: false,
+                    isVerified: true,
+                    matchPercentage: 88,
+                  ),
+                  userType: 'buyer',
+                ),
+
+                BlurredMatchCard(
+                  match: Matches(
+                    id: '1',
+                    name: 'Acme Corp',
+                    type: 'Seller',
+                    description: 'Leading provider of business solutions.',
+                    rating: 4.5,
+                    location: 'New York, NY',
+                    services: <String>[
+                      'Consulting',
+                      'Cloud Services',
+                      'Support'
+                    ],
+                    responseTime: '1 hour',
+                    budget: '\$10,000 - \$50,000',
+                    isPremium: true,
+                    isVerified: true,
+                    matchPercentage: 92,
+                  ),
+                ), // Provide a valid Matches instance here
+              ],
             ),
-            const SizedBox(height: 20),
-            BlurredMatchCard(
-              match: Matches(
-                id: '1',
-                name: 'Acme Corp',
-                type: 'Seller',
-                description: 'Leading provider of business solutions.',
-                rating: 4.5,
-                location: 'New York, NY',
-                services: <String>['Consulting', 'Cloud Services', 'Support'],
-                responseTime: '1 hour',
-                budget: '\$10,000 - \$50,000',
-                isPremium: true,
-                isVerified: true,
-                matchPercentage: 92,
-              ),
-            ), // Provide a valid Matches instance here
           ],
         ),
       ),
@@ -99,6 +135,7 @@ Widget buildMatchesTab(BuildContext context, String userType) {
   return SingleChildScrollView(
     padding: const EdgeInsets.all(16),
     child: Column(
+      spacing: 20,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         MatchHeader(
@@ -107,11 +144,11 @@ Widget buildMatchesTab(BuildContext context, String userType) {
           weeklyMatches: 22,
           totalMatches: 30,
         ),
-        const SizedBox(height: 20),
+
         OpportunityPrediction(
           predictions: getPredictions(userType),
         ),
-        const SizedBox(height: 20),
+
         Text(
           'Your Top Matches This Week',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -119,7 +156,7 @@ Widget buildMatchesTab(BuildContext context, String userType) {
                 color: textDark,
               ),
         ),
-        const SizedBox(height: 16),
+
         // Uncomment and provide matches from your provider
         // ...matchProvider.matches.map(
         //   (match) => MatchCard(
@@ -127,7 +164,7 @@ Widget buildMatchesTab(BuildContext context, String userType) {
         //     userType: userType,
         //   ),
         // ),
-        const SizedBox(height: 20),
+
         PremiumPrompt(
           blurredMatches: <Matches>[], // matchProvider.blurredMatches,
           userType: userType,
