@@ -1,8 +1,12 @@
-import 'package:business_bosses_v2/features/matchingfeature/models/matchmodel.dart';
-import 'package:business_bosses_v2/features/matchingfeature/widgets/matchcard.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+
+// Your app's theme and custom widgets
+import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/match_card.dart';
+
+// Import the correct, singular 'Match' model
+import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
 
 class BookmarkedMatches extends StatefulWidget {
   const BookmarkedMatches({super.key});
@@ -16,59 +20,62 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
-  // Sample bookmarked matches - replace with your actual data source
-  final List<Matches> _bookmarkedMatches = <Matches>[
-    Matches(
+  // UPDATED: Sample data now uses the correct 'Match' model
+  final List<Match> _bookmarkedMatches = <Match>[
+    Match(
       id: '1',
       name: 'Acme Corp',
       type: 'Seller',
       description: 'Leading provider of business solutions.',
       rating: 4.5,
       location: 'New York, NY',
-      services: <String>['Consulting', 'Cloud Services', 'Support'],
-      responseTime: '1 hour',
-      budget: '\$10,000 - \$50,000',
-      isPremium: true,
-      isVerified: true,
-      matchPercentage: 92,
+      services: const <String>['Consulting', 'Cloud Services', 'Support'],
+      responseTime: 'Within an hour',
+      budget: r'$10,000 - $50,000',
+      verified: true,
+      quality: 92,
+      photoUrl: 'https://businessbosses.com.ng/appfiles/sample_photo_2.jpg',
+      achievements: <String>[],
     ),
-    Matches(
+    Match(
       id: '2',
       name: 'Beta Solutions',
       type: 'Buyer',
       description: 'Innovative buyer seeking tech solutions.',
       rating: 4.2,
       location: 'San Francisco, CA',
-      services: <String>['Procurement', 'IT Consulting'],
-      responseTime: '2 hours',
-      budget: '\$20,000 - \$100,000',
-      isPremium: false,
-      isVerified: true,
-      matchPercentage: 88,
+      services: const <String>['Procurement', 'IT Consulting'],
+      responseTime: 'Within an hour',
+      budget: r'$20,000 - $100,000',
+      verified: true,
+      quality: 88,
+      photoUrl: 'https://businessbosses.com.ng/appfiles/sample_photo_1.jpg',
+      achievements: <String>[],
     ),
-    Matches(
+    Match(
       id: '3',
       name: 'TechStart Inc',
       type: 'Supplier',
       description: 'Emerging technology startup seeking partnerships.',
       rating: 4.0,
       location: 'Austin, TX',
-      services: <String>['Software Development', 'AI Solutions'],
-      responseTime: '4 hours',
-      budget: '\$5,000 - \$25,000',
-      isPremium: false,
-      isVerified: false,
-      matchPercentage: 85,
+      services: const <String>['Software Development', 'AI Solutions'],
+      responseTime: 'A few hours',
+      budget: r'$5,000 - $25,000',
+      verified: false,
+      quality: 85,
+      photoUrl: null,
+      achievements: <String>[],
     ),
   ];
 
-  List<Matches> get filteredMatches {
-    List<Matches> filtered = _bookmarkedMatches;
+  // UPDATED: Getter is now correctly typed to 'Match'
+  List<Match> get filteredMatches {
+    List<Match> filtered = _bookmarkedMatches;
 
-    // Apply search filter
     if (_searchQuery.isNotEmpty) {
       filtered = filtered
-          .where((Matches match) =>
+          .where((Match match) =>
               match.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
               match.description
                   .toLowerCase()
@@ -77,10 +84,9 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
           .toList();
     }
 
-    // Apply type filter
     if (_selectedFilter != 'All') {
       filtered = filtered
-          .where((Matches match) => match.type == _selectedFilter)
+          .where((Match match) => match.type == _selectedFilter)
           .toList();
     }
 
@@ -98,35 +104,20 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           icon: CircleAvatar(
             backgroundColor: backgroundColor,
-            child: Icon(
-              LucideIcons.arrowLeft,
-              color: textColor,
-              size: 20,
-            ),
+            child: Icon(LucideIcons.arrowLeft, color: textColor, size: 20),
           ),
         ),
         centerTitle: true,
-        title: const Text(
-          'Saved Matches',
-          textAlign: TextAlign.center,
-        ),
+        title: const Text('Saved Matches', textAlign: TextAlign.center),
         actions: <Widget>[
           IconButton(
-            onPressed: () {
-              _showSortBottomSheet(context);
-            },
+            onPressed: () => _showSortBottomSheet(context),
             icon: CircleAvatar(
               backgroundColor: backgroundColor,
-              child: Icon(
-                LucideIcons.listFilter,
-                color: textColor,
-                size: 20,
-              ),
+              child: Icon(LucideIcons.listFilter, color: textColor, size: 20),
             ),
           ),
         ],
@@ -134,34 +125,34 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
       body: Column(
         children: <Widget>[
           // Header Stats
-          // Container(
-          //   padding: const EdgeInsets.all(16),
-          //   child: Row(
-          //     children: <Widget>[
-          //       Expanded(
-          //         child: _buildStatCard(
-          //           'Total Saved',
-          //           _bookmarkedMatches.length.toString(),
-          //           LucideIcons.bookmark,
-          //         ),
-          //       ),
-          //       const SizedBox(width: 12),
-          //       Expanded(
-          //         child: _buildStatCard(
-          //           'This Week',
-          //           '${_bookmarkedMatches.where((Matches m) => m.matchPercentage > 85).length}',
-          //           LucideIcons.trendingUp,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: _buildStatCard(
+                    'Total Saved',
+                    _bookmarkedMatches.length.toString(),
+                    LucideIcons.bookmark,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildStatCard(
+                    'Top Tier',
+                    // UPDATED: Logic uses 'quality' and 'Match' type
+                    '${_bookmarkedMatches.where((Match m) => m.quality > 90).length}',
+                    LucideIcons.trendingUp,
+                  ),
+                ),
+              ],
+            ),
+          ),
           // Search Bar
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Container(
-              margin: EdgeInsets.only(top: 15),
+              margin: const EdgeInsets.only(bottom: 8), // Adjusted margin
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -170,9 +161,7 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
               child: TextField(
                 controller: _searchController,
                 onChanged: (String value) {
-                  setState(() {
-                    _searchQuery = value;
-                  });
+                  setState(() => _searchQuery = value);
                 },
                 decoration: InputDecoration(
                   hintText: 'Search saved matches...',
@@ -191,12 +180,12 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
                         )
                       : null,
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
                 ),
               ),
             ),
           ),
-
           // Filter Chips
           Container(
             height: 60,
@@ -213,27 +202,22 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
               ].map((String filter) => _buildFilterChip(filter)).toList(),
             ),
           ),
-
-          // Results
+          // Results List
           Expanded(
             child: filteredMatches.isEmpty
                 ? _buildEmptyState()
                 : ListView.builder(
-                    padding: const EdgeInsets.all(0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: filteredMatches.length,
                     itemBuilder: (BuildContext context, int index) {
+                      final Match match = filteredMatches[index];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16),
-                        child: Stack(
-                          children: <Widget>[
-                            MatchCard(
-                              showsavebutton: true,
-                              saveontap: () =>
-                                  _removeBookmark(filteredMatches[index]),
-                              match: filteredMatches[index],
-                              userType: 'buyer',
-                            ),
-                          ],
+                        child: MatchCard(
+                          showsavebutton: true,
+                          saveontap: () => _removeBookmark(match),
+                          match: match,
+                          userType: 'buyer', // This should be dynamic
                         ),
                       );
                     },
@@ -285,19 +269,18 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
 
   Widget _buildFilterChip(String filter) {
     final bool isSelected = _selectedFilter == filter;
+    // UPDATED: Logic is now correctly typed to 'Match'
+    final int count = filter == 'All'
+        ? _bookmarkedMatches.length
+        : _bookmarkedMatches.where((Match m) => m.type == filter).length;
+
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: FilterChip(
-        label: Text(
-          filter == 'All'
-              ? 'All (${_bookmarkedMatches.length})'
-              : '$filter (${_bookmarkedMatches.where((Matches m) => m.type == filter).length})',
-        ),
+        label: Text('$filter ($count)'),
         selected: isSelected,
         onSelected: (bool selected) {
-          setState(() {
-            _selectedFilter = filter;
-          });
+          setState(() => _selectedFilter = filter);
         },
         backgroundColor: backgroundColor,
         selectedColor: textColor,
@@ -308,8 +291,7 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(
-            color: isSelected ? Colors.white : Colors.grey.shade300,
-          ),
+              color: isSelected ? Colors.transparent : Colors.grey.shade300),
         ),
       ),
     );
@@ -320,30 +302,24 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(
-            LucideIcons.bookmark,
-            size: 50,
-            color: textColor.withOpacity(0.3),
-          ),
+          Icon(LucideIcons.bookmark,
+              size: 50, color: textColor.withOpacity(0.3)),
           const SizedBox(height: 16),
           Text(
             _searchQuery.isNotEmpty
                 ? 'No matches found for "$_searchQuery"'
                 : 'No saved matches yet',
             style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: textDark,
-            ),
+                fontSize: 18, fontWeight: FontWeight.w600, color: textDark),
+            textAlign: TextAlign.center,
           ),
+          const SizedBox(height: 8),
           Text(
             _searchQuery.isNotEmpty
                 ? 'Try adjusting your search or filters'
                 : 'Start bookmarking matches to see them here',
-            style: TextStyle(
-              color: textColor.withOpacity(0.6),
-              fontSize: 14,
-            ),
+            style: TextStyle(color: textColor.withOpacity(0.6), fontSize: 14),
+            textAlign: TextAlign.center,
           ),
           if (_searchQuery.isNotEmpty) ...<Widget>[
             const SizedBox(height: 16),
@@ -363,9 +339,11 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
     );
   }
 
-  void _removeBookmark(Matches match) {
+  // UPDATED: Method parameter is now correctly typed to 'Match'
+  void _removeBookmark(Match match) {
+    final int index = _bookmarkedMatches.indexOf(match);
     setState(() {
-      _bookmarkedMatches.removeWhere((Matches m) => m.id == match.id);
+      _bookmarkedMatches.removeWhere((Match m) => m.id == match.id);
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -375,7 +353,7 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
           label: 'Undo',
           onPressed: () {
             setState(() {
-              _bookmarkedMatches.add(match);
+              _bookmarkedMatches.insert(index, match);
             });
           },
         ),
@@ -398,13 +376,10 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
             Text(
               'Sort & Filter',
               style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: textDark,
-              ),
+                  fontSize: 20, fontWeight: FontWeight.bold, color: textDark),
             ),
             const SizedBox(height: 20),
-            _buildSortOption('Match Percentage', LucideIcons.percent),
+            _buildSortOption('Match Quality', LucideIcons.percent),
             _buildSortOption('Rating', LucideIcons.star),
             _buildSortOption('Recently Added', LucideIcons.clock),
             _buildSortOption('Response Time', LucideIcons.timer),
@@ -417,16 +392,12 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
 
   Widget _buildSortOption(String title, IconData icon) {
     return ListTile(
-      shape: ShapeBorder.lerp(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        0,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       leading: Icon(icon, color: textColor),
       title: Text(title),
       onTap: () {
         Navigator.pop(context);
-        // Implement sorting logic here
+        // Implement your sorting logic here based on the title
       },
     );
   }

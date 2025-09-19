@@ -1,10 +1,13 @@
-import 'package:business_bosses_v2/features/matchingfeature/models/matchmodel.dart';
-import 'package:business_bosses_v2/features/matchingfeature/widgets/blurredmatchcard.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
+// Your app's theme, model, and custom widgets
+import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/blurred_match_card.dart';
+
 class PremiumPrompt extends StatelessWidget {
-  final List<Matches> blurredMatches;
+  // UPDATED: Now uses the correct 'Match' model
+  final List<Match> blurredMatches;
   final String userType;
 
   const PremiumPrompt({
@@ -15,6 +18,11 @@ class PremiumPrompt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Don't show the prompt if there are no blurred matches to display
+    if (blurredMatches.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -33,9 +41,12 @@ class PremiumPrompt extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        ...blurredMatches
-            .map((Matches match) => BlurredMatchCard(match: match)),
-        const SizedBox(height: 24),
+        // UPDATED: Maps over the correctly typed List<Match>
+        ...blurredMatches.map((Match match) => Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: BlurredMatchCard(match: match),
+            )),
+        const SizedBox(height: 8), // Adjusted spacing
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -70,6 +81,7 @@ class PremiumPrompt extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white70,
+                  height: 1.4,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -122,7 +134,10 @@ class PremiumPrompt extends StatelessWidget {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              // Handle the upgrade logic here
+              Navigator.pop(context);
+            },
             child: const Text('Upgrade'),
           ),
         ],
@@ -139,20 +154,22 @@ class _FeatureItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           const Text(
             '• ',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 16,
               color: Colors.white70,
+              fontWeight: FontWeight.bold,
             ),
           ),
           Text(
             text,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 16,
               color: Colors.white70,
             ),
           ),
