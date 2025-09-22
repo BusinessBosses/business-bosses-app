@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:math' show Random;
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';

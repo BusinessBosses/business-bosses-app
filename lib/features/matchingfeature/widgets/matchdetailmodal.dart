@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/features/matchingfeature/models/matchmodel.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class MatchDetailModal extends StatelessWidget {
