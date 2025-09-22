@@ -17,7 +17,7 @@ class PersonalizationBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: const Color(0xFFFFF8E1), // Light amber background
         borderRadius: BorderRadius.circular(15),
@@ -49,16 +49,16 @@ class PersonalizationBanner extends StatelessWidget {
               child: RichText(
                 text: TextSpan(
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     color: Color(0xFF424242),
                     height: 1.3,
                   ),
                   children: <InlineSpan>[
                     const TextSpan(
-                      text: 'Personalize Your Experience on Business Bosses. ',
+                      text: 'Get seen and increase your visibility. ',
                     ),
                     TextSpan(
-                      text: 'Complete Setup',
+                      text: 'Update your profile',
                       style: const TextStyle(
                         color: Color(0xFF1976D2), // Blue color
                         fontWeight: FontWeight.w500,

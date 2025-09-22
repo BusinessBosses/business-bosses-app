@@ -122,108 +122,111 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          // Header Stats
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: _buildStatCard(
-                    'Total Saved',
-                    _bookmarkedMatches.length.toString(),
-                    LucideIcons.bookmark,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 15.0),
+        child: Column(
+          spacing: 0,
+          children: <Widget>[
+            // Header Stats
+            // Container(
+            //   padding: const EdgeInsets.all(16),
+            //   child: Row(
+            //     children: <Widget>[
+            //       Expanded(
+            //         child: _buildStatCard(
+            //           'Total Saved',
+            //           _bookmarkedMatches.length.toString(),
+            //           LucideIcons.bookmark,
+            //         ),
+            //       ),
+            //       const SizedBox(width: 12),
+            //       Expanded(
+            //         child: _buildStatCard(
+            //           'Top Tier',
+            //           // UPDATED: Logic uses 'quality' and 'Match' type
+            //           '${_bookmarkedMatches.where((Match m) => m.quality > 90).length}',
+            //           LucideIcons.trendingUp,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // Search Bar
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (String value) {
+                    setState(() => _searchQuery = value);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search saved matches...',
+                    prefixIcon: Icon(LucideIcons.search,
+                        size: 20, color: textColor.withOpacity(0.6)),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            icon: Icon(LucideIcons.x,
+                                color: textColor.withOpacity(0.6)),
+                            onPressed: () {
+                              setState(() {
+                                _searchQuery = '';
+                                _searchController.clear();
+                              });
+                            },
+                          )
+                        : null,
+                    border: InputBorder.none,
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildStatCard(
-                    'Top Tier',
-                    // UPDATED: Logic uses 'quality' and 'Match' type
-                    '${_bookmarkedMatches.where((Match m) => m.quality > 90).length}',
-                    LucideIcons.trendingUp,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Search Bar
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 8), // Adjusted margin
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.shade300),
               ),
-              child: TextField(
-                controller: _searchController,
-                onChanged: (String value) {
-                  setState(() => _searchQuery = value);
-                },
-                decoration: InputDecoration(
-                  hintText: 'Search saved matches...',
-                  prefixIcon: Icon(LucideIcons.search,
-                      size: 20, color: textColor.withOpacity(0.6)),
-                  suffixIcon: _searchQuery.isNotEmpty
-                      ? IconButton(
-                          icon: Icon(LucideIcons.x,
-                              color: textColor.withOpacity(0.6)),
-                          onPressed: () {
-                            setState(() {
-                              _searchQuery = '';
-                              _searchController.clear();
-                            });
-                          },
-                        )
-                      : null,
-                  border: InputBorder.none,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-                ),
+            ),
+            // Filter Chips
+            Container(
+              height: 60,
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: <String>[
+                  'All',
+                  'Seller',
+                  'Buyer',
+                  'Supplier',
+                  'Partner'
+                ].map((String filter) => _buildFilterChip(filter)).toList(),
               ),
             ),
-          ),
-          // Filter Chips
-          Container(
-            height: 60,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: <String>[
-                'All',
-                'Seller',
-                'Buyer',
-                'Supplier',
-                'Partner'
-              ].map((String filter) => _buildFilterChip(filter)).toList(),
+            // Results List
+            Expanded(
+              child: filteredMatches.isEmpty
+                  ? _buildEmptyState()
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      itemCount: filteredMatches.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Match match = filteredMatches[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: MatchCard(
+                            showsavebutton: true,
+                            saveontap: () => _removeBookmark(match),
+                            match: match,
+                            userType: 'buyer', // This should be dynamic
+                          ),
+                        );
+                      },
+                    ),
             ),
-          ),
-          // Results List
-          Expanded(
-            child: filteredMatches.isEmpty
-                ? _buildEmptyState()
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: filteredMatches.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final Match match = filteredMatches[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: MatchCard(
-                          showsavebutton: true,
-                          saveontap: () => _removeBookmark(match),
-                          match: match,
-                          userType: 'buyer', // This should be dynamic
-                        ),
-                      );
-                    },
-                  ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

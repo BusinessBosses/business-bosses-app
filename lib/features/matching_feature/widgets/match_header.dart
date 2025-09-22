@@ -27,7 +27,7 @@ class MatchHeader extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
       ),
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(15),
       child: Column(
         children: <Widget>[
           Text(
@@ -47,7 +47,9 @@ class MatchHeader extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 24),
+          SizedBox(
+            height: 15,
+          ),
           Container(
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.15),

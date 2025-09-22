@@ -365,10 +365,10 @@ packages:
     dependency: "direct main"
     description:
       name: fl_chart
-      sha256: "7ca9a40f4eb85949190e54087be8b4d6ac09dc4c54238d782a34cf1f7c011de9"
+      sha256: d3f82f4a38e33ba23d05a08ff304d7d8b22d2a59a5503f20bd802966e915db89
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -745,10 +745,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "8dfe08ea7fcf7467dbaf6889e72eebd5e0d6711caae201fdac780eb45232cd02"
+      sha256: "28f3987ca0ec702d346eae1d90eda59603a2101b52f1e234ded62cff1d5cfa6e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.13+3"
+    version: "0.8.13+1"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -873,10 +873,10 @@ packages:
     dependency: "direct main"
     description:
       name: lottie
-      sha256: "8ae0be46dbd9e19641791dc12ee480d34e1fd3f84c749adc05f3ad9342b71b95"
+      sha256: c5fa04a80a620066c15cf19cc44773e19e9b38e989ff23ea32e5903ef1015950
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.2"
+    version: "3.3.1"
   lucide_icons:
     dependency: "direct main"
     description:
@@ -1254,10 +1254,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_android
-      sha256: ecd684501ebc2ae9a83536e8b15731642b9570dc8623e0073d227d0ee2bfea88
+      sha256: "2b3070c5fa881839f8b402ee4a39c1b4d561704d4ebbbcfb808a119bc2a1701b"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.2+2"
+    version: "2.4.1"
   sqflite_common:
     dependency: transitive
     description:
@@ -1334,42 +1334,42 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_calendar
-      sha256: "3ad4e319a4d979153e9dab9144d3e3a4129fd03abfdbe060ca30e5d757e24f17"
+      sha256: d7e331d1067a2fe99ebfcd5874c39af7620e17c7f036360486c5f68925222d06
       url: "https://pub.dev"
     source: hosted
-    version: "31.1.20"
+    version: "31.1.19"
   syncfusion_flutter_charts:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_charts
-      sha256: "586b1f1abd50afc6a4bbc427979ddb548fbf3033dfd8e831c33f55080016f8b2"
+      sha256: "75e54c1dea16e0132a942294a82b489986f43f4c72f7ac7c916a02a78b2d6050"
       url: "https://pub.dev"
     source: hosted
-    version: "31.1.20"
+    version: "31.1.19"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: e8e351522b7c3442609e04f1613f29b7917147bb3de41dbd3c1ec4169cf1888d
+      sha256: "2d878bce96c4fd1092205a4f72b328f7f05d86b27c3bd55db7fd440e6017352a"
       url: "https://pub.dev"
     source: hosted
-    version: "31.1.20"
+    version: "31.1.19"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
       name: syncfusion_flutter_datepicker
-      sha256: a57184b6feb08e7547711e4cd3bfdf2338fc4673103cc0242c33858a8d22ce5d
+      sha256: bbd2135dcfed085fca2296a9b1492b2ecf1d288e5aa0758d8827ece58e26df0b
       url: "https://pub.dev"
     source: hosted
-    version: "31.1.20"
+    version: "31.1.19"
   syncfusion_localizations:
     dependency: transitive
     description:
       name: syncfusion_localizations
-      sha256: "47712853fbef0644bc062d014242dd45753187623c1c1c87a3df85881dee6db9"
+      sha256: "4cd832b1fdb7219ebec13fde2358ff10f07c01e2dff605596d16205cd1bce03e"
       url: "https://pub.dev"
     source: hosted
-    version: "31.1.20"
+    version: "31.1.19"
   synchronized:
     dependency: transitive
     description:
@@ -1454,10 +1454,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_android
-      sha256: "199bc33e746088546a39cc5f36bac5a278c5e53b40cb3196f99e7345fdcfae6b"
+      sha256: "81777b08c498a292d93ff2feead633174c386291e35612f8da438d6e92c4447e"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.22"
+    version: "6.3.20"
   url_launcher_ios:
     dependency: transitive
     description:
@@ -1574,10 +1574,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: "45caa6c5917fa127b5dbcfbd1fa60b14e583afdc08bfc96dda38886ca252eb60"
+      sha256: ddfa8d30d89985b96407efce8acbdd124701f96741f2d981ca860662f1c0dc02
       url: "https://pub.dev"
     source: hosted
-    version: "15.0.2"
+    version: "15.0.0"
   web:
     dependency: transitive
     description:
@@ -1598,10 +1598,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_android
-      sha256: "3c4eb4fcc252b40c2b5ce7be20d0481428b70f3ff589b0a8b8aaeb64c6bed701"
+      sha256: "9a25f6b4313978ba1c2cda03a242eea17848174912cfb4d2d8ee84a556f248e3"
       url: "https://pub.dev"
     source: hosted
-    version: "4.10.2"
+    version: "4.10.1"
   webview_flutter_platform_interface:
     dependency: transitive
     description:
@@ -1614,10 +1614,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_wkwebview
-      sha256: fea63576b3b7e02b2df8b78ba92b48ed66caec2bb041e9a0b1cbd586d5d80bfd
+      sha256: fb46db8216131a3e55bcf44040ca808423539bc6732e7ed34fb6d8044e3d512f
       url: "https://pub.dev"
     source: hosted
-    version: "3.23.1"
+    version: "3.23.0"
   win32:
     dependency: transitive
     description:
@@ -1659,5 +1659,5 @@ packages:
     source: hosted
     version: "9.1.2"
 sdks:
-  dart: ">=3.9.0 <4.0.0"
-  flutter: ">=3.35.1"
+  dart: ">=3.8.1 <4.0.0"
+  flutter: ">=3.32.0"
