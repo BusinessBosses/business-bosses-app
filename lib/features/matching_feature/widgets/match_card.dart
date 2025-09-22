@@ -63,7 +63,7 @@ class MatchCard extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20), color: Colors.green),
               child: Text(
-                '90%',
+                '${match.quality}%',
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
