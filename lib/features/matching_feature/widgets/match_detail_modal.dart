@@ -34,10 +34,10 @@ class MatchDetailModal extends StatelessWidget {
               _buildHeader(context),
               Expanded(
                 child: Container(
-                  color: backgroundColor,
+                  color: Colors.white,
                   child: SingleChildScrollView(
                     controller: scrollController,
-                    padding: const EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
