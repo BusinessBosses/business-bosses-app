@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/matchingfeature/widgets/matchheader.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/match_header.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart'; // Assuming you use GetX for navigation
 import 'package:lucide_icons/lucide_icons.dart';
@@ -86,7 +86,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
               child: Column(
                 children: <Widget>[
                   const MatchHeader(

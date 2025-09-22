@@ -64,7 +64,7 @@ class _PrematchmodalState extends State<Prematchmodal> {
                     ),
                     SizedBox(height: 12),
                     Text(
-                      'Personalize Your Experience on \n Business Bosses App',
+                      'Get seen and increase your visibility.',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
