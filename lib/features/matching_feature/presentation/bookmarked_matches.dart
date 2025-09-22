@@ -318,7 +318,8 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
             _searchQuery.isNotEmpty
                 ? 'Try adjusting your search or filters'
                 : 'Start bookmarking matches to see them here',
-            style: TextStyle(color: textColor.withOpacity(0.6), fontSize: 14),
+            style: TextStyle(
+                color: textColor.withValues(alpha: 0.6), fontSize: 14),
             textAlign: TextAlign.center,
           ),
           if (_searchQuery.isNotEmpty) ...<Widget>[
