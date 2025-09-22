@@ -91,7 +91,7 @@ class _BoostDonationState extends State<BoostDonation> {
           .then((PaymentSheetPaymentOption? value) async {
         await updatePost('card');
 
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => const Confirmation(),
         ));
 

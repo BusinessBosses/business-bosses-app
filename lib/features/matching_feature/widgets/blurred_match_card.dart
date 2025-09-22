@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/matchingfeature/models/matchmodel.dart';
+import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class BlurredMatchCard extends StatelessWidget {
-  final Matches match;
+  final Match match;
 
   const BlurredMatchCard({
     super.key,
@@ -49,7 +49,7 @@ class BlurredMatchCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          'match.matchPercentage%',
+                          match.rating.toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -61,7 +61,7 @@ class BlurredMatchCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'match.name',
+                    match.name,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -70,7 +70,7 @@ class BlurredMatchCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'match.type',
+                    match.type,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

@@ -8,16 +8,20 @@ import 'package:get/get.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../utils/theme/theme.dart';
 
-
 class WriteAComment extends StatefulWidget {
   final Function(CourseCommentModel) onCommentSend;
   final String? courseId;
-    final String? receiverUid;
+  final String? receiverUid;
 
-  const WriteAComment({super.key, required this.onCommentSend, this.courseId, this.receiverUid,});
+  const WriteAComment({
+    super.key,
+    required this.onCommentSend,
+    this.courseId,
+    this.receiverUid,
+  });
 
   @override
-  _WriteACommentState createState() => _WriteACommentState();
+  State<WriteAComment> createState() => _WriteACommentState();
 }
 
 class _WriteACommentState extends State<WriteAComment> {

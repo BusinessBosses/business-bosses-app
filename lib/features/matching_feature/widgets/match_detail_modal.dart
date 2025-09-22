@@ -1,10 +1,13 @@
-import 'package:business_bosses_v2/features/matchingfeature/models/matchmodel.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+// Your app's theme and the standardized Match model
+import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
+
 class MatchDetailModal extends StatelessWidget {
-  final Matches match;
+  // UPDATED: Now uses the correct 'Match' model
+  final Match match;
   final String userType;
 
   const MatchDetailModal({
@@ -40,8 +43,10 @@ class MatchDetailModal extends StatelessWidget {
                       children: <Widget>[
                         _buildMatchInfo(),
                         const SizedBox(height: 24),
-                        _buildServices(),
-                        const SizedBox(height: 24),
+                        if (match.services.isNotEmpty) ...<Widget>[
+                          _buildServices(),
+                          const SizedBox(height: 24),
+                        ],
                         _buildDetails(),
                         const SizedBox(height: 32),
                         _buildActionSection(context),
@@ -71,7 +76,7 @@ class MatchDetailModal extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 15, bottom: 12),
+      padding: const EdgeInsets.fromLTRB(24, 8, 16, 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -83,21 +88,12 @@ class MatchDetailModal extends StatelessWidget {
               color: textDark,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: backgroundColor,
-                child: const Icon(
-                  LucideIcons.x,
-                  size: 20,
-                  color: textColor,
-                ),
-              ),
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: CircleAvatar(
+              radius: 18,
+              backgroundColor: backgroundColor,
+              child: const Icon(LucideIcons.x, size: 20, color: textColor),
             ),
           ),
         ],
@@ -111,21 +107,20 @@ class MatchDetailModal extends StatelessWidget {
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                if (match.isPremium) _buildPremiumBadge(),
-                if (match.isPremium && match.isVerified)
-                  const SizedBox(width: 8),
-                if (match.isVerified) _buildVerifiedBadge(),
-              ],
-            ),
+            // UPDATED: Now only shows the 'Verified' badge based on the model
+            if (match.verified) _buildVerifiedBadge(),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20), color: Colors.green),
+                // UPDATED: Color is now dynamic based on quality
+                color: _getMatchColor(match.quality),
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: Text(
-                '90%',
+                // UPDATED: Text is now dynamic from match.quality
+                '${match.quality}%',
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -137,27 +132,32 @@ class MatchDetailModal extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          'match.name',
+          // UPDATED: Displays actual data
+          match.name,
           style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
             color: textDark,
           ),
         ),
+        const SizedBox(height: 4),
         Text(
-          'match.type',
+          // UPDATED: Displays actual data
+          match.type,
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: primaryBlue,
           ),
         ),
+        const SizedBox(height: 8),
         Row(
           children: <Widget>[
             const Icon(Icons.star, size: 20, color: premiumGold),
             const SizedBox(width: 6),
             Text(
-              'match.rating'.toString(),
+              // UPDATED: Displays actual data
+              match.rating.toString(),
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -167,17 +167,19 @@ class MatchDetailModal extends StatelessWidget {
             const SizedBox(width: 16),
             const Icon(LucideIcons.mapPin, size: 16, color: textMedium),
             const SizedBox(width: 6),
-            Text(
-              'match.location',
-              style: const TextStyle(
-                fontSize: 16,
-                color: textMedium,
+            Expanded(
+              child: Text(
+                // UPDATED: Displays actual data
+                match.location,
+                style: const TextStyle(fontSize: 16, color: textMedium),
               ),
             ),
           ],
         ),
+        const SizedBox(height: 12),
         Text(
-          'match.description',
+          // UPDATED: Displays actual data
+          match.description,
           style: const TextStyle(
             fontSize: 16,
             color: textMedium,
@@ -193,7 +195,7 @@ class MatchDetailModal extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const Text(
-          'Services Offered',
+          'Services', // Changed from 'Services Offered' for brevity
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -243,11 +245,14 @@ class MatchDetailModal extends StatelessWidget {
         Row(
           children: <Widget>[
             Expanded(
-              child: _buildDetailCard('Response Time', 'match.responseTime'),
+              // UPDATED: Passes actual data and handles nulls
+              child: _buildDetailCard('Response Time', match.responseTime),
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: _buildDetailCard('Budget Range', 'match.budget'),
+              // UPDATED: Passes actual data and handles nulls
+              child: _buildDetailCard(
+                  'Budget Range', match.budget ?? 'Not Specified'),
             ),
           ],
         ),
@@ -267,10 +272,7 @@ class MatchDetailModal extends StatelessWidget {
         children: <Widget>[
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: textMedium,
-            ),
+            style: const TextStyle(fontSize: 14, color: textMedium),
           ),
           const SizedBox(height: 4),
           Text(
@@ -292,18 +294,13 @@ class MatchDetailModal extends StatelessWidget {
         const Text(
           'Ready to Connect?',
           style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: textDark,
-          ),
+              fontSize: 20, fontWeight: FontWeight.bold, color: textDark),
           textAlign: TextAlign.center,
         ),
+        const SizedBox(height: 8),
         const Text(
           'Send a proposal or save this opportunity for later',
-          style: TextStyle(
-            fontSize: 16,
-            color: textMedium,
-          ),
+          style: TextStyle(fontSize: 16, color: textMedium),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
@@ -311,14 +308,13 @@ class MatchDetailModal extends StatelessWidget {
           height: 50,
           width: double.infinity,
           child: ElevatedButton.icon(
-            onPressed: () =>
-                <void Function(BuildContext context)>{_sendProposal},
+            // UPDATED: Corrected onPressed syntax
+            onPressed: () => _sendProposal(context),
             icon: const Icon(LucideIcons.send, size: 18),
             label: const Text('Send Proposal'),
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryBlue,
               foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -336,7 +332,6 @@ class MatchDetailModal extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: primaryBlue,
               side: const BorderSide(color: primaryBlue),
-              padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -347,30 +342,8 @@ class MatchDetailModal extends StatelessWidget {
     );
   }
 
-  Widget _buildPremiumBadge() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: premiumGold.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: const Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Icon(Icons.star, size: 12, color: premiumGold),
-          SizedBox(width: 4),
-          Text(
-            'Premium',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: premiumGold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // This badge is no longer needed as the model doesn't support 'isPremium'
+  // Widget _buildPremiumBadge() { ... }
 
   Widget _buildVerifiedBadge() {
     return Container(
@@ -387,10 +360,7 @@ class MatchDetailModal extends StatelessWidget {
           Text(
             'Verified',
             style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: successGreen,
-            ),
+                fontSize: 12, fontWeight: FontWeight.w600, color: successGreen),
           ),
         ],
       ),

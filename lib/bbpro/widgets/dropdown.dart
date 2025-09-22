@@ -85,7 +85,7 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                           borderSide: BorderSide(color: Colors.transparent),
                         ),
                       ),
-                      value: _selectedItem, // Directly use _selectedItem
+                      initialValue: _selectedItem, // Directly use _selectedItem
                       hint: widget.hintText != null
                           ? Text(
                               widget.hintText!,
@@ -139,7 +139,7 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                         borderSide: BorderSide(color: Colors.transparent),
                       ),
                     ),
-                    value: _selectedItem, // Directly use _selectedItem
+                    initialValue: _selectedItem, // Directly use _selectedItem
                     hint: widget.hintText != null
                         ? Text(
                             widget.hintText!,

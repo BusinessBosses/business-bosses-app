@@ -1,11 +1,11 @@
-import 'package:business_bosses_v2/features/matchingfeature/models/matchmodel.dart';
-import 'package:business_bosses_v2/features/matchingfeature/widgets/matchdetailmodal.dart';
+import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/match_detail_modal.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class MatchCard extends StatelessWidget {
-  final Matches match;
+  final Match match;
   final String userType;
   final bool? showsavebutton;
   final void Function()? saveontap;
@@ -51,9 +51,7 @@ class MatchCard extends StatelessWidget {
       children: <Widget>[
         Row(
           children: <Widget>[
-            if (match.isPremium) _buildPremiumBadge(),
-            if (match.isPremium && match.isVerified) const SizedBox(width: 8),
-            if (match.isVerified) _buildVerifiedBadge(),
+            if (match.verified) _buildPremiumBadge(),
           ],
         ),
         const Spacer(),
@@ -150,7 +148,7 @@ class MatchCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'match.name',
+          match.name,
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -158,7 +156,7 @@ class MatchCard extends StatelessWidget {
           ),
         ),
         Text(
-          'match.type',
+          match.type,
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -170,7 +168,7 @@ class MatchCard extends StatelessWidget {
             const Icon(Icons.star, size: 16, color: premiumGold),
             const SizedBox(width: 4),
             Text(
-              'match.rating'.toString(),
+              match.rating.toString(),
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -181,7 +179,7 @@ class MatchCard extends StatelessWidget {
             const Icon(LucideIcons.mapPin, size: 14, color: textMedium),
             const SizedBox(width: 4),
             Text(
-              'match.location',
+              match.location,
               style: const TextStyle(
                 fontSize: 14,
                 color: textMedium,
@@ -190,7 +188,7 @@ class MatchCard extends StatelessWidget {
           ],
         ),
         Text(
-          'match.description',
+          match.description,
           style: const TextStyle(
             fontSize: 15,
             color: textMedium,
@@ -206,21 +204,13 @@ class MatchCard extends StatelessWidget {
                 const Icon(Icons.access_time, size: 14, color: textMedium),
                 const SizedBox(width: 4),
                 Text(
-                  ' match.responseTime',
+                  match.responseTime,
                   style: const TextStyle(
                     fontSize: 14,
                     color: textMedium,
                   ),
                 ),
               ],
-            ),
-            Text(
-              'match.budget',
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: successGreen,
-              ),
             ),
           ],
         ),

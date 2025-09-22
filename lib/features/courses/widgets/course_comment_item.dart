@@ -14,7 +14,6 @@ import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 import '../../../utils/time_format.dart';
 
-
 class CourseCommentItem extends StatefulWidget {
   final CourseCommentModel comment;
   final Function(int)? onPageChange;
@@ -77,7 +76,8 @@ class _CommentItemState extends State<CourseCommentItem> {
                                   SvgPicture.asset(
                                     'assets/svgs/premiumbadge.svg',
                                     height: 9,
-                                    color: primaryColorLT,
+                                    colorFilter: ColorFilter.mode(
+                                        primaryColorLT, BlendMode.srcIn),
                                   )
                                 ],
                               )

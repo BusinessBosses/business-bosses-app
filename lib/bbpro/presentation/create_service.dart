@@ -508,7 +508,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                                 filled: true,
                                 fillColor: Colors.white,
                               ),
-                              value: 'minute(s)',
+                              initialValue: 'minute(s)',
                               padding: EdgeInsets.zero,
                               onChanged: (String? newValue) {
                                 setState(() {
@@ -1071,7 +1071,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                         filled: true,
                         fillColor: Colors.white,
                       ),
-                      value: _selectedDates.length > 1
+                      initialValue: _selectedDates.length > 1
                           ? 'Multiple days'
                           : 'Single day',
                       padding: EdgeInsets.zero,
