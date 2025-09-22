@@ -84,28 +84,23 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
               onSetupPressed: () => print('Setup pressed'),
               onClosePressed: () => print('Close pressed'),
             ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-              child: Column(
-                children: <Widget>[
-                  const MatchHeader(
-                    title: 'Your Top Matches',
-                    subtitle: 'Based on your profile and industry',
-                    weeklyMatches: 5,
-                    totalMatches: 25,
-                  ),
-                  const SizedBox(height: 20),
-                  MatchCard(
-                    match: sampleMatch,
-                    userType: 'buyer',
-                  ),
-                  const SizedBox(height: 20),
-                  BlurredMatchCard(
-                    match: blurredSampleMatch,
-                  ),
-                ],
-              ),
+            Column(
+              spacing: 20,
+              children: <Widget>[
+                const MatchHeader(
+                  title: 'Your Top Matches',
+                  subtitle: 'Based on your profile and industry',
+                  weeklyMatches: 5,
+                  totalMatches: 25,
+                ),
+                MatchCard(
+                  match: sampleMatch,
+                  userType: 'buyer',
+                ),
+                BlurredMatchCard(
+                  match: blurredSampleMatch,
+                ),
+              ],
             ),
           ],
         ),
