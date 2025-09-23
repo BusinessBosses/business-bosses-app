@@ -179,7 +179,7 @@ class _CreateEventState extends State<CreateEvent> {
                   ),
                 ),
                 child: DropdownButtonFormField<bool>(
-                  value: isOnline,
+                  initialValue: isOnline,
                   items: const <DropdownMenuItem<bool>>[
                     DropdownMenuItem<bool>(
                       value: true,
