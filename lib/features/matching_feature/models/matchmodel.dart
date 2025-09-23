@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class Match {
   final String id;
@@ -14,6 +14,7 @@ class Match {
   final String? photoUrl;
   final List<String> services;
   final List<String>? achievements; // ADDED: To hold achievements
+  final String? matchType;
 
   const Match({
     required this.id,
@@ -29,6 +30,7 @@ class Match {
     this.photoUrl,
     required this.services,
     this.achievements, // ADDED: In constructor
+    this.matchType,
   });
 
   /// Factory constructor to create a Match instance from a JSON map.
@@ -45,12 +47,29 @@ class Match {
       quality: (json['quality'] ?? 0).toInt(),
       verified: json['verified'] ?? false,
       photoUrl: json['photoUrl'],
-
-      // CHANGED: Now looks for the 'services' key from the JSON
+      matchType: json['matchType'],
       services: List<String>.from(json['services'] ?? <dynamic>[]),
-
-      // ADDED: Parses the 'achievements' key from the JSON
       achievements: List<String>.from(json['achievements'] ?? <dynamic>[]),
     );
+  }
+
+  /// Convert this Match instance into a Map (for saving in SharedPreferences).
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'uid': id,
+      'name': name,
+      'type': type,
+      'description': description,
+      'rating': rating,
+      'location': location,
+      'responseTime': responseTime,
+      'budget': budget,
+      'quality': quality,
+      'verified': verified,
+      'photoUrl': photoUrl,
+      'services': services,
+      'achievements': achievements,
+      'matchType': matchType,
+    };
   }
 }

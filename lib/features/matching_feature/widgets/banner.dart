@@ -44,7 +44,7 @@ class PersonalizationBanner extends StatelessWidget {
                     context: context,
                     isScrollControlled: true,
                     backgroundColor: Colors.transparent,
-                    builder: (BuildContext context) => Prematchmodal());
+                    builder: (BuildContext context) => PreMatchModal());
               },
               child: RichText(
                 text: TextSpan(

@@ -7,6 +7,7 @@ class MatchHeader extends StatelessWidget {
   final String subtitle;
   final int weeklyMatches;
   final int totalMatches;
+  final int matchQuality;
 
   const MatchHeader({
     super.key,
@@ -14,6 +15,7 @@ class MatchHeader extends StatelessWidget {
     required this.subtitle,
     required this.weeklyMatches,
     required this.totalMatches,
+    required this.matchQuality,
   });
 
   @override
@@ -65,7 +67,8 @@ class MatchHeader extends StatelessWidget {
                 _buildStat(LucideIcons.users, totalMatches.toString(),
                     'Total Available'),
                 _buildDivider(),
-                _buildStat(LucideIcons.searchCheck, '95%', 'Match Quality'),
+                _buildStat(LucideIcons.searchCheck,
+                    '${matchQuality.toString()}%', 'Match Quality'),
               ],
             ),
           ),

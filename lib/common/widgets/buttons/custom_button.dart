@@ -11,6 +11,8 @@ class CustomButton extends StatelessWidget {
   final String? label;
   final bool isProcessing;
   final ButtonType buttonType;
+  final Color? textColor;
+  final Color? backgroundColor;
 
   const CustomButton({
     super.key,
@@ -23,6 +25,8 @@ class CustomButton extends StatelessWidget {
     this.label,
     this.isProcessing = false,
     this.buttonType = ButtonType.outline,
+    this.textColor,
+    this.backgroundColor,
   });
 
   @override
@@ -65,7 +69,8 @@ class CustomButton extends StatelessWidget {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 0.0,
-                backgroundColor: primaryColorLT,
+                foregroundColor: textColor ?? Colors.white,
+                backgroundColor: backgroundColor ?? primaryColorLT,
               ),
               onPressed: isProcessing ? null : onPressed,
               child: isProcessing

@@ -34,9 +34,6 @@ class UserModel {
   final String? weeklyRank;
   final String? monthlyRank;
   final bool hasShop;
-
-  // final List<String>? deviceTokens;
-
   final List<String>? connections;
   final List<String>? connecteds;
   final List<DisconnectionsModel>? disconnections;
@@ -55,6 +52,7 @@ class UserModel {
   final String? inviteId;
   final double? averageRating;
   final bool? isUpdated;
+  final String? matchType; // ✅ NEW FIELD
 
   UserModel({
     this.uid = '',
@@ -80,7 +78,6 @@ class UserModel {
     this.interests,
     this.productsandservices,
     this.referals,
-    // this.deviceTokens,
     this.invitations,
     this.disconnections,
     this.active,
@@ -103,6 +100,7 @@ class UserModel {
     this.weeklyRank,
     this.monthlyRank,
     this.hasShop = false,
+    this.matchType, // ✅
   });
 
   UserModel copyWith({
@@ -133,9 +131,6 @@ class UserModel {
     String? weeklyRank,
     String? monthlyRank,
     bool? hasShop,
-
-    // List<String>? deviceTokens,
-
     List<String>? connections,
     List<String>? connecteds,
     List<DisconnectionsModel>? disconnections,
@@ -152,8 +147,9 @@ class UserModel {
     bool? isRanked,
     String? inviteId,
     double? averageRating,
-    bool? isSubscribed = false,
+    bool? isSubscribed,
     bool? isUpdated,
+    String? matchType, // ✅
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -181,7 +177,6 @@ class UserModel {
       interests: interests ?? this.interests,
       productsandservices: productsandservices ?? this.productsandservices,
       referals: referals ?? this.referals,
-      // deviceTokens: deviceTokens ?? this.deviceTokens,
       disconnections: disconnections ?? this.disconnections,
       active: active ?? this.active,
       deactivated: deactivated ?? this.deactivated,
@@ -204,6 +199,7 @@ class UserModel {
       monthlyRank: monthlyRank ?? this.monthlyRank,
       isUpdated: isUpdated ?? this.isUpdated,
       hasShop: hasShop ?? this.hasShop,
+      matchType: matchType ?? this.matchType, // ✅
     );
   }
 
@@ -232,7 +228,6 @@ class UserModel {
       'interests': interests?.map((Industry x) => x.toMap()).toList(),
       'productsandservices': productsandservices,
       'referals': referals?.map((ReferralsModel x) => x.toMap()).toList(),
-      // 'deviceTokens': deviceTokens,
       'connections': connections,
       'connecteds': connecteds,
       'disconnections':
@@ -257,6 +252,7 @@ class UserModel {
       'weeklyRank': weeklyRank,
       'monthlyRank': monthlyRank,
       'hasShop': hasShop,
+      'matchType': matchType, // ✅
     };
   }
 
@@ -300,18 +296,12 @@ class UserModel {
               map['productsandservices'].runtimeType == String
           ? null
           : List<String>.from((map['productsandservices'])),
-
       referals: map['referals'] != null
           ? List<dynamic>.from(map['referals'])
               .map((dynamic e) =>
                   ReferralsModel.fromMap(e as Map<String, dynamic>))
               .toList()
           : null,
-
-      // deviceTokens: map['deviceTokens'] != null
-      //     ? List<String>.from((map['deviceTokens'] as List<String>))
-      //     : null,
-
       connections: map['connections'] != null
           ? List<String>.from((map['connections']))
           : null,
@@ -364,9 +354,10 @@ class UserModel {
               : map['averageRating'] as double)
           : null,
       hasShop: map['hasShop'] != null ? map['hasShop'] as bool : false,
+      matchType:
+          map['matchType'] != null ? map['matchType'] as String : null, // ✅
     );
   }
-
   int get coinsCount => coinscount ?? 0;
 
   void incrementCoinsCount(int incrementBy) {

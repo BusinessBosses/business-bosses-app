@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-// Your app's theme, model, and custom widgets
+// Your app's theme and model
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
+
+// --- CORRECTED AND STANDARDIZED IMPORT PATH ---
 import 'package:business_bosses_v2/features/matching_feature/widgets/blurred_match_card.dart';
 
 class PremiumPrompt extends StatelessWidget {
-  // UPDATED: Now uses the correct 'Match' model
   final List<Match> blurredMatches;
   final String userType;
 
@@ -18,7 +19,6 @@ class PremiumPrompt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Don't show the prompt if there are no blurred matches to display
     if (blurredMatches.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -41,12 +41,12 @@ class PremiumPrompt extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        // UPDATED: Maps over the correctly typed List<Match>
+        // This map function will now work correctly
         ...blurredMatches.map((Match match) => Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: BlurredMatchCard(match: match),
             )),
-        const SizedBox(height: 8), // Adjusted spacing
+        const SizedBox(height: 8),
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -60,11 +60,7 @@ class PremiumPrompt extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           child: Column(
             children: <Widget>[
-              const Icon(
-                Icons.star,
-                size: 32,
-                color: Colors.white,
-              ),
+              const Icon(Icons.star, size: 32, color: Colors.white),
               const SizedBox(height: 12),
               const Text(
                 'Unlock All Matches',
@@ -135,7 +131,6 @@ class PremiumPrompt extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              // Handle the upgrade logic here
               Navigator.pop(context);
             },
             child: const Text('Upgrade'),

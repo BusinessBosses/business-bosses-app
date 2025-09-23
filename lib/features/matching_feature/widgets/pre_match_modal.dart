@@ -1,16 +1,23 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 
-class Prematchmodal extends StatefulWidget {
-  const Prematchmodal({super.key});
+class PreMatchModal extends StatefulWidget {
+  const PreMatchModal({super.key});
 
   @override
-  State<Prematchmodal> createState() => _PrematchmodalState();
+  State<PreMatchModal> createState() => _PreMatchModalState();
 }
 
-class _PrematchmodalState extends State<Prematchmodal> {
+class _PreMatchModalState extends State<PreMatchModal> {
+  final ProfileController profileController = Get.find();
   String? _selectedOption;
+  bool isSubmitting = false;
 
   final List<Map<String, dynamic>> options = <Map<String, dynamic>>[
     <String, dynamic>{
@@ -112,7 +119,7 @@ class _PrematchmodalState extends State<Prematchmodal> {
                           duration: const Duration(milliseconds: 200),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? primaryBlue.withOpacity(0.1)
+                                ? primaryBlue.withValues(alpha: 0.1)
                                 : Colors.white,
                             border: Border.all(
                               color: isSelected
@@ -161,19 +168,40 @@ class _PrematchmodalState extends State<Prematchmodal> {
                 child: SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: ElevatedButton(
+                  child: CustomButton(
+                    isProcessing: isSubmitting,
+                    buttonType: ButtonType.elevated,
+                    textColor: Colors.white,
+                    backgroundColor: primaryBlue,
                     onPressed: _selectedOption == null
-                        ? null
-                        : () {
-                            Navigator.pop(context, _selectedOption);
+                        ? () {}
+                        : () async {
+                            final Map<String, dynamic> updateData =
+                                <String, dynamic>{
+                              'matchType': _selectedOption!.toLowerCase(),
+                            };
+                            setState(() {
+                              isSubmitting = true;
+                            });
+                            ApiResponseModel response = await ApiService.put(
+                                path:
+                                    'users/${profileController.myProfile.uid}',
+                                body: updateData);
+                            if (response.success) {
+                              Get.snackbar(
+                                  'Success', 'Profile Updated Succesfully');
+                              profileController.updateProfile(<String, dynamic>{
+                                ...profileController.myProfile.toMap(),
+                                ...updateData
+                              });
+                            } else {
+                              Get.snackbar('Error', 'Profile Update Error');
+                            }
+                            Get.back();
+                            setState(() {
+                              isSubmitting = true;
+                            });
                           },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryBlue,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
                     child: const Text(
                       'Save Changes',
                       style: TextStyle(

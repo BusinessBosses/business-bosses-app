@@ -96,7 +96,7 @@ class BlurredMatchCard extends StatelessWidget {
                 filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.white.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: const Center(
@@ -133,61 +133,5 @@ class BlurredMatchCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget _buildPremiumBadge() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: premiumGold.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: const Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Icon(Icons.star, size: 12, color: premiumGold),
-          SizedBox(width: 4),
-          Text(
-            'Premium',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: premiumGold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildVerifiedBadge() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: successGreen.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: const Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Icon(Icons.verified, size: 12, color: successGreen),
-          SizedBox(width: 4),
-          Text(
-            'Verified',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: successGreen,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Color _getMatchColor(int percentage) {
-    if (percentage >= 90) return successGreen;
-    if (percentage >= 80) return premiumGold;
-    return textMedium;
   }
 }
