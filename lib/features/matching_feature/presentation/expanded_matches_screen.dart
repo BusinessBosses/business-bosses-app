@@ -167,28 +167,25 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                   onSetupPressed: () => print('Setup pressed'),
                   onClosePressed: () => print('Close pressed'),
                 ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: Column(
-                  children: <Widget>[
-                    MatchHeader(
-                      title: 'Your Top Matches',
-                      subtitle: 'Based on your profile',
-                      weeklyMatches: matchController.matchList.length,
-                      totalMatches: matchController.matchList.length,
-                      matchQuality: averageQuality,
-                    ),
-                    const SizedBox(height: 20),
+              Column(
+                children: <Widget>[
+                  MatchHeader(
+                    title: 'Your Top Matches',
+                    subtitle: 'Based on your profile',
+                    weeklyMatches: matchController.matchList.length,
+                    totalMatches: matchController.matchList.length,
+                    matchQuality: averageQuality,
+                  ),
+                  const SizedBox(height: 20),
 
-                    // --- RENDER UI BASED ON SUBSCRIPTION ---
-                    if (isSubscribed)
-                      // SUBSCRIBED USER VIEW: Show all matches
-                      buildSubscribedView(matchController.matchList)
-                    else
-                      // NON-SUBSCRIBED USER VIEW: Show first three clear, rest blurred
-                      buildFreeView(matchController.matchList),
-                  ],
-                ),
+                  // --- RENDER UI BASED ON SUBSCRIPTION ---
+                  if (isSubscribed)
+                    // SUBSCRIBED USER VIEW: Show all matches
+                    buildSubscribedView(matchController.matchList)
+                  else
+                    // NON-SUBSCRIBED USER VIEW: Show first three clear, rest blurred
+                    buildFreeView(matchController.matchList),
+                ],
               ),
             ],
           ),

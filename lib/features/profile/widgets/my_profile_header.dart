@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/banner.dart';
 import 'package:business_bosses_v2/features/profile/widgets/user_profile_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,11 @@ class MyProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        if (myProfile.matchType == null)
+          PersonalizationBanner(
+            onSetupPressed: () => print('Setup pressed'),
+            onClosePressed: () => print('Close pressed'),
+          ),
         Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0),
           child: Column(

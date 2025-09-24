@@ -149,7 +149,6 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
               child: bookmarked.isEmpty
                   ? _buildEmptyState()
                   : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       itemCount: bookmarked.length,
                       itemBuilder: (BuildContext context, int index) {
                         final Match match = bookmarked[index];

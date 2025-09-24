@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/features/home/controller/commumities_controll
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_list.dart';
+import 'package:business_bosses_v2/features/home/widgets/herosection.dart';
 import 'package:business_bosses_v2/features/home/widgets/relevantpeopletile.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
@@ -133,8 +134,10 @@ class _PostsWidgetState extends State<PostsWidget> {
         }
 
         if (index == 1) {
-          return const BossOfWeekProfileTile(
-            isForyou: true,
+          return Column(
+            children: <Widget>[
+              HeroSection(),
+            ],
           );
         }
 
