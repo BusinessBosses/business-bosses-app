@@ -43,6 +43,15 @@ class _PreMatchModalState extends State<PreMatchModal> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _selectedOption = profileController.myProfile.matchType != null &&
+            profileController.myProfile.matchType!.isNotEmpty
+        ? profileController.myProfile.matchType!.capitalizeFirst
+        : null;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       initialChildSize: 0.9,

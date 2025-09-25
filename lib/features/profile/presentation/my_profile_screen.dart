@@ -198,8 +198,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 ),
                 if (_selectedIndex == 0 || _selectedIndex == 4)
                   Positioned(
-                      bottom: 5,
-                      right: 0,
+                      bottom: 10,
+                      right: 10,
                       child: GestureDetector(
                           onTap: () {
                             _advancedDrawerController.showDrawer();
