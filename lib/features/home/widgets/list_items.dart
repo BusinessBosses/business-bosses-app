@@ -19,7 +19,6 @@ import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
-import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_tile.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -84,10 +83,7 @@ class _PostsWidgetState extends State<PostsWidget> {
             children: <Widget>[
               if (liveEventController.ongoing.isNotEmpty)
                 Container(
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 26, 26, 26),
-                  ),
-                  margin: const EdgeInsets.only(bottom: 6),
+                  decoration: const BoxDecoration(color: Colors.black),
                   child: Row(
                     crossAxisAlignment:
                         CrossAxisAlignment.center, // Adjust alignment as needed
@@ -113,8 +109,8 @@ class _PostsWidgetState extends State<PostsWidget> {
                         padding: const EdgeInsets.only(right: 15.0),
                         child: ElevatedButton(
                           style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all<Color>(
-                                Colors.grey.shade300),
+                            backgroundColor:
+                                WidgetStateProperty.all<Color>(Colors.white),
                           ),
                           onPressed: () => Get.to(() => const LiveEvent()),
                           child: const Text(
@@ -187,18 +183,6 @@ class _PostsWidgetState extends State<PostsWidget> {
         ],
       ));
     }
-
-    // if (postIndex != 0 && postIndex % 6 == 0) {
-    //   widgets.add(Column(
-    //     children: <Widget>[
-    //       const ChallengesSection(backgroundColor: backgroundColor),
-    //       Container(
-    //         height: 10,
-    //         color: backgroundColor,
-    //       )
-    //     ],
-    //   ));
-    // }
 
     final dynamic currentPost = controller.mixedPosts[postIndex];
 

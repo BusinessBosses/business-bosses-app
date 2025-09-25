@@ -73,75 +73,13 @@ class HomeAppBar extends StatelessWidget {
                       color: backgroundColor,
                     ),
                     child: CircleAvatar(
-                      radius: 18,
+                      radius: 16,
                       backgroundColor: backgroundColor,
                       child:
                           Icon(LucideIcons.search, size: 18, color: textColor),
                     ),
                   ),
                 ),
-
-                // Boss Up button
-                // GestureDetector(
-                //   onTap: () => Get.toNamed(Routes.allCommunitiesScreen),
-                //   child: Container(
-                //     padding:
-                //         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                //     decoration: BoxDecoration(
-                //       color: backgroundcolorinterface,
-                //       borderRadius: BorderRadius.circular(20),
-                //     ),
-                //     child: Row(
-                //       children: <Widget>[
-                //         Padding(
-                //           padding: const EdgeInsets.all(3.0),
-                //           child: SvgPicture.asset('assets/svgs/bossupu.svg',
-                //               height: 16),
-                //         ),
-                //         const SizedBox(width: 5),
-                //         const Text(
-                //           'Boss Up',
-                //           style: TextStyle(
-                //             color: textColor,
-                //             fontSize: 14,
-                //             fontWeight: FontWeight.w700,
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-
-                // Events button
-                // GestureDetector(
-                //   onTap: () => Get.toNamed(Routes.liveEvents),
-                //   child: Container(
-                //     padding:
-                //         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                //     decoration: BoxDecoration(
-                //       color: backgroundcolorinterface,
-                //       borderRadius: BorderRadius.circular(20),
-                //     ),
-                //     child: Row(
-                //       children: <Widget>[
-                //         Padding(
-                //           padding: const EdgeInsets.all(3.0),
-                //           child: SvgPicture.asset('assets/svgs/eventu.svg',
-                //               height: 16),
-                //         ),
-                //         const SizedBox(width: 5),
-                //         const Text(
-                //           'Events',
-                //           style: TextStyle(
-                //             color: textColor,
-                //             fontSize: 14,
-                //             fontWeight: FontWeight.w700,
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
 
                 // Coins button
                 GestureDetector(
@@ -178,7 +116,6 @@ class HomeAppBar extends StatelessWidget {
                     if (hasUnreadNotification)
                       Positioned(
                         right: 0,
-                        top: 2,
                         child: Container(
                           width: 10,
                           height: 10,

@@ -7,7 +7,6 @@ import 'package:business_bosses_v2/features/profile/widgets/dealssection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../action/action.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';

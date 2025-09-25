@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
+
 import 'package:business_bosses_v2/features/home/widgets/howtousetile.dart';
 import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';

@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,6 @@ import '../../../utils/theme/theme.dart';
 import '../../home/controller/home_controller.dart';
 import '../../posts/models/post_model.dart';
 import '../../posts/widgets/post_grid_item.dart';
-import '../../posts/widgets/userpost_tile.dart';
 
 class FilterPosts extends StatelessWidget {
   final List<PostModel> filterItems;

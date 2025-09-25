@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
+import 'package:business_bosses_v2/features/posts/widgets/tag.dart';
 import 'package:flutter/material.dart';
 
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
@@ -46,111 +47,176 @@ class _InventoryCardState extends State<InventoryCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16.0),
-        border: Border.all(
-          color: Colors.black12,
-          width: 0.5,
-        ),
-      ),
+      color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (widget.product?.images != null &&
-              widget.product!.images!.isNotEmpty &&
-              widget.product?.images?[0] != null &&
-              widget.product!.images![0].isNotEmpty)
-            SizedBox(
-              height: 120.0,
-              width: double.infinity,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: NetworkImageWithPlaceHolder(
-                  imageUrl: widget.product?.images?[0],
-                  radius: radius,
-                  placeHolder: Icons.person,
-                  iconSize: 0.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          // if (widget.product?.images?[0] != null &&
-          //     widget.product!.images![0].isNotEmpty)
-          //   const SizedBox(height: 5),
-          // if (widget.product?.images?[0] != null &&
-          //     widget.product!.images![0].isNotEmpty)
-          //   const Divider(),
-          if (widget.product?.images != null &&
-              widget.product!.images!.isNotEmpty &&
-              widget.product?.images?[0] != null &&
-              widget.product!.images![0].isNotEmpty)
-            const SizedBox(height: 5),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      widget.product?.name ?? 'Product Name',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: textColor,
+          PostTag(
+            label: 'Product',
+            textColor: const Color.fromARGB(255, 73, 200, 78),
+            backgroundColor: Colors.greenAccent.withAlpha(30),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              children: <Widget>[
+                if (widget.product?.images != null &&
+                    widget.product!.images!.isNotEmpty &&
+                    widget.product?.images?[0] != null &&
+                    widget.product!.images![0].isNotEmpty)
+                  SizedBox(
+                    height: 120.0,
+                    width: double.infinity,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: NetworkImageWithPlaceHolder(
+                        imageUrl: widget.product?.images?[0],
+                        radius: radius,
+                        placeHolder: Icons.person,
+                        iconSize: 0.0,
+                        fit: BoxFit.cover,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    if (widget.product?.discount != null &&
-                        widget.product!.discount! > 0)
-                      Row(
+                  ),
+                if (widget.product?.images != null &&
+                    widget.product!.images!.isNotEmpty &&
+                    widget.product?.images?[0] != null &&
+                    widget.product!.images![0].isNotEmpty)
+                  const SizedBox(height: 5),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            '${currencyValues[widget.product!.location.toString()]}${formatPrice(widget.product!.price * (1 - widget.product!.discount! / 100))}',
+                            widget.product?.name ?? 'Product Name',
                             style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
                               fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(width: 5),
-                          Text(
-                            '${currencyValues[widget.product!.location.toString()]}${formatPrice(widget.product!.price)}',
-                            style: const TextStyle(
-                              color: primaryColorLT,
-                              decoration: TextDecoration.lineThrough,
-                              fontSize: 11,
+                          if (widget.product?.discount != null &&
+                              widget.product!.discount! > 0)
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  '${currencyValues[widget.product!.location.toString()]}${formatPrice(widget.product!.price * (1 - widget.product!.discount! / 100))}',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  '${currencyValues[widget.product!.location.toString()]}${formatPrice(widget.product!.price)}',
+                                  style: const TextStyle(
+                                    color: primaryColorLT,
+                                    decoration: TextDecoration.lineThrough,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            )
+                          else
+                            Text(
+                              '${currencyValues[widget.product!.location.toString()]}${formatPrice(widget.product!.price)}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13,
+                              ),
                             ),
-                          ),
+                          if (widget.myShop == false)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Expanded(
+                                  child: Text(
+                                    widget.product?.description ??
+                                        'Product description',
+                                    style: const TextStyle(fontSize: 11),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (widget.marketplace == null)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 5,
+                                      vertical: 3,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(
+                                        color: primaryColorLT,
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      'Order',
+                                      style: TextStyle(
+                                        color: primaryColorLT,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
                         ],
-                      )
-                    else
-                      Text(
-                        '${currencyValues[widget.product!.location.toString()]}${formatPrice(widget.product!.price)}',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                        ),
                       ),
-                    if (widget.myShop == false)
-                      Row(
+                    ),
+                  ],
+                ),
+                if (widget.marketplace != null)
+                  const SizedBox(
+                    height: 5,
+                  ),
+                widget.myShop == false
+                    ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              widget.product?.description ??
-                                  'Product description',
-                              style: const TextStyle(fontSize: 11),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                          if (widget.marketplace == true)
+                            Row(
+                              children: <Widget>[
+                                const Icon(Icons.place,
+                                    color: Colors.grey, size: 15),
+                                const SizedBox(width: 4),
+                                Text(
+                                  CountryCodes.nameToCode[
+                                          widget.product?.location?.trim()] ??
+                                      'N/A',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 12),
+                                ),
+                              ],
                             ),
-                          ),
-                          if (widget.marketplace == null)
+                          if (widget.marketplace == true)
+                            Row(
+                              children: <Widget>[
+                                const Icon(Icons.star,
+                                    color: Colors.amber, size: 15),
+                                const SizedBox(width: 4),
+                                Text(
+                                  (widget.product?.user?.averageRating != null)
+                                      ? widget.product!.user!.averageRating!
+                                          .toStringAsFixed(1)
+                                      : '0.0',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          if (widget.marketplace == null) Container(width: 5),
+                          if (widget.marketplace != null)
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 5,
@@ -172,102 +238,40 @@ class _InventoryCardState extends State<InventoryCard> {
                               ),
                             ),
                         ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              widget.product?.description ??
+                                  'Product description',
+                              style: const TextStyle(fontSize: 11),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          OptionsButton(
+                            isBoost: true,
+                            item: widget.product,
+                            onEdit: () => Get.to(
+                              () => CreateProductListing(
+                                product: widget.product,
+                              ),
+                            ),
+                            onBoost: () {
+                              Get.to(() => BoostItem(
+                                    product: widget.product,
+                                  ));
+                            },
+                            onDelete: onDelete,
+                          ),
+                        ],
                       ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          if (widget.marketplace != null)
-            const SizedBox(
-              height: 5,
+              ],
             ),
-          widget.myShop == false
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    if (widget.marketplace == true)
-                      Row(
-                        children: <Widget>[
-                          const Icon(Icons.place, color: Colors.grey, size: 15),
-                          const SizedBox(width: 4),
-                          Text(
-                            CountryCodes.nameToCode[
-                                    widget.product?.location?.trim()] ??
-                                'N/A',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    if (widget.marketplace == true)
-                      Row(
-                        children: <Widget>[
-                          const Icon(Icons.star, color: Colors.amber, size: 15),
-                          const SizedBox(width: 4),
-                          Text(
-                            (widget.product?.user?.averageRating != null)
-                                ? widget.product!.user!.averageRating!
-                                    .toStringAsFixed(1)
-                                : '0.0',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    if (widget.marketplace == null) Container(width: 5),
-                    if (widget.marketplace != null)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 3,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            color: primaryColorLT,
-                          ),
-                        ),
-                        child: const Text(
-                          'Order',
-                          style: TextStyle(
-                            color: primaryColorLT,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 11,
-                          ),
-                        ),
-                      ),
-                  ],
-                )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        widget.product?.description ?? 'Product description',
-                        style: const TextStyle(fontSize: 11),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    OptionsButton(
-                      isBoost: true,
-                      item: widget.product,
-                      onEdit: () => Get.to(
-                        () => CreateProductListing(
-                          product: widget.product,
-                        ),
-                      ),
-                      onBoost: () {
-                        Get.to(() => BoostItem(
-                              product: widget.product,
-                            ));
-                      },
-                      onDelete: onDelete,
-                    ),
-                  ],
-                ),
+          ),
         ],
       ),
     );

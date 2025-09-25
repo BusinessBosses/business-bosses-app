@@ -15,6 +15,7 @@ import 'package:business_bosses_v2/features/posts/presentation/create_poll_scree
 import 'package:business_bosses_v2/features/posts/widgets/attendance_count.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
+import 'package:business_bosses_v2/features/posts/widgets/tag.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/premium_profile_tile.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
@@ -272,6 +273,10 @@ class _PostTileState extends State<PostTile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                PostTag(
+                  label: 'General',
+                  backgroundColor: backgroundColor,
+                ),
                 if (widget.post.reposts?.length != null &&
                     widget.post.reposts!.isNotEmpty) ...<Widget>[
                   Padding(
@@ -1317,7 +1322,7 @@ class _PostTileState extends State<PostTile> {
                                 'post',
                                 widget.post.user!.uid);
                           }
-                          setState((){});
+                          setState(() {});
                         },
                         icon: widget.post.coins?.contains(
                                     profileController.myProfile.uid) ==

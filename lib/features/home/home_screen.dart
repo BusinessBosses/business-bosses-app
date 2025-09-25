@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
 import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/controllers/ai_chat_controller.dart';
+import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -10,13 +11,15 @@ import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
-import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:upgrader/upgrader.dart';
 import '../../utils/constants/constants.dart';
 import '../chat/controllers/chat_controller.dart';
@@ -26,9 +29,6 @@ import '../home/widgets/home_appbar.dart';
 import '../marketplace/controllers/market_controller.dart';
 import '../posts/models/post_model.dart';
 import '../profile/controller/profile_controller.dart';
-import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
-import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.onPageChange});
@@ -138,14 +138,6 @@ class _HomeScreenState extends State<HomeScreen>
       _isTabVisibleNotifier.value = false;
     }
   }
-
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.resumed) {
-  //     homeController.fetchPosts(fromBackground: true);
-  //   }
-  //   super.didChangeAppLifecycleState(state);
-  // }
 
   void _scrollToTop() {
     _scrollController.animateTo(

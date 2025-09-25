@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/features/donations/models/donations_model.dar
 import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_comment.dart';
+import 'package:business_bosses_v2/features/posts/widgets/tag.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -134,7 +135,7 @@ class _DonationItemState extends State<DonationItem> {
               Get.to(() => ExpandedDonationScreen(donation: widget.donation));
             },
             child: Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.black12, width: 0.5),
                   color: Colors.white,
@@ -328,7 +329,12 @@ class _DonationItemState extends State<DonationItem> {
                 color: Colors.white,
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  PostTag(
+                      label: 'Crowdfund',
+                      textColor: Colors.purple,
+                      backgroundColor: Colors.purpleAccent.withAlpha(20)),
                   Padding(
                     padding: const EdgeInsets.only(
                         top: 15.0, left: 15.0, right: 15.0, bottom: 10),

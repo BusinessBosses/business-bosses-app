@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,7 +25,7 @@ Widget dealsSection() {
                 }
               },
               child: Container(
-                width: MediaQuery.of(context).size.width / 2.3,
+                width: MediaQuery.of(context).size.width / 4,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: backgroundColor,
