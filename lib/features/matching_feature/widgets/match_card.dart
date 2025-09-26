@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/common/widgets/user_avatar_with_badge.dart';
 import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_detail_modal.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -70,7 +72,7 @@ class _MatchCardState extends State<MatchCard> {
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 12,
                 ),
               ),
             ),
@@ -127,22 +129,43 @@ class _MatchCardState extends State<MatchCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          widget.match.name,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: textDark,
-          ),
+        Row(
+          spacing: 10,
+          children: <Widget>[
+            NetworkImageWithPlaceHolder(
+              imageUrl: widget.match.photoUrl,
+              height: 40,
+              width: 40,
+              radius: 50,
+              cacheHeight: 256,
+              cacheWidth: 256,
+              placeHolder: Icons.person,
+              iconSize: 24,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  widget.match.name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: textDark,
+                  ),
+                ),
+                Text(
+                  widget.match.type,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: primaryBlue,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-        Text(
-          widget.match.type,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: primaryBlue,
-          ),
-        ),
+        SizedBox(height: 12),
         Row(
           children: <Widget>[
             const Icon(Icons.star, size: 16, color: premiumGold),

@@ -106,6 +106,15 @@ class _HeroSectionState extends State<HeroSection> {
             'https://images.pexels.com/photos/9088850/pexels-photo-9088850.jpeg',
         action: 'View Events',
       ),
+      HeroItem(
+        id: '5',
+        type: 'matches',
+        title: 'Matches',
+        subtitle: 'Find Your Business Match',
+        image:
+            'https://images.pexels.com/photos/8380089/pexels-photo-8380089.jpeg',
+        action: 'View Matches',
+      )
     ];
   }
 
@@ -310,6 +319,9 @@ class _HeroSectionState extends State<HeroSection> {
                                   case 'View Challenges':
                                     Get.toNamed(Routes.allCommunitiesScreen);
                                     break;
+                                  case 'View Matches':
+                                    Get.toNamed(Routes.expandedmatchesscreen);
+                                    break;
                                   default:
                                     Get.toNamed(Routes.liveEvents);
                                     break;
@@ -435,8 +447,12 @@ class _HeroSectionState extends State<HeroSection> {
                                                                           'View Events'
                                                                       ? LucideIcons
                                                                           .calendar
-                                                                      : LucideIcons
-                                                                          .arrowUpRight,
+                                                                      : item.action ==
+                                                                              'View Matches'
+                                                                          ? LucideIcons
+                                                                              .users
+                                                                          : LucideIcons
+                                                                              .arrowUpRight,
                                                       size: 16,
                                                       color: Colors.white,
                                                     ),
