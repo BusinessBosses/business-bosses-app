@@ -1,11 +1,13 @@
+import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 // Your app's theme and the standardized Match model
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
 
-class MatchDetailModal extends StatelessWidget {
+class MatchDetailModal extends StatefulWidget {
   // UPDATED: Now uses the correct 'Match' model
   final Match match;
   final String userType;
@@ -15,6 +17,13 @@ class MatchDetailModal extends StatelessWidget {
     required this.match,
     required this.userType,
   });
+
+  @override
+  State<MatchDetailModal> createState() => _MatchDetailModalState();
+}
+
+class _MatchDetailModalState extends State<MatchDetailModal> {
+  final MatchController matchController = Get.find<MatchController>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +52,7 @@ class MatchDetailModal extends StatelessWidget {
                       children: <Widget>[
                         _buildMatchInfo(),
                         const SizedBox(height: 24),
-                        if (match.services.isNotEmpty) ...<Widget>[
+                        if (widget.match.services.isNotEmpty) ...<Widget>[
                           _buildServices(),
                           const SizedBox(height: 24),
                         ],
@@ -110,17 +119,17 @@ class MatchDetailModal extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             // UPDATED: Now only shows the 'Verified' badge based on the model
-            if (match.verified) _buildVerifiedBadge(),
+            if (widget.match.verified) _buildVerifiedBadge(),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
               decoration: BoxDecoration(
                 // UPDATED: Color is now dynamic based on quality
-                color: _getMatchColor(match.quality),
+                color: _getMatchColor(widget.match.quality),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
                 // UPDATED: Text is now dynamic from match.quality
-                '${match.quality}%',
+                '${widget.match.quality}%',
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -133,7 +142,7 @@ class MatchDetailModal extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           // UPDATED: Displays actual data
-          match.name,
+          widget.match.name,
           style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
@@ -143,7 +152,7 @@ class MatchDetailModal extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           // UPDATED: Displays actual data
-          match.type,
+          widget.match.type,
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -157,7 +166,7 @@ class MatchDetailModal extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               // UPDATED: Displays actual data
-              match.rating.toString(),
+              widget.match.rating.toString(),
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -170,7 +179,7 @@ class MatchDetailModal extends StatelessWidget {
             Expanded(
               child: Text(
                 // UPDATED: Displays actual data
-                match.location,
+                widget.match.location,
                 style: const TextStyle(fontSize: 16, color: textMedium),
               ),
             ),
@@ -179,7 +188,7 @@ class MatchDetailModal extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           // UPDATED: Displays actual data
-          match.description,
+          widget.match.description,
           style: const TextStyle(
             fontSize: 16,
             color: textMedium,
@@ -206,12 +215,12 @@ class MatchDetailModal extends StatelessWidget {
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: match.services
+          children: widget.match.services
               .map((String service) => Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: primaryBlue.withOpacity(0.1),
+                      color: primaryBlue.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -246,13 +255,14 @@ class MatchDetailModal extends StatelessWidget {
           children: <Widget>[
             Expanded(
               // UPDATED: Passes actual data and handles nulls
-              child: _buildDetailCard('Response Time', match.responseTime),
+              child:
+                  _buildDetailCard('Response Time', widget.match.responseTime),
             ),
             const SizedBox(width: 12),
             Expanded(
               // UPDATED: Passes actual data and handles nulls
               child: _buildDetailCard(
-                  'Budget Range', match.budget ?? 'Not Specified'),
+                  'Budget Range', widget.match.budget ?? 'Not Specified'),
             ),
           ],
         ),
@@ -289,6 +299,15 @@ class MatchDetailModal extends StatelessWidget {
   }
 
   Widget _buildActionSection(BuildContext context) {
+    final bool isBookmarked = matchController.isBookmarked(widget.match.id);
+    // Determine the button text, icon, and colors based on the bookmark status
+    final String buttonText =
+        isBookmarked ? 'Opportunity Saved' : 'Save Opportunity';
+    final Color buttonTextColor = isBookmarked ? Colors.white : primaryBlue;
+    final Color buttonBackgroundColor =
+        isBookmarked ? Colors.blueGrey : Colors.white;
+    final BorderSide buttonBorderSide =
+        isBookmarked ? BorderSide.none : const BorderSide(color: primaryBlue);
     return Column(
       children: <Widget>[
         const Text(
@@ -326,12 +345,20 @@ class MatchDetailModal extends StatelessWidget {
           height: 50,
           width: double.infinity,
           child: OutlinedButton.icon(
-            onPressed: () => _saveOpportunity(context),
-            icon: const Icon(LucideIcons.bookmark, size: 18),
-            label: const Text('Save Opportunity'),
+            onPressed: () => _saveOpportunity(),
+            icon: Icon(
+                isBookmarked ? LucideIcons.bookmark : LucideIcons.bookmark,
+                size: 18,
+                color: buttonTextColor),
+            label: Text(
+              buttonText,
+              style: TextStyle(color: buttonTextColor),
+            ),
             style: OutlinedButton.styleFrom(
-              foregroundColor: primaryBlue,
-              side: const BorderSide(color: primaryBlue),
+              backgroundColor:
+                  buttonBackgroundColor, // Set background for "Saved" state
+              foregroundColor: buttonTextColor,
+              side: buttonBorderSide, // Set border for "Save" state
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -343,13 +370,11 @@ class MatchDetailModal extends StatelessWidget {
   }
 
   // This badge is no longer needed as the model doesn't support 'isPremium'
-  // Widget _buildPremiumBadge() { ... }
-
   Widget _buildVerifiedBadge() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: successGreen.withOpacity(0.1),
+        color: successGreen.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: const Row(
@@ -377,18 +402,28 @@ class MatchDetailModal extends StatelessWidget {
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Proposal sent to ${match.name}!'),
+        content: Text('Proposal sent to ${widget.match.name}!'),
         backgroundColor: successGreen,
       ),
     );
   }
 
-  void _saveOpportunity(BuildContext context) {
-    Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Opportunity saved!'),
-        backgroundColor: successGreen,
+  void _saveOpportunity() {
+    // ⭐️ Call the controller method to save/toggle the bookmark status
+    matchController.toggleBookmark(widget.match);
+    setState(() {});
+
+    Get.back();
+
+    // Provide feedback to the user based on the action
+    final bool isBookmarked = matchController.isBookmarked(widget.match.id);
+
+    ScaffoldMessenger.of(Get.context!).showSnackBar(
+      SnackBar(
+        content: Text(isBookmarked
+            ? '${widget.match.name} unsaved!'
+            : '${widget.match.name} saved.'),
+        backgroundColor: isBookmarked ? primaryBlue : textMedium,
       ),
     );
   }

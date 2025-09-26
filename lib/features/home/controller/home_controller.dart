@@ -22,13 +22,14 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class HomeController extends GetxController {
-  late IO.Socket socket;
+  late io.Socket socket;
   // final PostsController _postsController = Get.find();
   late final ProfileController profileController;
   late final ChatController _chatController;
@@ -1203,7 +1204,7 @@ class HomeController extends GetxController {
   }
 
   void initSocket() {
-    socket = IO.io(Constants.socketUrl, <String, dynamic>{
+    socket = io.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
       'transports': ['websocket'],
     });
@@ -1246,6 +1247,51 @@ class HomeController extends GetxController {
     initSocket();
     loadData();
     super.onInit();
+    // Function to establish the WebSocket connection
+    void connectSocket() {
+      socket = io.io(Constants.socketUrl, <String, dynamic>{
+        'transports': <String>['websocket'],
+      });
+
+      socket.onConnect((_) {
+        if (kDebugMode) {
+          print('Connection established');
+        }
+      });
+
+      socket.on('newPostEvent', (dynamic data) {
+        final int postIndex = posts.indexWhere(
+            (PostModel element) => element.postId == data['newPost']['postId']);
+        if (postIndex == -1) {
+          sinkPosts(data);
+        }
+      });
+
+      socket.onDisconnect((_) {
+        if (kDebugMode) {
+          print('Connection Disconnection');
+        }
+        // Reconnect the socket when it's disconnected
+        Future.delayed(const Duration(seconds: 5), () {
+          connectSocket();
+        });
+      });
+
+      socket.onConnectError((dynamic err) {
+        if (kDebugMode) {
+          print(err);
+        }
+      });
+
+      socket.onError((dynamic err) {
+        if (kDebugMode) {
+          print(err);
+        }
+      });
+    }
+
+    // Initial connection
+    connectSocket();
   }
 
   @override
@@ -1253,5 +1299,6 @@ class HomeController extends GetxController {
     socket.disconnect();
     socket.dispose();
     super.dispose();
+    socket.off('newPostEvent');
   }
 }
