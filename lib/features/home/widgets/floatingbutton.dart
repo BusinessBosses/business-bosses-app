@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
+import 'package:business_bosses_v2/features/chat/ai_chat.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,8 +34,7 @@ class FloatingbuttonState extends State<Floatingbutton> {
     int previousStamp = myProfile.myProfile.bossOfTheWeekTimeStamp ?? 0;
     return GestureDetector(
       onTap: () {
-        //Get.to(() => AiChatScreen());
-        Get.to(() => ExpandedMatchesScreen());
+        Get.to(() => AiChatScreen());
       },
       child: Padding(
         padding: EdgeInsets.only(bottom: Platform.isIOS ? 50 : 80, right: 5),
