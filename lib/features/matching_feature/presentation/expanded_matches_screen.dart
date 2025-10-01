@@ -25,20 +25,59 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
   final MatchController matchController = Get.put(MatchController());
   final ProfileController profileController =
       Get.put(ProfileController()); // Make sure this is initialized
-  @override
-  Widget build(BuildContext context) {
-    /// Builds the view for a subscribed user, showing all matches clearly.
-    Widget buildSubscribedView(List<Match> matches) {
-      if (matches.isEmpty) {
-        return const Center(child: Text('No matches to display.'));
-      }
-      return Obx(() {
-        return ListView.builder(
+
+  /// Builds the view for a subscribed user, showing all matches clearly.
+  Widget buildSubscribedView(List<Match> matches) {
+    if (matches.isEmpty) {
+      return const Center(child: Text('No matches to display.'));
+    }
+    return Obx(() {
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: matches.length,
+        itemBuilder: (BuildContext context, int index) {
+          final Match match = matches[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: MatchCard(
+              match: match,
+              userType: match.matchType ?? 'Not Specified',
+              onBookmarkToggle: () {
+                matchController.toggleBookmark(match);
+                setState(() {});
+              },
+              isBookmarked: matchController.isBookmarked(match.id),
+            ),
+          );
+        },
+      );
+    });
+  }
+
+  /// Builds the view for a non-subscribed user.
+  /// Shows the first three matches clearly and blurs the rest.
+  Widget buildFreeView(List<Match> matches) {
+    if (matches.isEmpty) {
+      return const Center(child: Text('No matches to display.'));
+    }
+
+    // Get the first three matches
+    final List<Match> clearMatches = matches.take(3).toList();
+
+    // Get the rest of the matches to be blurred
+    final List<Match> blurredMatches = matches.skip(3).toList();
+
+    final MatchController matchController = Get.find<MatchController>();
+    return Column(
+      children: <Widget>[
+        // 1. Show the first three matches clearly
+        ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: matches.length,
+          itemCount: clearMatches.length,
           itemBuilder: (BuildContext context, int index) {
-            final Match match = matches[index];
+            final Match match = clearMatches[index];
             return Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: MatchCard(
@@ -46,65 +85,27 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                 userType: match.matchType ?? 'Not Specified',
                 onBookmarkToggle: () {
                   matchController.toggleBookmark(match);
-                  setState(() {});
                 },
-                isBookmarked: matchController.isBookmarked(match.id),
+                isBookmarked: !matchController.isBookmarked(match.id),
               ),
             );
           },
-        );
-      });
-    }
-
-    /// Builds the view for a non-subscribed user.
-    /// Shows the first three matches clearly and blurs the rest.
-    Widget buildFreeView(List<Match> matches) {
-      if (matches.isEmpty) {
-        return const Center(child: Text('No matches to display.'));
-      }
-
-      // Get the first three matches
-      final List<Match> clearMatches = matches.take(3).toList();
-
-      // Get the rest of the matches to be blurred
-      final List<Match> blurredMatches = matches.skip(3).toList();
-
-      final MatchController matchController = Get.find<MatchController>();
-      return Column(
-        children: <Widget>[
-          // 1. Show the first three matches clearly
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: clearMatches.length,
-            itemBuilder: (BuildContext context, int index) {
-              final Match match = clearMatches[index];
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: MatchCard(
-                  match: match,
-                  userType: match.matchType ?? 'Not Specified',
-                  onBookmarkToggle: () {
-                    matchController.toggleBookmark(match);
-                  },
-                  isBookmarked: !matchController.isBookmarked(match.id),
-                ),
-              );
-            },
-          ),
-          // 2. Show the rest as blurred cards within the PremiumPrompt
-          if (blurredMatches.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: PremiumPrompt(
-                blurredMatches: blurredMatches,
-                userType: blurredMatches.first.matchType ?? 'Not Specified',
-              ),
+        ),
+        // 2. Show the rest as blurred cards within the PremiumPrompt
+        if (blurredMatches.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: PremiumPrompt(
+              blurredMatches: blurredMatches,
+              userType: blurredMatches.first.matchType ?? 'Not Specified',
             ),
-        ],
-      );
-    }
+          ),
+      ],
+    );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

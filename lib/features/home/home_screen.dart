@@ -21,13 +21,11 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:upgrader/upgrader.dart';
-import '../../utils/constants/constants.dart';
 import '../chat/controllers/chat_controller.dart';
 import '../chat/models/my_message.dart';
 import '../home/controller/home_controller.dart';
 import '../home/widgets/home_appbar.dart';
 import '../marketplace/controllers/market_controller.dart';
-import '../posts/models/post_model.dart';
 import '../profile/controller/profile_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -80,44 +78,6 @@ class _HomeScreenState extends State<HomeScreen>
 
     // Listen to scroll events to update both notifiers:
     _scrollController.addListener(_onScrollChanged);
-
-    // Function to establish the WebSocket connection
-    void connectSocket() {
-      socket = io.io(Constants.socketUrl, <String, dynamic>{
-        'transports': <String>['websocket'],
-      });
-
-      socket.onConnect((_) {
-        print('Connection established');
-      });
-
-      socket.on('newPostEvent', (dynamic data) {
-        final int postIndex = homeController.posts.indexWhere(
-            (PostModel element) => element.postId == data['newPost']['postId']);
-        if (postIndex == -1) {
-          homeController.sinkPosts(data);
-        }
-      });
-
-      socket.onDisconnect((_) {
-        print('Connection Disconnection');
-        // Reconnect the socket when it's disconnected
-        Future.delayed(const Duration(seconds: 5), () {
-          connectSocket();
-        });
-      });
-
-      socket.onConnectError((dynamic err) {
-        print(err);
-      });
-
-      socket.onError((dynamic err) {
-        print(err);
-      });
-    }
-
-    // Initial connection
-    connectSocket();
   }
 
   void _onScrollChanged() {
@@ -153,7 +113,6 @@ class _HomeScreenState extends State<HomeScreen>
     _scrollController.dispose();
     _isScrolledNotifier.dispose();
     _isTabVisibleNotifier.dispose();
-    socket.off('newPostEvent');
     WidgetsBinding.instance.removeObserver(this);
     _tabController.dispose();
     super.dispose();
