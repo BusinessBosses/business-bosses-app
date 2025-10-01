@@ -1097,10 +1097,10 @@ packages:
     dependency: "direct main"
     description:
       name: purchases_flutter
-      sha256: "4b845cd93b411f954969b03360d1eaa24a07dfd0379dead514d35211e16b084b"
+      sha256: "8d142ced6086fac9608eaf467e48fdeee289c45a988b819decf1c3b88e3b54b3"
       url: "https://pub.dev"
     source: hosted
-    version: "9.6.2"
+    version: "9.7.0"
   rxdart:
     dependency: transitive
     description:
@@ -1334,42 +1334,42 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_calendar
-      sha256: "24a1c46ee5dee7fbc8dc66f998eadccd36e1b6a0a514a4dee7939b160e914015"
+      sha256: "89fd6f4a412765c30060261cc2df2b38491e8bdd510d43d6b95fda6419d5d3e8"
       url: "https://pub.dev"
     source: hosted
-    version: "31.1.21"
+    version: "31.1.22"
   syncfusion_flutter_charts:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_charts
-      sha256: f3bb85b7cecbc55bb235a9d5f62c93a9d5bd64e1d95c3fb8d689440d9eda3820
+      sha256: bee5094cd8128dd531f530842bede56ecd0edb72833a522dcbb7b7eb93ffcf12
       url: "https://pub.dev"
     source: hosted
-    version: "31.1.21"
+    version: "31.1.22"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: "7c700778e2b390412f3a364aa38fbc010570ade19684b9d6613d17e7ca284898"
+      sha256: "6a01bd0da768003f59a9c51ae28145a61372abb59e3e588ef33c86db3579bccf"
       url: "https://pub.dev"
     source: hosted
-    version: "31.1.21"
+    version: "31.1.22"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
       name: syncfusion_flutter_datepicker
-      sha256: f4cea1c28175a858875507e30d553acfefd2465ed8954052c5a3cb32958d443a
+      sha256: "960b40d48e44e246e4eb48141ed2676806b703afc4c01a00fcae669d50a52590"
       url: "https://pub.dev"
     source: hosted
-    version: "31.1.21"
+    version: "31.1.22"
   syncfusion_localizations:
     dependency: transitive
     description:
       name: syncfusion_localizations
-      sha256: beb82c9f9012320f87627cfcebc51a74d9cb950941f6a248f41d11f409b0a71b
+      sha256: "2d5322826cd7e03e5bee3e35f8d3b63a5c504b105a9d99d34b8799595ad4d6a6"
       url: "https://pub.dev"
     source: hosted
-    version: "31.1.21"
+    version: "31.1.22"
   synchronized:
     dependency: transitive
     description:
