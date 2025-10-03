@@ -183,33 +183,33 @@ class _HeroSectionState extends State<HeroSection> {
               ? 'Refer'
               : 'Follow',
           action2: 'Enter Challenge'),
+      // HeroItem(
+      //     id: '5',
+      //     type: 'deals',
+      //     title: 'Partner Deals',
+      //     subtitle: 'Up to 70% Off Premium Services',
+      //     image:
+      //         'https://images.pexels.com/photos/3184301/pexels-photo-3184301.jpeg',
+      //     action: 'View Deals',
+      //     action2: 'Become a Partner'),
+      // HeroItem(
+      //     id: '6',
+      //     type: 'challenges',
+      //     title: 'Challenges',
+      //     subtitle: '12 Challenges Available to Join',
+      //     image:
+      //         'https://images.pexels.com/photos/8422751/pexels-photo-8422751.jpeg',
+      //     action: 'View Challenges',
+      //     action2: ''),
       HeroItem(
-          id: '5',
-          type: 'deals',
-          title: 'Partner Deals',
-          subtitle: 'Up to 70% Off Premium Services',
-          image:
-              'https://images.pexels.com/photos/3184301/pexels-photo-3184301.jpeg',
-          action: 'View Deals',
-          action2: 'Become a Partner'),
-      HeroItem(
-          id: '6',
-          type: 'challenges',
-          title: 'Challenges',
-          subtitle: '12 Challenges Available to Join',
-          image:
-              'https://images.pexels.com/photos/8422751/pexels-photo-8422751.jpeg',
-          action: 'View Challenges',
-          action2: ''),
-      HeroItem(
-          id: '7',
-          type: 'events',
-          title: 'Events',
-          subtitle: 'Share your thoughts with other bosses',
-          image:
-              'https://images.pexels.com/photos/9088850/pexels-photo-9088850.jpeg',
-          action: 'View Events',
-          action2: 'Create an event'),
+        id: '7',
+        type: 'events',
+        title: 'Events',
+        subtitle: 'Share your thoughts with other bosses',
+        image:
+            'https://images.pexels.com/photos/9088850/pexels-photo-9088850.jpeg',
+        action: 'View Events',
+      ),
       HeroItem(
           id: '8',
           type: 'matches',
