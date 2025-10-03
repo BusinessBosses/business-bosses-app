@@ -107,7 +107,7 @@ class ChatScreenState extends State<ChatScreen> {
             ),
 
             child: Scaffold(
-              floatingActionButton: Floatingbutton(),
+              // floatingActionButton: Floatingbutton(),
               backgroundColor: Colors.white,
               appBar: _isSearching
                   ? SearchAppBar(
