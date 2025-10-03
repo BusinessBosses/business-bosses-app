@@ -215,6 +215,24 @@ class _MatchCardState extends State<MatchCard> {
                 ),
               ],
             ),
+            if (widget.match.matchType != null &&
+                widget.match.matchType!.isNotEmpty)
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: primaryBlue,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  widget.match.matchType!.toUpperCase(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
           ],
         ),
       ],
