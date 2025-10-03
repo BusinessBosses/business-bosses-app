@@ -130,7 +130,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
           child: Scaffold(
             backgroundColor: Colors.white,
-            floatingActionButton: Floatingbutton(),
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(
                   (_selectedIndex == 0 || _selectedIndex == 4)

@@ -171,8 +171,9 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
               Column(
                 children: <Widget>[
                   MatchHeader(
-                    title: 'Your Top Matches',
-                    subtitle: 'Based on your profile',
+                    title:
+                        'Your Top ${matchController.matchList.length} Matches',
+                    subtitle: 'for this week based on your profile',
                     weeklyMatches: matchController.matchList.length,
                     totalMatches: matchController.matchList.length,
                     matchQuality: averageQuality,

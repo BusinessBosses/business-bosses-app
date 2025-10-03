@@ -279,7 +279,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     }
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: Floatingbutton(),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight + 50),
         child: Column(

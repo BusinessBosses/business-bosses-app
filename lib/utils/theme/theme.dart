@@ -94,7 +94,7 @@ const TextStyle bodyText1 = TextStyle(
 const TextStyle bodyText2 = TextStyle(
   color: textColor,
   fontWeight: FontWeight.normal,
-  fontSize: 12.0,
+  fontSize: 14.0,
 );
 final InputDecoration inputDecoration = InputDecoration(
   hintStyle: bodyText2.copyWith(color: hintColor),

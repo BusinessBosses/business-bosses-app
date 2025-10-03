@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 class MatchHeader extends StatelessWidget {
   final String title;
@@ -49,29 +48,29 @@ class MatchHeader extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(
-            height: 15,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                _buildStat(LucideIcons.calendar, weeklyMatches.toString(),
-                    'This Week'),
-                _buildDivider(),
-                _buildStat(LucideIcons.users, totalMatches.toString(),
-                    'Total Available'),
-                _buildDivider(),
-                _buildStat(LucideIcons.searchCheck,
-                    '${matchQuality.toString()}%', 'Match Quality'),
-              ],
-            ),
-          ),
+          // SizedBox(
+          //   height: 15,
+          // ),
+          // Container(
+          //   decoration: BoxDecoration(
+          //     color: Colors.white.withOpacity(0.15),
+          //     borderRadius: BorderRadius.circular(16),
+          //   ),
+          //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //     children: <Widget>[
+          //       _buildStat(LucideIcons.calendar, weeklyMatches.toString(),
+          //           'This Week'),
+          //       _buildDivider(),
+          //       _buildStat(LucideIcons.users, totalMatches.toString(),
+          //           'Total Available'),
+          //       _buildDivider(),
+          //       _buildStat(LucideIcons.searchCheck,
+          //           '${matchQuality.toString()}%', 'Match Quality'),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

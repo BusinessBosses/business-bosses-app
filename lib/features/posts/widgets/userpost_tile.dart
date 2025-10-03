@@ -1815,24 +1815,6 @@ class _PostTileState extends State<PostTile> {
     );
   }
 
-  // void jumpToLivePage(
-  //   BuildContext context, {
-  //   required String roomID,
-  //   required bool isHost,
-  //   required String title,
-  // }) {
-  //   Navigator.push(
-  //     context,
-  //     // ignore: always_specify_types
-  //     MaterialPageRoute(
-  //       builder: (BuildContext context) => CallRoom(
-  //         title: title,
-  //         roomID: roomID,
-  //         isHost: isHost,
-  //       ),
-  //     ),
-  //   );
-  // }
   void _launchURL(String url) async {
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));

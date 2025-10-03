@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/widgets/menubutton.dart';
+import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -77,6 +78,32 @@ class HomeAppBar extends StatelessWidget {
                       backgroundColor: backgroundColor,
                       child:
                           Icon(LucideIcons.search, size: 18, color: textColor),
+                    ),
+                  ),
+                ),
+
+                GestureDetector(
+                  onTap: () {
+                    Get.to(AllCommunitiesScreen());
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                    decoration: BoxDecoration(
+                        color: backgroundcolorinterface,
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Row(
+                      spacing: 8,
+                      children: <Widget>[
+                        SvgPicture.asset('assets/svgs/bossupu.svg', height: 15),
+                        Text(
+                          'Boss Up & Grow',
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
