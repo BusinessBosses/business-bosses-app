@@ -1,19 +1,13 @@
 import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
 import 'package:business_bosses_v2/bbpro/widgets/menubutton.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
-import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filterdonationposts.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filterdonationusers.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
-import 'package:business_bosses_v2/features/home/widgets/crowdfundsection.dart';
-import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
-import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
-import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -24,7 +18,6 @@ import 'package:get/get.dart';
 
 import '../../common/widgets/safety_model.dart';
 import '../../utils/theme/theme.dart';
-
 import '../forum/models/industry.dart';
 import '../search/widgets/search_bar.dart';
 
@@ -258,7 +251,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                           },
                         )
                       : const Text(
-                          'Boss Up',
+                          'Boss Up & Grow',
                           style: TextStyle(
                               color: textColor,
                               fontWeight: FontWeight.w900,
@@ -392,151 +385,28 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                             )),
                                     ],
                                   )
-                                : DefaultTabController(
-                                    length: 4,
-                                    child: Column(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: const EdgeInsets.only(
-                                              top: 0, bottom: 0, left: 0),
-                                          constraints:
-                                              const BoxConstraints.expand(
-                                                  height: 40),
-                                          child: TabBar(
-                                            labelStyle: const TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 13),
-                                            controller: _bossupTabController,
-                                            isScrollable: false,
-                                            labelPadding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 0.0),
-                                            tabs: const <Widget>[
-                                              Tab(
-                                                child: FittedBox(
-                                                  child: Text(
-                                                    'All',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 14),
+                                : Column(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: TabBarView(
+                                                controller:
+                                                    _bossupTabController,
+                                                children: <Widget>[
+                                                  const BossupChallenge(
+                                                    ishome: false,
+                                                    backgroundColor:
+                                                        backgroundColor,
                                                   ),
-                                                ),
+                                                ],
                                               ),
-                                              Tab(
-                                                child: FittedBox(
-                                                  child: Text(
-                                                    'Challenges',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 14),
-                                                  ),
-                                                ),
-                                              ),
-                                              Tab(
-                                                child: FittedBox(
-                                                  child: Text(
-                                                    'Learning',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 14),
-                                                  ),
-                                                ),
-                                              ),
-                                              Tab(
-                                                child: FittedBox(
-                                                  child: Text(
-                                                    'Crowdfund',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 14),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                        Expanded(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: TabBarView(
-                                                  controller:
-                                                      _bossupTabController,
-                                                  children: <Widget>[
-                                                    Container(
-                                                      color: backgroundColor,
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: <Widget>[
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
-                                                            ChallengesSection(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  _bossupTabController
-                                                                      .index = 1;
-                                                                });
-                                                              },
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
-                                                            LearningSection(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  _bossupTabController
-                                                                      .index = 2;
-                                                                });
-                                                              },
-                                                            ),
-                                                            const EventsSection(),
-                                                            const SizedBox(
-                                                              height: 25,
-                                                            ),
-                                                            CrowdfundSection(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  _bossupTabController
-                                                                      .index = 3;
-                                                                });
-                                                              },
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 100,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const BossupChallenge(
-                                                      ishome: false,
-                                                      backgroundColor:
-                                                          backgroundColor,
-                                                    ),
-                                                    const LearningPage(),
-                                                    const DonationsPage(
-                                                      ishome: false,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                           ),
                         ],

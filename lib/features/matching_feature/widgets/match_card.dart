@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/common/widgets/user_avatar_with_badge.dart';
 import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_detail_modal.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';

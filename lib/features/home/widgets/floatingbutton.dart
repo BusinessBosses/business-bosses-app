@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:business_bosses_v2/features/chat/ai_chat.dart';
-import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -37,7 +36,7 @@ class FloatingbuttonState extends State<Floatingbutton> {
         Get.to(() => AiChatScreen());
       },
       child: Padding(
-        padding: EdgeInsets.only(bottom: Platform.isIOS ? 50 : 80, right: 5),
+        padding: const EdgeInsets.only(right: 15.0),
         child: Align(
           alignment: Alignment.bottomRight,
           child: Container(

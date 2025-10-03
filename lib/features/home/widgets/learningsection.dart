@@ -31,19 +31,6 @@ class LearningSection extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              // const Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 15.0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: <Widget>[
-              //       Text(
-              //         'Learning',
-              //         style:
-              //             TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: GestureDetector(

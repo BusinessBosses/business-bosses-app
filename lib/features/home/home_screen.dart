@@ -209,11 +209,6 @@ class _HomeScreenState extends State<HomeScreen>
             ),
             child: Scaffold(
               backgroundColor: Colors.white,
-              floatingActionButton: Obx(() {
-                return homeController.loading.value
-                    ? Container()
-                    : Floatingbutton();
-              }),
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(kToolbarHeight),
                 child: Obx(() {
