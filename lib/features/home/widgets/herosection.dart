@@ -333,6 +333,7 @@ class _HeroSectionState extends State<HeroSection> {
           description: user?.bio ?? '',
           image: user?.photoUrl ?? '',
           action: isConnected ? 'Refer' : 'Follow',
+          action2: heroItems[i].action2,
         );
       }
     });
@@ -640,7 +641,7 @@ class _HeroSectionState extends State<HeroSection> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        switch (item.action2) {
+                        switch (item.action2.isNotEmpty ? item.action2 : '') {
                           case 'Enter Challenge':
                             item.id == '1'
                                 ? enterChallenge()
@@ -679,7 +680,7 @@ class _HeroSectionState extends State<HeroSection> {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              item.action2,
+                              item.action2.isNotEmpty ? item.action2 : '',
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
@@ -897,7 +898,9 @@ class _HeroSectionState extends State<HeroSection> {
                                       const SizedBox(height: 8),
                                       GestureDetector(
                                         onTap: () async {
-                                          switch (item.action2) {
+                                          switch (item.action2.isNotEmpty
+                                              ? item.action2
+                                              : '') {
                                             case 'Become a Partner':
                                               if (await canLaunchUrl(Uri.parse(
                                                   'https://businessbosses.co.uk/landingpageforpartners'))) {
@@ -936,7 +939,9 @@ class _HeroSectionState extends State<HeroSection> {
                                               ),
                                               const SizedBox(width: 5),
                                               Text(
-                                                item.action2,
+                                                item.action2.isNotEmpty
+                                                    ? item.action2
+                                                    : '',
                                                 style: const TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w600,
