@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/features/forum/controller/create_bossup_contr
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -297,7 +298,7 @@ class _HeroSectionState extends State<HeroSection> {
                           fit: StackFit.expand,
                           children: <Widget>[
                             CachedNetworkImage(
-                              key: ValueKey(item.image),
+                              key: ValueKey<String>(item.image),
                               imageUrl: item.image,
                               fit: BoxFit.cover,
                               memCacheHeight: 1000,
@@ -320,7 +321,7 @@ class _HeroSectionState extends State<HeroSection> {
                                     Get.toNamed(Routes.allCommunitiesScreen);
                                     break;
                                   case 'View Matches':
-                                    Get.toNamed(Routes.expandedmatchesscreen);
+                                    Get.to(() => ExpandedMatchesScreen());
                                     break;
                                   default:
                                     Get.toNamed(Routes.liveEvents);
@@ -404,6 +405,10 @@ class _HeroSectionState extends State<HeroSection> {
                                                   case 'View Challenges':
                                                     Get.toNamed(Routes
                                                         .allCommunitiesScreen);
+                                                    break;
+                                                  case 'View Matches':
+                                                    Get.to(() =>
+                                                        ExpandedMatchesScreen());
                                                     break;
                                                   default:
                                                     Get.toNamed(

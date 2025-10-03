@@ -107,37 +107,40 @@ class _UserProfileTileState extends State<UserProfileTile> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (BuildContext context) => PreMatchModal());
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 4.0),
-                        decoration: BoxDecoration(
-                          color: primaryBlue.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(500),
-                        ),
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 5,
-                          children: <Widget>[
-                            Text(
-                              profileController.myProfile.matchType!.capitalize
-                                  .toString(),
-                              style: TextStyle(color: primaryBlue),
-                            ),
-                            Icon(LucideIcons.refreshCcw,
-                                size: 10,
-                                color: primaryBlue.withValues(alpha: 0.6))
-                          ],
+                    if (profileController.myProfile.matchType != null)
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (BuildContext context) =>
+                                  PreMatchModal());
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          decoration: BoxDecoration(
+                            color: primaryBlue.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(500),
+                          ),
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 5,
+                            children: <Widget>[
+                              Text(
+                                profileController
+                                    .myProfile.matchType!.capitalize
+                                    .toString(),
+                                style: TextStyle(color: primaryBlue),
+                              ),
+                              Icon(LucideIcons.refreshCcw,
+                                  size: 10,
+                                  color: primaryBlue.withValues(alpha: 0.6))
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                     widget.myProfile.isSubscribed
                         ? Row(
                             children: <Widget>[
