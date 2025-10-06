@@ -84,7 +84,7 @@ class HomeAppBar extends StatelessWidget {
 
                 GestureDetector(
                   onTap: () {
-                    Get.to(AllCommunitiesScreen());
+                    Get.to(() => AllCommunitiesScreen());
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),

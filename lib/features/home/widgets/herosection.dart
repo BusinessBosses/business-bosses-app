@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
@@ -73,6 +74,8 @@ class _HeroSectionState extends State<HeroSection> {
   Timer? _timer;
   DateTime _lastInteraction = DateTime.now();
   late UserModel? user;
+  late UserModel? mentor;
+  late UserModel? backer;
   final HomeController homeController = Get.find();
   late List<HeroItem> heroItems;
   final ProfileController _profileController = Get.find();
@@ -131,6 +134,8 @@ class _HeroSectionState extends State<HeroSection> {
   void initState() {
     super.initState();
     user = homeController.bossOfTheWeek;
+    mentor = homeController.mentorOfTheWeek;
+    backer = homeController.backerOfTheWeek;
     industry = challengeController.categories[0];
     _startAutoRotation();
     heroItems = <HeroItem>[
@@ -139,11 +144,10 @@ class _HeroSectionState extends State<HeroSection> {
           type: 'boss',
           icon: 'assets/images/app_logo_2.png',
           title: 'Boss of the Week',
-          subtitle: user?.name ?? '',
+          subtitle: user?.name ?? user!.username,
           description: user?.bio ?? '',
-          image: 'none',
-          action: user?.connecteds != null &&
-                  _profileController.myProfile.connecteds!.contains(user!.uid)
+          image: user?.photoUrl ?? '',
+          action: _profileController.myProfile.connecteds!.contains(user!.uid)
               ? 'Refer'
               : 'Follow',
           action2: 'Enter Challenge'),
@@ -151,11 +155,10 @@ class _HeroSectionState extends State<HeroSection> {
           id: '2',
           type: 'mentor',
           title: 'Mentor of the Week',
-          subtitle: user?.name ?? '',
-          image: 'none',
-          description: user?.bio ?? '',
-          action: user?.connecteds != null &&
-                  _profileController.myProfile.connecteds!.contains(user!.uid)
+          subtitle: mentor?.name ?? mentor!.username,
+          image: mentor?.photoUrl ?? '',
+          description: mentor?.bio ?? '',
+          action: _profileController.myProfile.connecteds!.contains(mentor!.uid)
               ? 'Refer'
               : 'Follow',
           action2: 'Enter Challenge'),
@@ -163,11 +166,10 @@ class _HeroSectionState extends State<HeroSection> {
           id: '3',
           type: 'backer',
           title: 'Backer of the Week',
-          subtitle: user?.name ?? '',
-          image: 'none',
-          description: user?.bio ?? '',
-          action: user?.connecteds != null &&
-                  _profileController.myProfile.connecteds!.contains(user!.uid)
+          subtitle: backer?.name ?? backer!.username,
+          image: backer?.photoUrl ?? '',
+          description: backer?.bio ?? '',
+          action: _profileController.myProfile.connecteds!.contains(backer!.uid)
               ? 'Refer'
               : 'Follow',
           action2: 'Enter Challenge'),
@@ -292,37 +294,16 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   Future<void> connectToUser() async {
-    final int checkConnected = _profileController.myProfile.connecteds == null
-        ? -1
-        : _profileController.myProfile.connecteds!
-            .indexWhere((String element) => element == user?.uid);
-
-    if (checkConnected == -1) {
-      _profileController.updateConnections(user!.uid);
-      setState(() {
-        user = UserModel.fromMap(<dynamic, dynamic>{
-          ...user!.toMap(),
-          'connectionCount':
-              user?.connectionCount == null ? 1 : user!.connectionCount! + 1
-        });
-      });
-      await connect(user!.uid);
-    } else {
-      _profileController.updateConnections(user!.uid);
-      setState(() {
-        user = UserModel.fromMap(<dynamic, dynamic>{
-          ...user!.toMap(),
-          'connectionCount':
-              user?.connectionCount == null ? null : user!.connectionCount! - 1
-        });
-      });
-      await disconnect(user!.uid);
-    }
-
-    // Update action text after follow/unfollow for all winner cards
+    // Check if current user (you) already have this Boss in your connecteds
     final bool isConnected = _profileController.myProfile.connecteds != null &&
-        _profileController.myProfile.connecteds!.contains(user?.uid ?? '');
+        _profileController.myProfile.connecteds!.contains(user?.uid);
+
+    // Toggle connection state locally
+    _profileController.updateConnections(user!.uid);
+
+    // Update UI (for button text etc.)
     setState(() {
+      final String actionText = isConnected ? 'Follow' : 'Refer';
       for (int i = 0; i < 4; i++) {
         heroItems[i] = HeroItem(
           id: heroItems[i].id,
@@ -331,40 +312,36 @@ class _HeroSectionState extends State<HeroSection> {
           title: heroItems[i].title,
           subtitle: user?.name ?? '',
           description: user?.bio ?? '',
-          image: user?.photoUrl ?? '',
-          action: isConnected ? 'Refer' : 'Follow',
+          image: heroItems[i].image,
+          action: actionText,
           action2: heroItems[i].action2,
         );
       }
     });
+
+    // API call: connect or disconnect depending on current state
+    if (!isConnected) {
+      await connect(user!.uid);
+    } else {
+      await disconnect(user!.uid);
+    }
   }
 
   Future<void> disconnect(String userId) async {
-    ApiService.post(path: 'connection/disconnect', body: <String, dynamic>{
-      'userId': _profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
-    setState(() {
-      homeController.bossOfTheWeek?.connecteds?.removeWhere(
-          (String string) => string == _profileController.myProfile.uid);
-
-      user?.connecteds?.removeWhere(
-          (String string) => string == _profileController.myProfile.uid);
-    });
+    await ApiService.post(
+        path: 'connection/disconnect',
+        body: <String, dynamic>{
+          'userId': _profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+        });
   }
 
   Future<void> connect(String userId) async {
-    ApiService.post(path: 'connection/connect', body: <String, dynamic>{
+    await ApiService.post(path: 'connection/connect', body: <String, dynamic>{
       'userId': _profileController.myProfile.uid,
       'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
-    setState(() {
-      homeController.bossOfTheWeek?.connecteds
-          ?.add(_profileController.myProfile.uid);
-
-      user?.connecteds?.add(_profileController.myProfile.uid);
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
     });
   }
 
@@ -391,7 +368,8 @@ class _HeroSectionState extends State<HeroSection> {
             'isBossUp': true,
             'industryId': industry.industryId,
           },
-          binding: BindingsBuilder.put(() => CreateBossUpController()),
+          binding: BindingsBuilder<CreateBossUpController>.put(
+              () => CreateBossUpController()),
         );
       } else {
         if (_profileController.myProfile.postChallenges!
@@ -534,17 +512,14 @@ class _HeroSectionState extends State<HeroSection> {
                   child: Row(
                     children: <Widget>[
                       // Avatar
-                      user?.photoUrl != null && user!.photoUrl!.isNotEmpty
+                      item.image != ''
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(30),
-                              child: CachedNetworkImage(
-                                imageUrl: user!.photoUrl!,
+                              child: NetworkImageWithPlaceHolder(
+                                imageUrl: item.image,
                                 width: 60,
                                 height: 60,
                                 fit: BoxFit.cover,
-                                errorWidget: (BuildContext context, String url,
-                                        Object error) =>
-                                    _buildDefaultAvatar(config, item.subtitle),
                               ),
                             )
                           : _buildDefaultAvatar(config, item.subtitle),
@@ -599,7 +574,7 @@ class _HeroSectionState extends State<HeroSection> {
                             referuser();
                             break;
                           case 'View Matches':
-                            Get.to(ExpandedMatchesScreen());
+                            Get.to(() => ExpandedMatchesScreen());
                             break;
                           default:
                             Get.toNamed(Routes.liveEvents);
@@ -652,7 +627,7 @@ class _HeroSectionState extends State<HeroSection> {
                                         : enterpartneroftheweek();
                             break;
                           case 'View Matches':
-                            Get.to(ExpandedMatchesScreen());
+                            Get.to(() => ExpandedMatchesScreen());
                             break;
                           default:
                             Get.toNamed(Routes.liveEvents);
@@ -849,7 +824,8 @@ class _HeroSectionState extends State<HeroSection> {
                                                 Routes.allCommunitiesScreen);
                                             break;
                                           case 'View Matches':
-                                            Get.to(ExpandedMatchesScreen());
+                                            Get.to(
+                                                () => ExpandedMatchesScreen());
                                             break;
                                           default:
                                             Get.toNamed(Routes.liveEvents);
@@ -969,7 +945,7 @@ class _HeroSectionState extends State<HeroSection> {
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(heroItems.length, (int index) {
+            children: List<Widget>.generate(heroItems.length, (int index) {
               final bool isActive = index == _currentIndex;
               return GestureDetector(
                 onTap: () {

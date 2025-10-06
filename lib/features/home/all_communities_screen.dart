@@ -142,7 +142,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
     _searchTabController = TabController(length: 2, vsync: this);
     _donationsearchTabController = TabController(length: 2, vsync: this);
     _bossupTabController = TabController(
-        length: 4,
+        length: 1,
         vsync: this,
         initialIndex: widget.initialBossupTabIndex ?? 0);
 
