@@ -125,14 +125,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
             ),
           ),
         ),
-      Padding(
-        padding: const EdgeInsets.only(right: 8.0, bottom: 8, top: 8),
-        child: GestureDetector(
-            onTap: () {
-              _advancedDrawerController.showDrawer();
-            },
-            child: const CustomMenuButton()),
-      ),
     ];
   }
 
@@ -413,7 +405,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                       ),
                     ),
                   ),
-                  BottomBar(activeIndex: 2),
                 ],
               ),
             ),

@@ -141,7 +141,10 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () => matchController.fetchMatches(),
-                  child: const Text('Retry'),
+                  child: const Text(
+                    'Retry',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),

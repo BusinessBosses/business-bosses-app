@@ -1,8 +1,12 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_detail_modal.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class MatchCard extends StatefulWidget {
@@ -128,41 +132,46 @@ class _MatchCardState extends State<MatchCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Row(
-          spacing: 10,
-          children: <Widget>[
-            NetworkImageWithPlaceHolder(
-              imageUrl: widget.match.photoUrl,
-              height: 40,
-              width: 40,
-              radius: 50,
-              cacheHeight: 256,
-              cacheWidth: 256,
-              placeHolder: Icons.person,
-              iconSize: 24,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  widget.match.name,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: textDark,
+        GestureDetector(
+          onTap: () {
+            Get.toNamed(Routes.publicProfile, arguments: widget.match);
+          },
+          child: Row(
+            spacing: 10,
+            children: <Widget>[
+              NetworkImageWithPlaceHolder(
+                imageUrl: widget.match.photoUrl,
+                height: 40,
+                width: 40,
+                radius: 50,
+                cacheHeight: 256,
+                cacheWidth: 256,
+                placeHolder: Icons.person,
+                iconSize: 24,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    widget.match.name,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: textDark,
+                    ),
                   ),
-                ),
-                Text(
-                  widget.match.type,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: primaryBlue,
+                  Text(
+                    widget.match.type,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: primaryBlue,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
         SizedBox(height: 12),
         Row(
@@ -295,11 +304,11 @@ class _MatchCardState extends State<MatchCard> {
   }
 
   void _sendProposal(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Proposal sent to ${widget.match.name}!'),
-        backgroundColor: successGreen,
+    Get.to(
+      () => const ChatRoomScreen(
+        frommarketplace: false,
       ),
+      arguments: widget.match,
     );
   }
 }

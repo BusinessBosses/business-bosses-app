@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
@@ -86,6 +87,8 @@ class _HeroSectionState extends State<HeroSection> {
   final ProfileController _profileController = Get.find();
   final ChallengeController challengeController = Get.find();
   late Industry industry;
+  final DonationsController donationsController =
+      Get.put(DonationsController());
 
   static const Map<String, WinnerCardConfig> cardConfigs =
       <String, WinnerCardConfig>{
@@ -417,7 +420,26 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void enterbackeroftheweek() {
-    print('backer of the week');
+    if (!donationsController.userIds
+        .contains(_profileController.myProfile.uid)) {
+      Get.snackbar(
+        'Error!',
+        'You have to join to create a donation!',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+    if (donationsController.doesUserDonationExist()) {
+      Get.snackbar(
+        'Error!',
+        'You cannot create multiple donations!',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+    Get.toNamed(Routes.createdonationsscreen);
   }
 
   void entermentoroftheweek() {

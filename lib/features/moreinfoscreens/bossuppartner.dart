@@ -2,6 +2,8 @@ import 'dart:core';
 
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
+import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -223,15 +225,24 @@ class BossuppartnerItem extends StatelessWidget {
                       const SizedBox(height: 5),
                       Padding(
                         padding: const EdgeInsets.only(right: 20.0),
-                        child: Text(
-                          companyDescription,
+                        child: DetectableText(
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 4,
+                          maxLines: 100,
                           softWrap: true,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w100,
+                          trimLength: 100,
+                          detectedStyle: bodyText2.copyWith(
+                            color: Colors.blue,
                           ),
+                          moreStyle: bodyText2.copyWith(
+                            color: Colors.redAccent,
+                          ),
+                          lessStyle: bodyText2.copyWith(
+                            color: Colors.redAccent,
+                          ),
+                          trimExpandedText: '  show less',
+                          basicStyle: bodyText2.copyWith(color: textColor),
+                          text: companyDescription,
+                          detectionRegExp: detectionRegExp(hashtag: false)!,
                         ),
                       ),
                     ],
@@ -263,31 +274,4 @@ class BossuppartnerItem extends StatelessWidget {
       ),
     );
   }
-
-  // Future<void> _contactUs(BuildContext context) async {
-  //   String? encodeQueryParameters(Map<String, String> params) {
-  //     return params.entries
-  //         .map((MapEntry<String, String> e) =>
-  //             '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-  //         .join('&');
-  //   }
-
-  //   final Uri mailUrl = Uri(
-  //     scheme: 'mailto',
-  //     path: 'support@businessbosses.co.uk',
-  //     query: encodeQueryParameters(<String, String>{
-  //       'subject': 'BossUp Partner',
-  //     }),
-  //   );
-
-  //   try {
-  //     if (await canLaunchUrl(mailUrl)) {
-  //       await launchUrl(mailUrl);
-  //     } else {
-  //       throw 'Could not launch $mailUrl';
-  //     }
-  //   } catch (e) {
-  //     showSnackBar(context, message: '${Constants.STGW}, try again later');
-  //   }
-  // }
 }
