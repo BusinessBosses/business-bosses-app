@@ -132,7 +132,8 @@ class _CourseItemState extends State<CourseItem> {
                                         child: SvgPicture.asset(
                                           'assets/svgs/pdf.svg',
                                           height: 22,
-                                          color: Colors.white,
+                                          colorFilter: ColorFilter.mode(
+                                              Colors.white, BlendMode.srcIn),
                                         ),
                                       ),
                                     ),
@@ -676,7 +677,11 @@ class _CourseItemState extends State<CourseItem> {
                                                         SvgPicture.asset(
                                                           'assets/svgs/premiumbadge.svg',
                                                           height: 9,
-                                                          color: primaryColorLT,
+                                                          colorFilter:
+                                                              ColorFilter.mode(
+                                                                  primaryColorLT,
+                                                                  BlendMode
+                                                                      .srcIn),
                                                         )
                                                       ],
                                                     )
@@ -819,7 +824,8 @@ class _CourseItemState extends State<CourseItem> {
                             SvgPicture.asset(
                               'assets/svgs/premiumbadge.svg',
                               height: 7,
-                              color: primaryColorLT,
+                              colorFilter: ColorFilter.mode(
+                                  primaryColorLT, BlendMode.srcIn),
                             )
                           ],
                         )
@@ -948,7 +954,8 @@ class _CourseItemState extends State<CourseItem> {
                       'assets/svgs/share.svg',
                       height: 15.0,
                       width: 15.0,
-                      color: textColor.withValues(alpha: 1.0),
+                      colorFilter: ColorFilter.mode(
+                          textColor.withValues(alpha: 1.0), BlendMode.srcIn),
                     ),
                   ),
                 ),

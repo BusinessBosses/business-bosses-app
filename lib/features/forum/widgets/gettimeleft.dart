@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 Widget getChallengeTimeLeft(Industry category) {
   DateTime now = DateTime.now();
@@ -50,17 +49,17 @@ String _calculateTimeLeftToStart(DateTime startTime) {
   }
 }
 
-String _calculateEndsDate(DateTime endedAt) {
-  // Format the endedAt date using DateFormat
-  String formattedDate = DateFormat('d MMM').format(endedAt);
-  return 'Ends $formattedDate';
-}
+// String _calculateEndsDate(DateTime endedAt) {
+//   // Format the endedAt date using DateFormat
+//   String formattedDate = DateFormat('d MMM').format(endedAt);
+//   return 'Ends $formattedDate';
+// }
 
-String _calculateStartDate(DateTime startAt) {
-  // Format the endedAt date using DateFormat
-  String formattedDate = DateFormat('d MMM').format(startAt);
-  return 'Starts $formattedDate';
-}
+// String _calculateStartDate(DateTime startAt) {
+//   // Format the endedAt date using DateFormat
+//   String formattedDate = DateFormat('d MMM').format(startAt);
+//   return 'Starts $formattedDate';
+// }
 
 String _calculateTimeLeft(DateTime endTime) {
   DateTime now = DateTime.now();

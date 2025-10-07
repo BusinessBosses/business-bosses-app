@@ -12,7 +12,6 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
@@ -186,7 +185,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               final String uid = _profileController.myProfile.uid;
               final int now = DateTime.now().millisecondsSinceEpoch;
               await prefs.setInt('migration_remind_$uid', now);
-              Navigator.pop(context); // dismiss migration dialog
+              Navigator.pop(Get.context!); // dismiss migration dialog
             },
             child: const Text('Remind Me Later'),
           ),
@@ -219,7 +218,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               }
               // Dismiss the loader dialog
               if (Get.isDialogOpen ?? false) {
-                Navigator.pop(context);
+                Navigator.pop(Get.context!);
               }
             },
             child: const Text('Migrate'),
@@ -588,9 +587,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                 ? 'assets/svgs/addclient.svg'
                                                                 : 'assets/svgs/addclient.svg',
                                                             height: 25,
-                                                            color: textColor
-                                                                .withValues(
-                                                                    alpha: 1),
+                                                            colorFilter:
+                                                                ColorFilter.mode(
+                                                                    textColor.withValues(
+                                                                        alpha:
+                                                                            1),
+                                                                    BlendMode
+                                                                        .srcIn),
                                                           ),
                                                           title: Text(
                                                             index == 0
@@ -685,10 +688,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                     ? 'assets/svgs/addproduct.svg'
                                                                     : 'assets/svgs/addservice.svg',
                                                                 height: 25,
-                                                                color: textColor
-                                                                    .withValues(
+                                                                colorFilter: ColorFilter.mode(
+                                                                    textColor.withValues(
                                                                         alpha:
                                                                             1),
+                                                                    BlendMode
+                                                                        .srcIn),
                                                               ),
                                                               title: Text(
                                                                 index == 0
@@ -907,7 +912,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                     child: SvgPicture.asset(
                                       'assets/svgs/homesearch.svg',
                                       height: 20,
-                                      color: textColor,
+                                      colorFilter: ColorFilter.mode(
+                                          textColor, BlendMode.srcIn),
                                     )),
                           ),
                         ),

@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -223,7 +224,9 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
                                   try {
                                     await Purchases.purchaseProduct(
                                         coinIDs[index]);
-                                    print('coin increase');
+                                    if (kDebugMode) {
+                                      print('coin increase');
+                                    }
 
                                     /// update coin here
                                   } catch (e) {

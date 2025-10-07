@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,7 +20,7 @@ class DownloadableItem extends StatefulWidget {
       {super.key, required this.link, required this.filename});
 
   @override
-  _DownloadableItemState createState() => _DownloadableItemState();
+  State<DownloadableItem> createState() => _DownloadableItemState();
 }
 
 class _DownloadableItemState extends State<DownloadableItem> {
@@ -41,7 +42,9 @@ class _DownloadableItemState extends State<DownloadableItem> {
     _port.listen((message) {
       setState(() {
         _progress = message[2];
-        print(message);
+        if (kDebugMode) {
+          print(message);
+        }
       });
     });
   }

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -100,7 +101,7 @@ class _BoostDonationState extends State<BoostDonation> {
         setState(() {
           _isProcessing = false;
         });
-        showSnackBar(context,
+        showSnackBar(Get.context!,
             message: 'Opps!! Something went wrong. Try again');
       });
     } on StripeException {
@@ -115,7 +116,8 @@ class _BoostDonationState extends State<BoostDonation> {
         _isProcessing = false;
       });
 
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackBar(Get.context!,
+          message: 'Opps!! Something went wrong. Try again');
     }
   }
 
@@ -174,11 +176,13 @@ class _BoostDonationState extends State<BoostDonation> {
         setState(() {
           _isProcessing = false;
         });
-        Navigator.of(context).push(MaterialPageRoute<dynamic>(
+        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => const Confirmation(),
         ));
       } catch (e) {
-        print(e.toString());
+        if (kDebugMode) {
+          print(e.toString());
+        }
       }
     } else {
       try {
@@ -202,7 +206,9 @@ class _BoostDonationState extends State<BoostDonation> {
 
         displaySheet();
       } catch (e) {
-        print(e.toString());
+        if (kDebugMode) {
+          print(e.toString());
+        }
       }
     }
     setState(() {
@@ -242,21 +248,18 @@ class _BoostDonationState extends State<BoostDonation> {
         },
         onSuccess: () async {
           await updatePost('paystack');
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => const Confirmation(),
-          ));
-          showSnackBar(context, message: 'Payment Successful, Thanks!');
+          Get.to(() => const Confirmation());
+          showSnackBar(Get.context!, message: 'Payment Successful, Thanks!');
           return null;
         },
       );
     } catch (e) {
-      showSnackBar(context, message: 'Error: ${e.toString()}');
+      showSnackBar(Get.context!, message: 'Error: ${e.toString()}');
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initPlan = plans[0]['amount'];
     myPlan = options[0]['optionname'];
