@@ -185,24 +185,6 @@ class _HeroSectionState extends State<HeroSection> {
               ? 'Refer'
               : 'Follow',
           action2: 'Enter Challenge'),
-      // HeroItem(
-      //     id: '5',
-      //     type: 'deals',
-      //     title: 'Partner Deals',
-      //     subtitle: 'Up to 70% Off Premium Services',
-      //     image:
-      //         'https://images.pexels.com/photos/3184301/pexels-photo-3184301.jpeg',
-      //     action: 'View Deals',
-      //     action2: 'Become a Partner'),
-      // HeroItem(
-      //     id: '6',
-      //     type: 'challenges',
-      //     title: 'Challenges',
-      //     subtitle: '12 Challenges Available to Join',
-      //     image:
-      //         'https://images.pexels.com/photos/8422751/pexels-photo-8422751.jpeg',
-      //     action: 'View Challenges',
-      //     action2: ''),
       HeroItem(
         id: '7',
         type: 'events',
@@ -725,7 +707,26 @@ class _HeroSectionState extends State<HeroSection> {
                   if (cardConfigs.containsKey(item.type)) {
                     return GestureDetector(
                       onTap: () {
-                        Get.toNamed(Routes.publicProfile, arguments: user);
+                        UserModel? targetUser;
+                        switch (item.type) {
+                          case 'boss':
+                            targetUser = user;
+                            break;
+                          case 'mentor':
+                            targetUser = mentor;
+                            break;
+                          case 'backer':
+                            targetUser = backer;
+                            break;
+                          case 'partner':
+                            targetUser = user;
+                            break;
+                        }
+
+                        if (targetUser != null) {
+                          Get.toNamed(Routes.publicProfile,
+                              arguments: targetUser);
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15.0),
