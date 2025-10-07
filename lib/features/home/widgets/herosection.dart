@@ -4,11 +4,15 @@ import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -18,6 +22,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -184,12 +189,12 @@ class _HeroSectionState extends State<HeroSection> {
                   _profileController.myProfile.connecteds!.contains(user!.uid)
               ? 'Refer'
               : 'Follow',
-          action2: 'Enter Challenge'),
+          action2: 'Claim Deal'),
       HeroItem(
         id: '7',
         type: 'events',
         title: 'Events',
-        subtitle: 'Share your thoughts with other bosses',
+        subtitle: 'Share your thoughts with bosses',
         image:
             'https://images.pexels.com/photos/9088850/pexels-photo-9088850.jpeg',
         action: 'View Events',
@@ -485,61 +490,84 @@ class _HeroSectionState extends State<HeroSection> {
                 const SizedBox(height: 12),
 
                 // Winner info card
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white10,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      // Avatar
-                      item.image != ''
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: NetworkImageWithPlaceHolder(
-                                imageUrl: item.image,
-                                width: 60,
-                                height: 60,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : _buildDefaultAvatar(config, item.subtitle),
+                GestureDetector(
+                  onTap: () {
+                    // Determine which user to navigate to based on card type
+                    UserModel? targetUser;
+                    switch (item.type) {
+                      case 'boss':
+                        targetUser = user;
+                        break;
+                      case 'mentor':
+                        targetUser = mentor;
+                        break;
+                      case 'backer':
+                        targetUser = backer;
+                        break;
+                      case 'partner':
+                        targetUser = user;
+                        break;
+                    }
 
-                      const SizedBox(width: 12),
+                    if (targetUser != null) {
+                      Get.toNamed(Routes.publicProfile, arguments: targetUser);
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white10,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        // Avatar
+                        item.image != ''
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: NetworkImageWithPlaceHolder(
+                                  imageUrl: item.image,
+                                  width: 60,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : _buildDefaultAvatar(config, item.subtitle),
 
-                      // Name and description
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              item.subtitle,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            if (item.description.isNotEmpty)
+                        const SizedBox(width: 12),
+
+                        // Name and description
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
                               Text(
-                                item.description,
+                                item.subtitle,
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
+                                  fontWeight: FontWeight.bold,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                          ],
+                              if (item.description.isNotEmpty)
+                                Text(
+                                  item.description,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-
                 const SizedBox(height: 12),
 
                 Row(
@@ -702,30 +730,82 @@ class _HeroSectionState extends State<HeroSection> {
                 },
                 itemBuilder: (BuildContext context, int index) {
                   final HeroItem item = heroItems[index];
+                  final Industry category = challengeController.categories[0];
 
                   // Use winner card for boss, mentor, backer, partner
                   if (cardConfigs.containsKey(item.type)) {
                     return GestureDetector(
                       onTap: () {
-                        UserModel? targetUser;
                         switch (item.type) {
                           case 'boss':
-                            targetUser = user;
+                            DateTime now = DateTime.now();
+                            if (category.startAt != null &&
+                                now.isBefore(category.startAt!)) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                      'How It Works!',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          category.criteria!,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          _calculateStartDate(
+                                              category.startAt!),
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text('OK'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              return;
+                            }
+                            Get.to(() => BossUpSection(
+                                  industry: category,
+                                  bossUp: challengeController.categories[0],
+                                ));
+
                             break;
                           case 'mentor':
-                            targetUser = mentor;
+                            Get.to(LearningPage());
                             break;
                           case 'backer':
-                            targetUser = backer;
+                            Get.to(DonationsPage(
+                              ishome: false,
+                            ));
                             break;
                           case 'partner':
-                            targetUser = user;
+                            Get.to(Bossuppartner());
                             break;
-                        }
-
-                        if (targetUser != null) {
-                          Get.toNamed(Routes.publicProfile,
-                              arguments: targetUser);
                         }
                       },
                       child: Padding(
@@ -792,115 +872,56 @@ class _HeroSectionState extends State<HeroSection> {
                               bottom: 0,
                               left: 0,
                               right: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      item.title,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      item.subtitle,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        switch (item.action) {
-                                          case 'View Deals':
-                                            Get.to(() => const Bossuppartner());
-                                            break;
-                                          case 'View Challenges':
-                                            Get.toNamed(
-                                                Routes.allCommunitiesScreen);
-                                            break;
-                                          case 'View Matches':
-                                            Get.to(
-                                                () => ExpandedMatchesScreen());
-                                            break;
-                                          default:
-                                            Get.toNamed(Routes.liveEvents);
-                                            break;
-                                        }
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        item.title,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 12,
-                                          vertical: 10,
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Icon(
-                                              item.action == 'View Events'
-                                                  ? LucideIcons.calendar
-                                                  : item.action == 'View Deals'
-                                                      ? LucideIcons.arrowUpRight
-                                                      : item.action ==
-                                                              'View Challenges'
-                                                          ? LucideIcons.trophy
-                                                          : LucideIcons.users,
-                                              size: 16,
-                                              color: textColor,
-                                            ),
-                                            const SizedBox(width: 5),
-                                            Text(
-                                              item.action,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700,
-                                                color: textColor,
-                                              ),
-                                            ),
-                                          ],
                                         ),
                                       ),
-                                    ),
-                                    if (item.action2.isNotEmpty) ...<Widget>[
-                                      const SizedBox(height: 8),
+                                      Text(
+                                        item.subtitle,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
                                       GestureDetector(
                                         onTap: () async {
-                                          switch (item.action2.isNotEmpty
-                                              ? item.action2
-                                              : '') {
-                                            case 'Become a Partner':
-                                              if (await canLaunchUrl(Uri.parse(
-                                                  'https://businessbosses.co.uk/landingpageforpartners'))) {
-                                                await launchUrl(Uri.parse(
-                                                    'https://businessbosses.co.uk/landingpageforpartners'));
-                                              }
+                                          switch (item.action) {
+                                            case 'View Deals':
+                                              Get.to(
+                                                  () => const Bossuppartner());
                                               break;
-                                            case 'Create an event':
-                                              Get.toNamed(Routes.liveEvents);
+                                            case 'View Challenges':
+                                              Get.toNamed(
+                                                  Routes.allCommunitiesScreen);
+                                              break;
+                                            case 'View Matches':
+                                              Get.to(() =>
+                                                  ExpandedMatchesScreen());
                                               break;
                                             default:
+                                              Get.toNamed(Routes.liveEvents);
                                               break;
                                           }
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: Colors.white12,
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(20),
-                                            border: Border.all(
-                                              color: Colors.white,
-                                              width: 1,
-                                            ),
                                           ),
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 12,
@@ -910,27 +931,93 @@ class _HeroSectionState extends State<HeroSection> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               Icon(
-                                                LucideIcons.plus,
+                                                item.action == 'View Events'
+                                                    ? LucideIcons.calendar
+                                                    : item.action ==
+                                                            'View Deals'
+                                                        ? LucideIcons
+                                                            .arrowUpRight
+                                                        : item.action ==
+                                                                'View Challenges'
+                                                            ? LucideIcons.trophy
+                                                            : LucideIcons.users,
                                                 size: 16,
-                                                color: Colors.white,
+                                                color: textColor,
                                               ),
                                               const SizedBox(width: 5),
                                               Text(
-                                                item.action2.isNotEmpty
-                                                    ? item.action2
-                                                    : '',
+                                                item.action,
                                                 style: const TextStyle(
                                                   fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: textColor,
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
                                       ),
+                                      if (item.action2.isNotEmpty) ...<Widget>[
+                                        const SizedBox(height: 8),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            switch (item.action2.isNotEmpty
+                                                ? item.action2
+                                                : '') {
+                                              case 'Become a Partner':
+                                                if (await canLaunchUrl(Uri.parse(
+                                                    'https://businessbosses.co.uk/landingpageforpartners'))) {
+                                                  await launchUrl(Uri.parse(
+                                                      'https://businessbosses.co.uk/landingpageforpartners'));
+                                                }
+                                                break;
+                                              case 'Create an event':
+                                                Get.toNamed(Routes.liveEvents);
+                                                break;
+                                              default:
+                                                break;
+                                            }
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white12,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              border: Border.all(
+                                                color: Colors.white,
+                                                width: 1,
+                                              ),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 10,
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Icon(
+                                                  LucideIcons.plus,
+                                                  size: 16,
+                                                  color: Colors.white,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                Text(
+                                                  item.action2.isNotEmpty
+                                                      ? item.action2
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ],
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -975,4 +1062,10 @@ class _HeroSectionState extends State<HeroSection> {
       ),
     );
   }
+}
+
+String _calculateStartDate(DateTime startAt) {
+  // Format the endedAt date using DateFormat
+  String formattedDate = DateFormat('d MMM').format(startAt);
+  return 'Starts $formattedDate';
 }

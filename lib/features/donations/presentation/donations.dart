@@ -60,7 +60,7 @@ class _DonationsPageState extends State<DonationsPage> {
           ),
           centerTitle: true,
           title: const Text(
-            'CrowdFund',
+            'CrowdFund Challenge',
             textAlign: TextAlign.center,
           ),
         ),
