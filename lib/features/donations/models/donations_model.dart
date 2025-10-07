@@ -136,8 +136,9 @@ class DonationModel {
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
       comments: map['comments'] != null
-          ? List.from(map['comments'])
-              .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+          ? List<dynamic>.from(map['comments'])
+              .map((dynamic e) =>
+                  CommentModel.fromMap(e as Map<String, dynamic>))
               .toList()
           : null,
       user: map['user'] != null
@@ -150,10 +151,10 @@ class DonationModel {
       images:
           map['images'] != null ? List<String>.from(map['images']) : <String>[],
       transactions: map['transactions'] != null
-          ? List.from(map['transactions'])
-              .where((t) => t != null) // Filter out null elements
-              .map(
-                  (t) => DonationTransaction.fromMap(t as Map<String, dynamic>))
+          ? List<dynamic>.from(map['transactions'])
+              .where((dynamic t) => t != null) // Filter out null elements
+              .map((dynamic t) =>
+                  DonationTransaction.fromMap(t as Map<String, dynamic>))
               .toList()
           : <DonationTransaction>[],
     );

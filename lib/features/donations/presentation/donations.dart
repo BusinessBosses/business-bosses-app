@@ -276,8 +276,11 @@ class _DonationsPageState extends State<DonationsPage> {
                                                                 .asset(
                                                               'assets/svgs/members.svg',
                                                               height: 15,
-                                                              color:
-                                                                  primaryColorLT,
+                                                              colorFilter:
+                                                                  ColorFilter.mode(
+                                                                      primaryColorLT,
+                                                                      BlendMode
+                                                                          .srcIn),
                                                             ),
                                                           ),
                                                           Padding(
@@ -329,7 +332,11 @@ class _DonationsPageState extends State<DonationsPage> {
                                                             child: SvgPicture
                                                                 .asset(
                                                               'assets/svgs/topics.svg',
-                                                              color: textColor,
+                                                              colorFilter:
+                                                                  ColorFilter.mode(
+                                                                      textColor,
+                                                                      BlendMode
+                                                                          .srcIn),
                                                               height: 11.5,
                                                             ),
                                                           ),
@@ -502,7 +509,11 @@ class _DonationsPageState extends State<DonationsPage> {
                                                           ),
                                                           SvgPicture.asset(
                                                             'assets/svgs/nexticon.svg',
-                                                            color: textColor,
+                                                            colorFilter:
+                                                                ColorFilter.mode(
+                                                                    textColor,
+                                                                    BlendMode
+                                                                        .srcIn),
                                                           ),
                                                         ]),
                                                   ),
@@ -517,55 +528,50 @@ class _DonationsPageState extends State<DonationsPage> {
                                           child: CircularProgressIndicator(),
                                         ),
                                       )
-                                    : Container(
-                                        child: Expanded(
-                                          child: Container(
-                                            color: backgroundColor,
-                                            child: ListView.builder(
-                                              padding: EdgeInsets.only(
-                                                bottom: widget.ishome == false
-                                                    ? 100
-                                                    : 0,
-                                              ),
-                                              shrinkWrap: true,
-                                              scrollDirection:
-                                                  widget.ishome == false
-                                                      ? Axis.vertical
-                                                      : Axis.horizontal,
-                                              itemCount: widget.ishome == false
-                                                  ? controller.donations.length
-                                                  : 5,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int i) {
-                                                bool isLastItem = controller
-                                                            .donations.length !=
-                                                        1
-                                                    ? i ==
-                                                        controller.donations
-                                                                .length -
-                                                            1
-                                                    : i ==
-                                                        controller
-                                                            .donations.length;
-                                                return Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left:
-                                                          widget.ishome == false
-                                                              ? 0
-                                                              : 10.0),
-                                                  child: DonationItem(
-                                                    donation:
-                                                        controller.donations[i],
-                                                    isLastItem: isLastItem,
-                                                    isHome:
-                                                        widget.ishome == false
-                                                            ? false
-                                                            : true,
-                                                  ),
-                                                );
-                                              },
+                                    : Expanded(
+                                        child: Container(
+                                          color: backgroundColor,
+                                          child: ListView.builder(
+                                            padding: EdgeInsets.only(
+                                              bottom: widget.ishome == false
+                                                  ? 100
+                                                  : 0,
                                             ),
+                                            shrinkWrap: true,
+                                            scrollDirection:
+                                                widget.ishome == false
+                                                    ? Axis.vertical
+                                                    : Axis.horizontal,
+                                            itemCount: widget.ishome == false
+                                                ? controller.donations.length
+                                                : 5,
+                                            itemBuilder:
+                                                (BuildContext context, int i) {
+                                              bool isLastItem =
+                                                  controller.donations.length !=
+                                                          1
+                                                      ? i ==
+                                                          controller.donations
+                                                                  .length -
+                                                              1
+                                                      : i ==
+                                                          controller
+                                                              .donations.length;
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: widget.ishome == false
+                                                        ? 0
+                                                        : 10.0),
+                                                child: DonationItem(
+                                                  donation:
+                                                      controller.donations[i],
+                                                  isLastItem: isLastItem,
+                                                  isHome: widget.ishome == false
+                                                      ? false
+                                                      : true,
+                                                ),
+                                              );
+                                            },
                                           ),
                                         ),
                                       )

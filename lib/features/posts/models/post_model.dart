@@ -164,8 +164,18 @@ class PostModel {
           map['oldtimestamp'] != null ? map['oldtimestamp'] as int : null,
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
-      reposts:
-          map['reposts'] != null ? List<String>.from((map['reposts'])) : null,
+      reposts: map['reposts'] != null
+          ? List<String>.from(
+              (map['reposts'] as List).map((item) {
+                if (item is Map<String, dynamic>) {
+                  return item['userId']?.toString() ?? '';
+                } else if (item is String) {
+                  return item;
+                }
+                return '';
+              }).where((String id) => id.isNotEmpty),
+            )
+          : null,
       comments: List.from(map['comments'])
           .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
           .toList(),

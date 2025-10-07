@@ -80,7 +80,8 @@ class _DonationMembersState extends State<DonationMembers> {
                                     SvgPicture.asset(
                                       'assets/svgs/premiumbadge.svg',
                                       height: 9,
-                                      color: primaryColorLT,
+                                      colorFilter: ColorFilter.mode(
+                                          primaryColorLT, BlendMode.srcIn),
                                     )
                                   ],
                                 )

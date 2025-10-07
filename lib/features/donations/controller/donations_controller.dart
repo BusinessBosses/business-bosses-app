@@ -1,3 +1,7 @@
+import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
+
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -5,14 +9,12 @@ import 'package:business_bosses_v2/features/donations/models/donations_model.dar
 import 'package:business_bosses_v2/features/donations/presentation/donation_created.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
-import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class DonationsController extends GetxController {
-  late IO.Socket socket;
+  late io.Socket socket;
   final ProfileController profileController = Get.find();
   final HomeController homeController = Get.find();
   RxList<DonationModel> donations = <DonationModel>[].obs;
@@ -536,20 +538,22 @@ class DonationsController extends GetxController {
   }
 
   void initSocket() {
-    socket = IO.io(Constants.socketUrl, <String, dynamic>{
+    socket = io.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
       'transports': <String>['websocket'],
     });
     socket.connect();
     socket.onConnect((_) {
-      print('Connection established');
+      if (kDebugMode) {
+        print('Connection established');
+      }
     });
 
-    socket.on('handshake', (data) {
+    socket.on('handshake', (dynamic data) {
       // print(data);
     });
 
-    socket.on('new-notification', (data) {
+    socket.on('new-notification', (dynamic data) {
       // print(data);
       profileController.updateProfile(<String, dynamic>{
         ...profileController.myProfile.toMap(),
@@ -560,11 +564,25 @@ class DonationsController extends GetxController {
     socket.onReconnect((_) {
       socket.emit('handshake', profileController.myProfile.uid);
 
-      print('reconnected');
+      if (kDebugMode) {
+        print('reconnected');
+      }
     });
 
-    socket.onDisconnect((_) => print('Connection Disconnection'));
-    socket.onConnectError((err) => print(err));
-    socket.onError((err) => print(err));
+    socket.onDisconnect((_) {
+      if (kDebugMode) {
+        print('Connection Disconnection');
+      }
+    });
+    socket.onConnectError((dynamic err) {
+      if (kDebugMode) {
+        print(err);
+      }
+    });
+    socket.onError((dynamic err) {
+      if (kDebugMode) {
+        print(err);
+      }
+    });
   }
 }

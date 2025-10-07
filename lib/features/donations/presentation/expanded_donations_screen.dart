@@ -25,7 +25,7 @@ class ExpandedDonationScreen extends StatefulWidget {
   });
 
   @override
-  _ExpandedDonationScreenState createState() => _ExpandedDonationScreenState();
+  State<ExpandedDonationScreen> createState() => _ExpandedDonationScreenState();
 }
 
 class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
@@ -167,7 +167,10 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                                     SvgPicture.asset(
                                                       'assets/svgs/premiumbadge.svg',
                                                       height: 9,
-                                                      color: primaryColorLT,
+                                                      colorFilter:
+                                                          ColorFilter.mode(
+                                                              primaryColorLT,
+                                                              BlendMode.srcIn),
                                                     )
                                                   ],
                                                 )
@@ -481,7 +484,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                               ),
                                               SvgPicture.asset(
                                                 'assets/svgs/edit.svg',
-                                                color: subtextColor,
+                                                colorFilter: ColorFilter.mode(
+                                                    subtextColor,
+                                                    BlendMode.srcIn),
                                               )
                                             ],
                                           ),
@@ -540,7 +545,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                               ),
                                               SvgPicture.asset(
                                                 'assets/svgs/share.svg',
-                                                color: subtextColor,
+                                                colorFilter: ColorFilter.mode(
+                                                    subtextColor,
+                                                    BlendMode.srcIn),
                                               )
                                             ],
                                           ),
@@ -829,7 +836,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                             SvgPicture.asset(
                                               'assets/svgs/premiumbadge.svg',
                                               height: 9,
-                                              color: primaryColorLT,
+                                              colorFilter: ColorFilter.mode(
+                                                  primaryColorLT,
+                                                  BlendMode.srcIn),
                                             )
                                           ])
                                         : Container()
