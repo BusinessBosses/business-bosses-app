@@ -21,10 +21,12 @@ class PeopleTab extends StatelessWidget {
 
     // Sort users with photos first
     sortedUsers.sort((UserModel a, UserModel b) {
-      if (a.photoUrl?.isNotEmpty == true && (b.photoUrl?.isEmpty ?? true))
+      if (a.photoUrl?.isNotEmpty == true && (b.photoUrl?.isEmpty ?? true)) {
         return -1;
-      if (b.photoUrl?.isNotEmpty == true && (a.photoUrl?.isEmpty ?? true))
+      }
+      if (b.photoUrl?.isNotEmpty == true && (a.photoUrl?.isEmpty ?? true)) {
         return 1;
+      }
       return 0;
     });
 

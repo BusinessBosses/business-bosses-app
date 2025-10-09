@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
-import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_detail_modal.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
