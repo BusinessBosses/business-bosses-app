@@ -56,10 +56,11 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   List<Widget> get mActions {
     return <Widget>[
       Padding(
-        padding: const EdgeInsets.only(right: 8.0, bottom: 8, top: 8),
+        padding: const EdgeInsets.only(right: 15.0, bottom: 8, top: 8),
         child: GestureDetector(
           onTap: () => Get.toNamed(Routes.relevantusersscreen),
           child: CircleAvatar(
+              radius: 16,
               backgroundColor: backgroundColor,
               child:
                   SvgPicture.asset('assets/svgs/collaborator.svg', height: 15)),
@@ -67,7 +68,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
       ),
       if (!profileController.myProfile.isSubscribed)
         Padding(
-          padding: const EdgeInsets.only(right: 8.0, bottom: 8, top: 8),
+          padding: const EdgeInsets.only(right: 15.0, bottom: 8, top: 8),
           child: GestureDetector(
             onTap: () {
               Get.bottomSheet(

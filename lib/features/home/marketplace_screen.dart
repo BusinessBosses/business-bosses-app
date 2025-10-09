@@ -96,7 +96,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   void initState() {
     super.initState();
     _marketplacesearchTabController = TabController(length: 4, vsync: this);
-    _marketplaceTabController = TabController(length: 5, vsync: this);
+    _marketplaceTabController = TabController(length: 4, vsync: this);
 
     // _marketplaceTabController.addListener(() {
     //   if (_marketplaceTabController.index == 2) {
@@ -1098,14 +1098,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                     fontSize: 14),
                                               ),
                                             ),
-                                            Tab(
-                                              child: Text(
-                                                'Deals',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 14),
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -1121,9 +1113,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                   ProductsPage(),
                                                   ServicesPage(),
                                                   SuppliersPage(),
-                                                  Bossuppartner(
-                                                    isMarketplace: true,
-                                                  ),
                                                 ],
                                               ),
                                             ),

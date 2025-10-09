@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
 import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
+import 'package:business_bosses_v2/features/chat/ai_chat.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -117,50 +118,6 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                   color: textColor,
                                   fontWeight: FontWeight.w700),
                             ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed(Routes.premiumscreen);
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    'SmartChat AI',
-                                    style: TextStyle(
-                                        color: textColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 15.0),
-                                    child: Column(
-                                      children: <Widget>[
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Container(
-                                            decoration: BoxDecoration(
-                                              boxShadow: <BoxShadow>[
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withValues(alpha: 0.09),
-                                                  blurRadius: 500.0,
-                                                  spreadRadius: 0.0,
-                                                ),
-                                              ],
-                                            ),
-                                            child: !profileController
-                                                    .myProfile.isSubscribed
-                                                ? subscribetopremiumbutton()
-                                                : Container())
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
                           ],
                         ),
                         Text(
@@ -171,15 +128,125 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                               color: primaryColorLT),
                         ),
                         const SizedBox(
-                          height: 5,
+                          height: 10,
                         ),
-                        // const Text(
-                        //   'how may I help you?',
-                        //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w100),
-                        // ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.to(() => AiChatScreen());
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors:
+                                      profileController.myProfile.isSubscribed
+                                          ? <Color>[
+                                              Color(0xFF6366F1),
+                                              Color(0xFF8B5CF6),
+                                            ]
+                                          : <Color>[
+                                              Color(0xFFF59E0B),
+                                              Color(0xFFEF4444),
+                                            ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: profileController
+                                            .myProfile.isSubscribed
+                                        ? Color(0xFF6366F1).withOpacity(0.3)
+                                        : Color(0xFFF59E0B).withOpacity(0.3),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: SvgPicture.asset(
+                                        'assets/svgs/bot.svg',
+                                        width: 10,
+                                        height: 18,
+                                        colorFilter: const ColorFilter.mode(
+                                          Colors.white,
+                                          BlendMode.srcIn,
+                                        ),
+                                      )),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            const Text(
+                                              'SmartChat AI',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 6),
+                                            if (!profileController
+                                                .myProfile.isSubscribed)
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 8,
+                                                  vertical: 3,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                child: const Text(
+                                                  'PRO',
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color(0xFFEF4444),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          profileController
+                                                  .myProfile.isSubscribed
+                                              ? 'Get AI-powered business insights'
+                                              : 'Unlock AI-powered features',
+                                          style: TextStyle(
+                                            color:
+                                                Colors.white.withOpacity(0.9),
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ]),
                 ),
-                Floatingbutton()
               ],
             ),
           ),
@@ -234,7 +301,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
           ListTile(
               leading: Icon(
                 LucideIcons.rocket,
-                color: Colors.grey,
+                color: Colors.grey.shade400,
               ),
               title: const Text(
                 'How to Promote My Business for Free',

@@ -21,6 +21,7 @@ import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../common/widgets/tiles/outlinebuttonheader.dart';
 import '../../marketplace/controllers/market_controller.dart';
 import '../../marketplace/models/market_model.dart';
@@ -196,22 +197,29 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 ),
                 if (_selectedIndex == 0 || _selectedIndex == 4)
                   Positioned(
-                      bottom: 10,
-                      right: 10,
-                      child: IconButton(
-                        onPressed: () {
+                      bottom: 12,
+                      right: 15,
+                      child: GestureDetector(
+                        onTap: () {
                           Get.to(
                             () => const MyEvents(
                               toHome: true,
                             ),
                           );
                         },
-                        icon: const Icon(Icons.calendar_month),
+                        child: CircleAvatar(
+                            radius: 18,
+                            backgroundColor: backgroundColor,
+                            child: const Icon(
+                              LucideIcons.calendar,
+                              color: textColor,
+                              size: 18,
+                            )),
                       )),
                 if (_selectedIndex == 0 || _selectedIndex == 4)
                   Positioned(
-                      bottom: 5,
-                      left: 0,
+                      bottom: 12,
+                      left: 15,
                       child: GestureDetector(
                           onTap: () {
                             _advancedDrawerController.showDrawer();
