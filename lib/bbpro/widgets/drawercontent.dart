@@ -330,42 +330,6 @@ class DrawerContent extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Stack(
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () => Get.toNamed(Routes.notifications),
-                            child: CircleAvatar(
-                              backgroundColor: backgroundColor,
-                              child: SvgPicture.asset(
-                                'assets/svgs/notificationicon.svg',
-                                height: 20,
-                                colorFilter: const ColorFilter.mode(
-                                  Colors.black,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                            ),
-                          ),
-                          if (hasUnreadNotification)
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors.white, // Border color
-                                    width: 2.0, // Border width
-                                  ),
-                                ),
-                                child: const CircleAvatar(
-                                  backgroundColor: primaryColorLT,
-                                  radius: 5,
-                                ),
-                              ),
-                            )
-                        ],
-                      ),
                       GestureDetector(
                         onTap: oncloseclick,
                         child: const CircleAvatar(
