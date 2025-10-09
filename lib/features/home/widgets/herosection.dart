@@ -129,9 +129,9 @@ class _HeroSectionState extends State<HeroSection> {
       title: 'Partner of the Week',
       icon: LucideIcons.heartHandshake,
       gradientColors: <Color>[
-        Color(0xFFFB7185),
-        Color(0xFFEC4899),
-        Color(0xFFD946EF)
+        Color(0xFF882BE4),
+        Color(0xFFFF4E61),
+        Color(0xFFFFAD28)
       ],
       iconColor: Color(0xFFFDA4AF),
       accentColor: Color(0x33FB7185),
@@ -193,15 +193,15 @@ class _HeroSectionState extends State<HeroSection> {
               ? 'Refer'
               : 'Follow',
           action2: 'Claim Deal'),
-      HeroItem(
-        id: '7',
-        type: 'events',
-        title: 'Events',
-        subtitle: 'Share your thoughts with bosses',
-        image:
-            'https://images.pexels.com/photos/9088850/pexels-photo-9088850.jpeg',
-        action: 'View Events',
-      ),
+      // HeroItem(
+      //   id: '7',
+      //   type: 'events',
+      //   title: 'Events',
+      //   subtitle: 'Share your thoughts with bosses',
+      //   image:
+      //       'https://images.pexels.com/photos/9088850/pexels-photo-9088850.jpeg',
+      //   action: 'View Events',
+      // ),
       HeroItem(
           id: '8',
           type: 'matches',
@@ -216,7 +216,7 @@ class _HeroSectionState extends State<HeroSection> {
 
   void _startAutoRotation() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 2000), (Timer timer) {
       final Duration timeSinceLast =
           DateTime.now().difference(_lastInteraction);
       if (timeSinceLast.inSeconds >= 2) {
@@ -493,7 +493,7 @@ class _HeroSectionState extends State<HeroSection> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 // Title
-                Spacer(),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -501,7 +501,7 @@ class _HeroSectionState extends State<HeroSection> {
                       config.title.toUpperCase(),
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 15,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1.5,
                       ),
@@ -509,7 +509,9 @@ class _HeroSectionState extends State<HeroSection> {
                   ],
                 ),
 
-                const SizedBox(height: 12),
+                SizedBox(
+                  height: 10,
+                ),
 
                 // Winner info card
                 GestureDetector(
@@ -536,9 +538,9 @@ class _HeroSectionState extends State<HeroSection> {
                     }
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.white10,
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -546,11 +548,11 @@ class _HeroSectionState extends State<HeroSection> {
                         // Avatar
                         item.image != ''
                             ? ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(50),
                                 child: NetworkImageWithPlaceHolder(
                                   imageUrl: item.image,
-                                  width: 60,
-                                  height: 60,
+                                  width: 65,
+                                  height: 65,
                                   fit: BoxFit.cover,
                                 ),
                               )
@@ -566,7 +568,7 @@ class _HeroSectionState extends State<HeroSection> {
                               Text(
                                 item.subtitle,
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -577,7 +579,7 @@ class _HeroSectionState extends State<HeroSection> {
                                 Text(
                                   item.description,
                                   style: const TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontSize: 14,
                                   ),
                                   maxLines: 1,
@@ -590,7 +592,7 @@ class _HeroSectionState extends State<HeroSection> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 7),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -632,14 +634,14 @@ class _HeroSectionState extends State<HeroSection> {
                                         ? LucideIcons.forward
                                         : LucideIcons.userPlus,
                                 size: 16,
-                                color: textColor),
+                                color: Colors.black),
                             const SizedBox(width: 5),
                             Text(
                               item.action,
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
-                                color: textColor,
+                                color: Colors.black,
                               ),
                             ),
                           ],
@@ -700,7 +702,6 @@ class _HeroSectionState extends State<HeroSection> {
                     ),
                   ],
                 ),
-                Spacer(),
               ],
             ),
           ),
@@ -742,7 +743,7 @@ class _HeroSectionState extends State<HeroSection> {
             onTap: _onUserInteraction,
             onPanDown: (_) => _onUserInteraction(),
             child: SizedBox(
-              height: 270,
+              height: 220,
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: heroItems.length,

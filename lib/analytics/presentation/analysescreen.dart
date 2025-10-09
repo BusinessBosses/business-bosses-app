@@ -6,10 +6,12 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
+import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/params.dart';
@@ -58,6 +60,15 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void showPromoteSheet() {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) => AIPromoteSheet(),
+      );
+    }
+
     UserModel user = UserModel();
     return Scaffold(
       backgroundColor: Colors.white,
@@ -107,34 +118,47 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                   fontWeight: FontWeight.w700),
                             ),
                             const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 15.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Get.toNamed(Routes.premiumscreen);
-                                },
-                                child: Column(
-                                  children: <Widget>[
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                        decoration: BoxDecoration(
-                                          boxShadow: <BoxShadow>[
-                                            BoxShadow(
-                                              color: Colors.black
-                                                  .withValues(alpha: 0.09),
-                                              blurRadius: 500.0,
-                                              spreadRadius: 0.0,
-                                            ),
-                                          ],
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.premiumscreen);
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'SmartChat AI',
+                                    style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 15.0),
+                                    child: Column(
+                                      children: <Widget>[
+                                        const SizedBox(
+                                          height: 10,
                                         ),
-                                        child: !profileController
-                                                .myProfile.isSubscribed
-                                            ? subscribetopremiumbutton()
-                                            : Container())
-                                  ],
-                                ),
+                                        Container(
+                                            decoration: BoxDecoration(
+                                              boxShadow: <BoxShadow>[
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withValues(alpha: 0.09),
+                                                  blurRadius: 500.0,
+                                                  spreadRadius: 0.0,
+                                                ),
+                                              ],
+                                            ),
+                                            child: !profileController
+                                                    .myProfile.isSubscribed
+                                                ? subscribetopremiumbutton()
+                                                : Container())
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             )
                           ],
@@ -208,16 +232,19 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
             child: ColoredBox(color: backgroundcolorinterface),
           ),
           ListTile(
-              leading: SvgPicture.asset('assets/svgs/ranking.svg'),
+              leading: Icon(
+                LucideIcons.rocket,
+                color: Colors.grey,
+              ),
               title: const Text(
-                'Show my ranking',
+                'How to Promote My Business for Free',
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                     color: textColor),
               ),
               onTap: () {
-                Get.toNamed(Routes.rankingscreen);
+                showPromoteSheet();
               },
               trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
           const SizedBox(

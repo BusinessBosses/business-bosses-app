@@ -198,15 +198,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   Positioned(
                       bottom: 10,
                       right: 10,
-                      child: GestureDetector(
-                          onTap: () {
-                            _advancedDrawerController.showDrawer();
-                          },
-                          child: const CustomMenuButton())),
-                if (_selectedIndex == 0 || _selectedIndex == 4)
-                  Positioned(
-                      bottom: 5,
-                      left: 0,
                       child: IconButton(
                         onPressed: () {
                           Get.to(
@@ -217,6 +208,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         },
                         icon: const Icon(Icons.calendar_month),
                       )),
+                if (_selectedIndex == 0 || _selectedIndex == 4)
+                  Positioned(
+                      bottom: 5,
+                      left: 0,
+                      child: GestureDetector(
+                          onTap: () {
+                            _advancedDrawerController.showDrawer();
+                          },
+                          child: const CustomMenuButton())),
               ]),
             ),
             body: loading

@@ -243,7 +243,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                           },
                         )
                       : const Text(
-                          'Boss Up & Grow',
+                          'Boss Up & Win',
                           style: TextStyle(
                               color: textColor,
                               fontWeight: FontWeight.w900,
