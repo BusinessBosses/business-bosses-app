@@ -5,7 +5,6 @@ import 'package:business_bosses_v2/features/donations/presentation/donation_memb
 import 'package:business_bosses_v2/features/donations/presentation/donationpopup.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
-import 'package:business_bosses_v2/features/forum/widgets/joinedbutton.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -85,316 +84,336 @@ class _DonationsPageState extends State<DonationsPage> {
                               children: <Widget>[
                                 Container(
                                   width: double.infinity,
-                                  color: backgroundColor,
-                                  child: Column(
+                                  color: backgroundcolorinterface,
+                                  child: Stack(
                                     children: <Widget>[
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      if (_myProfile.myProfile.toPost)
-                                        Row(
-                                          children: <Widget>[
-                                            GestureDetector(
-                                              onTap: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          const DonationPopup(),
-                                                );
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15.0),
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    const Text(
-                                                      'Info',
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    SvgPicture.asset(
-                                                      'assets/svgs/info.svg',
-                                                      height: 20,
-                                                    ),
-                                                  ],
+                                      Column(
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.all(15),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[],
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                            const Spacer(),
-                                            Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 15),
-                                                  child: ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            minimumSize:
-                                                                const Size(
-                                                                    150, 45),
-                                                            backgroundColor:
-                                                                primaryColorLT),
-                                                    onPressed: () {
-                                                      if (!donationsController
-                                                          .userIds
-                                                          .contains(_myProfile
-                                                              .myProfile.uid)) {
-                                                        Get.snackbar(
-                                                          'Error!',
-                                                          'You have to join to create a donation!',
-                                                          backgroundColor:
-                                                              Colors.red,
-                                                          colorText:
-                                                              Colors.white,
-                                                        );
-                                                        return;
-                                                      }
-                                                      if (donationsController
-                                                          .doesUserDonationExist()) {
-                                                        Get.snackbar(
-                                                          'Error!',
-                                                          'You cannot create multiple donations!',
-                                                          backgroundColor:
-                                                              Colors.red,
-                                                          colorText:
-                                                              Colors.white,
-                                                        );
-                                                        return;
-                                                      }
-                                                      Get.toNamed(Routes
-                                                          .createdonationsscreen);
-                                                    },
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          const DonationPopup(),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 8),
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.black12,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30)),
                                                     child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
                                                       children: <Widget>[
-                                                        const Text(
-                                                          'Post a Project',
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500),
+                                                        SvgPicture.asset(
+                                                          'assets/svgs/info.svg',
+                                                          height: 15,
                                                         ),
                                                         const SizedBox(
-                                                          width: 5,
+                                                            width: 5),
+                                                        const Text(
+                                                          'How it works ',
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700),
                                                         ),
-                                                        SvgPicture.asset(
-                                                            'assets/svgs/startatopic.svg')
                                                       ],
                                                     ),
                                                   ),
-                                                )),
-                                          ],
-                                        ),
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                            color: backgroundColor),
-                                        child: Stack(
-                                          children: <Widget>[
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 10, right: 15, left: 15),
-                                              height: 150,
-                                              width: double.infinity,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(15.0),
-                                                child: const ColoredBox(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                            Column(
-                                              children: <Widget>[
-                                                Row(
-                                                  children: <Widget>[
-                                                    Container(
-                                                      margin:
-                                                          const EdgeInsets.only(
-                                                              top: 25,
-                                                              right: 15,
-                                                              left: 30),
-                                                      height: 86,
-                                                      width: 142,
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        child: FittedBox(
-                                                          fit: BoxFit.fill,
-                                                          child: Image.asset(
-                                                              'assets/images/donationpic.png'),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                        child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 25,
-                                                              right: 30),
-                                                      child: Text(
-                                                        marketController
-                                                            .donationDescription,
-                                                        style: const TextStyle(
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w700),
-                                                        softWrap: true,
-                                                        maxLines: 5,
-                                                      ),
-                                                    )),
-                                                  ],
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 27, right: 15),
-                                                  child: Row(
-                                                    children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    right: 2,
-                                                                    top: 5),
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/svgs/members.svg',
-                                                              height: 15,
-                                                              colorFilter:
-                                                                  ColorFilter.mode(
-                                                                      primaryColorLT,
-                                                                      BlendMode
-                                                                          .srcIn),
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    top: 5.0),
-                                                            child: Obx(
-                                                              () => RichText(
-                                                                text: TextSpan(
-                                                                  children: <InlineSpan>[
-                                                                    TextSpan(
-                                                                      text:
-                                                                          'Members (${formatCount(donationsController.userIds.length)})',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontWeight:
-                                                                            FontWeight.w600,
-                                                                        color:
-                                                                            primaryColorLT,
-                                                                        decoration:
-                                                                            TextDecoration.underline,
-                                                                      ),
-                                                                      recognizer:
-                                                                          TapGestureRecognizer()
-                                                                            ..onTap =
-                                                                                () {
-                                                                              Get.to(() => DonationMembers(users: donationsController.usersMembers));
-                                                                            },
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    left: 8.0,
-                                                                    top: 5,
-                                                                    right: 2),
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/svgs/topics.svg',
-                                                              colorFilter:
-                                                                  ColorFilter.mode(
-                                                                      textColor,
-                                                                      BlendMode
-                                                                          .srcIn),
-                                                              height: 11.5,
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    top: 5.0),
-                                                            child: Obx(
-                                                              () => RichText(
-                                                                text: TextSpan(
-                                                                  children: <InlineSpan>[
-                                                                    TextSpan(
-                                                                      text:
-                                                                          'Posts (${formatCount(donationsController.donations.length)})',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        fontSize:
-                                                                            12,
-                                                                        color:
-                                                                            textColor,
-                                                                        fontWeight:
-                                                                            FontWeight.w600,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const Spacer(),
-                                                      Align(
-                                                        alignment: Alignment
-                                                            .centerRight,
-                                                        child: Obx(
-                                                          () => JoinedButton(
-                                                            donationsController
-                                                                .userIds
-                                                                .contains(
-                                                                    _myProfile
-                                                                        .myProfile
-                                                                        .uid),
-                                                            () {
-                                                              donationsController
-                                                                  .joinGroup();
-                                                            },
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              boxShadow: <BoxShadow>[
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withValues(alpha: 0.09),
+                                                  blurRadius: 100.0,
+                                                  spreadRadius: 5,
                                                 )
                                               ],
-                                            )
-                                          ],
-                                        ),
+                                            ),
+                                            child: Container(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 10),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: <Widget>[
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                            .all(5),
+                                                        height: 86,
+                                                        width: 142,
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                          child: FittedBox(
+                                                            fit: BoxFit.fill,
+                                                            child: Image.asset(
+                                                                'assets/images/donationpic.png'),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 10),
+                                                      Expanded(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 30),
+                                                          child: Text(
+                                                            marketController
+                                                                .donationDescription,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                            ),
+                                                            softWrap: true,
+                                                            maxLines: 5,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: <Widget>[
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          Row(
+                                                            children: <Widget>[
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        right:
+                                                                            2,
+                                                                        top: 5),
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/svgs/members.svg',
+                                                                  height: 15,
+                                                                  color:
+                                                                      primaryColorLT,
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        top:
+                                                                            5.0),
+                                                                child: Obx(
+                                                                  () =>
+                                                                      RichText(
+                                                                    text:
+                                                                        TextSpan(
+                                                                      children: <InlineSpan>[
+                                                                        TextSpan(
+                                                                          text:
+                                                                              'Members (${formatCount(donationsController.userIds.length)})',
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                            color:
+                                                                                primaryColorLT,
+                                                                            decoration:
+                                                                                TextDecoration.underline,
+                                                                          ),
+                                                                          recognizer: TapGestureRecognizer()
+                                                                            ..onTap = () {
+                                                                              Get.to(() => DonationMembers(users: donationsController.usersMembers));
+                                                                            },
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            children: <Widget>[
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        left:
+                                                                            8.0,
+                                                                        top: 5,
+                                                                        right:
+                                                                            2),
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/svgs/entries.svg',
+                                                                  color:
+                                                                      textColor,
+                                                                  height: 11.5,
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        top:
+                                                                            5.0),
+                                                                child: Obx(
+                                                                  () =>
+                                                                      RichText(
+                                                                    text:
+                                                                        TextSpan(
+                                                                      children: <InlineSpan>[
+                                                                        TextSpan(
+                                                                          text:
+                                                                              'Entries (${formatCount(donationsController.donations.length)}) ',
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                textColor,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                                minimumSize:
+                                                                    const Size(
+                                                                        90,
+                                                                        40)),
+                                                        onPressed: () {
+                                                          // if (!donationsController
+                                                          //     .userIds
+                                                          //     .contains(
+                                                          //         _myProfile
+                                                          //             .myProfile
+                                                          //             .uid)) {
+                                                          //   Get.snackbar(
+                                                          //     'Error!',
+                                                          //     'You have to join to create a donation!',
+                                                          //     backgroundColor:
+                                                          //         Colors.red,
+                                                          //     colorText:
+                                                          //         Colors.white,
+                                                          //   );
+                                                          //   return;
+                                                          // }
+                                                          // if (donationsController
+                                                          //     .doesUserDonationExist()) {
+                                                          //   Get.snackbar(
+                                                          //     'Error!',
+                                                          //     'You cannot create multiple donations!',
+                                                          //     backgroundColor:
+                                                          //         Colors.red,
+                                                          //     colorText:
+                                                          //         Colors.white,
+                                                          //   );
+                                                          //   return;
+                                                          // }
+                                                          Get.toNamed(Routes
+                                                              .createdonationsscreen);
+                                                        },
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: <Widget>[
+                                                            const Text(
+                                                              'Enter ',
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500),
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 5),
+                                                            SvgPicture.asset(
+                                                              'assets/svgs/startatopic.svg',
+                                                              height: 10,
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                        ],
                                       ),
                                     ],
                                   ),
