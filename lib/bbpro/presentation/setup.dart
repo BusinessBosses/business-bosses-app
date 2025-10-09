@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/projects.dart';
 import 'package:business_bosses_v2/bbpro/presentation/services_management.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
@@ -14,6 +15,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -30,6 +32,7 @@ class _SetupState extends State<Setup> {
     'Edit Biz-Center',
     'Manage Product Inventory',
     'My Services',
+    'My Tasks',
     'Contact Us'
   ];
 
@@ -217,10 +220,15 @@ class _SetupState extends State<Setup> {
                                                   'assets/svgs/editshop.svg',
                                                   height: 20,
                                                 )
-                                              : SvgPicture.asset(
-                                                  'assets/svgs/support.svg',
-                                                  height: 20,
-                                                ),
+                                              : titles[index] == 'My Tasks'
+                                                  ? SvgPicture.asset(
+                                                      'assets/svgs/projects.svg',
+                                                      height: 20,
+                                                    )
+                                                  : SvgPicture.asset(
+                                                      'assets/svgs/support.svg',
+                                                      height: 20,
+                                                    ),
                                   title: Text(
                                     titles[index],
                                     style: const TextStyle(
@@ -241,6 +249,9 @@ class _SetupState extends State<Setup> {
                                       Get.to(() => Setupshop(
                                             shop: shopController.shop,
                                           ));
+                                    }
+                                    if (titles[index] == 'My Tasks') {
+                                      Get.to(Projects());
                                     }
                                     if (titles[index] == 'Contact Us') {
                                       _contactUs();

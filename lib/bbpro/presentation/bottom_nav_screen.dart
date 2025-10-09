@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class Bottomnavscreen extends StatefulWidget {
   final int? initialindex;
@@ -133,6 +135,18 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                           Expanded(
                               flex: 10,
                               child: BottomTabButton(
+                                icon: _selectedIndex == 7
+                                    ? 'assets/svgs/dashboard.svg'
+                                    : 'assets/svgs/dashboard.svg',
+                                label: 'Home',
+                                onTap: () {
+                                  Get.to(HomeScreen());
+                                },
+                                isActive: _selectedIndex == 7,
+                              )),
+                          Expanded(
+                              flex: 10,
+                              child: BottomTabButton(
                                 icon: _selectedIndex == 0
                                     ? 'assets/svgs/dashboard.svg'
                                     : 'assets/svgs/dashboard.svg',
@@ -140,17 +154,17 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                                 onTap: () => _onItemTapped(0),
                                 isActive: _selectedIndex == 0,
                               )),
-                          Expanded(
-                            flex: 10,
-                            child: BottomTabButton(
-                              icon: _selectedIndex == 1
-                                  ? 'assets/svgs/projects.svg'
-                                  : 'assets/svgs/projects.svg',
-                              label: 'Tasks',
-                              onTap: () => _onItemTapped(1),
-                              isActive: _selectedIndex == 1,
-                            ),
-                          ),
+                          // Expanded(
+                          //   flex: 10,
+                          //   child: BottomTabButton(
+                          //     icon: _selectedIndex == 2
+                          //         ? 'assets/svgs/projects.svg'
+                          //         : 'assets/svgs/projects.svg',
+                          //     label: 'Tasks',
+                          //     onTap: () => _onItemTapped(2),
+                          //     isActive: _selectedIndex == 2,
+                          //   ),
+                          // ),
                           Expanded(
                             flex: 10,
                             child: BottomTabButton(
@@ -221,23 +235,45 @@ class BottomTabButton extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SvgPicture.asset(
-            icon,
-            height: 25,
-            colorFilter: ColorFilter.mode(
-              isActive ? proprimaryColor : textColor,
-              BlendMode.srcIn,
-            ),
-          ),
+          label == 'Home'
+              ? Container(
+                  width: 35.0,
+                  height: 25.0,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(
+                    'assets/images/app_logo_2.png',
+                  ),
+                )
+              : SvgPicture.asset(
+                  icon,
+                  height: 25,
+                  colorFilter: ColorFilter.mode(
+                    isActive ? proprimaryColor : textColor,
+                    BlendMode.srcIn,
+                  ),
+                ),
           const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14.0,
-              fontWeight: FontWeight.w700,
-              color: isActive ? proprimaryColor : textColor,
-            ),
-          ),
+          Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: <Widget>[
+                if (label == 'Home')
+                  Icon(
+                    LucideIcons.chevronLeft,
+                    size: 15,
+                  ),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w700,
+                    color: isActive ? proprimaryColor : textColor,
+                  ),
+                ),
+              ]),
         ],
       ),
     );

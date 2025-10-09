@@ -85,6 +85,12 @@ class _ProjectsState extends State<Projects>
       resizeToAvoidBottomInset: true,
       backgroundColor: probackgroundColor,
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        ),
         automaticallyImplyLeading: false,
         title: const Text(
           'Tasks',
