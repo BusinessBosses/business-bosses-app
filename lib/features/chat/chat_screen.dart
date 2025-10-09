@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../action/action.dart';
 import '../../common/dialogs/snackbar.dart';
 import '../../common/widgets/popup/my_popup_menu_button.dart';
@@ -127,11 +128,12 @@ class ChatScreenState extends State<ChatScreen> {
                             fontSize: 20),
                       ),
                       actions: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(right: 5.0),
-                              child: GestureDetector(
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15.0),
+                          child: Row(
+                            spacing: 10,
+                            children: <Widget>[
+                              GestureDetector(
                                 onTap: () {
                                   _profileController.myProfile.isSubscribed ==
                                           true
@@ -168,35 +170,31 @@ class ChatScreenState extends State<ChatScreen> {
                                         );
                                 },
                                 child: CircleAvatar(
-                                    radius: 20,
+                                    radius: 16,
                                     backgroundColor: backgroundColor,
                                     child: SvgPicture.asset(
                                       'assets/svgs/campaign.svg',
-                                      height: 23,
-                                    )),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => Get.toNamed(Routes.notifications),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 10.0,
-                                ),
-                                child: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: backgroundColor,
-                                    child: SvgPicture.asset(
-                                      'assets/svgs/notificationicon.svg',
                                       height: 20,
                                     )),
                               ),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  _advancedDrawerController.showDrawer();
-                                },
-                                child: const CustomMenuButton())
-                          ],
+                              GestureDetector(
+                                onTap: () => Get.toNamed(Routes.notifications),
+                                child: CircleAvatar(
+                                    radius: 16,
+                                    backgroundColor: backgroundColor,
+                                    child: Icon(
+                                      LucideIcons.bell,
+                                      color: textColor,
+                                      size: 20,
+                                    )),
+                              ),
+                              GestureDetector(
+                                  onTap: () {
+                                    _advancedDrawerController.showDrawer();
+                                  },
+                                  child: const CustomMenuButton())
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -273,6 +271,7 @@ class ChatScreenState extends State<ChatScreen> {
                             ),
                             Expanded(
                               child: ListView.builder(
+                                padding: EdgeInsets.only(bottom: 200),
                                 itemCount: controller.chats.length,
                                 itemBuilder: (BuildContext context, int i) {
                                   return Column(
@@ -288,7 +287,7 @@ class ChatScreenState extends State<ChatScreen> {
                                         child: Divider(
                                           height: 0.5,
                                           color: Colors.grey
-                                              .withValues(alpha: 0.3),
+                                              .withValues(alpha: 0.05),
                                         ),
                                       ),
                                     ],

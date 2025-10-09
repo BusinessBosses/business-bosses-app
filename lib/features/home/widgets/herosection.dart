@@ -480,7 +480,7 @@ class _HeroSectionState extends State<HeroSection> {
           // Centered content
           Center(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
@@ -497,7 +497,7 @@ class _HeroSectionState extends State<HeroSection> {
                     ),
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
 
                   // Winner info card
                   GestureDetector(
@@ -580,7 +580,7 @@ class _HeroSectionState extends State<HeroSection> {
                     ),
                   ),
 
-                  const SizedBox(height: 7),
+                  const SizedBox(height: 15),
 
                   // Action buttons
                   Row(
@@ -611,7 +611,7 @@ class _HeroSectionState extends State<HeroSection> {
                           ),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
-                            vertical: 10,
+                            vertical: 8,
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -664,7 +664,7 @@ class _HeroSectionState extends State<HeroSection> {
                               border: Border.all(color: Colors.white30)),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
-                            vertical: 10,
+                            vertical: 8,
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,

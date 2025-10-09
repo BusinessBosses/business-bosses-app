@@ -37,7 +37,6 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
     CompleteSearchController controller = Get.find();
     return InkWell(
       onTap: () {
@@ -45,18 +44,19 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
       },
       borderRadius: BorderRadius.circular(radius),
       child: Padding(
-        padding:
-            EdgeInsets.only(right: widget.color != null ? 10.0 : 0, bottom: 0),
+        padding: const EdgeInsets.only(right: 10.0),
         child: Container(
-          width: widget.color != null ? 150 : null,
-          height: widget.color != null ? 190 : null,
-          padding: const EdgeInsets.all(16.0),
+          width: 150,
+          padding: const EdgeInsets.all(12.0),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(radius),
-              color: widget.color ?? Colors.white),
+            borderRadius: BorderRadius.circular(radius),
+            color: widget.color ?? Colors.white,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              // Avatar
               UserAvatarWithBadge(
                 user: widget.user,
                 height: 64.0,
@@ -64,66 +64,76 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                 radius: 64.0,
                 placeHolder: Icons.person,
               ),
+
               const SizedBox(height: 8.0),
-              Column(
-                children: <Widget>[
-                  widget.user.isSubscribed == true
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 0.0),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                widget.user.name ?? widget.user.username,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: widget.color != null
-                                    ? const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700)
-                                    : Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              const SizedBox(width: 5),
-                              SvgPicture.asset(
-                                'assets/svgs/premiumbadge.svg',
-                                height: 9,
-                                colorFilter: ColorFilter.mode(
-                                    primaryColorLT, BlendMode.srcIn),
-                              )
-                            ],
-                          ),
-                        )
-                      : Text(
-                          truncateWithEllipsis(widget.color != null ? 10 : 30,
-                              widget.user.name ?? widget.user.username),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: widget.color != null
-                              ? const TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w700)
-                              : Theme.of(context).textTheme.bodyLarge,
-                        ),
-                  const SizedBox(height: 4.0),
-                  widget.user.category != null
-                      ? Text(widget.user.category.toString(),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 12,
-                          ))
-                      : widget.color != null
-                          ? const SizedBox(height: 12)
-                          : Container(),
-                ],
-              ),
-              const SizedBox(height: 12.0),
+
+              // Name and Badge Section - Fixed Height
               SizedBox(
-                width: 120,
+                height: 40,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    // Name with optional premium badge
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Flexible(
+                          child: Text(
+                            truncateWithEllipsis(
+                              15,
+                              widget.user.name ?? widget.user.username,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        if (widget.user.isSubscribed == true) ...<Widget>[
+                          const SizedBox(width: 4),
+                          SvgPicture.asset(
+                            'assets/svgs/premiumbadge.svg',
+                            height: 12,
+                            colorFilter: ColorFilter.mode(
+                              primaryColorLT,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+
+                    const SizedBox(height: 4.0),
+
+                    // Category
+                    Text(
+                      widget.user.category?.toString() ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 8.0),
+
+              // Follow Button
+              SizedBox(
+                width: double.infinity,
+                height: 36,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         widget.status ? Colors.white : primaryColorLT,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(radius),
                       side: BorderSide(
@@ -132,19 +142,17 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                       ),
                     ),
                   ),
-                  // buttonType:
-                  //     widget.status ? ButtonType.outline : ButtonType.elevated,
                   onPressed: widget.onChangeConnectionStatus,
-                  // height: 36.0,
-
                   child: Text(
                     widget.status ? 'Following' : 'Follow',
                     style: TextStyle(
-                        color: widget.status ? primaryColorLT : Colors.white),
+                      color: widget.status ? primaryColorLT : Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
             ],
           ),
         ),

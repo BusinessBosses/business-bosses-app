@@ -38,12 +38,6 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
                 element.category?.toString() == _filtertitle)
             .toList();
 
-        // void refreshScreen() {
-        //   setState(() {
-        //     _filtertitle = '';
-        //   });
-        // }
-
         filteredConnections.sort((UserModel a, UserModel b) {
           return _compareUsersByPhotoUrl(a, b);
         });
@@ -55,11 +49,8 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const SizedBox(
-              height: 2,
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: GestureDetector(
@@ -74,59 +65,46 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                     ),
-                    Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: <Widget>[
-                          // Text(
-                          //   'View all',
-                          //   style: TextStyle(fontSize: 11),
-                          // ),
-                          Icon(Icons.chevron_right, color: textColor, size: 20),
-                        ]),
+                    Icon(Icons.chevron_right, color: textColor, size: 20),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 10),
             controller.loading.value
-                ? const Center(child: CircularProgressIndicator())
-                : Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: SizedBox(
-                      height: 190,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: filteredConnections.length > 10
-                            ? 11
-                            : filteredConnections.length + 1,
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index == 0) {
-                            return const SizedBox(width: 15);
-                          }
+                ? const SizedBox(
+                    height: 180,
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                : SizedBox(
+                    height: 180,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: filteredConnections.length > 10
+                          ? 11
+                          : filteredConnections.length + 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index == 0) {
+                          return const SizedBox(width: 15);
+                        }
 
-                          final UserModel currentUser =
-                              filteredConnections[index - 1];
+                        final UserModel currentUser =
+                            filteredConnections[index - 1];
 
-                          bool checkConnected =
-                              profileController.myProfile.connecteds != null &&
-                                  profileController.myProfile.connecteds!
-                                      .contains(currentUser.uid);
+                        bool checkConnected =
+                            profileController.myProfile.connecteds != null &&
+                                profileController.myProfile.connecteds!
+                                    .contains(currentUser.uid);
 
-                          return Column(
-                            children: <Widget>[
-                              ConnectionGridTile(
-                                color: Colors.white,
-                                user: currentUser,
-                                status: checkConnected,
-                                onChangeConnectionStatus: () {
-                                  controller.connectToUser(currentUser);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                        return ConnectionGridTile(
+                          color: Colors.white,
+                          user: currentUser,
+                          status: checkConnected,
+                          onChangeConnectionStatus: () {
+                            controller.connectToUser(currentUser);
+                          },
+                        );
+                      },
                     ),
                   ),
             const SizedBox(height: 10),

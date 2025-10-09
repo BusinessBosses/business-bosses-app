@@ -273,10 +273,10 @@ class _PostTileState extends State<PostTile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                PostTag(
-                  label: 'General',
-                  backgroundColor: backgroundColor,
-                ),
+                // PostTag(
+                //   label: 'General',
+                //   backgroundColor: backgroundColor,
+                // ),
                 if (widget.post.reposts?.length != null &&
                     widget.post.reposts!.isNotEmpty) ...<Widget>[
                   Padding(

@@ -125,20 +125,19 @@ class HomeAppBar extends StatelessWidget {
                 ),
 
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () => Get.toNamed(Routes.notifications),
                   child: Stack(
                     children: <Widget>[
                       GestureDetector(
-                          onTap: onMenuClick,
                           child: const CircleAvatar(
-                            radius: 16,
-                            backgroundColor: backgroundColor,
-                            child: Icon(
-                              LucideIcons.bell,
-                              size: 17,
-                              color: textColor,
-                            ),
-                          )),
+                        radius: 16,
+                        backgroundColor: backgroundColor,
+                        child: Icon(
+                          LucideIcons.bell,
+                          size: 17,
+                          color: textColor,
+                        ),
+                      )),
                       if (hasUnreadNotification)
                         Positioned(
                           right: 0,
