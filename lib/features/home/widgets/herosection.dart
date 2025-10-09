@@ -187,11 +187,8 @@ class _HeroSectionState extends State<HeroSection> {
           subtitle: user?.name ?? '',
           image: 'none',
           description: user?.bio ?? '',
-          action: user?.connecteds != null &&
-                  _profileController.myProfile.connecteds!.contains(user!.uid)
-              ? 'Refer'
-              : 'Follow',
-          action2: 'Claim Deal'),
+          action: 'Claim Deal',
+          action2: 'Become a Partner'),
       HeroItem(
           id: '8',
           type: 'matches',
@@ -599,6 +596,8 @@ class _HeroSectionState extends State<HeroSection> {
                             case 'View Matches':
                               Get.to(() => ExpandedMatchesScreen());
                               break;
+                            case 'Claim Deal':
+                              break;
                             default:
                               Get.toNamed(Routes.liveEvents);
                               break;
@@ -621,7 +620,9 @@ class _HeroSectionState extends State<HeroSection> {
                                       ? LucideIcons.calendar
                                       : item.action == 'Refer'
                                           ? LucideIcons.forward
-                                          : LucideIcons.userPlus,
+                                          : item.action == 'Claim Deal'
+                                              ? LucideIcons.checkCircle2
+                                              : LucideIcons.userPlus,
                                   size: 16,
                                   color: Colors.black),
                               const SizedBox(width: 5),
