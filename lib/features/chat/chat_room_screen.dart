@@ -232,7 +232,7 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                     ),
                     contentPadding: const EdgeInsets.only(left: 0),
                     title: Text(
-                      args.username,
+                      args.name ?? args.username,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     leading: UserAvatarWithBadge(

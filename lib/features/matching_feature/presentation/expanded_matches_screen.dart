@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_header.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/premium_prompt.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -7,7 +8,6 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 // Import your controllers and other necessary files
 import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
-import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/bookmarked_matches.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/banner.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_card.dart';
@@ -27,7 +27,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
       Get.put(ProfileController()); // Make sure this is initialized
 
   /// Builds the view for a subscribed user, showing all matches clearly.
-  Widget buildSubscribedView(List<Match> matches) {
+  Widget buildSubscribedView(List<MatchModel> matches) {
     if (matches.isEmpty) {
       return const Center(child: Text('No matches to display.'));
     }
@@ -37,7 +37,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: matches.length,
         itemBuilder: (BuildContext context, int index) {
-          final Match match = matches[index];
+          final MatchModel match = matches[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: MatchCard(
@@ -57,16 +57,16 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
 
   /// Builds the view for a non-subscribed user.
   /// Shows the first three matches clearly and blurs the rest.
-  Widget buildFreeView(List<Match> matches) {
+  Widget buildFreeView(List<MatchModel> matches) {
     if (matches.isEmpty) {
       return const Center(child: Text('No matches to display.'));
     }
 
     // Get the first three matches
-    final List<Match> clearMatches = matches.take(3).toList();
+    final List<MatchModel> clearMatches = matches.take(3).toList();
 
     // Get the rest of the matches to be blurred
-    final List<Match> blurredMatches = matches.skip(3).toList();
+    final List<MatchModel> blurredMatches = matches.skip(3).toList();
 
     final MatchController matchController = Get.find<MatchController>();
     return Column(
@@ -77,7 +77,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: clearMatches.length,
           itemBuilder: (BuildContext context, int index) {
-            final Match match = clearMatches[index];
+            final MatchModel match = clearMatches[index];
             return Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: MatchCard(
@@ -159,7 +159,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
 
         // Calculate the average match quality of all matches
         final double totalQuality = matchController.matchList
-            .fold(0.0, (double sum, Match match) => sum + match.quality);
+            .fold(0.0, (double sum, MatchModel match) => sum + match.quality);
         final int averageQuality =
             (totalQuality / matchController.matchList.length).round();
 

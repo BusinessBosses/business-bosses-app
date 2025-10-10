@@ -77,6 +77,7 @@ class HomeController extends GetxController {
   UserModel? bossOfTheWeek = UserModel();
   UserModel? mentorOfTheWeek = UserModel();
   UserModel? backerOfTheWeek = UserModel();
+  dynamic partnerOfTheWeek;
   RxList<ForumModel> userresources = <ForumModel>[].obs;
 
   void addIndustries(List<Industry> data) {
@@ -1018,6 +1019,8 @@ class HomeController extends GetxController {
         data['interests'],
         data['userRanking'],
       );
+
+      partnerOfTheWeek = response.data['partnerOfTheWeek'];
 
       _chatController.processDataToState(
           data['chats'], profileController.myProfile.uid);

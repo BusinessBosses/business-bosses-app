@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 // Your app's theme and model
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
+import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 
 // --- CORRECTED AND STANDARDIZED IMPORT PATH ---
 import 'package:business_bosses_v2/features/matching_feature/widgets/blurred_match_card.dart';
 
 class PremiumPrompt extends StatelessWidget {
-  final List<Match> blurredMatches;
+  final List<MatchModel> blurredMatches;
   final String userType;
 
   const PremiumPrompt({
@@ -42,7 +42,7 @@ class PremiumPrompt extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         // This map function will now work correctly
-        ...blurredMatches.map((Match match) => Padding(
+        ...blurredMatches.map((MatchModel match) => Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: BlurredMatchCard(match: match),
             )),

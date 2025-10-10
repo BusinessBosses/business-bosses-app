@@ -81,6 +81,7 @@ class _HeroSectionState extends State<HeroSection> {
   late UserModel? user;
   late UserModel? mentor;
   late UserModel? backer;
+  dynamic partner;
   final HomeController homeController = Get.find();
   late List<HeroItem> heroItems;
   final ProfileController _profileController = Get.find();
@@ -143,6 +144,7 @@ class _HeroSectionState extends State<HeroSection> {
     user = homeController.bossOfTheWeek;
     mentor = homeController.mentorOfTheWeek;
     backer = homeController.backerOfTheWeek;
+    partner = homeController.partnerOfTheWeek;
     industry = challengeController.categories[0];
     _startAutoRotation();
     heroItems = <HeroItem>[
@@ -184,9 +186,9 @@ class _HeroSectionState extends State<HeroSection> {
           id: '4',
           type: 'partner',
           title: 'Partner of the Week',
-          subtitle: user?.name ?? '',
-          image: 'none',
-          description: user?.bio ?? '',
+          subtitle: partner['companyName'] ?? '',
+          image: partner['companyPhoto'],
+          description: partner['companyDescription'] ?? '',
           action: 'Claim Deal',
           action2: 'Become a Partner'),
       HeroItem(
@@ -437,7 +439,7 @@ class _HeroSectionState extends State<HeroSection> {
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: config.gradientColors[0].withOpacity(0.3),
+            color: config.gradientColors[0].withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -486,6 +488,7 @@ class _HeroSectionState extends State<HeroSection> {
                     onTap: () {
                       // Determine which user to navigate to based on card type
                       UserModel? targetUser;
+                      dynamic partner;
                       switch (item.type) {
                         case 'boss':
                           targetUser = user;
@@ -497,13 +500,21 @@ class _HeroSectionState extends State<HeroSection> {
                           targetUser = backer;
                           break;
                         case 'partner':
-                          targetUser = user;
+                          partner = homeController.partnerOfTheWeek;
                           break;
                       }
 
                       if (targetUser != null) {
                         Get.toNamed(Routes.publicProfile,
                             arguments: targetUser);
+                      }
+                      if (partner != null) {
+                        Uri url = Uri.parse(partner['companyUrl']);
+                        canLaunchUrl(url).then((bool canLaunch) {
+                          if (canLaunch) {
+                            launchUrl(url);
+                          }
+                        });
                       }
                     },
                     child: Container(
@@ -832,7 +843,7 @@ class _HeroSectionState extends State<HeroSection> {
                           fit: StackFit.expand,
                           children: <Widget>[
                             CachedNetworkImage(
-                              key: ValueKey(item.image),
+                              key: ValueKey<String>(item.title),
                               imageUrl: item.image,
                               fit: BoxFit.cover,
                               memCacheHeight: 1000,

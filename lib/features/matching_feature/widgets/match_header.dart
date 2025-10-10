@@ -76,36 +76,36 @@ class MatchHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildStat(IconData icon, String number, String label) {
-    return Column(
-      children: <Widget>[
-        Icon(icon, color: Colors.white, size: 20),
-        const SizedBox(height: 4),
-        Text(
-          number,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.white70,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
+  // Widget _buildStat(IconData icon, String number, String label) {
+  //   return Column(
+  //     children: <Widget>[
+  //       Icon(icon, color: Colors.white, size: 20),
+  //       const SizedBox(height: 4),
+  //       Text(
+  //         number,
+  //         style: const TextStyle(
+  //           fontSize: 18,
+  //           fontWeight: FontWeight.bold,
+  //           color: Colors.white,
+  //         ),
+  //       ),
+  //       Text(
+  //         label,
+  //         style: const TextStyle(
+  //           fontSize: 12,
+  //           color: Colors.white70,
+  //         ),
+  //         textAlign: TextAlign.center,
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Widget _buildDivider() {
-    return Container(
-      width: 1,
-      height: 40,
-      color: Colors.white.withOpacity(0.3),
-    );
-  }
+  // Widget _buildDivider() {
+  //   return Container(
+  //     width: 1,
+  //     height: 40,
+  //     color: Colors.white.withOpacity(0.3),
+  //   );
+  // }
 }

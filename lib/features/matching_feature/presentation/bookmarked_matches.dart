@@ -1,10 +1,10 @@
+import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_card.dart';
-import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
 import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
 
 class BookmarkedMatches extends StatefulWidget {
@@ -42,12 +42,12 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
         title: const Text('Saved Matches', textAlign: TextAlign.center),
       ),
       body: Obx(() {
-        List<Match> bookmarked = matchController.bookmarkedMatches;
+        List<MatchModel> bookmarked = matchController.bookmarkedMatches;
 
         // 🔍 Search
         if (_searchQuery.isNotEmpty) {
           bookmarked = bookmarked
-              .where((Match m) =>
+              .where((MatchModel m) =>
                   m.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
                   m.description
                       .toLowerCase()
@@ -59,7 +59,8 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
         // 🏷️ Filter
         if (_selectedFilter != 'All') {
           bookmarked = bookmarked
-              .where((Match m) => m.matchType == _selectedFilter.toLowerCase())
+              .where((MatchModel m) =>
+                  m.matchType == _selectedFilter.toLowerCase())
               .toList();
         }
 
@@ -81,7 +82,7 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
                   Expanded(
                     child: _buildStatCard(
                       'Top Tier',
-                      '${matchController.bookmarkedMatches.where((Match m) => m.quality > 90).length}',
+                      '${matchController.bookmarkedMatches.where((MatchModel m) => m.quality > 90).length}',
                       LucideIcons.trendingUp,
                     ),
                   ),
@@ -106,11 +107,11 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
                   decoration: InputDecoration(
                     hintText: 'Search saved matches...',
                     prefixIcon: Icon(LucideIcons.search,
-                        size: 20, color: textColor.withOpacity(0.6)),
+                        size: 20, color: textColor.withValues(alpha: 0.6)),
                     suffixIcon: _searchQuery.isNotEmpty
                         ? IconButton(
                             icon: Icon(LucideIcons.x,
-                                color: textColor.withOpacity(0.6)),
+                                color: textColor.withValues(alpha: 0.6)),
                             onPressed: () {
                               setState(() {
                                 _searchQuery = '';
@@ -151,7 +152,7 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
                   : ListView.builder(
                       itemCount: bookmarked.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final Match match = bookmarked[index];
+                        final MatchModel match = bookmarked[index];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 16),
                           child: MatchCard(
@@ -184,12 +185,12 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Icon(icon, color: textColor.withOpacity(0.6), size: 16),
+              Icon(icon, color: textColor.withValues(alpha: 0.6), size: 16),
               const SizedBox(width: 8),
               Text(
                 title,
                 style: TextStyle(
-                  color: textColor.withOpacity(0.6),
+                  color: textColor.withValues(alpha: 0.6),
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
@@ -210,12 +211,12 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
     );
   }
 
-  Widget _buildFilterChip(String filter, List<Match> allBookmarked) {
+  Widget _buildFilterChip(String filter, List<MatchModel> allBookmarked) {
     final bool isSelected = _selectedFilter == filter;
     final int count = filter == 'All'
         ? allBookmarked.length
         : allBookmarked
-            .where((Match m) => m.matchType == filter.toLowerCase())
+            .where((MatchModel m) => m.matchType == filter.toLowerCase())
             .length;
 
     return Padding(
@@ -256,7 +257,7 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(LucideIcons.bookmark,
-              size: 50, color: textColor.withOpacity(0.3)),
+              size: 50, color: textColor.withValues(alpha: 0.3)),
           const SizedBox(height: 16),
           Text(
             _searchQuery.isNotEmpty
@@ -271,7 +272,8 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
             _searchQuery.isNotEmpty
                 ? 'Try adjusting your search or filters'
                 : 'Start bookmarking matches to see them here',
-            style: TextStyle(color: textColor.withOpacity(0.6), fontSize: 14),
+            style: TextStyle(
+                color: textColor.withValues(alpha: 0.6), fontSize: 14),
             textAlign: TextAlign.center,
           ),
         ],

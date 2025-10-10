@@ -5,11 +5,11 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 // Your app's theme and the standardized Match model
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
+import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 
 class MatchDetailModal extends StatefulWidget {
   // UPDATED: Now uses the correct 'Match' model
-  final Match match;
+  final MatchModel match;
   final String userType;
 
   const MatchDetailModal({

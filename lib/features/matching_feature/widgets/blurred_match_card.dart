@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
+import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class BlurredMatchCard extends StatelessWidget {
-  final Match match;
+  final MatchModel match;
 
   const BlurredMatchCard({
     super.key,
