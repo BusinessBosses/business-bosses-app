@@ -593,6 +593,11 @@ class _HeroSectionState extends State<HeroSection> {
                               Get.to(() => ExpandedMatchesScreen());
                               break;
                             case 'Claim Deal':
+                              final Uri url = Uri.parse(partner['companyUrl']);
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
+
                               break;
                             default:
                               Get.toNamed(Routes.liveEvents);
