@@ -5,10 +5,8 @@ import 'package:business_bosses_v2/analytics/presentation/howtouseapp.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
 import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/chat/ai_chat.dart';
-import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -157,10 +155,12 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                 borderRadius: BorderRadius.circular(16),
                                 boxShadow: <BoxShadow>[
                                   BoxShadow(
-                                    color: profileController
-                                            .myProfile.isSubscribed
-                                        ? Color(0xFF6366F1).withOpacity(0.3)
-                                        : Color(0xFFF59E0B).withOpacity(0.3),
+                                    color:
+                                        profileController.myProfile.isSubscribed
+                                            ? Color(0xFF6366F1)
+                                                .withValues(alpha: 0.3)
+                                            : Color(0xFFF59E0B)
+                                                .withValues(alpha: 0.3),
                                     blurRadius: 12,
                                     offset: const Offset(0, 4),
                                   ),
@@ -171,7 +171,8 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                   Container(
                                       padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.2),
+                                        color:
+                                            Colors.white.withValues(alpha: 0.2),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: SvgPicture.asset(
@@ -231,8 +232,8 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                               ? 'Get AI-powered business insights'
                                               : 'Unlock AI-powered features',
                                           style: TextStyle(
-                                            color:
-                                                Colors.white.withOpacity(0.9),
+                                            color: Colors.white
+                                                .withValues(alpha: 0.9),
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500,
                                           ),

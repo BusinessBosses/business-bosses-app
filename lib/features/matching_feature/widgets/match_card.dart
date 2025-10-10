@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
-import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
+import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_detail_modal.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class MatchCard extends StatefulWidget {
-  final Match match;
+  final MatchModel match;
   final String userType;
   final bool isBookmarked;
   final void Function()? onBookmarkToggle;
@@ -106,7 +106,7 @@ class _MatchCardState extends State<MatchCard> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: premiumGold.withOpacity(0.1),
+        color: premiumGold.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: const Row(
@@ -133,7 +133,7 @@ class _MatchCardState extends State<MatchCard> {
       children: <Widget>[
         GestureDetector(
           onTap: () {
-            Get.toNamed(Routes.publicProfile, arguments: widget.match);
+            Get.toNamed(Routes.publicProfile, arguments: widget.match.user);
           },
           child: Row(
             spacing: 10,
@@ -307,7 +307,7 @@ class _MatchCardState extends State<MatchCard> {
       () => const ChatRoomScreen(
         frommarketplace: false,
       ),
-      arguments: widget.match,
+      arguments: widget.match.user,
     );
   }
 }

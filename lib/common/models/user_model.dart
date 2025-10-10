@@ -54,6 +54,11 @@ class UserModel {
   final bool? isUpdated;
   final String? matchType; // ✅ NEW FIELD
 
+  /// 🏆 New Achievement Counters
+  final int? bossCount;
+  final int? mentorCount;
+  final int? backerCount;
+
   UserModel({
     this.uid = '',
     this.username = '',
@@ -101,6 +106,9 @@ class UserModel {
     this.monthlyRank,
     this.hasShop = false,
     this.matchType, // ✅
+    this.bossCount, // ✅
+    this.mentorCount, // ✅
+    this.backerCount, // ✅
   });
 
   UserModel copyWith({
@@ -150,6 +158,9 @@ class UserModel {
     bool? isSubscribed,
     bool? isUpdated,
     String? matchType, // ✅
+    int? bossCount, // ✅
+    int? mentorCount, // ✅
+    int? backerCount, // ✅
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -200,6 +211,9 @@ class UserModel {
       isUpdated: isUpdated ?? this.isUpdated,
       hasShop: hasShop ?? this.hasShop,
       matchType: matchType ?? this.matchType, // ✅
+      bossCount: bossCount ?? this.bossCount, // ✅
+      mentorCount: mentorCount ?? this.mentorCount, // ✅
+      backerCount: backerCount ?? this.backerCount, // ✅
     );
   }
 
@@ -253,111 +267,93 @@ class UserModel {
       'monthlyRank': monthlyRank,
       'hasShop': hasShop,
       'matchType': matchType, // ✅
+      'bossCount': bossCount, // ✅
+      'mentorCount': mentorCount, // ✅
+      'backerCount': backerCount, // ✅
     };
   }
 
   factory UserModel.fromMap(Map<dynamic, dynamic> map) {
     return UserModel(
-      uid: map['uid'] as String,
-      username: map['username'] as String,
-      email: map['email'] as String,
-      timestamp: map['timestamp'] != null ? map['timestamp'] as int : null,
-      bossOfTheWeekTimeStamp: map['bossOfTheWeekTimeStamp'] != null
+      uid: map['uid']?.toString() ?? '',
+      username: map['username']?.toString() ?? '',
+      email: map['email']?.toString() ?? '',
+      timestamp: map['timestamp'] is int ? map['timestamp'] as int : null,
+      bossOfTheWeekTimeStamp: map['bossOfTheWeekTimeStamp'] is int
           ? map['bossOfTheWeekTimeStamp'] as int
           : null,
-      bossOfTheWeekUpTimeStamp: map['bossOfTheWeekUpTimeStamp'] != null
+      bossOfTheWeekUpTimeStamp: map['bossOfTheWeekUpTimeStamp'] is int
           ? map['bossOfTheWeekUpTimeStamp'] as int
           : null,
-      photoUrl: map['photoUrl'] != null ? map['photoUrl'] as String : null,
-      coinscount: map['coinscount'] != null ? map['coinscount'] as int : null,
-      name: map['name'] != null ? map['name'] as String : null,
-      companyName:
-          map['companyName'] != null ? map['companyName'] as String : null,
-      surname: map['surname'] != null ? map['surname'] as String : null,
-      bio: map['bio'] != null ? map['bio'] as String : null,
-      website: map['website'] != null ? map['website'] as String : null,
-      instagram: map['instagram'] != null ? map['instagram'] as String : null,
-      twitter: map['twitter'] != null ? map['twitter'] as String : null,
-      industry: map['industry'] != null ? map['industry'] as String : null,
-      category: map['category'] != null ? map['category'] as String : null,
-      location: map['location'] != null ? map['location'] as String : null,
-      achievements: map['achievements'] != null
-          ? List<String>.from((map['achievements']))
+      photoUrl: map['photoUrl']?.toString(),
+      coinscount: map['coinscount'] is int ? map['coinscount'] as int : null,
+      name: map['name']?.toString(),
+      companyName: map['companyName']?.toString(),
+      surname: map['surname']?.toString(),
+      bio: map['bio']?.toString(),
+      website: map['website']?.toString(),
+      instagram: map['instagram']?.toString(),
+      twitter: map['twitter']?.toString(),
+      industry: map['industry']?.toString(),
+      category: map['category']?.toString(),
+      location: map['location']?.toString(),
+      achievements: map['achievements'] is List
+          ? List<String>.from(map['achievements'])
           : null,
-      postChallenges: map['postChallenges'] != null
-          ? List<String>.from((map['postChallenges']))
+      postChallenges: map['postChallenges'] is List
+          ? List<String>.from(map['postChallenges'])
           : null,
-      interests: map['interests'] != null
-          ? List<dynamic>.from(map['interests'])
-              .map((dynamic e) => Industry.toObject(e as Map<String, dynamic>))
+      interests: map['interests'] is List
+          ? (map['interests'] as List)
+              .map((e) => Industry.toObject(e as Map<String, dynamic>))
               .toList()
           : null,
-      productsandservices: map['productsandservices'] == null ||
-              map['productsandservices'].runtimeType == String
-          ? null
-          : List<String>.from((map['productsandservices'])),
-      referals: map['referals'] != null
-          ? List<dynamic>.from(map['referals'])
-              .map((dynamic e) =>
-                  ReferralsModel.fromMap(e as Map<String, dynamic>))
+      productsandservices: map['productsandservices'] is List
+          ? List<String>.from(map['productsandservices'])
+          : null,
+      referals: map['referals'] is List
+          ? (map['referals'] as List)
+              .map((e) => ReferralsModel.fromMap(e as Map<String, dynamic>))
               .toList()
           : null,
-      connections: map['connections'] != null
-          ? List<String>.from((map['connections']))
+      connections: map['connections'] is List
+          ? List<String>.from(map['connections'])
           : null,
-      connecteds: map['connecteds'] != null
-          ? List<String>.from((map['connecteds']))
+      connecteds: map['connecteds'] is List
+          ? List<String>.from(map['connecteds'])
           : null,
-      disconnections: map['disconnections'] != null
-          ? List<DisconnectionsModel>.from(
-              (map['disconnections'] as List<int>).map<DisconnectionsModel?>(
-                (int x) =>
-                    DisconnectionsModel.fromMap(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
-      active: map['active'] != null ? map['active'] as bool : null,
-      deactivated:
-          map['deactivated'] != null ? map['deactivated'] as bool : null,
-      ageRange: map['ageRange'] != null ? map['ageRange'] as String : null,
-      gender: map['gender'] != null ? map['gender'] as String : null,
-      profileViews: map['profileViews'] != null
-          ? List<ProfileViewerModel>.from(
-              (map['profileViews'] as List<int>).map<ProfileViewerModel?>(
-                (int x) =>
-                    ProfileViewerModel.fromMap(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
+      active: map['active'] == true,
+      deactivated: map['deactivated'] == true,
+      ageRange: map['ageRange']?.toString(),
+      gender: map['gender']?.toString(),
       connectionCount:
-          map['connectionCount'] != null ? map['connectionCount'] as int : null,
+          map['connectionCount'] is int ? map['connectionCount'] as int : null,
       referalCount:
-          map['referalCount'] != null ? map['referalCount'] as int : null,
-      invitations:
-          map['invitations'] != null ? map['invitations'] as int : null,
+          map['referalCount'] is int ? map['referalCount'] as int : null,
+      invitations: map['invitations'] is int ? map['invitations'] as int : null,
       connectedCount:
-          map['connectedCount'] != null ? map['connectedCount'] as int : null,
-      unReadCount: map['unReadCount'] != null ? map['unReadCount'] as int : 0,
-      isRanked: map['isRanked'] != null ? map['isRanked'] as bool : null,
-      isSubscribed:
-          map['isSubscribed'] != null ? map['isSubscribed'] as bool : false,
-      toPost: map['toPost'] != null ? map['toPost'] as bool : false,
-      isUpdated: map['isUpdated'] != null ? map['isUpdated'] as bool : false,
-      inviteId: map['inviteId'] != null ? map['inviteId'] as String : null,
-      weeklyRank:
-          map['weeklyRank'] != null ? map['weeklyRank'] as String : null,
-      monthlyRank:
-          map['monthlyRank'] != null ? map['monthlyRank'] as String : null,
-      averageRating: map['averageRating'] != null
-          ? (map['averageRating'] is int
-              ? (map['averageRating'] as int).toDouble()
-              : map['averageRating'] as double)
-          : null,
-      hasShop: map['hasShop'] != null ? map['hasShop'] as bool : false,
-      matchType:
-          map['matchType'] != null ? map['matchType'] as String : null, // ✅
+          map['connectedCount'] is int ? map['connectedCount'] as int : null,
+      unReadCount: map['unReadCount'] is int ? map['unReadCount'] as int : 0,
+      isRanked: map['isRanked'] == true,
+      isSubscribed: map['isSubscribed'] == true,
+      toPost: map['toPost'] == true,
+      isUpdated: map['isUpdated'] == true,
+      inviteId: map['inviteId']?.toString(),
+      weeklyRank: map['weeklyRank']?.toString(),
+      monthlyRank: map['monthlyRank']?.toString(),
+      averageRating: map['averageRating'] is num
+          ? (map['averageRating'] as num).toDouble()
+          : 0.0,
+      hasShop: map['hasShop'] == true,
+      matchType: map['matchType']?.toString(),
+      bossCount: map['bossCount'] is int ? map['bossCount'] as int : 0, // ✅
+      mentorCount:
+          map['mentorCount'] is int ? map['mentorCount'] as int : 0, // ✅
+      backerCount:
+          map['backerCount'] is int ? map['backerCount'] as int : 0, // ✅
     );
   }
+
   int get coinsCount => coinscount ?? 0;
 
   void incrementCoinsCount(int incrementBy) {

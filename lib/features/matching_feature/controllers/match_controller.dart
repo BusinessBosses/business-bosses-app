@@ -5,15 +5,15 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
-import 'package:business_bosses_v2/features/matching_feature/models/matchmodel.dart';
+import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MatchController extends GetxController {
   // --- State Variables ---
   RxBool isLoading = true.obs;
   RxString errorMessage = ''.obs;
-  RxList<Match> matchList = <Match>[].obs;
-  RxList<Match> bookmarkedMatches = <Match>[].obs;
+  RxList<MatchModel> matchList = <MatchModel>[].obs;
+  RxList<MatchModel> bookmarkedMatches = <MatchModel>[].obs;
 
   static const String _bookmarkKey = 'bookmarked_matches';
 
@@ -27,12 +27,12 @@ class MatchController extends GetxController {
     loadBookmarks();
   }
 
-  Future<void> toggleBookmark(Match match) async {
+  Future<void> toggleBookmark(MatchModel match) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (bookmarkedMatches.any((Match m) => m.id == match.id)) {
+    if (bookmarkedMatches.any((MatchModel m) => m.id == match.id)) {
       // remove
-      bookmarkedMatches.removeWhere((Match m) => m.id == match.id);
+      bookmarkedMatches.removeWhere((MatchModel m) => m.id == match.id);
     } else {
       // add
       bookmarkedMatches.add(match);
@@ -41,12 +41,12 @@ class MatchController extends GetxController {
 
     // save to shared prefs
     final List<String> encoded =
-        bookmarkedMatches.map((Match m) => jsonEncode(m.toMap())).toList();
+        bookmarkedMatches.map((MatchModel m) => jsonEncode(m.toMap())).toList();
     await prefs.setStringList(_bookmarkKey, encoded);
   }
 
   bool isBookmarked(String matchId) {
-    return bookmarkedMatches.any((Match m) => m.id == matchId);
+    return bookmarkedMatches.any((MatchModel m) => m.id == matchId);
   }
 
   Future<void> loadBookmarks() async {
@@ -54,7 +54,7 @@ class MatchController extends GetxController {
     final List<String> saved = prefs.getStringList(_bookmarkKey) ?? <String>[];
 
     bookmarkedMatches.value =
-        saved.map((String s) => Match.fromJson(jsonDecode(s))).toList();
+        saved.map((String s) => MatchModel.fromJson(jsonDecode(s))).toList();
   }
 
   /// Fetches matches from the API and updates the state.
@@ -73,8 +73,9 @@ class MatchController extends GetxController {
         final List<dynamic> matchesData = response.data ?? <dynamic>[];
 
         // 2. Map the raw JSON list to a list of Match objects.
-        final List<Match> fetchedMatches =
-            matchesData.map((dynamic json) => Match.fromJson(json)).toList();
+        final List<MatchModel> fetchedMatches = matchesData
+            .map((dynamic json) => MatchModel.fromJson(json))
+            .toList();
 
         // 3. Assign the newly parsed list to our observable.
         matchList.assignAll(fetchedMatches);

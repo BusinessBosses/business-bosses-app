@@ -14,6 +14,12 @@ import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import '../../../utils/theme/theme.dart';
 
 Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
+  final int bossCount = publicUser.bossCount ?? 0;
+  final int mentorCount = publicUser.mentorCount ?? 0;
+  final int backerCount = publicUser.backerCount ?? 0;
+
+  final bool hasAnyAchievement =
+      bossCount > 0 || mentorCount > 0 || backerCount > 0;
   return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,89 +160,94 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         //         .where((String element) => element.isNotEmpty)
         //         .toList()
         //         .isNotEmpty)
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const SizedBox(
-              height: 35,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Text(
-                'Achievements',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: subtextColor),
+        if (hasAnyAchievement)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(
+                height: 35,
               ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: Column(
-                spacing: 15,
-                children: <Widget>[
-                  WinnerCard(type: WinnerType.boss, winCount: 3),
-                  WinnerCard(type: WinnerType.mentor, winCount: 1),
-                  WinnerCard(type: WinnerType.partner, winCount: 2),
-                  WinnerCard(type: WinnerType.backer, winCount: 5),
-                ],
+              const Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: Text(
+                  'Achievements',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: subtextColor),
+                ),
               ),
-            ),
 
-            // SizedBox(
-            //   width: double.infinity,
-            //   child: ListView.builder(
-            //     padding: const EdgeInsets.only(
-            //         top: 10.0, bottom: 10, left: 20, right: 20),
-            //     shrinkWrap: true,
-            //     physics: const NeverScrollableScrollPhysics(),
-            //     scrollDirection: Axis.vertical,
-            //     itemCount: publicUser.achievements == null
-            //         ? 0
-            //         : publicUser.achievements!.length,
-            //     // : _profileController.myProfile.achievements
-            //     //     .toString()
-            //     //     .split('+')
-            //     //     .length,
-            //     itemBuilder: (BuildContext context, int index) {
-            //       return Container(
-            //           margin: const EdgeInsets.only(bottom: 15),
-            //           decoration: BoxDecoration(
-            //             color: backgroundcolorinterface,
-            //             borderRadius: BorderRadius.circular(15),
-            //           ),
-            //           child: Padding(
-            //               padding: const EdgeInsets.only(
-            //                   top: 15, bottom: 15, left: 15, right: 20),
-            //               child: Row(
-            //                   mainAxisAlignment: MainAxisAlignment.start,
-            //                   crossAxisAlignment: CrossAxisAlignment.center,
-            //                   children: <Widget>[
-            //                     SvgPicture.asset(
-            //                       'assets/svgs/trophy.svg',
-            //                       color: Colors.black,
-            //                     ),
-            //                     const SizedBox(
-            //                       width: 10,
-            //                     ),
-            //                     Text(
-            //                       publicUser.achievements![index],
-            //                       // _profileController.myProfile.achievements
-            //                       //     .toString()
-            //                       //     .split('+')[index],
-            //                       style: const TextStyle(
-            //                           fontSize: 15,
-            //                           fontWeight: FontWeight.w700,
-            //                           color: Colors.black),
-            //                     ),
-            //                   ])));
-            //     },
-            //   ),
-            // ),
-          ],
-        ),
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: Column(
+                  spacing: 15,
+                  children: <Widget>[
+                    if (bossCount > 0)
+                      WinnerCard(type: WinnerType.boss, winCount: bossCount),
+                    if (mentorCount > 0)
+                      WinnerCard(
+                          type: WinnerType.mentor, winCount: mentorCount),
+                    if (backerCount > 0)
+                      WinnerCard(
+                          type: WinnerType.backer, winCount: backerCount),
+                  ],
+                ),
+              ),
+
+              // SizedBox(
+              //   width: double.infinity,
+              //   child: ListView.builder(
+              //     padding: const EdgeInsets.only(
+              //         top: 10.0, bottom: 10, left: 20, right: 20),
+              //     shrinkWrap: true,
+              //     physics: const NeverScrollableScrollPhysics(),
+              //     scrollDirection: Axis.vertical,
+              //     itemCount: publicUser.achievements == null
+              //         ? 0
+              //         : publicUser.achievements!.length,
+              //     // : _profileController.myProfile.achievements
+              //     //     .toString()
+              //     //     .split('+')
+              //     //     .length,
+              //     itemBuilder: (BuildContext context, int index) {
+              //       return Container(
+              //           margin: const EdgeInsets.only(bottom: 15),
+              //           decoration: BoxDecoration(
+              //             color: backgroundcolorinterface,
+              //             borderRadius: BorderRadius.circular(15),
+              //           ),
+              //           child: Padding(
+              //               padding: const EdgeInsets.only(
+              //                   top: 15, bottom: 15, left: 15, right: 20),
+              //               child: Row(
+              //                   mainAxisAlignment: MainAxisAlignment.start,
+              //                   crossAxisAlignment: CrossAxisAlignment.center,
+              //                   children: <Widget>[
+              //                     SvgPicture.asset(
+              //                       'assets/svgs/trophy.svg',
+              //                       color: Colors.black,
+              //                     ),
+              //                     const SizedBox(
+              //                       width: 10,
+              //                     ),
+              //                     Text(
+              //                       publicUser.achievements![index],
+              //                       // _profileController.myProfile.achievements
+              //                       //     .toString()
+              //                       //     .split('+')[index],
+              //                       style: const TextStyle(
+              //                           fontSize: 15,
+              //                           fontWeight: FontWeight.w700,
+              //                           color: Colors.black),
+              //                     ),
+              //                   ])));
+              //     },
+              //   ),
+              // ),
+            ],
+          ),
         const SizedBox(
           height: 20,
         ),
