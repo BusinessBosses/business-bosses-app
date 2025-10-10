@@ -407,25 +407,6 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void enterbackeroftheweek() {
-    if (!donationsController.userIds
-        .contains(_profileController.myProfile.uid)) {
-      Get.snackbar(
-        'Error!',
-        'You have to join to create a donation!',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      return;
-    }
-    if (donationsController.doesUserDonationExist()) {
-      Get.snackbar(
-        'Error!',
-        'You cannot create multiple donations!',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      return;
-    }
     Get.toNamed(Routes.createdonationsscreen);
   }
 
@@ -433,8 +414,12 @@ class _HeroSectionState extends State<HeroSection> {
     print('mentor of the week');
   }
 
-  void enterpartneroftheweek() {
-    print('partner of the week');
+  void enterpartneroftheweek() async {
+    if (await canLaunchUrl(
+        Uri.parse('https://businessbosses.co.uk/landingpageforpartners'))) {
+      await launchUrl(
+          Uri.parse('https://businessbosses.co.uk/landingpageforpartners'));
+    }
   }
 
   Widget _buildWinnerCard(HeroItem item) {
@@ -649,6 +634,9 @@ class _HeroSectionState extends State<HeroSection> {
                                       : item.id == '3'
                                           ? enterbackeroftheweek()
                                           : enterpartneroftheweek();
+                              break;
+                            case 'Become a Partner':
+                              enterpartneroftheweek();
                               break;
                             case 'View Matches':
                               Get.to(() => ExpandedMatchesScreen());
