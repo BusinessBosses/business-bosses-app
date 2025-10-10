@@ -203,7 +203,7 @@ class _HeroSectionState extends State<HeroSection> {
 
   void _startAutoRotation() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 2000), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       final Duration timeSinceLast =
           DateTime.now().difference(_lastInteraction);
       if (timeSinceLast.inSeconds >= 2) {
