@@ -70,7 +70,7 @@ class MatchController extends GetxController {
       if (response.success) {
         // --- UPDATED LOGIC ---
         // 1. Safely access the list of matches from the JSON response.
-        final List<dynamic> matchesData = response.data ?? <dynamic>[];
+        final List matchesData = response.data ?? <dynamic>[];
 
         // 2. Map the raw JSON list to a list of Match objects.
         final List<MatchModel> fetchedMatches = matchesData

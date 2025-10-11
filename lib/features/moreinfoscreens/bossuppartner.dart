@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -130,6 +131,7 @@ class _BossuppartnerState extends State<Bossuppartner> {
                   companyDescription: partner['companyDescription'],
                   companyUrl: partner['companyUrl'],
                   companyPhoto: partner['companyPhoto'],
+                  clicks: partner['clicks'],
                   id: partner['id'],
                   showPartnerMessage: isLastItem(index),
                 );
@@ -146,6 +148,7 @@ class BossuppartnerItem extends StatelessWidget {
   final String companyName;
   final String companyDescription;
   final String companyUrl;
+  final int clicks;
   final String? companyPhoto;
   final bool showPartnerMessage;
   final int id;
@@ -158,6 +161,7 @@ class BossuppartnerItem extends StatelessWidget {
     required this.showPartnerMessage,
     this.companyPhoto,
     required this.id,
+    required this.clicks,
   });
 
   @override
@@ -258,8 +262,11 @@ class BossuppartnerItem extends StatelessWidget {
               height: 45,
               child: OutlinedButton(
                   onPressed: () async {
+                    ApiService.put(
+                        path: 'partner/$id',
+                        body: <String, dynamic>{'clicks': clicks + 1});
                     final Uri url = Uri.parse(companyUrl);
-                    if (!await launchUrl(url)) {
+                    if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
                       throw Exception('Could not launch $url');
                     }
                   },

@@ -39,12 +39,31 @@ class MatchModel {
   /// Factory constructor to create a Match instance from a JSON map.
   factory MatchModel.fromJson(Map<String, dynamic> json) {
     final dynamic userData = json['user'];
+
+    List<String> parseStringList(dynamic value) {
+      if (value == null) return <String>[];
+      if (value is List) {
+        return value.map((e) {
+          if (e is Map && e.containsKey('name')) return e['name'].toString();
+          return e.toString();
+        }).toList();
+      }
+      return <String>[];
+    }
+
     return MatchModel(
       id: json['uid']?.toString() ?? UniqueKey().toString(),
       name: json['name']?.toString() ?? 'No Name Provided',
       type: json['type']?.toString() ?? 'General',
       description: json['description']?.toString() ?? '',
-      user: (userData is Map) ? UserModel.fromMap(userData) : UserModel(),
+      // 👇 FIX HERE: if no 'user', create a minimal UserModel
+      user: ((userData is Map) || userData != null)
+          ? UserModel.fromMap(userData)
+          : UserModel(
+              uid: json['uid']?.toString() ?? '',
+              name: json['name']?.toString(),
+              photoUrl: json['profile_image']?.toString(),
+            ),
       rating: (json['rating'] is num)
           ? (json['rating'] as num).toDouble()
           : double.tryParse(json['rating']?.toString() ?? '0') ?? 0.0,
@@ -55,10 +74,10 @@ class MatchModel {
           ? (json['quality'] as num).toInt()
           : int.tryParse(json['quality']?.toString() ?? '0') ?? 0,
       verified: json['verified'] == true,
-      photoUrl: json['photoUrl']?.toString(),
+      photoUrl: json['profile_image']?.toString(), // 👈 use API field
       matchType: json['matchType']?.toString(),
-      services: List<String>.from(json['services'] ?? <dynamic>[]),
-      achievements: List<String>.from(json['achievements'] ?? <dynamic>[]),
+      services: parseStringList(json['services']),
+      achievements: parseStringList(json['achievements']),
     );
   }
 
