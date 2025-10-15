@@ -149,6 +149,9 @@ class CustomEditText extends StatelessWidget {
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: hintText,
+                              hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w100),
                               filled: false,
                               fillColor: Colors.grey.shade100,
                               counterText: '',
@@ -231,6 +234,8 @@ class CustomEditText extends StatelessWidget {
               style: const TextStyle(fontSize: 13),
               decoration: InputDecoration(
                 hintText: 'USD',
+                hintStyle:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.w100),
                 fillColor: currencyfieldcolor ?? prosemibackColor,
                 filled: true,
                 contentPadding: const EdgeInsets.symmetric(
@@ -268,6 +273,7 @@ class CustomEditText extends StatelessWidget {
       decoration: InputDecoration(
         border: InputBorder.none,
         hintText: hintText,
+        hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w100),
         filled: false,
         fillColor: Colors.grey.shade100,
         counterText: maxLength != null && maxLength! > 30 ? null : '',

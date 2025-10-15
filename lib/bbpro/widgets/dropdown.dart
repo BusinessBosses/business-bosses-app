@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class CustomDropdownWidget extends StatefulWidget {
   final String caption;
@@ -163,11 +164,13 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                       );
                     }).toList(),
                     isExpanded: true,
-                    icon: SvgPicture.asset(
-                      widget.iconName,
-                      colorFilter: ColorFilter.mode(
-                          widget.iconcolor ?? proprimaryColor, BlendMode.srcIn),
-                    ),
+                    icon: SizedBox(
+                        height: 10,
+                        child: Icon(
+                          LucideIcons.chevronDown,
+                          size: 15,
+                          color: primaryColorLT,
+                        )),
                     validator: widget.validator,
                   ),
                   if (widget.secondarysection != null) widget.secondarysection!,

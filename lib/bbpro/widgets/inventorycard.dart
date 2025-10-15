@@ -54,8 +54,8 @@ class _InventoryCardState extends State<InventoryCard> {
         children: <Widget>[
           PostTag(
             label: 'Product',
-            textColor: const Color.fromARGB(255, 73, 200, 78),
-            backgroundColor: Colors.greenAccent.withAlpha(30),
+            textColor: textColor,
+            backgroundColor: backgroundColor,
           ),
           Padding(
             padding: const EdgeInsets.all(15.0),

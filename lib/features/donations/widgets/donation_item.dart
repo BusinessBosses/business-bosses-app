@@ -333,8 +333,8 @@ class _DonationItemState extends State<DonationItem> {
                 children: <Widget>[
                   PostTag(
                       label: 'Crowdfund',
-                      textColor: Colors.purple,
-                      backgroundColor: Colors.purpleAccent.withAlpha(20)),
+                      textColor: textColor,
+                      backgroundColor: backgroundColor),
                   Padding(
                     padding: const EdgeInsets.only(
                         top: 15.0, left: 15.0, right: 15.0, bottom: 10),
