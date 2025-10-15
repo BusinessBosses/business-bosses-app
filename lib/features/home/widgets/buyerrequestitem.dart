@@ -9,6 +9,7 @@ class BuyerRequestItem extends StatelessWidget {
   final VoidCallback? onApply;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final bool? ismyrequest;
 
   const BuyerRequestItem({
     super.key,
@@ -17,6 +18,7 @@ class BuyerRequestItem extends StatelessWidget {
     this.onApply,
     this.onEdit,
     this.onDelete,
+    this.ismyrequest,
   });
 
   @override
@@ -110,33 +112,39 @@ class BuyerRequestItem extends StatelessWidget {
                           label:
                               '${request.attachments.length} file${request.attachments.length == 1 ? '' : 's'}',
                         ),
+                      if (request.location != null)
+                        _buildInfoChip(
+                          icon: Icons.place,
+                          label: request.location!,
+                        ),
                     ],
                   ),
 
                   const SizedBox(height: 16),
 
                   // Apply Button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: onApply,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
+                  if (ismyrequest == null)
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: onApply,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
                         ),
-                      ),
-                      child: const Text(
-                        'Send Proposal',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
+                        child: const Text(
+                          'Send Proposal',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),

@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 2, initialIndex: 0);
+    _tabController = TabController(vsync: this, length: 1, initialIndex: 0);
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen>
                 onPageChange: widget.onPageChange,
                 scrollController: _scrollController,
               ),
-              _buildForumList(homeController),
+              // _buildForumList(homeController),
             ],
           ),
         ),

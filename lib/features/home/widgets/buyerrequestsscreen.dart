@@ -1,5 +1,7 @@
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyerrequestitem.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -16,6 +18,7 @@ class BuyerRequest {
   final String description;
   final String category;
   final String? budget;
+  final String? location;
   final DateTime? deadline;
   final List<PlatformFile> attachments;
   final DateTime createdAt;
@@ -28,6 +31,7 @@ class BuyerRequest {
     required this.description,
     required this.category,
     this.budget,
+    this.location,
     this.deadline,
     this.attachments = const <PlatformFile>[],
     required this.createdAt,
@@ -74,6 +78,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         budget: '\$5,000 - \$10,000',
         deadline: DateTime.now().add(const Duration(days: 15)),
         createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+        location: 'Ghana',
         offerCount: 12,
         imageUrl:
             'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop',
@@ -237,7 +242,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
           return SingleChildScrollView(
             controller: scrollController,
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -252,6 +257,45 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
+
+                  GestureDetector(
+                    onTap: () {
+                      // Get.toNamed(Routes.publicProfile,
+                      //     arguments: widget.request.user);
+                    },
+                    child: Row(
+                      spacing: 10,
+                      children: <Widget>[
+                        NetworkImageWithPlaceHolder(
+                          imageUrl: '',
+                          height: 40,
+                          width: 40,
+                          radius: 50,
+                          cacheHeight: 256,
+                          cacheWidth: 256,
+                          placeHolder: Icons.person,
+                          iconSize: 24,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Name',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: textDark,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 20,
+                  ),
 
                   // Image section
                   if (request.imageUrl != null)
@@ -330,7 +374,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                         ),
                       ),
                       child: const Text(
-                        'Apply Now',
+                        'Send Proposal',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),

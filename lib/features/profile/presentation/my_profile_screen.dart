@@ -8,6 +8,8 @@ import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/buyerrequestitem.dart';
+import 'package:business_bosses_v2/features/home/widgets/buyerrequestsscreen.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -18,6 +20,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -339,7 +342,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               const Tab(
                                                 child: FittedBox(
                                                   child: Text(
-                                                    'Resources',
+                                                    'Challenges',
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w700,
@@ -373,6 +376,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   ),
                                                 ),
                                               ),
+                                            // if (homeController
+                                            //     .buyerRequests.isNotEmpty)
+                                            const Tab(
+                                              child: FittedBox(
+                                                child: Text(
+                                                  'Requests',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -840,7 +856,47 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                 );
                                                 },
                                               ),
-                                            )
+                                            ),
+
+                                          ///Requests
+
+                                          // if (homeController
+                                          //   .userresources.isNotEmpty)
+                                          Container(
+                                            padding: EdgeInsets.all(15),
+                                            color: backgroundColor,
+                                            height: double.infinity,
+                                            width: double.infinity,
+                                            child: Obx(
+                                              () {
+                                                return MasonryGridView.count(
+                                                  crossAxisCount: 2,
+                                                  crossAxisSpacing: 12,
+                                                  mainAxisSpacing: 12,
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  itemCount: homeController
+                                                      .userresources.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int i) {
+                                                    return BuyerRequestItem(
+                                                        ismyrequest: true,
+                                                        request: BuyerRequest(
+                                                            id: 'id',
+                                                            title: 'title',
+                                                            description:
+                                                                'description',
+                                                            category:
+                                                                'category',
+                                                            createdAt: DateTime(
+                                                                2000)));
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ),
                                         ]),
                                       ),
                                     ],
