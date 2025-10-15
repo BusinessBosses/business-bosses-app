@@ -286,7 +286,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         color: const Color(0xFFF9F9F9),
                                         child: TabBar(
                                           isScrollable:
-                                              calculateTabLength() <= 4
+                                              calculateTabLength() <= 5
                                                   ? false
                                                   : true,
                                           indicatorColor:
@@ -983,6 +983,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     if (homeController.userresources.isNotEmpty) tabLength++;
     if (homeController.userdonations.isNotEmpty) tabLength++;
     if (homeController.usercourses.isNotEmpty) tabLength++;
+    // if (homeController.usercourses.isNotEmpty)
+    tabLength++;
 
     return tabLength;
   }
