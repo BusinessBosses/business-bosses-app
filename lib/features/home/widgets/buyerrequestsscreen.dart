@@ -282,7 +282,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                             Text(
                               'Name',
                               style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: textDark,
                               ),
@@ -316,7 +316,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                   Text(
                     request.title,
                     style: const TextStyle(
-                      fontSize: 24,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
