@@ -86,8 +86,8 @@ class _ServiceCardState extends State<ServiceCard> {
         children: <Widget>[
           PostTag(
               label: 'Service',
-              textColor: Colors.orange,
-              backgroundColor: Colors.amber.withAlpha(20)),
+              textColor: textColor,
+              backgroundColor: backgroundColor),
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(

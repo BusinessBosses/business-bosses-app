@@ -12,19 +12,16 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-
+import 'package:business_bosses_v2/features/home/widgets/buyerrequestsform.dart';
+import 'package:business_bosses_v2/features/home/widgets/buyerrequestsscreen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketproducts.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketservices.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
-import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
-
-import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/services.dart';
-import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
@@ -37,7 +34,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/widgets/safety_model.dart';
-
 import '../../utils/theme/theme.dart';
 import '../marketplace/controllers/market_controller.dart';
 import 'controller/home_controller.dart';
@@ -96,7 +92,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   void initState() {
     super.initState();
     _marketplacesearchTabController = TabController(length: 4, vsync: this);
-    _marketplaceTabController = TabController(length: 4, vsync: this);
+    _marketplaceTabController = TabController(length: 3, vsync: this);
 
     // _marketplaceTabController.addListener(() {
     //   if (_marketplaceTabController.index == 2) {
@@ -616,9 +612,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                         },
                                       )
                                 : _marketplaceTabController.index == 1
-                                    ? Get.to(() => const CreateProductListing(
-                                          isMarketplace: true,
-                                        ))
+                                    ? Get.to(BuyerRequests(
+                                        onSubmit: (BuyerRequestsData p1) {},
+                                      ))
                                     : _marketplaceTabController.index == 2
                                         ? Get.to(
                                             () => const CreateServiceListing(
@@ -716,11 +712,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                               );
                                             });
                       },
-                      text: _marketplaceTabController.index == 4
+                      text: _marketplaceTabController.index == 2
                           ? 'Add'
-                          : _marketplaceTabController.index != 3
-                              ? 'Sell'
-                              : 'Add',
+                          : _marketplaceTabController.index == 1
+                              ? 'Create request'
+                              : 'Sell',
                     ),
                   )
                 ],
@@ -928,64 +924,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
           : _ismarketplaceSearching
               ? Column(
                   children: <Widget>[
-                    // Container(
-                    //   height: 50,
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.grey[200],
-                    //     borderRadius: BorderRadius.circular(1),
-                    //   ),
-                    //   child: CountryListPick(
-                    //       appBar: AppBar(
-                    //         leading: IconButton(
-                    //           onPressed: () {
-                    //             Navigator.pop(context);
-                    //           },
-                    //           icon: SvgPicture.asset(
-                    //               'assets/svgs/backbutton.svg'),
-                    //         ),
-                    //         centerTitle: true,
-                    //         title: const Text(
-                    //           'Select Location',
-                    //           textAlign: TextAlign.center,
-                    //         ),
-                    //       ),
-                    //       initialSelection: _marketController.selectedLocation,
-                    //       onChanged: (CountryCode? code) async {
-                    //         setState(() {
-                    //           selectedLocationChanged(code!.name, code.code);
-                    //         });
-                    //       },
-                    //       useSafeArea: false,
-                    //       pickerBuilder:
-                    //           (BuildContext context, CountryCode? countryCode) {
-                    //         return Row(
-                    //           children: <Widget>[
-                    //             const Icon(
-                    //               Icons.place,
-                    //               size: 18,
-                    //             ),
-                    //             const SizedBox(
-                    //               width: 5,
-                    //             ),
-                    //             Text(
-                    //               _marketController.selectedLocation!.length >
-                    //                       20
-                    //                   ? '${_marketController.selectedLocation!.substring(0, 20)}...'
-                    //                   : _marketController.selectedLocation!,
-                    //               style: const TextStyle(
-                    //                 color: Colors.black,
-                    //                 fontWeight: FontWeight.w700,
-                    //                 fontSize: 16,
-                    //               ),
-                    //             ),
-                    //             const SizedBox(
-                    //               width: 5,
-                    //             ),
-                    //             SvgPicture.asset('assets/svgs/dropdown.svg')
-                    //           ],
-                    //         );
-                    //       }),
-                    // ),
                     Expanded(
                       child: TabBarView(
                         controller: _marketplacesearchTabController,
@@ -1069,14 +1007,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                   horizontal: 15.0),
                                           tabs: const <Widget>[
                                             Tab(
-                                              icon: Icon(
-                                                Icons.dashboard,
-                                                size: 15,
-                                              ),
-                                            ),
-                                            Tab(
                                               child: Text(
-                                                'Products',
+                                                'Listing',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 14),
@@ -1084,7 +1016,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                             ),
                                             Tab(
                                               child: Text(
-                                                'Services',
+                                                'Requests',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 14),
@@ -1092,7 +1024,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                             ),
                                             Tab(
                                               child: Text(
-                                                'Suppliers',
+                                                'Find Suppliers',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 14),
@@ -1110,8 +1042,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                     _marketplaceTabController,
                                                 children: const <Widget>[
                                                   MarketsPage(),
-                                                  ProductsPage(),
-                                                  ServicesPage(),
+                                                  BuyerRequestsScreen(),
                                                   SuppliersPage(),
                                                 ],
                                               ),
