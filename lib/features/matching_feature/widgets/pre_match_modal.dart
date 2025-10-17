@@ -197,19 +197,32 @@ class _PreMatchModalState extends State<PreMatchModal> {
                                     'users/${profileController.myProfile.uid}',
                                 body: updateData);
                             if (response.success) {
-                              Get.snackbar(
-                                  'Success', 'Profile Updated Succesfully');
                               profileController.updateProfile(<String, dynamic>{
                                 ...profileController.myProfile.toMap(),
                                 ...updateData
                               });
+
+                              Get.back();
+                              // Show success message
+                              Get.snackbar(
+                                  'Success', 'Profile Updated Successfully');
+
+                              // Wait a short moment before closing, so the user sees the message
+                              await Future.delayed(
+                                  const Duration(milliseconds: 800));
+
+                              // Close the modal
+                              if (mounted) Get.back();
                             } else {
                               Get.snackbar('Error', 'Profile Update Error');
                             }
-                            Get.back();
-                            setState(() {
-                              isSubmitting = true;
-                            });
+
+// Stop the loading state
+                            if (mounted) {
+                              setState(() {
+                                isSubmitting = false;
+                              });
+                            }
                           },
                     child: const Text(
                       'Save Changes',
