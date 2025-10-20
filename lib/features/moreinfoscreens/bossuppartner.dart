@@ -271,7 +271,7 @@ class BossuppartnerItem extends StatelessWidget {
                     }
                   },
                   child: const Text(
-                    'Claim Deal',
+                    'Claim Deals',
                     style: TextStyle(
                         color: primaryColorLT, fontWeight: FontWeight.w700),
                   )),

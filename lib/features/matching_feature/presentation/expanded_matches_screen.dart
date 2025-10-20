@@ -8,13 +8,14 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 // Import your controllers and other necessary files
 import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
-import 'package:business_bosses_v2/features/matching_feature/presentation/bookmarked_matches.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/banner.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_card.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 
 class ExpandedMatchesScreen extends StatefulWidget {
-  const ExpandedMatchesScreen({super.key});
+  final bool? isMarketplace;
+
+  const ExpandedMatchesScreen({super.key, this.isMarketplace});
 
   @override
   State<ExpandedMatchesScreen> createState() => _ExpandedMatchesScreenState();
@@ -63,10 +64,10 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
     }
 
     // Get the first three matches
-    final List<MatchModel> clearMatches = matches.take(3).toList();
+    final List<MatchModel> clearMatches = matches.take(2).toList();
 
     // Get the rest of the matches to be blurred
-    final List<MatchModel> blurredMatches = matches.skip(3).toList();
+    final List<MatchModel> blurredMatches = matches.skip(2).toList();
 
     final MatchController matchController = Get.find<MatchController>();
     return Column(
@@ -107,26 +108,20 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: CircleAvatar(
-            backgroundColor: backgroundColor,
-            child: Icon(LucideIcons.arrowLeft, color: textColor, size: 20),
-          ),
-        ),
-        centerTitle: true,
-        title: const Text('Matches', textAlign: TextAlign.center),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () => Get.to(() => const BookmarkedMatches()),
-            icon: CircleAvatar(
-              backgroundColor: backgroundColor,
-              child: Icon(LucideIcons.bookmark, color: textColor, size: 20),
+      appBar: widget.isMarketplace == true
+          ? null
+          : AppBar(
+              leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: CircleAvatar(
+                  backgroundColor: backgroundColor,
+                  child:
+                      Icon(LucideIcons.arrowLeft, color: textColor, size: 20),
+                ),
+              ),
+              centerTitle: true,
+              title: const Text('Matches', textAlign: TextAlign.center),
             ),
-          ),
-        ],
-      ),
       body: Obx(() {
         // Loading and Error states remain the same
         if (matchController.isLoading.value) {
@@ -173,14 +168,15 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                 ),
               Column(
                 children: <Widget>[
-                  MatchHeader(
-                    title:
-                        'Your Top ${matchController.matchList.length} Matches',
-                    subtitle: 'for this week based on your profile',
-                    weeklyMatches: matchController.matchList.length,
-                    totalMatches: matchController.matchList.length,
-                    matchQuality: averageQuality,
-                  ),
+                  if (widget.isMarketplace != true)
+                    MatchHeader(
+                      title:
+                          'Your Top ${matchController.matchList.length} Matches',
+                      subtitle: 'for this week based on your profile',
+                      weeklyMatches: matchController.matchList.length,
+                      totalMatches: matchController.matchList.length,
+                      matchQuality: averageQuality,
+                    ),
                   const SizedBox(height: 20),
 
                   // --- RENDER UI BASED ON SUBSCRIPTION ---
@@ -192,6 +188,9 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                     buildFreeView(matchController.matchList),
                 ],
               ),
+              SizedBox(
+                height: 200,
+              )
             ],
           ),
         );

@@ -189,7 +189,7 @@ class _HeroSectionState extends State<HeroSection> {
           subtitle: partner['companyName'] ?? '',
           image: partner['companyPhoto'],
           description: partner['companyDescription'] ?? '',
-          action: 'Claim Deal',
+          action: 'Claim Deals',
           action2: 'Become a Partner'),
       HeroItem(
           id: '8',
@@ -205,7 +205,7 @@ class _HeroSectionState extends State<HeroSection> {
 
   void _startAutoRotation() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
       final Duration timeSinceLast =
           DateTime.now().difference(_lastInteraction);
       if (timeSinceLast.inSeconds >= 2) {
@@ -592,7 +592,7 @@ class _HeroSectionState extends State<HeroSection> {
                             case 'View Matches':
                               Get.to(() => ExpandedMatchesScreen());
                               break;
-                            case 'Claim Deal':
+                            case 'Claim Deals':
                               final Uri url = Uri.parse(partner['companyUrl']);
                               if (!await launchUrl(url)) {
                                 throw Exception('Could not launch $url');
@@ -621,7 +621,7 @@ class _HeroSectionState extends State<HeroSection> {
                                       ? LucideIcons.calendar
                                       : item.action == 'Refer'
                                           ? LucideIcons.forward
-                                          : item.action == 'Claim Deal'
+                                          : item.action == 'Claim Deals'
                                               ? LucideIcons.checkCircle2
                                               : LucideIcons.userPlus,
                                   size: 16,

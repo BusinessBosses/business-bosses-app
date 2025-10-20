@@ -78,24 +78,6 @@ class _MatchCardState extends State<MatchCard> {
                 ),
               ),
             ),
-            // Always show bookmark icon, but toggle style
-            GestureDetector(
-              onTap: widget.onBookmarkToggle,
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: widget.isBookmarked ? primaryBlue : textColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  widget.isBookmarked
-                      ? LucideIcons.bookMarked
-                      : LucideIcons.bookmark,
-                  color: Colors.white,
-                  size: 16,
-                ),
-              ),
-            ),
           ],
         ),
       ],
@@ -205,43 +187,6 @@ class _MatchCardState extends State<MatchCard> {
             height: 1.4,
           ),
         ),
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                const Icon(Icons.access_time, size: 14, color: textMedium),
-                const SizedBox(width: 4),
-                Text(
-                  widget.match.responseTime,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: textMedium,
-                  ),
-                ),
-              ],
-            ),
-            if (widget.match.matchType != null &&
-                widget.match.matchType!.isNotEmpty)
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: primaryBlue,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  widget.match.matchType!.toUpperCase(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-          ],
-        ),
       ],
     );
   }
@@ -252,39 +197,10 @@ class _MatchCardState extends State<MatchCard> {
         Expanded(
           child: SizedBox(
             height: 50,
-            child: ElevatedButton.icon(
+            child: OutlinedButton.icon(
               onPressed: () => _sendProposal(context),
-              icon: const Icon(LucideIcons.send, size: 16),
-              label: const Text('Send Proposal'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primaryBlue,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        SizedBox(
-          height: 50,
-          child: OutlinedButton.icon(
-            onPressed: widget.onBookmarkToggle,
-            icon: Icon(
-              widget.isBookmarked
-                  ? LucideIcons.bookMarked
-                  : LucideIcons.bookmark,
-              size: 16,
-            ),
-            label: Text(widget.isBookmarked ? 'Saved' : 'Save'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: widget.isBookmarked ? successGreen : primaryBlue,
-              side: BorderSide(
-                  color: widget.isBookmarked ? successGreen : primaryBlue),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+              icon: const Icon(LucideIcons.messageCircle, size: 16),
+              label: const Text('Send Message'),
             ),
           ),
         ),
