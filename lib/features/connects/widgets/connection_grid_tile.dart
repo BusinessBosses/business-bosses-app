@@ -6,7 +6,6 @@ import '../../../common/models/user_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
-import '../../search/controller/search_controller.dart';
 
 class ConnectionGridTile extends StatefulWidget {
   final UserModel user;
@@ -37,7 +36,6 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
 
   @override
   Widget build(BuildContext context) {
-    CompleteSearchController controller = Get.find();
     return InkWell(
       onTap: () {
         Get.toNamed(Routes.publicProfile, arguments: widget.user);

@@ -7,7 +7,6 @@ import 'package:business_bosses_v2/features/donations/controller/donations_contr
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
@@ -299,26 +298,26 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _buildForumList(HomeController controller) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return SizedBox(
-          height: constraints.maxHeight,
-          width: constraints.maxWidth,
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: controller.forums.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ForumItem(
-                forum: controller.forums[index],
-                controller: homeController,
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
+  // Widget _buildForumList(HomeController controller) {
+  //   return LayoutBuilder(
+  //     builder: (BuildContext context, BoxConstraints constraints) {
+  //       return SizedBox(
+  //         height: constraints.maxHeight,
+  //         width: constraints.maxWidth,
+  //         child: ListView.builder(
+  //           controller: _scrollController,
+  //           itemCount: controller.forums.length,
+  //           itemBuilder: (BuildContext context, int index) {
+  //             return ForumItem(
+  //               forum: controller.forums[index],
+  //               controller: homeController,
+  //             );
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget _buildLoading() {
     return Center(

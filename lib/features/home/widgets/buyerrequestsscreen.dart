@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyerrequestitem.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -49,12 +48,12 @@ class BuyerRequestsScreen extends StatefulWidget {
 
 class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   final String _selectedFilter = 'All';
-  final List<String> _filters = <String>[
-    'All',
-    'Active',
-    'Has Offers',
-    'Closing Soon'
-  ];
+  // final List<String> _filters = <String>[
+  //   'All',
+  //   'Active',
+  //   'Has Offers',
+  //   'Closing Soon'
+  // ];
 
   // Dummy data
   late List<BuyerRequest> _allRequests;
@@ -203,7 +202,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   void _applyFilter() {
     setState(() {
       if (_selectedFilter == 'All') {
-        _filteredRequests = List.from(_allRequests);
+        _filteredRequests = List<BuyerRequest>.from(_allRequests);
       } else if (_selectedFilter == 'Active') {
         _filteredRequests = _allRequests
             .where(
@@ -429,7 +428,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                 ? _buildEmptyState()
                 : RefreshIndicator(
                     onRefresh: () async {
-                      await Future.delayed(const Duration(seconds: 1));
+                      await Future<dynamic>.delayed(const Duration(seconds: 1));
                       setState(() {
                         _applyFilter();
                       });
