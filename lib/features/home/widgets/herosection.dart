@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/home/widgets/becomeapartnerscreen.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
@@ -416,12 +417,8 @@ class _HeroSectionState extends State<HeroSection> {
     print('mentor of the week');
   }
 
-  void enterpartneroftheweek() async {
-    if (await canLaunchUrl(
-        Uri.parse('https://businessbosses.co.uk/landingpageforpartners'))) {
-      await launchUrl(
-          Uri.parse('https://businessbosses.co.uk/landingpageforpartners'));
-    }
+  void enterpartneroftheweek() {
+    Get.to(BecomeaPartnerScreen());
   }
 
   Widget _buildWinnerCard(HeroItem item) {
@@ -983,11 +980,7 @@ class _HeroSectionState extends State<HeroSection> {
                                                 ? item.action2
                                                 : '') {
                                               case 'Become a Partner':
-                                                if (await canLaunchUrl(Uri.parse(
-                                                    'https://businessbosses.co.uk/landingpageforpartners'))) {
-                                                  await launchUrl(Uri.parse(
-                                                      'https://businessbosses.co.uk/landingpageforpartners'));
-                                                }
+                                                Get.to(BecomeaPartnerScreen());
                                                 break;
                                               case 'Create an event':
                                                 Get.toNamed(Routes.liveEvents);
