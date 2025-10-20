@@ -71,7 +71,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     'Media & Entertainment',
     'Security, Safety & Equipment',
     'Technology, Games & Electronic',
-    'Vehicle & Transportation'
+    'Vehicle & Transportation',
+    'Other'
   ];
   final ScrollController _scrollController = ScrollController();
   bool showFloatingButton = false;

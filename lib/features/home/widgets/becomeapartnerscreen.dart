@@ -31,17 +31,16 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
 
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
+      allowMultiple: false,
       type: FileType.custom,
       allowedExtensions: <String>[
-        'pdf',
-        'doc',
-        'docx',
-        'txt',
         'png',
         'jpg',
         'jpeg',
-        'gif'
+        'gif',
+        'pdf',
+        'doc',
+        'docx'
       ],
     );
 
@@ -109,7 +108,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
                   'Please add your country code. Eg. +44 100 000 0000',
                   style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
-                caption: 'Company Phone *',
+                caption: 'Company Phone Number (Optional)',
                 hintText: 'Enter your company phone number',
                 inputType: TextInputType.phone,
                 controller: phoneController),
@@ -155,16 +154,6 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
                 useSafeArea: false,
               ),
             ),
-
-            CustomDropdownWidget(
-              caption: 'Company Category *',
-              items: <String>[
-                'Brand deals/Discounts',
-                'Organisation Initiatives',
-                'Government Initiatives'
-              ],
-              iconName: 'assets/svgs/dropdown.svg',
-            ),
             CustomDropdownWidget(
               caption: 'Type of Partnership *',
               items: <String>[
@@ -186,6 +175,25 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
                 hintText: 'Enter website or link',
                 controller: emailController,
                 inputType: TextInputType.emailAddress),
+            CustomDropdownWidget(
+              caption: 'Company Category *',
+              items: <String>[
+                'Agriculture, Food & Beverage',
+                'Books & Education',
+                'Construction & Real Estate',
+                'Fashion & Beauty',
+                'Finance & Legal',
+                'Healthcare & Wellness',
+                'Home, Gardens & Outdoors',
+                'Jewellery & Timepieces',
+                'Media & Entertainment',
+                'Security, Safety & Equipment',
+                'Technology, Games & Electronic',
+                'Vehicle & Transportation',
+                'Other'
+              ],
+              iconName: 'assets/svgs/dropdown.svg',
+            ),
             Column(
               children: <Widget>[
                 Padding(
@@ -194,7 +202,8 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      _buildLabel('Attach File (Optional)', LucideIcons.file),
+                      _buildLabel(
+                          'Add image or file (Optional)', LucideIcons.image),
                     ],
                   ),
                 ),
@@ -204,10 +213,10 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: InkWell(
-                    onTap: _attachments.length < 5 ? _pickFile : null,
+                    onTap: _attachments.isEmpty ? _pickFile : null,
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(32),
+                      padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(
@@ -217,27 +226,21 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
                         ),
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Column(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Icon(
                             LucideIcons.uploadCloud,
-                            size: 48,
+                            size: 20,
                             color: Colors.grey[400],
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(width: 10),
                           Text(
-                            'Drag & drop file here',
+                            'Tap to select file',
                             style: TextStyle(
                               color: Colors.grey[700],
                               fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'or click to browse',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[500],
                             ),
                           ),
                         ],
@@ -303,6 +306,19 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
               hintText: 'Enter your customised message',
               controller: bioController,
               inputType: TextInputType.name,
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text(
+                  textAlign: TextAlign.center,
+                  'By clicking submit, you agree to let Business Bosses use your logo and branding on marketing materials to promote the partnership.',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: subtextColor,
+                  ),
+                ),
+              ),
             ),
             SizedBox(
               width: double.infinity,
