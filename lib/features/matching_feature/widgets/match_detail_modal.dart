@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -141,26 +140,14 @@ class _MatchDetailModalState extends State<MatchDetailModal> {
           ],
         ),
         const SizedBox(height: 16),
-        Row(
-          children: <Widget>[
-            Text(
-              // UPDATED: Displays actual data
-              widget.match.name,
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: textDark,
-              ),
-            ),
-            if (widget.match.verified) ...<Widget>[
-              const SizedBox(width: 4),
-              const Icon(
-                Icons.verified,
-                size: 15,
-                color: primaryColorLT,
-              ),
-            ],
-          ],
+        Text(
+          // UPDATED: Displays actual data
+          widget.match.name,
+          style: const TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: textDark,
+          ),
         ),
         const SizedBox(height: 4),
         Text(
@@ -337,14 +324,44 @@ class _MatchDetailModalState extends State<MatchDetailModal> {
         ),
         const SizedBox(height: 24),
         SizedBox(
-          width: double.infinity,
           height: 50,
-          child: OutlinedButton.icon(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            // UPDATED: Corrected onPressed syntax
             onPressed: () => _sendProposal(context),
-            icon: const Icon(LucideIcons.messageCircle, size: 16),
-            label: const Text('Send Message'),
+            icon: const Icon(LucideIcons.send, size: 18),
+            label: const Text('Send Proposal'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: primaryBlue,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 50,
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: () => _saveOpportunity(),
+            icon: Icon(
+                isBookmarked ? LucideIcons.bookmark : LucideIcons.bookmark,
+                size: 18,
+                color: buttonTextColor),
+            label: Text(
+              buttonText,
+              style: TextStyle(color: buttonTextColor),
+            ),
             style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              backgroundColor:
+                  buttonBackgroundColor, // Set background for "Saved" state
+              foregroundColor: buttonTextColor,
+              side: buttonBorderSide, // Set border for "Save" state
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
           ),
         ),
@@ -382,11 +399,12 @@ class _MatchDetailModalState extends State<MatchDetailModal> {
   }
 
   void _sendProposal(BuildContext context) {
-    Get.to(
-      () => const ChatRoomScreen(
-        frommarketplace: false,
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Proposal sent to ${widget.match.name}!'),
+        backgroundColor: successGreen,
       ),
-      arguments: widget.match.user,
     );
   }
 

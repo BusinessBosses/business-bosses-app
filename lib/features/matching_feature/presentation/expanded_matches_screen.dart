@@ -135,7 +135,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                     child: CircleAvatar(
                       backgroundColor: backgroundColor,
                       child: Icon(LucideIcons.refreshCcw,
-                          color: textColor, size: 18),
+                          color: textColor, size: 20),
                     ),
                   ),
                 ),

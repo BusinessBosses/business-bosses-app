@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,29 +16,28 @@ class PreMatchModal extends StatefulWidget {
 
 class _PreMatchModalState extends State<PreMatchModal> {
   final ProfileController profileController = Get.find();
-  final MatchController matchController = Get.find();
   String? _selectedOption;
   bool isSubmitting = false;
 
   final List<Map<String, dynamic>> options = <Map<String, dynamic>>[
     <String, dynamic>{
-      'icon': LucideIcons.dollarSign,
-      'title': 'Funding / Investment',
+      'icon': LucideIcons.user,
+      'title': 'Shops you may like',
       'subtitle': 'Buyer',
     },
     <String, dynamic>{
-      'icon': LucideIcons.heartHandshake,
-      'title': 'Business Partners',
+      'icon': LucideIcons.store,
+      'title': 'Buyers interested',
       'subtitle': 'Seller',
     },
     <String, dynamic>{
-      'icon': LucideIcons.users,
-      'title': 'Customers / Supplier',
+      'icon': LucideIcons.truck,
+      'title': 'Sellers you may like',
       'subtitle': 'Supplier',
     },
     <String, dynamic>{
-      'icon': LucideIcons.graduationCap,
-      'title': 'Mentorship',
+      'icon': LucideIcons.heartHandshake,
+      'title': 'Deals to promote',
       'subtitle': 'Partner',
     },
   ];
@@ -82,7 +80,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
                     ),
                     SizedBox(height: 12),
                     Text(
-                      'What do you need? We\'ll match you to your need',
+                      'Get seen and increase your visibility.',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -92,7 +90,8 @@ class _PreMatchModalState extends State<PreMatchModal> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Select an option below. ',
+                      'This will help you get accurate matches and recommendations in the app. '
+                      'It gives you a customised view, and you can change this anytime in your profile.',
                       style: TextStyle(
                         fontSize: 14,
                         height: 1.5,
@@ -156,6 +155,13 @@ class _PreMatchModalState extends State<PreMatchModal> {
                                 ),
                                 textAlign: TextAlign.center,
                               ),
+                              Text(
+                                option['subtitle'],
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: isSelected ? primaryBlue : textMedium,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -186,33 +192,32 @@ class _PreMatchModalState extends State<PreMatchModal> {
                             setState(() {
                               isSubmitting = true;
                             });
-
                             ApiResponseModel response = await ApiService.put(
                                 path:
                                     'users/${profileController.myProfile.uid}',
                                 body: updateData);
-
                             if (response.success) {
-                              // Update profile
                               profileController.updateProfile(<String, dynamic>{
                                 ...profileController.myProfile.toMap(),
                                 ...updateData
                               });
 
-                              // Refresh matches immediately
-                              await matchController.fetchMatches();
-
-                              // Close the modal
                               Get.back();
-
                               // Show success message
                               Get.snackbar(
                                   'Success', 'Profile Updated Successfully');
+
+                              // Wait a short moment before closing, so the user sees the message
+                              await Future.delayed(
+                                  const Duration(milliseconds: 800));
+
+                              // Close the modal
+                              if (mounted) Get.back();
                             } else {
                               Get.snackbar('Error', 'Profile Update Error');
                             }
 
-                            // Stop the loading state
+// Stop the loading state
                             if (mounted) {
                               setState(() {
                                 isSubmitting = false;
