@@ -14,6 +14,7 @@ import 'package:business_bosses_v2/features/donations/presentation/filtersupplie
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyerrequestsform.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyerrequestsscreen.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
@@ -83,6 +84,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   bool databool = true;
   bool loadingData = true;
   final SupplierController supplierController = Get.put(SupplierController());
+  final BuyerRequestController buyerRequestController =
+      Get.put(BuyerRequestController());
   final TextEditingController minpricecontroller = TextEditingController();
   final TextEditingController maxpricecontroller = TextEditingController();
   final ProfileController _profileController = Get.find();
@@ -614,9 +617,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                         },
                                       )
                                 : _marketplaceTabController.index == 1
-                                    ? Get.to(BuyerRequests(
-                                        onSubmit: (BuyerRequestsData p1) {},
-                                      ))
+                                    ? Get.to(() => BuyerRequests(
+                                          onSubmit: (BuyerRequestsData p1) {},
+                                        ))
                                     : _marketplaceTabController.index == 2
                                         ? Get.to(
                                             () => const CreateServiceListing(
