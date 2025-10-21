@@ -38,7 +38,7 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
                     Text(
                       'Impact Breakdown',
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey[900],
                       ),
@@ -103,7 +103,7 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
                 Text(
                   'Total Impact Score',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey[900],
                   ),
@@ -111,7 +111,7 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
                 Text(
                   '15,420',
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey[900],
                   ),
@@ -186,7 +186,7 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
           Text(
             value,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.grey[900],
             ),
