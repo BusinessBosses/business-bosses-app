@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
-import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
+import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profile_picture_display.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -109,12 +109,13 @@ class _UserProfileTileState extends State<UserProfileTile> {
                     if (profileController.myProfile.matchType != null)
                       GestureDetector(
                         onTap: () {
-                          showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (BuildContext context) =>
-                                  PreMatchModal());
+                          Get.to(ExpandedMatchesScreen());
+                          // showModalBottomSheet(
+                          //     context: context,
+                          //     isScrollControlled: true,
+                          //     backgroundColor: Colors.transparent,
+                          //     builder: (BuildContext context) =>
+                          //         PreMatchModal());
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -128,12 +129,13 @@ class _UserProfileTileState extends State<UserProfileTile> {
                             spacing: 5,
                             children: <Widget>[
                               Text(
-                                profileController
-                                    .myProfile.matchType!.capitalize
-                                    .toString(),
+                                'View Matches',
+                                // profileController
+                                //     .myProfile.matchType!.capitalize
+                                //     .toString(),
                                 style: TextStyle(color: primaryBlue),
                               ),
-                              Icon(LucideIcons.refreshCcw,
+                              Icon(LucideIcons.arrowUpRight,
                                   size: 10,
                                   color: primaryBlue.withValues(alpha: 0.6))
                             ],

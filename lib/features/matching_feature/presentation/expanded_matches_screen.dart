@@ -1,16 +1,16 @@
+// Import your controllers and other necessary files
+import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
 import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/banner.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/match_card.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_header.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/premium_prompt.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-
-// Import your controllers and other necessary files
-import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
-import 'package:business_bosses_v2/features/matching_feature/widgets/banner.dart';
-import 'package:business_bosses_v2/features/matching_feature/widgets/match_card.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 
 class ExpandedMatchesScreen extends StatefulWidget {
   final bool? isMarketplace;
@@ -121,6 +121,25 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
               ),
               centerTitle: true,
               title: const Text('Matches', textAlign: TextAlign.center),
+              actions: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (BuildContext context) => PreMatchModal());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: CircleAvatar(
+                      backgroundColor: backgroundColor,
+                      child: Icon(LucideIcons.refreshCcw,
+                          color: textColor, size: 20),
+                    ),
+                  ),
+                ),
+              ],
             ),
       body: Obx(() {
         // Loading and Error states remain the same

@@ -42,169 +42,151 @@ class _MatchCardState extends State<MatchCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _buildHeader(),
-              const SizedBox(height: 12),
               _buildContent(),
-              const SizedBox(height: 16),
-              _buildActions(context),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        if (widget.match.verified) _buildPremiumBadge(),
-        const Spacer(),
-        Row(
-          spacing: 5,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.green,
-              ),
-              child: Text(
-                '${widget.match.quality}%',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPremiumBadge() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: premiumGold.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: const Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Icon(Icons.star, size: 12, color: premiumGold),
-          SizedBox(width: 4),
-          Text(
-            'Premium',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: premiumGold,
-            ),
-          ),
-        ],
       ),
     );
   }
 
   Widget _buildContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Get.toNamed(Routes.publicProfile, arguments: widget.match.user);
-          },
-          child: Row(
-            spacing: 10,
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.publicProfile,
+                        arguments: widget.match.user);
+                  },
+                  child: Row(
+                    spacing: 10,
+                    children: <Widget>[
+                      NetworkImageWithPlaceHolder(
+                        imageUrl: widget.match.photoUrl,
+                        height: 40,
+                        width: 40,
+                        radius: 50,
+                        cacheHeight: 256,
+                        cacheWidth: 256,
+                        placeHolder: Icons.person,
+                        iconSize: 24,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Flexible(
+                                  child: Text(
+                                    widget.match.name,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: textDark,
+                                    ),
+                                  ),
+                                ),
+                                if (widget.match.verified) ...<Widget>[
+                                  const SizedBox(width: 4),
+                                  const Icon(
+                                    Icons.verified,
+                                    size: 15,
+                                    color: primaryColorLT,
+                                  ),
+                                ],
+                              ],
+                            ),
+                            Text(
+                              widget.match.type,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: primaryBlue,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: <Widget>[
+                    const Icon(Icons.star, size: 16, color: premiumGold),
+                    const SizedBox(width: 4),
+                    Text(
+                      widget.match.rating.toString(),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: textDark,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    const Icon(LucideIcons.mapPin, size: 14, color: textMedium),
+                    const SizedBox(width: 4),
+                    Text(
+                      widget.match.location,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: textMedium,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  widget.match.description,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: textMedium,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              NetworkImageWithPlaceHolder(
-                imageUrl: widget.match.photoUrl,
-                height: 40,
-                width: 40,
-                radius: 50,
-                cacheHeight: 256,
-                cacheWidth: 256,
-                placeHolder: Icons.person,
-                iconSize: 24,
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.green,
+                ),
+                child: Text(
+                  '${widget.match.quality}%',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    widget.match.name,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: textDark,
-                    ),
-                  ),
-                  Text(
-                    widget.match.type,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: primaryBlue,
-                    ),
-                  ),
-                ],
+              const Spacer(),
+              OutlinedButton.icon(
+                onPressed: () => _sendProposal(context),
+                icon: const Icon(LucideIcons.messageCircle, size: 16),
+                label: const Text('Send Message'),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                ),
               ),
             ],
           ),
-        ),
-        SizedBox(height: 12),
-        Row(
-          children: <Widget>[
-            const Icon(Icons.star, size: 16, color: premiumGold),
-            const SizedBox(width: 4),
-            Text(
-              widget.match.rating.toString(),
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: textDark,
-              ),
-            ),
-            const SizedBox(width: 12),
-            const Icon(LucideIcons.mapPin, size: 14, color: textMedium),
-            const SizedBox(width: 4),
-            Text(
-              widget.match.location,
-              style: const TextStyle(
-                fontSize: 14,
-                color: textMedium,
-              ),
-            ),
-          ],
-        ),
-        Text(
-          widget.match.description,
-          style: const TextStyle(
-            fontSize: 15,
-            color: textMedium,
-            height: 1.4,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActions(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: SizedBox(
-            height: 50,
-            child: OutlinedButton.icon(
-              onPressed: () => _sendProposal(context),
-              icon: const Icon(LucideIcons.messageCircle, size: 16),
-              label: const Text('Send Message'),
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
