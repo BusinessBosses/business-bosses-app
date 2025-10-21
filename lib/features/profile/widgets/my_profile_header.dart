@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/impact/presentation/impactscreen.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/banner.dart';
 import 'package:business_bosses_v2/features/profile/widgets/user_profile_tile.dart';
 import 'package:flutter/material.dart';
@@ -74,13 +75,10 @@ class MyProfileHeader extends StatelessWidget {
                     )),
                     Expanded(
                       child: CustomChildButton(
-                        value: myProfile.referalCount ?? 0,
-                        caption: 'Referrals',
+                        value: 0,
+                        caption: 'Impact',
                         onPressed: () {
-                          Get.toNamed(
-                            Routes.referalsscreen,
-                            arguments: myProfile.uid,
-                          );
+                          Get.to(ImpactScreen());
                         },
                       ),
                     ),
