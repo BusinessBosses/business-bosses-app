@@ -84,10 +84,10 @@ class _ServiceCardState extends State<ServiceCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          PostTag(
-              label: 'Service',
-              textColor: textColor,
-              backgroundColor: backgroundColor),
+          // PostTag(
+          //     label: 'Service',
+          //     textColor: textColor,
+          //     backgroundColor: backgroundColor),
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(

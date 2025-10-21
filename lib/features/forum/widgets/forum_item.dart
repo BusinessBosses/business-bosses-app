@@ -202,11 +202,11 @@ class _ForumItemState extends State<ForumItem> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    PostTag(
-                        textColor: textColor,
-                        label: communitiesController
-                            .getIndustryNameById(widget.forum.industryId),
-                        backgroundColor: backgroundColor),
+                    // PostTag(
+                    //     textColor: textColor,
+                    //     label: communitiesController
+                    //         .getIndustryNameById(widget.forum.industryId),
+                    //     backgroundColor: backgroundColor),
                     ListTile(
                       contentPadding:
                           const EdgeInsets.only(left: 15.0, right: 0),

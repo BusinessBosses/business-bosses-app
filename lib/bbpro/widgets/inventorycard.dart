@@ -52,11 +52,11 @@ class _InventoryCardState extends State<InventoryCard> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          PostTag(
-            label: 'Product',
-            textColor: textColor,
-            backgroundColor: backgroundColor,
-          ),
+          // PostTag(
+          //   label: 'Product',
+          //   textColor: textColor,
+          //   backgroundColor: backgroundColor,
+          // ),
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(

@@ -331,10 +331,10 @@ class _DonationItemState extends State<DonationItem> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  PostTag(
-                      label: 'Crowdfund',
-                      textColor: textColor,
-                      backgroundColor: backgroundColor),
+                  // PostTag(
+                  //     label: 'Crowdfund',
+                  //     textColor: textColor,
+                  //     backgroundColor: backgroundColor),
                   Padding(
                     padding: const EdgeInsets.only(
                         top: 15.0, left: 15.0, right: 15.0, bottom: 10),
