@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_detail_modal.dart';
+import 'package:business_bosses_v2/features/withdrawal/presentation/depositscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class MatchCard extends StatefulWidget {
   final String userType;
   final bool isBookmarked;
   final void Function()? onBookmarkToggle;
+  final bool isExpanded;
 
   const MatchCard({
     super.key,
@@ -20,6 +22,7 @@ class MatchCard extends StatefulWidget {
     required this.userType,
     required this.isBookmarked,
     this.onBookmarkToggle,
+    this.isExpanded = true,
   });
 
   @override
@@ -86,6 +89,8 @@ class _MatchCardState extends State<MatchCard> {
                                 Flexible(
                                   child: Text(
                                     widget.match.name,
+                                    maxLines: isExpanded ? 100 : 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -105,6 +110,8 @@ class _MatchCardState extends State<MatchCard> {
                             ),
                             Text(
                               widget.match.type,
+                              maxLines: isExpanded ? 100 : 1,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -145,6 +152,8 @@ class _MatchCardState extends State<MatchCard> {
                 const SizedBox(height: 8),
                 Text(
                   widget.match.description,
+                  maxLines: isExpanded ? 100 : 3,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 15,
                     color: textMedium,
