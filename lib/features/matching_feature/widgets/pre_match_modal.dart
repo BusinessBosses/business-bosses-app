@@ -23,7 +23,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
 
   final List<Map<String, dynamic>> options = <Map<String, dynamic>>[
     <String, dynamic>{
-      'icon': LucideIcons.dollarSign,
+      'icon': LucideIcons.coins,
       'title': 'Funding / Investment',
       'subtitle': 'Buyer',
     },
