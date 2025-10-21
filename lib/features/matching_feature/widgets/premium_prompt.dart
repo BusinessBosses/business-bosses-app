@@ -133,7 +133,10 @@ class PremiumPrompt extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Upgrade'),
+            child: const Text(
+              'Upgrade',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),

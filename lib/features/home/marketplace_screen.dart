@@ -23,6 +23,7 @@ import 'package:business_bosses_v2/features/marketplace/presentation/filtermarke
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketservices.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
+import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
@@ -71,7 +72,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     'Media & Entertainment',
     'Security, Safety & Equipment',
     'Technology, Games & Electronic',
-    'Vehicle & Transportation'
+    'Vehicle & Transportation',
+    'Other'
   ];
   final ScrollController _scrollController = ScrollController();
   bool showFloatingButton = false;
@@ -95,7 +97,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   void initState() {
     super.initState();
     _marketplacesearchTabController = TabController(length: 4, vsync: this);
-    _marketplaceTabController = TabController(length: 3, vsync: this);
+    _marketplaceTabController = TabController(length: 4, vsync: this);
 
     // _marketplaceTabController.addListener(() {
     //   if (_marketplaceTabController.index == 2) {
@@ -1027,7 +1029,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                             ),
                                             Tab(
                                               child: Text(
-                                                'Find Suppliers',
+                                                'Suppliers',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 14),
+                                              ),
+                                            ),
+                                            Tab(
+                                              child: Text(
+                                                'Find My Match',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 14),
@@ -1047,6 +1057,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                   MarketsPage(),
                                                   BuyerRequestsScreen(),
                                                   SuppliersPage(),
+                                                  ExpandedMatchesScreen(
+                                                    isMarketplace: true,
+                                                  ),
                                                 ],
                                               ),
                                             ),

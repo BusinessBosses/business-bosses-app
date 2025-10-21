@@ -34,7 +34,7 @@ class CreateCourseScreen extends StatefulWidget {
   State<CreateCourseScreen> createState() => _CreateCourseScreenState();
 }
 
-enum ContentType { videos, files, text }
+enum ContentType { videos, files, both }
 
 class _CreateCourseScreenState extends State<CreateCourseScreen> {
   int optionCode = 1;
@@ -45,7 +45,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   final ProfileController profileController = Get.find();
   DetectableTextEditingController? desccontroller =
       DetectableTextEditingController();
-  ContentType _selectedContentType = ContentType.text;
+  ContentType _selectedContentType = ContentType.videos;
   File? _selectedImage;
   String? photo;
   bool _isCustomPriceSelected = false;
@@ -60,7 +60,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       'type': 'videos',
     },
     <String, dynamic>{
-      'type': 'text',
+      'type': 'both',
     },
   ];
 
@@ -96,7 +96,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
           ? ContentType.files
           : widget.course!.contentType == 'videos'
               ? ContentType.videos
-              : ContentType.text;
+              : ContentType.both;
     } else {
       VideoLinkData videolin = VideoLinkData(url: '', transcript: '');
       videoLinks.add(videolin);
@@ -158,6 +158,21 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         hintText: 'Enter Course Title',
                       )),
                   const SizedBox(height: 24.0),
+                  DetectableTextField(
+                    regExp: detectionRegExp(hashtag: false)!,
+                    keyboardType: TextInputType.multiline,
+                    maxLength: 1000,
+                    maxLines: 5,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    onChanged: (String val) {
+                      setState(() {
+                        description = val;
+                      });
+                    },
+                    decoration: inputDecoration.copyWith(
+                        hintText: 'Describe the Course'),
+                  ),
+                  const SizedBox(height: 20.0),
                   const Text(
                     'Select Course Content type',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
@@ -166,27 +181,6 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: RadioListTile<ContentType>(
-                            contentPadding: const EdgeInsets.all(0),
-                            title: const Text('Text'),
-                            value: ContentType.text,
-                            groupValue: _selectedContentType,
-                            onChanged: (ContentType? value) {
-                              setState(() {
-                                _selectedContentType = value!;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
@@ -217,7 +211,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                               borderRadius: BorderRadius.circular(10)),
                           child: RadioListTile<ContentType>(
                             contentPadding: const EdgeInsets.all(0),
-                            title: const Text('Pdf File'),
+                            title: const Text('Files'),
                             value: ContentType.files,
                             groupValue: _selectedContentType,
                             onChanged: (ContentType? value) {
@@ -232,26 +226,64 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           ),
                         ),
                       ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: RadioListTile<ContentType>(
+                            contentPadding: const EdgeInsets.all(0),
+                            title: const Text('Both'),
+                            value: ContentType.both,
+                            groupValue: _selectedContentType,
+                            onChanged: (ContentType? value) {
+                              setState(() {
+                                _selectedContentType = value!;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  DetectableTextField(
-                    regExp: detectionRegExp(hashtag: false)!,
-                    keyboardType: TextInputType.multiline,
-                    maxLength: 1000,
-                    maxLines: 5,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    onChanged: (String val) {
-                      setState(() {
-                        description = val;
-                      });
-                    },
-                    decoration: inputDecoration.copyWith(
-                        hintText: 'Describe the Course'),
-                  ),
                   const SizedBox(height: 20.0),
+                  Visibility(
+                    visible: _selectedContentType.toString() ==
+                            'ContentType.videos' ||
+                        _selectedContentType.toString() == 'ContentType.both',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          'Add Youtube or Video links',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 16),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: videoLinks.length + 1,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index < videoLinks.length) {
+                              return buildVideoLinkContainer(
+                                  videoLinks[index], index);
+                            } else {
+                              return buildAddButton();
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                      ],
+                    ),
+                  ),
                   Visibility(
                     visible: true,
                     child: Column(
@@ -599,6 +631,59 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                   const SizedBox(
                     height: 30,
                   ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     SvgPicture.asset('assets/svgs/rocket.svg'),
+                  //     const SizedBox(width: 15),
+                  //     const Expanded(
+                  //       child: Column(
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         children: <Widget>[
+                  //           Text(
+                  //             'Boost this listing?',
+                  //             style: TextStyle(
+                  //               fontWeight: FontWeight.w600,
+                  //               fontSize: 18,
+                  //             ),
+                  //           ),
+                  //           Text(
+                  //             'Reach a wider audience and get more views',
+                  //             style: TextStyle(
+                  //               fontWeight: FontWeight.w600,
+                  //               fontSize: 11,
+                  //               color: Color(0xFF777777),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //     Row(
+                  //       children: <Widget>[
+                  //         const Text(
+                  //           'No',
+                  //           style: TextStyle(
+                  //               fontSize: 8, fontWeight: FontWeight.w700),
+                  //         ),
+                  //         Switch(
+                  //           value: _shouldPromote,
+                  //           onChanged: (bool value) {
+                  //             setState(() {
+                  //               _shouldPromote = value;
+                  //             });
+                  //           },
+                  //         ),
+                  //         const Text(
+                  //           'Yes',
+                  //           style: TextStyle(
+                  //               fontSize: 8, fontWeight: FontWeight.w700),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
+                  // const SizedBox(
+                  //   height: 20,
+                  // ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 50.0),
                     child: MCustomButton(
@@ -1001,5 +1086,44 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
         _selectedImage = File(image.path);
       });
     }
+  }
+
+  Widget buildAddButton() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          videoLinks.length != 4
+              ? videoLinks.add(VideoLinkData())
+              : Get.snackbar('Error', 'You can only add 4 video links!');
+        });
+      },
+      child: Container(
+        height: 55,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 9,
+        ),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black.withAlpha(20)),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            const Text(
+              'Add more video links to create a course bundle',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: const Icon(
+                Icons.add_circle,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

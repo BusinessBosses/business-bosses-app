@@ -5,9 +5,11 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/challengeitem.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
+import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -44,10 +46,13 @@ class _BossupChallengeState extends State<BossupChallenge> {
             } else {
               return Container(
                 color: backgroundColor,
-                child: ListView.builder(
+                padding: EdgeInsets.all(15),
+                child: MasonryGridView.count(
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20,
                   scrollDirection:
                       widget.ishome! == true ? Axis.horizontal : Axis.vertical,
-                  itemCount: controller.categories.length + 2,
+                  itemCount: controller.categories.length + 3,
                   itemBuilder: (BuildContext context, int index) {
                     if (index < controller.categories.length) {
                       final Industry category = controller.categories[index];
@@ -118,7 +123,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                               ));
                         },
                       );
-                    } else if (index == controller.categories.length) {
+                    } else if (index == controller.categories.length + 1) {
                       return Challengeitem(
                         OnTap: () {
                           Get.to(() => const DonationsPage(
@@ -126,17 +131,29 @@ class _BossupChallengeState extends State<BossupChallenge> {
                               ));
                         },
                         description:
-                            'Discover and share your project to receive funding support ',
+                            'Share your project to receive funding support ',
                         iscustom: true,
                         title: 'Crowdfund',
                         imageurl: 'assets/images/donationpic.png',
                       );
-                    } else {
+                    } else if (index == controller.categories.length + 2) {
                       return Challengeitem(
                         OnTap: () {
                           Get.to(LearningPage());
                         },
-                        title: 'Learning',
+                        title: 'Mentor of the Week',
+                        description:
+                            'A journey of discovery, growth, and new opportunities.',
+                        imageurl:
+                            'https://images.pexels.com/photos/5905702/pexels-photo-5905702.jpeg',
+                      );
+                    } else {
+                      return Challengeitem(
+                        isPartner: true,
+                        OnTap: () {
+                          Get.to(Bossuppartner());
+                        },
+                        title: 'Partner\'s Deals',
                         description:
                             'A journey of discovery, growth, and new opportunities.',
                         imageurl:
@@ -144,6 +161,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       );
                     }
                   },
+                  crossAxisCount: 2,
                 ),
               );
             }

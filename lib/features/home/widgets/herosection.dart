@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/home/widgets/becomeapartnerscreen.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
@@ -189,7 +190,7 @@ class _HeroSectionState extends State<HeroSection> {
           subtitle: partner['companyName'] ?? '',
           image: partner['companyPhoto'],
           description: partner['companyDescription'] ?? '',
-          action: 'Claim Deal',
+          action: 'Claim Deals',
           action2: 'Become a Partner'),
       HeroItem(
           id: '8',
@@ -205,7 +206,7 @@ class _HeroSectionState extends State<HeroSection> {
 
   void _startAutoRotation() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
       final Duration timeSinceLast =
           DateTime.now().difference(_lastInteraction);
       if (timeSinceLast.inSeconds >= 2) {
@@ -416,12 +417,8 @@ class _HeroSectionState extends State<HeroSection> {
     print('mentor of the week');
   }
 
-  void enterpartneroftheweek() async {
-    if (await canLaunchUrl(
-        Uri.parse('https://businessbosses.co.uk/landingpageforpartners'))) {
-      await launchUrl(
-          Uri.parse('https://businessbosses.co.uk/landingpageforpartners'));
-    }
+  void enterpartneroftheweek() {
+    Get.to(BecomeaPartnerScreen());
   }
 
   Widget _buildWinnerCard(HeroItem item) {
@@ -592,7 +589,7 @@ class _HeroSectionState extends State<HeroSection> {
                             case 'View Matches':
                               Get.to(() => ExpandedMatchesScreen());
                               break;
-                            case 'Claim Deal':
+                            case 'Claim Deals':
                               final Uri url = Uri.parse(partner['companyUrl']);
                               if (!await launchUrl(url)) {
                                 throw Exception('Could not launch $url');
@@ -621,7 +618,7 @@ class _HeroSectionState extends State<HeroSection> {
                                       ? LucideIcons.calendar
                                       : item.action == 'Refer'
                                           ? LucideIcons.forward
-                                          : item.action == 'Claim Deal'
+                                          : item.action == 'Claim Deals'
                                               ? LucideIcons.checkCircle2
                                               : LucideIcons.userPlus,
                                   size: 16,
@@ -983,11 +980,7 @@ class _HeroSectionState extends State<HeroSection> {
                                                 ? item.action2
                                                 : '') {
                                               case 'Become a Partner':
-                                                if (await canLaunchUrl(Uri.parse(
-                                                    'https://businessbosses.co.uk/landingpageforpartners'))) {
-                                                  await launchUrl(Uri.parse(
-                                                      'https://businessbosses.co.uk/landingpageforpartners'));
-                                                }
+                                                Get.to(BecomeaPartnerScreen());
                                                 break;
                                               case 'Create an event':
                                                 Get.toNamed(Routes.liveEvents);

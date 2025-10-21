@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/home/widgets/becomeapartnerscreen.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -106,12 +107,8 @@ class _BossuppartnerState extends State<Bossuppartner> {
                             fontSize: 15,
                           ),
                         ),
-                        onPressed: () async {
-                          if (await canLaunchUrl(Uri.parse(
-                              'https://businessbosses.co.uk/landingpageforpartners'))) {
-                            await launchUrl(Uri.parse(
-                                'https://businessbosses.co.uk/landingpageforpartners'));
-                          }
+                        onPressed: () {
+                          Get.to(BecomeaPartnerScreen());
                         },
                       ),
                     ),
@@ -271,7 +268,7 @@ class BossuppartnerItem extends StatelessWidget {
                     }
                   },
                   child: const Text(
-                    'Claim Deal',
+                    'Claim Deals',
                     style: TextStyle(
                         color: primaryColorLT, fontWeight: FontWeight.w700),
                   )),
