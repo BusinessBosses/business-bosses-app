@@ -1,10 +1,10 @@
-import 'package:business_bosses_v2/features/home/widgets/buyerrequestsscreen.dart';
+import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BuyerRequestItem extends StatelessWidget {
-  final BuyerRequest request;
+  final BuyerRequestModel request;
   final VoidCallback? onTap;
   final VoidCallback? onApply;
   final VoidCallback? onEdit;
@@ -23,6 +23,8 @@ class BuyerRequestItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String formattedDeadline = _formatDeadline(request.deadline);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -31,14 +33,13 @@ class BuyerRequestItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // Content
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // Image
+                  // ✅ Image (if available)
                   if (request.imageUrl != null)
                     SizedBox(
                       height: 120.0,
@@ -60,7 +61,7 @@ class BuyerRequestItem extends StatelessWidget {
 
                   if (request.imageUrl != null) const SizedBox(height: 12),
 
-                  // Title and Description
+                  // ✅ Title and Description
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -90,39 +91,38 @@ class BuyerRequestItem extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  // Info Chips
+                  // ✅ Info Chips (Budget, Deadline, Files)
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: <Widget>[
-                      if (request.budget != null && request.budget!.isNotEmpty)
-                        _buildInfoChip(
-                          icon: Icons.attach_money,
-                          label: request.budget!,
-                        ),
-                      if (request.deadline != null)
-                        _buildInfoChip(
-                          icon: Icons.calendar_today,
-                          label:
-                              'Due: ${DateFormat('MMM dd').format(request.deadline!)}',
-                        ),
-                      if (request.attachments.isNotEmpty)
+                      // ✅ Budget (Start - End)
+                      _buildInfoChip(
+                        icon: Icons.attach_money,
+                        label:
+                            '\$${request.budgetStart.toStringAsFixed(0)} - \$${request.budgetEnd.toStringAsFixed(0)}',
+                      ),
+
+                      // ✅ Deadline
+                      _buildInfoChip(
+                        icon: Icons.calendar_today,
+                        label: 'Due: $formattedDeadline',
+                      ),
+
+                      // ✅ Attachments (if available)
+                      if (request.attachments != null &&
+                          request.attachments!.isNotEmpty)
                         _buildInfoChip(
                           icon: Icons.attach_file,
                           label:
-                              '${request.attachments.length} file${request.attachments.length == 1 ? '' : 's'}',
-                        ),
-                      if (request.location != null)
-                        _buildInfoChip(
-                          icon: Icons.place,
-                          label: request.location!,
+                              '${request.attachments!.length} file${request.attachments!.length == 1 ? '' : 's'}',
                         ),
                     ],
                   ),
 
                   const SizedBox(height: 16),
 
-                  // Apply Button
+                  // ✅ Apply Button
                   if (ismyrequest == null)
                     SizedBox(
                       width: double.infinity,
@@ -154,6 +154,18 @@ class BuyerRequestItem extends StatelessWidget {
     );
   }
 
+  // ✅ Helper: Format deadline date
+  String _formatDeadline(String? dateStr) {
+    if (dateStr == null || dateStr.isEmpty) return 'No deadline';
+    try {
+      final DateTime date = DateTime.parse(dateStr);
+      return DateFormat('MMM dd').format(date);
+    } catch (e) {
+      return 'Invalid date';
+    }
+  }
+
+  // ✅ Info Chip Widget (unchanged visually)
   Widget _buildInfoChip({
     required IconData icon,
     required String label,
@@ -171,7 +183,7 @@ class BuyerRequestItem extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 10,
               color: textColor,
               fontWeight: FontWeight.w500,
