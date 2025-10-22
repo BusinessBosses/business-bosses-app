@@ -45,7 +45,7 @@ class BuyerRequestController extends GetxController {
     update();
 
     final ApiResponseModel response = await ApiService.post(
-      path: 'buyer-requests',
+      path: 'buyer-request',
       body: <String, dynamic>{
         ...body,
         'user_id': _profileController.myProfile.uid,
@@ -53,7 +53,12 @@ class BuyerRequestController extends GetxController {
     );
 
     if (response.success && response.data != null) {
-      buyerRequests.insert(0, BuyerRequestModel.fromJson(response.data));
+      buyerRequests.insert(
+          0,
+          BuyerRequestModel.fromJson(<String, dynamic>{
+            ...response.data,
+            'user': _profileController.myProfile.toMap()
+          }));
     } else {
       error(true);
     }
@@ -65,7 +70,7 @@ class BuyerRequestController extends GetxController {
   /// Update an existing buyer request
   Future<void> updateBuyerRequest(int id, Map<String, dynamic> body) async {
     final ApiResponseModel response = await ApiService.put(
-      path: 'buyer-requests/$id',
+      path: 'buyer-request/$id',
       body: body,
     );
 
@@ -84,7 +89,7 @@ class BuyerRequestController extends GetxController {
   /// Delete a buyer request
   Future<void> deleteBuyerRequest(int id) async {
     final ApiResponseModel response =
-        await ApiService.delete(path: 'buyer-requests/$id');
+        await ApiService.delete(path: 'buyer-request/$id');
 
     if (response.success) {
       buyerRequests.removeWhere((BuyerRequestModel r) => r.id == id);

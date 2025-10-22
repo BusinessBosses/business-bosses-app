@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
-import 'package:business_bosses_v2/features/home/widgets/buyerrequestitem.dart';
+import 'package:business_bosses_v2/features/home/widgets/buyer_request_item.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -61,7 +61,8 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   void _navigateToChatScreen(BuyerRequestModel request) {
-    Get.to(() => const ChatRoomScreen(frommarketplace: false));
+    Get.to(() => const ChatRoomScreen(frommarketplace: false),
+        arguments: request.user);
   }
 
   void _showRequestDetails(BuyerRequestModel request) {

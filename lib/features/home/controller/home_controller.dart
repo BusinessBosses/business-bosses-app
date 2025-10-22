@@ -1035,6 +1035,7 @@ class HomeController extends GetxController {
           bossUpTitle = bossUpItem['companyName'];
           bossUpLink = bossUpItem['companyUrl'];
           bossUp?.removeWhere((e) => e['id'] == 5);
+          bossUp?.removeWhere((e) => e['approved'] == false);
         }
       } else if (!partner.success) {
         error(true);
