@@ -3,6 +3,8 @@ import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/features/home/controller/partners_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:file_picker/file_picker.dart';
@@ -26,28 +28,26 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
   final TextEditingController bioController = TextEditingController();
   final ShopController shopController = Get.find();
 
+  // PartnerController instance
+  final PartnerController partnerController = Get.put(PartnerController());
+
+  // Only one image allowed
   List<PlatformFile> _attachments = <PlatformFile>[];
   String country = '';
 
+  // PICK: images only, single file
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
-      type: FileType.custom,
-      allowedExtensions: <String>[
-        'png',
-        'jpg',
-        'jpeg',
-        'gif',
-        'pdf',
-        'doc',
-        'docx'
-      ],
+      type: FileType.image, // restrict to images only
+      // allowedExtensions not needed when using FileType.image
+      // allowedExtensions: <String>['png','jpg','jpeg','gif'],
     );
 
-    if (result != null) {
+    if (result != null && result.files.isNotEmpty) {
       setState(() {
-        _attachments =
-            <PlatformFile>[..._attachments, ...result.files].take(5).toList();
+        // keep only the first selected image (single)
+        _attachments = <PlatformFile>[result.files.first];
       });
     }
   }
@@ -56,6 +56,40 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
     setState(() {
       _attachments.removeAt(index);
     });
+  }
+
+  Future<void> _onSubmitPressed() async {
+    // Basic validation
+    if (nameController.text.trim().isEmpty) {
+      Get.snackbar('Validation', 'Company name is required');
+      return;
+    }
+    if (emailController.text.trim().isEmpty) {
+      Get.snackbar('Validation', 'Company email is required');
+      return;
+    }
+
+    // Replace these with actual dropdown-selected values if you wire them later
+    final String selectedPartnershipType = 'Brand deals/Discounts';
+    final String selectedCategory = 'Other';
+
+    final PlatformFile? image =
+        _attachments.isNotEmpty ? _attachments.first : null;
+
+    await partnerController.submitPartner(
+      companyName: nameController.text.trim(),
+      companyEmail: emailController.text.trim(),
+      companyPhone: phoneController.text.trim().isEmpty
+          ? null
+          : phoneController.text.trim(),
+      partnershipType: selectedPartnershipType,
+      category: selectedCategory,
+      location: country.isEmpty ? shopController.shop?.location : country,
+      companyUrl: null,
+      companyDescription:
+          bioController.text.trim().isEmpty ? null : bioController.text.trim(),
+      image: image,
+    );
   }
 
   @override
@@ -250,7 +284,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
                 ),
               ],
             ),
-            // Attachment List
+            // Attachment List (will show at most one image)
             if (_attachments.isNotEmpty) ...<Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -269,7 +303,8 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
                       ),
                       child: Row(
                         children: <Widget>[
-                          Icon(Icons.description, color: Colors.grey[400]),
+                          Icon(Icons.image,
+                              color: Colors.grey[400]), // image icon
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
@@ -322,11 +357,20 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
             ),
             SizedBox(
               width: double.infinity,
-              child: ProCustomButton(
-                text: 'Submit',
-                color: primaryColorLT,
-                onPressed: () {},
-              ),
+              child: Obx(() {
+                return ProCustomButton(
+                  loading: partnerController.isLoading.value,
+                  text: partnerController.isLoading.value
+                      ? 'Submitting...'
+                      : 'Submit',
+                  color: primaryColorLT,
+                  onPressed: partnerController.isLoading.value
+                      ? () {}
+                      : () {
+                          _onSubmitPressed();
+                        },
+                );
+              }),
             ),
             SizedBox(
               height: 200,

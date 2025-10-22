@@ -110,12 +110,11 @@ class BuyerRequestItem extends StatelessWidget {
                       ),
 
                       // ✅ Attachments (if available)
-                      if (request.attachments != null &&
-                          request.attachments!.isNotEmpty)
+                      if (request.attachments.isNotEmpty)
                         _buildInfoChip(
                           icon: Icons.attach_file,
                           label:
-                              '${request.attachments!.length} file${request.attachments!.length == 1 ? '' : 's'}',
+                              '${request.attachments.length} file${request.attachments.length == 1 ? '' : 's'}',
                         ),
                     ],
                   ),

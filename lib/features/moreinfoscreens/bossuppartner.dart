@@ -1,7 +1,7 @@
 import 'dart:core';
 
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/becomeapartnerscreen.dart';
+import 'package:business_bosses_v2/features/home/widgets/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -108,7 +108,7 @@ class _BossuppartnerState extends State<Bossuppartner> {
                           ),
                         ),
                         onPressed: () {
-                          Get.to(BecomeaPartnerScreen());
+                          Get.to(() => BecomeaPartnerScreen());
                         },
                       ),
                     ),
