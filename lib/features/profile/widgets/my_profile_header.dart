@@ -78,7 +78,7 @@ class MyProfileHeader extends StatelessWidget {
                         value: 0,
                         caption: 'Impact',
                         onPressed: () {
-                          Get.to(ImpactScreen());
+                          Get.to(() => ImpactScreen());
                         },
                       ),
                     ),

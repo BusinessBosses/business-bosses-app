@@ -410,17 +410,17 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void enterbackeroftheweek() {
-    Get.to(DonationsPage(
-      ishome: false,
-    ));
+    Get.to(() => DonationsPage(
+          ishome: false,
+        ));
   }
 
   void entermentoroftheweek() {
-    Get.to(LearningPage());
+    Get.to(() => LearningPage());
   }
 
   void enterpartneroftheweek() {
-    Get.to(BecomeaPartnerScreen());
+    Get.to(() => BecomeaPartnerScreen());
   }
 
   Widget _buildWinnerCard(HeroItem item) {
@@ -813,15 +813,15 @@ class _HeroSectionState extends State<HeroSection> {
 
                             break;
                           case 'mentor':
-                            Get.to(LearningPage());
+                            Get.to(() => LearningPage());
                             break;
                           case 'backer':
-                            Get.to(DonationsPage(
-                              ishome: false,
-                            ));
+                            Get.to(() => DonationsPage(
+                                  ishome: false,
+                                ));
                             break;
                           case 'partner':
-                            Get.to(Bossuppartner());
+                            Get.to(() => Bossuppartner());
                             break;
                         }
                       },
@@ -982,7 +982,8 @@ class _HeroSectionState extends State<HeroSection> {
                                                 ? item.action2
                                                 : '') {
                                               case 'Become a Partner':
-                                                Get.to(BecomeaPartnerScreen());
+                                                Get.to(() =>
+                                                    BecomeaPartnerScreen());
                                                 break;
                                               case 'Create an event':
                                                 Get.toNamed(Routes.liveEvents);

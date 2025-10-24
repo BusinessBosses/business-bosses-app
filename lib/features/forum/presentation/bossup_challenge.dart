@@ -139,7 +139,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                     } else if (index == controller.categories.length + 2) {
                       return Challengeitem(
                         OnTap: () {
-                          Get.to(LearningPage());
+                          Get.to(() => LearningPage());
                         },
                         title: 'Mentor of the Week',
                         description:
@@ -151,7 +151,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       return Challengeitem(
                         isPartner: true,
                         OnTap: () {
-                          Get.to(Bossuppartner());
+                          Get.to(() => Bossuppartner());
                         },
                         title: 'Partner\'s Deals',
                         description:

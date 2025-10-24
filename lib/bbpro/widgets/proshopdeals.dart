@@ -156,7 +156,7 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                             } else if (item is Service) {
                               return GestureDetector(
                                 onTap: () {
-                                  Get.to(BookServiceScreen(
+                                  Get.to(() => BookServiceScreen(
                                       shop: item.shop!, service: item));
                                 },
                                 child: _buildDealItem(

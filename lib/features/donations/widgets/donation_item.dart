@@ -93,12 +93,6 @@ class _DonationItemState extends State<DonationItem> {
   ];
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   void didUpdateWidget(DonationItem oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isLastItem != oldWidget.isLastItem) {

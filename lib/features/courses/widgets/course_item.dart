@@ -422,7 +422,7 @@ class _CourseItemState extends State<CourseItem> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(
+                                Get.to(() =>
                                     CourseReviewScreen(course: widget.course));
                               },
                               child: Container(

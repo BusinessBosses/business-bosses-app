@@ -140,7 +140,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                                     : 'assets/svgs/dashboard.svg',
                                 label: 'Home',
                                 onTap: () {
-                                  Get.to(HomeScreen());
+                                  Get.to(() => HomeScreen());
                                 },
                                 isActive: _selectedIndex == 7,
                               )),

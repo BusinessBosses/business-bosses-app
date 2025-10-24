@@ -23,7 +23,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
           child: OutlinedButton(
             onPressed: () async {
               Get.to(
-                UpdateProfileScreen(
+                () => UpdateProfileScreen(
                   user: myProfile,
                 ),
               );
