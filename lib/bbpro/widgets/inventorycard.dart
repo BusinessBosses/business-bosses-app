@@ -6,7 +6,6 @@ import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
-import 'package:business_bosses_v2/features/posts/widgets/tag.dart';
 import 'package:flutter/material.dart';
 
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
