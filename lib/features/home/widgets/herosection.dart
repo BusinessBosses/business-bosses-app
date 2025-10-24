@@ -410,7 +410,9 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void enterbackeroftheweek() {
-    Get.toNamed(Routes.createdonationsscreen);
+    Get.to(DonationsPage(
+      ishome: false,
+    ));
   }
 
   void entermentoroftheweek() {
