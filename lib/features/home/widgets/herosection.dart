@@ -206,10 +206,10 @@ class _HeroSectionState extends State<HeroSection> {
 
   void _startAutoRotation() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       final Duration timeSinceLast =
           DateTime.now().difference(_lastInteraction);
-      if (timeSinceLast.inSeconds >= 2) {
+      if (timeSinceLast.inSeconds >= 5) {
         final int nextIndex = (_currentIndex + 1) % heroItems.length;
         _pageController.animateToPage(
           nextIndex,
