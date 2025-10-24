@@ -23,7 +23,7 @@ Widget profilepostsdisplay(
             SvgPicture.asset(
               'assets/svgs/text.svg',
               height: 40,
-              color: Colors.grey,
+              colorFilter: ColorFilter.mode(Colors.grey, BlendMode.srcIn),
             ),
             const SizedBox(
               height: 10,

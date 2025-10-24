@@ -215,7 +215,9 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                               SvgPicture.asset(
                                                 'assets/svgs/premiumbadge.svg',
                                                 height: 9,
-                                                color: primaryColorLT,
+                                                colorFilter: ColorFilter.mode(
+                                                    primaryColorLT,
+                                                    BlendMode.srcIn),
                                               )
                                             ],
                                           )
