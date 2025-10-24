@@ -416,7 +416,7 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void entermentoroftheweek() {
-    print('mentor of the week');
+    Get.to(LearningPage());
   }
 
   void enterpartneroftheweek() {
