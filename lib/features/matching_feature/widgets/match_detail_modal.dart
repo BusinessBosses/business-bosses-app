@@ -314,13 +314,6 @@ class _MatchDetailModalState extends State<MatchDetailModal> {
   Widget _buildActionSection(BuildContext context) {
     final bool isBookmarked = matchController.isBookmarked(widget.match.id);
     // Determine the button text, icon, and colors based on the bookmark status
-    final String buttonText =
-        isBookmarked ? 'Opportunity Saved' : 'Save Opportunity';
-    final Color buttonTextColor = isBookmarked ? Colors.white : primaryBlue;
-    final Color buttonBackgroundColor =
-        isBookmarked ? Colors.blueGrey : Colors.white;
-    final BorderSide buttonBorderSide =
-        isBookmarked ? BorderSide.none : const BorderSide(color: primaryBlue);
     return Column(
       children: <Widget>[
         const Text(
@@ -387,26 +380,6 @@ class _MatchDetailModalState extends State<MatchDetailModal> {
         frommarketplace: false,
       ),
       arguments: widget.match.user,
-    );
-  }
-
-  void _saveOpportunity() {
-    // ⭐️ Call the controller method to save/toggle the bookmark status
-    matchController.toggleBookmark(widget.match);
-    setState(() {});
-
-    Get.back();
-
-    // Provide feedback to the user based on the action
-    final bool isBookmarked = matchController.isBookmarked(widget.match.id);
-
-    ScaffoldMessenger.of(Get.context!).showSnackBar(
-      SnackBar(
-        content: Text(isBookmarked
-            ? '${widget.match.name} unsaved!'
-            : '${widget.match.name} saved.'),
-        backgroundColor: isBookmarked ? primaryBlue : textMedium,
-      ),
     );
   }
 }
