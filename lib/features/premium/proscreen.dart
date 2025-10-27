@@ -182,7 +182,9 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                               SvgPicture.asset(
                                                 'assets/svgs/checkfilled.svg',
                                                 height: 15,
-                                                color: proprimaryColor,
+                                                colorFilter: ColorFilter.mode(
+                                                    proprimaryColor,
+                                                    BlendMode.srcIn),
                                               ),
                                               const SizedBox(
                                                 width: 5,

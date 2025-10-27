@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ImpactHeaderCard extends StatefulWidget {
-  const ImpactHeaderCard({super.key});
+  final dynamic data;
+  const ImpactHeaderCard({super.key, this.data});
 
   @override
   State<ImpactHeaderCard> createState() => _ImpactHeaderCardState();
@@ -13,7 +14,7 @@ class ImpactHeaderCard extends StatefulWidget {
 
 class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
   ProfileController profileController = Get.find();
-  UserModel get myProfile => profileController.myProfile;
+  UserModel get profile => UserModel.fromMap(widget.data['user']);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,7 +65,7 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
             iconBgColor: Colors.red[50]!,
             title: 'Likes',
             subtitle: 'Post engagement',
-            value: '8,234',
+            value: widget.data['totalLikes'].toString(),
           ),
 
           _buildImpactItem(
@@ -73,14 +74,14 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
             iconBgColor: Colors.blue[50]!,
             title: 'Views',
             subtitle: 'Content reach',
-            value: '5,986',
+            value: widget.data['totalViews'].toString(),
           ),
 
           GestureDetector(
             onTap: () {
               Get.toNamed(
                 Routes.referalsscreen,
-                arguments: myProfile.uid,
+                arguments: profile.uid,
               );
             },
             child: _buildImpactItem(
@@ -89,7 +90,7 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
               iconBgColor: Colors.green[50]!,
               title: 'Referrals',
               subtitle: 'Click to see who',
-              value: (myProfile.referalCount ?? 0).toString(),
+              value: profile.referalCount.toString(),
               isLast: false,
             ),
           ),
