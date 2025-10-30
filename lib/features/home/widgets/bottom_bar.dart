@@ -1,18 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
+import 'package:business_bosses_v2/features/home/bottom_nav.dart';
+import 'package:business_bosses_v2/features/home/widgets/buyer_requests_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
-import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
-
-import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
-import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -23,23 +23,16 @@ class BottomBar extends StatelessWidget {
     required this.activeIndex,
     this.scrollControl,
   });
+
   final int activeIndex;
   final VoidCallback? scrollControl;
   final ChallengeController controller = Get.put(ChallengeController());
 
   @override
   Widget build(BuildContext context) {
-    void showPromoteSheet() {
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        builder: (BuildContext context) => AIPromoteSheet(),
-      );
-    }
-
     ProfileController profileController = Get.find();
     ChatController chatController = Get.find();
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -50,7 +43,7 @@ class BottomBar extends StatelessWidget {
               color: Colors.black.withValues(alpha: 0.08),
               spreadRadius: 10,
               blurRadius: 50,
-              offset: const Offset(0, 7), // changes position of shadow
+              offset: const Offset(0, 7),
             ),
           ],
         ),
@@ -68,6 +61,7 @@ class BottomBar extends StatelessWidget {
                   color: Colors.white,
                   child: Row(
                     children: <Widget>[
+                      // Home
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
@@ -77,7 +71,7 @@ class BottomBar extends StatelessWidget {
                           label: 'Home',
                           onTap: () {
                             if (activeIndex == 0) {
-                              scrollControl;
+                              scrollControl?.call();
                               return;
                             }
                             Get.toNamed(Routes.home);
@@ -85,6 +79,8 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 0,
                         ),
                       ),
+
+                      // Inbox
                       Expanded(
                         flex: 10,
                         child: Stack(children: <Widget>[
@@ -95,15 +91,9 @@ class BottomBar extends StatelessWidget {
                             label: 'Inbox',
                             onTap: () {
                               if (activeIndex == 1) return;
-
                               if (activeIndex == 0) {
-                                //   profileController.myProfile.isSubscribed
-                                //       ? Get.to(() =>const Bottomnavscreen(noBack: false))
                                 Get.to(() => const ChatScreen());
                               } else {
-                                // profileController.myProfile.isSubscribed
-                                //     ? Get.to(const Bottomnavscreen(noBack: false))
-
                                 Get.off(() => const ChatScreen());
                               }
                             },
@@ -123,8 +113,8 @@ class BottomBar extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: Colors.white, // Border color
-                                    width: 2.0, // Border width
+                                    color: Colors.white,
+                                    width: 2.0,
                                   ),
                                 ),
                                 child: const CircleAvatar(
@@ -135,6 +125,8 @@ class BottomBar extends StatelessWidget {
                             )
                         ]),
                       ),
+
+                      // Post (+ button)
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
@@ -146,9 +138,6 @@ class BottomBar extends StatelessWidget {
                               color: Colors.white,
                             ),
                           ),
-                          // icon: activeIndex == 2
-                          //     ? 'assets/svgs/bossupufilled.svg'
-                          //     : 'assets/svgs/bossupu.svg',
                           onTap: () {
                             showModalBottomSheet(
                               context: context,
@@ -161,8 +150,7 @@ class BottomBar extends StatelessWidget {
                                 return Stack(
                                   children: <Widget>[
                                     SizedBox(
-                                      height:
-                                          380, // Increased height to accommodate the new item
+                                      height: 400,
                                       child: Padding(
                                         padding: const EdgeInsets.all(15.0),
                                         child: Column(
@@ -173,7 +161,7 @@ class BottomBar extends StatelessWidget {
                                             Expanded(
                                               child: ListView.separated(
                                                 itemCount:
-                                                    5, // Changed to 5 items
+                                                    4, // Post, Sell, Buyer Request, Promotion
                                                 separatorBuilder:
                                                     (BuildContext context,
                                                             int index) =>
@@ -185,104 +173,65 @@ class BottomBar extends StatelessWidget {
                                                     onTap: () {
                                                       Navigator.pop(context);
                                                       if (index == 0) {
-                                                        showPromoteSheet();
-                                                      } else if (index == 1) {
                                                         Get.toNamed(
                                                             Routes.createPost);
-                                                      } else if (index == 2) {
+                                                      } else if (index == 1) {
                                                         sellProduct(context);
+                                                      } else if (index == 2) {
+                                                        Get.to(BuyerRequests());
                                                       } else if (index == 3) {
-                                                        Get.toNamed(
-                                                            Routes.createevent);
-                                                      } else if (index == 4) {
-                                                        Get.to(() =>
-                                                            const CreatePollScreen());
+                                                        Get.to(
+                                                            AllCommunitiesScreen());
                                                       }
                                                     },
                                                     minVerticalPadding: 0,
                                                     contentPadding:
                                                         const EdgeInsets.only(
                                                             left: 10),
-                                                    leading: index == 4
-                                                        ? const Icon(
-                                                            Icons.poll,
-                                                            color: textColor,
+                                                    leading: index == 0
+                                                        ? SvgPicture.asset(
+                                                            'assets/svgs/text.svg',
+                                                            height: 25,
+                                                            color: textColor
+                                                                .withValues(
+                                                                    alpha: 1),
                                                           )
-                                                        : index == 0
-                                                            ? Container(
-                                                                width: 30,
-                                                                height: 30,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              30),
-                                                                  gradient:
-                                                                      LinearGradient(
-                                                                    colors: <Color>[
-                                                                      Color(
-                                                                          0xFF6366F1),
-                                                                      Color(
-                                                                          0xFF818CF8)
-                                                                    ],
-                                                                    begin: Alignment
-                                                                        .topLeft,
-                                                                    end: Alignment
-                                                                        .bottomRight,
-                                                                  ),
-                                                                ),
-                                                                child: Material(
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                  child: InkWell(
-                                                                      borderRadius: BorderRadius.circular(30),
-                                                                      child: Center(
-                                                                        child:
-                                                                            Stack(
-                                                                          alignment:
-                                                                              Alignment.center,
-                                                                          children: <Widget>[
-                                                                            Text(
-                                                                              'ai',
-                                                                              style: TextStyle(
-                                                                                color: Colors.white, // Choose a contrasting color
-                                                                                fontSize: 14, // Adjust size to fit within the icon
-                                                                                fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      )),
-                                                                ),
-                                                              )
-                                                            : SvgPicture.asset(
-                                                                index == 1
-                                                                    ? 'assets/svgs/text.svg'
-                                                                    : index == 2
-                                                                        ? 'assets/svgs/sellicon.svg'
-                                                                        : 'assets/svgs/eventu.svg',
-                                                                height: index ==
-                                                                        1
-                                                                    ? 25
-                                                                    : index == 2
-                                                                        ? 30
-                                                                        : 22,
+                                                        : index == 1
+                                                            ? SvgPicture.asset(
+                                                                'assets/svgs/sellicon.svg',
+                                                                height: 25,
                                                                 color: textColor
                                                                     .withValues(
                                                                         alpha:
                                                                             1),
-                                                              ),
+                                                              )
+                                                            : index == 2
+                                                                ? Icon(
+                                                                    LucideIcons
+                                                                        .coins,
+                                                                    color: textColor
+                                                                        .withValues(
+                                                                            alpha:
+                                                                                1),
+                                                                    size: 26,
+                                                                  )
+                                                                : Icon(
+                                                                    LucideIcons
+                                                                        .gift,
+                                                                    color: textColor
+                                                                        .withValues(
+                                                                            alpha:
+                                                                                1),
+                                                                    size: 26,
+                                                                  ),
                                                     title: Text(
                                                       index == 0
-                                                          ? 'Generate free promotion'
+                                                          ? 'Post content, discussion, etc'
                                                           : index == 1
-                                                              ? 'Post content, discussion, etc'
+                                                              ? 'Sell your product & service'
                                                               : index == 2
-                                                                  ? 'Sell your product & service'
-                                                                  : index == 3
-                                                                      ? 'Create an event'
-                                                                      : 'Create polls & surveys',
+                                                                  ? 'Create buyer request'
+                                                                  : 'Enter free promotion',
                                                       style: const TextStyle(
                                                         fontSize: 18,
                                                         fontWeight:
@@ -297,48 +246,6 @@ class BottomBar extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    // Positioned(
-                                    //     bottom: 25,
-                                    //     right: 15,
-                                    //     child: Container(
-                                    //       width: 60,
-                                    //       height: 60,
-                                    //       decoration: BoxDecoration(
-                                    //         borderRadius:
-                                    //             BorderRadius.circular(30),
-                                    //         gradient: LinearGradient(
-                                    //           colors: <Color>[
-                                    //             Color(0xFF6366F1),
-                                    //             Color(0xFF818CF8)
-                                    //           ],
-                                    //           begin: Alignment.topLeft,
-                                    //           end: Alignment.bottomRight,
-                                    //         ),
-                                    //         boxShadow: <BoxShadow>[
-                                    //           BoxShadow(
-                                    //             color: Colors.black
-                                    //                 .withValues(alpha: 0.3),
-                                    //             offset: Offset(0, 4),
-                                    //             blurRadius: 8,
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //       child: Material(
-                                    //         color: Colors.transparent,
-                                    //         child: InkWell(
-                                    //           borderRadius:
-                                    //               BorderRadius.circular(30),
-                                    //           onTap: showPromoteSheet,
-                                    //           child: Center(
-                                    //             child: Icon(
-                                    //               Icons.auto_fix_high,
-                                    //               color: Colors.white,
-                                    //               size: 24,
-                                    //             ),
-                                    //           ),
-                                    //         ),
-                                    //       ),
-                                    //     )),
                                   ],
                                 );
                               },
@@ -348,6 +255,8 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 2,
                         ),
                       ),
+
+                      // Marketplace
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
@@ -366,6 +275,8 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 3,
                         ),
                       ),
+
+                      // Profile
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(

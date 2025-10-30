@@ -3,11 +3,14 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/common/widgets/gallery_screen.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
+import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart'
     as custom_preview;
 import 'package:business_bosses_v2/features/posts/widgets/text_input.dart';
@@ -20,6 +23,7 @@ import 'package:detectable_text_field/widgets/detectable_text_editing_controller
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../profile/controller/profile_controller.dart';
 import '../models/post_model.dart';
@@ -117,6 +121,86 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     // }
   }
 
+  // Function to show the bottom sheet with options
+  void _showAddContentBottomSheet() {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const SizedBox(height: 20),
+
+              // Create Poll Option
+              _buildBottomSheetItem(
+                icon: LucideIcons.barChart3,
+                title: 'Create a Poll',
+                onTap: () {
+                  Navigator.pop(context);
+                  Get.to(() => CreatePollScreen());
+                },
+              ),
+
+              // Create Event Option
+              _buildBottomSheetItem(
+                icon: LucideIcons.calendar,
+                title: 'Create an Event',
+                onTap: () {
+                  Navigator.pop(context);
+
+                  Get.to(() => CreateEvent());
+                },
+              ),
+
+              // Free Promotion Option
+              _buildBottomSheetItem(
+                icon: LucideIcons.megaphone,
+                title: 'Free Promotion',
+                onTap: () {
+                  Navigator.pop(context);
+
+                  showPromoteSheet();
+                },
+              ),
+
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showPromoteSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) => AIPromoteSheet(),
+    );
+  }
+
+  // Helper method to build bottom sheet items
+  Widget _buildBottomSheetItem({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: Icon(icon, color: primaryColorLT),
+      title: Text(title, style: const TextStyle(fontSize: 16)),
+      onTap: onTap,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CreatePostController>(
@@ -148,7 +232,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ),
                     centerTitle: true,
                     title: widget.postId == null
-                        ? const Text('Post content, discussion, etc')
+                        ? const Text('Post content, discussion, etc')
                         : const Text('Update Discussion'),
                   ),
             body: GestureDetector(
@@ -194,6 +278,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             titleController: _titleCtrl,
                             onDetectionFinished: onDetectionFinished,
                           ),
+
+                          // Plus sign button below text area
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
@@ -245,11 +332,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                   'assets/svgs/addimagepost.svg',
                                                   height: 11,
                                                 ),
-
-                                                // const Text(
-                                                //   'Max file size for images is 10Mb',
-                                                //   style: TextStyle(fontSize: 11, color: Colors.red),
-                                                // )
                                               ],
                                             ),
                                           ),
@@ -287,15 +369,37 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                   'assets/svgs/yt.svg',
                                                   height: 15,
                                                 ),
-
-                                                // const Text(
-                                                //   'Max file size for images is 10Mb',
-                                                //   style: TextStyle(fontSize: 11, color: Colors.red),
-                                                // )
                                               ],
                                             ),
                                           ),
                                         )),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    GestureDetector(
+                                      onTap: _showAddContentBottomSheet,
+                                      child: Container(
+                                        width: 35,
+                                        height: 35,
+                                        decoration: BoxDecoration(
+                                          color: primaryColorLT,
+                                          shape: BoxShape.circle,
+                                          boxShadow: <BoxShadow>[
+                                            BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.2),
+                                              blurRadius: 4,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: const Icon(
+                                          LucideIcons.plus,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(
@@ -318,13 +422,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                           _ytUrl = val;
                                           setState(() {});
                                         },
-                                        // validator: (value) {
-                                        //   if (value == null || value.isEmpty) {
-                                        //     return '';
-                                        //   }
-                                        //   return null;
-                                        // },
-                                        // textInputAction: TextInputAction.done,
                                         keyboardType:
                                             TextInputType.visiblePassword,
                                         maxLines: 1,
