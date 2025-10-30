@@ -14,6 +14,7 @@ import 'package:business_bosses_v2/features/forum/presentation/create_bossup_scr
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
+import 'package:business_bosses_v2/features/impact/presentation/impactscreen.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -459,9 +460,7 @@ class _HeroSectionState extends State<HeroSection> {
 
   void enterambassadoroftheweek() {
     // Navigate to ambassador program or referral screen
-    Get.toNamed(Routes.referscreen, arguments: <String, bool>{
-      'showAmbassadorProgram': true,
-    });
+    Get.to(ImpactScreen(user: user!));
   }
 
   Widget _buildWinnerCard(HeroItem item) {

@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/challengeitem.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
+import 'package:business_bosses_v2/features/impact/presentation/impactscreen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -12,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+// Import your ImpactScreen (make sure to import the correct path)
 
 class BossupChallenge extends StatefulWidget {
   final Color? backgroundColor;
@@ -24,6 +27,19 @@ class BossupChallenge extends StatefulWidget {
 
 class _BossupChallengeState extends State<BossupChallenge> {
   final ProfileController profileController = Get.find();
+
+  // Mock data for ambassador challenge (replace with real data from your controller)
+  final Map<String, dynamic> ambassadorChallenge = <String, dynamic>{
+    'title': 'Ambassador of the Week',
+    'description': 'Invite 10 new businesses this week',
+    'imageUrl':
+        'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg',
+    'currentProgress': 3, // Current number of invites
+    'targetProgress': 10, // Target number of invites
+    'ranking': 5, // Current ranking
+    'totalParticipants': 50, // Total participants
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +68,8 @@ class _BossupChallengeState extends State<BossupChallenge> {
                   crossAxisSpacing: 20,
                   scrollDirection:
                       widget.ishome! == true ? Axis.horizontal : Axis.vertical,
-                  itemCount: controller.categories.length + 3,
+                  itemCount: controller.categories.length +
+                      4, // Increased by 1 for ambassador challenge
                   itemBuilder: (BuildContext context, int index) {
                     if (index < controller.categories.length) {
                       final Industry category = controller.categories[index];
@@ -122,6 +139,23 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                 bossUp: controller.categories[0],
                               ));
                         },
+                      );
+                    } else if (index == controller.categories.length) {
+                      // Ambassador of the Week Challenge
+                      return Challengeitem(
+                        OnTap: () {
+                          // Navigate to ImpactScreen with ambassador challenge data
+                          Get.to(() => ImpactScreen(
+                                user: profileController.myProfile,
+                              ));
+                        },
+                        iscustom: true,
+                        title: ambassadorChallenge['title'],
+                        description: ambassadorChallenge['description'],
+                        imageurl: ambassadorChallenge['imageUrl'],
+                        // progress: ambassadorChallenge['currentProgress'] / ambassadorChallenge['targetProgress'],
+                        // showProgress: true,
+                        // additionalInfo: 'Rank: ${ambassadorChallenge['ranking']}/${ambassadorChallenge['totalParticipants']}',
                       );
                     } else if (index == controller.categories.length + 1) {
                       return Challengeitem(
