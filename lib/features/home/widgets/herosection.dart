@@ -903,10 +903,7 @@ class _HeroSectionState extends State<HeroSection> {
                             Get.to(() => Bossuppartner());
                             break;
                           case 'ambassador':
-                            if (ambassador != null) {
-                              Get.toNamed(Routes.publicProfile,
-                                  arguments: ambassador);
-                            }
+                            Get.to(ImpactScreen(user: user!));
                             break;
                         }
                       },
