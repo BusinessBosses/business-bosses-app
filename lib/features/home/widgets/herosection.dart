@@ -53,6 +53,7 @@ class HeroItem {
   final String icon;
   final String description;
   final String action2;
+  final Map<String, dynamic>? metrics; // For ambassador metrics
 
   HeroItem({
     this.icon = '',
@@ -64,6 +65,7 @@ class HeroItem {
     required this.image,
     required this.action,
     this.action2 = '',
+    this.metrics,
   });
 }
 
@@ -82,6 +84,7 @@ class _HeroSectionState extends State<HeroSection> {
   late UserModel? user;
   late UserModel? mentor;
   late UserModel? backer;
+  late UserModel? ambassador; // Add ambassador
   dynamic partner;
   final HomeController homeController = Get.find();
   late List<HeroItem> heroItems;
@@ -137,6 +140,17 @@ class _HeroSectionState extends State<HeroSection> {
       iconColor: Color(0xFFFDA4AF),
       accentColor: Color(0x33FB7185),
     ),
+    'ambassador': WinnerCardConfig(
+      title: 'Ambassador of the Week',
+      icon: LucideIcons.users,
+      gradientColors: <Color>[
+        Color(0xFF43CEA2),
+        Color(0xFF185A9D),
+        Color(0xFFB993D6),
+      ],
+      iconColor: Color(0xFFC4B5FD),
+      accentColor: Color(0x338B5CF6),
+    ),
   };
 
   @override
@@ -145,6 +159,7 @@ class _HeroSectionState extends State<HeroSection> {
     user = homeController.bossOfTheWeek;
     mentor = homeController.mentorOfTheWeek;
     backer = homeController.backerOfTheWeek;
+    ambassador = homeController.backerOfTheWeek;
     partner = homeController.partnerOfTheWeek;
     industry = challengeController.categories[0];
     _startAutoRotation();
@@ -192,6 +207,25 @@ class _HeroSectionState extends State<HeroSection> {
           description: partner['companyDescription'] ?? '',
           action: 'Claim Deals',
           action2: 'Become a Partner'),
+      HeroItem(
+          id: '5',
+          type: 'ambassador',
+          title: 'Ambassador of the Week',
+          subtitle: ambassador?.name ?? ambassador!.username,
+          image: ambassador?.photoUrl ?? '',
+          description: 'Top Inviter This Week',
+          action: 'Follow',
+          action2: 'Become Ambassador',
+          metrics: <String, dynamic>{
+            'invites':
+                // homeController.ambassadorInvitesCount
+                // ?? 0,
+                0,
+            'conversions':
+                //  homeController.ambassadorConversions
+                // ??
+                0,
+          }),
       HeroItem(
           id: '8',
           type: 'matches',
@@ -423,6 +457,13 @@ class _HeroSectionState extends State<HeroSection> {
     Get.to(() => BecomeaPartnerScreen());
   }
 
+  void enterambassadoroftheweek() {
+    // Navigate to ambassador program or referral screen
+    Get.toNamed(Routes.referscreen, arguments: <String, bool>{
+      'showAmbassadorProgram': true,
+    });
+  }
+
   Widget _buildWinnerCard(HeroItem item) {
     final WinnerCardConfig? config = cardConfigs[item.type];
     if (config == null) return const SizedBox();
@@ -498,6 +539,9 @@ class _HeroSectionState extends State<HeroSection> {
                         case 'backer':
                           targetUser = backer;
                           break;
+                        case 'ambassador':
+                          targetUser = ambassador;
+                          break;
                         case 'partner':
                           partner = homeController.partnerOfTheWeek;
                           break;
@@ -539,7 +583,7 @@ class _HeroSectionState extends State<HeroSection> {
 
                           const SizedBox(width: 12),
 
-                          // Name and description
+                          // Name and description/metrics
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -564,6 +608,24 @@ class _HeroSectionState extends State<HeroSection> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
+                                // Ambassador metrics
+                                if (item.type == 'ambassador' &&
+                                    item.metrics != null)
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '${item.metrics!['invites']} Invites • ${item.metrics!['conversions']} Conversions',
+                                        style: TextStyle(
+                                          color: Colors.grey[700],
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                               ],
                             ),
                           ),
@@ -583,7 +645,23 @@ class _HeroSectionState extends State<HeroSection> {
                         onTap: () async {
                           switch (item.action) {
                             case 'Follow':
-                              connectToUser();
+                              if (item.type == 'ambassador') {
+                                // Connect to ambassador
+                                if (ambassador != null) {
+                                  final bool isConnected = _profileController
+                                              .myProfile.connecteds !=
+                                          null &&
+                                      _profileController.myProfile.connecteds!
+                                          .contains(ambassador!.uid);
+                                  if (!isConnected) {
+                                    await connect(ambassador!.uid);
+                                    _profileController
+                                        .updateConnections(ambassador!.uid);
+                                  }
+                                }
+                              } else {
+                                connectToUser();
+                              }
                               break;
                             case 'Refer':
                               referuser();
@@ -596,7 +674,6 @@ class _HeroSectionState extends State<HeroSection> {
                               if (!await launchUrl(url)) {
                                 throw Exception('Could not launch $url');
                               }
-
                               break;
                             default:
                               Get.toNamed(Routes.liveEvents);
@@ -652,6 +729,9 @@ class _HeroSectionState extends State<HeroSection> {
                               break;
                             case 'Become a Partner':
                               enterpartneroftheweek();
+                              break;
+                            case 'Become Ambassador':
+                              enterambassadoroftheweek();
                               break;
                             case 'View Matches':
                               Get.to(() => ExpandedMatchesScreen());
@@ -749,7 +829,7 @@ class _HeroSectionState extends State<HeroSection> {
                   final HeroItem item = heroItems[index];
                   final Industry category = challengeController.categories[0];
 
-                  // Use winner card for boss, mentor, backer, partner
+                  // Use winner card for boss, mentor, backer, partner, ambassador
                   if (cardConfigs.containsKey(item.type)) {
                     return GestureDetector(
                       onTap: () {
@@ -822,6 +902,12 @@ class _HeroSectionState extends State<HeroSection> {
                             break;
                           case 'partner':
                             Get.to(() => Bossuppartner());
+                            break;
+                          case 'ambassador':
+                            if (ambassador != null) {
+                              Get.toNamed(Routes.publicProfile,
+                                  arguments: ambassador);
+                            }
                             break;
                         }
                       },
