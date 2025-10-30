@@ -379,8 +379,11 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                                             SvgPicture.asset(
                                                               'assets/svgs/premiumbadge.svg',
                                                               height: 9,
-                                                              color:
-                                                                  primaryColorLT,
+                                                              colorFilter:
+                                                                  ColorFilter.mode(
+                                                                      primaryColorLT,
+                                                                      BlendMode
+                                                                          .src),
                                                             )
                                                           ],
                                                         )
@@ -843,7 +846,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                 SvgPicture.asset(
                                   'assets/svgs/premiumbadge.svg',
                                   height: 9,
-                                  color: primaryColorLT,
+                                  colorFilter: ColorFilter.mode(
+                                      primaryColorLT, BlendMode.srcIn),
                                 )
                               ],
                             )
