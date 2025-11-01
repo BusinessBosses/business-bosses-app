@@ -17,6 +17,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
   final int bossCount = publicUser.bossCount ?? 0;
   final int mentorCount = publicUser.mentorCount ?? 0;
   final int backerCount = publicUser.backerCount ?? 0;
+  final int ambassadorCount = publicUser.ambassadorCount ?? 0;
 
   final bool hasAnyAchievement =
       bossCount > 0 || mentorCount > 0 || backerCount > 0;
@@ -192,6 +193,10 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                     if (backerCount > 0)
                       WinnerCard(
                           type: WinnerType.backer, winCount: backerCount),
+                    if (ambassadorCount > 0)
+                      WinnerCard(
+                          type: WinnerType.ambassador,
+                          winCount: ambassadorCount),
                   ],
                 ),
               ),

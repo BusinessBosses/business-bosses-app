@@ -48,6 +48,14 @@ class _ImpactScreenState extends State<ImpactScreen> {
         final invites = controller.data['invitesThisWeek'] ?? 0;
         final rank = controller.data['rank'] ?? 12;
 
+        // if (true) {
+        //   return SafetyModel(
+        //     isLoading: false,
+        //     icon: Icon(Icons.warning),
+        //     title: 'NO User Referred!',
+        //   );
+        // }
+
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

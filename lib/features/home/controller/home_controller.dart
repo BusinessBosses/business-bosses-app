@@ -49,12 +49,9 @@ class HomeController extends GetxController {
   RxBool loadingMore = RxBool(false);
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
-  List<Map<String, dynamic>> mixedPosts = [
-    {'type': 'notype'},
-  ];
-  List<Map<String, dynamic>> sponsoredPosts = [
-    {'isForum': false, 'data': {}, 'shouldCount': false, 'isSponsored': true}
-  ];
+  List<Map<String, dynamic>> mixedPosts = [];
+
+  List<Map<String, dynamic>> sponsoredPosts = [];
   List<String> blocked = [];
   RxList<PostModel> promotedPosts = RxList<PostModel>(<PostModel>[]);
   RxList<MarketModel> promotedMarkets = RxList<MarketModel>(<MarketModel>[]);
@@ -66,6 +63,12 @@ class HomeController extends GetxController {
   RxList<EventModel> myEvents = RxList<EventModel>(<EventModel>[]);
   // RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
   Set<dynamic> itemsWithIncrementedViews = {};
+  // prevents promoted duplicate
+  final Set<String> seenPromoted = <String>{};
+
+// prevents normal duplicate
+  final Set<String> seenNormal = <String>{};
+
   String notificationDescription = '';
   String notificationStatus = '';
   Map<String, String> votes = {};
@@ -77,6 +80,7 @@ class HomeController extends GetxController {
   UserModel? bossOfTheWeek = UserModel();
   UserModel? mentorOfTheWeek = UserModel();
   UserModel? backerOfTheWeek = UserModel();
+  UserModel? ambassadorOfTheWeek = UserModel();
   dynamic partnerOfTheWeek;
   RxList<ForumModel> userresources = <ForumModel>[].obs;
 
@@ -184,8 +188,6 @@ class HomeController extends GetxController {
         'coins': _extractUserIds(e['coins']),
       });
     }));
-
-    mixPostandPromoted();
   }
 
   /// Convert forums efficiently
@@ -200,8 +202,6 @@ class HomeController extends GetxController {
         'coins': _extractUserIds(e['coins']),
       });
     }));
-
-    mixPostandPromoted();
   }
 
   /// Promoted posts
@@ -248,10 +248,9 @@ class HomeController extends GetxController {
   }
 
   /// Mix posts and promoted content for feed
+  /// Mix posts and promoted content for feed WITHOUT duplicates
   void mixPostandPromoted() {
-    mixedPosts
-      ..clear()
-      ..add({'type': 'notype'});
+    mixedPosts.clear();
 
     int postCount = posts.length;
     int promotedPostIndex = 0;
@@ -259,30 +258,78 @@ class HomeController extends GetxController {
     int promotedCourseIndex = 0;
 
     for (int i = 0; i < postCount; i++) {
-      mixedPosts.add({'type': 'post', 'index': i, 'id': posts[i].postId});
+      final p = posts[i];
 
-      // Insert a promoted item every 2 posts if available
+      // NORMAL POST DUP BLOCK
+      if (!seenNormal.contains(p.postId)) {
+        mixedPosts.add({'type': 'post', 'index': i, 'id': p.postId});
+        seenNormal.add(p.postId);
+      }
+
+      // insert promo every 2 posts
       if ((i + 1) % 2 == 0) {
+        // PROMOTED POST DUP BLOCK
         if (promotedPostIndex < promotedPosts.length) {
-          mixedPosts
-              .add({'type': 'promotedPost', 'index': promotedPostIndex++});
-        } else if (promotedMarketIndex < promotedMarkets.length) {
-          mixedPosts.add({'type': 'market', 'index': promotedMarketIndex++});
-        } else if (promotedCourseIndex < promotedCourses.length) {
-          mixedPosts.add({'type': 'course', 'index': promotedCourseIndex++});
+          final pr = promotedPosts[promotedPostIndex];
+          if (!seenPromoted.contains(pr.postId)) {
+            mixedPosts
+                .add({'type': 'promotedPost', 'index': promotedPostIndex});
+            seenPromoted.add(pr.postId);
+          }
+          promotedPostIndex++;
+          continue;
+        }
+
+        // MARKET DUP BLOCK
+        if (promotedMarketIndex < promotedMarkets.length) {
+          final mk = promotedMarkets[promotedMarketIndex];
+          if (!seenPromoted.contains(mk.marketId)) {
+            mixedPosts.add({'type': 'market', 'index': promotedMarketIndex});
+            seenPromoted.add(mk.marketId);
+          }
+          promotedMarketIndex++;
+          continue;
+        }
+
+        // COURSE DUP BLOCK
+        if (promotedCourseIndex < promotedCourses.length) {
+          final cr = promotedCourses[promotedCourseIndex];
+          if (!seenPromoted.contains(cr.id)) {
+            mixedPosts.add({'type': 'course', 'index': promotedCourseIndex});
+            seenPromoted.add(cr.id);
+          }
+          promotedCourseIndex++;
+          continue;
         }
       }
     }
 
-    // Append any remaining promoted items
+    // Append leftover promoted posts
     while (promotedPostIndex < promotedPosts.length) {
-      mixedPosts.add({'type': 'promotedPost', 'index': promotedPostIndex++});
+      final pr = promotedPosts[promotedPostIndex];
+      if (!seenPromoted.contains(pr.postId)) {
+        mixedPosts.add({'type': 'promotedPost', 'index': promotedPostIndex});
+        seenPromoted.add(pr.postId);
+      }
+      promotedPostIndex++;
     }
+
     while (promotedMarketIndex < promotedMarkets.length) {
-      mixedPosts.add({'type': 'market', 'index': promotedMarketIndex++});
+      final mk = promotedMarkets[promotedMarketIndex];
+      if (!seenPromoted.contains(mk.marketId)) {
+        mixedPosts.add({'type': 'market', 'index': promotedMarketIndex});
+        seenPromoted.add(mk.marketId);
+      }
+      promotedMarketIndex++;
     }
+
     while (promotedCourseIndex < promotedCourses.length) {
-      mixedPosts.add({'type': 'course', 'index': promotedCourseIndex++});
+      final cr = promotedCourses[promotedCourseIndex];
+      if (!seenPromoted.contains(cr.id)) {
+        mixedPosts.add({'type': 'course', 'index': promotedCourseIndex});
+        seenPromoted.add(cr.id);
+      }
+      promotedCourseIndex++;
     }
   }
 
@@ -1086,10 +1133,12 @@ class HomeController extends GetxController {
         });
       }));
 
+      mixPostandPromoted();
       // --- Remaining Setup ---
       processBossToState(data['bossOfTheWeek']);
       processMentorToState(data['mentorOfTheWeek']);
       processBackerToState(data['backerOfTheWeek']);
+      processAmbassadorToState(data['ambassadorOfTheWeek']);
       if (profileController.myProfile.hasShop) {
         await Get.find<ShopController>().initShop();
       }
@@ -1225,6 +1274,13 @@ class HomeController extends GetxController {
     final UserModel modelizedData = UserModel.fromMap(
         <dynamic, dynamic>{...userData, 'connections': [], 'connecteds': []});
     backerOfTheWeek = modelizedData;
+    update();
+  }
+
+  void processAmbassadorToState(dynamic userData) {
+    final UserModel modelizedData = UserModel.fromMap(
+        <dynamic, dynamic>{...userData, 'connections': [], 'connecteds': []});
+    ambassadorOfTheWeek = modelizedData;
     update();
   }
 

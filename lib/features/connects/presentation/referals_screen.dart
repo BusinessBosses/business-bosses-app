@@ -53,41 +53,50 @@ class ReferalsScreen extends StatelessWidget {
             children: <Widget>[
               controller.loading
                   ? const Center(child: CircularProgressIndicator.adaptive())
-                  : Column(
-                      children: <Widget>[
-                        Expanded(
-                          child: controller.referrals.isEmpty
-                              ? getSafetyModel(
-                                  '${profileController.myProfile.uid == Get.arguments ? 'You don\'t have any' : 'User has no'} referrals yet')
-                              : ListView.separated(
-                                  separatorBuilder: (_, __) =>
-                                      const Divider(height: 0.0),
-                                  itemCount: controller.referrals.length,
-                                  itemBuilder: (BuildContext context, int i) {
-                                    final int checkConnected = controller
-                                        .connecteds
-                                        .indexWhere((String element) =>
-                                            element ==
-                                            controller.referrals[i].uid);
-                                    return ConnectionUserItem(
-                                      label: 'skd',
-                                      user: controller.referrals[i],
-                                      status:
-                                          checkConnected == -1 ? false : true,
-                                      isMe: controller.referrals[i].uid ==
-                                              profileController.myProfile.uid
-                                          ? true
-                                          : false,
-                                      onChangeConnectionStatus:
-                                          (UserModel user) {
-                                        controller.connectToUser(user);
-                                      },
-                                    );
-                                  },
-                                ),
+                  : true
+                      ? SafetyModel(
+                          isLoading: false,
+                          icon: Icon(Icons.warning),
+                          title: 'No User Reffered!',
                         )
-                      ],
-                    ),
+                      : Column(
+                          children: <Widget>[
+                            Expanded(
+                              child: controller.referrals.isEmpty
+                                  ? getSafetyModel(
+                                      '${profileController.myProfile.uid == Get.arguments ? 'You don\'t have any' : 'User has no'} referrals yet')
+                                  : ListView.separated(
+                                      separatorBuilder: (_, __) =>
+                                          const Divider(height: 0.0),
+                                      itemCount: controller.referrals.length,
+                                      itemBuilder:
+                                          (BuildContext context, int i) {
+                                        final int checkConnected = controller
+                                            .connecteds
+                                            .indexWhere((String element) =>
+                                                element ==
+                                                controller.referrals[i].uid);
+                                        return ConnectionUserItem(
+                                          label: 'skd',
+                                          user: controller.referrals[i],
+                                          status: checkConnected == -1
+                                              ? false
+                                              : true,
+                                          isMe: controller.referrals[i].uid ==
+                                                  profileController
+                                                      .myProfile.uid
+                                              ? true
+                                              : false,
+                                          onChangeConnectionStatus:
+                                              (UserModel user) {
+                                            controller.connectToUser(user);
+                                          },
+                                        );
+                                      },
+                                    ),
+                            )
+                          ],
+                        ),
               if (controller.isSearching)
                 Container(
                   height: double.infinity,

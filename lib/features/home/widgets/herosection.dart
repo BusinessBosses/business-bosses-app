@@ -160,7 +160,7 @@ class _HeroSectionState extends State<HeroSection> {
     user = homeController.bossOfTheWeek;
     mentor = homeController.mentorOfTheWeek;
     backer = homeController.backerOfTheWeek;
-    ambassador = homeController.backerOfTheWeek;
+    ambassador = homeController.ambassadorOfTheWeek;
     partner = homeController.partnerOfTheWeek;
     industry = challengeController.categories[0];
     _startAutoRotation();
@@ -460,7 +460,7 @@ class _HeroSectionState extends State<HeroSection> {
 
   void enterambassadoroftheweek() {
     // Navigate to ambassador program or referral screen
-    Get.to(ImpactScreen(user: user!));
+    Get.to(() => ImpactScreen(user: user!));
   }
 
   Widget _buildWinnerCard(HeroItem item) {
@@ -903,7 +903,7 @@ class _HeroSectionState extends State<HeroSection> {
                             Get.to(() => Bossuppartner());
                             break;
                           case 'ambassador':
-                            Get.to(ImpactScreen(user: user!));
+                            Get.to(() => ImpactScreen(user: user!));
                             break;
                         }
                       },

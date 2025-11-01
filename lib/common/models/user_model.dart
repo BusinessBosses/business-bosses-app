@@ -58,6 +58,7 @@ class UserModel {
   final int? bossCount;
   final int? mentorCount;
   final int? backerCount;
+  final int? ambassadorCount;
 
   UserModel({
     this.uid = '',
@@ -109,6 +110,7 @@ class UserModel {
     this.bossCount, // ✅
     this.mentorCount, // ✅
     this.backerCount, // ✅
+    this.ambassadorCount,
   });
 
   UserModel copyWith({
@@ -161,6 +163,7 @@ class UserModel {
     int? bossCount, // ✅
     int? mentorCount, // ✅
     int? backerCount, // ✅
+    int? ambassadorCount,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -214,6 +217,7 @@ class UserModel {
       bossCount: bossCount ?? this.bossCount, // ✅
       mentorCount: mentorCount ?? this.mentorCount, // ✅
       backerCount: backerCount ?? this.backerCount, // ✅
+      ambassadorCount: ambassadorCount ?? this.ambassadorCount, // ✅
     );
   }
 
@@ -270,6 +274,7 @@ class UserModel {
       'bossCount': bossCount, // ✅
       'mentorCount': mentorCount, // ✅
       'backerCount': backerCount, // ✅
+      'ambassadorCount': ambassadorCount, // ✅
     };
   }
 
@@ -352,6 +357,9 @@ class UserModel {
           map['mentorCount'] is int ? map['mentorCount'] as int : 0, // ✅
       backerCount:
           map['backerCount'] is int ? map['backerCount'] as int : 0, // ✅
+      ambassadorCount: map['ambassadorCount'] is int
+          ? map['ambassadorCount'] as int
+          : 0, // ✅
     );
   }
 

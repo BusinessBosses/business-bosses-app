@@ -7,7 +7,7 @@ class AchievementsExpansionTile extends StatefulWidget {
   const AchievementsExpansionTile({super.key});
 
   @override
-  _AchievementsExpansionTileState createState() =>
+  State<AchievementsExpansionTile> createState() =>
       _AchievementsExpansionTileState();
 }
 
