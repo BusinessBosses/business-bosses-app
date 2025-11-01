@@ -86,7 +86,7 @@ class PartnerController extends GetxController {
             if (uploadResult != null &&
                 uploadResult is Map &&
                 uploadResult['success'] == true) {
-              final String? url = (uploadResult['url'] ??
+              final String? url = (uploadResult['fileUrl'] ??
                       uploadResult['file'] ??
                       uploadResult['filepath'] ??
                       uploadResult['path'] ??
@@ -131,7 +131,7 @@ class PartnerController extends GetxController {
         'companyEmail': companyEmail,
         'partnershipType': partnershipType,
         'category': category,
-        'userId': resolvedUserId,
+        'user_id': resolvedUserId,
       };
 
       if (companyPhone != null && companyPhone.isNotEmpty) {
