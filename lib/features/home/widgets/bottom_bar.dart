@@ -147,106 +147,87 @@ class BottomBar extends StatelessWidget {
                                 ),
                               ),
                               builder: (BuildContext context) {
-                                return Stack(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      height: 400,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(15.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: ListView.separated(
-                                                itemCount:
-                                                    4, // Post, Sell, Buyer Request, Promotion
-                                                separatorBuilder:
-                                                    (BuildContext context,
-                                                            int index) =>
-                                                        const Divider(),
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return ListTile(
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                      if (index == 0) {
-                                                        Get.toNamed(
-                                                            Routes.createPost);
-                                                      } else if (index == 1) {
-                                                        sellProduct(context);
-                                                      } else if (index == 2) {
-                                                        Get.to(BuyerRequests());
-                                                      } else if (index == 3) {
-                                                        Get.to(
-                                                            AllCommunitiesScreen());
-                                                      }
-                                                    },
-                                                    minVerticalPadding: 0,
-                                                    contentPadding:
-                                                        const EdgeInsets.only(
-                                                            left: 10),
-                                                    leading: index == 0
-                                                        ? SvgPicture.asset(
-                                                            'assets/svgs/text.svg',
-                                                            height: 25,
+                                return Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      ListView.separated(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: 4,
+                                        separatorBuilder:
+                                            (BuildContext context, int index) =>
+                                                const Divider(),
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return ListTile(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              if (index == 0) {
+                                                Get.toNamed(Routes.createPost);
+                                              } else if (index == 1) {
+                                                sellProduct(context);
+                                              } else if (index == 2) {
+                                                Get.to(BuyerRequests());
+                                              } else if (index == 3) {
+                                                Get.to(AllCommunitiesScreen());
+                                              }
+                                            },
+                                            minVerticalPadding: 0,
+                                            contentPadding:
+                                                const EdgeInsets.only(left: 10),
+                                            leading: index == 0
+                                                ? SvgPicture.asset(
+                                                    'assets/svgs/text.svg',
+                                                    height: 25,
+                                                    color: textColor.withValues(
+                                                        alpha: 1),
+                                                  )
+                                                : index == 1
+                                                    ? SvgPicture.asset(
+                                                        'assets/svgs/sellicon.svg',
+                                                        height: 25,
+                                                        color: textColor
+                                                            .withValues(
+                                                                alpha: 1),
+                                                      )
+                                                    : index == 2
+                                                        ? Icon(
+                                                            LucideIcons.coins,
                                                             color: textColor
                                                                 .withValues(
                                                                     alpha: 1),
+                                                            size: 26,
                                                           )
-                                                        : index == 1
-                                                            ? SvgPicture.asset(
-                                                                'assets/svgs/sellicon.svg',
-                                                                height: 25,
-                                                                color: textColor
-                                                                    .withValues(
-                                                                        alpha:
-                                                                            1),
-                                                              )
-                                                            : index == 2
-                                                                ? Icon(
-                                                                    LucideIcons
-                                                                        .coins,
-                                                                    color: textColor
-                                                                        .withValues(
-                                                                            alpha:
-                                                                                1),
-                                                                    size: 26,
-                                                                  )
-                                                                : Icon(
-                                                                    LucideIcons
-                                                                        .gift,
-                                                                    color: textColor
-                                                                        .withValues(
-                                                                            alpha:
-                                                                                1),
-                                                                    size: 26,
-                                                                  ),
-                                                    title: Text(
-                                                      index == 0
-                                                          ? 'Post content, discussion, etc'
-                                                          : index == 1
-                                                              ? 'Sell your product & service'
-                                                              : index == 2
-                                                                  ? 'Create buyer request'
-                                                                  : 'Enter free promotion',
-                                                      style: const TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
+                                                        : Icon(
+                                                            LucideIcons.gift,
+                                                            color: textColor
+                                                                .withValues(
+                                                                    alpha: 1),
+                                                            size: 26,
+                                                          ),
+                                            title: Text(
+                                              index == 0
+                                                  ? 'Post content, discussion, etc'
+                                                  : index == 1
+                                                      ? 'Sell your product & service'
+                                                      : index == 2
+                                                          ? 'Create buyer request'
+                                                          : 'Enter free promotion',
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w700,
                                               ),
-                                            )
-                                          ],
-                                        ),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 );
                               },
                             );

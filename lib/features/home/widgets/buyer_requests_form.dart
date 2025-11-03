@@ -31,7 +31,8 @@ class _BuyerRequestsState extends State<BuyerRequests> {
   final TextEditingController currencyController = TextEditingController();
 
   final ShopController shopController = Get.find();
-  final BuyerRequestController buyerRequestController = Get.find();
+  final BuyerRequestController buyerRequestController =
+      Get.put(BuyerRequestController());
   final ProfileController profileController = Get.find();
 
   String country = '';
