@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/impact/presentation/impactscreen.dart';
 import 'package:business_bosses_v2/features/profile/widgets/public_profile_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -23,7 +24,10 @@ Widget FriendProfileHeader(UserModel publicUser) {
                 caption: 'Followers',
                 onPressed: () {
                   Get.toNamed(Routes.allconnectionsscreen,
-                      arguments: <String, Object>{'uid': publicUser.uid, 'pageIndex': 0});
+                      arguments: <String, Object>{
+                        'uid': publicUser.uid,
+                        'pageIndex': 0
+                      });
                 },
               ),
             ),
@@ -33,15 +37,18 @@ Widget FriendProfileHeader(UserModel publicUser) {
               caption: 'Following',
               onPressed: () {
                 Get.toNamed(Routes.allconnectionsscreen,
-                    arguments: <String, Object>{'uid': publicUser.uid, 'pageIndex': 1});
+                    arguments: <String, Object>{
+                      'uid': publicUser.uid,
+                      'pageIndex': 1
+                    });
               },
             )),
             Expanded(
               child: CustomChildButton(
-                value: publicUser.referalCount ?? 0,
-                caption: 'Referrals',
+                value: 0,
+                caption: 'Impact',
                 onPressed: () {
-                  Get.toNamed(Routes.referalsscreen, arguments: publicUser.uid);
+                  Get.to(() => ImpactScreen(user: publicUser));
                 },
               ),
             ),
