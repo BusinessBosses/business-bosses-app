@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum WinnerType { boss, backer, mentor, partner }
+enum WinnerType { boss, backer, mentor, partner, ambassador }
 
 class WinnerCard extends StatelessWidget {
   final WinnerType type;
@@ -152,6 +152,16 @@ class WinnerCard extends StatelessWidget {
           icon: Icons.handshake,
           gradientColors: <Color>[
             const Color(0xFFFB7185),
+            const Color(0xFFEC4899),
+            const Color(0xFFD946EF),
+          ],
+        );
+      case WinnerType.ambassador:
+        return CardConfig(
+          title: 'PARTNER OF THE WEEK',
+          icon: Icons.handshake,
+          gradientColors: <Color>[
+            const Color.fromARGB(255, 22, 1, 95),
             const Color(0xFFEC4899),
             const Color(0xFFD946EF),
           ],
