@@ -1,0 +1,295 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "F85519AA",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "6479656213",
+      "localizations" : [
+        {
+          "description" : "This package will give you 100 BB Coins",
+          "displayName" : "100 BB Coins",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "100_bb_coins",
+      "referenceName" : "100 BB Coins",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "6479656461",
+      "localizations" : [
+        {
+          "description" : "This package will give you 1000 BB Coins",
+          "displayName" : "1000 BB Coins",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "1000_bb_coins",
+      "referenceName" : "1000 BB Coins",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "99.99",
+      "familyShareable" : false,
+      "internalID" : "6479656636",
+      "localizations" : [
+        {
+          "description" : "This package will give you 10000 BB Coins",
+          "displayName" : "10000 BB Coins",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "10000_bb_coins",
+      "referenceName" : "10000 BB Coins",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "6479656296",
+      "localizations" : [
+        {
+          "description" : "This package will give you 200 BB Coins",
+          "displayName" : "200 BB Coins",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "200_bb_coins",
+      "referenceName" : "200 BB Coins",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "6479656231",
+      "localizations" : [
+        {
+          "description" : "This package will give you 500 BB Coins",
+          "displayName" : "500 BB Coins",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "500_bb_coins",
+      "referenceName" : "500 BB Coins",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1569332982",
+    "_developerTeamID" : "AUK83G2M9D",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 776335856.70967102,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21421994",
+      "localizations" : [
+
+      ],
+      "name" : "Premium Subscription",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "99.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6474133922",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Access to Business Bosses premium features",
+              "displayName" : "Annual Subscription",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "xyz.codexia.businessbosses.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Annual",
+          "subscriptionGroupID" : "21421994",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "9.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6474133781",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Access to Business Bosses premium features",
+              "displayName" : "Premium Subscription - Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "xyz.codexia.businessbosses.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly ",
+          "subscriptionGroupID" : "21421994",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    },
+    {
+      "id" : "21577651",
+      "localizations" : [
+
+      ],
+      "name" : "Pro Subscription",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "119.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6737858532",
+          "introductoryOffer" : {
+            "internalID" : "4857D94D",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Pro Annual Plan",
+              "displayName" : "Pro Annual Plan",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "xyz.codexia.businessbosses.proyear",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Pro Annual",
+          "subscriptionGroupID" : "21577651",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "14.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6737858452",
+          "introductoryOffer" : {
+            "displayPrice" : "0.99",
+            "internalID" : "4D2510D1",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "payUpFront",
+            "subscriptionPeriod" : "P1M"
+          },
+          "localizations" : [
+            {
+              "description" : "Pro Monthly Plan",
+              "displayName" : "Pro Monthly Plan",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "xyz.codexia.businessbosses.promonth",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Pro Monthly",
+          "subscriptionGroupID" : "21577651",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
