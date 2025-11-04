@@ -459,7 +459,7 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void enterambassadoroftheweek() {
-    Get.to(() => ImpactScreen(user: user!));
+    Get.to(() => ImpactScreen(user: _profileController.myProfile));
   }
 
   Widget _buildWinnerCard(HeroItem item) {
@@ -902,7 +902,8 @@ class _HeroSectionState extends State<HeroSection> {
                             Get.to(() => Bossuppartner());
                             break;
                           case 'ambassador':
-                            Get.to(() => ImpactScreen(user: user!));
+                            Get.to(() => ImpactScreen(
+                                user: _profileController.myProfile));
                             break;
                         }
                       },

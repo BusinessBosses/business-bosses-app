@@ -1,8 +1,10 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/impact/widgets/impactheadercard.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,7 @@ class ImpactScreen extends StatefulWidget {
 class _ImpactScreenState extends State<ImpactScreen> {
   final ImpactController controller = Get.put(ImpactController());
   final ProfileController profileController = Get.find();
+  late String _referralId;
 
   @override
   void initState() {
@@ -134,6 +137,65 @@ class _ImpactScreenState extends State<ImpactScreen> {
                           ),
                         ],
                       ),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const Text(
+                                  'Invite friends to increase rank',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 16),
+                                ),
+                                Text(
+                                  'Invite ID : ${profileController.myProfile.inviteId!}',
+                                  style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w700),
+                                )
+                              ],
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _shareWithFriends();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                width: 120,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 2, color: primaryColorLT),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    const Text(
+                                      'Invite',
+                                      style: TextStyle(
+                                          color: primaryColorLT,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16),
+                                    ),
+                                    SvgPicture.asset(
+                                      'assets/svgs/invite.svg',
+                                      color: primaryColorLT,
+                                      height: 13,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -146,5 +208,15 @@ class _ImpactScreenState extends State<ImpactScreen> {
         );
       }),
     );
+  }
+
+  void _shareWithFriends() {
+    // ignore: unnecessary_null_comparison
+    if (_referralId == null) return;
+    String message = 'Check out Business Bosses.\n'
+        'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
+        'Invite id: $_referralId';
+    socialShare(message);
   }
 }

@@ -95,31 +95,30 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
             ),
           ),
 
-          // Total Impact
-          // Padding(
-          //   padding: const EdgeInsets.all(20),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: <Widget>[
-          //       Text(
-          //         'Total Impact Score',
-          //         style: TextStyle(
-          //           fontSize: 16,
-          //           fontWeight: FontWeight.bold,
-          //           color: Colors.grey[900],
-          //         ),
-          //       ),
-          //       Text(
-          //         '15,420',
-          //         style: TextStyle(
-          //           fontSize: 20,
-          //           fontWeight: FontWeight.bold,
-          //           color: Colors.grey[900],
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Total Impact Score',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[900],
+                  ),
+                ),
+                Text(
+                  '15,420',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[900],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
