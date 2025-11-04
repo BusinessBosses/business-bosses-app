@@ -178,7 +178,8 @@ class BottomBar extends StatelessWidget {
                                                       } else if (index == 1) {
                                                         sellProduct(context);
                                                       } else if (index == 2) {
-                                                        Get.to(BuyerRequests());
+                                                        Get.to(() =>
+                                                            BuyerRequests());
                                                       } else if (index == 3) {
                                                         Get.to(
                                                             AllCommunitiesScreen());
