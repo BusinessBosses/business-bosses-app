@@ -459,7 +459,6 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void enterambassadoroftheweek() {
-    // Navigate to ambassador program or referral screen
     Get.to(() => ImpactScreen(user: user!));
   }
 
