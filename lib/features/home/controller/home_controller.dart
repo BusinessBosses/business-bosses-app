@@ -49,9 +49,12 @@ class HomeController extends GetxController {
   RxBool loadingMore = RxBool(false);
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
-  List<Map<String, dynamic>> mixedPosts = [];
-
-  List<Map<String, dynamic>> sponsoredPosts = [];
+  List<Map<String, dynamic>> mixedPosts = [
+    {'type': 'notype'},
+  ];
+  List<Map<String, dynamic>> sponsoredPosts = [
+    {'isForum': false, 'data': {}, 'shouldCount': false, 'isSponsored': true}
+  ];
   List<String> blocked = [];
   RxList<PostModel> promotedPosts = RxList<PostModel>(<PostModel>[]);
   RxList<MarketModel> promotedMarkets = RxList<MarketModel>(<MarketModel>[]);
@@ -63,12 +66,6 @@ class HomeController extends GetxController {
   RxList<EventModel> myEvents = RxList<EventModel>(<EventModel>[]);
   // RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
   Set<dynamic> itemsWithIncrementedViews = {};
-  // prevents promoted duplicate
-  final Set<String> seenPromoted = <String>{};
-
-// prevents normal duplicate
-  final Set<String> seenNormal = <String>{};
-
   String notificationDescription = '';
   String notificationStatus = '';
   Map<String, String> votes = {};
@@ -202,6 +199,8 @@ class HomeController extends GetxController {
         'coins': _extractUserIds(e['coins']),
       });
     }));
+
+    mixPostandPromoted();
   }
 
   /// Promoted posts
@@ -248,9 +247,10 @@ class HomeController extends GetxController {
   }
 
   /// Mix posts and promoted content for feed
-  /// Mix posts and promoted content for feed WITHOUT duplicates
   void mixPostandPromoted() {
-    mixedPosts.clear();
+    mixedPosts
+      ..clear()
+      ..add({'type': 'notype'});
 
     int postCount = posts.length;
     int promotedPostIndex = 0;
@@ -258,78 +258,30 @@ class HomeController extends GetxController {
     int promotedCourseIndex = 0;
 
     for (int i = 0; i < postCount; i++) {
-      final p = posts[i];
+      mixedPosts.add({'type': 'post', 'index': i, 'id': posts[i].postId});
 
-      // NORMAL POST DUP BLOCK
-      if (!seenNormal.contains(p.postId)) {
-        mixedPosts.add({'type': 'post', 'index': i, 'id': p.postId});
-        seenNormal.add(p.postId);
-      }
-
-      // insert promo every 2 posts
+      // Insert a promoted item every 2 posts if available
       if ((i + 1) % 2 == 0) {
-        // PROMOTED POST DUP BLOCK
         if (promotedPostIndex < promotedPosts.length) {
-          final pr = promotedPosts[promotedPostIndex];
-          if (!seenPromoted.contains(pr.postId)) {
-            mixedPosts
-                .add({'type': 'promotedPost', 'index': promotedPostIndex});
-            seenPromoted.add(pr.postId);
-          }
-          promotedPostIndex++;
-          continue;
-        }
-
-        // MARKET DUP BLOCK
-        if (promotedMarketIndex < promotedMarkets.length) {
-          final mk = promotedMarkets[promotedMarketIndex];
-          if (!seenPromoted.contains(mk.marketId)) {
-            mixedPosts.add({'type': 'market', 'index': promotedMarketIndex});
-            seenPromoted.add(mk.marketId);
-          }
-          promotedMarketIndex++;
-          continue;
-        }
-
-        // COURSE DUP BLOCK
-        if (promotedCourseIndex < promotedCourses.length) {
-          final cr = promotedCourses[promotedCourseIndex];
-          if (!seenPromoted.contains(cr.id)) {
-            mixedPosts.add({'type': 'course', 'index': promotedCourseIndex});
-            seenPromoted.add(cr.id);
-          }
-          promotedCourseIndex++;
-          continue;
+          mixedPosts
+              .add({'type': 'promotedPost', 'index': promotedPostIndex++});
+        } else if (promotedMarketIndex < promotedMarkets.length) {
+          mixedPosts.add({'type': 'market', 'index': promotedMarketIndex++});
+        } else if (promotedCourseIndex < promotedCourses.length) {
+          mixedPosts.add({'type': 'course', 'index': promotedCourseIndex++});
         }
       }
     }
 
-    // Append leftover promoted posts
+    // Append any remaining promoted items
     while (promotedPostIndex < promotedPosts.length) {
-      final pr = promotedPosts[promotedPostIndex];
-      if (!seenPromoted.contains(pr.postId)) {
-        mixedPosts.add({'type': 'promotedPost', 'index': promotedPostIndex});
-        seenPromoted.add(pr.postId);
-      }
-      promotedPostIndex++;
+      mixedPosts.add({'type': 'promotedPost', 'index': promotedPostIndex++});
     }
-
     while (promotedMarketIndex < promotedMarkets.length) {
-      final mk = promotedMarkets[promotedMarketIndex];
-      if (!seenPromoted.contains(mk.marketId)) {
-        mixedPosts.add({'type': 'market', 'index': promotedMarketIndex});
-        seenPromoted.add(mk.marketId);
-      }
-      promotedMarketIndex++;
+      mixedPosts.add({'type': 'market', 'index': promotedMarketIndex++});
     }
-
     while (promotedCourseIndex < promotedCourses.length) {
-      final cr = promotedCourses[promotedCourseIndex];
-      if (!seenPromoted.contains(cr.id)) {
-        mixedPosts.add({'type': 'course', 'index': promotedCourseIndex});
-        seenPromoted.add(cr.id);
-      }
-      promotedCourseIndex++;
+      mixedPosts.add({'type': 'course', 'index': promotedCourseIndex++});
     }
   }
 
@@ -1133,7 +1085,6 @@ class HomeController extends GetxController {
         });
       }));
 
-      mixPostandPromoted();
       // --- Remaining Setup ---
       processBossToState(data['bossOfTheWeek']);
       processMentorToState(data['mentorOfTheWeek']);
