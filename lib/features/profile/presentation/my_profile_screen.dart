@@ -11,7 +11,6 @@ import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_request_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
-import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
@@ -80,6 +79,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       loading = false;
       setState(() {});
     }
+    homeController.loadMyRequests();
   }
 
   @override
@@ -869,6 +869,18 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             width: double.infinity,
                                             child: Obx(
                                               () {
+                                                if ((homeController
+                                                    .loadingRequests.value)) {
+                                                  return SafetyModel();
+                                                }
+                                                if ((homeController
+                                                    .myRequests.isEmpty)) {
+                                                  return SafetyModel(
+                                                    isLoading: false,
+                                                    icon: Icon(Icons.warning),
+                                                    title: 'No Request Added!',
+                                                  );
+                                                }
                                                 return MasonryGridView.count(
                                                   crossAxisCount: 2,
                                                   crossAxisSpacing: 12,
@@ -877,26 +889,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       const NeverScrollableScrollPhysics(),
                                                   shrinkWrap: true,
                                                   itemCount: homeController
-                                                      .userresources.length,
+                                                      .myRequests.length,
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int i) {
-                                                    return BuyerRequestItem(
+                                                    return GestureDetector(
+                                                      child: BuyerRequestItem(
                                                         ismyrequest: true,
-                                                        request: BuyerRequestModel(
-                                                            id: 1,
-                                                            title: 'title',
-                                                            description:
-                                                                'description',
-                                                            category:
-                                                                'category',
-                                                            userId: '',
-                                                            budgetStart: 0,
-                                                            budgetEnd: 0,
-                                                            deadline: '',
-                                                            user:
-                                                                profileController
-                                                                    .myProfile));
+                                                        request: homeController
+                                                            .myRequests[i],
+                                                      ),
+                                                    );
                                                   },
                                                 );
                                               },

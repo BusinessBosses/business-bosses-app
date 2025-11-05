@@ -25,7 +25,7 @@ class _ImpactScreenState extends State<ImpactScreen> {
   @override
   void initState() {
     super.initState();
-    controller.loadData(profileController.myProfile.uid);
+    controller.loadData(widget.user.uid);
     _referralId = profileController.myProfile.inviteId!;
   }
 

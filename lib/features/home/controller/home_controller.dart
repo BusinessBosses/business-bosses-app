@@ -13,6 +13,7 @@ import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
+import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
@@ -80,6 +81,8 @@ class HomeController extends GetxController {
   UserModel? ambassadorOfTheWeek = UserModel();
   dynamic partnerOfTheWeek;
   RxList<ForumModel> userresources = <ForumModel>[].obs;
+  RxList<BuyerRequestModel> myRequests = <BuyerRequestModel>[].obs;
+  RxBool loadingRequests = false.obs;
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -216,6 +219,21 @@ class HomeController extends GetxController {
         'coins': _extractUserIds(e['coins']),
       });
     }));
+  }
+
+  Future<void> loadMyRequests() async {
+    loadingRequests.value = true;
+    try {
+      final response = await ApiService.get(
+          path: 'buyer-request/user/${profileController.myProfile.uid}');
+      if (response.success) {
+        for (dynamic request in response.data) {
+          myRequests.add(BuyerRequestModel.fromJson(request));
+        }
+      }
+    } finally {
+      loadingRequests.value = false;
+    }
   }
 
   /// Promoted markets
@@ -917,6 +935,7 @@ class HomeController extends GetxController {
     } else {
       loadingMore(false);
     }
+    mixPostandPromoted();
     update();
   }
 

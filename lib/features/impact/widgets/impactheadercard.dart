@@ -109,7 +109,8 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
                   ),
                 ),
                 Text(
-                  '15,420',
+                  (widget.data['totalLikes'] + widget.data['totalViews'])
+                      .toString(),
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
