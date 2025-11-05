@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
+import 'package:business_bosses_v2/features/home/widgets/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
@@ -23,6 +24,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class DrawerContent extends StatelessWidget {
   final UserModel? currentuser;
@@ -385,135 +387,86 @@ class DrawerContent extends StatelessWidget {
                                 ),
                               ),
                               builder: (BuildContext context) {
-                                return SizedBox(
-                                  height:
-                                      380, // Increased height to accommodate the new item
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: ListView.separated(
-                                            itemCount: 5, // Changed to 5 items
-                                            separatorBuilder:
-                                                (BuildContext context,
-                                                        int index) =>
-                                                    const Divider(),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return ListTile(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                  if (index == 0) {
-                                                    showPromoteSheet();
-                                                  } else if (index == 1) {
-                                                    Get.toNamed(
-                                                        Routes.createPost);
-                                                  } else if (index == 2) {
-                                                    sellProduct(context);
-                                                  } else if (index == 3) {
-                                                    Get.toNamed(
-                                                        Routes.createevent);
-                                                  } else if (index == 4) {
-                                                    Get.to(() =>
-                                                        const CreatePollScreen());
-                                                  }
-                                                },
-                                                minVerticalPadding: 0,
-                                                contentPadding:
-                                                    const EdgeInsets.only(
-                                                        left: 10),
-                                                leading: index == 4
-                                                    ? const Icon(
-                                                        Icons.poll,
-                                                        color: textColor,
-                                                      )
-                                                    : index == 0
-                                                        ? Container(
-                                                            width: 30,
-                                                            height: 30,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          30),
-                                                              gradient:
-                                                                  LinearGradient(
-                                                                colors: <Color>[
-                                                                  Color(
-                                                                      0xFF6366F1),
-                                                                  Color(
-                                                                      0xFF818CF8)
-                                                                ],
-                                                                begin: Alignment
-                                                                    .topLeft,
-                                                                end: Alignment
-                                                                    .bottomRight,
-                                                              ),
-                                                            ),
-                                                            child: Material(
-                                                              color: Colors
-                                                                  .transparent,
-                                                              child: InkWell(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            30),
-                                                                child: Center(
-                                                                  child: Icon(
-                                                                    Icons.star,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    size: 24,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : SvgPicture.asset(
-                                                            index == 1
-                                                                ? 'assets/svgs/text.svg'
-                                                                : index == 2
-                                                                    ? 'assets/svgs/sellicon.svg'
-                                                                    : 'assets/svgs/eventu.svg',
-                                                            height: index == 1
-                                                                ? 25
-                                                                : index == 2
-                                                                    ? 30
-                                                                    : 22,
-                                                            colorFilter:
-                                                                ColorFilter.mode(
-                                                                    textColor.withValues(
-                                                                        alpha:
-                                                                            1),
-                                                                    BlendMode
-                                                                        .srcIn),
-                                                          ),
-                                                title: Text(
-                                                  index == 0
-                                                      ? 'Generate free promotion'
-                                                      : index == 1
-                                                          ? 'Post content, discussion, etc'
-                                                          : index == 2
-                                                              ? 'Sell your product & service'
-                                                              : index == 3
-                                                                  ? 'Create an event'
-                                                                  : 'Create polls & surveys',
-                                                  style: const TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                              );
+                                return Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      ListView.separated(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: 4,
+                                        separatorBuilder:
+                                            (BuildContext context, int index) =>
+                                                const Divider(),
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return ListTile(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              if (index == 0) {
+                                                Get.toNamed(Routes.createPost);
+                                              } else if (index == 1) {
+                                                sellProduct(context);
+                                              } else if (index == 2) {
+                                                Get.to(BuyerRequests());
+                                              } else if (index == 3) {
+                                                Get.to(AllCommunitiesScreen());
+                                              }
                                             },
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                                            minVerticalPadding: 0,
+                                            contentPadding:
+                                                const EdgeInsets.only(left: 10),
+                                            leading: index == 0
+                                                ? SvgPicture.asset(
+                                                    'assets/svgs/text.svg',
+                                                    height: 25,
+                                                    color: textColor.withValues(
+                                                        alpha: 1),
+                                                  )
+                                                : index == 1
+                                                    ? SvgPicture.asset(
+                                                        'assets/svgs/sellicon.svg',
+                                                        height: 25,
+                                                        color: textColor
+                                                            .withValues(
+                                                                alpha: 1),
+                                                      )
+                                                    : index == 2
+                                                        ? Icon(
+                                                            LucideIcons.coins,
+                                                            color: textColor
+                                                                .withValues(
+                                                                    alpha: 1),
+                                                            size: 26,
+                                                          )
+                                                        : Icon(
+                                                            LucideIcons.gift,
+                                                            color: textColor
+                                                                .withValues(
+                                                                    alpha: 1),
+                                                            size: 26,
+                                                          ),
+                                            title: Text(
+                                              index == 0
+                                                  ? 'Post content, discussion, etc'
+                                                  : index == 1
+                                                      ? 'Sell your product & service'
+                                                      : index == 2
+                                                          ? 'Create buyer request'
+                                                          : 'Enter free promotion',
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 );
                               },

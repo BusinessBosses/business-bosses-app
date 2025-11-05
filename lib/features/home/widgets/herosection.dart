@@ -209,24 +209,15 @@ class _HeroSectionState extends State<HeroSection> {
           action: 'Claim Deals',
           action2: 'Become a Partner'),
       HeroItem(
-          id: '5',
-          type: 'ambassador',
-          title: 'Ambassador of the Week',
-          subtitle: ambassador?.name ?? ambassador!.username,
-          image: ambassador?.photoUrl ?? '',
-          description: 'Top Inviter This Week',
-          action: 'Follow',
-          action2: 'Become Ambassador',
-          metrics: <String, dynamic>{
-            'invites':
-                // homeController.ambassadorInvitesCount
-                // ?? 0,
-                0,
-            'conversions':
-                //  homeController.ambassadorConversions
-                // ??
-                0,
-          }),
+        id: '5',
+        type: 'ambassador',
+        title: 'Ambassador of the Week',
+        subtitle: ambassador?.name ?? ambassador!.username,
+        image: ambassador?.photoUrl ?? '',
+        description: ambassador?.bio ?? '',
+        action: 'Follow',
+        action2: 'Become Ambassador',
+      ),
       HeroItem(
           id: '8',
           type: 'matches',
@@ -459,8 +450,7 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void enterambassadoroftheweek() {
-    // Navigate to ambassador program or referral screen
-    Get.to(() => ImpactScreen(user: user!));
+    Get.to(() => ImpactScreen(user: _profileController.myProfile));
   }
 
   Widget _buildWinnerCard(HeroItem item) {
@@ -501,219 +491,215 @@ class _HeroSectionState extends State<HeroSection> {
           ),
 
           // Centered content
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  // Title
-                  Text(
-                    config.title.toUpperCase(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.5,
-                    ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                // Title
+                Text(
+                  config.title.toUpperCase(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.5,
                   ),
+                ),
 
-                  const SizedBox(height: 12),
+                const SizedBox(height: 12),
 
-                  // Winner info card
-                  GestureDetector(
-                    onTap: () {
-                      // Determine which user to navigate to based on card type
-                      UserModel? targetUser;
-                      dynamic partner;
-                      switch (item.type) {
-                        case 'boss':
-                          targetUser = user;
-                          break;
-                        case 'mentor':
-                          targetUser = mentor;
-                          break;
-                        case 'backer':
-                          targetUser = backer;
-                          break;
-                        case 'ambassador':
-                          targetUser = ambassador;
-                          break;
-                        case 'partner':
-                          partner = homeController.partnerOfTheWeek;
-                          break;
-                      }
+                // Winner info card - FIXED HEIGHT
+                GestureDetector(
+                  onTap: () {
+                    // Determine which user to navigate to based on card type
+                    UserModel? targetUser;
+                    dynamic partner;
+                    switch (item.type) {
+                      case 'boss':
+                        targetUser = user;
+                        break;
+                      case 'mentor':
+                        targetUser = mentor;
+                        break;
+                      case 'backer':
+                        targetUser = backer;
+                        break;
+                      case 'ambassador':
+                        targetUser = ambassador;
+                        break;
+                      case 'partner':
+                        partner = homeController.partnerOfTheWeek;
+                        break;
+                    }
 
-                      if (targetUser != null) {
-                        Get.toNamed(Routes.publicProfile,
-                            arguments: targetUser);
-                      }
-                      if (partner != null) {
-                        Uri url = Uri.parse(partner['companyUrl']);
-                        canLaunchUrl(url).then((bool canLaunch) {
-                          if (canLaunch) {
-                            launchUrl(url);
-                          }
-                        });
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          // Avatar
-                          item.image != ''
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: NetworkImageWithPlaceHolder(
-                                    imageUrl: item.image,
-                                    width: 65,
-                                    height: 65,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : _buildDefaultAvatar(config, item.subtitle),
+                    if (targetUser != null) {
+                      Get.toNamed(Routes.publicProfile, arguments: targetUser);
+                    }
+                    if (partner != null) {
+                      Uri url = Uri.parse(partner['companyUrl']);
+                      canLaunchUrl(url).then((bool canLaunch) {
+                        if (canLaunch) {
+                          launchUrl(url);
+                        }
+                      });
+                    }
+                  },
+                  child: Container(
+                    height: 65, // FIXED HEIGHT for all white cards
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        // Avatar
+                        item.image != ''
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: NetworkImageWithPlaceHolder(
+                                  imageUrl: item.image,
+                                  width:
+                                      45, // Slightly smaller to fit fixed height
+                                  height: 45,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : _buildDefaultAvatar(config, item.subtitle),
 
-                          const SizedBox(width: 12),
+                        const SizedBox(width: 12),
 
-                          // Name and description/metrics
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
+                        // Name and description/metrics
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                item.subtitle,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if (item.description.isNotEmpty)
                                 Text(
-                                  item.subtitle,
+                                  item.description,
                                   style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black54,
+                                    fontSize: 12,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                if (item.description.isNotEmpty)
-                                  Text(
-                                    item.description,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                              // Ambassador metrics
+                              if (item.type == 'ambassador' &&
+                                  item.metrics != null)
+                                Text(
+                                  '${item.metrics!['invites']} Invites • ${item.metrics!['conversions']} Conversions',
+                                  style: TextStyle(
+                                    color: Colors.grey[700],
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                // Ambassador metrics
-                                if (item.type == 'ambassador' &&
-                                    item.metrics != null)
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        '${item.metrics!['invites']} Invites • ${item.metrics!['conversions']} Conversions',
-                                        style: TextStyle(
-                                          color: Colors.grey[700],
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  // Action buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 10,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () async {
-                          switch (item.action) {
-                            case 'Follow':
-                              if (item.type == 'ambassador') {
-                                // Connect to ambassador
-                                if (ambassador != null) {
-                                  final bool isConnected = _profileController
-                                              .myProfile.connecteds !=
-                                          null &&
-                                      _profileController.myProfile.connecteds!
-                                          .contains(ambassador!.uid);
-                                  if (!isConnected) {
-                                    await connect(ambassador!.uid);
-                                    _profileController
-                                        .updateConnections(ambassador!.uid);
-                                  }
-                                }
-                              } else {
-                                connectToUser();
-                              }
-                              break;
-                            case 'Refer':
-                              referuser();
-                              break;
-                            case 'View Matches':
-                              Get.to(() => ExpandedMatchesScreen());
-                              break;
-                            case 'Claim Deals':
-                              final Uri url = Uri.parse(partner['companyUrl']);
-                              if (!await launchUrl(url)) {
-                                throw Exception('Could not launch $url');
-                              }
-                              break;
-                            default:
-                              Get.toNamed(Routes.liveEvents);
-                              break;
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Icon(
-                                  item.action == 'View Events'
-                                      ? LucideIcons.calendar
-                                      : item.action == 'Refer'
-                                          ? LucideIcons.forward
-                                          : item.action == 'Claim Deals'
-                                              ? LucideIcons.checkCircle2
-                                              : LucideIcons.userPlus,
-                                  size: 16,
-                                  color: Colors.black),
-                              const SizedBox(width: 5),
-                              Text(
-                                item.action,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
                             ],
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+
+                // Action buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () async {
+                        switch (item.action) {
+                          case 'Follow':
+                            if (item.type == 'ambassador') {
+                              // Connect to ambassador
+                              if (ambassador != null) {
+                                final bool isConnected =
+                                    _profileController.myProfile.connecteds !=
+                                            null &&
+                                        _profileController.myProfile.connecteds!
+                                            .contains(ambassador!.uid);
+                                if (!isConnected) {
+                                  await connect(ambassador!.uid);
+                                  _profileController
+                                      .updateConnections(ambassador!.uid);
+                                }
+                              }
+                            } else {
+                              connectToUser();
+                            }
+                            break;
+                          case 'Refer':
+                            referuser();
+                            break;
+                          case 'View Matches':
+                            Get.to(() => ExpandedMatchesScreen());
+                            break;
+                          case 'Claim Deals':
+                            final Uri url = Uri.parse(partner['companyUrl']);
+                            if (!await launchUrl(url)) {
+                              throw Exception('Could not launch $url');
+                            }
+                            break;
+                          default:
+                            Get.toNamed(Routes.liveEvents);
+                            break;
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Icon(
+                                item.action == 'View Events'
+                                    ? LucideIcons.calendar
+                                    : item.action == 'Refer'
+                                        ? LucideIcons.forward
+                                        : item.action == 'Claim Deals'
+                                            ? LucideIcons.checkCircle2
+                                            : LucideIcons.userPlus,
+                                size: 16,
+                                color: Colors.black),
+                            const SizedBox(width: 5),
+                            Text(
+                              item.action,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                    ),
+                    const SizedBox(width: 8),
+                    if (item.action2.isNotEmpty)
                       GestureDetector(
                         onTap: () async {
                           switch (item.action2.isNotEmpty ? item.action2 : '') {
@@ -772,10 +758,9 @@ class _HeroSectionState extends State<HeroSection> {
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
@@ -903,7 +888,8 @@ class _HeroSectionState extends State<HeroSection> {
                             Get.to(() => Bossuppartner());
                             break;
                           case 'ambassador':
-                            Get.to(() => ImpactScreen(user: user!));
+                            Get.to(() => ImpactScreen(
+                                user: _profileController.myProfile));
                             break;
                         }
                       },
