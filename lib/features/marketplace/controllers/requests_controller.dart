@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -40,9 +44,15 @@ class BuyerRequestController extends GetxController {
   }
 
   /// Add a new buyer request
-  Future<void> addBuyerRequest(Map<String, dynamic> body) async {
+  Future<void> addBuyerRequest(Map<String, dynamic> body,
+      {List<PlatformFile>? attachments}) async {
     loading(true);
     update();
+
+    if (attachments != null && attachments.isNotEmpty) {
+      final List<String> urls = await _uploadAttachments(attachments);
+      body['attachments'] = urls;
+    }
 
     final ApiResponseModel response = await ApiService.post(
       path: 'buyer-request',
@@ -65,6 +75,51 @@ class BuyerRequestController extends GetxController {
 
     loading(false);
     update();
+  }
+
+  Future<List<String>> _uploadAttachments(List<PlatformFile> files) async {
+    final List<String> urls = <String>[];
+
+    for (final PlatformFile f in files) {
+      try {
+        if (f.path != null && f.path!.isNotEmpty) {
+          final File file = File(f.path!);
+          final dynamic uploadResult = await ApiService.uploadFile(file);
+
+          if (uploadResult != null &&
+              uploadResult is Map &&
+              uploadResult['success'] == true) {
+            final String url = (uploadResult['fileUrl'])?.toString() ??
+                jsonEncode(uploadResult);
+            urls.add(url);
+          } else {
+            Get.snackbar('Upload failed', 'Failed to upload ${f.name}');
+          }
+        } else if (f.bytes != null) {
+          final Directory temp = Directory.systemTemp;
+          final File tempFile = File(
+              '${temp.path}/${DateTime.now().millisecondsSinceEpoch}_${f.name}');
+          await tempFile.writeAsBytes(f.bytes!);
+
+          final dynamic uploadResult = await ApiService.uploadFile(tempFile);
+          await tempFile.delete();
+
+          if (uploadResult != null &&
+              uploadResult is Map &&
+              uploadResult['success'] == true) {
+            final String url = (uploadResult['fileUrl'])?.toString() ??
+                jsonEncode(uploadResult);
+            urls.add(url);
+          } else {
+            Get.snackbar('Upload failed', 'Failed to upload ${f.name}');
+          }
+        }
+      } catch (e) {
+        Get.snackbar('Upload exception', e.toString());
+      }
+    }
+
+    return urls;
   }
 
   /// Update an existing buyer request

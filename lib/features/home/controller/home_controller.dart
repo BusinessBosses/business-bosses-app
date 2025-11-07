@@ -270,8 +270,13 @@ class HomeController extends GetxController {
       ..clear()
       ..add({'type': 'notype'});
 
+    /// INSERT one promoted post at the very top if available
+    if (promotedPosts.isNotEmpty) {
+      mixedPosts.add({'type': 'promotedPost', 'index': 0}); // FIRST promoted
+    }
+
     int postCount = posts.length;
-    int promotedPostIndex = 0;
+    int promotedPostIndex = (promotedPosts.isNotEmpty ? 1 : 0);
     int promotedMarketIndex = 0;
     int promotedCourseIndex = 0;
 
