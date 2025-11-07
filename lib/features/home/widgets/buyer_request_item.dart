@@ -21,9 +21,18 @@ class BuyerRequestItem extends StatelessWidget {
     this.ismyrequest,
   });
 
+  bool _isValidImageUrl(String? url) {
+    if (url == null || url.isEmpty) return false;
+    final Uri? uri = Uri.tryParse(url);
+    return uri != null &&
+        uri.hasAbsolutePath &&
+        (uri.scheme == 'http' || uri.scheme == 'https');
+  }
+
   @override
   Widget build(BuildContext context) {
     final String formattedDeadline = _formatDeadline(request.deadline);
+    final bool hasValidImage = _isValidImageUrl(request.imageUrl);
 
     return GestureDetector(
       onTap: onTap,
@@ -39,8 +48,8 @@ class BuyerRequestItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // ✅ Image (if available)
-                  if (request.imageUrl != null)
+                  // ✅ Image (only if valid)
+                  if (hasValidImage) ...<Widget>[
                     SizedBox(
                       height: 120.0,
                       width: double.infinity,
@@ -58,8 +67,8 @@ class BuyerRequestItem extends StatelessWidget {
                         ),
                       ),
                     ),
-
-                  if (request.imageUrl != null) const SizedBox(height: 12),
+                    const SizedBox(height: 12),
+                  ],
 
                   // ✅ Title and Description
                   Column(
@@ -75,7 +84,6 @@ class BuyerRequestItem extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8),
                       Text(
                         request.description,
                         style: const TextStyle(
@@ -89,7 +97,7 @@ class BuyerRequestItem extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 5),
 
                   // ✅ Info Chips (Budget, Deadline, Files)
                   Wrap(
@@ -108,18 +116,10 @@ class BuyerRequestItem extends StatelessWidget {
                         icon: Icons.calendar_today,
                         label: 'Due: $formattedDeadline',
                       ),
-
-                      // ✅ Attachments (if available)
-                      // if (request.attachments.isNotEmpty)
-                      //   _buildInfoChip(
-                      //     icon: Icons.attach_file,
-                      //     label:
-                      //         '${request.attachments.length} file${request.attachments.length == 1 ? '' : 's'}',
-                      //   ),
                     ],
                   ),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 5),
 
                   // ✅ Apply Button
                   if (ismyrequest == null)

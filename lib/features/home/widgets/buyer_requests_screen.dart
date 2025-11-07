@@ -65,7 +65,18 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         arguments: request.user);
   }
 
+  bool _isValidImageUrl(String? url) {
+    if (url == null || url.isEmpty) return false;
+    final Uri? uri = Uri.tryParse(url);
+    return uri != null &&
+        uri.hasAbsolutePath &&
+        (uri.scheme == 'http' || uri.scheme == 'https');
+  }
+
   void _showRequestDetails(BuyerRequestModel request) {
+    final bool hasValidImage = _isValidImageUrl(request.imageUrl);
+    final bool hasValidProfilePic = _isValidImageUrl(request.user.photoUrl);
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -95,20 +106,35 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   Row(
                     spacing: 10,
                     children: <Widget>[
-                      NetworkImageWithPlaceHolder(
-                        imageUrl: '',
-                        height: 40,
-                        width: 40,
-                        radius: 50,
-                        cacheHeight: 256,
-                        cacheWidth: 256,
-                        placeHolder: Icons.person,
-                        iconSize: 24,
-                      ),
+                      if (hasValidProfilePic)
+                        NetworkImageWithPlaceHolder(
+                          imageUrl: request.user.photoUrl!,
+                          height: 40,
+                          width: 40,
+                          radius: 50,
+                          cacheHeight: 256,
+                          cacheWidth: 256,
+                          placeHolder: Icons.person,
+                          iconSize: 24,
+                        )
+                      else
+                        Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Icon(
+                            Icons.person,
+                            size: 24,
+                            color: Colors.grey[600],
+                          ),
+                        ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -124,19 +150,21 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 200,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      image: DecorationImage(
-                        image: NetworkImage(request.imageUrl!),
-                        fit: BoxFit.cover,
+                  const SizedBox(height: 16),
+                  if (hasValidImage) ...<Widget>[
+                    Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: NetworkImage(request.imageUrl!),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  if (request.imageUrl != null) const SizedBox(height: 16),
+                    const SizedBox(height: 16),
+                  ],
                   Text(
                     request.title,
                     style: const TextStyle(
@@ -144,7 +172,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   const Text(
                     'Description',
                     style: TextStyle(
@@ -152,7 +180,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
                   Text(
                     request.description,
                     style: const TextStyle(
@@ -161,11 +189,11 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                       height: 1.5,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 12),
                   _buildDetailRow(Icons.attach_money, 'Budget',
                       '\$${request.budgetStart} - \$${request.budgetEnd}'),
-                  const SizedBox(height: 12),
-                  if (request.deadline.isNotEmpty)
+                  const SizedBox(height: 8),
+                  if (request.deadline.isNotEmpty) ...<Widget>[
                     _buildDetailRow(
                       Icons.calendar_today,
                       'Deadline',
@@ -173,12 +201,13 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                         DateTime.tryParse(request.deadline) ?? DateTime.now(),
                       ),
                     ),
-                  const SizedBox(height: 12),
+                    const SizedBox(height: 8),
+                  ],
                   _buildDetailRow(Icons.category, 'Category', request.category),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
                   _buildDetailRow(Icons.local_offer, 'Offers Received',
                       request.offerCount.toString()),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -198,7 +227,6 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
                 ],
               ),
             ),
