@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
@@ -118,12 +118,11 @@ class _BuyerRequestsState extends State<BuyerRequests> {
         'budget_start': _startPriceController.text,
         'budget_end': _endPriceController.text,
         'deadline': _selectedDeadline?.toIso8601String() ?? '',
-        'attachments':
-            jsonEncode(_attachments.map((PlatformFile f) => f.name).toList()),
         'location': country.isEmpty ? shopController.shop!.location : country,
       };
 
-      await buyerRequestController.addBuyerRequest(body);
+      await buyerRequestController.addBuyerRequest(body,
+          attachments: _attachments);
 
       if (!buyerRequestController.error.value) {
         Get.snackbar(
@@ -347,24 +346,10 @@ class _BuyerRequestsState extends State<BuyerRequests> {
 
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: ElevatedButton(
-                        onPressed: isSubmitting ? null : _handleSubmit,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColorLT,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          elevation: 4,
-                        ),
-                        child: Text(
-                          isSubmitting ? 'Submitting...' : 'Post Request',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                      child: CustomButton(
+                        onPressed: _handleSubmit,
+                        isProcessing: isSubmitting,
+                        label: 'Post Request',
                       ),
                     ),
                     const SizedBox(height: 30),
