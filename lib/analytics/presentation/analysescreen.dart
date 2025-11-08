@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/chat/ai_chat.dart';
+import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -83,6 +84,25 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
           'Help',
           textAlign: TextAlign.center,
         ),
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () {
+              Get.to(SettingsScreen());
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 15.0, bottom: 5),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: backgroundColor,
+                child: Icon(
+                  LucideIcons.settings,
+                  size: 20,
+                  color: textColor,
+                ),
+              ),
+            ),
+          )
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,119 +150,68 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(right: 15.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.to(() => AiChatScreen());
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors:
-                                      profileController.myProfile.isSubscribed
-                                          ? <Color>[
-                                              Color(0xFF6366F1),
-                                              Color(0xFF8B5CF6),
-                                            ]
-                                          : <Color>[
-                                              Color(0xFFF59E0B),
-                                              Color(0xFFEF4444),
-                                            ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                                color: backgroundColor,
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    const Text(
+                                      'Invite friends to increase rank',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16),
+                                    ),
+                                    Text(
+                                      'Invite ID : ${profileController.myProfile.inviteId!}',
+                                      style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w700),
+                                    )
+                                  ],
                                 ),
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color:
-                                        profileController.myProfile.isSubscribed
-                                            ? Color(0xFF6366F1)
-                                                .withValues(alpha: 0.3)
-                                            : Color(0xFFF59E0B)
-                                                .withValues(alpha: 0.3),
-                                    blurRadius: 12,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Colors.white.withValues(alpha: 0.2),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: SvgPicture.asset(
-                                        'assets/svgs/bot.svg',
-                                        width: 10,
-                                        height: 18,
-                                        colorFilter: const ColorFilter.mode(
-                                          Colors.white,
-                                          BlendMode.srcIn,
-                                        ),
-                                      )),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                GestureDetector(
+                                  onTap: () {
+                                    _shareWithFriends();
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                          width: 2, color: Colors.transparent),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            const Text(
-                                              'SmartChat AI',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 6),
-                                            if (!profileController
-                                                .myProfile.isSubscribed)
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  horizontal: 8,
-                                                  vertical: 3,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                child: const Text(
-                                                  'PRO',
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Color(0xFFEF4444),
-                                                  ),
-                                                ),
-                                              ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          profileController
-                                                  .myProfile.isSubscribed
-                                              ? 'Get AI-powered business insights'
-                                              : 'Unlock AI-powered features',
+                                        const Text(
+                                          'Invite',
                                           style: TextStyle(
-                                            color: Colors.white
-                                                .withValues(alpha: 0.9),
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                              color: primaryColorLT,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 16),
                                         ),
+                                        SizedBox(width: 5),
+                                        SvgPicture.asset(
+                                          'assets/svgs/invite.svg',
+                                          colorFilter: const ColorFilter.mode(
+                                              primaryColorLT, BlendMode.srcIn),
+                                          height: 13,
+                                        )
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                )
+                              ],
                             ),
                           ),
                         ),
@@ -262,7 +231,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
           ListTile(
               leading: SvgPicture.asset('assets/svgs/analyze.svg'),
               title: const Text(
-                'Analyse my Profile',
+                'Analyse Profile',
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -305,7 +274,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                 color: Colors.grey.shade400,
               ),
               title: const Text(
-                'How to Promote My Business for Free',
+                'Generate Free Business Promotion',
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -361,64 +330,99 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
+            child: GestureDetector(
+              onTap: () {
+                Get.to(() => AiChatScreen());
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
                   color: backgroundColor,
-                  borderRadius: BorderRadius.circular(12)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        'Invite friends to get 10 coins',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 16),
-                      ),
-                      Text(
-                        'Invite ID : ${profileController.myProfile.inviteId!}',
-                        style: const TextStyle(
-                            color: Colors.grey, fontWeight: FontWeight.w700),
-                      )
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _shareWithFriends();
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      width: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(width: 2, color: Colors.transparent),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Text(
-                            'Invite',
-                            style: TextStyle(
-                                color: primaryColorLT,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16),
+                  borderRadius: BorderRadius.circular(16),
+                  // boxShadow: <BoxShadow>[
+                  //   BoxShadow(
+                  //     color:
+                  //         profileController.myProfile.isSubscribed
+                  //             ? Color(0xFF6366F1)
+                  //                 .withValues(alpha: 0.3)
+                  //             : Color(0xFFF59E0B)
+                  //                 .withValues(alpha: 0.3),
+                  //     blurRadius: 12,
+                  //     offset: const Offset(0, 4),
+                  //   ),
+                  // ],
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: textColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/svgs/bot.svg',
+                          width: 10,
+                          height: 18,
+                          colorFilter: const ColorFilter.mode(
+                            Colors.white,
+                            BlendMode.srcIn,
                           ),
-                          SvgPicture.asset(
-                            'assets/svgs/invite.svg',
-                            colorFilter: const ColorFilter.mode(
-                                primaryColorLT, BlendMode.srcIn),
-                            height: 13,
-                          )
+                        )),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              const Text(
+                                'SmartChat AI',
+                                style: TextStyle(
+                                  color: textColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              if (!profileController.myProfile.isSubscribed)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 3,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Text(
+                                    'PRO',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFEF4444),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            profileController.myProfile.isSubscribed
+                                ? 'Get AI-powered business insights'
+                                : 'Unlock AI-powered features',
+                            style: TextStyle(
+                              color: textColor.withValues(alpha: 0.9),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
             ),
           ),

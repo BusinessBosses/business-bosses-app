@@ -25,6 +25,8 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController companyNameController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController urlController = TextEditingController();
   final ShopController shopController = Get.find();
 
   // PartnerController instance
@@ -67,6 +69,15 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
       Get.snackbar('Validation', 'Company email is required');
       return;
     }
+    if (bioController.text.trim().isEmpty) {
+      Get.snackbar('Validation', 'Customised message / bio is required');
+      return;
+    }
+    if (descriptionController.text.trim().isEmpty) {
+      Get.snackbar(
+          'Validation', 'Description of your deal/offering is required');
+      return;
+    }
 
     // Replace these with actual dropdown-selected values if you wire them later
     final String selectedPartnershipType = 'Brand deals/Discounts';
@@ -84,7 +95,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
       partnershipType: selectedPartnershipType,
       category: selectedCategory,
       location: country.isEmpty ? shopController.shop?.location : country,
-      companyUrl: null,
+      companyUrl: urlController.text.trim(),
       companyDescription:
           bioController.text.trim().isEmpty ? null : bioController.text.trim(),
       image: image,
@@ -198,16 +209,23 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
             ),
             CustomEditText(
               maxLength: 300,
-              caption: 'Description of your deal/offering',
+              caption: 'Description of your deal/offering *',
               hintText: 'Eg. 30% discount on new membership',
+              controller: descriptionController,
+              inputType: TextInputType.name,
+            ),
+            CustomEditText(
+              maxLength: 300,
+              caption: 'Add customised message, bio or note *',
+              hintText: 'Enter your customised message',
               controller: bioController,
               inputType: TextInputType.name,
             ),
             CustomEditText(
                 caption: 'Website or link to redeem the deal',
                 hintText: 'Enter website or link',
-                controller: emailController,
-                inputType: TextInputType.emailAddress),
+                controller: urlController,
+                inputType: TextInputType.url),
             CustomDropdownWidget(
               caption: 'Company Category *',
               items: <String>[
@@ -332,15 +350,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
                 ),
               ),
             ],
-            CustomEditText(
-              maxLength: 300,
-              caption: 'Add customised message, bio or note',
-              optionalText: Text('Optional',
-                  style: TextStyle(color: Colors.grey, fontSize: 12)),
-              hintText: 'Enter your customised message',
-              controller: bioController,
-              inputType: TextInputType.name,
-            ),
+
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),

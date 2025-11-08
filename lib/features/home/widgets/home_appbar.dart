@@ -162,13 +162,13 @@ class HomeAppBar extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(80),
-                      color: backgroundColor,
+                      color: Colors.transparent,
                     ),
                     child: CircleAvatar(
                       radius: 16,
-                      backgroundColor: backgroundColor,
+                      backgroundColor: Colors.transparent,
                       child:
-                          Icon(LucideIcons.search, size: 18, color: textColor),
+                          Icon(LucideIcons.search, size: 25, color: textColor),
                     ),
                   ),
                 ),

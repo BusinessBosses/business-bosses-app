@@ -11,8 +11,8 @@ class CustomMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: 16,
-      backgroundColor: backgroundColor,
-      child: Icon(LucideIcons.menu, color: textColor, size: 18),
+      backgroundColor: Colors.transparent,
+      child: Icon(LucideIcons.menu, color: textColor, size: 25),
     );
   }
 }

@@ -15,6 +15,7 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -204,19 +205,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       right: 15,
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(
-                            () => const MyEvents(
-                              toHome: true,
-                            ),
-                          );
+                          Get.to(Get.toNamed(Routes.analysescreen));
                         },
                         child: CircleAvatar(
-                            radius: 18,
+                            radius: 20,
                             backgroundColor: backgroundColor,
                             child: const Icon(
-                              LucideIcons.calendar,
+                              LucideIcons.helpCircle,
                               color: textColor,
-                              size: 18,
+                              size: 20,
                             )),
                       )),
                 if (_selectedIndex == 0 || _selectedIndex == 4)

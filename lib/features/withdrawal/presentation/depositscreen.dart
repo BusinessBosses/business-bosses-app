@@ -521,7 +521,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   const Text(
-                                    'Invite friends to get 10 coins',
+                                    'Invite friends to increase rank',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 16),

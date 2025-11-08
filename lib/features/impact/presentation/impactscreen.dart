@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class ImpactScreen extends StatefulWidget {
   final UserModel user;
@@ -43,6 +44,25 @@ class _ImpactScreenState extends State<ImpactScreen> {
           'Impact',
           textAlign: TextAlign.center,
         ),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 15.0),
+            child: GestureDetector(
+              onTap: () {
+                _shareWithFriends();
+              },
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: backgroundColor,
+                child: Icon(
+                  LucideIcons.plus,
+                  size: 20,
+                  color: textColor,
+                ), // Invisible icon to maintain size'),
+              ),
+            ),
+          )
+        ],
       ),
       body: Obx(() {
         if (controller.loading.value) {
@@ -52,18 +72,12 @@ class _ImpactScreenState extends State<ImpactScreen> {
         final invites = controller.data['invitesThisWeek'] ?? 0;
         final rank = controller.data['rank'] ?? 12;
 
-        // if (true) {
-        //   return SafetyModel(
-        //     isLoading: false,
-        //     icon: Icon(Icons.warning),
-        //     title: 'NO User Referred!',
-        //   );
-        // }
-
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              ImpactHeaderCard(data: controller.data),
+
               /// Ambassador Challenge Sectionuser
               if (widget.user == profileController.myProfile)
                 Container(
@@ -72,9 +86,9 @@ class _ImpactScreenState extends State<ImpactScreen> {
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
+                    color: backgroundColor,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.blue.shade100),
+                    border: Border.all(color: Colors.grey.shade200),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +182,6 @@ class _ImpactScreenState extends State<ImpactScreen> {
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 10),
-                                width: 120,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                       width: 2, color: primaryColorLT),
@@ -185,6 +198,7 @@ class _ImpactScreenState extends State<ImpactScreen> {
                                           fontWeight: FontWeight.w700,
                                           fontSize: 16),
                                     ),
+                                    SizedBox(width: 5),
                                     SvgPicture.asset(
                                       'assets/svgs/invite.svg',
                                       color: primaryColorLT,
@@ -200,8 +214,6 @@ class _ImpactScreenState extends State<ImpactScreen> {
                     ],
                   ),
                 ),
-
-              ImpactHeaderCard(data: controller.data),
 
               const SizedBox(height: 15),
             ],

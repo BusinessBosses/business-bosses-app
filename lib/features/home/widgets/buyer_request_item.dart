@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/features/marketplace/models/buyer_request_mod
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class BuyerRequestItem extends StatelessWidget {
   final BuyerRequestModel request;
@@ -101,12 +102,12 @@ class BuyerRequestItem extends StatelessWidget {
 
                   // ✅ Info Chips (Budget, Deadline, Files)
                   Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
+                    spacing: 5,
+                    runSpacing: 0,
                     children: <Widget>[
                       // ✅ Budget (Start - End)
                       _buildInfoChip(
-                        icon: Icons.attach_money,
+                        icon: LucideIcons.coins,
                         label:
                             '\$${request.budgetStart.toStringAsFixed(0)} - \$${request.budgetEnd.toStringAsFixed(0)}',
                       ),
@@ -114,7 +115,7 @@ class BuyerRequestItem extends StatelessWidget {
                       // ✅ Deadline
                       _buildInfoChip(
                         icon: Icons.calendar_today,
-                        label: 'Due: $formattedDeadline',
+                        label: formattedDeadline,
                       ),
                     ],
                   ),
@@ -125,20 +126,20 @@ class BuyerRequestItem extends StatelessWidget {
                   if (ismyrequest == null)
                     SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
+                      child: OutlinedButton(
                         onPressed: onApply,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
+                        style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                         child: const Text(
                           'Send Proposal',
                           style: TextStyle(
                             fontSize: 13,
+                            color: primaryColorLT,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -155,7 +156,7 @@ class BuyerRequestItem extends StatelessWidget {
 
   // ✅ Helper: Format deadline date
   String _formatDeadline(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return 'No deadline';
+    if (dateStr == null || dateStr.isEmpty) return 'N/A';
     try {
       final DateTime date = DateTime.parse(dateStr);
       return DateFormat('MMM dd').format(date);
@@ -179,7 +180,6 @@ class BuyerRequestItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Icon(icon, size: 12, color: textColor),
-          const SizedBox(width: 4),
           Text(
             label,
             style: const TextStyle(

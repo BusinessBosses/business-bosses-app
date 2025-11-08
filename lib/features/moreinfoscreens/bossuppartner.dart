@@ -230,7 +230,7 @@ class BossuppartnerItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 100,
                           softWrap: true,
-                          trimLength: 100,
+                          trimLength: 45,
                           detectedStyle: bodyText2.copyWith(
                             color: Colors.blue,
                           ),
@@ -251,8 +251,8 @@ class BossuppartnerItem extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 15,
+            SizedBox(
+              height: 5,
             ),
             SizedBox(
               width: double.infinity,
