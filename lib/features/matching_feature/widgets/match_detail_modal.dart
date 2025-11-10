@@ -312,7 +312,7 @@ class _MatchDetailModalState extends State<MatchDetailModal> {
   }
 
   Widget _buildActionSection(BuildContext context) {
-    final bool isBookmarked = matchController.isBookmarked(widget.match.id);
+    // final bool isBookmarked = matchController.isBookmarked(widget.match.id);
     // Determine the button text, icon, and colors based on the bookmark status
     return Column(
       children: <Widget>[

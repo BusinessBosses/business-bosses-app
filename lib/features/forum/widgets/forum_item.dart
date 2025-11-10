@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/features/forum/controller/forum_controller.da
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/presentation/boost_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
-import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/posts/widgets/all_forum_images.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -184,7 +183,7 @@ class _ForumItemState extends State<ForumItem> {
   @override
   Widget build(BuildContext context) {
     final ProfileController profileController = Get.find();
-    final CommunitiesController communitiesController = Get.find();
+    // final CommunitiesController communitiesController = Get.find();
 
     // print(widget.forum.user!.uid);
     return widget.forum.user == null

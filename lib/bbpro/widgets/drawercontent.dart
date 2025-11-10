@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
@@ -39,14 +38,14 @@ class DrawerContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void showPromoteSheet() {
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        builder: (BuildContext context) => AIPromoteSheet(),
-      );
-    }
+    // void showPromoteSheet() {
+    //   showModalBottomSheet(
+    //     context: context,
+    //     isScrollControlled: true,
+    //     backgroundColor: Colors.transparent,
+    //     builder: (BuildContext context) => AIPromoteSheet(),
+    //   );
+    // }
 
     ProfileController profileController = Get.find();
     ChallengeController controller = Get.put(ChallengeController());
