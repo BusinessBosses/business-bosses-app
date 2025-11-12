@@ -533,17 +533,16 @@ class CreatePostController extends GetxController {
     });
     socket.connect();
     socket.onConnect((_) {
-      print('Connection established');
+      debugPrint('Connection established');
 
-      socket.onDisconnect((_) => print('Connection Disconnection'));
-      socket.onConnectError((err) => print(err));
-      socket.onError((err) => print(err));
+      socket.onDisconnect((_) => debugPrint('Connection Disconnection'));
+      socket.onConnectError((err) => debugPrint(err));
+      socket.onError((err) => debugPrint(err));
     });
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
     users.clear();
     imageFileList.clear();
     shouldPromote(false);
@@ -552,7 +551,6 @@ class CreatePostController extends GetxController {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     socket.disconnect();
     socket.dispose();
     super.dispose();

@@ -15,7 +15,7 @@ class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
 
   @override
-  _DeleteAccountScreenState createState() => _DeleteAccountScreenState();
+  State<DeleteAccountScreen> createState() => _DeleteAccountScreenState();
 }
 
 class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
@@ -240,10 +240,11 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
       body: <String, dynamic>{'deactivated': true},
     );
     if (response.success) {
-      showSnackBar(context, message: 'Your account has been deactivated');
+      showSnackBar(Get.context!, message: 'Your account has been deactivated');
       _signOut();
     } else {
-      showSnackBar(context, message: 'Error While Deactivating Your Account');
+      showSnackBar(Get.context!,
+          message: 'Error While Deactivating Your Account');
     }
 
     setState(() {
@@ -259,10 +260,10 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
       path: 'users/${profileController.myProfile.uid}',
     );
     if (response.success) {
-      showSnackBar(context, message: 'Your account has been deleted');
+      showSnackBar(Get.context!, message: 'Your account has been deleted');
       _signOut();
     } else {
-      showSnackBar(context, message: 'Error While Deleting Your Account');
+      showSnackBar(Get.context!, message: 'Error While Deleting Your Account');
     }
     setState(() {
       _isLoading = false;

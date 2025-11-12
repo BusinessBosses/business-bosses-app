@@ -43,7 +43,7 @@ Widget premiumButtonHeader(
                     final ApiResponseModel res = await ApiService.get(
                         path:
                             '/connection/connecteds/referals/${publicUser.uid}');
-                    Navigator.pop(context);
+                    Navigator.pop(Get.context!);
 
                     if (res.success) {
                       if (res.data.isEmpty) {

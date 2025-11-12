@@ -23,11 +23,12 @@ class _OutgoneDonationsState extends State<OutgoneDonations> {
         : ListView.builder(
             itemCount: widget.history.length,
             itemBuilder: (BuildContext context, int i) {
-              final item = widget.history[i];
+              final dynamic item = widget.history[i];
               final String prevdate =
                   i == 0 ? '' : formatDate(widget.history[i - 1]['date']);
               return DonationHistoryItem(
-                item: item, previousDate: prevdate,
+                item: item,
+                previousDate: prevdate,
               );
             },
           );

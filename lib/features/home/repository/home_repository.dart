@@ -105,7 +105,8 @@ class HomeRepository {
 
   /// Fetch BossUp Partner
   static Future<ApiResponseModel> fetchPartner() async {
-    final ApiResponseModel response = await ApiService.get(path: 'partner/all');
+    final ApiResponseModel response =
+        await ApiService.get(path: 'partner/all?size=100');
     return response;
   }
 

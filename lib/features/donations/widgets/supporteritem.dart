@@ -17,7 +17,7 @@ class SupporterItem extends StatefulWidget {
   });
 
   @override
-  _SupporterItemState createState() => _SupporterItemState();
+  State<SupporterItem> createState() => _SupporterItemState();
 }
 
 class _SupporterItemState extends State<SupporterItem> {

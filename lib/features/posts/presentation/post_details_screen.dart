@@ -240,7 +240,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                               hasVoted = true;
                               selectedVote = pollOption.id;
                             });
-                            print(controller.votes);
+                            debugPrint(controller.votes.toString());
                             return true;
                           },
                           pollTitle: const Align(

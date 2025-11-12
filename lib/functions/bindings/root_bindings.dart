@@ -5,6 +5,5 @@ class RootBindings extends Bindings {
   @override
   void dependencies() {
     Get.put(() => HomeController());
-    // TODO: implement dependencies
   }
 }

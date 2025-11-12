@@ -3,13 +3,10 @@ import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
 import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/controllers/ai_chat_controller.dart';
-import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
-import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
-import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -43,12 +40,8 @@ class _HomeScreenState extends State<HomeScreen>
   final ProfileController _profileController = Get.find();
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
-  final LiveController liveEventController = Get.put(LiveController());
   final ChallengeController challengeController =
       Get.put(ChallengeController());
-  final DonationsController donationsController =
-      Get.put(DonationsController());
-  final SupplierController supplierController = Get.put(SupplierController());
   final AiChatController ctrl = Get.put(AiChatController());
   late io.Socket socket;
 
@@ -367,9 +360,7 @@ class _HomeScreenState extends State<HomeScreen>
       onTap: () {
         homeController.loadData();
         _profileController.fetchData();
-        marketController.initMarket();
         _communitiesController.fetchIndustries();
-        liveEventController.initEvents();
       },
       icon: const Icon(
         Icons.warning,
@@ -387,9 +378,7 @@ class _HomeScreenState extends State<HomeScreen>
       onTap: () {
         homeController.loadData();
         _profileController.fetchData();
-        marketController.initMarket();
         _communitiesController.fetchIndustries();
-        liveEventController.initEvents();
       },
       icon: const Icon(
         Icons.warning,

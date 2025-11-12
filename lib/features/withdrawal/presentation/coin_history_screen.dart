@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/withdrawal/presentation/depositscreen.dart';
-import 'package:business_bosses_v2/features/withdrawal/presentation/withdrawalscreen.dart';
+import 'package:business_bosses_v2/features/withdrawal/presentation/deposit_screen.dart';
+import 'package:business_bosses_v2/features/withdrawal/presentation/withdrawal_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,6 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
   }

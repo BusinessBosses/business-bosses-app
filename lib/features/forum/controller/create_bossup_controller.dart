@@ -152,7 +152,6 @@ class CreateBossUpController extends GetxController {
 
   @override
   void onClose() {
-    // TODO: implement onClose
     imageFileList.clear();
     super.onClose();
   }

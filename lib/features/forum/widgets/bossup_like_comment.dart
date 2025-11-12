@@ -26,7 +26,7 @@ class BossUpLikeCommentItem extends StatefulWidget {
   });
 
   @override
-  _BossUpLikeCommentItemState createState() => _BossUpLikeCommentItemState();
+  State<BossUpLikeCommentItem> createState() => _BossUpLikeCommentItemState();
 }
 
 class _BossUpLikeCommentItemState extends State<BossUpLikeCommentItem> {

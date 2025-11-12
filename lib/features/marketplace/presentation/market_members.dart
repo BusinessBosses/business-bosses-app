@@ -17,7 +17,7 @@ class MarketMembersScreen extends StatefulWidget {
   const MarketMembersScreen({super.key, required this.users});
 
   @override
-  _MarketMembersScreenState createState() => _MarketMembersScreenState();
+  State<MarketMembersScreen> createState() => _MarketMembersScreenState();
 }
 
 class _MarketMembersScreenState extends State<MarketMembersScreen> {

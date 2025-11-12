@@ -35,9 +35,8 @@ class NotificationController extends GetxController {
             MyNotification.fromMap(response.data['notifications']['rows'][i]);
         if (newNotification.notificationType == 'order') {
           ordersNotification.add(newNotification);
-        } 
-          notifications.add(newNotification);
-        
+        }
+        notifications.add(newNotification);
 
         _page(_page.value + 1);
       }
@@ -55,7 +54,6 @@ class NotificationController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     loadNotifications();
     super.onInit();
   }

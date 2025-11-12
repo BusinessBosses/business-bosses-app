@@ -8,7 +8,7 @@ import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_requests_form.dart';
-import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
+import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
@@ -154,7 +154,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Partnership',
         'description':
             'Partner with us to expand your reach, list exclusive deals, and attract new customers. Collaborate on business opportunities, gain visibility, and grow your network through strategic partnerships on Business Bosses.',
-        'onTileClicked': () => Get.to(() => const Bossuppartner())
+        'onTileClicked': () => Get.to(() => const BossUpPartner())
       },
       {
         'icon': SvgPicture.asset(
@@ -219,13 +219,17 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                                 ? SvgPicture.asset(
                                     'assets/svgs/text.svg',
                                     height: 25,
-                                    color: textColor.withValues(alpha: 1),
+                                    colorFilter: ColorFilter.mode(
+                                        textColor.withValues(alpha: 1),
+                                        BlendMode.srcIn),
                                   )
                                 : index == 1
                                     ? SvgPicture.asset(
                                         'assets/svgs/sellicon.svg',
                                         height: 25,
-                                        color: textColor.withValues(alpha: 1),
+                                        colorFilter: ColorFilter.mode(
+                                            textColor.withValues(alpha: 1),
+                                            BlendMode.srcIn),
                                       )
                                     : index == 2
                                         ? Icon(

@@ -6,7 +6,7 @@ import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
-import 'package:business_bosses_v2/features/withdrawal/controller/coinhistorycontroller.dart';
+import 'package:business_bosses_v2/features/withdrawal/controller/coin_history_controller.dart';
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_header_item.dart';
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_item.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -178,7 +178,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
 
                                                                   /// update coin here
                                                                 } catch (e) {
-                                                                  print(e
+                                                                  debugPrint(e
                                                                       .toString());
                                                                   showSnackbar(
                                                                     title:

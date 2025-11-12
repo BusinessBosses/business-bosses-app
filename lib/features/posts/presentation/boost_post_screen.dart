@@ -96,7 +96,7 @@ class _BoostPostState extends State<BoostPost> {
           .then((PaymentSheetPaymentOption? value) async {
         await updatePost('card');
 
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => const Confirmation(),
         ));
 
@@ -105,23 +105,24 @@ class _BoostPostState extends State<BoostPost> {
         setState(() {
           _isProcessing = false;
         });
-        showSnackBar(context,
+        showSnackBar(Get.context!,
             message: 'Opps!! Something went wrong. Try again');
       });
     } on StripeException {
       setState(() {
         _isProcessing = false;
       });
-      // ignore: use_build_context_synchronously
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackBar(Get.context!,
+          message: 'Opps!! Something went wrong. Try again');
       // print('Here ->>>>>> $e');
     } catch (e) {
       setState(() {
         _isProcessing = false;
       });
-      print('Here ->>>>>> $e');
+      debugPrint('Here ->>>>>> $e');
 
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackBar(Get.context!,
+          message: 'Opps!! Something went wrong. Try again');
     }
   }
 
@@ -157,7 +158,7 @@ class _BoostPostState extends State<BoostPost> {
       setState(() {
         _isProcessing = false;
       });
-      print('Here Payment ->>>>>> $e');
+      debugPrint('Here Payment ->>>>>> $e');
 
       showSnackbar(
           title: 'OOPS!',
@@ -190,11 +191,11 @@ class _BoostPostState extends State<BoostPost> {
         setState(() {
           _isProcessing = false;
         });
-        Navigator.of(context).push(MaterialPageRoute<dynamic>(
+        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => const Confirmation(),
         ));
       } catch (e) {
-        print(e.toString());
+        debugPrint(e.toString());
       }
     } else {
       try {
@@ -219,7 +220,7 @@ class _BoostPostState extends State<BoostPost> {
 
         displaySheet();
       } catch (e) {
-        print(e.toString());
+        debugPrint(e.toString());
       }
     }
     setState(() {
@@ -250,10 +251,10 @@ class _BoostPostState extends State<BoostPost> {
       },
       onSuccess: () async {
         await updatePost('paystack');
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
           builder: (_) => const Confirmation(),
         ));
-        showSnackBar(context, message: 'Payment Successful, Thanks!');
+        showSnackBar(Get.context!, message: 'Payment Successful, Thanks!');
         return null;
       },
     );
@@ -261,7 +262,6 @@ class _BoostPostState extends State<BoostPost> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initPlan = plans[0]['amount'];
     myPlan = options[0]['optionname'];

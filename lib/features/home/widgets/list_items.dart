@@ -11,19 +11,12 @@ import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_list.dart';
 import 'package:business_bosses_v2/features/home/widgets/herosection.dart';
 import 'package:business_bosses_v2/features/home/widgets/relevantpeopletile.dart';
-import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
-import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
-import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:text_scroll/text_scroll.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class PostsWidget extends StatefulWidget {
@@ -39,7 +32,6 @@ class PostsWidget extends StatefulWidget {
 class _PostsWidgetState extends State<PostsWidget> {
   final HomeController controller = Get.find();
   final MarketController marketController = Get.find();
-  final LiveController liveEventController = Get.find();
   final CommunitiesController communitiesController = Get.find();
   final CourseController courseController = Get.put(CourseController());
   late Industry industry;
@@ -80,52 +72,7 @@ class _PostsWidgetState extends State<PostsWidget> {
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
           return Column(
-            children: <Widget>[
-              if (liveEventController.ongoing.isNotEmpty)
-                Container(
-                  decoration: const BoxDecoration(color: Colors.black),
-                  child: Row(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.center, // Adjust alignment as needed
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Lottie.asset(
-                          'assets/anim/liveevent.json',
-                          height: 25,
-                        ),
-                      ),
-                      const Expanded(
-                        child: TextScroll(
-                          '     Events - Create or Start listening to live events from bosses.           ',
-                          mode: TextScrollMode.bouncing,
-                          style: TextStyle(color: Colors.white, fontSize: 15),
-                          velocity: Velocity(
-                            pixelsPerSecond: Offset(30, 0),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15.0),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                WidgetStateProperty.all<Color>(Colors.white),
-                          ),
-                          onPressed: () => Get.to(() => const LiveEvent()),
-                          child: const Text(
-                            'Live Events',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-            ],
+            children: <Widget>[],
           );
         }
 
@@ -243,33 +190,6 @@ class _PostsWidgetState extends State<PostsWidget> {
             }
           },
         ),
-      );
-    } else if (currentPost['type'] == 'market') {
-      final MarketModel post = controller.promotedMarkets[currentPost['index']];
-
-      // Handle MarketModel
-      final MarketModel marketModel = post;
-      final bool hasIncrementedView =
-          controller.itemsWithIncrementedViews.contains(marketModel.marketId);
-      postWidget = VisibilityDetector(
-        key: Key(postIndex.toString()),
-        onVisibilityChanged: (VisibilityInfo info) {
-          if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-            marketController.updatemarketViews(marketModel);
-            setState(() {
-              controller.itemsWithIncrementedViews.add(marketModel.marketId);
-            });
-          }
-        },
-        child: marketModel.isProduct
-            ? MarketTile(
-                controller: controller,
-                post: marketModel,
-              )
-            : ServiceTile(
-                controller: controller,
-                post: marketModel,
-              ),
       );
     } else if (currentPost['type'] == 'course') {
       final CourseModel post = controller.promotedCourses[currentPost['index']];

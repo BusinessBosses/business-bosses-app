@@ -5,7 +5,6 @@ import 'package:business_bosses_v2/features/donations/presentation/expanded_dona
 import 'package:business_bosses_v2/features/forum/presentation/expanded_forum_view.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
@@ -66,7 +65,6 @@ class _PostTileState extends State<PostTile> {
   final ProfileController profileController = Get.find();
   final HomeController homeController = Get.find();
   final CommunitiesController communitiesController = Get.find();
-  final LiveController liveController = Get.put(LiveController());
   String? selectedValue;
   NumberFormat formatter = NumberFormat.compact();
 
@@ -159,7 +157,7 @@ class _PostTileState extends State<PostTile> {
     bool hasVoted = userHasVoted(widget.post, profileController);
     String? selectedVote = userSelectedOption(widget.post, profileController);
 // Create PollOption list based on the vote counts
-    List<PollOption> pollOptions = List.generate(
+    List<PollOption> pollOptions = List<PollOption>.generate(
       widget.post.options != null ? widget.post.options!.length : 0,
       (int index) {
         String option = widget.post.options![index];
@@ -191,9 +189,10 @@ class _PostTileState extends State<PostTile> {
           startat = jsonData['startat'];
           endat = jsonData['endat'];
         } else {
-          final jsonData = jsonDecode(widget.post.donation!.toString());
+          final dynamic jsonData = jsonDecode(widget.post.donation!.toString());
           title = jsonData['title'];
         }
+        // ignore: empty_catches
       } catch (e) {}
     } else {}
 
@@ -379,7 +378,8 @@ class _PostTileState extends State<PostTile> {
                                     SvgPicture.asset(
                                       'assets/svgs/premiumbadge.svg',
                                       height: 9,
-                                      color: primaryColorLT,
+                                      colorFilter: ColorFilter.mode(
+                                          primaryColorLT, BlendMode.srcIn),
                                     ),
                                   ],
                                 ),
@@ -399,7 +399,8 @@ class _PostTileState extends State<PostTile> {
                                     SvgPicture.asset(
                                       'assets/svgs/premiumbadge.svg',
                                       height: 9,
-                                      color: primaryColorLT,
+                                      colorFilter: ColorFilter.mode(
+                                          primaryColorLT, BlendMode.srcIn),
                                     ),
                                   ],
                                 ),
@@ -760,7 +761,9 @@ class _PostTileState extends State<PostTile> {
                                             ),
                                             SvgPicture.asset(
                                               'assets/svgs/nexticon.svg',
-                                              color: Colors.white,
+                                              colorFilter: ColorFilter.mode(
+                                                  Colors.white,
+                                                  BlendMode.srcIn),
                                             ),
                                           ]))
                                 ],
@@ -875,7 +878,9 @@ class _PostTileState extends State<PostTile> {
                                             ),
                                             SvgPicture.asset(
                                               'assets/svgs/nexticon.svg',
-                                              color: Colors.white,
+                                              colorFilter: ColorFilter.mode(
+                                                  Colors.white,
+                                                  BlendMode.srcIn),
                                             ),
                                           ]))
                                 ],
@@ -1064,8 +1069,6 @@ class _PostTileState extends State<PostTile> {
                                               onPressed: () async {
                                                 await homeController
                                                     .attendEvent(event);
-                                                liveController.joined
-                                                    .add(event);
 
                                                 setState(() {});
                                               },
@@ -1483,9 +1486,13 @@ class _PostTileState extends State<PostTile> {
                                                             height: index == 0
                                                                 ? 18
                                                                 : 25,
-                                                            color: textColor
-                                                                .withValues(
-                                                                    alpha: 1),
+                                                            colorFilter:
+                                                                ColorFilter.mode(
+                                                                    textColor.withValues(
+                                                                        alpha:
+                                                                            1),
+                                                                    BlendMode
+                                                                        .srcIn),
                                                           ),
                                                           title: Text(
                                                             index == 0
@@ -1598,8 +1605,10 @@ class _PostTileState extends State<PostTile> {
                                                       ? 'assets/svgs/share.svg'
                                                       : 'assets/svgs/repost.svg',
                                                   height: index == 0 ? 18 : 25,
-                                                  color: textColor.withValues(
-                                                      alpha: 1),
+                                                  colorFilter: ColorFilter.mode(
+                                                      textColor.withValues(
+                                                          alpha: 1),
+                                                      BlendMode.srcIn),
                                                 ),
                                                 title: Text(
                                                   index == 0

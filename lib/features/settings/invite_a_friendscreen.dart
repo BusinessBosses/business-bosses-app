@@ -12,7 +12,7 @@ class InviteAFriendTermsAndConditions extends StatefulWidget {
   const InviteAFriendTermsAndConditions({super.key});
 
   @override
-  _InviteAFriendTermsAndConditionsState createState() =>
+  State<InviteAFriendTermsAndConditions> createState() =>
       _InviteAFriendTermsAndConditionsState();
 }
 
@@ -55,19 +55,21 @@ class _InviteAFriendTermsAndConditionsState
             });
           } else {
             // Handle the case when 'terms' object or 'description' is not found
-            print("'terms' object or 'description' not found in the response");
+            debugPrint(
+                "'terms' object or 'description' not found in the response");
           }
         } else {
           // Handle the case when the response data is not in the expected format
-          print('Invalid response format');
+          debugPrint('Invalid response format');
         }
       } else {
         // Handle API error
-        print('API request failed with status code ${response.statusCode}');
+        debugPrint(
+            'API request failed with status code ${response.statusCode}');
       }
     } catch (error) {
       // Handle network or parsing errors
-      print('Error occurred while fetching data: $error');
+      debugPrint('Error occurred while fetching data: $error');
     } finally {
       setState(() {
         isLoading = false;

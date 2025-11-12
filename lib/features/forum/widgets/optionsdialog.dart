@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../common/widgets/buttons/button.dart';
 
-Future optionsDialog(BuildContext context, Function() ontap) {
+Future<dynamic> optionsDialog(BuildContext context, Function() ontap) {
   return showDialog(
       context: context,
       builder: (BuildContext ctx) {

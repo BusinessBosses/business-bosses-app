@@ -112,7 +112,6 @@ class _ForumItemState extends State<ForumItem> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     myPopup = _buildPopupMenu();
   }

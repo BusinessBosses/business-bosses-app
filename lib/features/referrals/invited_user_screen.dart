@@ -13,7 +13,7 @@ class InvitedUsersScreen extends StatefulWidget {
   const InvitedUsersScreen({super.key});
 
   @override
-  _InvitedUsersScreenState createState() => _InvitedUsersScreenState();
+  State<InvitedUsersScreen> createState() => _InvitedUsersScreenState();
 }
 
 class _InvitedUsersScreenState extends State<InvitedUsersScreen> {

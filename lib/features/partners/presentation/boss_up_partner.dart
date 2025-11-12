@@ -1,7 +1,7 @@
 import 'dart:core';
-
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/become_a_partner_screen.dart';
+import 'package:business_bosses_v2/features/partners/controllers/partners_controller.dart';
+import 'package:business_bosses_v2/features/partners/models/partner_model.dart';
+import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -11,41 +11,32 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// import '../../action/action.dart';
-// import '../../utils/constants/constants.dart';
-import '../../utils/theme/theme.dart';
-import '../posts/widgets/images_viewer_screen.dart';
+import '../../../utils/theme/theme.dart';
+import '../../posts/widgets/images_viewer_screen.dart';
 
-// ignore: public_member_api_docs
-class Bossuppartner extends StatefulWidget {
+class BossUpPartner extends StatefulWidget {
   final bool? isMarketplace;
-  // ignore: public_member_api_docs
-  const Bossuppartner({super.key, this.isMarketplace});
+  const BossUpPartner({super.key, this.isMarketplace});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _BossuppartnerState createState() => _BossuppartnerState();
+  State<BossUpPartner> createState() => _BossUpPartnerState();
 }
 
-class _BossuppartnerState extends State<Bossuppartner> {
+class _BossUpPartnerState extends State<BossUpPartner> {
+  final PartnerController partnerController = Get.put(PartnerController());
   bool _isInit = false;
-  final HomeController homeController = Get.find();
 
   @override
   void didChangeDependencies() {
     if (!_isInit) {
       _isInit = true;
+      partnerController.loadPartners();
     }
     super.didChangeDependencies();
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   bool isLastItem(int index) {
-    return index == homeController.bossUp!.length - 1;
+    return index == partnerController.partners.length - 1;
   }
 
   @override
@@ -53,9 +44,9 @@ class _BossuppartnerState extends State<Bossuppartner> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: widget.isMarketplace != null
-          ? PreferredSize(
-              preferredSize: const Size.fromHeight(0),
-              child: Container(),
+          ? const PreferredSize(
+              preferredSize: Size.fromHeight(0),
+              child: SizedBox.shrink(),
             )
           : AppBar(
               leading: IconButton(
@@ -72,71 +63,85 @@ class _BossuppartnerState extends State<Bossuppartner> {
                 textAlign: TextAlign.center,
               ),
             ),
-      body: Column(
-        children: <Widget>[
-          if (widget.isMarketplace == null)
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 15, right: 15, top: 20, bottom: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  const Expanded(
-                    child: Text(
-                      'Partner with us, list deals and get customers.',
-                      maxLines: 3,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: SizedBox(
-                      height: 45,
-                      child: ElevatedButton(
-                        child: const Text(
-                          'Become a Partner',
-                          style: TextStyle(
-                            color: Colors.white,
-                            // fontWeight: FontWeight.w700,
-                            fontSize: 15,
-                          ),
+      body: Obx(() {
+        if (partnerController.loading.value) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (partnerController.partners.isEmpty) {
+          return const Center(
+            child: Text(
+              'No partners available at the moment.',
+              style: TextStyle(fontSize: 15, color: Colors.grey),
+            ),
+          );
+        }
+
+        return Column(
+          children: <Widget>[
+            if (widget.isMarketplace == null)
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 15, right: 15, top: 20, bottom: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    const Expanded(
+                      child: Text(
+                        'Partner with us, list deals and get customers.',
+                        maxLines: 3,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
                         ),
-                        onPressed: () {
-                          Get.to(() => BecomeaPartnerScreen());
-                        },
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 20),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: SizedBox(
+                        height: 45,
+                        child: ElevatedButton(
+                          child: const Text(
+                            'Become a Partner',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
+                          ),
+                          onPressed: () {
+                            Get.to(() => const BecomeaPartnerScreen());
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.only(top: 10, bottom: 100),
+                itemCount: partnerController.partners.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final Partner partner =
+                      partnerController.partners.reversed.toList()[index];
+                  return BossuppartnerItem(
+                    companyName: partner.companyName,
+                    companyDescription: partner.companyDescription ?? '',
+                    companyUrl: partner.companyUrl ?? '',
+                    companyPhoto: partner.companyPhoto,
+                    clicks: partner.clicks,
+                    id: partner.id ?? 0,
+                    showPartnerMessage: isLastItem(index),
+                  );
+                },
               ),
             ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.only(top: 10, bottom: 100),
-              itemCount: homeController.bossUp?.length ?? 0,
-              itemBuilder: (BuildContext context, int index) {
-                Map<String, dynamic> partner =
-                    homeController.bossUp!.reversed.toList()[index];
-                return BossuppartnerItem(
-                  companyName: partner['companyName'],
-                  companyDescription: partner['companyDescription'],
-                  companyUrl: partner['companyUrl'],
-                  companyPhoto: partner['companyPhoto'],
-                  clicks: partner['clicks'],
-                  id: partner['id'],
-                  showPartnerMessage: isLastItem(index),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 }
@@ -169,7 +174,9 @@ class BossuppartnerItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -207,9 +214,7 @@ class BossuppartnerItem extends StatelessWidget {
                         )
                       : const SizedBox(),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,27 +256,29 @@ class BossuppartnerItem extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: 5),
             SizedBox(
               width: double.infinity,
               height: 45,
               child: OutlinedButton(
-                  onPressed: () async {
-                    ApiService.put(
-                        path: 'partner/$id',
-                        body: <String, dynamic>{'clicks': clicks + 1});
-                    final Uri url = Uri.parse(companyUrl);
-                    if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
-                      throw Exception('Could not launch $url');
-                    }
-                  },
-                  child: const Text(
-                    'Claim Deals',
-                    style: TextStyle(
-                        color: primaryColorLT, fontWeight: FontWeight.w700),
-                  )),
+                onPressed: () async {
+                  ApiService.put(
+                    path: 'partner/$id',
+                    body: <String, dynamic>{'clicks': clicks + 1},
+                  );
+                  final Uri url = Uri.parse(companyUrl);
+                  if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
+                    throw Exception('Could not launch $url');
+                  }
+                },
+                child: const Text(
+                  'Claim Deals',
+                  style: TextStyle(
+                    color: primaryColorLT,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

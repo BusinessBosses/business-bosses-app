@@ -27,7 +27,7 @@ class PostLikeCommentItem extends StatefulWidget {
   });
 
   @override
-  _PostLikeCommentItemState createState() => _PostLikeCommentItemState();
+  State<PostLikeCommentItem> createState() => _PostLikeCommentItemState();
 }
 
 class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
@@ -346,7 +346,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
         _users.add(UserModel.fromMap(response.data['rows'][i]['user']));
       }
     }
-    print(response);
+    debugPrint(response.toString());
     // for (dynamic l in widget.post.likes ?? []) {
     //   final Map<String, dynamic> response = await ProfileController.loadData(l);
     //   _users.add(
@@ -373,7 +373,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
         _reposters.add(UserModel.fromMap(response.data['rows'][i]['user']));
       }
     }
-    print(response);
+    debugPrint(response.toString());
     // for (dynamic l in widget.post.likes ?? []) {
     //   final Map<String, dynamic> response = await ProfileController.loadData(l);
     //   _users.add(

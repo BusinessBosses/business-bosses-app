@@ -29,7 +29,7 @@ class ForumLikeCommentItem extends StatefulWidget {
   });
 
   @override
-  _ForumLikeCommentItemState createState() => _ForumLikeCommentItemState();
+  State<ForumLikeCommentItem> createState() => _ForumLikeCommentItemState();
 }
 
 class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {

@@ -124,8 +124,9 @@ class ForumModel {
       promote: map['promote'] as bool,
       approved: map['approved'] as bool,
       comments: map['comments'] != null
-          ? List.from(map['comments'])
-              .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+          ? List<dynamic>.from(map['comments'])
+              .map((dynamic e) =>
+                  CommentModel.fromMap(e as Map<String, dynamic>))
               .toList()
           : <CommentModel>[],
       user: map['user'] != null

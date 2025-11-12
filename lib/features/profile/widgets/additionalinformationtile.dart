@@ -14,7 +14,7 @@ class AdditionalInfoTile extends StatefulWidget {
   const AdditionalInfoTile({super.key});
 
   @override
-  _AdditionalInfoTileState createState() => _AdditionalInfoTileState();
+  State<AdditionalInfoTile> createState() => _AdditionalInfoTileState();
 }
 
 class _AdditionalInfoTileState extends State<AdditionalInfoTile> {

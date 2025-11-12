@@ -10,7 +10,7 @@ class YoutubeDisplay extends StatefulWidget {
   const YoutubeDisplay(this.youtubeUrl, {this.corner, super.key});
 
   @override
-  _YoutubeDisplayState createState() => _YoutubeDisplayState();
+  State<YoutubeDisplay> createState() => _YoutubeDisplayState();
 }
 
 class _YoutubeDisplayState extends State<YoutubeDisplay> {

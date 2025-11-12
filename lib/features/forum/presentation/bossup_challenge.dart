@@ -6,7 +6,7 @@ import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dar
 import 'package:business_bosses_v2/features/forum/widgets/challengeitem.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/impact/presentation/impactscreen.dart';
-import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
+import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -185,7 +185,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       return Challengeitem(
                         isPartner: true,
                         OnTap: () {
-                          Get.to(() => Bossuppartner());
+                          Get.to(() => BossUpPartner());
                         },
                         title: 'Partner\'s Deals',
                         description:

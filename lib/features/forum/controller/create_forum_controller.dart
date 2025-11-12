@@ -331,7 +331,6 @@ class CreateForumController extends GetxController {
 
   @override
   void onClose() {
-    // TODO: implement onClose
     imageFileList.clear();
     updatingImageFileList.clear();
     super.onClose();

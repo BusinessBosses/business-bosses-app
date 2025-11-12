@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
@@ -12,11 +11,11 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/become_a_partner_screen.dart';
+import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/impact/presentation/impactscreen.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
-import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
+import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -92,8 +91,6 @@ class _HeroSectionState extends State<HeroSection> {
   final ProfileController _profileController = Get.find();
   final ChallengeController challengeController = Get.find();
   late Industry industry;
-  final DonationsController donationsController =
-      Get.put(DonationsController());
 
   static const Map<String, WinnerCardConfig> cardConfigs =
       <String, WinnerCardConfig>{
@@ -417,7 +414,7 @@ class _HeroSectionState extends State<HeroSection> {
     );
     final ApiResponseModel res = await ApiService.get(
         path: '/connection/connecteds/referals/${user?.uid}');
-    Navigator.pop(context);
+    Navigator.pop(Get.context!);
 
     if (res.success) {
       if (res.data.isEmpty) {
@@ -885,7 +882,7 @@ class _HeroSectionState extends State<HeroSection> {
                                 ));
                             break;
                           case 'partner':
-                            Get.to(() => Bossuppartner());
+                            Get.to(() => BossUpPartner());
                             break;
                           case 'ambassador':
                             Get.to(() => ImpactScreen(
@@ -927,7 +924,7 @@ class _HeroSectionState extends State<HeroSection> {
                               onTap: () {
                                 switch (item.action) {
                                   case 'View Deals':
-                                    Get.to(() => const Bossuppartner());
+                                    Get.to(() => const BossUpPartner());
                                     break;
                                   case 'View Challenges':
                                     Get.toNamed(Routes.allCommunitiesScreen);
@@ -987,7 +984,7 @@ class _HeroSectionState extends State<HeroSection> {
                                           switch (item.action) {
                                             case 'View Deals':
                                               Get.to(
-                                                  () => const Bossuppartner());
+                                                  () => const BossUpPartner());
                                               break;
                                             case 'View Challenges':
                                               Get.toNamed(

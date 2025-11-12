@@ -12,7 +12,7 @@ import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_requests_form.dart';
-import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
+import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
@@ -263,7 +263,7 @@ class DrawerContent extends StatelessWidget {
             'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
         'onTileClicked': () {
           oncloseclick?.call();
-          Get.to(() => const Bossuppartner());
+          Get.to(() => const BossUpPartner());
         }
       },
       {
@@ -422,16 +422,25 @@ class DrawerContent extends StatelessWidget {
                                                 ? SvgPicture.asset(
                                                     'assets/svgs/text.svg',
                                                     height: 25,
-                                                    color: textColor.withValues(
-                                                        alpha: 1),
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            textColor
+                                                                .withValues(
+                                                                    alpha: 1),
+                                                            BlendMode.srcIn),
                                                   )
                                                 : index == 1
                                                     ? SvgPicture.asset(
                                                         'assets/svgs/sellicon.svg',
                                                         height: 25,
-                                                        color: textColor
-                                                            .withValues(
-                                                                alpha: 1),
+                                                        colorFilter:
+                                                            ColorFilter.mode(
+                                                                textColor
+                                                                    .withValues(
+                                                                        alpha:
+                                                                            1),
+                                                                BlendMode
+                                                                    .srcIn),
                                                       )
                                                     : index == 2
                                                         ? Icon(

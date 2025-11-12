@@ -2,8 +2,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
-import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
-import 'package:business_bosses_v2/features/profile/widgets/dealssection.dart';
+import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -276,7 +275,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const Bossuppartner());
+                    Get.to(() => const BossUpPartner());
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -309,7 +308,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                         const SizedBox(
                           height: 10,
                         ),
-                        dealsSection(),
+                        // dealsSection(),
                       ],
                     ),
                   ),

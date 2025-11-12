@@ -72,7 +72,7 @@ class _BoostMarketState extends State<BoostMarket> {
           .then((PaymentSheetPaymentOption? value) async {
         await updatePost();
 
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => const Confirmation(),
         ));
 
@@ -82,14 +82,15 @@ class _BoostMarketState extends State<BoostMarket> {
           _isProcessing = false;
         });
         // log(' =>> $error');
-        showSnackBar(context,
+        showSnackBar(Get.context!,
             message: 'Opps!! Something went wrong. Try again');
       });
     } on StripeException {
       setState(() {
         _isProcessing = false;
       });
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackBar(Get.context!,
+          message: 'Opps!! Something went wrong. Try again');
       // print('Here ->>>>>> $e');
     } catch (e) {
       setState(() {
@@ -97,7 +98,8 @@ class _BoostMarketState extends State<BoostMarket> {
       });
       // log('Here ->>>>>> $e');
 
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackBar(Get.context!,
+          message: 'Opps!! Something went wrong. Try again');
     }
   }
 
@@ -126,7 +128,8 @@ class _BoostMarketState extends State<BoostMarket> {
       });
       // log('Here ->>>>>> $e');
 
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackBar(Get.context!,
+          message: 'Opps!! Something went wrong. Try again');
     }
   }
 
@@ -152,7 +155,7 @@ class _BoostMarketState extends State<BoostMarket> {
         setState(() {
           _isProcessing = false;
         });
-        Navigator.of(context).push(MaterialPageRoute<dynamic>(
+        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => const Confirmation(),
         ));
       } catch (e) {
@@ -187,7 +190,6 @@ class _BoostMarketState extends State<BoostMarket> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initPlan = plans[0]['amount'];
 

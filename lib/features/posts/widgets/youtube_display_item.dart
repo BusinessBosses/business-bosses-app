@@ -12,7 +12,7 @@ class YoutubeDisplayItem extends StatefulWidget {
   const YoutubeDisplayItem(this.youtubeUrl, {this.corner, super.key});
 
   @override
-  _YoutubeDisplayState createState() => _YoutubeDisplayState();
+  State<YoutubeDisplayItem> createState() => _YoutubeDisplayState();
 }
 
 class _YoutubeDisplayState extends State<YoutubeDisplayItem> {
@@ -59,20 +59,19 @@ class _YoutubeDisplayState extends State<YoutubeDisplayItem> {
 
   @override
   Widget build(BuildContext context) {
-    return  VisibilityDetector(
-        key: const Key('unique key'),
-        onVisibilityChanged: (VisibilityInfo info) {},
-        child: ClipRRect(
-          borderRadius: widget.corner ?? BorderRadius.circular(10),
-          child: _thumbnailUrl == null
-              ? Container(
-                  color: backgroundColor,
-                  height: 90,
-                  width: 160,
-                )
-              : Image.network(_thumbnailUrl!),
-        ),
-      )
-    ;
+    return VisibilityDetector(
+      key: const Key('unique key'),
+      onVisibilityChanged: (VisibilityInfo info) {},
+      child: ClipRRect(
+        borderRadius: widget.corner ?? BorderRadius.circular(10),
+        child: _thumbnailUrl == null
+            ? Container(
+                color: backgroundColor,
+                height: 90,
+                width: 160,
+              )
+            : Image.network(_thumbnailUrl!),
+      ),
+    );
   }
 }

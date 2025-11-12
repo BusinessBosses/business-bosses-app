@@ -12,7 +12,7 @@ class CommunityRulesScreen extends StatefulWidget {
   const CommunityRulesScreen({super.key});
 
   @override
-  _CommunityRulesScreenState createState() => _CommunityRulesScreenState();
+  State<CommunityRulesScreen> createState() => _CommunityRulesScreenState();
 }
 
 class _CommunityRulesScreenState extends State<CommunityRulesScreen> {
@@ -36,14 +36,14 @@ class _CommunityRulesScreenState extends State<CommunityRulesScreen> {
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final dynamic data = jsonDecode(response.body);
 
         if (data != null &&
             data['data'] != null &&
             data['data']['rows'] != null) {
-          final rows = data['data']['rows'];
-          final rules = rows.firstWhere(
-            (item) => item['title'] == 'rules',
+          final dynamic rows = data['data']['rows'];
+          final dynamic rules = rows.firstWhere(
+            (dynamic item) => item['title'] == 'rules',
             orElse: () => null,
           );
 
@@ -56,7 +56,7 @@ class _CommunityRulesScreenState extends State<CommunityRulesScreen> {
       }
     } catch (error) {
       // Handle network or parsing errors
-      print('Error occurred while fetching data: $error');
+      debugPrint('Error occurred while fetching data: $error');
     } finally {
       setState(() {
         isLoading = false;

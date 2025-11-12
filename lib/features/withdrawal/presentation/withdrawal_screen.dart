@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../../common/dialogs/snackbar.dart';
 import '../../../common/widgets/buttons/custom_button.dart';
 import '../../../features/profile/controller/profile_controller.dart';
-import '../../../features/withdrawal/controller/coinhistorycontroller.dart';
+import '../controller/coin_history_controller.dart';
 import '../../../utils/theme/theme.dart';
 
 class WithdrawalScreen extends StatefulWidget {

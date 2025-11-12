@@ -9,7 +9,7 @@ class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
 
   @override
-  _ContactScreenState createState() => _ContactScreenState();
+  State<ContactScreen> createState() => _ContactScreenState();
 }
 
 class _ContactScreenState extends State<ContactScreen> {

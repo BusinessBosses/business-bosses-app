@@ -35,7 +35,6 @@ class _TopicsPageState extends State<TopicsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (Get.arguments == null) {
       Get.back();

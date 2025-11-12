@@ -19,8 +19,8 @@ class MyProfileHeader extends StatelessWidget {
       children: <Widget>[
         if (myProfile.matchType == null)
           PersonalizationBanner(
-            onSetupPressed: () => print('Setup pressed'),
-            onClosePressed: () => print('Close pressed'),
+            onSetupPressed: () => debugPrint('Setup pressed'),
+            onClosePressed: () => debugPrint('Close pressed'),
           ),
         Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0),

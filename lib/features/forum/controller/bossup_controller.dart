@@ -356,7 +356,6 @@ class BossUpController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     socket = _homeController.socket;
 
     super.onInit();

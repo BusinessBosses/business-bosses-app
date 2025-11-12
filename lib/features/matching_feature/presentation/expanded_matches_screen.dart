@@ -182,8 +182,8 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
             children: <Widget>[
               if (profileController.myProfile.matchType == null)
                 PersonalizationBanner(
-                  onSetupPressed: () => print('Setup pressed'),
-                  onClosePressed: () => print('Close pressed'),
+                  onSetupPressed: () => debugPrint('Setup pressed'),
+                  onClosePressed: () => debugPrint('Close pressed'),
                 ),
               Column(
                 children: <Widget>[

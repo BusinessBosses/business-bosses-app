@@ -250,7 +250,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
             );
 
             // Show toast
-            ScaffoldMessenger.of(context).showSnackBar(
+            ScaffoldMessenger.of(Get.context!).showSnackBar(
               const SnackBar(content: Text('Website Url copied to clipboard')),
             );
 
@@ -269,7 +269,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
             );
 
             // Show toast
-            ScaffoldMessenger.of(context).showSnackBar(
+            ScaffoldMessenger.of(Get.context!).showSnackBar(
               const SnackBar(content: Text('Email copied to clipboard')),
             );
 
@@ -288,7 +288,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
             );
 
             // Show toast
-            ScaffoldMessenger.of(context).showSnackBar(
+            ScaffoldMessenger.of(Get.context!).showSnackBar(
               const SnackBar(content: Text('Phone copied to clipboard')),
             );
 
@@ -309,7 +309,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
               );
 
               // Show toast
-              ScaffoldMessenger.of(context).showSnackBar(
+              ScaffoldMessenger.of(Get.context!).showSnackBar(
                 const SnackBar(content: Text('Location copied to clipboard')),
               );
             },

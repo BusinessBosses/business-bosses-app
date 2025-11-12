@@ -17,7 +17,7 @@ class TabsPagesFilterItem extends StatefulWidget {
   });
 
   @override
-  _TabsPagesFilterItemState createState() => _TabsPagesFilterItemState();
+  State<TabsPagesFilterItem> createState() => _TabsPagesFilterItemState();
 }
 
 class _TabsPagesFilterItemState extends State<TabsPagesFilterItem> {
@@ -49,8 +49,8 @@ class _TabsPagesFilterItemState extends State<TabsPagesFilterItem> {
             child: ListView.builder(
               itemCount: widget.allTab!.length,
               itemBuilder: (BuildContext context, int i) {
-                int index = _selectedTabs.indexWhere(
-                    (MySearchTab element) => element.label == widget.allTab![i].label);
+                int index = _selectedTabs.indexWhere((MySearchTab element) =>
+                    element.label == widget.allTab![i].label);
                 return CheckboxListTile(
                     controlAffinity: ListTileControlAffinity.leading,
                     title: Text(widget.allTab![i].label!),

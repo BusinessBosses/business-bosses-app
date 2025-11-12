@@ -21,7 +21,6 @@ import 'package:business_bosses_v2/features/live_event/presentation/create_event
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/renewconfirmation.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/bookmarked_matches.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
@@ -40,14 +39,14 @@ import 'package:business_bosses_v2/features/forum/controller/forum_controller.da
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/specific_user_list_screen.dart';
-import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
+import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/analysescreen.dart';
 import 'package:business_bosses_v2/features/profile/change_password_screen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
-import 'package:business_bosses_v2/features/promotions/presentation/promotionscreen.dart';
+import 'package:business_bosses_v2/features/promotions/presentation/promotion_screen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/features/referrals/refer_screen.dart';
@@ -55,7 +54,7 @@ import 'package:business_bosses_v2/features/search/controller/search_controller.
 import 'package:business_bosses_v2/features/search/presentation/complete_searching_screen.dart';
 import 'package:business_bosses_v2/features/settings/invite_a_friendscreen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
-import 'package:business_bosses_v2/features/withdrawal/presentation/coinhistoryscreen.dart';
+import 'package:business_bosses_v2/features/withdrawal/presentation/coin_history_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
@@ -83,7 +82,7 @@ var routes = [
   ),
   GetPage(
     name: Routes.bossuppartner,
-    page: () => const Bossuppartner(),
+    page: () => const BossUpPartner(),
   ),
   GetPage(
     name: Routes.home,
@@ -254,12 +253,6 @@ var routes = [
   GetPage(
     name: Routes.createevent,
     page: () => const CreateEvent(),
-  ),
-  GetPage(
-    name: Routes.sellscreen,
-    page: () => const CreateSellingitemScreen(
-      isUpd: false,
-    ),
   ),
   GetPage(
     name: Routes.bottomnavscreen,

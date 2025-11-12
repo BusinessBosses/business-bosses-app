@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/utils/validators/validator.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,7 +96,7 @@ class ApiService {
         log(result.toString());
         return result;
       } else {
-        print(result.toString());
+        debugPrint(result.toString());
         showSnackbar(
             title: 'OOPS!',
             message: 'An error occurred, please try again!',
@@ -103,7 +104,7 @@ class ApiService {
         return null;
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       showSnackbar(
           title: 'OOPS!',
           message: 'An error occurred, please try again!',
@@ -252,7 +253,7 @@ class ApiService {
       log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       showSnackbar(
           title: 'OOPS!',
           message: 'An error occurred, please try again!',
@@ -307,7 +308,7 @@ class ApiService {
           'Authorization': 'bearer $token'
         },
       );
-      log(response.body.toString());
+      log(ApiResponseModel.fromMap(jsonDecode(response.body)).message);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       return ApiResponseModel(

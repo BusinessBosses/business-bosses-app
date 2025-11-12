@@ -9,7 +9,7 @@ class YoutubeVideo extends StatefulWidget {
   const YoutubeVideo(this.youtubeUrl, {super.key});
 
   @override
-  _YoutubeVideoState createState() => _YoutubeVideoState();
+  State<YoutubeVideo> createState() => _YoutubeVideoState();
 }
 
 class _YoutubeVideoState extends State<YoutubeVideo> {

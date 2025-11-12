@@ -14,7 +14,6 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
-import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -48,7 +47,6 @@ class HomeController extends GetxController {
   RxInt paginationPage = RxInt(1);
   RxBool loading = RxBool(false);
   RxBool loadingMore = RxBool(false);
-  List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
   List<Map<String, dynamic>> mixedPosts = [
     {'type': 'notype'},
@@ -58,11 +56,7 @@ class HomeController extends GetxController {
   ];
   List<String> blocked = [];
   RxList<PostModel> promotedPosts = RxList<PostModel>(<PostModel>[]);
-  RxList<MarketModel> promotedMarkets = RxList<MarketModel>(<MarketModel>[]);
   RxList<CourseModel> promotedCourses = RxList<CourseModel>(<CourseModel>[]);
-  String bossUpTitle = 'Boss Up By';
-  String bossUpLink = '';
-  RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<EventModel> events = RxList<EventModel>(<EventModel>[]);
   RxList<EventModel> myEvents = RxList<EventModel>(<EventModel>[]);
   // RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
@@ -86,11 +80,6 @@ class HomeController extends GetxController {
 
   void addIndustries(List<Industry> data) {
     industries = data;
-  }
-
-  void addMarkets(RxList<MarketModel> data) {
-    markets.clear();
-    markets = data;
   }
 
   void addEvents(RxList<EventModel> data) {
@@ -236,20 +225,6 @@ class HomeController extends GetxController {
     }
   }
 
-  /// Promoted markets
-  void processPromotedMarketsToState(dynamic post) {
-    final List<dynamic> psts = List<dynamic>.from(post ?? []);
-    if (psts.isEmpty) return;
-
-    promotedMarkets.addAll(psts.map((e) {
-      return MarketModel.fromMap({
-        ...e,
-        'likes': _extractUserIds(e['likes']),
-        'coins': _extractUserIds(e['coins']),
-      });
-    }));
-  }
-
   /// Promoted courses
   void processPromotedCoursesToState(dynamic post) {
     final List<dynamic> psts = List<dynamic>.from(post ?? []);
@@ -277,7 +252,6 @@ class HomeController extends GetxController {
 
     int postCount = posts.length;
     int promotedPostIndex = (promotedPosts.isNotEmpty ? 1 : 0);
-    int promotedMarketIndex = 0;
     int promotedCourseIndex = 0;
 
     for (int i = 0; i < postCount; i++) {
@@ -288,8 +262,6 @@ class HomeController extends GetxController {
         if (promotedPostIndex < promotedPosts.length) {
           mixedPosts
               .add({'type': 'promotedPost', 'index': promotedPostIndex++});
-        } else if (promotedMarketIndex < promotedMarkets.length) {
-          mixedPosts.add({'type': 'market', 'index': promotedMarketIndex++});
         } else if (promotedCourseIndex < promotedCourses.length) {
           mixedPosts.add({'type': 'course', 'index': promotedCourseIndex++});
         }
@@ -299,9 +271,6 @@ class HomeController extends GetxController {
     // Append any remaining promoted items
     while (promotedPostIndex < promotedPosts.length) {
       mixedPosts.add({'type': 'promotedPost', 'index': promotedPostIndex++});
-    }
-    while (promotedMarketIndex < promotedMarkets.length) {
-      mixedPosts.add({'type': 'market', 'index': promotedMarketIndex++});
     }
     while (promotedCourseIndex < promotedCourses.length) {
       mixedPosts.add({'type': 'course', 'index': promotedCourseIndex++});
@@ -1013,13 +982,11 @@ class HomeController extends GetxController {
       // Run multiple API calls concurrently
       final results = await Future.wait([
         HomeRepository.fetchData(),
-        HomeRepository.fetchPartner(),
         HomeRepository.fetchPromoted(),
       ]);
 
       final ApiResponseModel response = results[0];
-      final ApiResponseModel partner = results[1];
-      final ApiResponseModel promoted = results[2];
+      final ApiResponseModel promoted = results[1];
 
       if (!response.success) {
         if (response.message == 'send a valid token') {
@@ -1049,25 +1016,9 @@ class HomeController extends GetxController {
           data['chats'], profileController.myProfile.uid);
       socket.emit('handshake', profileController.myProfile.uid);
 
-      // --- Partner Data ---
-      if (partner.success && partner.data['count'] > 0) {
-        bossUp?.addAll(List<Map<String, dynamic>>.from(partner.data['rows']));
-        final bossUpItem =
-            bossUp?.firstWhere((e) => e['id'] == 5, orElse: () => {});
-        if (bossUpItem != null && bossUpItem.isNotEmpty) {
-          bossUpTitle = bossUpItem['companyName'];
-          bossUpLink = bossUpItem['companyUrl'];
-          bossUp?.removeWhere((e) => e['id'] == 5);
-          bossUp?.removeWhere((e) => e['approved'] == false);
-        }
-      } else if (!partner.success) {
-        error(true);
-      }
-
       // --- Promoted Data ---
       if (promoted.success) {
         processPromotedPostsToState(promoted.data['promotedPosts']['rows']);
-        processPromotedMarketsToState(promoted.data['promotedMarkets']['rows']);
         processPromotedCoursesToState(promoted.data['promotedCourses']['rows']);
         processPostsAndForumsData(data['posts'], data['posts']['forums']);
       }

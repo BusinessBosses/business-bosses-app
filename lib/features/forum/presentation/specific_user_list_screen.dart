@@ -14,7 +14,7 @@ class SpecificUserListScreen extends StatefulWidget {
   const SpecificUserListScreen({super.key});
 
   @override
-  _SpecificUserListScreenState createState() => _SpecificUserListScreenState();
+  State<SpecificUserListScreen> createState() => _SpecificUserListScreenState();
 }
 
 class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
@@ -24,7 +24,6 @@ class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (!Get.isRegistered<ForumController>()) {
       _forumController = Get.put(ForumController());

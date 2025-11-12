@@ -377,9 +377,8 @@ class ForumController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     socket = _homeController.socket;
-    print(Get.arguments);
+    debugPrint(Get.arguments);
     if (Get.arguments == null) {
       Get.back();
       return;

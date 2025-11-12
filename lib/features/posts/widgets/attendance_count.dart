@@ -12,7 +12,7 @@ class AttendeesCountWidget extends StatefulWidget {
   });
 
   @override
-  _AttendeesCountWidgetState createState() => _AttendeesCountWidgetState();
+  State<AttendeesCountWidget> createState() => _AttendeesCountWidgetState();
 }
 
 class _AttendeesCountWidgetState extends State<AttendeesCountWidget> {

@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/withdrawal/presentation/withdrawal_c
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -109,11 +110,11 @@ class CoinHistoryController extends GetxController {
     socket.onReconnect((_) {
       socket.emit('handshake', profileController.myProfile.uid);
 
-      print('reconnected');
+      debugPrint('reconnected');
     });
 
-    socket.onDisconnect((_) => print('Connection Disconnection'));
-    socket.onConnectError((err) => print(err));
-    socket.onError((err) => print(err));
+    socket.onDisconnect((_) => debugPrint('Connection Disconnection'));
+    socket.onConnectError((err) => debugPrint(err));
+    socket.onError((err) => debugPrint(err));
   }
 }

@@ -1,5 +1,12 @@
 import 'dart:io';
 
+import 'package:detectable_text_field/detectable_text_field.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
@@ -8,12 +15,7 @@ import 'package:business_bosses_v2/features/courses/models/video_link_data.dart'
 import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
-import 'package:detectable_text_field/detectable_text_field.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+
 import '../../../action/action.dart';
 import '../../../utils/theme/theme.dart';
 

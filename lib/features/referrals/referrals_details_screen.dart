@@ -13,7 +13,7 @@ class ReferralsDetailsScreen extends StatefulWidget {
   const ReferralsDetailsScreen({super.key});
 
   @override
-  _ReferralsDetailsScreenState createState() => _ReferralsDetailsScreenState();
+  State<ReferralsDetailsScreen> createState() => _ReferralsDetailsScreenState();
 }
 
 class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {

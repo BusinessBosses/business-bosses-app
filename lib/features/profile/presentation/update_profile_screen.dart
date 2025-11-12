@@ -1449,9 +1449,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       });
       widget.isShopedit == null
           ? Get.toNamed(Routes.home)
-          // ignore: use_build_context_synchronously
           : Navigator.pushReplacement(
-              context,
+              Get.context!,
               MaterialPageRoute(
                 builder: (BuildContext context) =>
                     const Bottomnavscreen(initialindex: 0),

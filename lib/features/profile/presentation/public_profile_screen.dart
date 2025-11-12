@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
@@ -14,12 +13,8 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../action/action.dart';
-import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
-import '../../marketplace/controllers/market_controller.dart';
-import '../../marketplace/models/market_model.dart';
-import '../../marketplace/widgets/marketplace_item.dart';
 import '../controller/profile_controller.dart';
 import '../widgets/friendoutlinebuttonheader.dart';
 import '../widgets/friendprofileheader.dart';
@@ -41,7 +36,6 @@ class PublicProfileScreen extends StatefulWidget {
 class _PublicProfileScreenState extends State<PublicProfileScreen> {
   final ProfileController _profileController = Get.find();
   final ShopController shopController = Get.find();
-  final MarketController _marketController = Get.find();
   List<PostModel> _posts = <PostModel>[];
   late UserModel publicUser;
   bool isLoading = true;
@@ -49,7 +43,6 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   bool hasShop = false;
 
   bool hasUser = true;
-  List<MarketModel> filteredMarkets = <MarketModel>[];
 
   late PageController _pageController;
 
@@ -67,9 +60,6 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
           <dynamic, dynamic>{...res['user'], 'interests': res['industries']});
       publicUser = modelizedUser;
       _posts = res['posts'];
-      filteredMarkets = _marketController.markets
-          .where((MarketModel market) => market.userId == publicUser.uid)
-          .toList();
       await shopController.initUserShop(modelizedUser).then((bool value) {
         if (value) {
           if (mounted) {
@@ -168,7 +158,6 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
       publicUser = Get.arguments;
       // print(publicUser.productsandservices);
-      filteredMarkets.clear();
       loadData();
     }
   }
@@ -550,7 +539,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                         ];
                       },
                       body: DefaultTabController(
-                        length: filteredMarkets.isEmpty ? 2 : 3,
+                        length: 2,
                         initialIndex: widget.store != null ? 2 : 0,
                         child: Column(
                           children: <Widget>[
@@ -576,27 +565,14 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                 labelStyle: const TextStyle(
                                     fontWeight: FontWeight.w500),
                                 labelColor: Colors.black,
-                                tabs: filteredMarkets.isEmpty
-                                    ? <Widget>[
-                                        const Tab(
-                                          text: 'About',
-                                        ),
-                                        const Tab(
-                                          text: 'Posts',
-                                        ),
-                                      ]
-                                    : <Widget>[
-                                        const Tab(
-                                          text: 'About',
-                                        ),
-                                        const Tab(
-                                          text: 'Posts',
-                                        ),
-                                        if (!publicUser.isSubscribed)
-                                          const Tab(
-                                            text: 'Listings',
-                                          ),
-                                      ],
+                                tabs: <Widget>[
+                                  const Tab(
+                                    text: 'About',
+                                  ),
+                                  const Tab(
+                                    text: 'Posts',
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(
@@ -607,141 +583,29 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                             ), // Container(
 
                             Expanded(
-                              child: TabBarView(
-                                children: filteredMarkets.isEmpty
-                                    ? <Widget>[
-                                        SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              const SizedBox(
-                                                height: 30,
-                                              ),
-                                              profileinfodisplay(
-                                                  context, publicUser),
-                                            ],
-                                          ),
-                                        ),
-                                        // Container()
-                                        profilepostsdisplay(
-                                          ispublicposts: true,
-                                          context,
-                                          publicUser,
-                                          _posts,
-                                          loading: isLoading,
-                                        ),
-                                      ]
-                                    : <Widget>[
-                                        // Container(),
-                                        SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              const SizedBox(
-                                                height: 30,
-                                              ),
-                                              profileinfodisplay(
-                                                  context, publicUser),
-                                            ],
-                                          ),
-                                        ),
-                                        // Container()
-                                        profilepostsdisplay(
-                                          ispublicposts: true,
-                                          context,
-                                          publicUser,
-                                          _posts,
-                                          loading: isLoading,
-                                        ),
-
-                                        if (!publicUser.isSubscribed)
-                                          SingleChildScrollView(
-                                            child: Stack(
-                                              children: <Widget>[
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.all(0),
-                                                  height: 100,
-                                                  width: double.infinity,
-                                                  child: ClipRRect(
-                                                    child: FittedBox(
-                                                      fit: BoxFit.fill,
-                                                      child: Image.asset(
-                                                          'assets/images/sellerbackground.jpg'),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    filteredMarkets.isEmpty
-                                                        ? const SafetyModel(
-                                                            isLoading: false,
-                                                            icon: Icon(
-                                                              Icons.warning,
-                                                              color:
-                                                                  Colors.grey,
-                                                              size: 80.0,
-                                                            ),
-                                                            title:
-                                                                'This user has no items in store',
-                                                            // subTitle: '',
-                                                          )
-                                                        : ListView.builder(
-                                                            shrinkWrap: true,
-                                                            physics:
-                                                                const NeverScrollableScrollPhysics(),
-                                                            itemCount:
-                                                                filteredMarkets
-                                                                    .length,
-                                                            itemBuilder:
-                                                                (BuildContext
-                                                                        context,
-                                                                    int index) {
-                                                              final MarketModel
-                                                                  market =
-                                                                  filteredMarkets[
-                                                                      index];
-
-                                                              return market
-                                                                      .isProduct
-                                                                  ? MarketTile(
-                                                                      post:
-                                                                          market,
-                                                                      controller:
-                                                                          _marketController,
-                                                                      key: ValueKey(
-                                                                          market
-                                                                              .marketId),
-                                                                    )
-                                                                  : ServiceTile(
-                                                                      post:
-                                                                          market,
-                                                                      controller:
-                                                                          _marketController,
-                                                                      key: ValueKey(
-                                                                          market
-                                                                              .marketId),
-                                                                    );
-                                                            },
-                                                          ),
-                                                    const SizedBox(
-                                                      height: 200,
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                      ],
-                              ),
+                              child: TabBarView(children: <Widget>[
+                                SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      profileinfodisplay(context, publicUser),
+                                    ],
+                                  ),
+                                ),
+                                // Container()
+                                profilepostsdisplay(
+                                  ispublicposts: true,
+                                  context,
+                                  publicUser,
+                                  _posts,
+                                  loading: isLoading,
+                                ),
+                              ]),
                             ),
                           ],
                         ),
@@ -752,12 +616,6 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                       ismyshop: false,
                     )
                   ]));
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
   }
 
   Widget optionsButton() {

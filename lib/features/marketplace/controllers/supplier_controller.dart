@@ -128,10 +128,4 @@ class SupplierController extends GetxController {
     }));
     return response;
   }
-
-  @override
-  void onInit() {
-    super.onInit();
-    initAllSuppliers();
-  }
 }
