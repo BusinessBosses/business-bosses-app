@@ -118,7 +118,8 @@ class _BuyerRequestsState extends State<BuyerRequests> {
         'budget_start': _startPriceController.text,
         'budget_end': _endPriceController.text,
         'deadline': _selectedDeadline?.toIso8601String() ?? '',
-        'location': country.isEmpty ? shopController.shop!.location : country,
+        'location':
+            country.isEmpty ? (shopController.shop?.location ?? '') : country,
       };
 
       await buyerRequestController.addBuyerRequest(body,
@@ -229,7 +230,7 @@ class _BuyerRequestsState extends State<BuyerRequests> {
                               textAlign: TextAlign.center),
                         ),
                         initialSelection: country.isEmpty
-                            ? shopController.shop!.location
+                            ? (shopController.shop?.location ?? 'UK')
                             : country,
                         pickerBuilder:
                             (BuildContext context, CountryCode? countryCode) {
@@ -242,7 +243,8 @@ class _BuyerRequestsState extends State<BuyerRequests> {
                               caption: 'Location *',
                               iconName: 'assets/svgs/nexticon.svg',
                               text: country.isEmpty
-                                  ? shopController.shop!.location
+                                  ? (shopController.shop?.location ??
+                                      'United Kingdom')
                                   : country,
                             ),
                           );
