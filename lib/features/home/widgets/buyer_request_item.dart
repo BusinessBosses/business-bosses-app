@@ -78,20 +78,22 @@ class BuyerRequestItem extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(
-                            request.title,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                              color: textColor,
+                          Expanded(
+                            child: Text(
+                              request.title,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: textColor,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
                           Icon(
                             LucideIcons.chevronRight,
                             size: 15,
-                          )
+                          ),
                         ],
                       ),
                       Text(
@@ -112,7 +114,7 @@ class BuyerRequestItem extends StatelessWidget {
                   // ✅ Info Chips (Budget, Deadline, Files)
                   Wrap(
                     spacing: 5,
-                    runSpacing: 0,
+                    runSpacing: 5,
                     children: <Widget>[
                       // ✅ Budget (Start - End)
                       _buildInfoChip(
@@ -189,6 +191,9 @@ class BuyerRequestItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Icon(icon, size: 12, color: textColor),
+          SizedBox(
+            width: 5,
+          ),
           Text(
             label,
             style: const TextStyle(

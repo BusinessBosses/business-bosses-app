@@ -347,19 +347,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   ),
                                                 ),
                                               ),
-                                            // if (homeController
-                                            //     .buyerRequests.isNotEmpty)
-                                            const Tab(
-                                              child: FittedBox(
-                                                child: Text(
-                                                  'Requests',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14),
+                                            if (homeController
+                                                .userresources.isNotEmpty)
+                                              const Tab(
+                                                child: FittedBox(
+                                                  child: Text(
+                                                    'Requests',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 14),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -706,51 +706,52 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
                                           ///Requests
 
-                                          // if (homeController
-                                          //   .userresources.isNotEmpty)
-                                          Container(
-                                            padding: EdgeInsets.all(15),
-                                            color: backgroundColor,
-                                            height: double.infinity,
-                                            width: double.infinity,
-                                            child: Obx(
-                                              () {
-                                                if ((homeController
-                                                    .loadingRequests.value)) {
-                                                  return SafetyModel();
-                                                }
-                                                if ((homeController
-                                                    .myRequests.isEmpty)) {
-                                                  return SafetyModel(
-                                                    isLoading: false,
-                                                    icon: Icon(Icons.warning),
-                                                    title: 'No Request Added!',
-                                                  );
-                                                }
-                                                return MasonryGridView.count(
-                                                  crossAxisCount: 2,
-                                                  crossAxisSpacing: 12,
-                                                  mainAxisSpacing: 12,
-                                                  physics:
-                                                      const NeverScrollableScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  itemCount: homeController
-                                                      .myRequests.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int i) {
-                                                    return GestureDetector(
-                                                      child: BuyerRequestItem(
-                                                        ismyrequest: true,
-                                                        request: homeController
-                                                            .myRequests[i],
-                                                      ),
+                                          if (homeController
+                                              .userresources.isNotEmpty)
+                                            Container(
+                                              padding: EdgeInsets.all(15),
+                                              color: backgroundColor,
+                                              height: double.infinity,
+                                              width: double.infinity,
+                                              child: Obx(
+                                                () {
+                                                  if ((homeController
+                                                      .loadingRequests.value)) {
+                                                    return SafetyModel();
+                                                  }
+                                                  if ((homeController
+                                                      .myRequests.isEmpty)) {
+                                                    return SafetyModel(
+                                                      isLoading: false,
+                                                      icon: Icon(Icons.warning),
+                                                      title:
+                                                          'No Request Added!',
                                                     );
-                                                  },
-                                                );
-                                              },
+                                                  }
+                                                  return MasonryGridView.count(
+                                                    crossAxisCount: 2,
+                                                    crossAxisSpacing: 12,
+                                                    mainAxisSpacing: 12,
+                                                    physics:
+                                                        const NeverScrollableScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemCount: homeController
+                                                        .myRequests.length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int i) {
+                                                      return GestureDetector(
+                                                        child: BuyerRequestItem(
+                                                          ismyrequest: true,
+                                                          request: homeController
+                                                              .myRequests[i],
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                              ),
                                             ),
-                                          ),
                                         ]),
                                       ),
                                     ],

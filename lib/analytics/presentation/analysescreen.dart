@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/chat/ai_chat.dart';
+import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -178,7 +179,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    _shareWithFriends();
+                                    Get.to(Invitepage());
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(

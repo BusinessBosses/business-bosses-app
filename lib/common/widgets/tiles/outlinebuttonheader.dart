@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +98,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
         Expanded(
           child: OutlinedButton(
             onPressed: () {
-              shareWithFriends();
+              Get.to(Invitepage());
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,

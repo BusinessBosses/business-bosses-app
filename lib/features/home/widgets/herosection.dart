@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/impact/presentation/impactscreen.dart';
@@ -53,7 +54,7 @@ class HeroItem {
   final String icon;
   final String description;
   final String action2;
-  final Map<String, dynamic>? metrics; // For ambassador metrics
+  final Map<String, dynamic>? metrics;
 
   HeroItem({
     this.icon = '',
@@ -84,7 +85,7 @@ class _HeroSectionState extends State<HeroSection> {
   late UserModel? user;
   late UserModel? mentor;
   late UserModel? backer;
-  late UserModel? ambassador; // Add ambassador
+  late UserModel? ambassador;
   dynamic partner;
   final HomeController homeController = Get.find();
   late List<HeroItem> heroItems;
@@ -229,8 +230,9 @@ class _HeroSectionState extends State<HeroSection> {
       HeroItem(
         id: '6',
         type: 'matches',
-        title: 'Your Matches',
-        subtitle: 'Find your business matches',
+        title: 'Find your business matches',
+        subtitle:
+            'See your top business matches for the week and connect with people and opportunities that can help your business grow.',
         image: '',
         action: 'View Matches',
       ),
@@ -307,14 +309,11 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   Future<void> connectToUser() async {
-    // Check if current user (you) already have this Boss in your connecteds
     final bool isConnected = _profileController.myProfile.connecteds != null &&
         _profileController.myProfile.connecteds!.contains(user?.uid);
 
-    // Toggle connection state locally
     _profileController.updateConnections(user!.uid);
 
-    // Update UI (for button text etc.)
     setState(() {
       final String actionText = isConnected ? 'Follow' : 'Refer';
       for (int i = 0; i < 4; i++) {
@@ -332,7 +331,6 @@ class _HeroSectionState extends State<HeroSection> {
       }
     });
 
-    // API call: connect or disconnect depending on current state
     if (!isConnected) {
       await connect(user!.uid);
     } else {
@@ -457,7 +455,7 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void enterambassadoroftheweek() {
-    Get.to(() => ReachScreen(user: _profileController.myProfile));
+    Get.to(Invitepage());
   }
 
   Widget _buildWinnerCard(HeroItem item) {
@@ -483,7 +481,6 @@ class _HeroSectionState extends State<HeroSection> {
       ),
       child: Stack(
         children: <Widget>[
-          // Background icon watermark
           Positioned(
             top: -50,
             right: -20,
@@ -496,15 +493,12 @@ class _HeroSectionState extends State<HeroSection> {
               ),
             ),
           ),
-
-          // Centered content
           Padding(
             padding: const EdgeInsets.all(15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Title
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -524,220 +518,160 @@ class _HeroSectionState extends State<HeroSection> {
                     ),
                   ],
                 ),
+                // FIXED: Only show user info if not matches card
+                if (item.type != 'matches')
+                  GestureDetector(
+                    onTap: () {
+                      UserModel? targetUser;
+                      dynamic partner;
+                      switch (item.type) {
+                        case 'boss':
+                          targetUser = user;
+                          break;
+                        case 'mentor':
+                          targetUser = mentor;
+                          break;
+                        case 'backer':
+                          targetUser = backer;
+                          break;
+                        case 'ambassador':
+                          targetUser = ambassador;
+                          break;
+                        case 'partner':
+                          partner = homeController.partnerOfTheWeek;
+                          break;
+                      }
 
-                // Winner info card - FIXED HEIGHT
-                GestureDetector(
-                  onTap: () {
-                    // Determine which user to navigate to based on card type
-                    UserModel? targetUser;
-                    dynamic partner;
-                    switch (item.type) {
-                      case 'boss':
-                        targetUser = user;
-                        break;
-                      case 'mentor':
-                        targetUser = mentor;
-                        break;
-                      case 'backer':
-                        targetUser = backer;
-                        break;
-                      case 'ambassador':
-                        targetUser = ambassador;
-                        break;
-                      case 'partner':
-                        partner = homeController.partnerOfTheWeek;
-                        break;
-                    }
-
-                    if (targetUser != null) {
-                      Get.toNamed(Routes.publicProfile, arguments: targetUser);
-                    }
-                    if (partner != null) {
-                      Uri url = Uri.parse(partner['companyUrl']);
-                      canLaunchUrl(url).then((bool canLaunch) {
-                        if (canLaunch) {
-                          launchUrl(url);
-                        }
-                      });
-                    }
-                  },
-                  child: Container(
-                    height: 75,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // Avatar
-                        item.image != ''
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(50),
-                                child: NetworkImageWithPlaceHolder(
-                                  imageUrl: item.image,
-                                  width:
-                                      45, // Slightly smaller to fit fixed height
-                                  height: 45,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : _buildDefaultAvatar(config, item.subtitle),
-
-                        const SizedBox(width: 12),
-
-                        // Name and description/metrics
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                item.subtitle,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                      if (targetUser != null) {
+                        Get.toNamed(Routes.publicProfile,
+                            arguments: targetUser);
+                      }
+                      if (partner != null) {
+                        Uri url = Uri.parse(partner['companyUrl']);
+                        canLaunchUrl(url).then((bool canLaunch) {
+                          if (canLaunch) {
+                            launchUrl(url);
+                          }
+                        });
+                      }
+                    },
+                    child: Container(
+                      height: 75,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          if (item.image.isNotEmpty)
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: NetworkImageWithPlaceHolder(
+                                imageUrl: item.image,
+                                width: 45,
+                                height: 45,
+                                fit: BoxFit.cover,
                               ),
-                              if (item.description.isNotEmpty)
+                            )
+                          else
+                            _buildDefaultAvatar(config, item.subtitle),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
                                 Text(
-                                  item.description,
+                                  item.subtitle,
                                   style: const TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 12,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              // Ambassador metrics
-                              if (item.type == 'ambassador' &&
-                                  item.metrics != null)
-                                Text(
-                                  '${item.metrics!['invites']} Invites • ${item.metrics!['conversions']} Conversions',
-                                  style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // Action buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () async {
-                        switch (item.action) {
-                          case 'Follow':
-                            if (item.type == 'ambassador') {
-                              // Connect to ambassador
-                              if (ambassador != null) {
-                                final bool isConnected =
-                                    _profileController.myProfile.connecteds !=
-                                            null &&
-                                        _profileController.myProfile.connecteds!
-                                            .contains(ambassador!.uid);
-                                if (!isConnected) {
-                                  await connect(ambassador!.uid);
-                                  _profileController
-                                      .updateConnections(ambassador!.uid);
-                                }
-                              }
-                            } else {
-                              connectToUser();
-                            }
-                            break;
-                          case 'Refer':
-                            referuser();
-                            break;
-                          case 'View Matches':
-                            Get.to(() => ExpandedMatchesScreen());
-                            break;
-                          case 'Claim Deals':
-                            final Uri url = Uri.parse(partner['companyUrl']);
-                            if (!await launchUrl(url)) {
-                              throw Exception('Could not launch $url');
-                            }
-                            break;
-                          default:
-                            Get.toNamed(Routes.liveEvents);
-                            break;
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Icon(
-                                item.action == 'View Events'
-                                    ? LucideIcons.calendar
-                                    : item.action == 'Refer'
-                                        ? LucideIcons.forward
-                                        : item.action == 'Claim Deals'
-                                            ? LucideIcons.checkCircle2
-                                            : LucideIcons.userPlus,
-                                size: 16,
-                                color: primaryColorLT),
-                            const SizedBox(width: 5),
-                            Text(
-                              item.action,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: primaryColorLT,
-                              ),
+                                if (item.description.isNotEmpty)
+                                  Text(
+                                    item.description,
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 12,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                if (item.type == 'ambassador' &&
+                                    item.metrics != null)
+                                  Text(
+                                    '${item.metrics!['invites']} Invites • ${item.metrics!['conversions']} Conversions',
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    if (item.action2.isNotEmpty)
+                  ),
+                // FIXED: For matches card, show description text
+                if (item.type == 'matches')
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      item.subtitle,
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
                       GestureDetector(
                         onTap: () async {
-                          switch (item.action2.isNotEmpty ? item.action2 : '') {
-                            case 'Get Featured':
-                              item.id == '1'
-                                  ? enterChallenge()
-                                  : item.id == '2'
-                                      ? entermentoroftheweek()
-                                      : item.id == '3'
-                                          ? enterbackeroftheweek()
-                                          : enterpartneroftheweek();
+                          switch (item.action) {
+                            case 'Follow':
+                              if (item.type == 'ambassador') {
+                                if (ambassador != null) {
+                                  final bool isConnected = _profileController
+                                              .myProfile.connecteds !=
+                                          null &&
+                                      _profileController.myProfile.connecteds!
+                                          .contains(ambassador!.uid);
+                                  if (!isConnected) {
+                                    await connect(ambassador!.uid);
+                                    _profileController
+                                        .updateConnections(ambassador!.uid);
+                                  }
+                                }
+                              } else {
+                                connectToUser();
+                              }
                               break;
-                            case 'Fund a project':
-                              enterbackeroftheweek();
-                              break;
-                            case 'Become a Partner':
-                              enterpartneroftheweek();
-                              break;
-                            case 'Become Ambassador':
-                              enterambassadoroftheweek();
+                            case 'Refer':
+                              referuser();
                               break;
                             case 'View Matches':
                               Get.to(() => ExpandedMatchesScreen());
+                              break;
+                            case 'Claim Deal':
+                              final Uri url = Uri.parse(partner['companyUrl']);
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
                               break;
                             default:
                               Get.toNamed(Routes.liveEvents);
@@ -746,9 +680,9 @@ class _HeroSectionState extends State<HeroSection> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: textColor)),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
                             vertical: 8,
@@ -757,26 +691,96 @@ class _HeroSectionState extends State<HeroSection> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Icon(
-                                item.action == 'View Events'
-                                    ? LucideIcons.calendar
-                                    : LucideIcons.plus,
-                                size: 16,
-                                color: textColor,
-                              ),
+                                  item.action == 'View Events'
+                                      ? LucideIcons.calendar
+                                      : item.action == 'Refer'
+                                          ? LucideIcons.forward
+                                          : item.action == 'Claim Deal'
+                                              ? LucideIcons.checkCircle2
+                                              : item.action == 'View Matches'
+                                                  ? LucideIcons.users
+                                                  : LucideIcons.userPlus,
+                                  size: 16,
+                                  color: primaryColorLT),
                               const SizedBox(width: 5),
                               Text(
-                                item.action2.isNotEmpty ? item.action2 : '',
+                                item.action,
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: textColor,
+                                  color: primaryColorLT,
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                  ],
+                      const SizedBox(width: 8),
+                      if (item.action2.isNotEmpty)
+                        GestureDetector(
+                          onTap: () async {
+                            switch (
+                                item.action2.isNotEmpty ? item.action2 : '') {
+                              case 'Get Featured':
+                                item.id == '1'
+                                    ? enterChallenge()
+                                    : item.id == '2'
+                                        ? entermentoroftheweek()
+                                        : item.id == '3'
+                                            ? enterbackeroftheweek()
+                                            : enterpartneroftheweek();
+                                break;
+                              case 'Fund a project':
+                                enterbackeroftheweek();
+                                break;
+                              case 'Become a Partner':
+                                enterpartneroftheweek();
+                                break;
+                              case 'Become Ambassador':
+                                enterambassadoroftheweek();
+                                break;
+                              case 'View Matches':
+                                Get.to(() => ExpandedMatchesScreen());
+                                break;
+                              default:
+                                Get.toNamed(Routes.liveEvents);
+                                break;
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: textColor)),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Icon(
+                                  item.action == 'View Events'
+                                      ? LucideIcons.calendar
+                                      : LucideIcons.plus,
+                                  size: 16,
+                                  color: textColor,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  item.action2.isNotEmpty ? item.action2 : '',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -818,12 +822,15 @@ class _HeroSectionState extends State<HeroSection> {
     return Container(
       color: Colors.white,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           GestureDetector(
             onTap: _onUserInteraction,
             onPanDown: (_) => _onUserInteraction(),
+            // FIXED: Changed IntrinsicHeight to SizedBox with fixed height
             child: SizedBox(
-              height: 180,
+              height: 180, // Adjust this height as needed
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: heroItems.length,
@@ -835,7 +842,19 @@ class _HeroSectionState extends State<HeroSection> {
                   final HeroItem item = heroItems[index];
                   final Industry category = challengeController.categories[0];
 
-                  // Use winner card for boss, mentor, backer, partner, ambassador
+                  // FIXED: Handle matches card click navigation
+                  if (item.type == 'matches') {
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(() => ExpandedMatchesScreen());
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: _buildWinnerCard(item),
+                      ),
+                    );
+                  }
+
                   if (cardConfigs.containsKey(item.type)) {
                     return GestureDetector(
                       onTap: () {
@@ -922,7 +941,7 @@ class _HeroSectionState extends State<HeroSection> {
                     );
                   }
 
-                  // Use original card for matches and events
+                  // Original card style for other types (if any)
                   return GestureDetector(
                     onTap: () => _onSlideTap(item),
                     child: Padding(
@@ -936,15 +955,16 @@ class _HeroSectionState extends State<HeroSection> {
                         child: Stack(
                           fit: StackFit.expand,
                           children: <Widget>[
-                            CachedNetworkImage(
-                              key: ValueKey<String>(item.title),
-                              imageUrl: item.image,
-                              fit: BoxFit.cover,
-                              memCacheHeight: 1000,
-                              errorWidget: (BuildContext context, String url,
-                                      Object error) =>
-                                  const Icon(Icons.error),
-                            ),
+                            if (item.image.isNotEmpty)
+                              CachedNetworkImage(
+                                key: ValueKey<String>(item.title),
+                                imageUrl: item.image,
+                                fit: BoxFit.cover,
+                                memCacheHeight: 1000,
+                                errorWidget: (BuildContext context, String url,
+                                        Object error) =>
+                                    const Icon(Icons.error),
+                              ),
                             GestureDetector(
                               onTap: () {
                                 switch (item.action) {
@@ -955,7 +975,7 @@ class _HeroSectionState extends State<HeroSection> {
                                     Get.toNamed(Routes.allCommunitiesScreen);
                                     break;
                                   case 'View Matches':
-                                    Get.toNamed(Routes.expandedmatchesscreen);
+                                    Get.to(() => ExpandedMatchesScreen());
                                     break;
                                   default:
                                     Get.toNamed(Routes.liveEvents);
@@ -984,8 +1004,8 @@ class _HeroSectionState extends State<HeroSection> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(20),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: <Widget>[
                                       Text(
                                         item.title,
@@ -1169,7 +1189,6 @@ class _HeroSectionState extends State<HeroSection> {
 }
 
 String _calculateStartDate(DateTime startAt) {
-  // Format the endedAt date using DateFormat
   String formattedDate = DateFormat('d MMM').format(startAt);
   return 'Starts $formattedDate';
 }

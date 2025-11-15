@@ -61,8 +61,14 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   void _navigateToChatScreen(BuyerRequestModel request) {
-    Get.to(() => const ChatRoomScreen(frommarketplace: false),
-        arguments: request.user);
+    Get.to(
+      () =>
+          const ChatRoomScreen(frommarketplace: false, fromBuyerRequest: true),
+      arguments: <String, Object>{
+        'user': request.user,
+        'buyerRequest': request,
+      },
+    );
   }
 
   bool _isValidImageUrl(String? url) {
@@ -213,7 +219,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                     child: ElevatedButton(
                       onPressed: () => _navigateToChatScreen(request),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
+                        backgroundColor: primaryColorLT,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
