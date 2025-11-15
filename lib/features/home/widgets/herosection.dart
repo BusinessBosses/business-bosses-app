@@ -98,9 +98,9 @@ class _HeroSectionState extends State<HeroSection> {
       title: 'Boss of the Week',
       icon: LucideIcons.trophy,
       gradientColors: <Color>[
-        Color(0xFFFBBF24),
-        Color(0xFFF97316),
-        Color(0xFFEF4444)
+        Color(0xFFF3F4F6),
+        Color(0xFFE5E7EB),
+        Color(0xFFD1D5DB),
       ],
       iconColor: Color(0xFFFCD34D),
       accentColor: Color(0x33FBBf24),
@@ -109,9 +109,9 @@ class _HeroSectionState extends State<HeroSection> {
       title: 'Backer of the Week',
       icon: LucideIcons.dollarSign,
       gradientColors: <Color>[
-        Color(0xFF34D399),
-        Color(0xFF14B8A6),
-        Color(0xFF0891B2)
+        Color(0xFFE0F2F1),
+        Color(0xFFB2DFDB),
+        Color(0xFFB2EBF2)
       ],
       iconColor: Color(0xFF6EE7B7),
       accentColor: Color(0x3334D399),
@@ -120,9 +120,9 @@ class _HeroSectionState extends State<HeroSection> {
       title: 'Mentor of the Week',
       icon: LucideIcons.graduationCap,
       gradientColors: <Color>[
-        Color(0xFF60A5FA),
-        Color(0xFF0EA5E9),
-        Color(0xFF06B6D4)
+        Color(0xFFE0F2FE),
+        Color(0xFFBAE6FD),
+        Color(0xFFDBEAFE),
       ],
       iconColor: Color(0xFF93C5FD),
       accentColor: Color(0x3360A5FA),
@@ -131,9 +131,9 @@ class _HeroSectionState extends State<HeroSection> {
       title: 'Partner of the Week',
       icon: LucideIcons.heartHandshake,
       gradientColors: <Color>[
-        Color(0xFF882BE4),
-        Color(0xFFFF4E61),
-        Color(0xFFFFAD28)
+        Color(0xFFFDEFFB),
+        Color(0xFFFFF6E0),
+        Color(0xFFE0F7FA),
       ],
       iconColor: Color(0xFFFDA4AF),
       accentColor: Color(0x33FB7185),
@@ -142,12 +142,23 @@ class _HeroSectionState extends State<HeroSection> {
       title: 'Ambassador of the Week',
       icon: LucideIcons.users,
       gradientColors: <Color>[
-        Color(0xFF43CEA2),
-        Color(0xFF185A9D),
-        Color(0xFFB993D6),
+        Color(0xFFEDE9FE),
+        Color(0xFFF3F4F6),
+        Color(0xFFE0E7FF),
       ],
       iconColor: Color(0xFFC4B5FD),
       accentColor: Color(0x338B5CF6),
+    ),
+    'matches': WinnerCardConfig(
+      title: 'Matches',
+      icon: LucideIcons.users,
+      gradientColors: <Color>[
+        Color(0xFFE0F2FE),
+        Color(0xFFBAE6FD),
+        Color(0xFFDBEAFE),
+      ],
+      iconColor: Color(0xFF93C5FD),
+      accentColor: Color(0x3360A5FA),
     ),
   };
 
@@ -173,7 +184,7 @@ class _HeroSectionState extends State<HeroSection> {
           action: _profileController.myProfile.connecteds!.contains(user!.uid)
               ? 'Refer'
               : 'Follow',
-          action2: 'Enter Challenge'),
+          action2: 'Get Featured'),
       HeroItem(
           id: '2',
           type: 'mentor',
@@ -184,7 +195,7 @@ class _HeroSectionState extends State<HeroSection> {
           action: _profileController.myProfile.connecteds!.contains(mentor!.uid)
               ? 'Refer'
               : 'Follow',
-          action2: 'Enter Challenge'),
+          action2: 'Share Learning'),
       HeroItem(
           id: '3',
           type: 'backer',
@@ -195,7 +206,7 @@ class _HeroSectionState extends State<HeroSection> {
           action: _profileController.myProfile.connecteds!.contains(backer!.uid)
               ? 'Refer'
               : 'Follow',
-          action2: 'Enter Challenge'),
+          action2: 'Fund a project'),
       HeroItem(
           id: '4',
           type: 'partner',
@@ -203,7 +214,7 @@ class _HeroSectionState extends State<HeroSection> {
           subtitle: partner['companyName'] ?? '',
           image: partner['companyPhoto'],
           description: partner['companyDescription'] ?? '',
-          action: 'Claim Deals',
+          action: 'Claim Deal',
           action2: 'Become a Partner'),
       HeroItem(
         id: '5',
@@ -216,23 +227,22 @@ class _HeroSectionState extends State<HeroSection> {
         action2: 'Become Ambassador',
       ),
       HeroItem(
-          id: '8',
-          type: 'matches',
-          title: 'Matches',
-          subtitle: 'Find Your Business Match',
-          image:
-              'https://images.pexels.com/photos/8380089/pexels-photo-8380089.jpeg',
-          action: 'View Matches',
-          action2: ''),
+        id: '6',
+        type: 'matches',
+        title: 'Your Matches',
+        subtitle: 'Find your business matches',
+        image: '',
+        action: 'View Matches',
+      ),
     ];
   }
 
   void _startAutoRotation() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 12), (Timer timer) {
       final Duration timeSinceLast =
           DateTime.now().difference(_lastInteraction);
-      if (timeSinceLast.inSeconds >= 5) {
+      if (timeSinceLast.inSeconds >= 12) {
         final int nextIndex = (_currentIndex + 1) % heroItems.length;
         _pageController.animateToPage(
           nextIndex,
@@ -447,7 +457,7 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void enterambassadoroftheweek() {
-    Get.to(() => ImpactScreen(user: _profileController.myProfile));
+    Get.to(() => ReachScreen(user: _profileController.myProfile));
   }
 
   Widget _buildWinnerCard(HeroItem item) {
@@ -489,23 +499,31 @@ class _HeroSectionState extends State<HeroSection> {
 
           // Centered content
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(15),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 // Title
-                Text(
-                  config.title.toUpperCase(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1.5,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      config.title.toUpperCase(),
+                      style: const TextStyle(
+                        color: textColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                    Icon(
+                      LucideIcons.chevronRight,
+                      color: textColor,
+                      size: 20,
+                    ),
+                  ],
                 ),
-
-                const SizedBox(height: 12),
 
                 // Winner info card - FIXED HEIGHT
                 GestureDetector(
@@ -544,13 +562,15 @@ class _HeroSectionState extends State<HeroSection> {
                     }
                   },
                   child: Container(
-                    height: 65, // FIXED HEIGHT for all white cards
-                    padding: const EdgeInsets.all(10),
+                    height: 75,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.transparent,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         // Avatar
                         item.image != ''
@@ -588,10 +608,10 @@ class _HeroSectionState extends State<HeroSection> {
                                 Text(
                                   item.description,
                                   style: const TextStyle(
-                                    color: Colors.black54,
+                                    color: Colors.black87,
                                     fontSize: 12,
                                   ),
-                                  maxLines: 1,
+                                  maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               // Ambassador metrics
@@ -615,11 +635,9 @@ class _HeroSectionState extends State<HeroSection> {
                   ),
                 ),
 
-                const SizedBox(height: 15),
-
                 // Action buttons
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     GestureDetector(
                       onTap: () async {
@@ -681,14 +699,14 @@ class _HeroSectionState extends State<HeroSection> {
                                             ? LucideIcons.checkCircle2
                                             : LucideIcons.userPlus,
                                 size: 16,
-                                color: Colors.black),
+                                color: primaryColorLT),
                             const SizedBox(width: 5),
                             Text(
                               item.action,
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.black,
+                                color: primaryColorLT,
                               ),
                             ),
                           ],
@@ -700,7 +718,7 @@ class _HeroSectionState extends State<HeroSection> {
                       GestureDetector(
                         onTap: () async {
                           switch (item.action2.isNotEmpty ? item.action2 : '') {
-                            case 'Enter Challenge':
+                            case 'Get Featured':
                               item.id == '1'
                                   ? enterChallenge()
                                   : item.id == '2'
@@ -708,6 +726,9 @@ class _HeroSectionState extends State<HeroSection> {
                                       : item.id == '3'
                                           ? enterbackeroftheweek()
                                           : enterpartneroftheweek();
+                              break;
+                            case 'Fund a project':
+                              enterbackeroftheweek();
                               break;
                             case 'Become a Partner':
                               enterpartneroftheweek();
@@ -727,7 +748,7 @@ class _HeroSectionState extends State<HeroSection> {
                           decoration: BoxDecoration(
                               color: Colors.transparent,
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.white30)),
+                              border: Border.all(color: textColor)),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
                             vertical: 8,
@@ -740,7 +761,7 @@ class _HeroSectionState extends State<HeroSection> {
                                     ? LucideIcons.calendar
                                     : LucideIcons.plus,
                                 size: 16,
-                                color: Colors.white,
+                                color: textColor,
                               ),
                               const SizedBox(width: 5),
                               Text(
@@ -748,7 +769,7 @@ class _HeroSectionState extends State<HeroSection> {
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                                  color: textColor,
                                 ),
                               ),
                             ],
@@ -771,7 +792,11 @@ class _HeroSectionState extends State<HeroSection> {
       height: 48,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: config.gradientColors,
+          colors: <Color>[
+            Color(0xFFF3F4F6),
+            Color(0xFFE5E7EB),
+            Color(0xFFD1D5DB),
+          ],
         ),
         borderRadius: BorderRadius.circular(30),
       ),
@@ -779,7 +804,7 @@ class _HeroSectionState extends State<HeroSection> {
         child: Text(
           name.isNotEmpty ? name[0].toUpperCase() : '?',
           style: const TextStyle(
-            color: Colors.white,
+            color: textColor,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -798,7 +823,7 @@ class _HeroSectionState extends State<HeroSection> {
             onTap: _onUserInteraction,
             onPanDown: (_) => _onUserInteraction(),
             child: SizedBox(
-              height: 220,
+              height: 180,
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: heroItems.length,
@@ -885,7 +910,7 @@ class _HeroSectionState extends State<HeroSection> {
                             Get.to(() => BossUpPartner());
                             break;
                           case 'ambassador':
-                            Get.to(() => ImpactScreen(
+                            Get.to(() => ReachScreen(
                                 user: _profileController.myProfile));
                             break;
                         }

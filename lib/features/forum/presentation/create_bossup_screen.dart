@@ -73,7 +73,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
             appBar: AppBar(
               title: //Text(Provider.of<AppCommunities>(context, listen: false).label(_industry.categoryId, isUpdating: _isUpdating)),
                   Text(widget.industryModel.createTitle ??
-                      'Introduce Your Business'),
+                      'Share business to get featured'),
               automaticallyImplyLeading:
                   false, // Used for removing back buttoon.
               actions: <Widget>[
@@ -119,7 +119,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
 
                     decoration: inputDecoration.copyWith(
                         hintText: widget.industryModel.createDescription ??
-                            'Describe your Business'),
+                            'What is your business about? Share your story, values, and the benefits you offer to customers.'),
                   ),
                   const SizedBox(height: 12.0),
                   Row(

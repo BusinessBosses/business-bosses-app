@@ -46,9 +46,9 @@ Widget FriendProfileHeader(UserModel publicUser) {
             Expanded(
               child: CustomChildButton(
                 value: 0,
-                caption: 'Impact',
+                caption: 'Reach',
                 onPressed: () {
-                  Get.to(() => ImpactScreen(user: publicUser));
+                  Get.to(() => ReachScreen(user: publicUser));
                 },
               ),
             ),

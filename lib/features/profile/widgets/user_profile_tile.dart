@@ -117,29 +117,22 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           //     builder: (BuildContext context) =>
                           //         PreMatchModal());
                         },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 4.0),
-                          decoration: BoxDecoration(
-                            color: primaryBlue.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(500),
-                          ),
-                          child: Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            spacing: 5,
-                            children: <Widget>[
-                              Text(
-                                'View Matches',
-                                // profileController
-                                //     .myProfile.matchType!.capitalize
-                                //     .toString(),
-                                style: TextStyle(color: primaryBlue),
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'Find My Match',
+                              // profileController
+                              //     .myProfile.matchType!.capitalize
+                              //     .toString(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.blueAccent,
                               ),
-                              Icon(LucideIcons.arrowUpRight,
-                                  size: 10,
-                                  color: primaryBlue.withValues(alpha: 0.6))
-                            ],
-                          ),
+                            ),
+                            Icon(LucideIcons.chevronRight,
+                                size: 15, color: Colors.blueAccent)
+                          ],
                         ),
                       ),
                     widget.myProfile.isSubscribed

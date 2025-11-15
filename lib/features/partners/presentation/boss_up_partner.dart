@@ -59,7 +59,7 @@ class _BossUpPartnerState extends State<BossUpPartner> {
               ),
               centerTitle: true,
               title: const Text(
-                'Partner Challenge',
+                'Partner Deals',
                 textAlign: TextAlign.center,
               ),
             ),

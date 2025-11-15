@@ -61,52 +61,12 @@ Widget outlineButtonHeader(UserModel publicUser, UserModel myProfile,
             child: MCustomButton(
                 margin: const EdgeInsets.symmetric(horizontal: 4.0),
                 onPressed: () async {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const AlertDialog(
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            CircularProgressIndicator(),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                  final ApiResponseModel res = await ApiService.get(
-                      path:
-                          '/connection/connecteds/referals/${publicUser.uid}');
-                  // ignore: use_build_context_synchronously
-                  Navigator.pop(context);
-
-                  if (res.success) {
-                    if (res.data.isEmpty) {
-                      String message =
-                          'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
-                          'https://businessbosses.onelink.me/xLWk/36a2ff16';
-                      logEvent(publicUser.uid, 'user');
-                      socialShare(message);
-                    } else {
-                      Get.toNamed(
-                        Routes.referscreen,
-                        arguments: <String, dynamic>{'user': publicUser},
-                      );
-                    }
-                  }
-
-                  // if (profileController.myProfile.connectedCount == 0 &&
-                  //     profileController.myProfile.connectionCount == 0) {
-                  //   String message =
-                  //       'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
-                  //       'https://businessbosses.onelink.me/xLWk/36a2ff16';
-                  //   socialShare(message);
-                  // } else {
-                  //   Get.toNamed(Routes.referscreen,
-                  //       arguments: {'user': publicUser});
-                  // }
+                  String message =
+                      'Check out ${publicUser.username}\'s profile on Business Bosses\n'
+                      'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                  socialShare(message);
                 },
-                child: const Text('Refer')),
+                child: const Text('Share')),
           ),
         ]),
   );

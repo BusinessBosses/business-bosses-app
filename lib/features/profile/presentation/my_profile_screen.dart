@@ -195,7 +195,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 if (_selectedIndex == 0 || _selectedIndex == 4)
                   Positioned(
                       bottom: 12,
-                      right: 15,
+                      left: 15,
                       child: GestureDetector(
                         onTap: () {
                           Get.to(Get.toNamed(Routes.analysescreen));
@@ -212,7 +212,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 if (_selectedIndex == 0 || _selectedIndex == 4)
                   Positioned(
                       bottom: 12,
-                      left: 15,
+                      right: 15,
                       child: GestureDetector(
                           onTap: () {
                             _advancedDrawerController.showDrawer();

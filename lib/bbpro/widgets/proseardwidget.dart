@@ -61,8 +61,9 @@ class ProSearchbar extends StatelessWidget {
         decoration: inputDecoration.copyWith(
           fillColor: backgroundColor ?? Colors.white,
           contentPadding: EdgeInsets.symmetric(
-              horizontal: contentPadding ?? 0.0,
-              vertical: contentPadding ?? 0.0),
+            horizontal: contentPadding ?? 0.0,
+            vertical: contentPadding ?? 0.0,
+          ),
           hintText: hintText,
           hintStyle: TextStyle(
             color: textColor.withValues(alpha: 0.6),
@@ -83,43 +84,30 @@ class ProSearchbar extends StatelessWidget {
                     height: 20,
                   ),
                 ),
+
+          // ----------------------------
+          // ENABLE BORDER ONLY IF MARKETPLACE
+          // ----------------------------
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radius ?? 100.0),
-            borderSide: BorderSide.none,
+            borderSide: ismarketplace == true
+                ? const BorderSide(color: Colors.grey, width: 1)
+                : BorderSide.none,
           ),
-          // enabledBorder: OutlineInputBorder(
-          //   borderRadius:
-          //       BorderRadius.circular(10.0), // Add BorderRadius for enabled state
-          //   borderSide: BorderSide.none,
-          // ),
-          // focusedBorder: OutlineInputBorder(
-          //   borderRadius:
-          //       BorderRadius.circular(10.0), // Add BorderRadius for focused state
-          //   borderSide: BorderSide(
-          //       color: proprimaryColor), // Customize border color when focused
-          // ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radius ?? 100.0),
+            borderSide: ismarketplace == true
+                ? const BorderSide(color: Colors.grey, width: 1)
+                : BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radius ?? 100.0),
+            borderSide: ismarketplace == true
+                ? const BorderSide(color: proprimaryColor, width: 1.5)
+                : BorderSide.none,
+          ),
         ),
       ),
-      if (ismarketplace != null)
-        Positioned(
-          right: 0,
-          top: 0,
-          bottom: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: GestureDetector(
-              onTap: onfiltertap,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(7),
-                ),
-                child: SvgPicture.asset('assets/svgs/filterprosections.svg'),
-              ),
-            ),
-          ),
-        ),
     ]);
   }
 }

@@ -1,6 +1,9 @@
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'dart:ui';
 
 import 'package:lucide_icons/lucide_icons.dart';
@@ -15,122 +18,229 @@ class BlurredMatchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: Stack(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 15),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+    return GestureDetector(
+      onTap: () {
+        Get.bottomSheet(
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              topRight: Radius.circular(20.0),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
+          ),
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+              ),
+            ),
+            height: Get.height * 0.9,
+            child: const Center(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          // if (match.isPremium) _buildPremiumBadge(),
-                          // if (match.isPremium && match.isVerified)
-                          //   const SizedBox(width: 8),
-                          // if (match.isVerified) _buildVerifiedBadge(),
-                        ],
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          // color: _getMatchColor(match.matchPercentage),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          match.rating.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    match.name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: textDark,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    match.type,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: primaryBlue,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'High-quality opportunity matching your criteria...',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: textMedium,
-                    ),
-                  ),
+                  PremiumScreen(),
                 ],
               ),
             ),
           ),
-          Positioned.fill(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(16),
+          backgroundColor: Colors.white,
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        child: Stack(
+          children: <Widget>[
+            // Base card with actual content
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 15, top: 8, bottom: 8, right: 8),
+                child: IntrinsicHeight(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              spacing: 10,
+                              children: <Widget>[
+                                NetworkImageWithPlaceHolder(
+                                  imageUrl: match.photoUrl,
+                                  height: 40,
+                                  width: 40,
+                                  radius: 50,
+                                  cacheHeight: 256,
+                                  cacheWidth: 256,
+                                  placeHolder: Icons.person,
+                                  iconSize: 24,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Flexible(
+                                            child: Text(
+                                              match.name,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: textDark,
+                                              ),
+                                            ),
+                                          ),
+                                          if (match.verified) ...<Widget>[
+                                            const SizedBox(width: 4),
+                                            const Icon(
+                                              Icons.verified,
+                                              size: 15,
+                                              color: primaryColorLT,
+                                            ),
+                                          ],
+                                        ],
+                                      ),
+                                      Text(
+                                        match.type,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: primaryBlue,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                const Icon(Icons.star,
+                                    size: 16, color: premiumGold),
+                                const SizedBox(width: 4),
+                                Text(
+                                  match.rating.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: textDark,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                const Icon(LucideIcons.mapPin,
+                                    size: 14, color: textMedium),
+                                const SizedBox(width: 4),
+                                Text(
+                                  match.location,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: textMedium,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      '${match.quality}% Match',
+                                      style: const TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Text(
+                              match.description,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                color: textMedium,
+                                height: 1.4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(LucideIcons.chevronRight,
+                          color: textMedium, size: 18),
+                    ],
                   ),
-                  child: const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(
-                          LucideIcons.crown,
-                          size: 25,
-                          color: premiumGold,
+                ),
+              ),
+            ),
+            // Blur overlay
+            Positioned.fill(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 15),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              LucideIcons.crown,
+                              size: 30,
+                              color: premiumGold,
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Premium Match',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: textDark,
+                              ),
+                            ),
+                            Text(
+                              'Upgrade to view details',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: textMedium,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Premium Match',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: textDark,
-                          ),
-                        ),
-                        Text(
-                          'Upgrade to view details',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: textMedium,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

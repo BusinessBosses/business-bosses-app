@@ -14,8 +14,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-// Import your ImpactScreen (make sure to import the correct path)
-
 class BossupChallenge extends StatefulWidget {
   final Color? backgroundColor;
   final bool? ishome;
@@ -28,183 +26,160 @@ class BossupChallenge extends StatefulWidget {
 class _BossupChallengeState extends State<BossupChallenge> {
   final ProfileController profileController = Get.find();
 
-  // Mock data for ambassador challenge (replace with real data from your controller)
-  final Map<String, dynamic> ambassadorChallenge = <String, dynamic>{
-    'title': 'Ambassador of the Week',
-    'description': 'Invite 10 new businesses this week',
-    'imageUrl':
-        'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg',
-    'currentProgress': 3, // Current number of invites
-    'targetProgress': 10, // Target number of invites
-    'ranking': 5, // Current ranking
-    'totalParticipants': 50, // Total participants
-  };
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: widget.backgroundColor ?? Colors.white,
-        body: GetBuilder<ChallengeController>(
-          init: ChallengeController(),
-          builder: (ChallengeController controller) {
-            if (controller.loading.value) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (controller.error.value) {
-              return SafetyModel(
-                clickableText: 'Reload',
-                isLoading: false,
-                icon: const Icon(Icons.warning, color: Colors.black),
-                onTap: () async {
-                  controller.initCategories();
-                },
-                title: 'There was an error loading data',
-              );
-            } else {
-              return Container(
-                color: backgroundColor,
-                padding: EdgeInsets.all(15),
-                child: MasonryGridView.count(
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
-                  scrollDirection:
-                      widget.ishome! == true ? Axis.horizontal : Axis.vertical,
-                  itemCount: controller.categories.length +
-                      4, // Increased by 1 for ambassador challenge
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index < controller.categories.length) {
-                      final Industry category = controller.categories[index];
-                      return Challengeitem(
-                        time: category.industryId == '-MsUOGcOT9oRXGakCcJv'
-                            ? 'Every Monday'
-                            : _getChallengeStatus(category),
-                        category: category,
-                        title: category.industry!,
-                        imageurl: category.photo,
-                        categorytype:
-                            category.industryId == '-MsUOGcOT9oRXGakCcJv'
-                                ? 'Free Promotion'
-                                : category.award ?? 'Win',
-                        OnTap: () {
-                          DateTime now = DateTime.now();
-                          if (category.startAt != null &&
-                              now.isBefore(category.startAt!)) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text(
-                                    'How It Works!',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline,
+      backgroundColor: widget.backgroundColor ?? Colors.white,
+      body: GetBuilder<ChallengeController>(
+        init: ChallengeController(),
+        builder: (ChallengeController controller) {
+          if (controller.loading.value) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (controller.error.value) {
+            return SafetyModel(
+              clickableText: 'Reload',
+              isLoading: false,
+              icon: const Icon(Icons.warning, color: Colors.black),
+              onTap: () async {
+                controller.initCategories();
+              },
+              title: 'There was an error loading data',
+            );
+          } else {
+            return Container(
+              color: backgroundColor,
+              padding: EdgeInsets.all(15),
+              child: MasonryGridView.count(
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 20,
+                scrollDirection:
+                    widget.ishome! == true ? Axis.horizontal : Axis.vertical,
+
+                // UPDATED: removed ambassador challenge (+3 instead of +4)
+                itemCount: controller.categories.length + 3,
+
+                itemBuilder: (BuildContext context, int index) {
+                  if (index < controller.categories.length) {
+                    final Industry category = controller.categories[index];
+                    return Challengeitem(
+                      time: category.industryId == '-MsUOGcOT9oRXGakCcJv'
+                          ? 'Every Monday'
+                          : _getChallengeStatus(category),
+                      category: category,
+                      title: category.industry!,
+                      imageurl: category.photo,
+                      categorytype:
+                          category.industryId == '-MsUOGcOT9oRXGakCcJv'
+                              ? 'Free Promotion'
+                              : category.award ?? 'Win',
+                      OnTap: () {
+                        DateTime now = DateTime.now();
+                        if (category.startAt != null &&
+                            now.isBefore(category.startAt!)) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'How It Works!',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      category.criteria!,
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        category.criteria!,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        _calculateStartDate(category.startAt!),
-                                        style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: const Text('OK'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      _calculateStartDate(category.startAt!),
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
-                                );
-                              },
-                            );
-                            return;
-                          }
-                          Get.to(() => BossUpSection(
-                                industry: category,
-                                bossUp: controller.categories[0],
-                              ));
-                        },
-                      );
-                    } else if (index == controller.categories.length) {
-                      // Ambassador of the Week Challenge
-                      return Challengeitem(
-                        OnTap: () {
-                          // Navigate to ImpactScreen with ambassador challenge data
-                          Get.to(() => ImpactScreen(
-                                user: profileController.myProfile,
-                              ));
-                        },
-                        iscustom: true,
-                        title: ambassadorChallenge['title'],
-                        description: ambassadorChallenge['description'],
-                        imageurl: ambassadorChallenge['imageUrl'],
-                        // progress: ambassadorChallenge['currentProgress'] / ambassadorChallenge['targetProgress'],
-                        // showProgress: true,
-                        // additionalInfo: 'Rank: ${ambassadorChallenge['ranking']}/${ambassadorChallenge['totalParticipants']}',
-                      );
-                    } else if (index == controller.categories.length + 1) {
-                      return Challengeitem(
-                        OnTap: () {
-                          Get.to(() => const DonationsPage(
-                                ishome: false,
-                              ));
-                        },
-                        description:
-                            'Share your project to receive funding support ',
-                        iscustom: true,
-                        title: 'Crowdfund',
-                        imageurl: 'assets/images/donationpic.png',
-                      );
-                    } else if (index == controller.categories.length + 2) {
-                      return Challengeitem(
-                        OnTap: () {
-                          Get.to(() => LearningPage());
-                        },
-                        title: 'Mentor of the Week',
-                        description:
-                            'A journey of discovery, growth, and new opportunities.',
-                        imageurl:
-                            'https://images.pexels.com/photos/5905702/pexels-photo-5905702.jpeg',
-                      );
-                    } else {
-                      return Challengeitem(
-                        isPartner: true,
-                        OnTap: () {
-                          Get.to(() => BossUpPartner());
-                        },
-                        title: 'Partner\'s Deals',
-                        description:
-                            'A journey of discovery, growth, and new opportunities.',
-                        imageurl:
-                            'https://images.pexels.com/photos/5905702/pexels-photo-5905702.jpeg',
-                      );
-                    }
-                  },
-                  crossAxisCount: 2,
-                ),
-              );
-            }
-          },
-        ));
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          return;
+                        }
+                        Get.to(() => BossUpSection(
+                              industry: category,
+                              bossUp: controller.categories[0],
+                            ));
+                      },
+                    );
+                  }
+
+                  // REMOVED: Ambassador challenge block
+
+                  else if (index == controller.categories.length) {
+                    return Challengeitem(
+                      isCrowdfund: true,
+                      OnTap: () {
+                        Get.to(() => const DonationsPage(
+                              ishome: false,
+                            ));
+                      },
+                      description:
+                          'Share your project to receive funding support ',
+                      iscustom: true,
+                      title: 'Crowdfund',
+                      imageurl: 'assets/images/donationpic.png',
+                    );
+                  } else if (index == controller.categories.length + 1) {
+                    return Challengeitem(
+                      isMentor: true,
+                      OnTap: () {
+                        Get.to(() => LearningPage());
+                      },
+                      title: 'Mentor of the Week',
+                      description:
+                          'Share learnings and resources for upskilling and mentorship',
+                      imageurl:
+                          'https://images.pexels.com/photos/5905702/pexels-photo-5905702.jpeg',
+                    );
+                  } else {
+                    return Challengeitem(
+                      isPartner: true,
+                      OnTap: () {
+                        Get.to(() => BossUpPartner());
+                      },
+                      title: 'Partner\'s Deals',
+                      description: 'Discover and list deals and get customers.',
+                      imageurl:
+                          'https://images.pexels.com/photos/5905702/pexels-photo-5905702.jpeg',
+                    );
+                  }
+                },
+                crossAxisCount: 2,
+              ),
+            );
+          }
+        },
+      ),
+    );
   }
 
   String _calculateStartDate(DateTime startAt) {
-    // Format the endedAt date using DateFormat
     String formattedDate = DateFormat('d MMM').format(startAt);
     return 'Starts $formattedDate';
   }
@@ -221,7 +196,6 @@ class _BossupChallengeState extends State<BossupChallenge> {
   }
 
   String _calculateEndsDate(DateTime endedAt) {
-    // Format the endedAt date using DateFormat
     String formattedDate = DateFormat('d MMM').format(endedAt);
     return 'Ends $formattedDate';
   }

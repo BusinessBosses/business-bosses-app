@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:flutter/material.dart';
 
 // Your app's theme and model
@@ -6,6 +7,7 @@ import 'package:business_bosses_v2/features/matching_feature/models/match_model.
 
 // --- CORRECTED AND STANDARDIZED IMPORT PATH ---
 import 'package:business_bosses_v2/features/matching_feature/widgets/blurred_match_card.dart';
+import 'package:get/get.dart';
 
 class PremiumPrompt extends StatelessWidget {
   final List<MatchModel> blurredMatches;
@@ -26,27 +28,6 @@ class PremiumPrompt extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const Row(
-          children: <Widget>[
-            Icon(Icons.visibility_outlined, color: textMedium),
-            SizedBox(width: 8),
-            Text(
-              'More Matches Available',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: textMedium,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        // This map function will now work correctly
-        ...blurredMatches.map((MatchModel match) => Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: BlurredMatchCard(match: match),
-            )),
-        const SizedBox(height: 8),
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -57,41 +38,19 @@ class PremiumPrompt extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(20),
           ),
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(15),
           child: Column(
             children: <Widget>[
-              const Icon(Icons.star, size: 32, color: Colors.white),
-              const SizedBox(height: 12),
               const Text(
                 'Unlock All Matches',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
-              const Text(
-                'Get unlimited access to all matches, premium user priority, and advanced filtering',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white70,
-                  height: 1.4,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _FeatureItem(text: 'Unlimited weekly matches'),
-                  _FeatureItem(text: 'Priority in search results'),
-                  _FeatureItem(text: 'Advanced match analytics'),
-                  _FeatureItem(text: 'Direct contact information'),
-                ],
-              ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 10),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
@@ -112,34 +71,43 @@ class PremiumPrompt extends StatelessWidget {
             ],
           ),
         ),
+        SizedBox(height: 20),
+        // This map function will now work correctly
+        ...blurredMatches
+            .map((MatchModel match) => BlurredMatchCard(match: match)),
+        const SizedBox(height: 8),
       ],
     );
   }
 
   void _upgradeToPremium(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text('Upgrade to Premium'),
-        content: const Text(
-          'Get unlimited matches, priority placement, and advanced analytics.',
+    Get.bottomSheet(
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
         ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text(
-              'Upgrade',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
       ),
+      Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.0),
+            topRight: Radius.circular(20.0),
+          ),
+        ),
+        height: Get.height * 0.9,
+        child: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              PremiumScreen(),
+            ],
+          ),
+        ),
+      ),
+      backgroundColor: Colors.white,
     );
   }
 }

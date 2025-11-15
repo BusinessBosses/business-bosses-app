@@ -75,15 +75,24 @@ class BuyerRequestItem extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        request.title,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          color: textColor,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            request.title,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Icon(
+                            LucideIcons.chevronRight,
+                            size: 15,
+                          )
+                        ],
                       ),
                       Text(
                         request.description,
@@ -127,7 +136,7 @@ class BuyerRequestItem extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
-                        onPressed: onApply,
+                        onPressed: onTap,
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -136,7 +145,7 @@ class BuyerRequestItem extends StatelessWidget {
                           ),
                         ),
                         child: const Text(
-                          'Send Proposal',
+                          'View request',
                           style: TextStyle(
                             fontSize: 13,
                             color: primaryColorLT,

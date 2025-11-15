@@ -4,15 +4,15 @@ import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ImpactHeaderCard extends StatefulWidget {
+class ReachHeaderCard extends StatefulWidget {
   final dynamic data;
-  const ImpactHeaderCard({super.key, this.data});
+  const ReachHeaderCard({super.key, this.data});
 
   @override
-  State<ImpactHeaderCard> createState() => _ImpactHeaderCardState();
+  State<ReachHeaderCard> createState() => _ReachHeaderCardState();
 }
 
-class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
+class _ReachHeaderCardState extends State<ReachHeaderCard> {
   ProfileController profileController = Get.find();
   UserModel get profile => UserModel.fromMap(widget.data['user']);
   @override
@@ -37,7 +37,7 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'Impact Breakdown',
+                      'Reach Breakdown',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -46,7 +46,7 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Detailed view of your reach and influence',
+                      'Detailed view of reach and influence',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[600],
@@ -58,8 +58,8 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
             ),
           ),
 
-          // Impact Items
-          _buildImpactItem(
+          // Reach Items
+          _buildReachItem(
             icon: Icons.favorite,
             iconColor: Colors.red[400]!,
             iconBgColor: Colors.red[50]!,
@@ -68,7 +68,7 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
             value: widget.data['totalLikes'].toString(),
           ),
 
-          _buildImpactItem(
+          _buildReachItem(
             icon: Icons.visibility,
             iconColor: Colors.blue[400]!,
             iconBgColor: Colors.blue[50]!,
@@ -77,23 +77,23 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
             value: widget.data['totalViews'].toString(),
           ),
 
-          GestureDetector(
-            onTap: () {
-              Get.toNamed(
-                Routes.referalsscreen,
-                arguments: profile.uid,
-              );
-            },
-            child: _buildImpactItem(
-              icon: Icons.people,
-              iconColor: Colors.green[400]!,
-              iconBgColor: Colors.green[50]!,
-              title: 'Referrals',
-              subtitle: 'Click to see who',
-              value: 0.toString(),
-              isLast: false,
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     Get.toNamed(
+          //       Routes.referalsscreen,
+          //       arguments: profile.uid,
+          //     );
+          //   },
+          //   child: _buildReachItem(
+          //     icon: Icons.people,
+          //     iconColor: Colors.green[400]!,
+          //     iconBgColor: Colors.green[50]!,
+          //     title: 'Referrals',
+          //     subtitle: 'Click to see who',
+          //     value: 0.toString(),
+          //     isLast: false,
+          //   ),
+          // ),
 
           Padding(
             padding: const EdgeInsets.all(20),
@@ -101,7 +101,7 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  'Total Impact Score',
+                  'Total Reach Score',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -125,7 +125,7 @@ class _ImpactHeaderCardState extends State<ImpactHeaderCard> {
     );
   }
 
-  Widget _buildImpactItem({
+  Widget _buildReachItem({
     required IconData icon,
     required Color iconColor,
     required Color iconBgColor,

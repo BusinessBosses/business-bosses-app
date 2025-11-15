@@ -10,16 +10,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-class ImpactScreen extends StatefulWidget {
+class ReachScreen extends StatefulWidget {
   final UserModel user;
-  const ImpactScreen({super.key, required this.user});
+  const ReachScreen({super.key, required this.user});
 
   @override
-  State<ImpactScreen> createState() => _ImpactScreenState();
+  State<ReachScreen> createState() => _ReachScreenState();
 }
 
-class _ImpactScreenState extends State<ImpactScreen> {
-  final ImpactController controller = Get.put(ImpactController());
+class _ReachScreenState extends State<ReachScreen> {
+  final ReachController controller = Get.put(ReachController());
   final ProfileController profileController = Get.find();
   late String _referralId;
 
@@ -41,27 +41,28 @@ class _ImpactScreenState extends State<ImpactScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'Impact',
+          'Reach',
           textAlign: TextAlign.center,
         ),
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: GestureDetector(
-              onTap: () {
-                _shareWithFriends();
-              },
-              child: CircleAvatar(
-                radius: 20,
-                backgroundColor: backgroundColor,
-                child: Icon(
-                  LucideIcons.plus,
-                  size: 20,
-                  color: textColor,
-                ), // Invisible icon to maintain size'),
+          if (widget.user == profileController.myProfile)
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: GestureDetector(
+                onTap: () {
+                  _shareWithFriends();
+                },
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: backgroundColor,
+                  child: Icon(
+                    LucideIcons.plus,
+                    size: 20,
+                    color: textColor,
+                  ), // Invisible icon to maintain size'),
+                ),
               ),
-            ),
-          )
+            )
         ],
       ),
       body: Obx(() {
@@ -76,7 +77,7 @@ class _ImpactScreenState extends State<ImpactScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              ImpactHeaderCard(data: controller.data),
+              ReachHeaderCard(data: controller.data),
 
               /// Ambassador Challenge Sectionuser
               if (widget.user == profileController.myProfile)
@@ -103,7 +104,7 @@ class _ImpactScreenState extends State<ImpactScreen> {
                       ),
                       const SizedBox(height: 4),
                       const Text(
-                        'Boost your Impact Score by getting more likes, views, and referrals this week to move up the leaderboard!',
+                        'Boost your Reach Score by getting more likes, views, and referrals this week to move up the leaderboard!',
                         style: TextStyle(
                           fontSize: 12.5,
                           color: Colors.black87,

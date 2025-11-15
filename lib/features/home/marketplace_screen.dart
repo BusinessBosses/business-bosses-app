@@ -138,7 +138,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight + 50),
+        preferredSize: const Size.fromHeight(kToolbarHeight + 60),
         child: Column(
           children: <Widget>[
             if (!_ismarketplaceSearching)
@@ -174,7 +174,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                   2
                                               ? 'Search Services'
                                               : 'Find Suppliers for your Business',
-                                  ismarketplace: true,
                                   onChange: (String query) {
                                     if (query.trim().isEmpty) {
                                       supplierController.clearSupplierSearch();
@@ -356,18 +355,21 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         const SizedBox(width: 10),
         Padding(
           padding: const EdgeInsets.only(right: 15),
-          child: ProCustomButton(
-            padding: 0,
-            icon: SvgPicture.asset('assets/svgs/startatopic.svg'),
-            color: primaryColorLT,
-            onPressed: () {
-              _handleCreateButton(context);
-            },
-            text: _marketplaceTabController.index == 2
-                ? 'Add'
-                : _marketplaceTabController.index == 1
-                    ? 'Create request'
-                    : 'Sell',
+          child: SizedBox(
+            height: 40,
+            child: ProCustomButton(
+              padding: 0,
+              icon: SvgPicture.asset('assets/svgs/startatopic.svg'),
+              color: primaryColorLT,
+              onPressed: () {
+                _handleCreateButton(context);
+              },
+              text: _marketplaceTabController.index == 2
+                  ? 'Add'
+                  : _marketplaceTabController.index == 1
+                      ? 'Create request'
+                      : 'Sell',
+            ),
           ),
         ),
       ],
@@ -383,6 +385,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         children: <Widget>[
           Expanded(
             child: ProSearchbar(
+              ismarketplace: true,
               hintText: 'Search Marketplace',
               hasSearchIcon: true,
               backgroundColor: backgroundColor,

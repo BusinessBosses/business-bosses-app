@@ -76,9 +76,9 @@ class MyProfileHeader extends StatelessWidget {
                     Expanded(
                       child: CustomChildButton(
                         value: 0,
-                        caption: 'Impact',
+                        caption: 'Reach',
                         onPressed: () {
-                          Get.to(() => ImpactScreen(user: myProfile));
+                          Get.to(() => ReachScreen(user: myProfile));
                         },
                       ),
                     ),

@@ -24,22 +24,22 @@ class _PreMatchModalState extends State<PreMatchModal> {
   final List<Map<String, dynamic>> options = <Map<String, dynamic>>[
     <String, dynamic>{
       'icon': LucideIcons.coins,
-      'title': 'Funding / Investment',
+      'title': ' I need Funding / Investment',
       'subtitle': 'Buyer',
     },
     <String, dynamic>{
       'icon': LucideIcons.heartHandshake,
-      'title': 'Business Partners',
+      'title': 'I need Business Partners',
       'subtitle': 'Seller',
     },
     <String, dynamic>{
       'icon': LucideIcons.users,
-      'title': 'Customers / Supplier',
+      'title': 'I need Customers / Supplier',
       'subtitle': 'Supplier',
     },
     <String, dynamic>{
       'icon': LucideIcons.graduationCap,
-      'title': 'Mentorship',
+      'title': 'I need Mentorship',
       'subtitle': 'Partner',
     },
   ];
@@ -78,11 +78,11 @@ class _PreMatchModalState extends State<PreMatchModal> {
                     Icon(
                       LucideIcons.sparkles,
                       size: 45,
-                      color: primaryBlue,
+                      color: Colors.black,
                     ),
                     SizedBox(height: 12),
                     Text(
-                      'What do you need? We\'ll match you to your need',
+                      'What business match do you need?',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -107,61 +107,60 @@ class _PreMatchModalState extends State<PreMatchModal> {
               const SizedBox(height: 24),
 
               // Grid
-              Expanded(
-                child: Container(
-                  color: Colors.white,
-                  padding: const EdgeInsets.all(24),
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.1,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    children: options.map((Map<String, dynamic> option) {
-                      final bool isSelected =
-                          _selectedOption == option['subtitle'];
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedOption = option['subtitle'];
-                          });
-                        },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          decoration: BoxDecoration(
+              Container(
+                height: 380,
+                color: Colors.white,
+                padding: const EdgeInsets.all(24),
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1.1,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  children: options.map((Map<String, dynamic> option) {
+                    final bool isSelected =
+                        _selectedOption == option['subtitle'];
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedOption = option['subtitle'];
+                        });
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? Colors.black.withValues(alpha: 0.1)
+                              : Colors.white,
+                          border: Border.all(
                             color: isSelected
-                                ? primaryBlue.withValues(alpha: 0.1)
-                                : Colors.white,
-                            border: Border.all(
-                              color: isSelected
-                                  ? primaryBlue
-                                  : Colors.grey.shade300,
-                              width: isSelected ? 2 : 1,
-                            ),
-                            borderRadius: BorderRadius.circular(14),
+                                ? Colors.black
+                                : Colors.grey.shade300,
+                            width: isSelected ? 2 : 1,
                           ),
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(option['icon'],
-                                  size: 30,
-                                  color: isSelected ? primaryBlue : textDark),
-                              const SizedBox(height: 12),
-                              Text(
-                                option['title'],
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: isSelected ? primaryBlue : textDark,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
+                          borderRadius: BorderRadius.circular(14),
                         ),
-                      );
-                    }).toList(),
-                  ),
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(option['icon'],
+                                size: 30,
+                                color: isSelected ? Colors.black : textDark),
+                            const SizedBox(height: 12),
+                            Text(
+                              option['title'],
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: isSelected ? Colors.black : textDark,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
 
@@ -175,7 +174,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
                     isProcessing: isSubmitting,
                     buttonType: ButtonType.elevated,
                     textColor: Colors.white,
-                    backgroundColor: primaryBlue,
+                    backgroundColor: Colors.black,
                     onPressed: _selectedOption == null
                         ? () {}
                         : () async {
@@ -220,7 +219,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
                             }
                           },
                     child: const Text(
-                      'Save Changes',
+                      'Find My Match',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

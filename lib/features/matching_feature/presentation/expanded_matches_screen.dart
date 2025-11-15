@@ -80,7 +80,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
           itemBuilder: (BuildContext context, int index) {
             final MatchModel match = clearMatches[index];
             return Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
+              padding: const EdgeInsets.only(bottom: 15.0),
               child: MatchCard(
                 match: match,
                 userType: match.matchType ?? 'Not Specified',
@@ -189,14 +189,12 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                 children: <Widget>[
                   if (widget.isMarketplace != true)
                     MatchHeader(
-                      title:
-                          'Your Top ${matchController.matchList.length} Matches',
+                      title: 'Your Top Matches',
                       subtitle: 'for this week based on your profile',
                       weeklyMatches: matchController.matchList.length,
                       totalMatches: matchController.matchList.length,
                       matchQuality: averageQuality,
                     ),
-                  const SizedBox(height: 20),
 
                   // --- RENDER UI BASED ON SUBSCRIPTION ---
                   if (isSubscribed)

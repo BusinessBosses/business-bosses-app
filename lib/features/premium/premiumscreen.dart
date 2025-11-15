@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../utils/theme/theme.dart';
@@ -617,7 +618,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                           height: 16),
                                       const SizedBox(width: 18),
                                       const Text(
-                                        'Access to Exclusive Partner Offers',
+                                        'Access to exclusive partner offers',
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w600),
@@ -648,14 +649,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(30),
-                                          gradient: LinearGradient(
-                                            colors: <Color>[
-                                              Color(0xFF6366F1),
-                                              Color(0xFF818CF8)
-                                            ],
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                          ),
                                         ),
                                         child: Material(
                                           color: Colors.transparent,
@@ -666,17 +659,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                 child: Stack(
                                                   alignment: Alignment.center,
                                                   children: <Widget>[
-                                                    Text(
-                                                      'ai',
-                                                      style: TextStyle(
-                                                        color: Colors
-                                                            .white, // Choose a contrasting color
-                                                        fontSize:
-                                                            14, // Adjust size to fit within the icon
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
+                                                    Icon(LucideIcons.network)
                                                   ],
                                                 ),
                                               )),
@@ -684,7 +667,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                       ),
                                       const SizedBox(width: 18),
                                       const Text(
-                                        'Generate Unlimited Promotion',
+                                        'Find more leads & business matches',
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w600),

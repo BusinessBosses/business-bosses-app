@@ -1,24 +1,25 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
+import 'package:business_bosses_v2/features/chat/models/my_message.dart';
+import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
+import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-import 'package:business_bosses_v2/features/chat/chat_screen.dart';
-import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
-import 'package:business_bosses_v2/features/chat/models/my_message.dart';
-import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
-import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
-import 'package:business_bosses_v2/features/home/sellProduct.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
-
-class BottomBar extends StatelessWidget {
-  BottomBar({
+class BottomBar extends StatefulWidget {
+  const BottomBar({
     super.key,
     required this.activeIndex,
     this.scrollControl,
@@ -26,12 +27,76 @@ class BottomBar extends StatelessWidget {
 
   final int activeIndex;
   final VoidCallback? scrollControl;
+
+  @override
+  State<BottomBar> createState() => _BottomBarState();
+}
+
+class _BottomBarState extends State<BottomBar> {
   final ChallengeController controller = Get.put(ChallengeController());
+
+  late Industry industry;
+
+  @override
+  void initState() {
+    super.initState();
+    industry = controller.categories[0];
+  }
 
   @override
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
     ChatController chatController = Get.find();
+
+    void enterChallenge() {
+      int now = DateTime.now().millisecondsSinceEpoch;
+      int previousStamp =
+          profileController.myProfile.bossOfTheWeekTimeStamp ?? 0;
+
+      if ((previousStamp + 1209600000) > now &&
+          industry.industryId == '-MsUOGcOT9oRXGakCcJv') {
+        const SnackBar snackBar = SnackBar(
+          duration: Duration(seconds: 4),
+          content: Text(
+            'You may have posted in Boss Up Challenge'
+            ' in the past 12 weeks. You can only post once in 12 weeks.',
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        if (industry.industryId == '-MsUOGcOT9oRXGakCcJv') {
+          Get.to(
+            () => CreateBossUpScreen(industryModel: industry),
+            arguments: <String, Object?>{
+              'isBossUp': true,
+              'industryId': industry.industryId,
+            },
+            binding: BindingsBuilder<CreateBossUpController>.put(
+                () => CreateBossUpController()),
+          );
+        } else {
+          if (profileController.myProfile.postChallenges!
+              .contains(industry.industryId)) {
+            const SnackBar snackBar = SnackBar(
+              duration: Duration(seconds: 4),
+              content: Text('You can only post once in a challenge'),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            return;
+          }
+          Get.to(
+            () => CreateBossUpScreen(industryModel: industry),
+            arguments: <String, Object?>{
+              'isBossUp': true,
+              'industryId': industry.industryId,
+            },
+            binding: BindingsBuilder<CreateBossUpController>.put(
+              () => CreateBossUpController(),
+            ),
+          );
+        }
+      }
+    }
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -65,18 +130,18 @@ class BottomBar extends StatelessWidget {
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
-                          icon: activeIndex == 0
+                          icon: widget.activeIndex == 0
                               ? 'assets/svgs/homeufilled.svg'
                               : 'assets/svgs/homeu.svg',
                           label: 'Home',
                           onTap: () {
-                            if (activeIndex == 0) {
-                              scrollControl?.call();
+                            if (widget.activeIndex == 0) {
+                              widget.scrollControl?.call();
                               return;
                             }
                             Get.toNamed(Routes.home);
                           },
-                          isActive: activeIndex == 0,
+                          isActive: widget.activeIndex == 0,
                         ),
                       ),
 
@@ -85,19 +150,19 @@ class BottomBar extends StatelessWidget {
                         flex: 10,
                         child: Stack(children: <Widget>[
                           BottomTabButton(
-                            icon: activeIndex == 1
+                            icon: widget.activeIndex == 1
                                 ? 'assets/svgs/messagefilled.svg'
                                 : 'assets/svgs/bottombarchat.svg',
                             label: 'Inbox',
                             onTap: () {
-                              if (activeIndex == 1) return;
-                              if (activeIndex == 0) {
+                              if (widget.activeIndex == 1) return;
+                              if (widget.activeIndex == 0) {
                                 Get.to(() => const ChatScreen());
                               } else {
                                 Get.off(() => const ChatScreen());
                               }
                             },
-                            isActive: activeIndex == 1,
+                            isActive: widget.activeIndex == 1,
                           ),
                           if (chatController.chats
                               .where((MessageModel element) =>
@@ -168,24 +233,24 @@ class BottomBar extends StatelessWidget {
                                             onTap: () {
                                               Navigator.pop(context);
                                               if (index == 0) {
-                                                Get.toNamed(Routes.createPost);
+                                                enterChallenge();
                                               } else if (index == 1) {
                                                 sellProduct(context);
                                               } else if (index == 2) {
-                                                Get.to(BuyerRequests());
+                                                Get.toNamed(Routes.createPost);
                                               } else if (index == 3) {
-                                                Get.to(AllCommunitiesScreen());
+                                                Get.to(BuyerRequests());
                                               }
                                             },
                                             minVerticalPadding: 0,
                                             contentPadding:
                                                 const EdgeInsets.only(left: 10),
                                             leading: index == 0
-                                                ? SvgPicture.asset(
-                                                    'assets/svgs/text.svg',
-                                                    height: 25,
+                                                ? Icon(
+                                                    LucideIcons.trophy,
                                                     color: textColor.withValues(
                                                         alpha: 1),
+                                                    size: 26,
                                                   )
                                                 : index == 1
                                                     ? SvgPicture.asset(
@@ -196,15 +261,15 @@ class BottomBar extends StatelessWidget {
                                                                 alpha: 1),
                                                       )
                                                     : index == 2
-                                                        ? Icon(
-                                                            LucideIcons.coins,
+                                                        ? SvgPicture.asset(
+                                                            'assets/svgs/text.svg',
+                                                            height: 25,
                                                             color: textColor
                                                                 .withValues(
                                                                     alpha: 1),
-                                                            size: 26,
                                                           )
                                                         : Icon(
-                                                            LucideIcons.gift,
+                                                            LucideIcons.coins,
                                                             color: textColor
                                                                 .withValues(
                                                                     alpha: 1),
@@ -212,12 +277,12 @@ class BottomBar extends StatelessWidget {
                                                           ),
                                             title: Text(
                                               index == 0
-                                                  ? 'Post content, discussion, etc'
+                                                  ? 'Share business, get featured'
                                                   : index == 1
                                                       ? 'Sell your product & service'
                                                       : index == 2
-                                                          ? 'Create buyer request'
-                                                          : 'Enter free promotion',
+                                                          ? 'Post content, discussion, etc'
+                                                          : 'Create buyer request',
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w700,
@@ -233,7 +298,7 @@ class BottomBar extends StatelessWidget {
                             );
                           },
                           label: 'Post',
-                          isActive: activeIndex == 2,
+                          isActive: widget.activeIndex == 2,
                         ),
                       ),
 
@@ -242,18 +307,18 @@ class BottomBar extends StatelessWidget {
                         flex: 10,
                         child: BottomTabButton(
                           label: 'Marketplace',
-                          icon: activeIndex == 3
+                          icon: widget.activeIndex == 3
                               ? 'assets/svgs/cartufilled.svg'
                               : 'assets/svgs/cartu.svg',
                           onTap: () {
-                            if (activeIndex == 3) return;
-                            if (activeIndex == 0) {
+                            if (widget.activeIndex == 3) return;
+                            if (widget.activeIndex == 0) {
                               Get.to(() => const MarketplaceScreen());
                             } else {
                               Get.off(() => const MarketplaceScreen());
                             }
                           },
-                          isActive: activeIndex == 3,
+                          isActive: widget.activeIndex == 3,
                         ),
                       ),
 
@@ -263,14 +328,14 @@ class BottomBar extends StatelessWidget {
                         child: BottomTabButton(
                           icon: '',
                           onTap: () {
-                            if (activeIndex == 4) return;
-                            if (activeIndex == 0) {
+                            if (widget.activeIndex == 4) return;
+                            if (widget.activeIndex == 0) {
                               Get.toNamed(Routes.myProfile);
                             } else {
                               Get.offAndToNamed(Routes.myProfile);
                             }
                           },
-                          isActive: activeIndex == 4,
+                          isActive: widget.activeIndex == 4,
                           label: 'Profile',
                         ),
                       ),

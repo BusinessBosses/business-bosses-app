@@ -14,6 +14,8 @@ class Challengeitem extends StatelessWidget {
   final bool? iscustom;
   final String? description;
   final bool? isPartner;
+  final bool? isCrowdfund;
+  final bool? isMentor;
 
   const Challengeitem({
     super.key,
@@ -26,6 +28,8 @@ class Challengeitem extends StatelessWidget {
     this.iscustom,
     this.isPartner,
     this.description,
+    this.isCrowdfund,
+    this.isMentor,
   });
 
   @override
@@ -43,33 +47,12 @@ class Challengeitem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Flexible(
-                  child: Text(
-                    title ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-                SvgPicture.asset(
-                  'assets/svgs/nexticon.svg',
-                  color: textColor,
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
             // ✅ Image container
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: _buildImage(imageurl),
             ),
-            const SizedBox(height: 10),
+
             // ✅ Description or challenge info
             description != null
                 ? _buildDescriptionSection(context)
@@ -118,7 +101,7 @@ class Challengeitem extends StatelessWidget {
 
   Widget _buildDescriptionSection(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10.0),
+      padding: const EdgeInsets.only(top: 5.0),
       child: Column(
         children: <Widget>[
           Text(
@@ -134,7 +117,13 @@ class Challengeitem extends StatelessWidget {
             child: OutlinedButton(
               onPressed: OnTap,
               child: Text(
-                isPartner == true ? 'Claim Deals' : 'Enter Challenge',
+                isPartner == true
+                    ? 'Claim Deals'
+                    : isCrowdfund == true
+                        ? 'Fund a Project'
+                        : isMentor == true
+                            ? 'Start Learning'
+                            : 'Enter',
                 style: const TextStyle(
                   color: primaryColorLT,
                   fontSize: 12,
@@ -186,7 +175,7 @@ class Challengeitem extends StatelessWidget {
           child: OutlinedButton(
             onPressed: OnTap,
             child: const Text(
-              'Enter Challenge',
+              'Enter',
               style: TextStyle(
                 color: primaryColorLT,
                 fontSize: 12,

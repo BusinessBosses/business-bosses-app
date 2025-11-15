@@ -37,67 +37,100 @@ class HomeAppBar extends StatelessWidget {
           preferredSize: const Size.fromHeight(50.0),
           child: Container(
             color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
             child: Row(
               spacing: 15,
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          GestureDetector(
-                              onTap: onMenuClick,
-                              child: const CustomMenuButton()),
-                          if (hasUnreadNotification)
-                            Positioned(
-                              right: 0,
-                              child: Container(
-                                width: 10,
-                                height: 10,
-                                decoration: const BoxDecoration(
-                                  color: Colors.red,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
                 // Search button
 
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => AllCommunitiesScreen());
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                    decoration: BoxDecoration(
-                        color: backgroundcolorinterface,
-                        borderRadius: BorderRadius.circular(50)),
-                    child: Row(
-                      spacing: 8,
-                      children: <Widget>[
-                        SvgPicture.asset('assets/svgs/bossupu.svg', height: 15),
-                        Text(
-                          'Boss Up & Win',
-                          style: TextStyle(
-                            color: textColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
+                Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(() => AllCommunitiesScreen());
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                      decoration: BoxDecoration(
+                          color: backgroundcolorinterface,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Row(
+                        spacing: 8,
+                        children: <Widget>[
+                          SvgPicture.asset('assets/svgs/bossupu.svg',
+                              color: textColor, height: 22),
+                          Text(
+                            'Boss Up & Grow',
+                            style: TextStyle(
+                              color: textColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
 
                 // Coins button
+                Expanded(
+                  child: Row(
+                    children: <Widget>[
+                      // GestureDetector(
+                      //   onTap: () => Get.toNamed(Routes.notifications),
+                      //   child: Stack(
+                      //     children: <Widget>[
+                      //       GestureDetector(
+                      //           child: const CircleAvatar(
+                      //         radius: 16,
+                      //         backgroundColor: backgroundColor,
+                      //         child: Icon(
+                      //           LucideIcons.bell,
+                      //           size: 17,
+                      //           color: textColor,
+                      //         ),
+                      //       )),
+                      //       if (hasUnreadNotification)
+                      //         Positioned(
+                      //           right: 0,
+                      //           child: Container(
+                      //             width: 10,
+                      //             height: 10,
+                      //             decoration: const BoxDecoration(
+                      //               color: Colors.red,
+                      //               shape: BoxShape.circle,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //     ],
+                      //   ),
+                      // ),
+
+//Search
+                    ],
+                  ),
+                ),
+
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.completesearchingscreen);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(80),
+                      color: Colors.transparent,
+                    ),
+                    child: CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Colors.transparent,
+                      child:
+                          Icon(LucideIcons.search, size: 25, color: textColor),
+                    ),
+                  ),
+                ),
+
                 GestureDetector(
                   onTap: () => Get.toNamed(Routes.promotionscreen),
                   child: Container(
@@ -124,52 +157,32 @@ class HomeAppBar extends StatelessWidget {
                   ),
                 ),
 
-                GestureDetector(
-                  onTap: () => Get.toNamed(Routes.notifications),
-                  child: Stack(
+                Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      GestureDetector(
-                          child: const CircleAvatar(
-                        radius: 16,
-                        backgroundColor: backgroundColor,
-                        child: Icon(
-                          LucideIcons.bell,
-                          size: 17,
-                          color: textColor,
-                        ),
-                      )),
-                      if (hasUnreadNotification)
-                        Positioned(
-                          right: 0,
-                          child: Container(
-                            width: 10,
-                            height: 10,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
+                      Stack(
+                        children: <Widget>[
+                          GestureDetector(
+                              onTap: onMenuClick,
+                              child: const CustomMenuButton()),
+                          if (hasUnreadNotification)
+                            Positioned(
+                              right: 0,
+                              child: Container(
+                                width: 10,
+                                height: 10,
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
+                        ],
+                      )
                     ],
-                  ),
-                ),
-
-//Search
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(Routes.completesearchingscreen);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(80),
-                      color: Colors.transparent,
-                    ),
-                    child: CircleAvatar(
-                      radius: 16,
-                      backgroundColor: Colors.transparent,
-                      child:
-                          Icon(LucideIcons.search, size: 25, color: textColor),
-                    ),
                   ),
                 ),
               ],

@@ -21,13 +21,7 @@ class MatchHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: <Color>[primaryBlue, accentPurple],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      decoration: BoxDecoration(color: backgroundColor),
       padding: const EdgeInsets.all(15),
       child: Column(
         children: <Widget>[
@@ -36,7 +30,7 @@ class MatchHeader extends StatelessWidget {
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: textColor,
             ),
             textAlign: TextAlign.center,
           ),
@@ -44,7 +38,7 @@ class MatchHeader extends StatelessWidget {
             subtitle,
             style: const TextStyle(
               fontSize: 16,
-              color: Colors.white70,
+              color: textColor,
             ),
             textAlign: TextAlign.center,
           ),

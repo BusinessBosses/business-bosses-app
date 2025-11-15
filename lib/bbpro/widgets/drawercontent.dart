@@ -6,12 +6,15 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
+import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -24,7 +27,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-class DrawerContent extends StatelessWidget {
+class DrawerContent extends StatefulWidget {
   final UserModel? currentuser;
   final VoidCallback? oncloseclick;
   final VoidCallback? oncrowfundclick;
@@ -37,6 +40,21 @@ class DrawerContent extends StatelessWidget {
       this.hasUnreadNotification = false});
 
   @override
+  State<DrawerContent> createState() => _DrawerContentState();
+}
+
+class _DrawerContentState extends State<DrawerContent> {
+  ProfileController profileController = Get.find();
+  ChallengeController controller = Get.put(ChallengeController());
+  late Industry industry;
+
+  @override
+  void initState() {
+    super.initState();
+    industry = controller.categories[0];
+  }
+
+  @override
   Widget build(BuildContext context) {
     // void showPromoteSheet() {
     //   showModalBottomSheet(
@@ -47,8 +65,6 @@ class DrawerContent extends StatelessWidget {
     //   );
     // }
 
-    ProfileController profileController = Get.find();
-    ChallengeController controller = Get.put(ChallengeController());
     // ignore: unused_local_variable
     final Industry category = controller.categories.isNotEmpty
         ? controller.categories[0]
@@ -72,6 +88,38 @@ class DrawerContent extends StatelessWidget {
           });
     List<Map<String, dynamic>> tilesData = <Map<String, dynamic>>[
       {
+        'icon': Icon(LucideIcons.bell,
+            size: 25,
+            color: widget.hasUnreadNotification
+                ? primaryColorLT
+                : textColor), // Changed to Icon widget
+
+        'title': 'Notifications',
+        'description':
+            'View your notifications, including updates, messages, and alerts.',
+        'onTileClicked': () {
+          widget.oncloseclick?.call();
+          Get.to(() => const NotificationsScreen());
+        },
+      },
+      {
+        'icon': SvgPicture.asset(
+          'assets/svgs/bossupu.svg',
+          height: 24,
+          colorFilter: const ColorFilter.mode(
+            textColor,
+            BlendMode.srcIn,
+          ),
+        ),
+        'title': 'Boss Up & Grow',
+        'description':
+            'Connect with other users and build your network. Find connections who share your interests.',
+        'onTileClicked': () {
+          widget.oncloseclick?.call();
+          Get.to(() => const AllCommunitiesScreen());
+        },
+      },
+      {
         'icon': SvgPicture.asset(
           'assets/svgs/cartu.svg',
           height: 25,
@@ -84,7 +132,7 @@ class DrawerContent extends StatelessWidget {
         'description':
             'Browse and purchase items from other users. You can find a wide variety of items here.',
         'onTileClicked': () {
-          oncloseclick?.call();
+          widget.oncloseclick?.call();
           Get.to(() => const MarketplaceScreen());
         },
       },
@@ -101,7 +149,7 @@ class DrawerContent extends StatelessWidget {
         'description':
             'Everything you need to manage and grow your business 10X faster, all in one place.',
         'onTileClicked': () {
-          oncloseclick?.call();
+          widget.oncloseclick?.call();
           Get.to(() => const MyProfileScreen(
                 currentIndex: 1,
               ));
@@ -116,85 +164,10 @@ class DrawerContent extends StatelessWidget {
         'description':
             'Monetize your business. Explore various revenue streams and opportunities on business bosses.',
         'onTileClicked': () {
-          oncloseclick?.call();
+          widget.oncloseclick?.call();
           Get.toNamed(Routes.promotionscreen);
         },
       },
-      {
-        'icon': SvgPicture.asset(
-          'assets/svgs/bossupu.svg',
-          height: 25,
-          colorFilter: const ColorFilter.mode(
-            textColor,
-            BlendMode.srcIn,
-          ),
-        ),
-        'title': 'Boss Up',
-        'description':
-            'Connect with other users and build your network. Find connections who share your interests.',
-        'onTileClicked': () {
-          oncloseclick?.call();
-          Get.to(() => const AllCommunitiesScreen());
-        },
-      },
-      !profileController.myProfile.isSubscribed
-          ? {
-              'icon': SvgPicture.asset(
-                'assets/svgs/growfilled.svg',
-                height: 22,
-                colorFilter: const ColorFilter.mode(
-                  textColor,
-                  BlendMode.srcIn,
-                ),
-              ),
-              'title': 'Grow',
-              'description':
-                  'Access tools and resources to grow your business and reach new heights.',
-              'onTileClicked': () {
-                Get.bottomSheet(
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0),
-                    ),
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.9,
-                    child: const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 0.0, top: 0, bottom: 10),
-                              child: PremiumScreen()),
-                        ],
-                      ),
-                    ),
-                  ),
-                  backgroundColor: Colors.white,
-                );
-              }
-            }
-          : {
-              'icon': SvgPicture.asset(
-                'assets/svgs/messages.svg',
-                height: 25,
-                colorFilter: const ColorFilter.mode(
-                  textColor,
-                  BlendMode.srcIn,
-                ),
-              ),
-              'title': 'Messages',
-              'description':
-                  'Communicate with other users through private messages. Stay connected with your connections and customers',
-              'onTileClicked': () {
-                oncloseclick?.call();
-                Get.to(() => const ChatScreen());
-              },
-            },
       {
         'icon': SvgPicture.asset(
           'assets/svgs/calendar.svg',
@@ -208,7 +181,7 @@ class DrawerContent extends StatelessWidget {
         'description':
             'Discover and attend events hosted by other users. Find events that match your interests and goals.',
         'onTileClicked': () {
-          oncloseclick?.call();
+          widget.oncloseclick?.call();
           Get.toNamed(Routes.liveEvents);
         },
       },
@@ -225,30 +198,10 @@ class DrawerContent extends StatelessWidget {
         'description':
             'Discover and attend events hosted by other users. Find events that match your interests and goals.',
         'onTileClicked': () {
-          oncloseclick?.call();
+          widget.oncloseclick?.call();
           Get.to(() => const MyOrdersScreen());
         },
       },
-      // {
-      //   'icon': SvgPicture.asset(
-      //     'assets/svgs/supporter.svg',
-      //     height: 25,
-      //     colorFilter: const ColorFilter.mode(
-      //       textColor,
-      //       BlendMode.srcIn,
-      //     ),
-      //   ),
-      //   'title': 'Crowdfund',
-      //   'description':
-      //       'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
-      //   'onTileClicked': () {
-      //     oncloseclick?.call();
-      //     Get.to(() => const AllCommunitiesScreen(
-      //           initialBossupTabIndex: 3,
-      //         ));
-      //     oncrowfundclick?.call();
-      //   },
-      // },
       {
         'icon': SvgPicture.asset(
           'assets/svgs/partner.svg',
@@ -262,7 +215,7 @@ class DrawerContent extends StatelessWidget {
         'description':
             'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
         'onTileClicked': () {
-          oncloseclick?.call();
+          widget.oncloseclick?.call();
           Get.to(() => const BossUpPartner());
         }
       },
@@ -279,11 +232,61 @@ class DrawerContent extends StatelessWidget {
         'description':
             'Customize your app preferences and manage your account settings. ',
         'onTileClicked': () {
-          oncloseclick?.call();
+          widget.oncloseclick?.call();
           Get.to(() => const SettingsScreen());
         },
       },
     ];
+
+    void enterChallenge() {
+      int now = DateTime.now().millisecondsSinceEpoch;
+      int previousStamp =
+          profileController.myProfile.bossOfTheWeekTimeStamp ?? 0;
+
+      if ((previousStamp + 1209600000) > now &&
+          industry.industryId == '-MsUOGcOT9oRXGakCcJv') {
+        const SnackBar snackBar = SnackBar(
+          duration: Duration(seconds: 4),
+          content: Text(
+            'You may have posted in Boss Up Challenge'
+            ' in the past 12 weeks. You can only post once in 12 weeks.',
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        if (industry.industryId == '-MsUOGcOT9oRXGakCcJv') {
+          Get.to(
+            () => CreateBossUpScreen(industryModel: industry),
+            arguments: <String, Object?>{
+              'isBossUp': true,
+              'industryId': industry.industryId,
+            },
+            binding: BindingsBuilder<CreateBossUpController>.put(
+                () => CreateBossUpController()),
+          );
+        } else {
+          if (profileController.myProfile.postChallenges!
+              .contains(industry.industryId)) {
+            const SnackBar snackBar = SnackBar(
+              duration: Duration(seconds: 4),
+              content: Text('You can only post once in a challenge'),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            return;
+          }
+          Get.to(
+            () => CreateBossUpScreen(industryModel: industry),
+            arguments: <String, Object?>{
+              'isBossUp': true,
+              'industryId': industry.industryId,
+            },
+            binding: BindingsBuilder<CreateBossUpController>.put(
+              () => CreateBossUpController(),
+            ),
+          );
+        }
+      }
+    }
 
     return SafeArea(
       child: ListTileTheme(
@@ -331,7 +334,7 @@ class DrawerContent extends StatelessWidget {
                   Row(
                     children: [
                       GestureDetector(
-                        onTap: oncloseclick,
+                        onTap: widget.oncloseclick,
                         child: const CircleAvatar(
                           backgroundColor: Colors.transparent,
                           child: Icon(
@@ -406,52 +409,43 @@ class DrawerContent extends StatelessWidget {
                                             onTap: () {
                                               Navigator.pop(context);
                                               if (index == 0) {
-                                                Get.toNamed(Routes.createPost);
+                                                enterChallenge();
                                               } else if (index == 1) {
                                                 sellProduct(context);
                                               } else if (index == 2) {
-                                                Get.to(BuyerRequests());
+                                                Get.toNamed(Routes.createPost);
                                               } else if (index == 3) {
-                                                Get.to(AllCommunitiesScreen());
+                                                Get.to(BuyerRequests());
                                               }
                                             },
                                             minVerticalPadding: 0,
                                             contentPadding:
                                                 const EdgeInsets.only(left: 10),
                                             leading: index == 0
-                                                ? SvgPicture.asset(
-                                                    'assets/svgs/text.svg',
-                                                    height: 25,
-                                                    colorFilter:
-                                                        ColorFilter.mode(
-                                                            textColor
-                                                                .withValues(
-                                                                    alpha: 1),
-                                                            BlendMode.srcIn),
+                                                ? Icon(
+                                                    LucideIcons.trophy,
+                                                    color: textColor.withValues(
+                                                        alpha: 1),
+                                                    size: 26,
                                                   )
                                                 : index == 1
                                                     ? SvgPicture.asset(
                                                         'assets/svgs/sellicon.svg',
                                                         height: 25,
-                                                        colorFilter:
-                                                            ColorFilter.mode(
-                                                                textColor
-                                                                    .withValues(
-                                                                        alpha:
-                                                                            1),
-                                                                BlendMode
-                                                                    .srcIn),
+                                                        color: textColor
+                                                            .withValues(
+                                                                alpha: 1),
                                                       )
                                                     : index == 2
-                                                        ? Icon(
-                                                            LucideIcons.coins,
+                                                        ? SvgPicture.asset(
+                                                            'assets/svgs/text.svg',
+                                                            height: 25,
                                                             color: textColor
                                                                 .withValues(
                                                                     alpha: 1),
-                                                            size: 26,
                                                           )
                                                         : Icon(
-                                                            LucideIcons.gift,
+                                                            LucideIcons.coins,
                                                             color: textColor
                                                                 .withValues(
                                                                     alpha: 1),
@@ -459,12 +453,12 @@ class DrawerContent extends StatelessWidget {
                                                           ),
                                             title: Text(
                                               index == 0
-                                                  ? 'Post content, discussion, etc'
+                                                  ? 'Share business, get featured'
                                                   : index == 1
                                                       ? 'Sell your product & service'
                                                       : index == 2
-                                                          ? 'Create buyer request'
-                                                          : 'Enter free promotion',
+                                                          ? 'Post content, discussion, etc'
+                                                          : 'Create buyer request',
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w700,
@@ -497,7 +491,7 @@ class DrawerContent extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(1000),
                           child: NetworkImageWithPlaceHolder(
-                            imageUrl: currentuser?.photoUrl ?? '',
+                            imageUrl: widget.currentuser?.photoUrl ?? '',
                             radius: radius,
                             placeHolder: Icons.person,
                             iconSize: 22.0,
@@ -513,14 +507,16 @@ class DrawerContent extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('@${currentuser?.username.toLowerCase() ?? ''}',
+                        Text(
+                            '@${widget.currentuser?.username.toLowerCase() ?? ''}',
                             style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w700)),
                         Row(
                           children: [
                             Text(
-                              currentuser != null
-                                  ? currentuser!.connectionCount.toString()
+                              widget.currentuser != null
+                                  ? widget.currentuser!.connectionCount
+                                      .toString()
                                   : '0',
                               style: const TextStyle(
                                 color: primaryColorLT,
@@ -534,9 +530,10 @@ class DrawerContent extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              currentuser != null &&
-                                      currentuser?.connecteds != null
-                                  ? currentuser!.connecteds!.length.toString()
+                              widget.currentuser != null &&
+                                      widget.currentuser?.connecteds != null
+                                  ? widget.currentuser!.connecteds!.length
+                                      .toString()
                                   : '0',
                               style: const TextStyle(
                                 color: primaryColorLT,
