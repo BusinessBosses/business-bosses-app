@@ -165,18 +165,19 @@ class HomeController extends GetxController {
   }
 
   /// Convert dynamic post list to PostModel list efficiently
-  void processPostsToState(dynamic post) {
-    final List<dynamic> psts = List<dynamic>.from(post ?? []);
-    if (psts.isEmpty) return;
+  void processPostsToState(List<dynamic>? list) {
+    if (list == null || list.isEmpty) return;
 
-    posts.addAll(psts.map((e) {
+    final parsed = list.map((e) {
       return PostModel.fromMap({
         ...e,
         'likes': _extractUserIds(e['likes']),
         'reposts': _extractUserIds(e['reposts']),
         'coins': _extractUserIds(e['coins']),
       });
-    }));
+    });
+
+    posts.addAll(parsed);
   }
 
   /// Convert forums efficiently
@@ -241,40 +242,32 @@ class HomeController extends GetxController {
 
   /// Mix posts and promoted content for feed
   void mixPostandPromoted() {
-    mixedPosts
-      ..clear()
-      ..add({'type': 'notype'});
+    final List<Map<String, dynamic>> result = [
+      {'type': 'notype'}
+    ];
 
-    /// INSERT one promoted post at the very top if available
-    if (promotedPosts.isNotEmpty) {
-      mixedPosts.add({'type': 'promotedPost', 'index': 0}); // FIRST promoted
-    }
-
-    int postCount = posts.length;
-    int promotedPostIndex = (promotedPosts.isNotEmpty ? 1 : 0);
+    int promotedPostIndex = 0;
     int promotedCourseIndex = 0;
 
-    for (int i = 0; i < postCount; i++) {
-      mixedPosts.add({'type': 'post', 'index': i, 'id': posts[i].postId});
+    // Insert first promoted post
+    if (promotedPosts.isNotEmpty) {
+      result.add({'type': 'promotedPost', 'index': 0});
+      promotedPostIndex = 1;
+    }
 
-      // Insert a promoted item every 2 posts if available
+    for (int i = 0; i < posts.length; i++) {
+      result.add({'type': 'post', 'index': i, 'id': posts[i].postId});
+
       if ((i + 1) % 2 == 0) {
         if (promotedPostIndex < promotedPosts.length) {
-          mixedPosts
-              .add({'type': 'promotedPost', 'index': promotedPostIndex++});
+          result.add({'type': 'promotedPost', 'index': promotedPostIndex++});
         } else if (promotedCourseIndex < promotedCourses.length) {
-          mixedPosts.add({'type': 'course', 'index': promotedCourseIndex++});
+          result.add({'type': 'course', 'index': promotedCourseIndex++});
         }
       }
     }
 
-    // Append any remaining promoted items
-    while (promotedPostIndex < promotedPosts.length) {
-      mixedPosts.add({'type': 'promotedPost', 'index': promotedPostIndex++});
-    }
-    while (promotedCourseIndex < promotedCourses.length) {
-      mixedPosts.add({'type': 'course', 'index': promotedCourseIndex++});
-    }
+    mixedPosts = result;
   }
 
   /// Combine post and forum data
@@ -1250,55 +1243,12 @@ class HomeController extends GetxController {
   void onInit() {
     profileController = Get.put(ProfileController());
     _chatController = Get.put(ChatController());
-    // _createPostController = Get.put(CreatePostController());
-    initSocket();
-    loadData();
+
+    initSocket(); // only ONE socket setup
+
+    loadData(); // loads once
+
     super.onInit();
-    // Function to establish the WebSocket connection
-    void connectSocket() {
-      socket = io.io(Constants.socketUrl, <String, dynamic>{
-        'transports': <String>['websocket'],
-      });
-
-      socket.onConnect((_) {
-        if (kDebugMode) {
-          print('Connection established');
-        }
-      });
-
-      socket.on('newPostEvent', (dynamic data) {
-        final int postIndex = posts.indexWhere(
-            (PostModel element) => element.postId == data['newPost']['postId']);
-        if (postIndex == -1) {
-          sinkPosts(data);
-        }
-      });
-
-      socket.onDisconnect((_) {
-        if (kDebugMode) {
-          print('Connection Disconnection');
-        }
-        // Reconnect the socket when it's disconnected
-        Future.delayed(const Duration(seconds: 5), () {
-          connectSocket();
-        });
-      });
-
-      socket.onConnectError((dynamic err) {
-        if (kDebugMode) {
-          print(err);
-        }
-      });
-
-      socket.onError((dynamic err) {
-        if (kDebugMode) {
-          print(err);
-        }
-      });
-    }
-
-    // Initial connection
-    connectSocket();
   }
 
   @override

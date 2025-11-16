@@ -4,7 +4,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 class HomeRepository {
   /// GET INIT DATA
   static Future<ApiResponseModel> fetchData() async {
-    final ApiResponseModel response = await ApiService.get(path: 'init');
+    final ApiResponseModel response = await ApiService.get(path: 'init/new');
     return response;
   }
 
