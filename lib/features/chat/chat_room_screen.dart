@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -49,7 +48,6 @@ class ChatRoomScreen extends StatefulWidget {
 
 class ChatRoomScreenState extends State<ChatRoomScreen> {
   final ProfileController _profileController = Get.find();
-  final HomeController _homeController = Get.find();
   final ChatController _chatController = Get.find();
   late TextEditingController _textEditingController;
   late UserModel args;

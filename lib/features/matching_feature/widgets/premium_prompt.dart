@@ -1,5 +1,7 @@
-import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unused_element
 import 'package:flutter/material.dart';
+
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 
 // Your app's theme and model
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -115,7 +117,9 @@ class PremiumPrompt extends StatelessWidget {
 class _FeatureItem extends StatelessWidget {
   final String text;
 
-  const _FeatureItem({required this.text});
+  const _FeatureItem({
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'dart:core';
 
-import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/analytics/presentation/howtouseapp.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -48,16 +47,16 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
     super.initState();
   }
 
-  void _shareWithFriends() {
-    // ignore: unnecessary_null_comparison
-    if (profileController.myProfile.inviteId == null) return;
-    String message = 'Check out Business Bosses.\n'
-        'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
-        'Invite id: $profileController.myProfile.inviteId';
-    logEvent(profileController.myProfile.inviteId, 'invite');
-    socialShare(message);
-  }
+  // void _shareWithFriends() {
+  //   // ignore: unnecessary_null_comparison
+  //   if (profileController.myProfile.inviteId == null) return;
+  //   String message = 'Check out Business Bosses.\n'
+  //       'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
+  //       'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
+  //       'Invite id: $profileController.myProfile.inviteId';
+  //   logEvent(profileController.myProfile.inviteId, 'invite');
+  //   socialShare(message);
+  // }
 
   @override
   Widget build(BuildContext context) {

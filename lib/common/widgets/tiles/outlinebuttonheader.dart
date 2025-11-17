@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/action/action.dart';
+// import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
@@ -12,15 +12,15 @@ import '../../../utils/theme/theme.dart';
 
 // ignore: non_constant_identifier_names, public_member_api_docs
 Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
-  void shareWithFriends() {
-    // ignore: unnecessary_null_comparison
-    if (myProfile.inviteId == null) return;
-    String message = 'Check out Business Bosses.\n'
-        'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
-        'Invite id: $myProfile.inviteId';
-    socialShare(message);
-  }
+  // void shareWithFriends() {
+  //   // ignore: unnecessary_null_comparison
+  //   if (myProfile.inviteId == null) return;
+  //   String message = 'Check out Business Bosses.\n'
+  //       'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
+  //       'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
+  //       'Invite id: $myProfile.inviteId';
+  //   socialShare(message);
+  // }
 
   return Container(
     height: 50.0,

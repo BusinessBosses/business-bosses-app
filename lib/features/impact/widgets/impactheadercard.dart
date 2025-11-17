@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -132,7 +131,6 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
     required String title,
     required String subtitle,
     required String value,
-    bool isLast = false,
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
