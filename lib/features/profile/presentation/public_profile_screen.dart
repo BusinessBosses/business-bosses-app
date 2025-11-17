@@ -280,7 +280,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                         return <Widget>[
                           SliverStickyHeader(
                             sticky: false,
-                            header: FriendProfileHeader(publicUser),
+                            header: friendProfileHeader(publicUser),
                           )
                         ];
                       },

@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/impact/presentation/impactscreen.dart';
+import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
 import 'package:business_bosses_v2/features/profile/widgets/public_profile_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -6,7 +6,7 @@ import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/custom_child_button.dart';
 import '../../../navigation/routes.dart';
 
-Widget FriendProfileHeader(UserModel publicUser) {
+Widget friendProfileHeader(UserModel publicUser) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     child: Column(
