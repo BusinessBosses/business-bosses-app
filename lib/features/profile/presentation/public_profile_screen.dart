@@ -17,7 +17,7 @@ import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
 import '../controller/profile_controller.dart';
 import '../widgets/friendoutlinebuttonheader.dart';
-import '../widgets/friendprofileheader.dart';
+import '../widgets/friend_profile_header.dart';
 
 // ignore: public_member_api_docs, must_be_immutable
 class PublicProfileScreen extends StatefulWidget {
@@ -55,7 +55,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     });
     try {
       final Map<String, dynamic> res =
-          await ProfileController.loadData(publicUser.uid);
+          await _profileController.loadData(publicUser.uid);
       final UserModel modelizedUser = UserModel.fromMap(
           <dynamic, dynamic>{...res['user'], 'interests': res['industries']});
       publicUser = modelizedUser;

@@ -2,7 +2,7 @@ import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
-import 'package:business_bosses_v2/features/impact/widgets/impactheadercard.dart';
+import 'package:business_bosses_v2/features/impact/widgets/impact_header_card.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +71,8 @@ class _ReachScreenState extends State<ReachScreen> {
         }
 
         final dynamic invites = controller.data['invitesThisWeek'] ?? 0;
-        final dynamic rank = controller.data['rank'] ?? 12;
+        final dynamic rank =
+            controller.data['user']['weeklyRankingScore'] ?? 12;
 
         return SingleChildScrollView(
           child: Column(

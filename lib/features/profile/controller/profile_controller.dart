@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/repository/profile_repository.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,6 +17,7 @@ class ProfileController extends GetxController {
   UserModel myProfile = UserModel();
   List<PostModel> posts = <PostModel>[];
   RxBool isLoading = RxBool(false);
+  dynamic impact;
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
   void processDataToState(
@@ -84,12 +86,24 @@ class ProfileController extends GetxController {
     update();
   }
 
-  static Future<Map<String, dynamic>> loadData(String userId) async {
+  Future<Map<String, dynamic>> loadData(String userId) async {
     List<PostModel> posts = <PostModel>[];
-    final ApiResponseModel response =
-        // ProfileRepos
-        await ProfileRepository.fetchData(0, 50, userId);
+    final List<ApiResponseModel> results =
+        await Future.wait(<Future<ApiResponseModel>>[
+      ProfileRepository.fetchData(0, 50, userId), // Profile API
+      ApiService.get(path: 'impact/user/$userId'), // Impact API
+    ]);
+
+    final ApiResponseModel response = results[0];
+    final ApiResponseModel impactResponse = results[1];
+
     if (response.success) {
+      if (impactResponse.success) {
+        impact = impactResponse.data; // assign impact data
+      } else {
+        impact = <dynamic, dynamic>{}; // fallback if error
+      }
+
       final List<dynamic> psts = response.data['posts']['rows'];
       for (int i = 0; i < psts.length; i++) {
         posts.add(PostModel.fromMap(<String, dynamic>{
@@ -228,7 +242,7 @@ class ProfileController extends GetxController {
     update();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final Map<String, dynamic> res =
-        await ProfileController.loadData(prefs.getString(Constants.USER_ID)!);
+        await loadData(prefs.getString(Constants.USER_ID)!);
 
     posts = res['posts'] ?? <PostModel>[];
     isLoading(false);

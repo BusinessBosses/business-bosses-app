@@ -52,7 +52,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
 
   Future<void> loadUser() async {
     final Map<String, dynamic> currentUser =
-        await ProfileController.loadData(widget.user.uid);
+        await _profileController.loadData(widget.user.uid);
     if (mounted) {
       setState(() {
         cUser = UserModel.fromMap(currentUser['user']);
@@ -719,8 +719,8 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                             );
                             await processData();
                             final Map<String, dynamic> currentUser =
-                                await ProfileController.loadData(
-                                    widget.user.uid);
+                                await _profileController
+                                    .loadData(widget.user.uid);
                             if (mounted) {
                               setState(
                                 () {
@@ -936,7 +936,8 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                           );
                           await processData();
                           final Map<String, dynamic> currentUser =
-                              await ProfileController.loadData(widget.user.uid);
+                              await _profileController
+                                  .loadData(widget.user.uid);
                           if (mounted) {
                             setState(
                               () {

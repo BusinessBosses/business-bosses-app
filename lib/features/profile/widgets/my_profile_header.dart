@@ -93,7 +93,7 @@ class MyProfileHeader extends StatelessWidget {
     );
   }
 
-  Widget OutlinedContainer(BuildContext context, Widget child,
+  Widget outlinedContainer(BuildContext context, Widget child,
       {required Function onTap}) {
     return GestureDetector(
       onTap: () {},
@@ -112,7 +112,7 @@ class MyProfileHeader extends StatelessWidget {
     );
   }
 
-  Widget LRCL(context, String value, String caption) {
+  Widget lRCL(BuildContext context, String value, String caption) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
