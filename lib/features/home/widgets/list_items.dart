@@ -49,7 +49,6 @@ class _PostsWidgetState extends State<PostsWidget> {
       if (widget.scrollController.position.pixels >=
               widget.scrollController.position.maxScrollExtent - 300 &&
           !controller.loadingMore.value) {
-        // Call fetchPosts when near the end of the list
         controller.fetchPosts();
       }
     });
@@ -65,32 +64,36 @@ class _PostsWidgetState extends State<PostsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      controller: widget.scrollController,
-      itemCount: controller.mixedPosts.length + 2,
-      itemBuilder: (BuildContext context, int index) {
-        if (index == 0) {
-          return Column(
-            children: <Widget>[],
-          );
-        }
+    return Obx(() => ListView.builder(
+          shrinkWrap: true,
+          controller: widget.scrollController,
+          itemCount: controller.mixedPosts.length +
+              2 +
+              (controller.loadingMore.value ? 1 : 0),
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return Column(children: <Widget>[]);
+            }
 
-        if (index == 1) {
-          return Column(
-            children: <Widget>[
-              HeroSection(),
-            ],
-          );
-        }
+            if (index == 1) {
+              return Column(children: <Widget>[HeroSection()]);
+            }
 
-        return _buildPostWidget(index - 2);
-      },
-    );
+            // Loader at the bottom when loadingMore is true
+            if (index == controller.mixedPosts.length + 2 &&
+                controller.loadingMore.value) {
+              return const Padding(
+                padding: EdgeInsets.only(bottom: 100),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            return _buildPostWidget(index - 2);
+          },
+        ));
   }
 
   Widget _buildPostWidget(int postIndex) {
-    // List to hold multiple widgets (ChallengeSection + Post)
     List<Widget> widgets = <Widget>[];
 
     if (postIndex == 3) {
@@ -106,97 +109,71 @@ class _PostsWidgetState extends State<PostsWidget> {
                     return item.images != null &&
                         item.images!.isNotEmpty &&
                         item.images!.first.isNotEmpty &&
-                        (item).user!.isSubscribed;
+                        item.user!.isSubscribed;
                   } else {
                     return (item as Service).images != null &&
-                        (item).images!.isNotEmpty &&
-                        (item).images![0].isNotEmpty &&
-                        (item).user!.isSubscribed;
+                        item.images!.isNotEmpty &&
+                        item.images![0].isNotEmpty &&
+                        item.user!.isSubscribed;
                   }
                 }).take(10).toList(),
             ],
           ),
-          const SizedBox(
-            height: 7,
-          )
+          const SizedBox(height: 7),
         ],
       ));
     }
 
     if (postIndex == 5) {
-      widgets.add(const Column(
-        children: <Widget>[
-          RelevantPeopleTile(),
-        ],
-      ));
+      widgets.add(const Column(children: <Widget>[RelevantPeopleTile()]));
     }
 
     final dynamic currentPost = controller.mixedPosts[postIndex];
-
     Widget postWidget;
 
     if (currentPost['type'] == 'post') {
       final PostModel post = controller.posts[currentPost['index']];
+      final bool hasIncrementedView =
+          controller.itemsWithIncrementedViews.contains(post.postId);
 
-      // Handle regular non-promoted PostModel
-      final PostModel nonPromotedPostModel = post;
-      final bool hasIncrementedView = controller.itemsWithIncrementedViews
-          .contains(nonPromotedPostModel.postId);
       postWidget = VisibilityDetector(
         key: Key(postIndex.toString()),
         onVisibilityChanged: (VisibilityInfo info) {
           if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-            controller.updateViews(nonPromotedPostModel);
-            setState(() {
-              controller.itemsWithIncrementedViews
-                  .add(nonPromotedPostModel.postId);
-            });
+            controller.updateViews(post);
+            controller.itemsWithIncrementedViews.add(post.postId);
           }
         },
         child: PostTile(
           controller: controller,
-          post: nonPromotedPostModel,
-          onPageChange: (int page) {
-            if (widget.onPageChange != null) {
-              widget.onPageChange!(page);
-            }
-          },
+          post: post,
+          onPageChange: widget.onPageChange,
         ),
       );
     } else if (currentPost['type'] == 'promotedPost') {
       final PostModel post = controller.promotedPosts[currentPost['index']];
+      final bool hasIncrementedView =
+          controller.itemsWithIncrementedViews.contains(post.postId);
 
-      // Handle promoted PostModel
-      final PostModel promotedPostModel = post;
-      final bool hasIncrementedView = controller.itemsWithIncrementedViews
-          .contains(promotedPostModel.postId);
       postWidget = VisibilityDetector(
         key: Key(postIndex.toString()),
         onVisibilityChanged: (VisibilityInfo info) {
           if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-            controller.updateViews(promotedPostModel);
-            setState(() {
-              controller.itemsWithIncrementedViews
-                  .add(promotedPostModel.postId);
-            });
+            controller.updateViews(post);
+            controller.itemsWithIncrementedViews.add(post.postId);
           }
         },
         child: PostTile(
           controller: controller,
-          post: promotedPostModel,
-          onPageChange: (int page) {
-            if (widget.onPageChange != null) {
-              widget.onPageChange!(page);
-            }
-          },
+          post: post,
+          onPageChange: widget.onPageChange,
         ),
       );
     } else if (currentPost['type'] == 'course') {
-      final CourseModel post = controller.promotedCourses[currentPost['index']];
+      final CourseModel course =
+          controller.promotedCourses[currentPost['index']];
 
-      // Handle CourseModel
       postWidget = Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const Padding(
@@ -207,7 +184,7 @@ class _PostsWidgetState extends State<PostsWidget> {
               size: 10,
             ),
           ),
-          CourseItem(course: post),
+          CourseItem(course: course),
         ],
       );
     } else {
@@ -215,9 +192,6 @@ class _PostsWidgetState extends State<PostsWidget> {
     }
 
     widgets.add(postWidget);
-
-    return Column(
-      children: widgets,
-    );
+    return Column(children: widgets);
   }
 }

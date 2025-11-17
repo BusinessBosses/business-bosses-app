@@ -112,7 +112,8 @@ dependencies:
   flutter_markdown_plus: ^1.0.3
   flutter_paystack_plus: ^2.1.0
   lucide_icons: ^0.257.0
-  
+  firebase_crashlytics: ^5.0.4
+
 dev_dependencies:
   flutter_launcher_icons: ^0.14.3
   flutter_lints: ^6.0.0
@@ -120,8 +121,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 # dependency_overrides:
-  # photo_manager: ^3.0.0-dev.2
-  # stripe_android: "9.5.0+1"
+# photo_manager: ^3.0.0-dev.2
+# stripe_android: "9.5.0+1"
 
 flutter_native_splash:
   android: true

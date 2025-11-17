@@ -22,7 +22,6 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -35,7 +34,6 @@ class HomeController extends GetxController {
   late final ChatController _chatController;
   // ignore: unused_field
   late final CreatePostController _createPostController;
-  // final MarketController _marketController = Get.put(MarketController());
   // final CommunitiesController _communitiesController =
   //     Get.put(CommunitiesController());
   final GetStorage sandBox = GetStorage();
@@ -1069,7 +1067,6 @@ class HomeController extends GetxController {
 
       addCoinDaily();
       _showMyDialog();
-
       // Fire and forget: send device token
       FirebaseMessaging.instance.getToken().then((value) {
         if (value != null) {

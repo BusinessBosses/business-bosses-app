@@ -38,168 +38,224 @@ class ShopController extends GetxController {
   ApiResponseModel? error;
 
   Future<bool> initShop() async {
-    ApiResponseModel response = await ApiService.get(
-      path: 'shops/user-shops/${profileController.myProfile.uid}',
-    );
-    if (response.success) {
-      if (response.data['rows'].isEmpty) {
-        return false;
-      } else {
-        shop = Shop.fromMap(<String, dynamic>{
-          ...response.data['rows'][0],
-          'user': profileController.myProfile.toMap()
-        });
-        update();
-        return true;
-      }
-    } else {
+    try {
+      final ApiResponseModel response = await ApiService.get(
+        path: 'shops/user-shops/${profileController.myProfile.uid}',
+      );
+
+      if (!response.success || response.data['rows'].isEmpty) return false;
+
+      shop = Shop.fromMap(<String, dynamic>{
+        ...response.data['rows'][0],
+        'user': profileController.myProfile.toMap(),
+      });
+
+      update();
+      return true;
+    } catch (e) {
+      print('Error initializing shop: $e');
       return false;
     }
   }
 
   Future<bool> initShopData() async {
-    final bool response = await initShop();
-    if (response) {
-      ApiResponseModel productResponse = await ApiService.get(
-        path: 'goods/user-products/${profileController.myProfile.uid}',
-      );
-      products.clear();
-      if (productResponse.success) {
-        for (int i = 0; i < productResponse.data['rows'].length; i++) {
-          products.add(Product.fromJson(productResponse.data['rows'][i]));
-        }
-      }
-      ApiResponseModel servicesResponse = await ApiService.get(
-        path: 'services/user-services/${profileController.myProfile.uid}',
-      );
-      services.clear();
-      if (servicesResponse.success) {
-        for (int i = 0; i < servicesResponse.data['rows'].length; i++) {
-          services.add(Service.fromJson(servicesResponse.data['rows'][i]));
-        }
-      }
-      ApiResponseModel customReponse = await ApiService.get(
-        path: 'custom-items/user/${profileController.myProfile.uid}',
-      );
-      customItems.clear();
-      if (customReponse.success) {
-        if (customReponse.data.isNotEmpty) {
-          for (int i = 0; i < customReponse.data.length; i++) {
-            customItems.add(Customitem.fromJson(customReponse.data[i]));
-          }
-        }
-      }
-      items.clear();
-      items.addAll(<Object>[...products, ...services, ...customItems]);
-      items.sort((Object a, Object b) {
-        // Assuming both Product and Service have a createdAt property.
-        DateTime aDate = (a is Product)
-            ? a.createdAt
-            : (a is Service)
-                ? a.createdAt
-                : (a as Customitem).createdAt;
+    try {
+      final bool hasShop = await initShop();
+      if (!hasShop) return false;
 
-        DateTime bDate = (b is Product)
-            ? b.createdAt
-            : (b is Service)
-                ? b.createdAt
-                : (b as Customitem).createdAt;
-        return bDate.compareTo(aDate);
-      });
+      final String uid = profileController.myProfile.uid;
 
-      ApiResponseModel vendorsReponse = await ApiService.get(
-        path: 'vendors/user/${profileController.myProfile.uid}',
-      );
-      suppliers.clear();
-      if (vendorsReponse.success) {
-        for (int i = 0; i < vendorsReponse.data['rows'].length; i++) {
-          suppliers.add(Vendor.fromMap(vendorsReponse.data['rows'][i]));
-        }
-      }
+      // Fetch data in parallel
+      final List<Future<ApiResponseModel>> requests =
+          <Future<ApiResponseModel>>[
+        ApiService.get(path: 'goods/user-products/$uid'),
+        ApiService.get(path: 'services/user-services/$uid'),
+        ApiService.get(path: 'custom-items/user/$uid'),
+        ApiService.get(path: 'vendors/user/$uid'),
+      ];
+
+      final List<ApiResponseModel> responses = await Future.wait(requests);
+
+      final ApiResponseModel productResponse = responses[0];
+      final ApiResponseModel servicesResponse = responses[1];
+      final ApiResponseModel customResponse = responses[2];
+      final ApiResponseModel vendorsResponse = responses[3];
+
+      // Map products
+      products
+        ..clear()
+        ..addAll(
+          _parseRows<Product>(
+            response: productResponse,
+            fromMap: (data) => Product.fromJson(data),
+          ),
+        );
+
+      // Map services
+      services
+        ..clear()
+        ..addAll(
+          _parseRows<Service>(
+            response: servicesResponse,
+            fromMap: (data) => Service.fromJson(data),
+          ),
+        );
+
+      // Map custom items
+      customItems
+        ..clear()
+        ..addAll(
+          _parseAnyList<Customitem>(
+            response: customResponse,
+            fromMap: (data) => Customitem.fromJson(data),
+          ),
+        );
+
+      // Combine items and sort
+      items
+        ..clear()
+        ..addAll(<Object>[...products, ...services, ...customItems])
+        ..sort((Object a, Object b) =>
+            _getCreatedAt(b).compareTo(_getCreatedAt(a)));
+
+      // Map vendors
+      suppliers
+        ..clear()
+        ..addAll(
+          _parseRows<Vendor>(
+            response: vendorsResponse,
+            fromMap: (data) => Vendor.fromMap(data),
+          ),
+        );
+
       update();
       return true;
-    } else {
+    } catch (e) {
+      print('Error initializing shop data: $e');
       return false;
     }
   }
 
-  Future<bool> initUserShop(UserModel user) async {
-    userShop = null;
-    ApiResponseModel response = await ApiService.get(
-      path: 'shops/user-shops/${user.uid}',
-    );
-    if (response.success) {
-      if (response.data['rows'].isEmpty) {
-        return false;
-      } else {
-        userShop = Shop.fromMap(<String, dynamic>{
-          ...response.data['rows'][0],
-          'user': user.toMap()
-        });
-        ApiService.put(
-          path: 'shops/${userShop!.id}',
-          body: <String, dynamic>{
-            'views': userShop!.views + 1,
-          },
-        );
-      }
-    } else {
-      return false;
+// Parse rows under 'data['rows']'
+  List<T> _parseRows<T>({
+    required ApiResponseModel response,
+    required T Function(dynamic) fromMap,
+  }) {
+    if (response.success && response.data['rows'] is List) {
+      return (response.data['rows'] as List)
+          .map((item) => fromMap(item))
+          .toList();
     }
-    if (response.data['rows'].isNotEmpty) {
-      ApiResponseModel productResponse = await ApiService.get(
-        path: 'goods/user-products/${user.uid}',
-      );
-      userProducts.clear();
-      if (productResponse.success) {
-        for (int i = 0; i < productResponse.data['rows'].length; i++) {
-          userProducts.add(Product.fromJson(productResponse.data['rows'][i]));
-        }
-      }
-      ApiResponseModel servicesResponse = await ApiService.get(
-        path: 'services/user-services/${user.uid}',
-      );
-      userServices.clear();
-      if (servicesResponse.success) {
-        for (int i = 0; i < servicesResponse.data['rows'].length; i++) {
-          userServices.add(Service.fromJson(servicesResponse.data['rows'][i]));
-        }
-      }
-      ApiResponseModel customResponse = await ApiService.get(
-        path: 'custom-items/user/${user.uid}',
-      );
-      userCustomItems.clear();
-      if (customResponse.success) {
-        for (int i = 0; i < customResponse.data.length; i++) {
-          userCustomItems.add(Customitem.fromJson(customResponse.data[i]));
-        }
-      }
-      userItems.clear();
-      userItems.addAll(<Object>[
-        ...userProducts.where((Product item) => item.isActive),
-        ...userServices.where((Service item) => item.isActive),
-        ...userCustomItems,
-      ]);
-      userItems.sort((Object a, Object b) {
-        // Assuming both Product and Service have a createdAt property.
-        DateTime aDate = (a is Product)
-            ? a.createdAt
-            : (a is Service)
-                ? a.createdAt
-                : (a as Customitem).createdAt;
+    return <T>[];
+  }
 
-        DateTime bDate = (b is Product)
-            ? b.createdAt
-            : (b is Service)
-                ? b.createdAt
-                : (b as Customitem).createdAt;
-        return bDate.compareTo(aDate);
+// Parse any List under data, useful for custom items
+  List<T> _parseAnyList<T>({
+    required ApiResponseModel response,
+    required T Function(dynamic) fromMap,
+  }) {
+    if (response.success && response.data is List) {
+      return (response.data as List).map((item) => fromMap(item)).toList();
+    }
+    return <T>[];
+  }
+
+// Extract createdAt from different types
+  DateTime _getCreatedAt(Object item) {
+    if (item is Product) return item.createdAt;
+    if (item is Service) return item.createdAt;
+    if (item is Customitem) return item.createdAt;
+    throw Exception('Unknown item type: $item');
+  }
+
+  Future<bool> initUserShop(UserModel user) async {
+    try {
+      userShop = null;
+      userProducts.clear();
+      userServices.clear();
+      userCustomItems.clear();
+      userItems.clear();
+
+      // Fetch the shop
+      final ApiResponseModel shopResponse = await ApiService.get(
+        path: 'shops/user-shops/${user.uid}',
+      );
+
+      if (!shopResponse.success || shopResponse.data['rows'].isEmpty) {
+        return false;
+      }
+
+      // Map and assign shop details
+      final Map<String, dynamic> shopData = shopResponse.data['rows'][0];
+      userShop = Shop.fromMap(<String, dynamic>{
+        ...shopData,
+        'user': user.toMap(),
       });
 
-      return true;
-    } else {
+      // Fetch products, services, and custom items in parallel
+      final List<Future<ApiResponseModel>> futures = <Future<ApiResponseModel>>[
+        ApiService.get(path: 'goods/user-products/${user.uid}'),
+        ApiService.get(path: 'services/user-services/${user.uid}'),
+        ApiService.get(path: 'custom-items/user/${user.uid}'),
+      ];
+
+      final List<ApiResponseModel> responses = await Future.wait(futures);
+      final ApiResponseModel productResponse = responses[0];
+      final ApiResponseModel servicesResponse = responses[1];
+      final ApiResponseModel customResponse = responses[2];
+
+      // Assign products
+      if (productResponse.success) {
+        userProducts.addAll(
+          (productResponse.data['rows'] as List<dynamic>)
+              .map((dynamic item) => Product.fromJson(item))
+              .where((Product product) => product.isActive),
+        );
+      }
+
+      // Assign services
+      if (servicesResponse.success) {
+        userServices.addAll(
+          (servicesResponse.data['rows'] as List<dynamic>)
+              .map((dynamic item) => Service.fromJson(item))
+              .where((Service service) => service.isActive),
+        );
+      }
+
+      // Assign custom items
+      if (customResponse.success) {
+        userCustomItems.addAll(
+          (customResponse.data as List<dynamic>)
+              .map((dynamic item) => Customitem.fromJson(item)),
+        );
+      }
+
+      // Combine and sort all items
+      userItems.value = <Object>[
+        ...userProducts,
+        ...userServices,
+        ...userCustomItems
+      ];
+      userItems.sort((Object a, Object b) =>
+          getItemCreatedAt(b).compareTo(getItemCreatedAt(a)));
+// Increment views asynchronously (don't block)
+      ApiService.put(
+        path: 'shops/${userShop!.id}',
+        body: <String, dynamic>{'views': userShop!.views + 1},
+      );
+      return true; // Everything successful
+    } catch (e) {
+      print('Error initializing shop: $e');
       return false;
     }
+  }
+
+// Helper to safely get createdAt for any item
+  DateTime getItemCreatedAt(Object item) {
+    if (item is Product) return item.createdAt;
+    if (item is Service) return item.createdAt;
+    if (item is Customitem) return item.createdAt;
+    throw Exception('Unknown item type');
   }
 
   Future<bool> addShop(Map<String, dynamic> data) async {
