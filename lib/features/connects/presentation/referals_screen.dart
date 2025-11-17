@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
