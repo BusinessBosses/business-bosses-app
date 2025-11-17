@@ -50,32 +50,39 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   int _currentIndex = 0;
 
   Future<void> loadData() async {
+    if (!mounted) return;
+
     setState(() {
       isLoading = true;
     });
+
     try {
       final Map<String, dynamic> res =
           await _profileController.loadData(publicUser.uid);
+
+      // Process user model outside of setState
       final UserModel modelizedUser = UserModel.fromMap(
-          <dynamic, dynamic>{...res['user'], 'interests': res['industries']});
-      publicUser = modelizedUser;
-      _posts = res['posts'];
-      await shopController.initUserShop(modelizedUser).then((bool value) {
-        if (value) {
-          if (mounted) {
-            setState(() {
-              hasShop = true;
-            });
-          }
-        }
-      });
+        <dynamic, dynamic>{...res['user'], 'interests': res['industries']},
+      );
+
+      // Assign values locally first
+      UserModel updatedUser = modelizedUser;
+      bool userHasShop = false;
+
+      // Initialize shop asynchronously and await result
+      userHasShop = await shopController.initUserShop(modelizedUser);
+
+      // All state updates at once
       if (mounted) {
         setState(() {
-          isLoading = false;
+          publicUser = updatedUser;
+          _posts = res['posts'];
+          hasShop = userHasShop;
+          isLoading = false; // Done loading
         });
       }
     } catch (e) {
-      // Handle any errors here.
+      // Handle errors
       if (mounted) {
         setState(() {
           isLoading = false;
