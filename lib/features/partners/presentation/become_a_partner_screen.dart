@@ -87,18 +87,67 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
   bool _validateInputs() {
     if (nameController.text.trim().isEmpty) {
       showSnackbar(
-          title: 'Validation',
-          message: 'Company name is required',
-          error: true);
+        title: 'Validation',
+        message: 'Company name is required',
+        error: true,
+      );
       return false;
     }
+
     if (emailController.text.trim().isEmpty) {
       showSnackbar(
-          title: 'Validation',
-          message: 'Company email is required',
-          error: true);
+        title: 'Validation',
+        message: 'Company email is required',
+        error: true,
+      );
       return false;
     }
+
+    if (!GetUtils.isEmail(emailController.text.trim())) {
+      showSnackbar(
+        title: 'Validation',
+        message: 'Please enter a valid email address',
+        error: true,
+      );
+      return false;
+    }
+
+    if (phoneController.text.trim().isEmpty) {
+      showSnackbar(
+        title: 'Validation',
+        message: 'Company phone number is required',
+        error: true,
+      );
+      return false;
+    }
+
+    if (country.isEmpty) {
+      showSnackbar(
+        title: 'Validation',
+        message: 'Please select your company location',
+        error: true,
+      );
+      return false;
+    }
+
+    if (selectedPartnershipType.isEmpty) {
+      showSnackbar(
+        title: 'Validation',
+        message: 'Please select a partnership type',
+        error: true,
+      );
+      return false;
+    }
+
+    if (selectedCategory.isEmpty) {
+      showSnackbar(
+        title: 'Validation',
+        message: 'Please select your company category',
+        error: true,
+      );
+      return false;
+    }
+
     if (descriptionController.text.trim().isEmpty) {
       showSnackbar(
         title: 'Validation',
@@ -107,6 +156,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
       );
       return false;
     }
+
     if (bioController.text.trim().isEmpty) {
       showSnackbar(
         title: 'Validation',
@@ -115,6 +165,25 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
       );
       return false;
     }
+
+    if (urlController.text.trim().isEmpty) {
+      showSnackbar(
+        title: 'Validation',
+        message: 'Company website or deal link is required',
+        error: true,
+      );
+      return false;
+    }
+
+    if (_attachments.isEmpty) {
+      showSnackbar(
+        title: 'Validation',
+        message: 'Please upload a company image or file',
+        error: true,
+      );
+      return false;
+    }
+
     return true;
   }
 
@@ -356,11 +425,14 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Obx(() {
         final bool loading = partnerController.isLoading.value;
-        return ProCustomButton(
-          loading: loading,
-          text: loading ? 'Submitting...' : 'Submit',
-          color: primaryColorLT,
-          onPressed: _onSubmitPressed,
+        return SizedBox(
+          width: double.infinity,
+          child: ProCustomButton(
+            loading: loading,
+            text: loading ? 'Submitting...' : 'Submit',
+            color: primaryColorLT,
+            onPressed: _onSubmitPressed,
+          ),
         );
       }),
     );

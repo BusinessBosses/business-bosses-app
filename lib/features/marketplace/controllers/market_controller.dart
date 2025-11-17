@@ -99,43 +99,46 @@ class MarketController extends GetxController {
     try {
       loading(true);
       error(false);
-
-      final List<ApiResponseModel> responses =
-          await Future.wait(<Future<ApiResponseModel>>[
-        HomeRepository.fetchMarketDescription(),
-      ]);
-
-      final ApiResponseModel description = responses.first;
+      await initDescription();
       await initProItems();
-
-      if (description.success) {
-        final List<dynamic> rows = description.data['rows'];
-        final dynamic marketEntry = rows.firstWhere(
-          (dynamic e) => e['title'] == 'market',
-          orElse: () => null,
-        );
-        final dynamic donationEntry = rows.firstWhere(
-          (dynamic e) => e['title'] == 'donation',
-          orElse: () => null,
-        );
-        final dynamic popUpEntry = rows.firstWhere(
-          (dynamic e) => e['id'] == 6,
-          orElse: () => null,
-        );
-
-        marketDescription = marketEntry?['description'] ?? '';
-        donationDescription = donationEntry?['description'] ?? '';
-        _homeController.notificationStatus = popUpEntry?['title'] ?? '';
-        _homeController.notificationDescription =
-            popUpEntry?['description'] ?? '';
-      } else {
-        marketDescription = '';
-      }
     } catch (e) {
       log(e.toString());
       error(true);
     } finally {
       loading(false);
+    }
+  }
+
+  Future<void> initDescription() async {
+    final List<ApiResponseModel> responses =
+        await Future.wait(<Future<ApiResponseModel>>[
+      HomeRepository.fetchMarketDescription(),
+    ]);
+
+    final ApiResponseModel description = responses.first;
+
+    if (description.success) {
+      final List<dynamic> rows = description.data['rows'];
+      final dynamic marketEntry = rows.firstWhere(
+        (dynamic e) => e['title'] == 'market',
+        orElse: () => null,
+      );
+      final dynamic donationEntry = rows.firstWhere(
+        (dynamic e) => e['title'] == 'donation',
+        orElse: () => null,
+      );
+      final dynamic popUpEntry = rows.firstWhere(
+        (dynamic e) => e['id'] == 6,
+        orElse: () => null,
+      );
+
+      marketDescription = marketEntry?['description'] ?? '';
+      donationDescription = donationEntry?['description'] ?? '';
+      _homeController.notificationStatus = popUpEntry?['title'] ?? '';
+      _homeController.notificationDescription =
+          popUpEntry?['description'] ?? '';
+    } else {
+      marketDescription = '';
     }
   }
 
