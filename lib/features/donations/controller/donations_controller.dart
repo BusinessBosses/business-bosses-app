@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
@@ -11,7 +10,6 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
 
 class DonationsController extends GetxController {
   late io.Socket socket;
@@ -44,8 +42,6 @@ class DonationsController extends GetxController {
 
   @override
   void onInit() async {
-    initSocket();
-    await initUsers();
     fetchDonations();
     super.onInit();
   }
@@ -86,11 +82,15 @@ class DonationsController extends GetxController {
   Future<void> fetchDonations() async {
     try {
       loading(true); // Set loading to true before fetching data
-      update();
-      ApiResponseModel response = await ApiService.get(path: 'donation/all');
 
-      // Clear previous donations before adding new ones
-      donations.clear();
+      final List<ApiResponseModel> responses =
+          await Future.wait(<Future<ApiResponseModel>>[
+        ApiService.get(path: 'donation/all'),
+        ApiService.get(path: 'donation/query?isActive=false&isDeleted=false'),
+      ]);
+      final ApiResponseModel response = responses[0];
+      final ApiResponseModel responseNot = responses[1];
+
       if (response.success) {
         for (int i = 0; i < response.data['rows'].length; i++) {
           if (response.data['rows'][i]['user'] != null) {
@@ -103,11 +103,7 @@ class DonationsController extends GetxController {
             donations.add(donation);
           }
         }
-        ApiResponseModel responseNot = await ApiService.get(
-            path: 'donation/query?isActive=false&isDeleted=false');
 
-        // Clear previous donations before adding new ones
-        donationsNotApproved.clear();
         if (responseNot.success) {
           for (int i = 0; i < responseNot.data['rows'].length; i++) {
             if (responseNot.data['rows'][i]['user'] != null) {
@@ -128,8 +124,8 @@ class DonationsController extends GetxController {
       error(true); // Set error to true if there's an error
     } finally {
       loading(false); // Set loading back to false after fetching data
+      update();
     }
-    update();
   }
 
   Future<void> deleteDonation(String donationId) async {
@@ -535,54 +531,5 @@ class DonationsController extends GetxController {
     }
 
     update();
-  }
-
-  void initSocket() {
-    socket = io.io(Constants.socketUrl, <String, dynamic>{
-      'autoConnect': false,
-      'transports': <String>['websocket'],
-    });
-    socket.connect();
-    socket.onConnect((_) {
-      if (kDebugMode) {
-        print('Connection established');
-      }
-    });
-
-    socket.on('handshake', (dynamic data) {
-      // print(data);
-    });
-
-    socket.on('new-notification', (dynamic data) {
-      // print(data);
-      profileController.updateProfile(<String, dynamic>{
-        ...profileController.myProfile.toMap(),
-        'unReadCount': 1
-      });
-    });
-
-    socket.onReconnect((_) {
-      socket.emit('handshake', profileController.myProfile.uid);
-
-      if (kDebugMode) {
-        print('reconnected');
-      }
-    });
-
-    socket.onDisconnect((_) {
-      if (kDebugMode) {
-        print('Connection Disconnection');
-      }
-    });
-    socket.onConnectError((dynamic err) {
-      if (kDebugMode) {
-        print(err);
-      }
-    });
-    socket.onError((dynamic err) {
-      if (kDebugMode) {
-        print(err);
-      }
-    });
   }
 }
