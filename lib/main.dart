@@ -31,38 +31,45 @@ final AppLinks _appLinks = AppLinks();
 bool _initialAppLinkHandled = false;
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
-void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+void main() {
+  // Make all binding and initialization happen inside the Zone
+  runZonedGuarded<Future<void>>(() async {
+    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  await Purchases.configure(_configuration);
-  await GetStorage.init();
-  await dotenv.load();
-  await Firebase.initializeApp();
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    await Purchases.configure(_configuration);
+    await GetStorage.init();
+    await dotenv.load();
+    await Firebase.initializeApp();
 
-  // Catch asynchronous errors as well
-  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
+    // Crashlytics setup
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
 
-  await FlutterDownloader.initialize();
+    await FlutterDownloader.initialize();
 
-  AnalyticsServices();
-  Stripe.publishableKey = dotenv.env['STRIPE_PUB_KEY']!;
-  Stripe.merchantIdentifier = 'merchant.businessbosses';
+    AnalyticsServices();
+    Stripe.publishableKey = dotenv.env['STRIPE_PUB_KEY']!;
+    Stripe.merchantIdentifier = 'merchant.businessbosses';
 
-  FirebaseMessaging.instance.getToken();
-  FirebaseMessaging.instance.requestPermission();
+    FirebaseMessaging.instance.getToken();
+    FirebaseMessaging.instance.requestPermission();
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
+    FirebaseMessaging.instance.getInitialMessage().then(_handleInitialMessage);
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
-  FirebaseMessaging.instance.getInitialMessage().then(_handleInitialMessage);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    runApp(const MyApp());
+    await initAppLinks();
 
-  runApp(const MyApp());
-  await initAppLinks();
-  FlutterNativeSplash.remove();
+    FlutterNativeSplash.remove();
+  }, (Object error, StackTrace stackTrace) async {
+    // Catch ANY uncaught error that escapes the zone
+    await FirebaseCrashlytics.instance
+        .recordError(error, stackTrace, fatal: true);
+  });
 }
 
 /// INITIALIZE DEEP LINKING VIA app_links
