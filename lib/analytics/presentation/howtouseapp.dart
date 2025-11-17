@@ -7,7 +7,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
-import 'package:business_bosses_v2/features/home/widgets/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
@@ -208,9 +208,9 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                               } else if (index == 1) {
                                 sellProduct(context);
                               } else if (index == 2) {
-                                Get.to(BuyerRequests());
+                                Get.to(() => AddBuyerRequests());
                               } else if (index == 3) {
-                                Get.to(AllCommunitiesScreen());
+                                Get.to(() => AllCommunitiesScreen());
                               }
                             },
                             minVerticalPadding: 0,

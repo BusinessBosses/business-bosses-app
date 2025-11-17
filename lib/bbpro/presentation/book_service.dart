@@ -547,7 +547,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                           height: 250,
                           child: GenericSlider(
                             radius: 0,
-                            images: widget.service.images ?? <String>[],
+                            images: widget.service.images!,
                           ),
                         ),
 

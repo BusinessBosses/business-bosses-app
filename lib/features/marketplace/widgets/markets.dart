@@ -31,118 +31,138 @@ class _MarketsPageState extends State<MarketsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
-          ),
-          child: GetBuilder<MarketController>(
-              builder: (MarketController controller) {
-            bool isFiltering = controller.isfiltered.value;
-            List<Object> markets =
-                isFiltering ? controller.allFilteredItems : controller.proItems;
-            return Column(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: ProshopdealsWidget(
-                    title: 'NEW',
-                    combinedList: controller.proItems
-                        .where((Object item) {
-                          if (item is Product) {
-                            return item.images != null &&
-                                item.images!.isNotEmpty &&
-                                item.images!.first.isNotEmpty &&
-                                (item).user!.isSubscribed;
-                          } else {
-                            return (item as Service).images != null &&
-                                (item).images!.isNotEmpty &&
-                                (item).images![0].isNotEmpty &&
-                                (item).user!.isSubscribed;
-                          }
-                        })
-                        .take(10)
-                        .toList(),
-                  ),
-                ),
-                if (isFiltering && markets.isEmpty)
-                  const SafetyModel(
-                    isLoading: false,
-                    title: 'No Items Found For This Search',
-                  )
-                else
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 10.0),
-                    child: MasonryGridView.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 10.0,
-                      itemCount: markets.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        if (markets[index] is Product) {
-                          final Product product = markets[index] as Product;
-                          return GestureDetector(
-                            onTap: () {
-                              if (product.user!.uid ==
-                                  profileController.myProfile.uid) {
-                                // Get.to(() => CreateProductListing(product: product));
-                              } else {
-                                Get.to(() => OrderProductScreen(
-                                      ismarketplace: true,
-                                      product: product,
-                                      shop: product.shop!,
-                                    ));
-                              }
-                            },
-                            child: InventoryCard(
-                              marketplace: true,
-                              product: product,
-                              shop: product.shop!,
-                              myShop: product.user!.uid ==
-                                      profileController.myProfile.uid
-                                  ? true
-                                  : false,
-                            ),
-                          );
-                        } else if (markets[index] is Service) {
-                          final Service service = markets[index] as Service;
-                          return GestureDetector(
-                            onTap: () {
-                              if (service.user!.uid ==
-                                  profileController.myProfile.uid) {
-                                // Get.to(() => CreateServiceListing(service: service));
-                              } else {
-                                Get.to(() => BookServiceScreen(
-                                      isMarketplace: true,
-                                      service: service,
-                                      shop: service.shop!,
-                                    ));
-                              }
-                            },
-                            child: ServiceCard(
-                              shop: service.shop!,
-                              marketplace: true,
-                              service: service,
-                              myShop: service.user!.uid ==
-                                      profileController.myProfile.uid
-                                  ? true
-                                  : false,
-                            ),
-                          );
-                        }
-                        return const SizedBox();
-                      },
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          if (scrollInfo.metrics.pixels >=
+                  scrollInfo.metrics.maxScrollExtent - 100 &&
+              !Get.find<MarketController>().loadingMore.value &&
+              Get.find<MarketController>().hasMoreItems.value) {
+            Get.find<MarketController>().loadMore();
+          }
+          return false;
+        },
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: GetBuilder<MarketController>(
+                builder: (MarketController controller) {
+              bool isFiltering = controller.isfiltered.value;
+              List<Object> markets = isFiltering
+                  ? controller.allFilteredItems
+                  : controller.proItems;
+              return Column(
+                children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: ProshopdealsWidget(
+                      title: 'NEW',
+                      combinedList: controller.proItems
+                          .where((Object item) {
+                            if (item is Product) {
+                              return item.images != null &&
+                                  item.images!.isNotEmpty &&
+                                  item.images!.first.isNotEmpty &&
+                                  item.user!.isSubscribed;
+                            } else {
+                              final Service service = item as Service;
+                              return service.images != null &&
+                                  service.images!.isNotEmpty &&
+                                  service.images![0].isNotEmpty &&
+                                  service.user!.isSubscribed;
+                            }
+                          })
+                          .take(10)
+                          .toList(),
                     ),
                   ),
-                const SizedBox(
-                  height: 100,
-                ),
-              ],
-            );
-          }),
+                  if (isFiltering && markets.isEmpty)
+                    const SafetyModel(
+                      isLoading: false,
+                      title: 'No Items Found For This Search',
+                    )
+                  else
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: MasonryGridView.count(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 10.0,
+                        crossAxisSpacing: 10.0,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: markets.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final Object item = markets[index];
+                          if (item is Product) {
+                            return GestureDetector(
+                              onTap: () {
+                                if (item.user!.uid ==
+                                    profileController.myProfile.uid) {
+                                  // Your own shop item.
+                                } else {
+                                  Get.to(() => OrderProductScreen(
+                                        ismarketplace: true,
+                                        product: item,
+                                        shop: item.shop!,
+                                      ));
+                                }
+                              },
+                              child: InventoryCard(
+                                marketplace: true,
+                                product: item,
+                                shop: item.shop!,
+                                myShop: item.user!.uid ==
+                                    profileController.myProfile.uid,
+                              ),
+                            );
+                          } else {
+                            final Service service = item as Service;
+                            return GestureDetector(
+                              onTap: () {
+                                if (service.user!.uid ==
+                                    profileController.myProfile.uid) {
+                                  // Your own shop item.
+                                } else {
+                                  Get.to(() => BookServiceScreen(
+                                        isMarketplace: true,
+                                        service: service,
+                                        shop: service.shop!,
+                                      ));
+                                }
+                              },
+                              child: ServiceCard(
+                                marketplace: true,
+                                service: service,
+                                shop: service.shop!,
+                                myShop: service.user!.uid ==
+                                    profileController.myProfile.uid,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  Obx(() => controller.loadingMore.value
+                      ? const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          child: CircularProgressIndicator(),
+                        )
+                      : const SizedBox.shrink()),
+                  if (!controller.hasMoreItems.value)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        'No more items',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  const SizedBox(height: 100),
+                ],
+              );
+            }),
+          ),
         ),
       ),
     );

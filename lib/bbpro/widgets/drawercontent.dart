@@ -12,7 +12,7 @@ import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
-import 'package:business_bosses_v2/features/home/widgets/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -116,7 +116,7 @@ class _DrawerContentState extends State<DrawerContent> {
             'View your notifications, including updates, messages, and alerts.',
         'onTileClicked': () {
           widget.oncloseclick?.call();
-          Get.to(() => const NotificationsScreen());
+          Get.to(() => NotificationsScreen());
         },
       },
       {
@@ -432,7 +432,8 @@ class _DrawerContentState extends State<DrawerContent> {
                                               } else if (index == 2) {
                                                 Get.toNamed(Routes.createPost);
                                               } else if (index == 3) {
-                                                Get.to(BuyerRequests());
+                                                Get.to(
+                                                    () => AddBuyerRequests());
                                               }
                                             },
                                             minVerticalPadding: 0,

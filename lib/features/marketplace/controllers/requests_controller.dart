@@ -13,6 +13,7 @@ class BuyerRequestController extends GetxController {
   final RxBool loading = false.obs;
   final RxBool error = false.obs;
   final RxBool loadingMore = false.obs;
+  final RxList<BuyerRequestModel> _allRequests = <BuyerRequestModel>[].obs;
 
   final ProfileController _profileController = Get.find();
 
@@ -38,8 +39,12 @@ class BuyerRequestController extends GetxController {
 
   /// Process fetched buyer requests into state
   void processRequestsToState(List<dynamic> rows) {
+    buyerRequests.clear();
+    _allRequests.clear(); // store backup
     for (dynamic item in rows) {
-      buyerRequests.add(BuyerRequestModel.fromJson(item));
+      final BuyerRequestModel request = BuyerRequestModel.fromJson(item);
+      buyerRequests.add(request);
+      _allRequests.add(request);
     }
   }
 
@@ -47,6 +52,7 @@ class BuyerRequestController extends GetxController {
   Future<void> addBuyerRequest(Map<String, dynamic> body,
       {List<PlatformFile>? attachments}) async {
     loading(true);
+    error(false);
     update();
 
     if (attachments != null && attachments.isNotEmpty) {
@@ -69,6 +75,7 @@ class BuyerRequestController extends GetxController {
             ...response.data,
             'user': _profileController.myProfile.toMap()
           }));
+      Get.back();
     } else {
       error(true);
     }
@@ -123,48 +130,83 @@ class BuyerRequestController extends GetxController {
   }
 
   /// Update an existing buyer request
-  Future<void> updateBuyerRequest(int id, Map<String, dynamic> body) async {
+  Future<void> updateBuyerRequest(
+    int id,
+    Map<String, dynamic> body, {
+    List<PlatformFile>? attachments,
+    List<String>? existingAttachments, // for pre-existing attachments
+  }) async {
+    loading(true);
+    error(false);
+    update();
+
+    // 🟢 Upload new attachments if added
+    if (attachments != null && attachments.isNotEmpty) {
+      final List<String> newUrls = await _uploadAttachments(attachments);
+      body['attachments'] = <String>[
+        ...existingAttachments ?? <String>[],
+        ...newUrls,
+      ];
+    } else if (existingAttachments != null) {
+      // 🟡 Keep existing attachments if no new files uploaded
+      body['attachments'] = existingAttachments;
+    }
+
     final ApiResponseModel response = await ApiService.put(
       path: 'buyer-request/$id',
       body: body,
     );
 
-    if (response.success) {
+    if (response.success && response.data != null) {
       int index = buyerRequests.indexWhere((BuyerRequestModel r) => r.id == id);
       if (index != -1) {
-        buyerRequests[index] = BuyerRequestModel.fromJson(response.data);
+        final BuyerRequestModel updatedRequest =
+            BuyerRequestModel.fromJson(<String, dynamic>{
+          ...response.data,
+          'user': buyerRequests[index].user.toMap()
+        });
+
+        // Optionally merge user info if API doesn’t include it
+        buyerRequests[index] = updatedRequest;
       }
+      Get.back();
     } else {
       error(true);
     }
 
+    loading(false);
     update();
   }
 
   /// Delete a buyer request
-  Future<void> deleteBuyerRequest(int id) async {
+  Future<bool> deleteBuyerRequest(int id) async {
     final ApiResponseModel response =
         await ApiService.delete(path: 'buyer-request/$id');
 
     if (response.success) {
       buyerRequests.removeWhere((BuyerRequestModel r) => r.id == id);
+      update();
+      return true;
     } else {
       error(true);
+      return false;
     }
-
-    update();
   }
 
   /// Filter requests by category or search query
   void filterBuyerRequests(String query) {
     query = query.toLowerCase();
-    final List<BuyerRequestModel> filtered = buyerRequests
-        .where((BuyerRequestModel r) =>
-            r.title.toLowerCase().contains(query) ||
-            r.description.toLowerCase().contains(query))
-        .toList();
 
-    buyerRequests.assignAll(filtered);
+    if (query.isEmpty) {
+      buyerRequests.assignAll(_allRequests);
+    } else {
+      final List<BuyerRequestModel> filtered = _allRequests
+          .where((BuyerRequestModel r) =>
+              r.title.toLowerCase().contains(query) ||
+              r.description.toLowerCase().contains(query))
+          .toList();
+      buyerRequests.assignAll(filtered);
+    }
     update();
   }
 

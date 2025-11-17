@@ -978,7 +978,7 @@ class _ForumItemState extends State<ForumItem> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const TextWidget(
-              text: 'Are you sure you want to delete this forum?'),
+              text: 'Are you sure you want to delete this challenge?'),
           actions: <Widget>[
             TextButton(
                 onPressed: () {
@@ -988,27 +988,28 @@ class _ForumItemState extends State<ForumItem> {
                   text: 'Cancel',
                 )),
             TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
+              onPressed: () {
+                Navigator.of(context).pop();
 
-                  if (Get.isRegistered<ForumController>()) {
-                    final ForumController controller = Get.find();
+                if (Get.isRegistered<ForumController>()) {
+                  final ForumController controller = Get.find();
 
-                    controller.deleteForum(forumId);
-                  }
+                  controller.deleteForum(forumId);
+                }
 
-                  if (Get.isRegistered<BossUpController>()) {
-                    profileController.myProfile.postChallenges
-                        ?.remove(widget.forum.industryId);
-                    Get.find<BossUpController>()
-                        .deleteForum(widget.forum.forumId);
-                  }
-                  setState(() {});
-                },
-                child: const TextWidget(
-                  text: 'Delete',
-                  color: primaryColorLT,
-                ))
+                if (Get.isRegistered<BossUpController>()) {
+                  profileController.myProfile.postChallenges
+                      ?.remove(widget.forum.industryId);
+                  Get.find<BossUpController>()
+                      .deleteForum(widget.forum.forumId);
+                }
+                setState(() {});
+              },
+              child: const TextWidget(
+                text: 'Delete',
+                color: primaryColorLT,
+              ),
+            ),
           ],
         );
       },

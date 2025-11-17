@@ -217,6 +217,7 @@ class HomeController extends GetxController {
       final response = await ApiService.get(
           path: 'buyer-request/user/${profileController.myProfile.uid}');
       if (response.success) {
+        myRequests.clear();
         for (dynamic request in response.data) {
           myRequests.add(BuyerRequestModel.fromJson(request));
         }

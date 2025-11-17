@@ -3,6 +3,8 @@ import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_request_item.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -19,6 +21,7 @@ class BuyerRequestsScreen extends StatefulWidget {
 class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   final BuyerRequestController _buyerRequestController =
       Get.put(BuyerRequestController());
+  final ProfileController profileController = Get.find();
 
   final String _selectedFilter = 'All';
   List<BuyerRequestModel> _filteredRequests = <BuyerRequestModel>[];
@@ -214,30 +217,143 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                   _buildDetailRow(Icons.local_offer, 'Offers Received',
                       request.offerCount.toString()),
                   const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => _navigateToChatScreen(request),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColorLT,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                  if (request.user.uid !=
+                      profileController.myProfile.uid) ...<Widget>[
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => _navigateToChatScreen(request),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColorLT,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          'Send Proposal',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       ),
-                      child: const Text(
-                        'Send Proposal',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ] else ...<Widget>[
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            Get.to(() => AddBuyerRequests(request: request)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColorLT,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          'Edit Request',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ),
-                  ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          // 🟡 Confirm before deleting
+                          final bool? confirmed =
+                              await _showDeleteConfirmation();
+
+                          if (confirmed == true) {
+                            print('logged');
+                            // 🟢 Show loading dialog
+                            Get.dialog(
+                              const Center(child: CircularProgressIndicator()),
+                              barrierDismissible: false,
+                            );
+
+                            // 🚀 Perform delete action
+                            final bool success = await _buyerRequestController
+                                .deleteBuyerRequest(
+                                    request.id!); // Assuming request has id
+
+                            // ❌ Hide loader
+                            Get.back();
+
+                            if (success) {
+                              Get.snackbar(
+                                'Deleted',
+                                'Request deleted successfully!',
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.green[100],
+                                colorText: Colors.green[900],
+                              );
+
+                              // Safely close both loader and bottom sheet
+                              Future.delayed(const Duration(milliseconds: 100),
+                                  () {
+                                Get.back(closeOverlays: true);
+                              });
+                            } else {
+                              Get.snackbar(
+                                'Error',
+                                'Failed to delete request.',
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red[100],
+                                colorText: Colors.red[900],
+                              );
+                            }
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          'Delete Request',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    )
+                  ]
                 ],
               ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Future<bool?> _showDeleteConfirmation() async {
+    return await Get.dialog(
+      AlertDialog(
+        title: const Text('Confirm Delete'),
+        content: const Text('Are you sure you want to delete this request?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Get.back(result: true),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
       ),
     );
   }

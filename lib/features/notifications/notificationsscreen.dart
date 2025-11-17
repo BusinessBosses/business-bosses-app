@@ -29,6 +29,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   late ScrollController _scrollController;
   final bool isLoad = false;
   ProfileController profileController = Get.find();
+  final NotificationController controller = Get.put(NotificationController());
 
   @override
   void initState() {
@@ -80,7 +81,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     isLoading: true,
                     icon: SvgPicture.asset(
                       'assets/svgs/notification.svg',
-                      color: iconColor,
+                      colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
                       height: 80.0,
                       width: 80.0,
                     ),
@@ -90,7 +91,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         isLoading: true,
                         icon: SvgPicture.asset(
                           'assets/svgs/notification.svg',
-                          color: iconColor,
+                          colorFilter:
+                              ColorFilter.mode(iconColor, BlendMode.srcIn),
                           height: 80.0,
                           width: 80.0,
                         ),

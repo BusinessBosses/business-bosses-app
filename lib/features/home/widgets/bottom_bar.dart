@@ -9,7 +9,7 @@ import 'package:business_bosses_v2/features/forum/presentation/create_bossup_scr
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
-import 'package:business_bosses_v2/features/home/widgets/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -239,7 +239,8 @@ class _BottomBarState extends State<BottomBar> {
                                               } else if (index == 2) {
                                                 Get.toNamed(Routes.createPost);
                                               } else if (index == 3) {
-                                                Get.to(BuyerRequests());
+                                                Get.to(
+                                                    () => AddBuyerRequests());
                                               }
                                             },
                                             minVerticalPadding: 0,

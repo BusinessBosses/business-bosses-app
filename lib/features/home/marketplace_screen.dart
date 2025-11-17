@@ -6,8 +6,8 @@ import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/home/widgets/buyer_requests_form.dart';
-import 'package:business_bosses_v2/features/home/widgets/buyer_requests_screen.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
@@ -606,7 +606,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     }
 
     if (index == 1) {
-      Get.to(() => BuyerRequests());
+      Get.to(() => AddBuyerRequests());
     } else if (index == 2) {
       Get.to(() => const CreateServiceListing(isMarketplace: true));
     } else {

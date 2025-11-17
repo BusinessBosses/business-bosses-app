@@ -102,7 +102,7 @@ class _GenericSliderState extends State<GenericSlider> {
                         decoration: BoxDecoration(
                             color: _activeIndex == i
                                 ? widget.iconcolor ?? primaryColorLT
-                                : widget.iconcolor == null
+                                : widget.iconcolor != null
                                     ? widget.iconcolor!.withValues(alpha: 0.5)
                                     : primaryColorLT.withValues(alpha: 0.5),
                             borderRadius: BorderRadius.circular(10.0)),
