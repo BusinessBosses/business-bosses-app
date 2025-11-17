@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/analytics/presentation/profile_analyse_screen
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/my_connect.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/common/params.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_child_button.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
