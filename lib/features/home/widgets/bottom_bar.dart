@@ -17,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({
@@ -34,6 +36,7 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   final ChallengeController controller = Get.put(ChallengeController());
+  final String urlString = 'https://google.com';
 
   late Industry industry;
 
@@ -47,6 +50,7 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
     ChatController chatController = Get.find();
+    final Uri url = Uri.parse(urlString);
 
     void enterChallenge() {
       int now = DateTime.now().millisecondsSinceEpoch;
@@ -230,7 +234,7 @@ class _BottomBarState extends State<BottomBar> {
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return ListTile(
-                                            onTap: () {
+                                            onTap: () async {
                                               Navigator.pop(context);
                                               if (index == 0) {
                                                 enterChallenge();
@@ -239,8 +243,12 @@ class _BottomBarState extends State<BottomBar> {
                                               } else if (index == 2) {
                                                 Get.toNamed(Routes.createPost);
                                               } else if (index == 3) {
-                                                Get.to(
-                                                    () => AddBuyerRequests());
+                                                if (!await launchUrl(url,
+                                                    mode: LaunchMode
+                                                        .platformDefault)) {
+                                                  throw Exception(
+                                                      'Could not launch $urlString');
+                                                }
                                               }
                                             },
                                             minVerticalPadding: 0,
@@ -270,7 +278,7 @@ class _BottomBarState extends State<BottomBar> {
                                                                     alpha: 1),
                                                           )
                                                         : Icon(
-                                                            LucideIcons.coins,
+                                                            LucideIcons.globe,
                                                             color: textColor
                                                                 .withValues(
                                                                     alpha: 1),
@@ -283,7 +291,7 @@ class _BottomBarState extends State<BottomBar> {
                                                       ? 'Sell your product & service'
                                                       : index == 2
                                                           ? 'Post content, discussion, etc'
-                                                          : 'Create buyer request',
+                                                          : 'Create press release',
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w700,

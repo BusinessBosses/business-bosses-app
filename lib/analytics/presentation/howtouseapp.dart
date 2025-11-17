@@ -233,7 +233,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                                       )
                                     : index == 2
                                         ? Icon(
-                                            LucideIcons.coins,
+                                            LucideIcons.globe,
                                             color:
                                                 textColor.withValues(alpha: 1),
                                             size: 26,
@@ -250,7 +250,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                                   : index == 1
                                       ? 'Sell your product & service'
                                       : index == 2
-                                          ? 'Create buyer request'
+                                          ? 'Create press release'
                                           : 'Enter free promotion',
                               style: const TextStyle(
                                 fontSize: 18,

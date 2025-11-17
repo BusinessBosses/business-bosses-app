@@ -463,7 +463,7 @@ class _DrawerContentState extends State<DrawerContent> {
                                                                     alpha: 1),
                                                           )
                                                         : Icon(
-                                                            LucideIcons.coins,
+                                                            LucideIcons.globe,
                                                             color: textColor
                                                                 .withValues(
                                                                     alpha: 1),
@@ -476,7 +476,7 @@ class _DrawerContentState extends State<DrawerContent> {
                                                       ? 'Sell your product & service'
                                                       : index == 2
                                                           ? 'Post content, discussion, etc'
-                                                          : 'Create buyer request',
+                                                          : 'Create press release',
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w700,

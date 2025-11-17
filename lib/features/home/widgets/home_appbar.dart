@@ -59,7 +59,7 @@ class HomeAppBar extends StatelessWidget {
                         spacing: 8,
                         children: <Widget>[
                           SvgPicture.asset('assets/svgs/bossupu.svg',
-                              color: textColor, height: 22),
+                              color: primaryColorLT, height: 22),
                           Text(
                             'Boss Up & Grow',
                             style: TextStyle(

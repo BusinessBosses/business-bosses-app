@@ -154,7 +154,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       description:
                           'Share learnings and resources for upskilling and mentorship',
                       imageurl:
-                          'https://images.pexels.com/photos/5905702/pexels-photo-5905702.jpeg',
+                          'https://images.pexels.com/photos/247819/pexels-photo-247819.jpeg',
                     );
                   } else {
                     return Challengeitem(
@@ -165,7 +165,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       title: 'Partner\'s Deals',
                       description: 'Discover and list deals and get customers.',
                       imageurl:
-                          'https://images.pexels.com/photos/5905702/pexels-photo-5905702.jpeg',
+                          'https://images.pexels.com/photos/5520322/pexels-photo-5520322.jpeg',
                     );
                   }
                 },

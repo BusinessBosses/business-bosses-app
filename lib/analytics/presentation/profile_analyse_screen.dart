@@ -160,7 +160,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                                           timestamp: TimeFormat.ONE_WEEK)
                                       .length,
                                   onPressed: () {},
-                                  caption: 'Connection',
+                                  caption: 'Following',
                                 ),
                               ),
                               Expanded(
@@ -169,7 +169,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                                           timestamp: TimeFormat.ONE_WEEK)
                                       .length,
                                   onPressed: () {},
-                                  caption: 'Connected',
+                                  caption: 'Followers',
                                 ),
                               ),
                               Expanded(
@@ -178,7 +178,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                                           timestamp: TimeFormat.ONE_WEEK)
                                       .length,
                                   onPressed: () {},
-                                  caption: 'Disconnected',
+                                  caption: 'Unfollowed',
                                 ),
                               ),
                             ],
@@ -205,7 +205,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                                   //         timestamp: TimeFormat.ONE_MONTH)
                                   //     .length,
                                   onPressed: () {},
-                                  caption: 'Connection',
+                                  caption: 'Following',
                                 ),
                               ),
                               Expanded(
@@ -214,7 +214,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                                           timestamp: TimeFormat.ONE_MONTH)
                                       .length,
                                   onPressed: () {},
-                                  caption: 'Connected',
+                                  caption: 'Followers',
                                 ),
                               ),
                               Expanded(
@@ -223,7 +223,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                                           timestamp: TimeFormat.ONE_MONTH)
                                       .length,
                                   onPressed: () {},
-                                  caption: 'Disconnected',
+                                  caption: 'Unfollowed',
                                 ),
                               ),
                             ],
@@ -245,7 +245,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                               tooltipBehavior: _tooltipBehavior,
                               series: <LineSeries<SalesData, String>>[
                                 LineSeries<SalesData, String>(
-                                    name: 'Connections',
+                                    name: 'Following',
                                     dataSource: <SalesData>[
                                       SalesData(name: 'Mon', value: 0),
                                       SalesData(
@@ -281,7 +281,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                                     dataLabelSettings: const DataLabelSettings(
                                         isVisible: true)),
                                 LineSeries<SalesData, String>(
-                                    name: 'Connected',
+                                    name: 'Followers',
                                     dataSource: <SalesData>[
                                       SalesData(name: 'Mon', value: 0),
                                       SalesData(
@@ -317,7 +317,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                                     dataLabelSettings: const DataLabelSettings(
                                         isVisible: true)),
                                 LineSeries<SalesData, String>(
-                                    name: 'Disconnected',
+                                    name: 'Unfollowed',
                                     dataSource: <SalesData>[
                                       SalesData(name: 'Mon', value: 0),
                                       SalesData(
@@ -360,37 +360,6 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                 )),
     );
   }
-
-//   List<MyConnect> _connections(
-//     List<String>? connects, {
-//     num? timestamp,
-//   }) {
-// <<<<<<< HEAD
-//     List<MyConnect> myConnects = [];
-//     if (connects != null) {
-//       myConnects = connects.map((String str) {
-//         return MyConnect(
-//           id: str,
-//           connectedBy: null,
-//           connectedTo: null,
-//           timestamp: null,
-//           status: null,
-//         );
-//       }).toList();
-//     }
-
-//     return myConnects.where((MyConnect element) {
-//       bool isWithinTime = timestamp == null
-// =======
-//     return connects.where((MyConnect element) {
-//       bool isWithInTime = timestamp == null
-// >>>>>>> test
-//           ? true
-//           : DateTime.now().millisecondsSinceEpoch - (element.timestamp ?? 0) <=
-//               timestamp;
-//       return isWithinTime;
-//     }).toList();
-//   }
 
   List<MyConnect> _connections(
     List<MyConnect> connects, {

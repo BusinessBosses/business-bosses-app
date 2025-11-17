@@ -99,9 +99,8 @@ class _HeroSectionState extends State<HeroSection> {
       title: 'Boss of the Week',
       icon: LucideIcons.trophy,
       gradientColors: <Color>[
-        Color(0xFFF3F4F6),
-        Color(0xFFE5E7EB),
-        Color(0xFFD1D5DB),
+        backgroundColor,
+        backgroundColor,
       ],
       iconColor: Color(0xFFFCD34D),
       accentColor: Color(0x33FBBf24),
@@ -111,8 +110,7 @@ class _HeroSectionState extends State<HeroSection> {
       icon: LucideIcons.dollarSign,
       gradientColors: <Color>[
         Color(0xFFE0F2F1),
-        Color(0xFFB2DFDB),
-        Color(0xFFB2EBF2)
+        Color(0xFFE0F2F1),
       ],
       iconColor: Color(0xFF6EE7B7),
       accentColor: Color(0x3334D399),
@@ -122,8 +120,7 @@ class _HeroSectionState extends State<HeroSection> {
       icon: LucideIcons.graduationCap,
       gradientColors: <Color>[
         Color(0xFFE0F2FE),
-        Color(0xFFBAE6FD),
-        Color(0xFFDBEAFE),
+        Color(0xFFE0F2FE),
       ],
       iconColor: Color(0xFF93C5FD),
       accentColor: Color(0x3360A5FA),
@@ -132,9 +129,8 @@ class _HeroSectionState extends State<HeroSection> {
       title: 'Partner of the Week',
       icon: LucideIcons.heartHandshake,
       gradientColors: <Color>[
-        Color(0xFFFDEFFB),
-        Color(0xFFFFF6E0),
-        Color(0xFFE0F7FA),
+        Color.fromARGB(255, 251, 249, 231),
+        Color.fromARGB(255, 251, 249, 231),
       ],
       iconColor: Color(0xFFFDA4AF),
       accentColor: Color(0x33FB7185),
@@ -144,8 +140,7 @@ class _HeroSectionState extends State<HeroSection> {
       icon: LucideIcons.users,
       gradientColors: <Color>[
         Color(0xFFEDE9FE),
-        Color(0xFFF3F4F6),
-        Color(0xFFE0E7FF),
+        Color(0xFFEDE9FE),
       ],
       iconColor: Color(0xFFC4B5FD),
       accentColor: Color(0x338B5CF6),
@@ -155,8 +150,7 @@ class _HeroSectionState extends State<HeroSection> {
       icon: LucideIcons.users,
       gradientColors: <Color>[
         Color(0xFFE0F2FE),
-        Color(0xFFBAE6FD),
-        Color(0xFFDBEAFE),
+        Color(0xFFE0F2FE),
       ],
       iconColor: Color(0xFF93C5FD),
       accentColor: Color(0x3360A5FA),
@@ -232,7 +226,7 @@ class _HeroSectionState extends State<HeroSection> {
         type: 'matches',
         title: 'Find your business matches',
         subtitle:
-            'See your top business matches for the week and connect with people and opportunities that can help your business grow.',
+            'See your top matches and connect with people and opportunities that can help your business grow.',
         image: '',
         action: 'View Matches',
       ),
@@ -929,8 +923,7 @@ class _HeroSectionState extends State<HeroSection> {
                             Get.to(() => BossUpPartner());
                             break;
                           case 'ambassador':
-                            Get.to(() => ReachScreen(
-                                user: _profileController.myProfile));
+                            Get.to(Invitepage());
                             break;
                         }
                       },

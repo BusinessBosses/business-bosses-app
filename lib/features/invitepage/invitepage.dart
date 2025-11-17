@@ -1,4 +1,6 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -16,10 +18,15 @@ class Invitepage extends StatefulWidget {
 class _InvitepageState extends State<Invitepage> {
   ProfileController profileController = Get.find();
   late String _referralId;
+  final ReachController controller = Get.put(ReachController());
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.loadData(profileController.myProfile.uid);
+    });
+
     _referralId = profileController.myProfile.inviteId!;
   }
 
@@ -40,18 +47,32 @@ class _InvitepageState extends State<Invitepage> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
+      body: Obx(() {
+        if (controller.loading.value) {
+          return const SafetyModel();
+        }
+
+        final dynamic invites = controller.data['invitesThisWeek'] ?? 0;
+        final dynamic rank =
+            controller.data['user']['weeklyRankingScore'] ?? 12;
+        return SingleChildScrollView(
+            child: Column(
           children: <Widget>[
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: SizedBox(
-                  height: 200,
+                  height: 150,
                   child: Image.asset('assets/images/invitepicture.png')),
             ),
-
-            const SizedBox(height: 18),
+            const Text(
+              '🏆 Win Ambassador of the Week!',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: Colors.black87,
+              ),
+            ),
 
             const Text(
               'Invite your Friends',
@@ -61,12 +82,12 @@ class _InvitepageState extends State<Invitepage> {
                 fontWeight: FontWeight.w800,
               ),
             ),
-            const SizedBox(height: 5),
+
             const Text(
               'to join Business Bosses and get a Free Promotion',
               style: TextStyle(color: Colors.black54),
             ),
-            const SizedBox(height: 5),
+
             const Text(
               'Copy link to share your InviteID with them',
               style: TextStyle(color: Colors.black45, fontSize: 12),
@@ -79,22 +100,29 @@ class _InvitepageState extends State<Invitepage> {
             // ---------------------------------------
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    'Invite ID:',
-                    style: TextStyle(
-                        color: Colors.grey[600],
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Invite ID:',
+                        style: TextStyle(
+                            color: Colors.grey[600],
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        _referralId,
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 3),
-                  Text(
-                    _referralId,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 15),
+                  const SizedBox(width: 15),
                   GestureDetector(
                     onTap: () {
                       socialShare(
@@ -150,29 +178,24 @@ class _InvitepageState extends State<Invitepage> {
               ),
             ),
 
-            const Spacer(),
+            /// Ambassador Challenge Sectionuser
+            ///
 
-            // ---------------------------------------
-            // TERMS
-            // ---------------------------------------
-            // GestureDetector(
-            //   onTap: () {},
-            //   child: const Padding(
-            //     padding: EdgeInsets.only(bottom: 15),
-            //     child: Text(
-            //       'Terms and Conditions',
-            //       style: TextStyle(
-            //         color: Colors.red,
-            //         fontSize: 12,
-            //         decoration: TextDecoration.underline,
-            //       ),
-            //     ),
-            //   ),
-            // )
+            SizedBox(height: 25),
           ],
-        ),
-      ),
+        ));
+      }),
     );
+  }
+
+  void _shareWithFriends() {
+    // ignore: unnecessary_null_comparison
+    if (_referralId == null) return;
+    String message = 'Check out Business Bosses.\n'
+        'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
+        'Invite id: $_referralId';
+    socialShare(message);
   }
 
   Widget _buildImpactItem({
