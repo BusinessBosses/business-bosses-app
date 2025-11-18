@@ -27,14 +27,15 @@ class CreateForumScreen extends StatefulWidget {
 
 class _CreateForumScreenState extends State<CreateForumScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final CreateForumController _createForumController = Get.find();
+  final CreateForumController _createForumController =
+      Get.put(CreateForumController());
 
   String title = '';
   String description = '';
   ForumModel forum = ForumModel(forumId: '', industryId: '');
   bool isUpdating = false;
-  late bool isbossup;
-  late String industryId;
+  bool isbossup = false;
+  String? industryId;
   String? categoryId;
   bool isVisible = false;
   String? _ytUrl;
@@ -43,15 +44,37 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
   final DetectableTextEditingController descriptionController =
       DetectableTextEditingController();
 
+  // Add lists for industries and categories
+  final List<Map<String, String>> industries = <Map<String, String>>[
+    <String, String>{'id': '1', 'name': 'Technology'},
+    <String, String>{'id': '2', 'name': 'Healthcare'},
+    <String, String>{'id': '3', 'name': 'Finance'},
+    <String, String>{'id': '4', 'name': 'Education'},
+    <String, String>{'id': '5', 'name': 'Retail'},
+    <String, String>{'id': '6', 'name': 'Manufacturing'},
+    <String, String>{'id': '7', 'name': 'Real Estate'},
+    <String, String>{'id': '8', 'name': 'Hospitality'},
+    <String, String>{'id': '9', 'name': 'Other'},
+  ];
+
+  final List<Map<String, String>> categories = <Map<String, String>>[
+    <String, String>{
+      'id': Constants.LEARNINGID,
+      'name': 'Learning & Resources'
+    },
+    <String, String>{'id': '2', 'name': 'Opportunities'},
+    <String, String>{'id': '3', 'name': 'Challenges'},
+  ];
+
   @override
   void initState() {
     super.initState();
 
     final arguments = Get.arguments;
 
-    if (arguments == null) {
-      Get.back();
-    } else {
+    debugPrint('CreateForumScreen arguments: $arguments');
+
+    if (arguments != null) {
       isbossup = arguments['isBossUp'] ?? false;
       if (arguments['isUpdating'] != null) {
         isUpdating = true;
@@ -79,18 +102,14 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
             key: scaffoldKey,
             appBar: AppBar(
               title: Text(
-                isbossup
-                    ? 'Enter Challenge'
-                    : categoryId == Constants.LEARNINGID
-                        ? 'Share Resources'
-                        : 'Share Opportunities',
+                'Share Learning posts',
               ),
               automaticallyImplyLeading: false,
               actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
-                    isbossup ? Get.back() : Get.back();
+                    Get.back();
                   },
                 )
               ],
@@ -100,6 +119,67 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const SizedBox(height: 16.0),
+
+                  // Industry Dropdown
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: DropdownButtonFormField<String>(
+                      initialValue: industryId,
+                      decoration: inputDecoration.copyWith(
+                        hintText: 'Select Industry',
+                        labelText: 'Industry',
+                      ),
+                      items: industries.map((Map<String, String> industry) {
+                        return DropdownMenuItem<String>(
+                          value: industry['id'],
+                          child: Text(industry['name']!),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          industryId = value;
+                        });
+                      },
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select an industry';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+
+                  // Category Dropdown
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: DropdownButtonFormField<String>(
+                      initialValue: categoryId,
+                      decoration: inputDecoration.copyWith(
+                        hintText: 'Select Category',
+                        labelText: 'Category',
+                      ),
+                      items: categories.map((Map<String, String> category) {
+                        return DropdownMenuItem<String>(
+                          value: category['id'],
+                          child: Text(category['name']!),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          categoryId = value;
+                        });
+                      },
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a category';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: TextFormField(
@@ -139,90 +219,8 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     ),
                   ),
                   const SizedBox(height: 12.0),
-                  // if (!isUpdating)
                   Padding(
                     padding: const EdgeInsets.only(left: 15.0),
-                    // child: Row(
-                    //   children: [
-                    //     Container(
-                    //         decoration: BoxDecoration(
-                    //             color: Colors.white,
-                    //             borderRadius: BorderRadius.circular(50)),
-                    //         child: Padding(
-                    //           padding: const EdgeInsets.symmetric(
-                    //               horizontal: 8, vertical: 8),
-                    //           child: GestureDetector(
-                    //             onTap: () {
-                    //               if (controller.imageFileList.length < 5) {
-                    //                 controller.onPickImage();
-                    //               } else {
-                    //                 showSnackbar(
-                    //                     message:
-                    //                         'You can only upload up to 5 images.');
-                    //               }
-                    //             },
-                    //             child: Row(
-                    //               children: <Widget>[
-                    //                 const TextWidget(
-                    //                   text: 'Add Attachment',
-                    //                   fontWeight: FontWeight.w700,
-                    //                   size: 15,
-                    //                 ),
-                    //                 const SizedBox(
-                    //                   width: 5,
-                    //                 ),
-                    //                 SvgPicture.asset(
-                    //                   'assets/svgs/addimagepost.svg',
-                    //                   height: 11,
-                    //                 ),
-
-                    //                 // const Text(
-                    //                 //   'Max file size for images is 10Mb',
-                    //                 //   style: TextStyle(fontSize: 11, color: Colors.red),
-                    //                 // )
-                    //               ],
-                    //             ),
-                    //           ),
-                    //         )),
-                    //     const Padding(
-                    //       padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    //       child: Text('or'),
-                    //     ),
-                    //     Container(
-                    //         decoration: BoxDecoration(
-                    //             color: Colors.white,
-                    //             borderRadius: BorderRadius.circular(50)),
-                    //         child: Padding(
-                    //           padding: const EdgeInsets.symmetric(
-                    //               horizontal: 8, vertical: 8),
-                    //           child: GestureDetector(
-                    //             onTap: () {
-                    //               setState(() {
-                    //                 isVisible = !isVisible;
-                    //               });
-                    //             },
-                    //             child: Row(
-                    //               children: <Widget>[
-                    //                 const TextWidget(
-                    //                   text: 'Add Youtube link',
-                    //                   fontWeight: FontWeight.w700,
-                    //                   size: 15,
-                    //                 ),
-                    //                 const SizedBox(
-                    //                   width: 5,
-                    //                 ),
-                    //                 SvgPicture.asset(
-                    //                   'assets/svgs/yt.svg',
-                    //                   height: 15,
-                    //                 ),
-
-                    //               ],
-                    //             ),
-                    //           ),
-                    //         )),
-                    //   ],
-                    // ),
-
                     child: Row(
                       children: <Widget>[
                         Container(
@@ -256,20 +254,6 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                                       'assets/svgs/addimagepost.svg',
                                       height: 11,
                                     ),
-                                    // Radio(
-                                    //   value: true,
-                                    //   groupValue: isImageSelected,
-                                    //   onChanged: (value) {
-                                    //     setState(() {
-                                    //       isImageSelected = value!;
-                                    //       isYoutubeSelected = false;
-                                    //     });
-                                    //   },
-                                    // ),
-                                    // const Text(
-                                    //   'Max file size for images is 10Mb',
-                                    //   style: TextStyle(fontSize: 11, color: Colors.red),
-                                    // )
                                   ],
                                 ),
                               ),
@@ -305,16 +289,6 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                                       'assets/svgs/yt.svg',
                                       height: 15,
                                     ),
-                                    // Radio(
-                                    //   value: true,
-                                    //   groupValue: isYoutubeSelected,
-                                    //   onChanged: (value) {
-                                    //     setState(() {
-                                    //       isYoutubeSelected = value!;
-                                    //       isImageSelected = false;
-                                    //     });
-                                    //   },
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -340,15 +314,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                           child: TextFormField(
                             onChanged: (String val) {
                               _ytUrl = val;
-                              setState(() {});
                             },
-                            // validator: (value) {
-                            //   if (value == null || value.isEmpty) {
-                            //     return '';
-                            //   }
-                            //   return null;
-                            // },
-                            // textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.visiblePassword,
                             maxLines: 1,
                             decoration: InputDecoration(
@@ -384,6 +350,24 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     child: MCustomButton(
                       buttonType: ButtonType.elevated,
                       onPressed: () {
+                        // Validate industry and category selection
+                        if (industryId == null || industryId!.isEmpty) {
+                          showSnackbar(message: 'Please select an industry');
+                          return;
+                        }
+                        if (categoryId == null || categoryId!.isEmpty) {
+                          showSnackbar(message: 'Please select a category');
+                          return;
+                        }
+                        if (title.trim().isEmpty) {
+                          showSnackbar(message: 'Please enter a title');
+                          return;
+                        }
+                        if (description.trim().isEmpty) {
+                          showSnackbar(message: 'Please enter a description');
+                          return;
+                        }
+
                         if (isUpdating) {
                           controller.editForum(<String, dynamic>{
                             ...forum.toMap(),
@@ -397,6 +381,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                             'description': description.trim(),
                             'timestamp': DateTime.now().millisecondsSinceEpoch,
                             'industryId': industryId,
+                            'categoryId': categoryId,
                             'ytUrl': _ytUrl,
                             'images': _ytUrl != null && _ytUrl != ''
                                 ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'

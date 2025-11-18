@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/invitepage/leaderboardpage.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donationpopup.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class DonationsPage extends StatefulWidget {
   final bool? ishome;
@@ -196,6 +198,25 @@ class DonationsHeader extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(LeaderboardScreen());
+                                },
+                                child: Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      LucideIcons.award,
+                                      size: 15,
+                                    ),
+                                    Text('Previous Winners',
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          color: textColor,
+                                          fontWeight: FontWeight.w600,
+                                        ))
+                                  ],
+                                ),
+                              ),
                               Row(
                                 children: <Widget>[
                                   SvgPicture.asset(
@@ -243,7 +264,6 @@ class DonationsHeader extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
                 ],
               ),
             ),
@@ -306,7 +326,7 @@ class DonationsList extends StatelessWidget {
 
   Widget _buildBalanceAndHistoryRow() {
     return Padding(
-      padding: const EdgeInsets.only(right: 15, left: 15, bottom: 10, top: 10),
+      padding: const EdgeInsets.only(right: 15, left: 15, bottom: 10, top: 0),
       child: Container(
         height: 40,
         decoration: BoxDecoration(

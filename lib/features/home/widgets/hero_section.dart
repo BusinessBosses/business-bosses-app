@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dar
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
+import 'package:business_bosses_v2/features/learningposts/presentation/learningpostscreen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
@@ -440,7 +441,7 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void entermentoroftheweek() {
-    Get.to(() => LearningPage());
+    Get.to(() => LearningPosts());
   }
 
   void enterpartneroftheweek() {
@@ -732,6 +733,9 @@ class _HeroSectionState extends State<HeroSection> {
                               case 'Become Ambassador':
                                 enterambassadoroftheweek();
                                 break;
+                              case 'Share Learning':
+                                entermentoroftheweek();
+                                break;
                               case 'View Matches':
                                 Get.to(() => ExpandedMatchesScreen());
                                 break;
@@ -911,7 +915,7 @@ class _HeroSectionState extends State<HeroSection> {
 
                             break;
                           case 'mentor':
-                            Get.to(() => LearningPage());
+                            Get.to(() => LearningPosts());
                             break;
                           case 'backer':
                             Get.to(() => DonationsPage(
