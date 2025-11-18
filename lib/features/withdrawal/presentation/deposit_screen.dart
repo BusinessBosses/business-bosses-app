@@ -2,7 +2,6 @@
 
 import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
@@ -343,7 +342,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                         fontSize: 16),
                                   ),
                                   Text(
-                                    'Sell your Products or Services',
+                                    'Monetise your expertise',
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w700),
@@ -431,68 +430,6 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                     children: <Widget>[
                                       const Text(
                                         'Share',
-                                        style: TextStyle(
-                                            color: primaryColorLT,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 16),
-                                      ),
-                                      SvgPicture.asset(
-                                          'assets/svgs/nexticon.svg')
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 1,
-                          color: backgroundcolorinterface,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Create Premium Courses',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 16),
-                                  ),
-                                  Text(
-                                    'Monetise your expetise',
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w700),
-                                  )
-                                ],
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Get.to(() => const AllLearningPostsScreen(
-                                        isCoursesTile: false,
-                                      ));
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  width: 120,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 2, color: primaryColorLT),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      const Text(
-                                        'Create',
                                         style: TextStyle(
                                             color: primaryColorLT,
                                             fontWeight: FontWeight.w700,

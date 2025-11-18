@@ -229,27 +229,6 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
             child: ColoredBox(color: backgroundcolorinterface),
           ),
           ListTile(
-              leading: SvgPicture.asset('assets/svgs/analyze.svg'),
-              title: const Text(
-                'Analyse Profile',
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: textColor),
-              ),
-              onTap: () {
-                String uid = profileController.myProfile.uid;
-                Params params = Params(arg1: uid);
-                Get.toNamed(Routes.profileanalysescreen,
-                    arguments: Params(arg1: params));
-              },
-              trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
-          const SizedBox(
-            width: double.infinity,
-            height: 1.5,
-            child: ColoredBox(color: backgroundcolorinterface),
-          ),
-          ListTile(
               leading: SvgPicture.asset('assets/svgs/connectrelevant.svg'),
               title: const Text(
                 'Follow relevant people',

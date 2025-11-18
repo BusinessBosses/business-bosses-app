@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -115,6 +116,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 16),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 15.0),
+            child: GestureDetector(
+              onTap: () {
+                Get.to(Get.toNamed(Routes.analysescreen));
+              },
+              child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: backgroundColor,
+                  child: const Icon(
+                    LucideIcons.helpCircle,
+                    color: textColor,
+                    size: 20,
+                  )),
+            ),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

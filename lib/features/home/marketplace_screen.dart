@@ -15,7 +15,6 @@ import 'package:business_bosses_v2/features/marketplace/presentation/filtermarke
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketservices.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
-import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
@@ -92,7 +91,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     });
 
     _marketplacesearchTabController = TabController(length: 4, vsync: this);
-    _marketplaceTabController = TabController(length: 4, vsync: this);
+    _marketplaceTabController = TabController(length: 3, vsync: this);
 
     _marketplaceTabController.addListener(() {
       if (!_marketplaceTabController.indexIsChanging) {
@@ -550,7 +549,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               return RefreshIndicator(
                 onRefresh: refreshData,
                 child: DefaultTabController(
-                  length: 4,
+                  length: 3,
                   child: Column(
                     children: <Widget>[
                       _buildMarketplaceTabs(),
@@ -561,7 +560,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             MarketsPage(),
                             BuyerRequestsScreen(),
                             SuppliersPage(),
-                            ExpandedMatchesScreen(isMarketplace: true),
                           ],
                         ),
                       ),
@@ -581,8 +579,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     return Container(
       constraints: const BoxConstraints.expand(height: 45),
       child: TabBar(
-        tabAlignment: TabAlignment.start,
-        isScrollable: true,
+        isScrollable: false,
         controller: _marketplaceTabController,
         labelPadding: const EdgeInsets.symmetric(horizontal: 15),
         labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
@@ -591,7 +588,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
           Tab(text: 'Listing'),
           Tab(text: 'Requests'),
           Tab(text: 'Suppliers'),
-          Tab(text: 'Find My Match'),
         ],
       ),
     );
@@ -600,7 +596,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   /// Handles creation button press logic (moved from big nested ifs)
   void _handleCreateButton(BuildContext context) async {
     final int index = _marketplaceTabController.index;
-    if (!_profileController.myProfile.hasShop && index < 4) {
+    if (!_profileController.myProfile.hasShop && index != 1 && index < 4) {
       Get.to(() => const MyProfileScreen(currentIndex: 1));
       return;
     }

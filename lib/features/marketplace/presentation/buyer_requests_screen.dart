@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/marketplace/controllers/requests_con
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -116,48 +117,53 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Row(
-                    spacing: 10,
-                    children: <Widget>[
-                      if (hasValidProfilePic)
-                        NetworkImageWithPlaceHolder(
-                          imageUrl: request.user.photoUrl!,
-                          height: 40,
-                          width: 40,
-                          radius: 50,
-                          cacheHeight: 256,
-                          cacheWidth: 256,
-                          placeHolder: Icons.person,
-                          iconSize: 24,
-                        )
-                      else
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Icon(
-                            Icons.person,
-                            size: 24,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            request.user.name ?? request.user.username,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: textDark,
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(PublicProfileScreen(), arguments: request.user);
+                    },
+                    child: Row(
+                      spacing: 10,
+                      children: <Widget>[
+                        if (hasValidProfilePic)
+                          NetworkImageWithPlaceHolder(
+                            imageUrl: request.user.photoUrl!,
+                            height: 40,
+                            width: 40,
+                            radius: 50,
+                            cacheHeight: 256,
+                            cacheWidth: 256,
+                            placeHolder: Icons.person,
+                            iconSize: 24,
+                          )
+                        else
+                          Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: Icon(
+                              Icons.person,
+                              size: 24,
+                              color: Colors.grey[600],
                             ),
                           ),
-                        ],
-                      ),
-                    ],
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              request.user.name ?? request.user.username,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: textDark,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 16),
                   if (hasValidImage) ...<Widget>[
@@ -213,9 +219,6 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                     const SizedBox(height: 8),
                   ],
                   _buildDetailRow(Icons.category, 'Category', request.category),
-                  const SizedBox(height: 8),
-                  _buildDetailRow(Icons.local_offer, 'Offers Received',
-                      request.offerCount.toString()),
                   const SizedBox(height: 16),
                   if (request.user.uid !=
                       profileController.myProfile.uid) ...<Widget>[
@@ -387,7 +390,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: backgroundColor,
       body: Obx(() {
         if (_buyerRequestController.loading.value) {
           return const Center(child: CircularProgressIndicator());

@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/features/donations/presentation/filterdonatio
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/filterchallengeposts.dart';
+import 'package:business_bosses_v2/features/invitepage/leaderboardpage.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../common/widgets/popup/bossup_challenge_popup.dart';
@@ -450,63 +452,40 @@ class _BossUpSectionState extends State<BossUpSection>
                                                         CrossAxisAlignment
                                                             .center,
                                                     children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    right: 2,
-                                                                    top: 5),
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/svgs/members.svg',
-                                                              height: 15,
-                                                              color:
-                                                                  primaryColorLT,
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    top: 5.0),
-                                                            child: RichText(
-                                                              text: TextSpan(
-                                                                children: <InlineSpan>[
-                                                                  TextSpan(
-                                                                    text: widget.industry.joinedUsers ==
-                                                                            null
-                                                                        ? 'Members (0)'
-                                                                        : 'Members ($formattedUserCount)',
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      color:
-                                                                          primaryColorLT,
-                                                                      decoration:
-                                                                          TextDecoration
-                                                                              .underline,
-                                                                    ),
-                                                                    recognizer:
-                                                                        TapGestureRecognizer()
-                                                                          ..onTap =
-                                                                              () {
-                                                                            Get.toNamed(
-                                                                              Routes.specificuserlistscreen,
-                                                                              arguments: '-MsUOGcOT9oRXGakCcJv',
-                                                                            );
-                                                                          },
-                                                                  ),
-                                                                ],
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(
+                                                              LeaderboardScreen());
+                                                        },
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  left: 8.0,
+                                                                  top: 5,
+                                                                  right: 2),
+                                                          child: Row(
+                                                            children: <Widget>[
+                                                              Icon(
+                                                                LucideIcons
+                                                                    .award,
+                                                                size: 15,
                                                               ),
-                                                            ),
+                                                              Text(
+                                                                  'Previous Winners',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        13,
+                                                                    color:
+                                                                        textColor,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ))
+                                                            ],
                                                           ),
-                                                        ],
+                                                        ),
                                                       ),
                                                       Row(
                                                         children: <Widget>[

@@ -90,10 +90,6 @@ class BuyerRequestItem extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          Icon(
-                            LucideIcons.chevronRight,
-                            size: 15,
-                          ),
                         ],
                       ),
                       Text(

@@ -425,7 +425,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
             children: <Widget>[
               _buildLabel('Attachments (optional)', LucideIcons.file),
               Text(
-                'Upload specs, images, or sample references (max 5 files)',
+                'Upload images, or files (max 5 files)',
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
             ],
@@ -479,36 +479,28 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
         // 🟢 File picker for new attachments
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: InkWell(
+          child: GestureDetector(
             onTap: (_existingAttachments.length + _attachments.length) < 5
                 ? _pickFiles
                 : null,
             child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(32),
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: Colors.grey[300]!, width: 2),
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(radiusValue),
               ),
-              child: Column(
-                children: <Widget>[
-                  Icon(LucideIcons.uploadCloud,
-                      size: 48, color: Colors.grey[400]),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Drag & drop files here',
-                    style: TextStyle(
-                      color: Colors.grey[700],
-                      fontWeight: FontWeight.w500,
+              child: const Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Add Attachment',
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'or click to browse',
-                    style: TextStyle(fontSize: 14, color: Colors.grey[500]),
-                  ),
-                ],
+                    Icon(Icons.image),
+                  ],
+                ),
               ),
             ),
           ),

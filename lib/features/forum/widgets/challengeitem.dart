@@ -117,7 +117,7 @@ class Challengeitem extends StatelessWidget {
               onPressed: OnTap,
               child: Text(
                 isPartner == true
-                    ? 'Claim Deals'
+                    ? 'Partners Deals'
                     : isCrowdfund == true
                         ? 'Fund a Project'
                         : isMentor == true
