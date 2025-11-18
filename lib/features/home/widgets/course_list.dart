@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
+import 'package:business_bosses_v2/features/forum/presentation/all_learning_posts.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

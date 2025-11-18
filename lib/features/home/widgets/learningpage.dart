@@ -2,7 +2,7 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/common/widgets/tiles/custom_tile.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
+import 'package:business_bosses_v2/features/forum/presentation/all_learning_posts.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';

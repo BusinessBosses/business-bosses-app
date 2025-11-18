@@ -2,12 +2,13 @@
 
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 
 class ForumModel {
   final String forumId;
   final String industryId;
   final String? description;
-  final String? industry;
+  final Industry? industry;
   final String? title;
   final String? ytUrl;
   final List<String>? images;
@@ -43,7 +44,7 @@ class ForumModel {
     String? industryId,
     String? description,
     String? title,
-    String? industry,
+    Industry? industry,
     List<String>? images,
     int? timestamp,
     List<String>? likes,
@@ -82,7 +83,7 @@ class ForumModel {
       'industryId': industryId,
       'description': description,
       'title': title,
-      'industry': industry,
+      'industry': industry?.toMap(),
       'images': images,
       'promote': promote,
       'approved': approved,
@@ -105,7 +106,9 @@ class ForumModel {
           map['description'] != null ? map['description'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
       ytUrl: map['ytUrl'] != null ? map['ytUrl'] as String : null,
-      industry: map['industry'] != null ? map['industry'] as String : null,
+      industry: map['industry'] != null && map['industry'] is Map
+          ? Industry.fromMap(map['industry'])
+          : null,
       images: map['images'] != null && map['images'] != ''
           ? List<String>.from((map['images']))
                   .where((String element) => element.isNotEmpty)

@@ -4,7 +4,7 @@ import 'package:business_bosses_v2/features/forum/controller/challenge_controlle
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/challengeitem.dart';
-import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
+import 'package:business_bosses_v2/features/forum/presentation/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';

@@ -85,10 +85,10 @@ class ForumController extends GetxController {
     error(false);
     update();
     final ApiResponseModel response = await ForumRepository.getForums(
-        page.value,
-        Get.arguments.runtimeType == String
-            ? Get.arguments
-            : Get.arguments.industryId);
+      page.value,
+      industry.industryId!,
+    );
+
     if (response.success) {
       totalForums(int.parse(response.data['count'].toString()));
       page(page.value + 1);
@@ -110,6 +110,36 @@ class ForumController extends GetxController {
       error(true);
     }
     loading(false);
+
+    update();
+  }
+
+  Future<void> fetchIndustryUsers(String industryId,
+      {bool isNext = false}) async {
+    members.clear();
+    membersPage(0);
+    if (isNext && loadingNextMembers.value) return;
+    if (isNext) {
+      loadingNextMembers(true);
+    } else {
+      loadingMembers(true);
+      errorMembers(false);
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      update();
+    });
+    final ApiResponseModel response =
+        await ForumRepository.getForumMembers(membersPage.value, industryId);
+    if (response.success) {
+      membersPage(membersPage.value + 1);
+      for (int i = 0; i < response.data.length; i++) {
+        members.add(UserModel.fromMap(response.data[i]));
+      }
+    } else {
+      errorMembers(true);
+    }
+    loadingNextMembers(false);
+    loadingMembers(false);
 
     update();
   }
@@ -155,36 +185,6 @@ class ForumController extends GetxController {
     }
   }
 
-  Future<void> fetchIndustryUsers(String industryId,
-      {bool isNext = false}) async {
-    members.clear();
-    membersPage(0);
-    if (isNext && loadingNextMembers.value) return;
-    if (isNext) {
-      loadingNextMembers(true);
-    } else {
-      loadingMembers(true);
-      errorMembers(false);
-    }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      update();
-    });
-    final ApiResponseModel response =
-        await ForumRepository.getForumMembers(membersPage.value, industryId);
-    if (response.success) {
-      membersPage(membersPage.value + 1);
-      for (int i = 0; i < response.data.length; i++) {
-        members.add(UserModel.fromMap(response.data[i]));
-      }
-    } else {
-      errorMembers(true);
-    }
-    loadingNextMembers(false);
-    loadingMembers(false);
-
-    update();
-  }
-
   /// LIKE AND UNLIKE FUNCTION
   void postLike(String userId, String postId, String type, String receiverUid) {
     final int postIndex =
@@ -222,9 +222,7 @@ class ForumController extends GetxController {
 
     searchedUsers.clear();
 
-    if (members.isEmpty) {
-      await fetchIndustryUsers(industryid);
-    }
+    await fetchIndustryUsers(industry.industryId!);
 
     for (UserModel user in members) {
       if (user.username.toLowerCase().contains(query.toLowerCase()) ||
@@ -378,16 +376,15 @@ class ForumController extends GetxController {
   @override
   void onInit() {
     socket = _homeController.socket;
-    debugPrint(Get.arguments);
-    if (Get.arguments == null) {
+
+    if (Get.arguments is! Industry) {
+      debugPrint('Invalid arguments passed to ForumController.');
       Get.back();
       return;
-    } else {
-      if (Get.arguments.runtimeType == Industry) {
-        industry = Get.arguments;
-        fetchForums();
-      }
     }
+
+    industry = Get.arguments as Industry;
+    fetchForums(); // Safe to call now
 
     super.onInit();
   }

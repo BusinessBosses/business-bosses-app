@@ -640,7 +640,7 @@ class _ForumItemState extends State<ForumItem> {
                             color: backgroundcolorinterface,
                             borderRadius: BorderRadius.all(Radius.circular(5))),
                         child: TextWidget(
-                          text: widget.forum.industry!,
+                          text: widget.forum.industry!.industry!,
                           fontWeight: FontWeight.w700,
                           size: 10,
                         ),
