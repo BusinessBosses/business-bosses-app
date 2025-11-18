@@ -14,7 +14,7 @@ class CoursesPopup extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.white,
       elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       insetPadding: const EdgeInsets.all(10),
       child: Container(
         padding: const EdgeInsets.all(15),
@@ -31,11 +31,8 @@ class CoursesPopup extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: backgroundColor,
                     borderRadius: BorderRadius.circular(15)),
-                child: Lottie.asset(
-                  'assets/anim/courses.json',
-                  height: 80,
-                  fit: BoxFit.fill
-                ),
+                child: Lottie.asset('assets/anim/courses.json',
+                    height: 80, fit: BoxFit.fill),
               ),
             ),
             const SizedBox(
@@ -50,12 +47,12 @@ class CoursesPopup extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-             const Row(
+            const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    'The course learning feature is a valuable resource for individuals looking to enhance their business knowledge. Whether you\'re a budding entrepreneur seeking business tips, a business owner looking to expand your skills, or simply eager to learn something new, our courses cater to diverse learning needs.',
+                    'The learning feature is a valuable resource for individuals looking to enhance their business knowledge. Whether you\'re a budding entrepreneur seeking business tips, or simply eager to learn something new, our courses cater to diverse learning needs.',
                     style: bodyText2,
                     textAlign: TextAlign.start,
                   ),
@@ -71,22 +68,8 @@ class CoursesPopup extends StatelessWidget {
               style: bodyText1.copyWith(
                   fontWeight: FontWeight.w700, color: Colors.black),
             ),
-           
-           
             const SizedBox(
               height: 10,
-            ),
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    '• Create free or paid courses that is relevant to your have expertise in',
-                    style: bodyText2,
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-              ],
             ),
             const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,44 +95,17 @@ class CoursesPopup extends StatelessWidget {
                 ),
               ],
             ),
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    '• Click on the course card to access detailed information about the course, instructor, and reviews.',
-                    style: bodyText2,
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-              ],
-            ),
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    '• Complete the enrolment process for paid courses and gain access to the course content.',
-                    style: bodyText2,
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-              ],
-            ),
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    '• Work through the course material at your own pace and complete all required modules.',
-                    style: bodyText2,
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-              ],
-            ),
             const SizedBox(
               height: 20,
+            ),
+            Text(
+              'Create courses for a chance to get featured as mentor of the week',
+              textAlign: TextAlign.center,
+              style: bodyText1.copyWith(
+                  fontWeight: FontWeight.w700, color: Colors.black),
+            ),
+            const SizedBox(
+              height: 10,
             ),
             SizedBox(
               height: SizeConfig.safeBlockHorizontal * 3,

@@ -142,7 +142,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: _buildRankBadge(rank),
+        // leading: _buildRankBadge(rank),
         title: Row(
           children: <Widget>[
             _buildAvatar(user),

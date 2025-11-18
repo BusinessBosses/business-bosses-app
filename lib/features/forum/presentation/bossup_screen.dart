@@ -470,15 +470,20 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                 LucideIcons
                                                                     .award,
                                                                 size: 15,
+                                                                color:
+                                                                    primaryColorLT,
                                                               ),
                                                               Text(
                                                                   'Previous Winners',
                                                                   style:
                                                                       const TextStyle(
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .underline,
                                                                     fontSize:
                                                                         13,
                                                                     color:
-                                                                        textColor,
+                                                                        primaryColorLT,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w600,
