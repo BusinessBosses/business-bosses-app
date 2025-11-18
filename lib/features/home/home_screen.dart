@@ -258,6 +258,9 @@ class _HomeScreenState extends State<HomeScreen>
                 } else if (homeController.error.value) {
                   return _buildError();
                 } else {
+                  if (marketController.proItems.isEmpty) {
+                    marketController.initProItems();
+                  }
                   return _buildMainContent();
                 }
               }),

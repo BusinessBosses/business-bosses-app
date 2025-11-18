@@ -1,7 +1,7 @@
 import 'package:business_bosses_v2/features/home/widgets/cointile.dart';
 import 'package:business_bosses_v2/features/home/widgets/howtousetile.dart';
 import 'package:business_bosses_v2/features/home/widgets/protile.dart';
-import 'package:business_bosses_v2/features/home/widgets/relevantpeopletile.dart';
+import 'package:business_bosses_v2/features/home/widgets/relevant_people_tile.dart';
 import 'package:flutter/material.dart';
 
 class DiscoverSection extends StatelessWidget {

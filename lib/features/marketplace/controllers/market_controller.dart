@@ -99,7 +99,6 @@ class MarketController extends GetxController {
     try {
       loading(true);
       error(false);
-      await initDescription();
       await initProItems();
     } catch (e) {
       log(e.toString());
@@ -174,7 +173,7 @@ class MarketController extends GetxController {
         final List<dynamic> productRows =
             responseProducts.data['rows'] ?? <dynamic>[];
         final List<Product> newProducts = productRows
-            .map((e) => Product.fromJson(e as Map<String, dynamic>))
+            .map((dynamic e) => Product.fromJson(e as Map<String, dynamic>))
             .where((Product p) => p.isActive)
             .toList();
         proProducts.addAll(newProducts);
@@ -185,7 +184,7 @@ class MarketController extends GetxController {
         final List<dynamic> serviceRows =
             responseServices.data['rows'] ?? <dynamic>[];
         final List<Service> newServices = serviceRows
-            .map((e) => Service.fromJson(e as Map<String, dynamic>))
+            .map((dynamic e) => Service.fromJson(e as Map<String, dynamic>))
             .where((Service s) => s.isActive)
             .toList();
         proServices.addAll(newServices);

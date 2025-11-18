@@ -10,7 +10,7 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_list.dart';
 import 'package:business_bosses_v2/features/home/widgets/hero_section.dart';
-import 'package:business_bosses_v2/features/home/widgets/relevantpeopletile.dart';
+import 'package:business_bosses_v2/features/home/widgets/relevant_people_tile.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
