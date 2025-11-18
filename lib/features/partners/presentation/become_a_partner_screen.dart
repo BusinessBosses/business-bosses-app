@@ -421,21 +421,18 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
   }
 
   Widget _buildSubmitButton() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Obx(() {
-        final bool loading = partnerController.isLoading.value;
-        return SizedBox(
-          width: double.infinity,
-          child: ProCustomButton(
-            loading: loading,
-            text: loading ? 'Submitting...' : 'Submit',
-            color: primaryColorLT,
-            onPressed: _onSubmitPressed,
-          ),
-        );
-      }),
-    );
+    return Obx(() {
+      final bool loading = partnerController.isLoading.value;
+      return SizedBox(
+        width: double.infinity,
+        child: ProCustomButton(
+          loading: loading,
+          text: loading ? 'Submitting...' : 'Submit',
+          color: primaryColorLT,
+          onPressed: _onSubmitPressed,
+        ),
+      );
+    });
   }
 
   Widget _buildLabel(String text, IconData icon) {

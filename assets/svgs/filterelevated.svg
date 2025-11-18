@@ -1,7 +1,0 @@
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="40" height="40" rx="10" transform="matrix(-1 0 0 1 40 0)" fill="white"/>
-<line x1="11.4001" y1="16.1348" x2="27.8" y2="16.1348" stroke="#232426" stroke-width="2" stroke-linecap="round"/>
-<line x1="11.4001" y1="25.0381" x2="27.8" y2="25.0381" stroke="#13171A" stroke-width="2" stroke-linecap="round"/>
-<circle cx="16.9292" cy="15.948" r="2.56126" fill="white" stroke="#232426" stroke-width="2"/>
-<circle cx="22.2712" cy="24.8513" r="2.56126" fill="white" stroke="#232426" stroke-width="2"/>
-</svg>
