@@ -11,11 +11,10 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
-import 'package:business_bosses_v2/features/learningposts/presentation/learningpostscreen.dart';
-import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
-import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
+import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -441,7 +440,7 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void entermentoroftheweek() {
-    Get.to(() => LearningPosts());
+    Get.to(() => const AllLearningPostsScreen(isCoursesTile: false));
   }
 
   void enterpartneroftheweek() {
@@ -915,7 +914,8 @@ class _HeroSectionState extends State<HeroSection> {
 
                             break;
                           case 'mentor':
-                            Get.to(() => LearningPosts());
+                            Get.to(() => const AllLearningPostsScreen(
+                                isCoursesTile: false));
                             break;
                           case 'backer':
                             Get.to(() => DonationsPage(
