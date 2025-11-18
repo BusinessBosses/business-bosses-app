@@ -157,6 +157,23 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                       decoration: inputDecoration.copyWith(
                         hintText: 'Enter Course Title',
                       )),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  DetectableTextField(
+                    regExp: detectionRegExp(hashtag: false)!,
+                    keyboardType: TextInputType.multiline,
+                    maxLength: 1000,
+                    maxLines: 5,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    onChanged: (String val) {
+                      setState(() {
+                        description = val;
+                      });
+                    },
+                    decoration: inputDecoration.copyWith(
+                        hintText: 'Describe the Course'),
+                  ),
                   const SizedBox(height: 24.0),
                   const Text(
                     'Select Course Content type',
@@ -234,29 +251,166 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  DetectableTextField(
-                    regExp: detectionRegExp(hashtag: false)!,
-                    keyboardType: TextInputType.multiline,
-                    maxLength: 1000,
-                    maxLines: 5,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    onChanged: (String val) {
-                      setState(() {
-                        description = val;
-                      });
-                    },
-                    decoration: inputDecoration.copyWith(
-                        hintText: 'Describe the Course'),
-                  ),
                   const SizedBox(height: 20.0),
                   Visibility(
                     visible: true,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        Visibility(
+                          visible: _selectedContentType.toString() ==
+                                  'ContentType.files' ||
+                              _selectedContentType.toString() ==
+                                  'ContentType.both',
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              InkWell(
+                                onTap: (() async {
+                                  final FilePickerResult? result =
+                                      await FilePicker.platform.pickFiles(
+                                    allowMultiple: true,
+                                    type: FileType.custom,
+                                    allowedExtensions: <String>['pdf'],
+                                  );
+
+                                  if (result != null) {
+                                    setState(() {
+                                      for (dynamic file in result.files) {
+                                        selectedFileNames.add(file.name);
+                                        selectedFilePaths.add(file.path!);
+                                      }
+                                    });
+                                  }
+                                }),
+                                child: Container(
+                                  height: 55,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 9,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        const Wrap(children: <Widget>[
+                                          Text(
+                                            'Add Files',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            ' (Only PDFs are supported)',
+                                            style: TextStyle(
+                                              color: primaryColorLT,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ]),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: SvgPicture.asset(
+                                            'assets/svgs/fileresources.svg',
+                                          ),
+                                        ),
+                                      ]),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              editDocuments != null && editDocuments!.isNotEmpty
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: editDocuments!
+                                          .asMap()
+                                          .entries
+                                          .map((MapEntry<int, String> entry) {
+                                        int index = entry.key;
+                                        String fileName = entry.value;
+
+                                        return Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 6),
+                                          padding: const EdgeInsets.all(6),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black12,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Row(
+                                            children: <Widget>[
+                                              const Icon(
+                                                  Icons.insert_drive_file),
+                                              const SizedBox(width: 8),
+                                              Flexible(
+                                                child: Text(
+                                                  fileName,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(Icons.close,
+                                                    color: Colors.red),
+                                                onPressed: () =>
+                                                    _removeFile(index),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }).toList(),
+                                    )
+                                  : const SizedBox(),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: selectedFileNames
+                                    .asMap()
+                                    .entries
+                                    .map((MapEntry<int, String> entry) {
+                                  int index = entry.key;
+                                  String fileName = entry.value;
+
+                                  return Container(
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 6),
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black12,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      children: <Widget>[
+                                        const Icon(Icons.insert_drive_file),
+                                        const SizedBox(width: 8),
+                                        Flexible(
+                                          child: Text(
+                                            fileName,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.close,
+                                              color: Colors.red),
+                                          onPressed: () =>
+                                              _removeFileUpload(index),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                        ),
                         const Text(
                           'Add an image for your Course',
                           style: TextStyle(
@@ -325,157 +479,11 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                       ],
                     ),
                   ),
-                  Visibility(
-                    visible: _selectedContentType.toString() ==
-                            'ContentType.files' ||
-                        _selectedContentType.toString() == 'ContentType.both',
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        InkWell(
-                          onTap: (() async {
-                            final FilePickerResult? result =
-                                await FilePicker.platform.pickFiles(
-                              allowMultiple: true,
-                              type: FileType.custom,
-                              allowedExtensions: <String>['pdf'],
-                            );
-
-                            if (result != null) {
-                              setState(() {
-                                for (dynamic file in result.files) {
-                                  selectedFileNames.add(file.name);
-                                  selectedFilePaths.add(file.path!);
-                                }
-                              });
-                            }
-                          }),
-                          child: Container(
-                            height: 55,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 9,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  const Wrap(children: <Widget>[
-                                    Text(
-                                      'Add Files',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      ' (Only PDFs are supported)',
-                                      style: TextStyle(
-                                        color: primaryColorLT,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ]),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: SvgPicture.asset(
-                                      'assets/svgs/fileresources.svg',
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        editDocuments != null && editDocuments!.isNotEmpty
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: editDocuments!
-                                    .asMap()
-                                    .entries
-                                    .map((MapEntry<int, String> entry) {
-                                  int index = entry.key;
-                                  String fileName = entry.value;
-
-                                  return Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 6),
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      color: Colors.black12,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Row(
-                                      children: <Widget>[
-                                        const Icon(Icons.insert_drive_file),
-                                        const SizedBox(width: 8),
-                                        Flexible(
-                                          child: Text(
-                                            fileName,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(Icons.close,
-                                              color: Colors.red),
-                                          onPressed: () => _removeFile(index),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
-                              )
-                            : const SizedBox(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: selectedFileNames
-                              .asMap()
-                              .entries
-                              .map((MapEntry<int, String> entry) {
-                            int index = entry.key;
-                            String fileName = entry.value;
-
-                            return Container(
-                              margin: const EdgeInsets.symmetric(vertical: 6),
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: Colors.black12,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  const Icon(Icons.insert_drive_file),
-                                  const SizedBox(width: 8),
-                                  Flexible(
-                                    child: Text(
-                                      fileName,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.close,
-                                        color: Colors.red),
-                                    onPressed: () => _removeFileUpload(index),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                      ],
-                    ),
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       const Text(
-                        'Paid Course',
+                        'Is this a paid course?',
                         style: TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 16),
                       ),
@@ -492,6 +500,12 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                                     ? false
                                     : true
                                 : _paidCourse,
+                            activeThumbColor:
+                                Colors.white, // Thumb color when ON
+                            activeTrackColor:
+                                primaryColorLT, // Track color when ON
+                            inactiveTrackColor:
+                                Colors.grey, // Track when OFF (optional)
                             onChanged: (bool value) {
                               setState(() {
                                 _paidCourse = value;

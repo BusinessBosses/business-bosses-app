@@ -172,15 +172,15 @@ String formatDateTimeToAgo(String dateTimeString) {
   Duration difference = DateTime.now().difference(dateTime);
 
   if (difference.inDays > 365) {
-    return '${(difference.inDays / 365).floor()} yrs ago';
+    return '${(difference.inDays / 365).floor()} yrs';
   } else if (difference.inDays > 30) {
-    return '${(difference.inDays / 30).floor()} mon ago';
+    return '${(difference.inDays / 30).floor()} mon';
   } else if (difference.inDays > 0) {
-    return '${difference.inDays} d ago';
+    return '${difference.inDays} d';
   } else if (difference.inHours > 0) {
-    return '${difference.inHours} hrs ago';
+    return '${difference.inHours} hrs';
   } else if (difference.inMinutes > 0) {
-    return '${difference.inMinutes} mins ago';
+    return '${difference.inMinutes} mins';
   } else {
     return 'just now';
   }

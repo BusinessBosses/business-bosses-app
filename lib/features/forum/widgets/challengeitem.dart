@@ -119,7 +119,7 @@ class Challengeitem extends StatelessWidget {
                 isPartner == true
                     ? 'Partners Deals'
                     : isCrowdfund == true
-                        ? 'Fund a Project'
+                        ? 'Crowdfund'
                         : isMentor == true
                             ? 'Start Learning'
                             : 'Enter',

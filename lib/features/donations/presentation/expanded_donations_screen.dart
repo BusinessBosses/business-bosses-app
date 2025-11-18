@@ -418,7 +418,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                                         .length ==
                                                     1
                                                 ? ' Supporter'
-                                                : ' Supporters',
+                                                : ' Backers',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: subtextColor,
@@ -998,11 +998,11 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
 
   String formatDuration(Duration difference) {
     if (difference.inDays > 0) {
-      return '${difference.inDays} ${difference.inDays == 1 ? 'day ago' : 'days ago'}';
+      return '${difference.inDays} ${difference.inDays == 1 ? 'day' : 'days'}';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours} ${difference.inHours == 1 ? 'hour ago' : 'hours ago'}';
+      return '${difference.inHours} ${difference.inHours == 1 ? 'hour' : 'hours'}';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} ${difference.inMinutes == 1 ? 'minute ago' : 'minutes ago'}';
+      return '${difference.inMinutes} ${difference.inMinutes == 1 ? 'minute' : 'minutes'}';
     } else {
       return 'just now';
     }
