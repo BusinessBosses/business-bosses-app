@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/common/widgets/tiles/custom_tile_learning.dart';
-import 'package:business_bosses_v2/features/courses/widgets/coursespopup.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -44,29 +43,9 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
           title: Text(
             widget.isCoursesTile == true
                 ? 'Community & Networking'
-                : 'Learn New Skills',
+                : 'Learn New Skils',
             textAlign: TextAlign.center,
           ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => const CoursesPopup(),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: SvgPicture.asset(
-                    'assets/svgs/info.svg',
-                    height: 22,
-                  ),
-                ),
-              ),
-            ),
-          ],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -82,17 +61,9 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
                       true
                   ? Container()
                   : CustomTileLearning(
-                      url: controller
-                          .getCategoryIndustries(Constants.LEARNINGID)[index]
-                          .photo,
                       label: controller
                           .getCategoryIndustries(Constants.LEARNINGID)[index]
                           .industry!,
-                      count: controller
-                          .getCategoryIndustries(Constants.LEARNINGID)[index]
-                          .industry
-                          ?.length
-                          .toString(),
                       onTap: () {
                         if (widget.isCoursesTile == true) {
                           Get.to(() => const AllForumScreen(isCourses: false),

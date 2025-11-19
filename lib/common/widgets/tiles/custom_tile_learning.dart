@@ -1,5 +1,8 @@
+import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 /// Custom Tile For Forums Categories GridView
 class CustomTileLearning extends StatelessWidget {
@@ -7,6 +10,8 @@ class CustomTileLearning extends StatelessWidget {
   final String label;
   final bool hideIcon;
   final bool showBorder;
+  final String? count;
+  final String? url;
 
   const CustomTileLearning({
     super.key,
@@ -14,6 +19,8 @@ class CustomTileLearning extends StatelessWidget {
     required this.label,
     this.hideIcon = false,
     this.showBorder = false,
+    this.count,
+    this.url,
   });
 
   @override
@@ -41,17 +48,52 @@ class CustomTileLearning extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     ListTile(
-                        title: Text(
-                          label,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                      title: Column(
+                        children: <Widget>[
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: SizedBox(
+                              width: 25,
+                              height: 25,
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl: url ?? '',
+                              ),
+                            ),
                           ),
-                        ),
-                        trailing: hideIcon
-                            ? null
-                            : SvgPicture.asset('assets/svgs/nexticon.svg')),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            label,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  '$count Courses' ?? '0',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                                Icon(
+                                  LucideIcons.chevronRight,
+                                  size: 15,
+                                  color: primaryColorLT,
+                                )
+                              ]),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),

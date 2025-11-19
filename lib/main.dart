@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
@@ -43,11 +43,11 @@ void main() {
     await Firebase.initializeApp();
 
     // Crashlytics setup
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-    PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
+    // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    // PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    // FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    // return true;
+    // };
 
     await FlutterDownloader.initialize();
 
@@ -67,8 +67,8 @@ void main() {
     FlutterNativeSplash.remove();
   }, (Object error, StackTrace stackTrace) async {
     // Catch ANY uncaught error that escapes the zone
-    await FirebaseCrashlytics.instance
-        .recordError(error, stackTrace, fatal: true);
+    // await FirebaseCrashlytics.instance
+    //     .recordError(error, stackTrace, fatal: true);
   });
 }
 

@@ -75,70 +75,53 @@ class _CoursesPageState extends State<CoursesPage> {
                       ),
                       Row(
                         children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    const CoursesPopup(),
-                              );
-                            },
+                          Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(left: 15.0),
+                              child: Text(
+                                'Create learning to become mentor of the week',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(150, 45),
+                                backgroundColor: primaryColorLT,
+                              ),
+                              onPressed: () {
+                                Get.to(() => CreateCourseScreen(
+                                      industryId: industry.industryId!,
+                                    ));
+                              },
                               child: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   const Text(
-                                    'Info',
+                                    'Create a Course',
                                     style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700),
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
+                                  const SizedBox(width: 5),
                                   SvgPicture.asset(
-                                    'assets/svgs/info.svg',
-                                    height: 20,
-                                  ),
+                                      'assets/svgs/startatopic.svg'),
                                 ],
                               ),
                             ),
                           ),
-                          const Spacer(),
-                          Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    minimumSize: const Size(150, 45),
-                                    backgroundColor: primaryColorLT,
-                                  ),
-                                  onPressed: () {
-                                    Get.to(() => CreateCourseScreen(
-                                        industryId: industry.industryId!));
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      const Text(
-                                        'Create a Course',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      SvgPicture.asset(
-                                          'assets/svgs/startatopic.svg')
-                                    ],
-                                  ),
-                                ),
-                              )),
                         ],
-                      ),
+                      )
                     ],
                   ),
                 ),
