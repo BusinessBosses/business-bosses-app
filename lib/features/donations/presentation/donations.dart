@@ -78,6 +78,28 @@ class _DonationsPageState extends State<DonationsPage> {
       ),
       centerTitle: true,
       title: const Text('CrowdFund'),
+      actions: <Widget>[
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (_) => const DonationPopup(),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+            child: Row(
+              children: <Widget>[
+                SvgPicture.asset(
+                  'assets/svgs/info.svg',
+                  height: 22,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -117,38 +139,8 @@ class DonationsHeader extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (_) => const DonationPopup(),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 8),
-                          decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Row(
-                            children: <Widget>[
-                              SvgPicture.asset(
-                                'assets/svgs/info.svg',
-                                height: 15,
-                              ),
-                              const SizedBox(width: 5),
-                              const Text(
-                                'How it works ',
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                     ],
                   ),
-                  const SizedBox(height: 10),
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: <BoxShadow>[
@@ -209,7 +201,7 @@ class DonationsHeader extends StatelessWidget {
                                       size: 15,
                                       color: primaryColorLT,
                                     ),
-                                    Text('Previous Winners',
+                                    Text('Previous Backers',
                                         style: const TextStyle(
                                           decoration: TextDecoration.underline,
                                           fontSize: 13,
@@ -245,11 +237,11 @@ class DonationsHeader extends StatelessWidget {
                                 child: Row(
                                   children: <Widget>[
                                     const Text(
-                                      'Enter ',
+                                      'Post project ',
                                       style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 13,
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                     const SizedBox(width: 5),

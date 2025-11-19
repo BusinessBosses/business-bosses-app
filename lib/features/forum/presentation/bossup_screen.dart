@@ -320,7 +320,6 @@ class _BossUpSectionState extends State<BossUpSection>
                                                         horizontal: 10,
                                                         vertical: 8),
                                                 decoration: BoxDecoration(
-                                                    color: Colors.black12,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             30)),
@@ -334,7 +333,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                                       width: 5,
                                                     ),
                                                     const Text(
-                                                      'How it works ',
+                                                      'Info',
                                                       style: TextStyle(
                                                           fontSize: 12,
                                                           fontWeight:

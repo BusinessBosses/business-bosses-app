@@ -288,7 +288,7 @@ class _DonationItemState extends State<DonationItem> {
                                   border: Border.all(color: primaryColorLT),
                                 ),
                                 child: const Text(
-                                  'Support',
+                                  'Back Project',
                                   style: TextStyle(
                                     color: primaryColorLT,
                                     fontWeight: FontWeight.bold,
@@ -585,7 +585,7 @@ class _DonationItemState extends State<DonationItem> {
                                                                 .length ==
                                                             1
                                                         ? ' Supporter'
-                                                        : ' Supporters',
+                                                        : ' Backers',
                                                     style: const TextStyle(
                                                         fontSize: 10,
                                                         color: subtextColor),
@@ -1057,11 +1057,11 @@ class _DonationItemState extends State<DonationItem> {
 
   String formatDuration(Duration difference) {
     if (difference.inDays > 0) {
-      return '${difference.inDays} ${difference.inDays == 1 ? 'd ago' : 'd ago'}';
+      return '${difference.inDays} ${difference.inDays == 1 ? 'd' : 'd'}';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours} ${difference.inHours == 1 ? 'hr ago' : 'hrs ago'}';
+      return '${difference.inHours} ${difference.inHours == 1 ? 'hr' : 'hrs'}';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} ${difference.inMinutes == 1 ? 'min ago' : 'mins ago'}';
+      return '${difference.inMinutes} ${difference.inMinutes == 1 ? 'min' : 'mins'}';
     } else {
       return 'just now';
     }

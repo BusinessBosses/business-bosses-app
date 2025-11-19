@@ -42,7 +42,7 @@ class _SupporterItemState extends State<SupporterItem> {
                 tabs: <Widget>[
                   Tab(
                     child: Text(
-                      'Supporters (${widget.donation.transactions?.length.toString()})',
+                      'Backers (${widget.donation.transactions?.length.toString()})',
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),

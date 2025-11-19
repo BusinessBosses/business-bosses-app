@@ -10,19 +10,19 @@ class TimeFormat {
   static const num ONE_WEEK = 604800000;
   static const num ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
 
-  static const String MANY_SECONDS_AGO = 'secs ago';
-  static const String MANY_MINUTES_AGO = 'mins ago';
-  static const String MANY_HOURS_AGO = 'hr ago';
-  static const String MANY_DAYS_AGO = 'd ago';
-  static const String MANY_MONTHS_AGO = 'mon ago';
-  static const String MANY_YEARS_AGO = 'yr ago';
+  static const String MANY_SECONDS_AGO = 'secs';
+  static const String MANY_MINUTES_AGO = 'mins';
+  static const String MANY_HOURS_AGO = 'hr';
+  static const String MANY_DAYS_AGO = 'd';
+  static const String MANY_MONTHS_AGO = 'mon';
+  static const String MANY_YEARS_AGO = 'yr';
 
-  static const String ONE_SECOND_AGO = 'sec ago';
-  static const String ONE_MINUTE_AGO = 'min ago';
-  static const String ONE_HOUR_AGO = 'hr ago';
-  static const String ONE_DAY_AGO = 'd ago';
-  static const String ONE_MONTH_AGO = 'mon ago';
-  static const String ONE_YEAR_AGO = 'yr ago';
+  static const String ONE_SECOND_AGO = 'sec';
+  static const String ONE_MINUTE_AGO = 'min';
+  static const String ONE_HOUR_AGO = 'hr';
+  static const String ONE_DAY_AGO = 'd';
+  static const String ONE_MONTH_AGO = 'mon';
+  static const String ONE_YEAR_AGO = 'yr';
 
   //Time conversion
   static String formatString(int? timestamp) {
@@ -49,7 +49,7 @@ class TimeFormat {
       return '${(hours <= 0 ? 1 : hours).toInt()}$hoursLabel';
     }
     if (delta < 48 * ONE_HOUR) {
-      return 'yesterday';
+      return '1d';
     }
     if (delta < 30 * ONE_DAY) {
       num days = toDays(delta);

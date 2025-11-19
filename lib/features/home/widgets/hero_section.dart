@@ -200,7 +200,7 @@ class _HeroSectionState extends State<HeroSection> {
           action: _profileController.myProfile.connecteds!.contains(backer!.uid)
               ? 'Refer'
               : 'Follow',
-          action2: 'Fund a project'),
+          action2: 'Crowdfund'),
       HeroItem(
           id: '4',
           type: 'partner',
@@ -723,7 +723,7 @@ class _HeroSectionState extends State<HeroSection> {
                                             ? enterbackeroftheweek()
                                             : enterpartneroftheweek();
                                 break;
-                              case 'Fund a project':
+                              case 'Crowdfund':
                                 enterbackeroftheweek();
                                 break;
                               case 'Become a Partner':

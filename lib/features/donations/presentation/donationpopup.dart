@@ -14,7 +14,7 @@ class DonationPopup extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.white,
       elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       insetPadding: const EdgeInsets.all(10),
       child: Container(
         padding: const EdgeInsets.all(15),
@@ -41,7 +41,7 @@ class DonationPopup extends StatelessWidget {
               height: 40,
             ),
             Text(
-              'Donations',
+              'Crowdfund',
               textAlign: TextAlign.start,
               style: bodyText1.copyWith(
                   fontWeight: FontWeight.w700, color: Colors.black),
@@ -54,7 +54,7 @@ class DonationPopup extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    'The donation feature is a dedicated space where entrepreneurs can support each other\'s initiatives, or projects. By sharing and receiving digital coins to kickstart and support their business. Users can set donation goals, share their stories, and engage with supporters.',
+                    'The crowdfund feature is a dedicated space where entrepreneurs can support each other\'s initiatives, or projects. By sharing and receiving digital coins to kickstart and support their business. Users can set donation goals, share their stories, and engage with Backers.',
                     style: bodyText2,
                     textAlign: TextAlign.start,
                   ),
@@ -73,18 +73,6 @@ class DonationPopup extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    'To create a donation, click on the donation section in the app menu.',
-                    style: bodyText2,
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-              ],
-            ),
             const SizedBox(
               height: 20,
             ),
@@ -93,7 +81,7 @@ class DonationPopup extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    '• Select "Create Donation" and provide details about your business project, fundraising goal, and timeline.',
+                    '• Select "Enter" and provide details about your business project, fundraising goal, and timeline.',
                     style: bodyText2,
                     textAlign: TextAlign.start,
                   ),
@@ -117,19 +105,7 @@ class DonationPopup extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    '• Share your donation, encourage friends, family, and followers to donate and help you reach your goal.',
-                    style: bodyText2,
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-              ],
-            ),
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    '• Explore and support other donations that resonate with you and make a difference in the lives of others.',
+                    '• Share your crowdfund, encourage friends, family, and followers to donate and help you reach your goal.',
                     style: bodyText2,
                     textAlign: TextAlign.start,
                   ),
@@ -150,6 +126,12 @@ class DonationPopup extends StatelessWidget {
             ),
             const SizedBox(
               height: 20,
+            ),
+            Text(
+              'Support crowdfund projects to get featured and become backer of the week',
+              textAlign: TextAlign.center,
+              style: bodyText1.copyWith(
+                  fontWeight: FontWeight.w700, color: Colors.black),
             ),
             SizedBox(
               height: SizeConfig.safeBlockHorizontal * 3,
