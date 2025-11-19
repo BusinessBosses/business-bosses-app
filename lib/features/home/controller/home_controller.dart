@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
+import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
@@ -72,6 +73,7 @@ class HomeController extends GetxController {
   dynamic partnerOfTheWeek;
   RxList<BuyerRequestModel> myRequests = <BuyerRequestModel>[].obs;
   RxBool loadingRequests = false.obs;
+  final ReachController impactController = Get.put(ReachController());
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -966,6 +968,8 @@ class HomeController extends GetxController {
 
       addCoinDaily();
       _showMyDialog();
+      impactController.loadData(
+          profileController.myProfile.uid, profileController.myProfile.uid);
       // Fire and forget: send device token
       FirebaseMessaging.instance.getToken().then((value) {
         if (value != null) {

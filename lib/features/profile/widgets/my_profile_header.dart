@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/banner.dart';
 import 'package:business_bosses_v2/features/profile/widgets/user_profile_tile.dart';
@@ -15,6 +16,7 @@ class MyProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ReachController reachController = Get.find();
     return Column(
       children: <Widget>[
         if (myProfile.matchType == null)
@@ -75,7 +77,8 @@ class MyProfileHeader extends StatelessWidget {
                     )),
                     Expanded(
                       child: CustomChildButton(
-                        value: 0,
+                        value: reachController.myReach['totalLikes'] +
+                            reachController.myReach['totalViews'],
                         caption: 'Reach',
                         onPressed: () {
                           Get.to(() => ReachScreen(user: myProfile));

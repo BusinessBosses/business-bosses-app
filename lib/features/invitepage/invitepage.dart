@@ -24,7 +24,8 @@ class _InvitepageState extends State<Invitepage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.loadData(profileController.myProfile.uid);
+      controller.loadData(
+          profileController.myProfile.uid, profileController.myProfile.uid);
     });
 
     _referralId = profileController.myProfile.inviteId!;

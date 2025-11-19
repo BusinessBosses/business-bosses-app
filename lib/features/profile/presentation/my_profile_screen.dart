@@ -83,7 +83,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           backdrop: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: <Color>[Colors.white, Colors.white.withOpacity(0.2)],
+                colors: <Color>[
+                  Colors.white,
+                  Colors.white.withValues(alpha: 0.2)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),

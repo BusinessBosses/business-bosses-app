@@ -98,7 +98,7 @@ class _ReachScreenState extends State<ReachScreen> {
   @override
   void initState() {
     super.initState();
-    controller.loadData(widget.user.uid);
+    controller.loadData(widget.user.uid, profileController.myProfile.uid);
     _referralId = profileController.myProfile.inviteId!;
     loadRawConnections();
   }
