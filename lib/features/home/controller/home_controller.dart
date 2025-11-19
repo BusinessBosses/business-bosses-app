@@ -968,15 +968,15 @@ class HomeController extends GetxController {
 
       addCoinDaily();
       _showMyDialog();
-      impactController.loadData(
-          profileController.myProfile.uid, profileController.myProfile.uid);
       // Fire and forget: send device token
-      FirebaseMessaging.instance.getToken().then((value) {
+      await FirebaseMessaging.instance.getToken().then((value) {
         if (value != null) {
           ApiService.post(
               path: 'users/add-device-token', body: {'deviceToken': value});
         }
       });
+      await impactController.loadData(
+          profileController.myProfile.uid, profileController.myProfile.uid);
     } catch (e, st) {
       debugPrint('Error loading data: $e\n$st');
       error(true);
