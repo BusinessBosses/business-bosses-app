@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/tiles/custom_tile_learning.dart';
 import 'package:business_bosses_v2/features/courses/widgets/coursespopup.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -88,26 +89,23 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
                       label: controller
                           .getCategoryIndustries(Constants.LEARNINGID)[index]
                           .industry!,
-                      count: controller
-                          .getCategoryIndustries(Constants.LEARNINGID)[index]
-                          .industry
-                          ?.length
-                          .toString(),
+                      // count: controller
+                      //     .getCategoryIndustries(Constants.LEARNINGID)[index]
+                      //     .industry
+                      //     ?.length
+                      //     .toString(),
                       onTap: () {
-                        if (widget.isCoursesTile == true) {
-                          Get.to(() => const AllForumScreen(isCourses: false),
-                              arguments: controller.getCategoryIndustries(
-                                  Constants.LEARNINGID)[index]);
-                        } else {
-                          Get.to(() => const AllForumScreen(isCourses: true),
-                              arguments: controller.getCategoryIndustries(
-                                  Constants.LEARNINGID)[index]);
+                        final Industry industry = controller
+                            .getCategoryIndustries(Constants.LEARNINGID)[index];
+
+                        if (industry.industry == null ||
+                            industry.industryId == null) {
+                          Get.snackbar('Error', 'Invalid industry category');
+                          return;
                         }
-                        // Get.toNamed(
-                        //   Routes.allforumscreen,
-                        //   arguments: controller
-                        //       .getCategoryIndustries(Constants.LEARNINGID)[index],
-                        // );
+
+                        Get.to(() => const AllForumScreen(isCourses: true),
+                            arguments: industry);
                       },
                     );
             },

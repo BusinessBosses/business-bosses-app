@@ -14,18 +14,14 @@ class HomeAppBar extends StatelessWidget {
     this.hasBadge = false,
     required this.coinsCount,
     this.hasUnreadNotification = false,
-    this.isTabVisible = false,
-    required this.controller,
     this.hasevent,
     this.onMenuClick,
   });
 
   final VoidCallback? onMenuClick;
   final bool hasBadge;
-  final bool isTabVisible;
   final String coinsCount;
   final bool hasUnreadNotification;
-  final TabController controller;
   final bool? hasevent;
 
   @override

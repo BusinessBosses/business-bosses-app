@@ -191,6 +191,7 @@ class CourseController extends GetxController {
     loading(true);
     error(false);
     update();
+    courses.clear();
 
     final ApiResponseModel response = await ApiService.get(
         path:

@@ -45,49 +45,36 @@ class _HomeScreenState extends State<HomeScreen>
   final AiChatController ctrl = Get.put(AiChatController());
   late io.Socket socket;
 
-  late TabController _tabController;
   final ScrollController _scrollController = ScrollController();
   final MarketController marketController = Get.put(MarketController());
   final ShopController shopController =
       Get.put(ShopController(), permanent: true);
 
-  // Instead of plain bools, use ValueNotifiers so we don't call setState on every scroll.
+  // Removed tab-related notifiers
   final ValueNotifier<bool> _isScrolledNotifier = ValueNotifier<bool>(true);
-  final ValueNotifier<bool> _isTabVisibleNotifier = ValueNotifier<bool>(false);
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 1, initialIndex: 0);
 
     WidgetsBinding.instance.addObserver(this);
 
-    // Run checkOrderVisit and shop init once, after first frame:
     WidgetsBinding.instance.addPostFrameCallback((_) {
       checkOrderVisit();
       marketController.initDescription();
     });
 
-    // Listen to scroll events to update both notifiers:
     _scrollController.addListener(_onScrollChanged);
   }
 
   void _onScrollChanged() {
-    // Hide/show bottom bar based on scroll direction:
+    // Show/hide bottom bar based on scroll direction only
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.forward) {
       _isScrolledNotifier.value = true;
     } else if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
       _isScrolledNotifier.value = false;
-    }
-
-    // Show/hide tabs in the app bar based on scroll offset:
-    if (_scrollController.hasClients &&
-        _scrollController.position.pixels >= 230) {
-      _isTabVisibleNotifier.value = true;
-    } else {
-      _isTabVisibleNotifier.value = false;
     }
   }
 
@@ -104,9 +91,7 @@ class _HomeScreenState extends State<HomeScreen>
     _scrollController.removeListener(_onScrollChanged);
     _scrollController.dispose();
     _isScrolledNotifier.dispose();
-    _isTabVisibleNotifier.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    _tabController.dispose();
     super.dispose();
   }
 
@@ -145,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen>
           },
         ).then((bool? shouldExit) {
           if (shouldExit == true && context.mounted) {
-            SystemNavigator.pop(); // This exits the app completely
+            SystemNavigator.pop();
           }
         });
       },
@@ -154,15 +139,12 @@ class _HomeScreenState extends State<HomeScreen>
           durationUntilAlertAgain: const Duration(minutes: 1),
         ),
         child: Obx(() {
-          // Check if we should disable drawer interactions
           bool shouldDisableDrawer = homeController.loading.value ||
               homeController.noConnection.value ||
               homeController.error.value;
 
           return AdvancedDrawer(
             backdrop: Container(
-              width: double.infinity,
-              height: double.infinity,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -177,9 +159,7 @@ class _HomeScreenState extends State<HomeScreen>
             controller: _advancedDrawerController,
             animationCurve: Curves.easeInOut,
             animationDuration: const Duration(milliseconds: 300),
-            animateChildDecoration: true,
             rtlOpening: false,
-            // Disable gestures when in loading/error states
             disabledGestures: shouldDisableDrawer,
             childDecoration: const BoxDecoration(
               boxShadow: <BoxShadow>[
@@ -207,42 +187,34 @@ class _HomeScreenState extends State<HomeScreen>
                   if (homeController.loading.value) {
                     return Container();
                   }
-                  return ValueListenableBuilder<bool>(
-                    valueListenable: _isTabVisibleNotifier,
-                    builder: (BuildContext context, bool isTabVisible, _) {
-                      return GetBuilder<ChatController>(
-                        builder: (ChatController chatController) {
-                          final List<MessageModel> unseenChats =
-                              chatController.chats.where((MessageModel msg) {
-                            return msg.receiverUid ==
-                                    homeController
-                                        .profileController.myProfile.uid &&
-                                !msg.seen;
-                          }).toList();
-                          final bool hasBadge = unseenChats.isNotEmpty;
 
-                          return GetBuilder<ProfileController>(
-                            builder: (ProfileController profileController) {
-                              return HomeAppBar(
-                                onMenuClick: shouldDisableDrawer
-                                    ? null
-                                    : () {
-                                        _advancedDrawerController.showDrawer();
-                                      },
-                                isTabVisible: isTabVisible,
-                                hasBadge: hasBadge,
-                                coinsCount: profileController
-                                        .myProfile.coinscount
-                                        ?.toString() ??
-                                    '0',
-                                hasUnreadNotification: profileController
-                                            .myProfile.unReadCount !=
-                                        null &&
-                                    profileController.myProfile.unReadCount! >
-                                        0,
-                                controller: _tabController,
-                              );
-                            },
+                  return GetBuilder<ChatController>(
+                    builder: (ChatController chatController) {
+                      final List<MessageModel> unseenChats =
+                          chatController.chats.where((MessageModel msg) {
+                        return msg.receiverUid ==
+                                homeController
+                                    .profileController.myProfile.uid &&
+                            !msg.seen;
+                      }).toList();
+                      final bool hasBadge = unseenChats.isNotEmpty;
+
+                      return GetBuilder<ProfileController>(
+                        builder: (ProfileController profileController) {
+                          return HomeAppBar(
+                            onMenuClick: shouldDisableDrawer
+                                ? null
+                                : () {
+                                    _advancedDrawerController.showDrawer();
+                                  },
+                            hasBadge: hasBadge,
+                            coinsCount: profileController.myProfile.coinscount
+                                    ?.toString() ??
+                                '0',
+                            hasUnreadNotification: profileController
+                                        .myProfile.unReadCount !=
+                                    null &&
+                                profileController.myProfile.unReadCount! > 0,
                           );
                         },
                       );
@@ -276,15 +248,9 @@ class _HomeScreenState extends State<HomeScreen>
       children: <Widget>[
         Container(
           color: backgroundColor,
-          child: TabBarView(
-            controller: _tabController,
-            children: <Widget>[
-              PostsWidget(
-                onPageChange: widget.onPageChange,
-                scrollController: _scrollController,
-              ),
-              // _buildForumList(homeController),
-            ],
+          child: PostsWidget(
+            onPageChange: widget.onPageChange,
+            scrollController: _scrollController,
           ),
         ),
         BottomBar(
@@ -294,27 +260,6 @@ class _HomeScreenState extends State<HomeScreen>
       ],
     );
   }
-
-  // Widget _buildForumList(HomeController controller) {
-  //   return LayoutBuilder(
-  //     builder: (BuildContext context, BoxConstraints constraints) {
-  //       return SizedBox(
-  //         height: constraints.maxHeight,
-  //         width: constraints.maxWidth,
-  //         child: ListView.builder(
-  //           controller: _scrollController,
-  //           itemCount: controller.forums.length,
-  //           itemBuilder: (BuildContext context, int index) {
-  //             return ForumItem(
-  //               forum: controller.forums[index],
-  //               controller: homeController,
-  //             );
-  //           },
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   Widget _buildLoading() {
     return Center(
