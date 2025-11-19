@@ -192,7 +192,7 @@ class DonationsHeader extends StatelessWidget {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Get.to(LeaderboardScreen());
+                                  Get.to(() => LeaderboardScreen());
                                 },
                                 child: Row(
                                   children: <Widget>[

@@ -5,7 +5,6 @@ import 'package:business_bosses_v2/features/forum/presentation/filterchallengepo
 import 'package:business_bosses_v2/features/invitepage/leaderboardpage.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -16,7 +15,6 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../common/widgets/safety_model.dart';
-import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/controller/home_controller.dart';
 import '../../profile/controller/profile_controller.dart';

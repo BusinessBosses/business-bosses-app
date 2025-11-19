@@ -309,6 +309,7 @@ class ApiService {
         },
       );
       log(ApiResponseModel.fromMap(jsonDecode(response.body)).message);
+      // log((jsonDecode(response.body)).toString());
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       return ApiResponseModel(

@@ -3,12 +3,11 @@ import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
 import 'package:business_bosses_v2/bbpro/widgets/menubutton.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/home/widgets/buyer_request_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
+import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
@@ -17,7 +16,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -32,10 +30,9 @@ bool isExpanded = false;
 class MyProfileScreen extends StatefulWidget {
   final int? selectedIndex;
   final int? currentIndex;
-  // ignore: public_member_api_docs
+
   static const String routeName = '/my-profile-screen';
 
-  // ignore: public_member_api_docs
   const MyProfileScreen({super.key, this.selectedIndex, this.currentIndex});
 
   @override
@@ -47,777 +44,86 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   final MarketController marketController = Get.find();
   final ShopController shopController = Get.find();
   final HomeController homeController = Get.find();
+
   final AdvancedDrawerController _advancedDrawerController =
       AdvancedDrawerController();
-  bool isScrolled = true;
+
   bool loading = true;
-
   int _currentIndex = 0;
-  late PageController _pageController;
-
   int? _selectedIndex;
+  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _currentIndex);
-    _selectedIndex = widget.selectedIndex ?? 0;
+
     _currentIndex = widget.currentIndex ?? 0;
-    _pageController = PageController(initialPage: widget.currentIndex ?? 0);
+    _selectedIndex = widget.selectedIndex ?? 0;
+
+    _pageController = PageController(initialPage: _currentIndex);
+
     if (shopController.shop == null) {
-      shopController.initShop().then((bool value) {
-        loading = false;
-        setState(() {});
+      shopController.initShop().then((_) {
+        setState(() => loading = false);
       });
     } else {
       loading = false;
-      setState(() {});
     }
-    homeController.loadMyRequests();
+    if (homeController.myRequests.isEmpty) {
+      homeController.loadMyRequests();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // ignore: no_leading_underscores_for_local_identifiers
     return GetBuilder<ProfileController>(
-      builder: (ProfileController profileController) {
+      builder: (_) {
         return AdvancedDrawer(
+          controller: _advancedDrawerController,
           backdrop: Container(
-            width: double.infinity,
-            height: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
                 colors: <Color>[
                   Colors.white,
                   Colors.white.withValues(alpha: 0.2)
                 ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
             ),
           ),
-          controller: _advancedDrawerController,
-          animationCurve: Curves.easeInOut,
-          animationDuration: const Duration(milliseconds: 300),
-          animateChildDecoration: true,
-          rtlOpening: false,
-          // openScale: 1.0,
-          disabledGestures: false,
           childDecoration: const BoxDecoration(
-            // NOTICE: Uncomment if you want to add shadow behind the page.
-            // Keep in mind that it may cause animation jerks.
             boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 3,
-              ),
+              BoxShadow(color: Colors.black12, blurRadius: 3)
             ],
             borderRadius: BorderRadius.all(Radius.circular(16)),
           ),
-
           drawer: DrawerContent(
-            oncloseclick: () {
-              _advancedDrawerController.hideDrawer();
-            },
+            oncloseclick: () => _advancedDrawerController.hideDrawer(),
             currentuser: homeController.profileController.myProfile,
             hasUnreadNotification:
                 profileController.myProfile.unReadCount != null &&
                     profileController.myProfile.unReadCount! > 0,
           ),
-
           child: Scaffold(
             backgroundColor: Colors.white,
-            appBar: PreferredSize(
-              preferredSize: Size.fromHeight(
-                  (_selectedIndex == 0 || _selectedIndex == 4)
-                      ? kToolbarHeight
-                      : 0),
-              child: Stack(children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    if (_selectedIndex == 0 || _selectedIndex == 4)
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: CupertinoSlidingSegmentedControl<int>(
-                          backgroundColor: backgroundColor,
-                          padding: const EdgeInsets.all(5),
-                          children: <int, Widget>{
-                            0: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Text(
-                                'Profile',
-                                style: _currentIndex == 0
-                                    ? const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      )
-                                    : const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                        color: textColor,
-                                      ),
-                              ),
-                            ),
-                            1: Text(
-                              'My-Biz',
-                              style: _currentIndex == 1
-                                  ? const TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 14)
-                                  : const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: textColor,
-                                    ),
-                            ),
-                          },
-                          onValueChanged: (int? value) {
-                            if (value != null) {
-                              setState(() {
-                                _selectedIndex == 0;
-                                _currentIndex = value;
-                                _pageController.animateToPage(
-                                  _currentIndex,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.ease,
-                                );
-                              });
-                            }
-                          },
-                          groupValue: _currentIndex,
-                        ),
-                      ),
-                    if (_selectedIndex == 0 || _selectedIndex == 4)
-                      const SizedBox(height: 10.0),
-                  ],
-                ),
-                if (_selectedIndex == 0 || _selectedIndex == 4)
-                  Positioned(
-                      bottom: 12,
-                      left: 15,
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(Get.toNamed(Routes.analysescreen));
-                        },
-                        child: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: backgroundColor,
-                            child: const Icon(
-                              LucideIcons.helpCircle,
-                              color: textColor,
-                              size: 20,
-                            )),
-                      )),
-                if (_selectedIndex == 0 || _selectedIndex == 4)
-                  Positioned(
-                      bottom: 12,
-                      right: 15,
-                      child: GestureDetector(
-                          onTap: () {
-                            _advancedDrawerController.showDrawer();
-                          },
-                          child: const CustomMenuButton())),
-              ]),
-            ),
+            appBar: _buildAppBar(),
             body: loading
                 ? const SafetyModel()
                 : PageView(
-                    physics: const NeverScrollableScrollPhysics(),
                     controller: _pageController,
-                    onPageChanged: (int index) {
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                    },
+                    physics: const NeverScrollableScrollPhysics(),
+                    onPageChanged: (int i) => setState(() {
+                      _currentIndex = i;
+                    }),
                     children: <Widget>[
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              height: MediaQuery.of(context).size.height,
-                              width: MediaQuery.of(context).size.width,
-                              color: Colors.white,
-                              child: NestedScrollView(
-                                headerSliverBuilder: (BuildContext context,
-                                    bool innerBoxIsScrolled) {
-                                  return <Widget>[
-                                    SliverStickyHeader(
-                                      sticky: false,
-                                      header: MyProfileHeader(
-                                        myProfile: profileController.myProfile,
-                                      ),
-                                    )
-                                  ];
-                                },
-                                body: DefaultTabController(
-                                  length: calculateTabLength(),
-                                  child: Column(
-                                    children: <Widget>[
-                                      // if (_publicUser.uid !=
-                                      //     'FirebaseAuth.instance.currentUser.uid') ...{
-                                      OutlineButtonHeader(
-                                        context,
-                                        profileController.myProfile,
-                                      ),
-                                      const SizedBox(height: 15.0),
-                                      // },
-
-                                      const SizedBox(
-                                        width: double.infinity,
-                                        height: 1.5,
-                                        child: ColoredBox(
-                                          color: backgroundcolorinterface,
-                                        ),
-                                      ),
-                                      Material(
-                                        color: const Color(0xFFF9F9F9),
-                                        child: TabBar(
-                                          isScrollable:
-                                              calculateTabLength() <= 5
-                                                  ? false
-                                                  : true,
-                                          indicatorColor:
-                                              primaryColorLT, // Replace primaryColorLT with the desired color
-                                          labelStyle: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                          labelColor: Colors.black,
-                                          tabs: <Widget>[
-                                            const Tab(
-                                              child: FittedBox(
-                                                child: Text(
-                                                  'About',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14),
-                                                ),
-                                              ),
-                                            ),
-                                            const Tab(
-                                              child: FittedBox(
-                                                child: Text(
-                                                  'Posts',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14),
-                                                ),
-                                              ),
-                                            ),
-                                            if (homeController
-                                                .userresources.isNotEmpty)
-                                              const Tab(
-                                                child: FittedBox(
-                                                  child: Text(
-                                                    'Challenges',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 14),
-                                                  ),
-                                                ),
-                                              ),
-                                            if (homeController
-                                                .userdonations.isNotEmpty)
-                                              const Tab(
-                                                child: FittedBox(
-                                                  child: Text(
-                                                    'Donations',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 14),
-                                                  ),
-                                                ),
-                                              ),
-                                            if (homeController
-                                                .usercourses.isNotEmpty)
-                                              const Tab(
-                                                child: FittedBox(
-                                                  child: Text(
-                                                    'Courses',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 14),
-                                                  ),
-                                                ),
-                                              ),
-                                            if (homeController
-                                                .userresources.isNotEmpty)
-                                              const Tab(
-                                                child: FittedBox(
-                                                  child: Text(
-                                                    'Requests',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 14),
-                                                  ),
-                                                ),
-                                              ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      const SizedBox(
-                                        width: double.infinity,
-                                        height: 1.5,
-                                        child: ColoredBox(
-                                          color: backgroundcolorinterface,
-                                        ),
-                                      ), // Container(
-
-                                      Expanded(
-                                        child: TabBarView(children: <Widget>[
-                                          NotificationListener<
-                                              ScrollNotification>(
-                                            onNotification: (ScrollNotification
-                                                notification) {
-                                              if (notification
-                                                  is ScrollUpdateNotification) {
-                                                if (notification.dragDetails !=
-                                                        null &&
-                                                    notification.dragDetails!
-                                                            .primaryDelta !=
-                                                        null) {
-                                                  double primaryDelta =
-                                                      notification.dragDetails!
-                                                          .primaryDelta!;
-
-                                                  if (primaryDelta > 0) {
-                                                    // Scrolling downward
-                                                    setState(() {
-                                                      isScrolled = true;
-                                                    });
-                                                  } else if (primaryDelta < 0) {
-                                                    // Scrolling upward
-                                                    setState(() {
-                                                      isScrolled = false;
-                                                    });
-                                                  }
-                                                }
-                                              }
-
-                                              return true;
-                                            },
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  const SizedBox(
-                                                    height: 30,
-                                                  ),
-                                                  profileinfodisplay(
-                                                      context,
-                                                      profileController
-                                                          .myProfile),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          NotificationListener<
-                                              ScrollNotification>(
-                                            onNotification: (ScrollNotification
-                                                notification) {
-                                              if (notification
-                                                  is ScrollUpdateNotification) {
-                                                if (notification.dragDetails !=
-                                                        null &&
-                                                    notification.dragDetails!
-                                                            .primaryDelta !=
-                                                        null) {
-                                                  double primaryDelta =
-                                                      notification.dragDetails!
-                                                          .primaryDelta!;
-
-                                                  if (primaryDelta > 0) {
-                                                    // Scrolling downward
-                                                    setState(
-                                                      () {
-                                                        isScrolled = true;
-                                                      },
-                                                    );
-                                                  } else if (primaryDelta < 0) {
-                                                    // Scrolling upward
-                                                    setState(
-                                                      () {
-                                                        isScrolled = false;
-                                                      },
-                                                    );
-                                                  }
-                                                }
-                                              }
-
-                                              return true;
-                                            },
-                                            child: profilepostsdisplay(
-                                              ispublicposts: false,
-                                              context,
-                                              profileController.myProfile,
-                                              profileController.posts,
-                                              loading: profileController
-                                                  .isLoading.value,
-                                            ),
-                                          ),
-
-                                          ///Forum or Resources
-                                          if (homeController
-                                              .userresources.isNotEmpty)
-                                            SizedBox(
-                                              height: double.infinity,
-                                              width: double.infinity,
-                                              child: Obx(
-                                                () {
-                                                  return ListView.builder(
-                                                    physics:
-                                                        const NeverScrollableScrollPhysics(),
-                                                    shrinkWrap: true,
-                                                    itemCount: homeController
-                                                        .userresources.length,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int i) {
-                                                      return ForumItem(
-                                                        forum: homeController
-                                                            .userresources[i],
-                                                        controller:
-                                                            homeController,
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                              ),
-                                            ),
-
-                                          ///Donations
-                                          if (homeController
-                                              .userdonations.isNotEmpty)
-                                            SizedBox(
-                                              height: double.infinity,
-                                              width: double.infinity,
-                                              child: Obx(
-                                                () {
-                                                  return homeController
-                                                          .userdonations.isEmpty
-                                                      ? Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: <Widget>[
-                                                            SvgPicture.asset(
-                                                              'assets/svgs/supporter.svg',
-                                                              height: 40,
-                                                              colorFilter:
-                                                                  const ColorFilter
-                                                                      .mode(
-                                                                Colors.grey,
-                                                                BlendMode.srcIn,
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            const Text(
-                                                              'No Crowdfunds Found',
-                                                              style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                fontSize: 15,
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 50,
-                                                            ),
-                                                          ],
-                                                        )
-                                                      : ListView.builder(
-                                                          physics:
-                                                              const NeverScrollableScrollPhysics(),
-                                                          shrinkWrap: true,
-                                                          itemCount:
-                                                              homeController
-                                                                  .userdonations
-                                                                  .length,
-                                                          itemBuilder:
-                                                              (BuildContext
-                                                                      context,
-                                                                  int i) {
-                                                            bool isLastItem = homeController
-                                                                        .userdonations
-                                                                        .length !=
-                                                                    1
-                                                                ? i ==
-                                                                    homeController
-                                                                            .userdonations
-                                                                            .length -
-                                                                        1
-                                                                : i ==
-                                                                    homeController
-                                                                        .userdonations
-                                                                        .length;
-                                                            return DonationItem(
-                                                              donation:
-                                                                  homeController
-                                                                      .userdonations[i],
-                                                              isLastItem:
-                                                                  isLastItem,
-                                                            );
-                                                          },
-                                                        );
-                                                },
-                                              ),
-                                            ),
-
-                                          ///Courses
-                                          if (homeController
-                                              .usercourses.isNotEmpty)
-                                            SizedBox(
-                                              height: double.infinity,
-                                              width: double.infinity,
-                                              child: Obx(
-                                                () {
-                                                  return homeController
-                                                          .loading.value
-                                                      ? const Center(
-                                                          child:
-                                                              CircularProgressIndicator(),
-                                                        )
-                                                      : homeController
-                                                              .cError.value
-                                                          ? Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: <Widget>[
-                                                                SvgPicture
-                                                                    .asset(
-                                                                  'assets/svgs/courses.svg',
-                                                                  height: 40,
-                                                                  colorFilter:
-                                                                      const ColorFilter
-                                                                          .mode(
-                                                                    Colors.grey,
-                                                                    BlendMode
-                                                                        .srcIn,
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 10,
-                                                                ),
-                                                                const Text(
-                                                                  'Error Loading Courses!',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                    fontSize:
-                                                                        15,
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 50,
-                                                                ),
-                                                              ],
-                                                            )
-                                                          : homeController
-                                                                  .usercourses
-                                                                  .isEmpty
-                                                              ? Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  children: <Widget>[
-                                                                    SvgPicture
-                                                                        .asset(
-                                                                      'assets/svgs/courses.svg',
-                                                                      height:
-                                                                          40,
-                                                                      colorFilter:
-                                                                          const ColorFilter
-                                                                              .mode(
-                                                                        Colors
-                                                                            .grey,
-                                                                        BlendMode
-                                                                            .srcIn,
-                                                                      ),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    const Text(
-                                                                      'No Courses Found',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight.w700,
-                                                                        fontSize:
-                                                                            15,
-                                                                      ),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          50,
-                                                                    ),
-                                                                  ],
-                                                                )
-                                                              : ListView
-                                                                  .builder(
-                                                                  physics:
-                                                                      const NeverScrollableScrollPhysics(),
-                                                                  shrinkWrap:
-                                                                      true,
-                                                                  itemCount:
-                                                                      homeController
-                                                                          .usercourses
-                                                                          .length,
-                                                                  itemBuilder:
-                                                                      (BuildContext
-                                                                              context,
-                                                                          int i) {
-                                                                    return CourseItem(
-                                                                      course: homeController
-                                                                          .usercourses[i],
-                                                                    );
-                                                                  },
-                                                                );
-                                                },
-                                              ),
-                                            ),
-
-                                          ///Requests
-
-                                          if (homeController
-                                              .userresources.isNotEmpty)
-                                            Container(
-                                              padding: EdgeInsets.all(15),
-                                              color: backgroundColor,
-                                              height: double.infinity,
-                                              width: double.infinity,
-                                              child: Obx(
-                                                () {
-                                                  if ((homeController
-                                                      .loadingRequests.value)) {
-                                                    return SafetyModel();
-                                                  }
-                                                  if ((homeController
-                                                      .myRequests.isEmpty)) {
-                                                    return SafetyModel(
-                                                      isLoading: false,
-                                                      icon: Icon(Icons.warning),
-                                                      title:
-                                                          'No Request Added!',
-                                                    );
-                                                  }
-                                                  return MasonryGridView.count(
-                                                    crossAxisCount: 2,
-                                                    crossAxisSpacing: 12,
-                                                    mainAxisSpacing: 12,
-                                                    physics:
-                                                        const NeverScrollableScrollPhysics(),
-                                                    shrinkWrap: true,
-                                                    itemCount: homeController
-                                                        .myRequests.length,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int i) {
-                                                      return GestureDetector(
-                                                        child: BuyerRequestItem(
-                                                          ismyrequest: true,
-                                                          request: homeController
-                                                              .myRequests[i],
-                                                        ),
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                        ]),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            BottomBar(
-                              activeIndex: 4,
-                            )
-                          ],
-                        ),
+                      _buildProfileView(context),
+                      Bottomnavscreen(
+                        initialindex: 0,
+                        onTabChanged: (int index) {
+                          setState(() => _selectedIndex = index);
+                        },
                       ),
-                      // profileController.myProfile.isSubscribed
-                      //     ?
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                        child: Bottomnavscreen(
-                          initialindex: 0,
-                          onTabChanged: (int index) {
-                            setState(
-                              () {
-                                _selectedIndex = index;
-                              },
-                            );
-                          },
-                        ),
-                      )
-                      // :
-                      // // Center(
-                      // //     child: SingleChildScrollView(
-                      // //       child: Column(
-                      // //         mainAxisAlignment: MainAxisAlignment.center,
-                      // //         crossAxisAlignment: CrossAxisAlignment.center,
-                      // //         children: <Widget>[
-                      // //           const Text(
-                      // //             'Upgrade now to unlock \nBiz-Centre',
-                      // //             style: TextStyle(
-                      // //               fontSize: 18,
-                      // //               fontWeight: FontWeight.w700,
-                      // //             ),
-                      // //             textAlign: TextAlign.center,
-                      // //           ),
-                      // //           const SizedBox(
-                      // //             height: 30,
-                      // //           ),
-                      // //           Lottie.asset(
-                      // //             'assets/anim/padlock.json',
-                      // //             fit: BoxFit.cover,
-                      // //             height: 90,
-                      // //             width: 90,
-                      // //           ),
-                      // //           const SizedBox(
-                      // //             height: 30,
-                      // //           ),
-                      // //           const Padding(
-                      // //               padding: EdgeInsets.only(
-                      // //                   left: 0.0, top: 10, bottom: 10),
-                      // //               child: ProSubscribeSection(
-                      // //                 isGrow: true,
-                      // //               )),
-                      // //         ],
-                      // //       ),
-                      // //     ),
-                      // //   ),
                     ],
                   ),
           ),
@@ -826,14 +132,269 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     );
   }
 
-  int calculateTabLength() {
-    int tabLength = 2;
-    if (homeController.userresources.isNotEmpty) tabLength++;
-    if (homeController.userdonations.isNotEmpty) tabLength++;
-    if (homeController.usercourses.isNotEmpty) tabLength++;
-    // if (homeController.usercourses.isNotEmpty)
-    tabLength++;
+  PreferredSizeWidget _buildAppBar() {
+    final bool showHeader = _selectedIndex == 0 || _selectedIndex == 4;
 
-    return tabLength;
+    return PreferredSize(
+      preferredSize: Size.fromHeight(showHeader ? kToolbarHeight : 0),
+      child: Stack(
+        children: <Widget>[
+          if (showHeader)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: CupertinoSlidingSegmentedControl<int>(
+                padding: const EdgeInsets.all(5),
+                backgroundColor: backgroundColor,
+                groupValue: _currentIndex,
+                children: <int, Widget>{
+                  0: _segmentLabel('Profile', _currentIndex == 0),
+                  1: _segmentLabel('My-Biz', _currentIndex == 1),
+                },
+                onValueChanged: (int? v) {
+                  if (v != null) {
+                    setState(() {
+                      _selectedIndex = 0;
+                      _currentIndex = v;
+                      _pageController.animateToPage(
+                        v,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.ease,
+                      );
+                    });
+                  }
+                },
+              ),
+            ),
+          if (showHeader)
+            Positioned(
+              bottom: 12,
+              left: 15,
+              child: GestureDetector(
+                onTap: () => Get.toNamed(Routes.analysescreen),
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: backgroundColor,
+                  child: const Icon(
+                    LucideIcons.helpCircle,
+                    color: textColor,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ),
+          if (showHeader)
+            Positioned(
+              bottom: 12,
+              right: 15,
+              child: GestureDetector(
+                onTap: () => _advancedDrawerController.showDrawer(),
+                child: const CustomMenuButton(),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _segmentLabel(String text, bool active) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+          color: active ? Colors.black : textColor,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileView(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        _buildProfileTabs(context),
+        BottomBar(activeIndex: 4),
+      ],
+    );
+  }
+
+  Widget _buildProfileTabs(BuildContext context) {
+    return NestedScrollView(
+      headerSliverBuilder: (_, __) => <Widget>[
+        SliverStickyHeader(
+          header: MyProfileHeader(
+            myProfile: profileController.myProfile,
+          ),
+        )
+      ],
+      body: DefaultTabController(
+        length: calculateTabLength(),
+        child: Column(
+          children: <Widget>[
+            OutlineButtonHeader(context, profileController.myProfile),
+            const SizedBox(height: 15),
+            _buildTopDivider(),
+            _buildTabBar(),
+            _buildTopDivider(),
+            Expanded(child: _buildTabBarView()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTopDivider() => const SizedBox(
+        width: double.infinity,
+        height: 1.3,
+        child: ColoredBox(color: backgroundcolorinterface),
+      );
+
+  Widget _buildTabBar() {
+    return Material(
+      color: const Color(0xFFF9F9F9),
+      child: TabBar(
+        isScrollable: calculateTabLength() > 4,
+        indicatorColor: primaryColorLT,
+        tabs: <Widget>[
+          const Tab(
+              child:
+                  Text('About', style: TextStyle(fontWeight: FontWeight.w700))),
+          const Tab(
+              child:
+                  Text('Posts', style: TextStyle(fontWeight: FontWeight.w700))),
+          if (homeController.myRequests.isNotEmpty)
+            const Tab(
+              child: Text(
+                'Requests',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+          if (homeController.userdonations.isNotEmpty)
+            const Tab(
+                child: Text('Donations',
+                    style: TextStyle(fontWeight: FontWeight.w700))),
+          if (homeController.usercourses.isNotEmpty)
+            const Tab(
+                child: Text('Courses',
+                    style: TextStyle(fontWeight: FontWeight.w700))),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabBarView() {
+    return TabBarView(
+      children: <Widget>[
+        _buildAboutTab(),
+        _buildPostsTab(),
+        if (homeController.myRequests.isNotEmpty) _buildRequestsTab(),
+        if (homeController.userdonations.isNotEmpty) _buildDonationsTab(),
+        if (homeController.usercourses.isNotEmpty) _buildCoursesTab(),
+      ],
+    );
+  }
+
+  Widget _buildAboutTab() {
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          const SizedBox(height: 30),
+          profileinfodisplay(context, profileController.myProfile),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRequestsTab() {
+    return Obx(() {
+      if (homeController.myRequests.isEmpty) {
+        return _emptyState('No Requests Found', 'assets/svgs/supporter.svg');
+      }
+
+      return ListView.builder(
+        itemCount: homeController.myRequests.length,
+        itemBuilder: (_, int i) {
+          final BuyerRequestModel req = homeController.myRequests[i];
+
+          return ListTile(
+            title: Text(req.title),
+            subtitle: Text(req.description),
+          );
+        },
+      );
+    });
+  }
+
+  Widget _buildPostsTab() {
+    return profilepostsdisplay(
+      ispublicposts: false,
+      context,
+      profileController.myProfile,
+      profileController.posts,
+      loading: profileController.isLoading.value,
+    );
+  }
+
+  Widget _buildDonationsTab() {
+    return Obx(() {
+      if (homeController.userdonations.isEmpty) {
+        return _emptyState('No Crowdfunds Found', 'assets/svgs/supporter.svg');
+      }
+
+      return ListView.builder(
+        itemCount: homeController.userdonations.length,
+        itemBuilder: (_, int i) {
+          return DonationItem(
+            donation: homeController.userdonations[i],
+            isLastItem: i == homeController.userdonations.length - 1,
+          );
+        },
+      );
+    });
+  }
+
+  Widget _buildCoursesTab() {
+    return Obx(() {
+      if (homeController.loading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (homeController.cError.value) {
+        return _emptyState('Error Loading Courses!', 'assets/svgs/courses.svg');
+      }
+
+      if (homeController.usercourses.isEmpty) {
+        return _emptyState('No Courses Found', 'assets/svgs/courses.svg');
+      }
+
+      return ListView.builder(
+        itemCount: homeController.usercourses.length,
+        itemBuilder: (_, int i) =>
+            CourseItem(course: homeController.usercourses[i]),
+      );
+    });
+  }
+
+  Widget _emptyState(String msg, String icon) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        SvgPicture.asset(icon,
+            height: 40,
+            colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
+        const SizedBox(height: 10),
+        Text(msg,
+            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+      ],
+    );
+  }
+
+  int calculateTabLength() {
+    int count = 2; // About + Posts
+    if (homeController.userdonations.isNotEmpty) count++;
+    if (homeController.usercourses.isNotEmpty) count++;
+    if (homeController.myRequests.isNotEmpty) count++;
+    return count;
   }
 }

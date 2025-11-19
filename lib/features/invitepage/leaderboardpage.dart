@@ -1,6 +1,11 @@
-import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
@@ -10,7 +15,7 @@ class LeaderboardScreen extends StatefulWidget {
 }
 
 class _LeaderboardScreenState extends State<LeaderboardScreen> {
-  List<Map<String, dynamic>> _leaderboardData = <Map<String, dynamic>>[];
+  final List<UserModel> _leaderboardData = <UserModel>[];
   bool _isLoading = true;
   String? _error;
 
@@ -28,41 +33,17 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         _error = null;
       });
 
-      await Future<void>.delayed(const Duration(seconds: 1)); // simulate API
+      final ApiResponseModel response =
+          await ApiService.get(path: 'users/backer-winners');
 
-      final List<Map<String, dynamic>> dummy = <Map<String, dynamic>>[
-        <String, dynamic>{
-          'username': 'Ernest',
-          'avatar_url': 'https://i.pravatar.cc/150?img=3',
-          'achievements_count': 12,
-          'level': 6,
-          'score': 990,
-        },
-        <String, dynamic>{
-          'username': 'Kofi',
-          'avatar_url': 'https://i.pravatar.cc/150?img=4',
-          'achievements_count': 9,
-          'level': 5,
-          'score': 870,
-        },
-        <String, dynamic>{
-          'username': 'Ama',
-          'avatar_url': 'https://i.pravatar.cc/150?img=10',
-          'achievements_count': 7,
-          'level': 4,
-          'score': 820,
-        },
-        <String, dynamic>{
-          'username': 'Junior Dev',
-          'avatar_url': '',
-          'achievements_count': 4,
-          'level': 2,
-          'score': 400,
-        },
-      ];
-
+      if (response.success) {
+        for (dynamic user in response.data) {
+          _leaderboardData.add(UserModel.fromMap(user));
+        }
+      } else {
+        _error = response.message;
+      }
       setState(() {
-        _leaderboardData = dummy;
         _isLoading = false;
       });
     } catch (e) {
@@ -120,7 +101,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     }
 
     if (_leaderboardData.isEmpty) {
-      return const Center(child: Text('No data yet'));
+      return const Center(
+          child: SafetyModel(isLoading: false, title: 'No data yet'));
     }
 
     return RefreshIndicator(
@@ -129,7 +111,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         padding: const EdgeInsets.all(16),
         itemCount: _leaderboardData.length,
         itemBuilder: (BuildContext context, int index) {
-          final Map<String, dynamic> user = _leaderboardData[index];
+          final UserModel user = _leaderboardData[index];
           final int rank = index + 1;
           return _buildLeaderboardItem(user, rank);
         },
@@ -137,48 +119,52 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     );
   }
 
-  Widget _buildLeaderboardItem(Map<String, dynamic> user, int rank) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        // leading: _buildRankBadge(rank),
-        title: Row(
-          children: <Widget>[
-            _buildAvatar(user),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    user['username'] ?? 'Unknown',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
+  Widget _buildLeaderboardItem(UserModel user, int rank) {
+    return GestureDetector(
+      onTap: () => Get.to(() => PublicProfileScreen(), arguments: user),
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 12),
+        child: ListTile(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          // leading: _buildRankBadge(rank),
+          title: Row(
+            children: <Widget>[
+              _buildAvatar(user),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      user.name ?? user.username,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${user['achievements_count']} achievements',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
+                    const SizedBox(height: 4),
+                    Text(
+                      '${user.backerCount} achievements',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
   /// Avatar with fallback initial
-  Widget _buildAvatar(Map<String, dynamic> user) {
-    final String username = (user['username'] ?? 'U').trim();
-    final String? avatarUrl = user['avatar_url'];
+  Widget _buildAvatar(UserModel user) {
+    final String username = (user.username).trim();
+    final String? avatarUrl = user.photoUrl;
 
     final bool hasImage = avatarUrl != null &&
         avatarUrl.isNotEmpty &&
@@ -203,28 +189,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           color: Colors.white,
           fontSize: 18,
           fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  /// Rank Badge — same grey for all (#)
-  Widget _buildRankBadge(int rank) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Text(
-          '#$rank',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            color: primaryColorLT,
-          ),
         ),
       ),
     );

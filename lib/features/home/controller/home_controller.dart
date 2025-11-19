@@ -9,9 +9,9 @@ import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
-import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
+import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
@@ -63,7 +63,6 @@ class HomeController extends GetxController {
   String notificationStatus = '';
   Map<String, String> votes = {};
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
-  RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
   RxList<CourseModel> usercourses = <CourseModel>[].obs;
   RxBool cError = RxBool(false);
   RxList<DonationModel> userdonations = <DonationModel>[].obs;
@@ -72,9 +71,9 @@ class HomeController extends GetxController {
   UserModel? backerOfTheWeek = UserModel();
   UserModel? ambassadorOfTheWeek = UserModel();
   dynamic partnerOfTheWeek;
-  RxList<ForumModel> userresources = <ForumModel>[].obs;
   RxList<BuyerRequestModel> myRequests = <BuyerRequestModel>[].obs;
   RxBool loadingRequests = false.obs;
+  final ReachController impactController = Get.put(ReachController());
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -178,22 +177,6 @@ class HomeController extends GetxController {
     posts.addAll(parsed);
   }
 
-  /// Convert forums efficiently
-  void processForumsToState(dynamic post) {
-    final List<dynamic> psts = List<dynamic>.from(post ?? []);
-    if (psts.isEmpty) return;
-
-    forums.addAll(psts.map((e) {
-      return ForumModel.fromMap({
-        ...e,
-        'likes': _extractUserIds(e['likes']),
-        'coins': _extractUserIds(e['coins']),
-      });
-    }));
-
-    mixPostandPromoted();
-  }
-
   /// Promoted posts
   void processPromotedPostsToState(dynamic post) {
     final List<dynamic> psts = List<dynamic>.from(post ?? []);
@@ -270,9 +253,9 @@ class HomeController extends GetxController {
   }
 
   /// Combine post and forum data
-  void processPostsAndForumsData(dynamic data, dynamic forum) {
+  void processPostsAndForumsData(dynamic data) {
     processPostsToState(data?['posts']?['rows']);
-    processForumsToState(forum?['rows']);
+    mixPostandPromoted();
     update();
   }
 
@@ -309,7 +292,6 @@ class HomeController extends GetxController {
       final int spIndex = sponsoredPosts.indexWhere(
           (Map<String, dynamic> post) =>
               post['shouldCount'] == null &&
-              !post['isForum'] &&
               post['isSponsored'] &&
               post['data'].postId == postId);
       if (spIndex != -1) {
@@ -321,17 +303,6 @@ class HomeController extends GetxController {
               .removeWhere((element) => element == userId);
         } else {
           sponsoredPosts[spIndex]['data'].likes!.add(userId);
-        }
-      }
-    } else if (type == 'forum') {
-      final int forumIndex =
-          forums.indexWhere((ForumModel forum) => forum.forumId == postId);
-      if (forumIndex != -1) {
-        final bool checkLiked = forums[forumIndex].likes!.contains(userId);
-        if (checkLiked) {
-          forums[forumIndex].likes?.remove(userId);
-        } else {
-          forums[forumIndex].likes?.add(userId);
         }
       }
     } else if (type == 'course') {
@@ -347,10 +318,8 @@ class HomeController extends GetxController {
         }
       }
     } else {
-      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          post['shouldCount'] == null &&
-          post['isForum'] &&
-          post['data'].forumId == postId);
+      final int postIndex = mixedPosts.indexWhere(
+          (Map<String, dynamic> post) => post['shouldCount'] == null);
       if (postIndex != -1) {
         final bool checkLiked =
             mixedPosts[postIndex]['data'].likes!.contains(userId);
@@ -394,7 +363,6 @@ class HomeController extends GetxController {
       //sponsored posts
       spIndex = sponsoredPosts.indexWhere((Map<String, dynamic> post) =>
           post['shouldCount'] == null &&
-          !post['isForum'] &&
           post['isSponsored'] &&
           post['data'].postId == postId);
     } else {
@@ -404,10 +372,7 @@ class HomeController extends GetxController {
 
       //sponsored posts
       spIndex = sponsoredPosts.indexWhere((Map<String, dynamic> post) =>
-          post['shouldCount'] == null &&
-          post['isForum'] &&
-          post['isSponsored'] &&
-          post['data'].forumId == postId);
+          post['shouldCount'] == null && post['isSponsored']);
     }
     if (postIndex != -1) {
       posts[postIndex].comments!.add(comment);
@@ -457,7 +422,6 @@ class HomeController extends GetxController {
       final int spIndex = sponsoredPosts.indexWhere(
           (Map<String, dynamic> item) =>
               item['shouldCount'] == null &&
-              !item['isForum'] &&
               item['isSponsored'] &&
               item['data'].postId == postId);
       if (spIndex != -1) {
@@ -471,25 +435,6 @@ class HomeController extends GetxController {
         } else {
           profileController.updateCoinCount(-1);
           sponsoredPosts[spIndex]['data'].coins!.add(userId);
-        }
-      }
-    } else {
-      final int forumIndex = mixedPosts.indexWhere(
-          (Map<String, dynamic> item) =>
-              item['shouldCount'] == null &&
-              item['isForum'] &&
-              item['data'].forumId == postId);
-      if (forumIndex != -1) {
-        final bool checkIfCoined =
-            mixedPosts[forumIndex]['data'].coins!.contains(userId);
-        if (checkIfCoined) {
-          profileController.updateCoinCount(1);
-          mixedPosts[forumIndex]['data']
-              .coins!
-              .removeWhere((String element) => element == userId);
-        } else {
-          profileController.updateCoinCount(-1);
-          mixedPosts[forumIndex]['data'].coins!.add(userId);
         }
       }
     }
@@ -515,18 +460,6 @@ class HomeController extends GetxController {
   /// BUY COURSE WITH COINS
   void courseCoin(String userId, String courseId, String price,
       ProfileController profileController, String type, String receiverUid) {
-    // final bool checkIfCoined =
-    //     mixedPosts[forumIndex]['data'].coins!.contains(userId);
-    // if (checkIfCoined) {
-    //   profileController.updateCoinCount(int.parse(price));
-    //   // mixedPosts[forumIndex]['data']
-    //   //     .coins!
-    //   //     .removeWhere((String element) => element == userId);
-    // } else {
-    //   profileController.updateCoinCount(-int.parse(price));
-    //   // mixedPosts[forumIndex]['data'].coins!.add(userId);
-    // }
-
     update();
     if (profileController.myProfile.uid != receiverUid) {
       socket.emit('coin', {
@@ -573,7 +506,6 @@ class HomeController extends GetxController {
       final int spIndex = sponsoredPosts.indexWhere(
           (Map<String, dynamic> post) =>
               post['shouldCount'] == null &&
-              !post['isForum'] &&
               post['isSponsored'] &&
               post['data'].postId == postId);
       if (spIndex != -1) {
@@ -881,12 +813,9 @@ class HomeController extends GetxController {
     update();
     final ApiResponseModel response = await HomeRepository.fetchPosts(
         paginationPage.value, posts[posts.length - 1].timestamp);
-
-    final ApiResponseModel forum = await HomeRepository.fetchForums(
-        profileController.myProfile.uid, paginationPage.value);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
-      processPostsAndForumsData(response.data, forum.data);
+      processPostsAndForumsData(response.data);
     } else {
       // showSnackbar(
       //     title: 'OOPS!',
@@ -951,19 +880,6 @@ class HomeController extends GetxController {
     }
   }
 
-  void updateForumViews(ForumModel post) {
-    final int postIndex = mixedPosts.indexWhere(
-        (Map<String, dynamic> element) =>
-            element['shouldCount'] == null &&
-            element['isForum'] &&
-            element['data'].forumId == post.forumId);
-    if (postIndex != -1) {
-      // Increment the view count of the post by 1
-      mixedPosts[postIndex]['data'].setViews(post.views! + 1);
-      HomeRepository.updateForumViews(post.forumId, post.views!);
-    }
-  }
-
   /// LOAD POSTS FROM REMOTE SOURCE
   Future<void> loadData() async {
     loading(true);
@@ -1012,7 +928,7 @@ class HomeController extends GetxController {
       if (promoted.success) {
         processPromotedPostsToState(promoted.data['promotedPosts']['rows']);
         processPromotedCoursesToState(promoted.data['promotedCourses']['rows']);
-        processPostsAndForumsData(data['posts'], data['posts']['forums']);
+        processPostsAndForumsData(data['posts']);
       }
 
       // --- Profile Setup ---
@@ -1037,21 +953,6 @@ class HomeController extends GetxController {
         });
       }));
 
-      // --- Forums ---
-      final forumRows =
-          List<Map<String, dynamic>>.from(data['forums']?['rows'] ?? []);
-      userresources.addAll(forumRows.map((e) {
-        return ForumModel.fromMap({
-          ...e,
-          'likes': (e['likes'] as List)
-              .map((like) => like['userId'].toString())
-              .toList(),
-          'coins': (e['coins'] as List)
-              .map((coin) => coin['userId'].toString())
-              .toList(),
-        });
-      }));
-
       // --- Remaining Setup ---
       processBossToState(data['bossOfTheWeek']);
       processMentorToState(data['mentorOfTheWeek']);
@@ -1067,6 +968,8 @@ class HomeController extends GetxController {
 
       addCoinDaily();
       _showMyDialog();
+      impactController.loadData(
+          profileController.myProfile.uid, profileController.myProfile.uid);
       // Fire and forget: send device token
       FirebaseMessaging.instance.getToken().then((value) {
         if (value != null) {

@@ -117,12 +117,6 @@ class BossUpController extends GetxController {
 
   void deleteForum(String forumId) async {
     forums.removeWhere((ForumModel element) => element.forumId == forumId);
-    if (_homeController.userresources
-            .indexWhere((ForumModel element) => element.forumId == forumId) !=
-        -1) {
-      _homeController.userresources
-          .removeWhere((ForumModel element) => element.forumId == forumId);
-    }
     await ForumRepository.deleteForum(forumId);
     ApiService.put(
       path: 'users/${_profileController.myProfile.uid}',
@@ -344,7 +338,6 @@ class BossUpController extends GetxController {
     });
 
     forums.insert(0, modelizedNewPost);
-    _homeController.userresources.insert(0, modelizedNewPost);
 
     Get.off(() => PostonhomePopUp(
           forum: modelizedNewPost,

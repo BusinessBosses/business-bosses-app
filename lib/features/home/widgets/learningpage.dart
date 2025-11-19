@@ -19,6 +19,7 @@ class LearningPage extends StatefulWidget {
 }
 
 class _LearningPageState extends State<LearningPage> {
+  // ignore: unused_field
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
 
