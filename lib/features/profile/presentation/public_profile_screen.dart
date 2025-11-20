@@ -180,7 +180,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                 ],
                 leading: IconButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                 ),
@@ -263,7 +263,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                     left: 0,
                     child: IconButton(
                       onPressed: () {
-                        Get.back();
+                        Navigator.pop(context);
                       },
                       icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                     ),

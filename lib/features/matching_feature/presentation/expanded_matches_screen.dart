@@ -189,8 +189,8 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                 children: <Widget>[
                   if (widget.isMarketplace != true)
                     MatchHeader(
-                      title: 'Your Top Matches',
-                      subtitle: 'for this week based on your profile',
+                      title: 'Top Matches',
+                      subtitle: 'opportunities for you based on your profile',
                       weeklyMatches: matchController.matchList.length,
                       totalMatches: matchController.matchList.length,
                       matchQuality: averageQuality,

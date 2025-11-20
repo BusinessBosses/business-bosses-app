@@ -23,10 +23,35 @@ class UserProfileTile extends StatefulWidget {
 class _UserProfileTileState extends State<UserProfileTile> {
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
     final ProfileController profileController = Get.find();
-    // fetchData();
-    // setState(() {});
+
+    final String category = widget.myProfile.category ?? '';
+    final String company = widget.myProfile.companyName ?? '';
+
+    String limitText(String text, int max) {
+      if (text.length <= max) return text;
+      return '${text.substring(0, max)}…';
+    }
+
+// Build combined AFTER trim and checks
+    String combined;
+
+// First check if we need to shorten them
+    if ((category + company).length > 30) {
+      int split = ((30 - 3) ~/ 2); // minus 3 for " | "
+      String shortCategory = limitText(category, split);
+      String shortCompany = limitText(company, split);
+
+      combined = '$shortCategory'
+          '${(shortCategory.trim().isNotEmpty && shortCompany.trim().isNotEmpty) ? ' | ' : ''}'
+          '$shortCompany';
+    } else {
+      // If already short enough, use full versions with clean check
+      combined = '$category'
+          '${(category.trim().isNotEmpty && company.trim().isNotEmpty) ? ' | ' : ''}'
+          '$company';
+    }
+
     return SizedBox(
       width: double.infinity,
       child: Row(
@@ -40,8 +65,8 @@ class _UserProfileTileState extends State<UserProfileTile> {
                       ProfilePictureDisplay(widget.myProfile.photoUrl ?? ''));
                 },
                 child: SizedBox(
-                  height: 120.0,
-                  width: 120.0,
+                  height: 100.0,
+                  width: 100.0,
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: ClipRRect(
@@ -73,8 +98,8 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         boxShadow: const <BoxShadow>[
                           BoxShadow(
                             color: Colors.black,
-                            blurRadius: 5000000.0, // soften the shadow
-                            spreadRadius: 0.02, // extend the shadow
+                            blurRadius: 5000000.0,
+                            spreadRadius: 0.02,
                           )
                         ],
                       ),
@@ -82,9 +107,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         'assets/svgs/bosseek.svg',
                       ),
                     ),
-                    const SizedBox(
-                      height: 2,
-                    ),
+                    const SizedBox(height: 2),
                     Text(
                       'Boss of the week',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -98,147 +121,135 @@ class _UserProfileTileState extends State<UserProfileTile> {
             ],
           ),
           Expanded(
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(height: 6.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    if (profileController.myProfile.matchType != null)
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(ExpandedMatchesScreen());
-                          // showModalBottomSheet(
-                          //     context: context,
-                          //     isScrollControlled: true,
-                          //     backgroundColor: Colors.transparent,
-                          //     builder: (BuildContext context) =>
-                          //         PreMatchModal());
-                        },
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'Find My Match',
-                              // profileController
-                              //     .myProfile.matchType!.capitalize
-                              //     .toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                            Icon(LucideIcons.chevronRight,
-                                size: 15, color: Colors.blueAccent)
-                          ],
-                        ),
-                      ),
-                    widget.myProfile.isSubscribed
-                        ? Row(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(height: 6.0),
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      if (profileController.myProfile.matchType != null)
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(ExpandedMatchesScreen());
+                          },
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: <Widget>[
                               Text(
-                                widget.myProfile.name != null &&
-                                        widget.myProfile.name!.length <= 20
-                                    ? widget.myProfile.name!
-                                    : widget.myProfile.name != null
-                                        ? '${widget.myProfile.name!.substring(0, 20)}...'
-                                        : widget.myProfile.username,
-                                style: Theme.of(context).textTheme.bodyLarge,
+                                'Find My Match',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.blueAccent,
+                                ),
                               ),
-                              const SizedBox(width: 5),
-                              SvgPicture.asset(
-                                'assets/svgs/premiumbadge.svg',
-                                height: 9,
-                                colorFilter: const ColorFilter.mode(
-                                  primaryColorLT,
-                                  BlendMode.srcIn,
-                                ),
-                              )
+                              Icon(LucideIcons.chevronRight,
+                                  size: 15, color: Colors.blueAccent)
                             ],
-                          )
-                        : Text(
-                            widget.myProfile.name != null &&
-                                    widget.myProfile.name!.length <= 20
-                                ? widget.myProfile.name!
-                                : widget.myProfile.name != null
-                                    ? '${widget.myProfile.name!.substring(0, 20)}...'
-                                    : '',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
                           ),
-                    Text(
-                      widget.myProfile.category ?? '',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: textColor.withValues(alpha: 0.8)),
-                    ),
-                    widget.myProfile.companyName != null &&
-                            widget.myProfile.companyName != ''
-                        ? Text(
-                            widget.myProfile.companyName!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.normal,
-                                color: textColor.withValues(
-                                  alpha: 0.8,
-                                )),
-                          )
-                        : Container(),
-                    widget.myProfile.location != null &&
-                            widget.myProfile.location != ''
-                        ? Text(
-                            widget.myProfile.location ?? '',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: textColor.withValues(alpha: 0.6),
-                                ),
-                          )
-                        : Container(),
-                  ],
-                ),
-                if (!profileController.myProfile.isSubscribed)
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.09),
-                              blurRadius: 500.0,
-                              spreadRadius: 0.0,
-                            ),
-                          ],
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            top: 2.0,
+
+                      /// NAME
+                      if (widget.myProfile.name != null &&
+                          widget.myProfile.name!.isNotEmpty)
+                        widget.myProfile.isSubscribed
+                            ? Row(
+                                children: <Widget>[
+                                  Text(
+                                    widget.myProfile.name!.length <= 20
+                                        ? widget.myProfile.name!
+                                        : '${widget.myProfile.name!.substring(0, 20)}...',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  SvgPicture.asset(
+                                    'assets/svgs/premiumbadge.svg',
+                                    height: 9,
+                                    colorFilter: const ColorFilter.mode(
+                                      primaryColorLT,
+                                      BlendMode.srcIn,
+                                    ),
+                                  )
+                                ],
+                              )
+                            : Text(
+                                widget.myProfile.name!.length <= 20
+                                    ? widget.myProfile.name!
+                                    : '${widget.myProfile.name!.substring(0, 20)}...',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+
+                      /// CATEGORY (already clean)
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            combined,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: textColor.withValues(alpha: 0.8),
+                                    ),
                           ),
-                          child: Transform.translate(
-                            offset: const Offset(-15, 0),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 2.0),
-                              child: subscribetopremiumbutton(),
+                        ],
+                      ),
+
+                      /// COMPANY NAME
+
+                      /// LOCATION
+                      if (widget.myProfile.location != null &&
+                          widget.myProfile.location!.isNotEmpty)
+                        Text(
+                          widget.myProfile.location!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withValues(alpha: 0.6),
+                                  ),
+                        ),
+                    ],
+                  ),
+
+                  /// SUBSCRIBE BUTTON
+                  if (!profileController.myProfile.isSubscribed)
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.09),
+                                blurRadius: 500.0,
+                                spreadRadius: 0.0,
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 2.0),
+                            child: Transform.translate(
+                              offset: const Offset(-15, 0),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 2.0),
+                                child: subscribetopremiumbutton(),
+                              ),
                             ),
-                          ),
-                        )),
-                  )
-              ],
+                          )),
+                    )
+                ],
+              ),
             ),
           )
         ],
