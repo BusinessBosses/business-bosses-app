@@ -22,6 +22,7 @@ import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../utils/theme/theme.dart';
 import '../marketplace/controllers/market_controller.dart';
@@ -194,7 +195,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
                               // ⚙️ Filter button
                               IconButton(
-                                icon: const Icon(Icons.filter_alt_outlined,
+                                icon: const Icon(LucideIcons.filter,
                                     color: Colors.black87),
                                 onPressed: () {
                                   showModalBottomSheet(
