@@ -165,6 +165,12 @@ class PartnerController extends GetxController {
       loading.value = false;
     }
   }
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadPartners();
+  }
 }
 
 class TempFile {
