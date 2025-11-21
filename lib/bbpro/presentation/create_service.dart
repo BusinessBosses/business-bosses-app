@@ -304,7 +304,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
-              Get.back();
+              Navigator.pop(context);
             },
           ),
         ],

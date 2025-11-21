@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
@@ -34,7 +35,8 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
 
   final ShopController shopController = Get.find();
   final BuyerRequestController buyerRequestController =
-      Get.put(BuyerRequestController());
+      Get.find<BuyerRequestController>();
+
   final ProfileController profileController = Get.find();
 
   String country = '';
@@ -64,7 +66,6 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
     super.initState();
     currencyController.text = 'USD';
 
-    /// 🟡 If editing, pre-fill the fields
     if (widget.request != null) {
       final BuyerRequestModel req = widget.request!;
       _titleController.text = req.title;
@@ -75,7 +76,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
       country = req.user.location ?? '';
       _selectedDeadline =
           req.deadline.isNotEmpty ? DateTime.tryParse(req.deadline) : null;
-      currencyController.text = 'USD'; // Or derive based on request
+      currencyController.text = 'USD';
       _existingAttachments =
           List<String>.from(widget.request?.attachments ?? <dynamic>[]);
     }
@@ -88,8 +89,6 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
     _startPriceController.dispose();
     _endPriceController.dispose();
     currencyController.dispose();
-
-    // Don't dispose GetX controllers here if they're used elsewhere.
     super.dispose();
   }
 
@@ -99,11 +98,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.custom,
-      allowedExtensions: <String>[
-        'png',
-        'jpg',
-        'jpeg',
-      ],
+      allowedExtensions: <String>['png', 'jpg', 'jpeg'],
     );
 
     if (result != null) {
@@ -142,277 +137,261 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
       return;
     }
 
-    if (_formKey.currentState!.validate()) {
-      buyerRequestController.error(false);
-      final Map<String, dynamic> body = <String, dynamic>{
-        'title': _titleController.text.trim(),
-        'description': _descriptionController.text.trim(),
-        'category': _selectedCategory,
-        'budget_start': _startPriceController.text,
-        'budget_end': _endPriceController.text,
-        'deadline': _selectedDeadline?.toIso8601String() ?? '',
-        'location':
-            country.isEmpty ? (shopController.shop?.location ?? '') : country,
-      };
+    buyerRequestController.error(false);
 
-      if (widget.request != null) {
-        /// ✏️ Editing Request
-        await buyerRequestController.updateBuyerRequest(
-          widget.request!.id!,
-          body,
-          attachments: _attachments,
-          existingAttachments: _existingAttachments,
-        );
-      } else {
-        /// ➕ Creating New Request
-        await buyerRequestController.addBuyerRequest(
-          body,
-          attachments: _attachments, // new ones
-        );
-      }
+    final Map<String, dynamic> body = <String, dynamic>{
+      'title': _titleController.text.trim(),
+      'description': _descriptionController.text.trim(),
+      'category': _selectedCategory,
+      'budget_start': _startPriceController.text,
+      'budget_end': _endPriceController.text,
+      'deadline': _selectedDeadline?.toIso8601String() ?? '',
+      'location':
+          country.isEmpty ? (shopController.shop?.location ?? '') : country,
+    };
 
-      if (!buyerRequestController.error.value) {
-        Get.snackbar(
-          'Success',
-          widget.request != null
-              ? 'Request edited successfully!'
-              : 'Buyer request posted successfully!',
-          backgroundColor: Colors.green[50],
-          colorText: Colors.green[900],
-          snackPosition: SnackPosition.BOTTOM,
-        );
-        Get.back();
-      } else {
-        Get.snackbar(
-          'Error',
-          'Failed to ${widget.request != null ? 'edit' : 'post'} request.',
-          backgroundColor: Colors.red[50],
-          colorText: Colors.red[900],
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      }
+    if (widget.request != null) {
+      await buyerRequestController.updateBuyerRequest(
+        widget.request!.id!,
+        body,
+        attachments: _attachments,
+        existingAttachments: _existingAttachments,
+      );
+    } else {
+      await buyerRequestController.addBuyerRequest(
+        body,
+        attachments: _attachments,
+      );
+    }
+
+    if (!buyerRequestController.error.value) {
+      showSnackBar(Get.context!,
+          message:
+              'Request ${widget.request == null ? 'added' : 'edited'} succesfully!');
+
+      Navigator.pop(Get.context!);
+    } else {
+      Get.snackbar(
+        'Error',
+        'Failed to ${widget.request != null ? 'edit' : 'post'} request.',
+        backgroundColor: Colors.red[50],
+        colorText: Colors.red[900],
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      final bool isSubmitting = buyerRequestController.loading.value;
-
-      return Scaffold(
-        backgroundColor: backgroundColor,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(
-            widget.request != null
-                ? 'Edit Buyer Request'
-                : 'Create Buyer Request',
-            style: TextStyle(
-              color: textColor,
-              fontWeight: FontWeight.bold,
-            ),
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(
+          widget.request != null
+              ? 'Edit Buyer Request'
+              : 'Create Buyer Request',
+          style: TextStyle(
+            color: textColor,
+            fontWeight: FontWeight.bold,
           ),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () => Get.back(),
-            ),
-          ],
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                spacing: 20,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  const SizedBox(height: 0),
-                  CustomEditText(
-                    caption: 'Request Title *',
-                    maxLength: 30,
-                    hintText: 'e.g., Need a responsive website for my startup',
-                    controller: _titleController,
-                    validator: (String? value) =>
-                        value == null || value.trim().isEmpty
-                            ? 'Title is required'
-                            : null,
-                  ),
-
-                  CustomEditText(
-                    caption: 'Description *',
-                    hintText:
-                        'Describe your requirements in detail. Include specific deliverables, quality expectations, and any important constraints...',
-                    controller: _descriptionController,
-                    maxLength: 300,
-                    validator: (String? value) => value == null || value.isEmpty
-                        ? 'Please enter a description'
-                        : null,
-                  ),
-
-                  CustomDropdownWidget(
-                    caption: 'Select Category *',
-                    hintText: 'Choose a category',
-                    items: _categories,
-                    iconName: 'assets/svgs/dropdown.svg',
-                    initialValue: _selectedCategory,
-                    onChanged: (String? newValue) {
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              spacing: 20,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                const SizedBox(height: 0),
+                CustomEditText(
+                  caption: 'Request Title *',
+                  maxLength: 30,
+                  hintText: 'e.g., Need a responsive website for my startup',
+                  controller: _titleController,
+                  validator: (String? value) =>
+                      value == null || value.trim().isEmpty
+                          ? 'Title is required'
+                          : null,
+                ),
+                CustomEditText(
+                  caption: 'Description *',
+                  hintText:
+                      'Describe your requirements in detail. Include specific deliverables, quality expectations, and any important constraints...',
+                  controller: _descriptionController,
+                  maxLength: 300,
+                  validator: (String? value) => value == null || value.isEmpty
+                      ? 'Please enter a description'
+                      : null,
+                ),
+                CustomDropdownWidget(
+                  caption: 'Select Category *',
+                  hintText: 'Choose a category',
+                  items: _categories,
+                  iconName: 'assets/svgs/dropdown.svg',
+                  initialValue: _selectedCategory,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedCategory = newValue!;
+                    });
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                  child: CountryListPick(
+                    appBar: AppBar(
+                      leading: IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                      ),
+                      centerTitle: true,
+                      title: const Text(
+                        'Select Location',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    initialSelection: country.isEmpty
+                        ? (shopController.shop?.location ?? 'UK')
+                        : country,
+                    pickerBuilder:
+                        (BuildContext context, CountryCode? countryCode) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(radiusValue),
+                        ),
+                        child: CustomTextWidget(
+                          caption: 'Location *',
+                          iconName: 'assets/svgs/nexticon.svg',
+                          text: country.isEmpty
+                              ? (shopController.shop?.location ??
+                                  'United Kingdom')
+                              : country,
+                        ),
+                      );
+                    },
+                    onChanged: (CountryCode? code) {
                       setState(() {
-                        _selectedCategory = newValue!;
+                        country = code!.name!;
+                        currencyController.text =
+                            currencyValues[code.name.toString()] ?? 'USD';
                       });
                     },
+                    useSafeArea: false,
                   ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                    child: CountryListPick(
-                      appBar: AppBar(
-                        leading: IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                        ),
-                        centerTitle: true,
-                        title: const Text('Select Location',
-                            textAlign: TextAlign.center),
-                      ),
-                      initialSelection: country.isEmpty
-                          ? (shopController.shop?.location ?? 'UK')
-                          : country,
-                      pickerBuilder:
-                          (BuildContext context, CountryCode? countryCode) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(radiusValue),
-                          ),
-                          child: CustomTextWidget(
-                            caption: 'Location *',
-                            iconName: 'assets/svgs/nexticon.svg',
-                            text: country.isEmpty
-                                ? (shopController.shop?.location ??
-                                    'United Kingdom')
-                                : country,
-                          ),
-                        );
-                      },
-                      onChanged: (CountryCode? code) {
-                        setState(() {
-                          country = code!.name!;
-                          currencyController.text =
-                              currencyValues[code.name.toString()] ??
-                                  'USD'; // Default to USD
-                        });
-                      },
-                      useSafeArea: false,
-                    ),
-                  ),
-
-                  // Budget and Deadline Row
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  _buildLabel('Budget (optional)',
-                                      LucideIcons.dollarSign),
-                                  const SizedBox(height: 10),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              spacing: 10,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: CustomEditText(
-                                    padding: 5,
-                                    currencycontroller: currencyController,
-                                    caption: 'Starting Price',
-                                    iscurrencyfield: true,
-                                    maxLength: 15,
-                                    hintText: 'Enter price',
-                                    controller: _startPriceController,
-                                    inputType: TextInputType.number,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: CustomEditText(
-                                    padding: 5,
-                                    currencycontroller: currencyController,
-                                    caption: ' Ending Price',
-                                    iscurrencyfield: true,
-                                    maxLength: 15,
-                                    hintText: 'Enter price',
-                                    controller: _endPriceController,
-                                    inputType: TextInputType.number,
-                                  ),
-                                ),
+                                _buildLabel('Budget (optional)',
+                                    LucideIcons.dollarSign),
+                                const SizedBox(height: 10),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Row(
+                            spacing: 10,
+                            children: <Widget>[
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: CustomEditText(
+                                  padding: 5,
+                                  currencycontroller: currencyController,
+                                  caption: 'Starting Price',
+                                  iscurrencyfield: true,
+                                  maxLength: 15,
+                                  hintText: 'Enter price',
+                                  controller: _startPriceController,
+                                  inputType: TextInputType.number,
+                                ),
+                              ),
+                              Expanded(
+                                child: CustomEditText(
+                                  padding: 5,
+                                  currencycontroller: currencyController,
+                                  caption: ' Ending Price',
+                                  iscurrencyfield: true,
+                                  maxLength: 15,
+                                  hintText: 'Enter price',
+                                  controller: _endPriceController,
+                                  inputType: TextInputType.number,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 16),
-                    ],
-                  ),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: _buildLabel(
-                            'Deadline (optional)', Icons.calendar_today),
+                    ),
+                    const SizedBox(width: 16),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: _buildLabel(
+                          'Deadline (optional)', Icons.calendar_today),
+                    ),
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: _selectDate,
+                      child: CustomTextWidget(
+                        padding: 15,
+                        textpadding: 15,
+                        hashint: true,
+                        caption: 'When do you need responses by?',
+                        iconName: 'assets/svgs/dropdown.svg',
+                        text: _selectedDeadline == null
+                            ? 'Select date'
+                            : DateFormat('EEEE dd MMMM, yyyy')
+                                .format(_selectedDeadline!),
                       ),
-                      const SizedBox(height: 8),
-                      GestureDetector(
-                        onTap: _selectDate,
-                        child: CustomTextWidget(
-                          padding: 15,
-                          textpadding: 15,
-                          hashint: true,
-                          caption: 'When do you need responses by?',
-                          iconName: 'assets/svgs/dropdown.svg',
-                          text: _selectedDeadline == null
-                              ? 'Select date'
-                              : DateFormat('EEEE dd MMMM, yyyy')
-                                  .format(_selectedDeadline!),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
+                _buildAttachmentSection(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
 
-                  // Attachments
-                  _buildAttachmentSection(),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: CustomButton(
+                  /// ONLY OBSERVING THIS PART
+                  child: Obx(() {
+                    return CustomButton(
                       backgroundColor: Colors.red,
                       textColor: Colors.white,
                       onPressed: _handleSubmit,
-                      isProcessing: isSubmitting,
+                      isProcessing: buyerRequestController.loading.value,
                       label: widget.request == null
                           ? 'Post Request'
                           : 'Edit Request',
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                ],
-              ),
+                    );
+                  }),
+                ),
+                const SizedBox(height: 30),
+              ],
             ),
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 
   Widget _buildAttachmentSection() {
@@ -432,8 +411,6 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
           ),
         ),
         const SizedBox(height: 8),
-
-        // 🟡 Existing attachments
         if (_existingAttachments.isNotEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -456,7 +433,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          url.split('/').last, // Show file name
+                          url.split('/').last,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -475,8 +452,6 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
               },
             ),
           ),
-
-        // 🟢 File picker for new attachments
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: GestureDetector(
@@ -505,8 +480,6 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
             ),
           ),
         ),
-
-        // 🟢 Newly picked files
         if (_attachments.isNotEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),

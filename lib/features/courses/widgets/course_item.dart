@@ -569,12 +569,13 @@ class _CourseItemState extends State<CourseItem> {
                                   ],
                                 ),
                               );
-                            } else if (val == 'Boost') {
-                              Get.to(() => BoostCourse(
-                                    postId: widget.course.id,
-                                    postTitle: widget.course.title!,
-                                  ));
                             }
+                            // else if (val == 'Boost') {
+                            //   Get.to(() => BoostCourse(
+                            //         postId: widget.course.id,
+                            //         postTitle: widget.course.title!,
+                            //       ));
+                            // }
                           },
                         )
                       : GestureDetector(

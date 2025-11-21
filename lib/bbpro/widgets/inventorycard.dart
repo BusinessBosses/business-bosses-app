@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
+// import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -252,18 +252,18 @@ class _InventoryCardState extends State<InventoryCard> {
                             ),
                           ),
                           OptionsButton(
-                            isBoost: true,
+                            // isBoost: true,
                             item: widget.product,
                             onEdit: () => Get.to(
                               () => CreateProductListing(
                                 product: widget.product,
                               ),
                             ),
-                            onBoost: () {
-                              Get.to(() => BoostItem(
-                                    product: widget.product,
-                                  ));
-                            },
+                            // onBoost: () {
+                            //   Get.to(() => BoostItem(
+                            //         product: widget.product,
+                            //       ));
+                            // },
                             onDelete: onDelete,
                           ),
                         ],

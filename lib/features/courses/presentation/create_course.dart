@@ -773,6 +773,28 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       return;
     }
 
+    // Paid course price validation
+    if (_paidCourse) {
+      // If user selected preset price
+      if (!_isCustomPriceSelected && (_courseprice == null)) {
+        _showError('Please select a price for the paid course!');
+        return;
+      }
+
+      // If user selected custom price but left it empty
+      if (_isCustomPriceSelected &&
+          (customPrice == null || customPrice!.trim().isEmpty)) {
+        _showError('Please enter a custom price for the paid course!');
+        return;
+      }
+
+      // Custom price must be a valid number
+      if (_isCustomPriceSelected && int.tryParse(customPrice!) == null) {
+        _showError('Please enter a valid number for the custom price!');
+        return;
+      }
+    }
+
     // Upload thumbnail if new image selected
     if (_selectedImage != null) {
       dynamic response = await ApiService.uploadFile(_selectedImage!);

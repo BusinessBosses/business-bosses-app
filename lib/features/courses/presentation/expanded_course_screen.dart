@@ -1205,47 +1205,59 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     ? Container()
                                     : Center(
                                         child: ElevatedButton(
-                                            onPressed: () async {
-                                              if (num.parse(
-                                                      widget.course.price!) >
-                                                  num.parse(profileController
-                                                      .myProfile.coinscount
-                                                      .toString())) {
-                                                showSnackbar(
-                                                  title: 'OOPS!',
-                                                  message:
-                                                      'Insufficient Coin balance, please top up!',
-                                                  error: true,
-                                                );
+                                          onPressed: () async {
+                                            if (num.parse(
+                                                    widget.course.price!) >
+                                                num.parse(profileController
+                                                    .myProfile.coinscount
+                                                    .toString())) {
+                                              showSnackbar(
+                                                title: 'OOPS!',
+                                                message:
+                                                    'Insufficient Coin balance, please top up!',
+                                                error: true,
+                                              );
 
-                                                setState(() {
-                                                  insufficientBalance = true;
-                                                });
-                                              } else {
-                                                courseController.payforcourse(
-                                                    widget.course.id,
-                                                    num.parse(
-                                                        widget.course.price!));
-                                              }
-                                              setState(() {});
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(10.0),
-                                              child: Wrap(
-                                                runAlignment:
-                                                    WrapAlignment.center,
-                                                crossAxisAlignment:
-                                                    WrapCrossAlignment.center,
-                                                children: <Widget>[
-                                                  const Text('Buy Course for '),
-                                                  SvgPicture.asset(
-                                                      'assets/svgs/coin.svg'),
-                                                  Text(
-                                                      ' ${widget.course.price!}')
-                                                ],
-                                              ),
-                                            ))),
+                                              setState(() {
+                                                insufficientBalance = true;
+                                              });
+                                            } else {
+                                              courseController.payforcourse(
+                                                  widget.course.id,
+                                                  num.parse(
+                                                      widget.course.price!));
+                                            }
+                                            setState(() {});
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Wrap(
+                                              runAlignment:
+                                                  WrapAlignment.center,
+                                              crossAxisAlignment:
+                                                  WrapCrossAlignment.center,
+                                              children: <Widget>[
+                                                const Text(
+                                                  'Buy Course for ',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                SvgPicture.asset(
+                                                    'assets/svgs/coin.svg'),
+                                                Text(
+                                                  ' ${widget.course.price!}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                 const SizedBox(
                                   height: 20,
                                 ),

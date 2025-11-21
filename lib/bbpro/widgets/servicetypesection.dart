@@ -60,6 +60,8 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
                               .url!)), // Replace with your actual profile link
                           child: Text(
                             widget.service.url ?? 'N/A',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontSize: 14,
                               color: Colors.blue,

@@ -285,12 +285,12 @@ class _ServiceCardState extends State<ServiceCard> {
                             item: widget.service,
                             onEdit: _onEdit,
                             onDelete: onDelete,
-                            onBoost: () {
-                              Get.to(() => BoostItem(
-                                    service: widget.service,
-                                  ));
-                            },
-                            isBoost: true,
+                            // onBoost: () {
+                            //   Get.to(() => BoostItem(
+                            //         service: widget.service,
+                            //       ));
+                            // },
+                            // isBoost: true,
                           ),
                         ],
                       ),

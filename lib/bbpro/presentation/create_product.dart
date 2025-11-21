@@ -191,7 +191,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
-              Get.back();
+              Navigator.pop(context);
             },
           ),
         ],

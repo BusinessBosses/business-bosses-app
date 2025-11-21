@@ -139,12 +139,12 @@ class _MyServiceCardState extends State<MyServiceCard> {
                         onDelete: onDelete,
                         padding: const EdgeInsets.all(0),
                         borderColor: Colors.white,
-                        onBoost: () {
-                          Get.to(() => BoostItem(
-                                service: widget.service,
-                              ));
-                        },
-                        isBoost: true,
+                        // onBoost: () {
+                        //   Get.to(() => BoostItem(
+                        //         service: widget.service,
+                        //       ));
+                        // },
+                        // isBoost: true,
                       ),
               ],
             ),

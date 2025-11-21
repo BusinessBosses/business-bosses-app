@@ -119,7 +119,8 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                   const SizedBox(height: 16),
                   GestureDetector(
                     onTap: () {
-                      Get.to(PublicProfileScreen(), arguments: request.user);
+                      Get.to(() => PublicProfileScreen(),
+                          arguments: request.user);
                     },
                     child: Row(
                       spacing: 10,

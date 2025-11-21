@@ -75,7 +75,6 @@ class BuyerRequestController extends GetxController {
             ...response.data,
             'user': _profileController.myProfile.toMap()
           }));
-      Get.back();
     } else {
       error(true);
     }
@@ -169,7 +168,6 @@ class BuyerRequestController extends GetxController {
         // Optionally merge user info if API doesn’t include it
         buyerRequests[index] = updatedRequest;
       }
-      Get.back();
     } else {
       error(true);
     }
