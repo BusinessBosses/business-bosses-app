@@ -110,17 +110,17 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (Get.arguments == null) {
-        Get.back();
-        return;
-      } else {
-        if (Get.arguments.runtimeType == Industry) {
-          courseController.industry.value = Get.arguments;
-          courseController.initCourses();
-        }
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (Get.arguments == null) {
+    //     Get.back();
+    //     return;
+    //   } else {
+    //     if (Get.arguments.runtimeType == Industry) {
+    //       courseController.industry.value = Get.arguments;
+    //       courseController.initCourses();
+    //     }
+    //   }
+    // });
     // Initialize data or perform any other necessary setup
     if (widget.course.courseType == 'paid' &&
         widget.course.userId != profileController.myProfile.uid) {
