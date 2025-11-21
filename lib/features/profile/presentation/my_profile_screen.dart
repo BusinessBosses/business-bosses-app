@@ -137,62 +137,66 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
     return PreferredSize(
       preferredSize: Size.fromHeight(showHeader ? kToolbarHeight : 0),
-      child: Stack(
-        children: <Widget>[
-          if (showHeader)
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: CupertinoSlidingSegmentedControl<int>(
-                padding: const EdgeInsets.all(5),
-                backgroundColor: backgroundColor,
-                groupValue: _currentIndex,
-                children: <int, Widget>{
-                  0: _segmentLabel('Profile', _currentIndex == 0),
-                  1: _segmentLabel('My-Biz', _currentIndex == 1),
-                },
-                onValueChanged: (int? v) {
-                  if (v != null) {
-                    setState(() {
-                      _selectedIndex = 0;
-                      _currentIndex = v;
-                      _pageController.animateToPage(
-                        v,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.ease,
-                      );
-                    });
-                  }
-                },
-              ),
-            ),
-          if (showHeader)
-            Positioned(
-              bottom: 12,
-              left: 15,
-              child: GestureDetector(
-                onTap: () => Get.toNamed(Routes.analysescreen),
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: backgroundColor,
-                  child: const Icon(
-                    LucideIcons.helpCircle,
-                    color: textColor,
-                    size: 20,
+      child: showHeader
+          ? Padding(
+              padding: const EdgeInsets.only(top: 50.0),
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Center(
+                    child: CupertinoSlidingSegmentedControl<int>(
+                      padding: const EdgeInsets.all(5),
+                      backgroundColor: backgroundColor,
+                      groupValue: _currentIndex,
+                      children: <int, Widget>{
+                        0: _segmentLabel('Profile', _currentIndex == 0),
+                        1: _segmentLabel('My-Biz', _currentIndex == 1),
+                      },
+                      onValueChanged: (int? v) {
+                        if (v != null) {
+                          setState(() {
+                            _selectedIndex = 0;
+                            _currentIndex = v;
+                            _pageController.animateToPage(
+                              v,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.ease,
+                            );
+                          });
+                        }
+                      },
+                    ),
                   ),
-                ),
+
+                  // LEFT ICON
+                  Positioned(
+                    left: 15,
+                    child: GestureDetector(
+                      onTap: () => Get.toNamed(Routes.analysescreen),
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: backgroundColor,
+                        child: const Icon(
+                          LucideIcons.helpCircle,
+                          color: textColor,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // RIGHT ICON
+                  Positioned(
+                    right: 15,
+                    child: GestureDetector(
+                      onTap: () => _advancedDrawerController.showDrawer(),
+                      child: const CustomMenuButton(),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          if (showHeader)
-            Positioned(
-              bottom: 12,
-              right: 15,
-              child: GestureDetector(
-                onTap: () => _advancedDrawerController.showDrawer(),
-                child: const CustomMenuButton(),
-              ),
-            ),
-        ],
-      ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 

@@ -1,15 +1,14 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/common/widgets/tiles/custom_tileinterests.dart';
 import 'package:business_bosses_v2/features/home/widgets/winnercard.dart';
+import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 
 import '../../../utils/theme/theme.dart';
 
@@ -18,6 +17,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
   final int mentorCount = publicUser.mentorCount ?? 0;
   final int backerCount = publicUser.backerCount ?? 0;
   final int ambassadorCount = publicUser.ambassadorCount ?? 0;
+  final ProfileController profileController = Get.find();
 
   final bool hasAnyAchievement =
       bossCount > 0 || mentorCount > 0 || backerCount > 0;
@@ -300,74 +300,135 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         const SizedBox(
           height: 10,
         ),
-        if (publicUser.interests != null && publicUser.interests!.isNotEmpty)
-          const Padding(
+        if (profileController.myProfile.matchType != null &&
+            profileController.myProfile.matchType!.isNotEmpty)
+          Padding(
             padding: EdgeInsets.only(left: 15),
-            child: Text(
-              'Interests',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: subtextColor,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Interests',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: subtextColor,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(ExpandedMatchesScreen(
+                      isMarketplace: false,
+                    ));
+                  },
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    trailing: Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: Icon(
+                        LucideIcons.chevronRight,
+                        color: primaryColorLT,
+                      ),
+                    ),
+                    title: Text(
+                        'I Need ${profileController.myProfile.matchType!.capitalizeFirst!}s',
+                        style: TextStyle(
+                            color: subtextColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15)),
+                  ),
+                ),
+              ],
             ),
           ),
-        const SizedBox(
-          height: 10,
-        ),
-        Column(children: <Widget>[
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-            itemBuilder: (BuildContext context, int i) {
-              return Column(
-                children: <Widget>[
-                  CustomTileInterest(
-                    label: publicUser.interests != null
-                        ? publicUser.interests![i].industry!
-                        : '',
-                    onTap: () {
-                      if (publicUser.interests![i].categoryId ==
-                          Constants.BOSS_UP_CHALLENGE_CATEGORY_ID) {
-                        Get.toNamed(
-                          Routes.allCommunitiesScreen,
-                        );
-                      } else if (publicUser.interests![i].categoryId ==
-                          Constants.MARKET_PLACE_CATEGORY_ID) {
-                        Get.toNamed(
-                          Routes.marketPlace,
-                        );
-                      } else if (publicUser.interests![i].categoryId ==
-                          '6463a069-657d-47ae-b937-9a5d4c336811') {
-                        Get.to(() => const AllCommunitiesScreen(
-                              initialTabIndex: 2,
-                            ));
-                      } else {
-                        Get.toNamed(
-                          Routes.allforumscreen,
-                          arguments: publicUser.interests![i],
-                        );
-                      }
-                    },
+
+        if (profileController.myProfile.uid != publicUser.uid &&
+            publicUser.matchType != null &&
+            publicUser.matchType!.isNotEmpty)
+          Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Interests',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              );
-            },
-            itemCount:
-                publicUser.interests != null ? publicUser.interests!.length : 0,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text('Need ${publicUser.matchType!.capitalizeFirst!}s',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                          color: subtextColor)),
+                ),
+              ],
+            ),
           ),
-          publicUser.interests != null && publicUser.interests!.isNotEmpty
-              ? const SizedBox(
-                  width: double.infinity,
-                  height: 1,
-                  child: ColoredBox(color: backgroundcolorinterface),
-                )
-              : Container(),
-          const SizedBox(
-            height: 150,
-          )
-        ]),
+
+        // Column(children: <Widget>[
+        //   ListView.builder(
+        //     shrinkWrap: true,
+        //     physics: const NeverScrollableScrollPhysics(),
+        //     padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+        //     itemBuilder: (BuildContext context, int i) {
+        //       return Column(
+        //         children: <Widget>[
+        //           CustomTileInterest(
+        //             label: publicUser.interests != null
+        //                 ? publicUser.interests![i].industry!
+        //                 : '',
+        //             onTap: () {
+        //               if (publicUser.interests![i].categoryId ==
+        //                   Constants.BOSS_UP_CHALLENGE_CATEGORY_ID) {
+        //                 Get.toNamed(
+        //                   Routes.allCommunitiesScreen,
+        //                 );
+        //               } else if (publicUser.interests![i].categoryId ==
+        //                   Constants.MARKET_PLACE_CATEGORY_ID) {
+        //                 Get.toNamed(
+        //                   Routes.marketPlace,
+        //                 );
+        //               } else if (publicUser.interests![i].categoryId ==
+        //                   '6463a069-657d-47ae-b937-9a5d4c336811') {
+        //                 Get.to(() => const AllCommunitiesScreen(
+        //                       initialTabIndex: 2,
+        //                     ));
+        //               } else {
+        //                 Get.toNamed(
+        //                   Routes.allforumscreen,
+        //                   arguments: publicUser.interests![i],
+        //                 );
+        //               }
+        //             },
+        //           ),
+        //         ],
+        //       );
+        //     },
+        //     itemCount:
+        //         publicUser.interests != null ? publicUser.interests!.length : 0,
+        //   ),
+        //   publicUser.interests != null && publicUser.interests!.isNotEmpty
+        //       ? const SizedBox(
+        //           width: double.infinity,
+        //           height: 1,
+        //           child: ColoredBox(color: backgroundcolorinterface),
+        //         )
+        //       : Container(),
+        //   const SizedBox(
+        //     height: 150,
+        //   )
+        // ],
+        // ),
 
         // if (profileController.myProfile.uid == publicUser.uid)
         //   const Padding(

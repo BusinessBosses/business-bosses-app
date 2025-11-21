@@ -182,6 +182,7 @@ class _HeroSectionState extends State<HeroSection> {
       HeroItem(
           id: '2',
           type: 'mentor',
+          icon: 'assets/images/app_logo_2.png',
           title: 'Mentor of the Week',
           subtitle: mentor?.name ?? mentor!.username,
           image: mentor?.photoUrl ?? '',
@@ -193,6 +194,7 @@ class _HeroSectionState extends State<HeroSection> {
       HeroItem(
           id: '3',
           type: 'backer',
+          icon: 'assets/images/app_logo_2.png',
           title: 'Backer of the Week',
           subtitle: backer?.name ?? backer!.username,
           image: backer?.photoUrl ?? '',
@@ -205,6 +207,7 @@ class _HeroSectionState extends State<HeroSection> {
           id: '4',
           type: 'partner',
           title: 'Partner of the Week',
+          icon: 'assets/images/app_logo_2.png',
           subtitle: partner['companyName'] ?? '',
           image: partner['companyPhoto'],
           description: partner['companyDescription'] ?? '',
@@ -214,6 +217,7 @@ class _HeroSectionState extends State<HeroSection> {
         id: '5',
         type: 'ambassador',
         title: 'Ambassador of the Week',
+        icon: 'assets/images/app_logo_2.png',
         subtitle: ambassador?.name ?? ambassador!.username,
         image: ambassador?.photoUrl ?? '',
         description: ambassador?.bio ?? '',
@@ -224,6 +228,7 @@ class _HeroSectionState extends State<HeroSection> {
         id: '6',
         type: 'matches',
         title: 'Find your business matches',
+        icon: 'assets/images/app_logo_2.png',
         subtitle:
             'See your top matches and connect with people and opportunities that can help your business grow.',
         image: '',
@@ -495,14 +500,25 @@ class _HeroSectionState extends State<HeroSection> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                      config.title.toUpperCase(),
-                      style: const TextStyle(
-                        color: textColor,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.5,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        // if (item.icon.isNotEmpty)
+                        Image.asset(
+                          item.icon,
+                          width: 22,
+                          height: 22,
+                        ),
+                        SizedBox(width: item.icon.isNotEmpty ? 4 : 0),
+                        Text(
+                          config.title,
+                          style: const TextStyle(
+                            color: textColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
                     Icon(
                       LucideIcons.chevronRight,
@@ -826,7 +842,7 @@ class _HeroSectionState extends State<HeroSection> {
             onPanDown: (_) => _onUserInteraction(),
             // FIXED: Changed IntrinsicHeight to SizedBox with fixed height
             child: SizedBox(
-              height: 180, // Adjust this height as needed
+              height: 185, // Adjust this height as needed
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: heroItems.length,

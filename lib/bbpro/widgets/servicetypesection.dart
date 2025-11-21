@@ -33,50 +33,49 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
               height: 5,
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      widget.isOnline == true ? 'Online' : 'In-Person',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    widget.isOnline == true ? 'Online' : 'In-Person',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 const SizedBox(
                   width: 5,
                 ),
-                Center(
-                    child: widget.isOnline == true
-                        ? InkWell(
-                            onTap: () => launchUrl(Uri.parse(widget.service
-                                .url!)), // Replace with your actual profile link
-                            child: Text(
-                              widget.service.url ?? 'N/A',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.blue,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          )
-                        : Text(
+                Expanded(
+                  child: widget.isOnline == true
+                      ? InkWell(
+                          onTap: () => launchUrl(Uri.parse(widget.service
+                              .url!)), // Replace with your actual profile link
+                          child: Text(
                             widget.service.url ?? 'N/A',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Colors.blue,
                               decoration: TextDecoration.underline,
                             ),
-                          )),
+                          ),
+                        )
+                      : Text(
+                          widget.service.url ?? 'N/A',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                ),
               ],
             ),
             const SizedBox(
@@ -87,6 +86,8 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
               height: 10,
             ),
             Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const Text(
                   'Service Type',
