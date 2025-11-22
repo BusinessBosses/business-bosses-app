@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -12,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
@@ -28,47 +29,41 @@ final PurchasesConfiguration _configuration = Platform.isIOS
 
 final AppLinks _appLinks = AppLinks();
 bool _initialAppLinkHandled = false;
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() {
+void main() async {
   // Make all binding and initialization happen inside the Zone
-  runZonedGuarded<Future<void>>(() async {
-    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-    await Purchases.configure(_configuration);
-    await GetStorage.init();
-    await dotenv.load();
-    await Firebase.initializeApp();
+  await Purchases.configure(_configuration);
+  await GetStorage.init();
+  await dotenv.load();
+  await Firebase.initializeApp();
 
-    // Crashlytics setup
-    // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-    // PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    // FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    // return true;
-    // };
+  // Crashlytics setup
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
-    await FlutterDownloader.initialize();
+  await FlutterDownloader.initialize();
 
-    AnalyticsServices();
-    Stripe.publishableKey = dotenv.env['STRIPE_PUB_KEY']!;
-    Stripe.merchantIdentifier = 'merchant.businessbosses';
+  AnalyticsServices();
+  Stripe.publishableKey = dotenv.env['STRIPE_PUB_KEY']!;
+  Stripe.merchantIdentifier = 'merchant.businessbosses';
 
-    FirebaseMessaging.instance.getToken();
-    FirebaseMessaging.instance.requestPermission();
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
-    FirebaseMessaging.instance.getInitialMessage().then(_handleInitialMessage);
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.instance.getToken();
+  FirebaseMessaging.instance.requestPermission();
+  FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
+  FirebaseMessaging.instance.getInitialMessage().then(_handleInitialMessage);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-    runApp(const MyApp());
-    await initAppLinks();
+  runApp(const MyApp());
+  await initAppLinks();
 
-    FlutterNativeSplash.remove();
-  }, (Object error, StackTrace stackTrace) async {
-    // Catch ANY uncaught error that escapes the zone
-    // await FirebaseCrashlytics.instance
-    //     .recordError(error, stackTrace, fatal: true);
-  });
+  FlutterNativeSplash.remove();
 }
 
 /// INITIALIZE DEEP LINKING VIA app_links
@@ -200,7 +195,7 @@ class MyAppState extends State<MyApp> {
                 : Routes.home;
 
         return GetMaterialApp(
-          key: navigatorKey,
+          navigatorKey: navigatorKey,
           navigatorObservers: <NavigatorObserver>[
             AnalyticsServices.getAnalyticObserver()
           ],

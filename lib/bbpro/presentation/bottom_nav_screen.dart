@@ -109,9 +109,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
               }
             },
             child: Scaffold(
-              body: Center(
-                child: _widgetOptions.elementAt(_selectedIndex),
-              ),
+              body: _widgetOptions.elementAt(_selectedIndex),
               bottomNavigationBar: Container(
                 height: 83.0,
                 decoration: BoxDecoration(
