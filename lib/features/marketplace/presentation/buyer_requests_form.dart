@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
@@ -165,10 +165,12 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
     }
 
     if (!buyerRequestController.error.value) {
-      showSnackBar(Get.context!,
+      if (mounted) {
+        showSnackbar(
           message:
-              'Request ${widget.request == null ? 'added' : 'edited'} succesfully!');
-
+              'Request ${widget.request == null ? 'added' : 'edited'} succesfully!',
+        );
+      }
       Navigator.pop(Get.context!);
     } else {
       Get.snackbar(

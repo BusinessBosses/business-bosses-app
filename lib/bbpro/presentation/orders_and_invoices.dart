@@ -41,7 +41,6 @@ class _OrdersScreenState extends State<OrdersScreen>
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
 
-    // Initialize tasks
     orderController.initOrders(shopController.shop!.id).then((_) {
       setState(() {
         loading = false;
@@ -60,197 +59,191 @@ class _OrdersScreenState extends State<OrdersScreen>
     setState(() {});
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          backgroundColor: probackgroundColor,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: const Text(
+  Widget _buildOrdersAppBar() {
+    return Container(
+      color: probackgroundColor,
+      child: Container(
+        height: 60,
+        padding: const EdgeInsets.only(left: 10),
+        alignment: Alignment.centerLeft,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            const Text(
               'Orders',
               style: TextStyle(
                 color: textColor,
                 fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
             ),
-            actions: <Widget>[
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: 10.0,
-                    ),
-                    child: ProIconButton(
-                      radius: 50,
-                      icon: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Get.to(() => const CreateOrder());
-                      },
-                      text: 'Create Order',
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => const ChatScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 10.0,
-                      ),
-                      child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: prosemibackColor,
-                          child: SvgPicture.asset(
-                            'assets/svgs/prochat.svg',
-                            height: 15,
-                          )),
-                    ),
-                  ),
-                  NotificationButton(
-                    hasUnreadNotification:
-                        shopController.shop!.user!.unReadCount != null &&
-                            shopController.shop!.user!.unReadCount! > 0,
-                  ),
-                ],
-              )
-            ],
-          ),
-          body: SafeArea(
-            child: Column(
+            Row(
               children: <Widget>[
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTabBarWidget<OrderStatus>(
-                  tabController: _tabController,
-                  scrollToSection: (int index) {
-                    _scrollToSection(index);
-                  },
-                  proprimaryColor: proprimaryColor,
-                  backgroundColor: <Color>[
-                    backgroundColor,
-                    Colors.amber.withValues(alpha: 0.1),
-                    Colors.blue.withValues(alpha: 0.1),
-                    Colors.green.withValues(alpha: 0.1)
-                  ],
-                  listofitems: OrderStatus.values.toList(),
-                  itemToString: (OrderStatus status) =>
-                      '${status.displayTitle.toString().split('.').last} (${status == OrderStatus.allorders ? orderController.orders.length : (orderController.ordersStatus[status] == null ? '0' : orderController.ordersStatus[status]!.length.toString())})',
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: loading
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : Obx(
-                            () => orderController.loading.value
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : orderController.orders.isEmpty
-                                    ? const Center(
-                                        child: SafetyModel(
-                                          isLoading: false,
-                                          title: 'No Orders Found!',
-                                        ),
-                                      )
-                                    : CustomScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        controller: _mainListScrollController,
-                                        slivers: <Widget>[
-                                          ...OrderStatus.values.map(
-                                            (OrderStatus status) =>
-                                                SliverToBoxAdapter(
-                                              child: RowStatusCard(
-                                                orders: orderController.orders
-                                                    .where((Order order) =>
-                                                        order.status
-                                                            .displayTitle ==
-                                                        status.displayTitle)
-                                                    .toList(),
-                                                orderStatus: status,
-                                                screenSize: screenSize,
-                                                orderAccepted: (Order order,
-                                                    OrderStatus newStatus) {
-                                                  setState(() {
-                                                    orderController
-                                                        .ordersStatus[
-                                                            order.status]
-                                                        ?.remove(order);
-                                                    orderController
-                                                        .ordersStatus[newStatus]
-                                                        ?.add(
-                                                      Order(
-                                                        id: order.id,
-                                                        user: order.user,
-                                                        items: order.items,
-                                                        userId: order.userId,
-                                                        shopId: order.shopId,
-                                                        clientId:
-                                                            order.clientId,
-                                                        status: newStatus,
-                                                        createdAt:
-                                                            order.createdAt,
-                                                        deliveryDate:
-                                                            order.deliveryDate,
-                                                        deliveryMethod: order
-                                                            .deliveryMethod,
-                                                        paymentMethod:
-                                                            order.paymentMethod,
-                                                        notes: order.notes,
-                                                        invoiceOption:
-                                                            order.invoiceOption,
-                                                        client: order.client,
-                                                        products:
-                                                            order.products,
-                                                        services:
-                                                            order.services,
-                                                        orderDetails:
-                                                            order.orderDetails,
-                                                        shop: order.shop,
-                                                      ),
-                                                    );
-                                                    orderController.updateOrder(
-                                                        order.id,
-                                                        <String, dynamic>{
-                                                          'status': newStatus
-                                                              .toString(),
-                                                        });
-                                                  });
-                                                },
-                                                onDrag: (bool isRight) {
-                                                  if (_lastMoveRight ==
-                                                      isRight) {
-                                                    return;
-                                                  }
-                                                  _lastMoveRight = isRight;
-                                                  _moveMainList(isRight);
-                                                },
-                                                cancelDrag: () {
-                                                  _lastMoveRight = null;
-                                                  _timer?.cancel();
-                                                },
-                                                allorders:
-                                                    orderController.orders,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                          ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: ProIconButton(
+                    radius: 50,
+                    icon: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Get.to(() => const CreateOrder());
+                    },
+                    text: 'Create Order',
                   ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => const ChatScreen());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: prosemibackColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/prochat.svg',
+                          height: 15,
+                        )),
+                  ),
+                ),
+                NotificationButton(
+                  hasUnreadNotification:
+                      shopController.shop!.user!.unReadCount != null &&
+                          shopController.shop!.user!.unReadCount! > 0,
                 ),
               ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: EdgeInsets.only(top: 50),
+      child: Column(
+        children: <Widget>[
+          _buildOrdersAppBar(),
+          const SizedBox(height: 10),
+          CustomTabBarWidget<OrderStatus>(
+            tabController: _tabController,
+            scrollToSection: (int index) {
+              _scrollToSection(index);
+            },
+            proprimaryColor: proprimaryColor,
+            backgroundColor: <Color>[
+              backgroundColor,
+              Colors.amber.withValues(alpha: 0.1),
+              Colors.blue.withValues(alpha: 0.1),
+              Colors.green.withValues(alpha: 0.1)
+            ],
+            listofitems: OrderStatus.values.toList(),
+            itemToString: (OrderStatus status) =>
+                '${status.displayTitle.toString().split('.').last} (${status == OrderStatus.allorders ? orderController.orders.length : (orderController.ordersStatus[status] == null ? '0' : orderController.ordersStatus[status]!.length.toString())})',
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: loading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Obx(
+                      () => orderController.loading.value
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : orderController.orders.isEmpty
+                              ? const Center(
+                                  child: SafetyModel(
+                                    isLoading: false,
+                                    title: 'No Orders Found!',
+                                  ),
+                                )
+                              : CustomScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  controller: _mainListScrollController,
+                                  slivers: <Widget>[
+                                    ...OrderStatus.values.map(
+                                      (OrderStatus status) =>
+                                          SliverToBoxAdapter(
+                                        child: RowStatusCard(
+                                          orders: orderController.orders
+                                              .where((Order order) =>
+                                                  order.status.displayTitle ==
+                                                  status.displayTitle)
+                                              .toList(),
+                                          orderStatus: status,
+                                          screenSize: screenSize,
+                                          orderAccepted: (Order order,
+                                              OrderStatus newStatus) {
+                                            setState(() {
+                                              orderController
+                                                  .ordersStatus[order.status]
+                                                  ?.remove(order);
+                                              orderController
+                                                  .ordersStatus[newStatus]
+                                                  ?.add(
+                                                Order(
+                                                  id: order.id,
+                                                  user: order.user,
+                                                  items: order.items,
+                                                  userId: order.userId,
+                                                  shopId: order.shopId,
+                                                  clientId: order.clientId,
+                                                  status: newStatus,
+                                                  createdAt: order.createdAt,
+                                                  deliveryDate:
+                                                      order.deliveryDate,
+                                                  deliveryMethod:
+                                                      order.deliveryMethod,
+                                                  paymentMethod:
+                                                      order.paymentMethod,
+                                                  notes: order.notes,
+                                                  invoiceOption:
+                                                      order.invoiceOption,
+                                                  client: order.client,
+                                                  products: order.products,
+                                                  services: order.services,
+                                                  orderDetails:
+                                                      order.orderDetails,
+                                                  shop: order.shop,
+                                                ),
+                                              );
+                                              orderController.updateOrder(
+                                                  order.id, <String, dynamic>{
+                                                'status': newStatus.toString(),
+                                              });
+                                            });
+                                          },
+                                          onDrag: (bool isRight) {
+                                            if (_lastMoveRight == isRight) {
+                                              return;
+                                            }
+                                            _lastMoveRight = isRight;
+                                            _moveMainList(isRight);
+                                          },
+                                          cancelDrag: () {
+                                            _lastMoveRight = null;
+                                            _timer?.cancel();
+                                          },
+                                          allorders: orderController.orders,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                    ),
             ),
-          )),
+          ),
+        ],
+      ),
     );
   }
 

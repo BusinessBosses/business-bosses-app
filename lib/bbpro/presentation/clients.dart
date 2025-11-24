@@ -46,22 +46,11 @@ class _ClientsScreenState extends State<ClientsScreen>
   bool loading = true;
   bool loadingSupplier = false;
   final ProfileController profileController = Get.find();
-
   final ClientsController clientsController = Get.put(ClientsController());
   final ShopController shopController = Get.find();
 
   String searchQuery = '';
   List<Campaign> filteredCampaign = <Campaign>[];
-
-  void _scrollToSection(int index) {
-    final double offset = index * MediaQuery.of(context).size.width * 0.9;
-    _mainListScrollController.animateTo(
-      offset,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-    setState(() {});
-  }
 
   @override
   void initState() {
@@ -92,49 +81,238 @@ class _ClientsScreenState extends State<ClientsScreen>
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    // Dynamically build the children map based on the condition
-    Map<int, Widget> segments = <int, Widget>{
-      0: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-        child: Text(
-          'Customers',
-          style: _tabController.index == 0
-              ? const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                )
-              : const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: textColor,
-                ),
-        ),
-      ),
-      1: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        child: Text(
-          'Campaign',
-          style: _tabController.index == 1
-              ? const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                )
-              : const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: textColor,
-                ),
-        ),
-      ),
-    };
+  void _scrollToSection(int index) {
+    final double offset = index * MediaQuery.of(context).size.width * 0.9;
+    _mainListScrollController.animateTo(
+      offset,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+    setState(() {});
+  }
 
-    return Scaffold(
-      backgroundColor: probackgroundColor,
-      appBar: AppBar(
+  /// 👇 This is the helper that was missing
+  void _showAddSupplierSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: SvgPicture.asset(
+                  'assets/svgs/cors.svg',
+                  height: 18,
+                ),
+                title: const Text(
+                  'Add a New Supplier',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  Get.to(() => const AddSupplier());
+                },
+              ),
+              ListTile(
+                leading: SvgPicture.asset(
+                  'assets/svgs/import.svg',
+                  height: 16,
+                ),
+                title: const Text(
+                  'Import from Business Bosses',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    builder: (BuildContext context) {
+                      return DraggableScrollableSheet(
+                        initialChildSize: 0.9,
+                        maxChildSize: 0.9,
+                        minChildSize: 0.9,
+                        expand: false,
+                        builder: (BuildContext context,
+                            ScrollController scrollController) {
+                          return SizedBox.expand(
+                            child: Obx(
+                              () => supplierController.loading.value
+                                  ? const SafetyModel()
+                                  : supplierController.suppliers.isEmpty
+                                      ? const SafetyModel(
+                                          isLoading: false,
+                                          title: 'No Supplier Found!',
+                                        )
+                                      : Column(
+                                          children: <Widget>[
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            const Text(
+                                              'Select a Supplier',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            Expanded(
+                                              child: ListView(
+                                                shrinkWrap: true,
+                                                controller: scrollController,
+                                                children:
+                                                    supplierController.suppliers
+                                                        .map(
+                                                          (SuppliersModel
+                                                                  supplier) =>
+                                                              shopController
+                                                                      .suppliers
+                                                                      .any(
+                                                            (Vendor element) =>
+                                                                element.name ==
+                                                                supplier.name,
+                                                          )
+                                                                  ? const SizedBox()
+                                                                  : ListTile(
+                                                                      leading: (supplier.images != null &&
+                                                                              supplier.images!.isNotEmpty)
+                                                                          ? Container(
+                                                                              width: 50,
+                                                                              height: 50,
+                                                                              decoration: BoxDecoration(
+                                                                                borderRadius: BorderRadius.circular(8),
+                                                                              ),
+                                                                              child: ClipRRect(
+                                                                                borderRadius: BorderRadius.circular(8),
+                                                                                child: Image.network(
+                                                                                  supplier.images![0],
+                                                                                  fit: BoxFit.cover,
+                                                                                  errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) => const Icon(Icons.error),
+                                                                                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                                                                    if (loadingProgress == null) return child;
+                                                                                    return const Center(child: CircularProgressIndicator());
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                          : const SizedBox(),
+                                                                      title: Text(
+                                                                          supplier
+                                                                              .name),
+                                                                      trailing:
+                                                                          ElevatedButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          setState(
+                                                                              () {
+                                                                            loadingSupplier =
+                                                                                true;
+                                                                          });
+
+                                                                          final Map<String, dynamic>
+                                                                              supplierData =
+                                                                              <String, dynamic>{
+                                                                            'userId':
+                                                                                profileController.myProfile.uid,
+                                                                            'name':
+                                                                                supplier.name,
+                                                                            'email':
+                                                                                supplier.email,
+                                                                            'phone':
+                                                                                supplier.phone,
+                                                                            'description':
+                                                                                supplier.description,
+                                                                            'url':
+                                                                                supplier.url,
+                                                                            'category':
+                                                                                supplier.category,
+                                                                            'images':
+                                                                                supplier.images,
+                                                                            'location':
+                                                                                supplier.location,
+                                                                          };
+
+                                                                          try {
+                                                                            final bool
+                                                                                success =
+                                                                                await shopController.addSupplier(supplierData);
+                                                                            if (success) {
+                                                                              showSnackbar(message: 'Supplier Added Successfully!');
+                                                                              await Future<dynamic>.delayed(const Duration(seconds: 1));
+                                                                            } else {
+                                                                              showSnackbar(message: 'Error Adding Supplier!', error: true);
+                                                                            }
+                                                                          } catch (e) {
+                                                                            showSnackbar(
+                                                                                message: 'An error occurred: $e',
+                                                                                error: true);
+                                                                          } finally {
+                                                                            setState(() {
+                                                                              loadingSupplier = false;
+                                                                            });
+                                                                          }
+                                                                        },
+                                                                        style: ElevatedButton
+                                                                            .styleFrom(
+                                                                          backgroundColor:
+                                                                              proprimaryColor,
+                                                                        ),
+                                                                        child:
+                                                                            const Text(
+                                                                          'Select',
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                        )
+                                                        .toList(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildClientsAppBar(Map<int, Widget> segments) {
+    return Container(
+      color: probackgroundColor,
+      child: AppBar(
         automaticallyImplyLeading: false,
+        backgroundColor: probackgroundColor,
+        elevation: 0,
         title: Container(
           padding: const EdgeInsets.only(bottom: 5),
           child: CupertinoSlidingSegmentedControl<int>(
@@ -159,191 +337,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                       Get.to(() => const Addclient());
                       break;
                     case 'Item 2':
-                      showModalBottomSheet<void>(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
-                        ),
-                        builder: (BuildContext context) {
-                          return Container(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ListTile(
-                                  leading: SvgPicture.asset(
-                                    'assets/svgs/cors.svg',
-                                    height: 18,
-                                  ),
-                                  title: const Text(
-                                    'Add a New Supplier',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    Get.to(() => const AddSupplier());
-                                  },
-                                ),
-                                ListTile(
-                                  leading: SvgPicture.asset(
-                                    'assets/svgs/import.svg',
-                                    height: 16,
-                                  ),
-                                  title: const Text(
-                                    'Import from Business Bosses',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    showModalBottomSheet<void>(
-                                      context: context,
-                                      isScrollControlled:
-                                          true, // Allow resizing
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20),
-                                          topRight: Radius.circular(20),
-                                        ),
-                                      ),
-                                      builder: (BuildContext context) {
-                                        return DraggableScrollableSheet(
-                                          initialChildSize:
-                                              0.9, // 90% of the screen
-                                          maxChildSize: 0.9,
-                                          minChildSize: 0.9,
-                                          expand: false,
-                                          builder: (BuildContext context,
-                                              ScrollController
-                                                  scrollController) {
-                                            return SizedBox.expand(
-                                              // Ensures the content takes up the available space
-                                              child: Obx(
-                                                () =>
-                                                    supplierController
-                                                            .loading.value
-                                                        ? const SafetyModel()
-                                                        : supplierController
-                                                                .suppliers
-                                                                .isEmpty
-                                                            ? const SafetyModel(
-                                                                isLoading:
-                                                                    false,
-                                                                title:
-                                                                    'No Supplier Found!',
-                                                              )
-                                                            : Column(
-                                                                children: <Widget>[
-                                                                  const SizedBox(
-                                                                    height: 20,
-                                                                  ),
-                                                                  const Text(
-                                                                    'Select a Supplier',
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontWeight:
-                                                                            FontWeight.bold),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 20,
-                                                                  ),
-                                                                  Expanded(
-                                                                    child:
-                                                                        ListView(
-                                                                      shrinkWrap:
-                                                                          true,
-                                                                      children: supplierController
-                                                                          .suppliers
-                                                                          .map((SuppliersModel supplier) => shopController.suppliers.any((Vendor element) => element.name == supplier.name)
-                                                                              ? const SizedBox()
-                                                                              : ListTile(
-                                                                                  leading: (supplier.images != null && supplier.images!.isNotEmpty)
-                                                                                      ? Container(
-                                                                                          width: 50,
-                                                                                          height: 50,
-                                                                                          decoration: BoxDecoration(
-                                                                                            borderRadius: BorderRadius.circular(8),
-                                                                                          ),
-                                                                                          child: ClipRRect(
-                                                                                            borderRadius: BorderRadius.circular(8),
-                                                                                            child: Image.network(
-                                                                                              supplier.images![0],
-                                                                                              fit: BoxFit.cover,
-                                                                                              errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) => const Icon(Icons.error),
-                                                                                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                                                                                                if (loadingProgress == null) return child;
-                                                                                                return const Center(child: CircularProgressIndicator());
-                                                                                              },
-                                                                                            ),
-                                                                                          ),
-                                                                                        )
-                                                                                      : const SizedBox(),
-                                                                                  title: Text(supplier.name),
-                                                                                  trailing: ElevatedButton(
-                                                                                    onPressed: () async {
-                                                                                      Navigator.pop(context);
-                                                                                      setState(() {
-                                                                                        loadingSupplier = true;
-                                                                                      });
-                                                                                      Map<String, dynamic> supplierData = <String, dynamic>{
-                                                                                        'userId': profileController.myProfile.uid,
-                                                                                        'name': supplier.name,
-                                                                                        'email': supplier.email,
-                                                                                        'phone': supplier.phone,
-                                                                                        'description': supplier.description,
-                                                                                        'url': supplier.url,
-                                                                                        'category': supplier.category,
-                                                                                        'images': supplier.images,
-                                                                                        'location': supplier.location,
-                                                                                      };
-
-                                                                                      try {
-                                                                                        bool success = await shopController.addSupplier(supplierData);
-                                                                                        if (success) {
-                                                                                          showSnackbar(message: 'Supplier Added Successfully!');
-                                                                                          await Future<dynamic>.delayed(const Duration(seconds: 1)); // Optional delay for visibility
-                                                                                          // ignore: use_build_context_synchronously
-                                                                                        } else {
-                                                                                          showSnackbar(message: 'Error Adding Supplier!', error: true);
-                                                                                        }
-                                                                                      } catch (e) {
-                                                                                        showSnackbar(message: 'An error occurred: $e', error: true);
-                                                                                      } finally {
-                                                                                        setState(() {
-                                                                                          loadingSupplier = false;
-                                                                                        });
-                                                                                      }
-                                                                                    },
-                                                                                    style: ElevatedButton.styleFrom(
-                                                                                      backgroundColor: proprimaryColor,
-                                                                                    ),
-                                                                                    child: const Text('Select'),
-                                                                                  ),
-                                                                                ))
-                                                                          .toList(),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
+                      _showAddSupplierSheet();
                       break;
                     case 'Item 3':
                       Get.to(() => const Campaignpage());
@@ -465,391 +459,408 @@ class _ClientsScreenState extends State<ClientsScreen>
           )
         ],
       ),
-      body: TabBarView(controller: _viewController, children: <Widget>[
-        Column(
-          children: <Widget>[
-            // TopsectionWidget(
-            //   buttonText: 'Add Client',
-            //   onHowItWorksPressed: () {
-            //     // Handle "How it works" pressed
-            //     print('How it works pressed');
-            //   },
-            //   onAddProjectPressed: () {
-            //     // Handle "Add Project" pressed
-            //     Get.to(() => const Addclient());
-            //   },
-            // ),
-            const SizedBox(
-              height: 10,
-            ),
-            CustomTabBarWidget<String>(
-              tabController: _tabController,
-              scrollToSection: (int index) {
-                _scrollToSection(index);
-              },
-              proprimaryColor: proprimaryColor,
-              backgroundColor: <Color>[
-                backgroundColor,
-                Colors.green.withValues(alpha: 0.1),
-                Colors.blue.withValues(alpha: 0.1),
-                primaryColorLT.withValues(alpha: 0.1),
-              ],
-              listofitems: <String>[
-                ...ClientType.values.map((ClientType e) => e.name),
-                'Suppliers',
-              ],
-              itemToString: (String status) {
-                if (status == 'Suppliers') {
-                  return 'Suppliers (${shopController.suppliers.length})';
-                }
-                final ClientType clientType = ClientType.values
-                    .firstWhere((ClientType element) => element.name == status);
-                return '${clientType.displayTitle.toString().split('.').last} (${clientType == ClientType.allclients ? clientsController.clients.length : (clientsController.clientsType[clientType] == null ? '0' : clientsController.clientsType[clientType]!.length.toString())})';
-              },
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: loading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Obx(
-                        () => clientsController.clients.isEmpty
-                            ? const Center(
-                                child: SafetyModel(
-                                  isLoading: false,
-                                  title: 'No Clients Found!',
-                                ),
-                              )
-                            : CustomScrollView(
-                                scrollDirection: Axis.horizontal,
-                                controller: _mainListScrollController,
-                                slivers: <Widget>[
-                                  ...ClientType.values.map(
-                                    (ClientType status) => SliverToBoxAdapter(
-                                      child: RowStatusCard(
-                                        clients: clientsController.clients
-                                            .where((Client client) =>
-                                                client.type == status)
-                                            .toList(),
-                                        clientType: status,
-                                        screenSize: screenSize,
-                                        taskAccepted: (Client task,
-                                            ClientType newStatus) {
-                                          setState(() {
-                                            // Update client status here
-                                          });
-                                        },
-                                        onDrag: (bool isRight) {
-                                          if (_lastMoveRight == isRight) {
-                                            return;
-                                          }
-                                          _lastMoveRight = isRight;
-                                          _moveMainList(isRight);
-                                        },
-                                        cancelDrag: () {
-                                          _lastMoveRight = null;
-                                          _timer?.cancel();
-                                        },
-                                        allclients: clientsController.clients,
-                                      ),
-                                    ),
-                                  ),
-                                  SliverToBoxAdapter(
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 10.0),
-                                      child: Container(
-                                        width: screenSize.width * 0.9,
-                                        height: screenSize.height * 0.8,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        child: Column(children: <Widget>[
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0, vertical: 5),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Wrap(
-                                                  crossAxisAlignment:
-                                                      WrapCrossAlignment.center,
-                                                  children: <Widget>[
-                                                    CircleAvatar(
-                                                      backgroundColor:
-                                                          primaryColorLT,
-                                                      radius: 5,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Text(
-                                                      'Suppliers',
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 14,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  width: 50,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 10),
-                                            child: Divider(
-                                              height: 1,
-                                              color: Colors.black12,
-                                            ),
-                                          ),
-                                          Obx(() {
-                                            if (shopController
-                                                .suppliers.isNotEmpty) {
-                                              return loadingSupplier
-                                                  ? const SafetyModel()
-                                                  : Expanded(
-                                                      child:
-                                                          MasonryGridView.count(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          horizontal: 15.0,
-                                                        ),
-                                                        crossAxisCount: 2,
-                                                        crossAxisSpacing: 8.0,
-                                                        mainAxisSpacing: 8.0,
-                                                        itemCount:
-                                                            shopController
-                                                                .suppliers
-                                                                .length,
-                                                        shrinkWrap: true,
-                                                        physics: null,
-                                                        itemBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                int index) {
-                                                          return SuppliersCard(
-                                                            onTap: () {
-                                                              Get.to(() => ExpandedProSuppliersPage(
-                                                                  supplier: shopController
-                                                                          .suppliers[
-                                                                      index]));
-                                                            },
-                                                            supplier:
-                                                                shopController
-                                                                        .suppliers[
-                                                                    index],
-                                                          );
-                                                        },
-                                                      ),
-                                                    );
-                                            } else {
-                                              return const Center(
-                                                child: SafetyModel(
-                                                  isLoading: false,
-                                                  title: 'No Suppliers Found!',
-                                                ),
-                                              );
-                                            }
-                                          }),
-                                        ]),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                      ),
-              ),
-            ),
-          ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+
+    // Dynamically build the children map based on the condition
+    Map<int, Widget> segments = <int, Widget>{
+      0: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+        child: Text(
+          'Customers',
+          style: _viewController.index == 0
+              ? const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                )
+              : const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: textColor,
+                ),
         ),
-        Obx(
-          () => clientsController.loading.value
-              ? const SafetyModel()
-              : profileController.myProfile.isSubscribed
-                  ? clientsController.campaigns.isEmpty
-                      ? SafetyModel(
-                          isLoading: false,
-                          icon: SvgPicture.asset(
-                            'assets/svgs/campaign.svg',
-                            height: 50,
-                            colorFilter: const ColorFilter.mode(
-                                Colors.black12, BlendMode.srcIn),
-                          ),
-                          title: 'No Campaigns Yet!',
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 55,
-                                child: Stack(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10.0, right: 10, bottom: 10),
-                                      child: SizedBox(
-                                        width: double.infinity,
-                                        child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            child: Row(
-                                              children: <Widget>[
-                                                SvgPicture.asset(
-                                                  'assets/svgs/search.svg',
-                                                  height: 20,
-                                                  colorFilter:
-                                                      const ColorFilter.mode(
-                                                          hintColor,
-                                                          BlendMode.srcIn),
-                                                ),
-                                                Expanded(
-                                                  child: ProSearchbar(
-                                                    contentPadding: 10,
-                                                    hasSearchIcon: false,
-                                                    hintText:
-                                                        'Search Campaigns',
-                                                    autofocus: false,
-                                                    onChange: (String query) {
-                                                      setState(() {
-                                                        searchQuery = query;
-                                                        filteredCampaign = clientsController
-                                                            .campaigns
-                                                            .where((Campaign
-                                                                    campaign) =>
-                                                                campaign
-                                                                    .campaignName
-                                                                    .toLowerCase()
-                                                                    .contains(
-                                                                        searchQuery
-                                                                            .toLowerCase()))
-                                                            .toList();
-                                                      });
-                                                    },
-                                                    onSubmit: (String query) {},
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 10,
-                                      top: 0,
-                                      bottom: 10,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            showMenu(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                context: context,
-                                                shadowColor: Colors.black,
-                                                position:
-                                                    const RelativeRect.fromLTRB(
-                                                        double.infinity,
-                                                        130,
-                                                        15,
-                                                        0),
-                                                items: <String>[
-                                                  'None',
-                                                  'Latest',
-                                                  'A-Z'
-                                                ].map((String option) {
-                                                  return PopupMenuItem<String>(
-                                                    value: option,
-                                                    child: Text(option),
-                                                  );
-                                                }).toList());
-                                          },
-                                          child: DecoratedBox(
-                                            decoration: BoxDecoration(
-                                              color: backgroundColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                              boxShadow: <BoxShadow>[
-                                                BoxShadow(
-                                                  color: backgroundColor
-                                                      .withValues(alpha: 0.6),
-                                                  offset: const Offset(-5, 0),
-                                                  blurRadius: 10,
-                                                  spreadRadius: 2,
-                                                ),
-                                              ],
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              child: SvgPicture.asset(
-                                                  'assets/svgs/filterprosections.svg'),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+      ),
+      1: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        child: Text(
+          'Campaign',
+          style: _viewController.index == 1
+              ? const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                )
+              : const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: textColor,
+                ),
+        ),
+      ),
+    };
+
+    return Padding(
+      padding: EdgeInsets.only(top: 50),
+      child: Column(
+        children: <Widget>[
+          _buildClientsAppBar(segments),
+          Expanded(
+            child: TabBarView(
+              controller: _viewController,
+              children: <Widget>[
+                _buildCustomerView(screenSize),
+                _buildCampaignView(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCustomerView(Size screenSize) {
+    return Column(
+      children: <Widget>[
+        const SizedBox(
+          height: 10,
+        ),
+        CustomTabBarWidget<String>(
+          tabController: _tabController,
+          scrollToSection: (int index) {
+            _scrollToSection(index);
+          },
+          proprimaryColor: proprimaryColor,
+          backgroundColor: <Color>[
+            backgroundColor,
+            Colors.green.withValues(alpha: 0.1),
+            Colors.blue.withValues(alpha: 0.1),
+            primaryColorLT.withValues(alpha: 0.1),
+          ],
+          listofitems: <String>[
+            ...ClientType.values.map((ClientType e) => e.name),
+            'Suppliers',
+          ],
+          itemToString: (String status) {
+            if (status == 'Suppliers') {
+              return 'Suppliers (${shopController.suppliers.length})';
+            }
+            final ClientType clientType = ClientType.values
+                .firstWhere((ClientType element) => element.name == status);
+            return '${clientType.displayTitle.toString().split('.').last} (${clientType == ClientType.allclients ? clientsController.clients.length : (clientsController.clientsType[clientType] == null ? '0' : clientsController.clientsType[clientType]!.length.toString())})';
+          },
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: loading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Obx(
+                    () => clientsController.clients.isEmpty
+                        ? const Center(
+                            child: SafetyModel(
+                              isLoading: false,
+                              title: 'No Clients Found!',
+                            ),
+                          )
+                        : CustomScrollView(
+                            scrollDirection: Axis.horizontal,
+                            controller: _mainListScrollController,
+                            slivers: <Widget>[
+                              ...ClientType.values.map(
+                                (ClientType status) => SliverToBoxAdapter(
+                                  child: RowStatusCard(
+                                    clients: clientsController.clients
+                                        .where((Client client) =>
+                                            client.type == status)
+                                        .toList(),
+                                    clientType: status,
+                                    screenSize: screenSize,
+                                    taskAccepted:
+                                        (Client task, ClientType newStatus) {
+                                      setState(() {
+                                        // Update client status here
+                                      });
+                                    },
+                                    onDrag: (bool isRight) {
+                                      if (_lastMoveRight == isRight) {
+                                        return;
+                                      }
+                                      _lastMoveRight = isRight;
+                                      _moveMainList(isRight);
+                                    },
+                                    cancelDrag: () {
+                                      _lastMoveRight = null;
+                                      _timer?.cancel();
+                                    },
+                                    allclients: clientsController.clients,
+                                  ),
                                 ),
                               ),
-                              filteredCampaign.isNotEmpty
-                                  ? Expanded(
-                                      child: ListView.builder(
-                                        itemCount: filteredCampaign.length,
-                                        itemBuilder:
-                                            ((BuildContext context, int index) {
-                                          return CampaignItem(
-                                              campaign:
-                                                  filteredCampaign[index]);
-                                        }),
-                                      ),
-                                    )
-                                  : const Text('No Campaigns found'),
+                              SliverToBoxAdapter(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: _buildSuppliersSection(screenSize),
+                                ),
+                              ),
                             ],
                           ),
-                        )
-                  : const PremiumScreen(),
+                  ),
+          ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildSuppliersSection(Size screenSize) {
+    return Container(
+      width: screenSize.width * 0.9,
+      height: screenSize.height * 0.8,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(children: <Widget>[
+        const SizedBox(
+          height: 10,
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundColor: primaryColorLT,
+                    radius: 5,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Suppliers',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                width: 50,
+              ),
+            ],
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Divider(
+            height: 1,
+            color: Colors.black12,
+          ),
+        ),
+        Obx(() {
+          if (shopController.suppliers.isNotEmpty) {
+            return loadingSupplier
+                ? const SafetyModel()
+                : Expanded(
+                    child: MasonryGridView.count(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0,
+                      ),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                      itemCount: shopController.suppliers.length,
+                      shrinkWrap: true,
+                      physics: null,
+                      itemBuilder: (BuildContext context, int index) {
+                        return SuppliersCard(
+                          onTap: () {
+                            Get.to(() => ExpandedProSuppliersPage(
+                                supplier: shopController.suppliers[index]));
+                          },
+                          supplier: shopController.suppliers[index],
+                        );
+                      },
+                    ),
+                  );
+          } else {
+            return const Center(
+              child: SafetyModel(
+                isLoading: false,
+                title: 'No Suppliers Found!',
+              ),
+            );
+          }
+        }),
       ]),
     );
   }
-  // SuppliersModel? _selectedSupplier;
 
-  // void _onItemSelect(bool? selected, SuppliersModel supplier) {
-  //   setState(() {
-  //     if (selected == true) {
-  //       _selectedSupplier = supplier;
-  //     } else {
-  //       _selectedSupplier = null;
-  //     }
-  //   });
-  // }
+  Widget _buildCampaignView() {
+    return Obx(
+      () => clientsController.loading.value
+          ? const SafetyModel()
+          : profileController.myProfile.isSubscribed
+              ? clientsController.campaigns.isEmpty
+                  ? SafetyModel(
+                      isLoading: false,
+                      icon: SvgPicture.asset(
+                        'assets/svgs/campaign.svg',
+                        height: 50,
+                        colorFilter: const ColorFilter.mode(
+                            Colors.black12, BlendMode.srcIn),
+                      ),
+                      title: 'No Campaigns Yet!',
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 55,
+                            child: Stack(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, right: 10, bottom: 10),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Row(
+                                          children: <Widget>[
+                                            SvgPicture.asset(
+                                              'assets/svgs/search.svg',
+                                              height: 20,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      hintColor,
+                                                      BlendMode.srcIn),
+                                            ),
+                                            Expanded(
+                                              child: ProSearchbar(
+                                                contentPadding: 10,
+                                                hasSearchIcon: false,
+                                                hintText: 'Search Campaigns',
+                                                autofocus: false,
+                                                onChange: (String query) {
+                                                  setState(() {
+                                                    searchQuery = query;
+                                                    filteredCampaign = clientsController
+                                                        .campaigns
+                                                        .where((Campaign
+                                                                campaign) =>
+                                                            campaign
+                                                                .campaignName
+                                                                .toLowerCase()
+                                                                .contains(
+                                                                    searchQuery
+                                                                        .toLowerCase()))
+                                                        .toList();
+                                                  });
+                                                },
+                                                onSubmit: (String query) {},
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 10,
+                                  top: 0,
+                                  bottom: 10,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showMenu(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            context: context,
+                                            shadowColor: Colors.black,
+                                            position:
+                                                const RelativeRect.fromLTRB(
+                                                    double.infinity,
+                                                    130,
+                                                    15,
+                                                    0),
+                                            items: <String>[
+                                              'None',
+                                              'Latest',
+                                              'A-Z'
+                                            ].map((String option) {
+                                              return PopupMenuItem<String>(
+                                                value: option,
+                                                child: Text(option),
+                                              );
+                                            }).toList());
+                                      },
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: backgroundColor,
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          boxShadow: <BoxShadow>[
+                                            BoxShadow(
+                                              color: backgroundColor.withValues(
+                                                  alpha: 0.6),
+                                              offset: const Offset(-5, 0),
+                                              blurRadius: 10,
+                                              spreadRadius: 2,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: SvgPicture.asset(
+                                              'assets/svgs/filterprosections.svg'),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          filteredCampaign.isNotEmpty
+                              ? Expanded(
+                                  child: ListView.builder(
+                                    itemCount: filteredCampaign.length,
+                                    itemBuilder:
+                                        ((BuildContext context, int index) {
+                                      return CampaignItem(
+                                          campaign: filteredCampaign[index]);
+                                    }),
+                                  ),
+                                )
+                              : const Text('No Campaigns found'),
+                        ],
+                      ),
+                    )
+              : const PremiumScreen(),
+    );
+  }
 
   void _moveMainList(bool isRight) {
     _timer?.cancel();
@@ -916,9 +927,6 @@ class _RowStatusCardState extends State<RowStatusCard> {
       case ClientType.inPerson:
         statusColor = Colors.blue;
         break;
-      // case ClientType.bbUser:
-      //   statusColor = primaryColorLT;
-      //   break;
       default:
         statusColor = Colors.grey;
     }

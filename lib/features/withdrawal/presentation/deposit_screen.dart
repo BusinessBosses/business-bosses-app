@@ -47,11 +47,32 @@ class _DepositsScreenState extends State<DepositsScreen> {
     '1000_bb_coins',
     '10000_bb_coins'
   ];
+  Offerings? _offerings;
+  List<Package> _coinPackages = [];
 
   @override
   void initState() {
     super.initState();
+    _loadProducts();
+
     _referralId = _profileController.myProfile.inviteId!;
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      Offerings offerings = await Purchases.getOfferings();
+
+      // Assuming all coin packages are inside the current offering
+      if (offerings.current != null &&
+          offerings.current!.availablePackages.isNotEmpty) {
+        setState(() {
+          _offerings = offerings;
+          _coinPackages = offerings.current!.availablePackages;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading products: $e');
+    }
   }
 
   @override
@@ -160,47 +181,59 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                                         ),
                                                       ),
                                                       Expanded(
-                                                        child: ListView.builder(
-                                                          itemCount: coinAmounts
-                                                              .length,
-                                                          itemBuilder:
-                                                              (BuildContext
-                                                                      context,
-                                                                  int index) {
-                                                            return GestureDetector(
-                                                              onTap: () async {
-                                                                try {
-                                                                  await Purchases
-                                                                      .purchaseProduct(
-                                                                          coinIDs[
-                                                                              index]);
+                                                        child: _coinPackages
+                                                                .isEmpty
+                                                            ? const Center(
+                                                                child:
+                                                                    CircularProgressIndicator())
+                                                            : ListView.builder(
+                                                                itemCount:
+                                                                    _coinPackages
+                                                                        .length,
+                                                                itemBuilder:
+                                                                    (BuildContext
+                                                                            context,
+                                                                        int index) {
+                                                                  final pkg =
+                                                                      _coinPackages[
+                                                                          index];
+                                                                  final product =
+                                                                      pkg.storeProduct;
 
-                                                                  /// update coin here
-                                                                } catch (e) {
-                                                                  debugPrint(e
-                                                                      .toString());
-                                                                  showSnackbar(
-                                                                    title:
-                                                                        'OOPS!',
-                                                                    message:
-                                                                        'An error occurred while making payment, please try again!',
-                                                                    error: true,
+                                                                  return GestureDetector(
+                                                                    onTap:
+                                                                        () async {
+                                                                      try {
+                                                                        await Purchases.purchasePackage(
+                                                                            pkg);
+
+                                                                        /// update coin here
+                                                                      } catch (e) {
+                                                                        debugPrint(
+                                                                            e.toString());
+                                                                        showSnackbar(
+                                                                          title:
+                                                                              'OOPS!',
+                                                                          message:
+                                                                              'An error occurred while making payment, please try again!',
+                                                                          error:
+                                                                              true,
+                                                                        );
+                                                                      }
+                                                                    },
+                                                                    child:
+                                                                        BuyCoinsListItem(
+                                                                      coinamount:
+                                                                          product
+                                                                              .title, // or your own mapping
+                                                                      coinprice:
+                                                                          product
+                                                                              .priceString, // from Store
+                                                                    ),
                                                                   );
-                                                                }
-                                                              },
-                                                              child:
-                                                                  BuyCoinsListItem(
-                                                                coinamount:
-                                                                    coinAmounts[
-                                                                        index],
-                                                                coinprice:
-                                                                    coinPrices[
-                                                                        index],
+                                                                },
                                                               ),
-                                                            );
-                                                          },
-                                                        ),
-                                                      ),
+                                                      )
                                                     ],
                                                   ),
                                                 ),

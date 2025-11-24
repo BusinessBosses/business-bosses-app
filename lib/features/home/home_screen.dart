@@ -50,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen>
   final ShopController shopController =
       Get.put(ShopController(), permanent: true);
 
-  // Removed tab-related notifiers
   final ValueNotifier<bool> _isScrolledNotifier = ValueNotifier<bool>(true);
 
   @override
@@ -68,7 +67,6 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _onScrollChanged() {
-    // Show/hide bottom bar based on scroll direction only
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.forward) {
       _isScrolledNotifier.value = true;
@@ -179,6 +177,8 @@ class _HomeScreenState extends State<HomeScreen>
                   _profileController.myProfile.unReadCount != null &&
                       _profileController.myProfile.unReadCount! > 0,
             ),
+
+            // ⭐⭐ FIX APPLIED HERE ⭐⭐
             child: Scaffold(
               backgroundColor: Colors.white,
               appBar: PreferredSize(

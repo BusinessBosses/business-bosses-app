@@ -29,10 +29,9 @@ final PurchasesConfiguration _configuration = Platform.isIOS
 
 final AppLinks _appLinks = AppLinks();
 bool _initialAppLinkHandled = false;
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> navigatorKey = Get.key;
 
 void main() async {
-  // Make all binding and initialization happen inside the Zone
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
@@ -60,9 +59,20 @@ void main() async {
   FirebaseMessaging.instance.getInitialMessage().then(_handleInitialMessage);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  runApp(const MyApp());
-  await initAppLinks();
+  // 🔥 LOAD PREFS BEFORE runApp
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String? userId = prefs.getString(Constants.USER_ID);
+  final String? token = prefs.getString(Constants.ACCESS_TOKEN);
 
+  final String initialRoute =
+      (userId == null || userId.isEmpty || token == null || token.isEmpty)
+          ? Routes.login
+          : Routes.home;
+
+  // 🔥 PASS INITIAL ROUTE TO THE APP
+  runApp(MyApp(initialRoute: initialRoute));
+
+  await initAppLinks();
   FlutterNativeSplash.remove();
 }
 
@@ -164,13 +174,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-  @override
-  State<MyApp> createState() => MyAppState();
-}
+class MyApp extends StatelessWidget {
+  final String initialRoute;
+  const MyApp({super.key, required this.initialRoute});
 
-class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -180,32 +187,18 @@ class MyAppState extends State<MyApp> {
       ),
     );
 
-    return FutureBuilder<SharedPreferences>(
-      future: SharedPreferences.getInstance(),
-      builder:
-          (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
-        if (!snapshot.hasData) return Container();
-        final SharedPreferences prefs = snapshot.data!;
-        final String? userId = prefs.getString(Constants.USER_ID);
-        final String? token = prefs.getString(Constants.ACCESS_TOKEN);
+    return GetMaterialApp(
+      navigatorObservers: <NavigatorObserver>[
+        AnalyticsServices.getAnalyticObserver()
+      ],
+      debugShowCheckedModeBanner: false,
+      theme: appTheme,
+      title: 'Business Bosses',
 
-        final String initialRoute =
-            (userId == null || userId.isEmpty || token == null || token.isEmpty)
-                ? Routes.login
-                : Routes.home;
+      // 🔥 This now works because GetMaterialApp is root from first frame
+      initialRoute: initialRoute,
 
-        return GetMaterialApp(
-          navigatorKey: navigatorKey,
-          navigatorObservers: <NavigatorObserver>[
-            AnalyticsServices.getAnalyticObserver()
-          ],
-          debugShowCheckedModeBanner: false,
-          theme: appTheme,
-          title: 'Business Bosses',
-          initialRoute: initialRoute,
-          getPages: routes,
-        );
-      },
+      getPages: routes,
     );
   }
 }
