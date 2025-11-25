@@ -13,7 +13,6 @@ import 'package:business_bosses_v2/features/courses/presentation/create_course.d
 import 'package:business_bosses_v2/features/courses/presentation/pdfscreen.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
 import 'package:business_bosses_v2/features/courses/widgets/unpaidcoursepopup.dart';
-import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display_item.dart';

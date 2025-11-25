@@ -17,7 +17,7 @@ class PreMatchModal extends StatefulWidget {
 
 class _PreMatchModalState extends State<PreMatchModal> {
   final ProfileController profileController = Get.find();
-  final MatchController matchController = Get.find();
+  final MatchController matchController = Get.put(MatchController());
   String? _selectedOption;
   bool isSubmitting = false;
 

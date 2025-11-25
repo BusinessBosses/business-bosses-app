@@ -1,5 +1,7 @@
 // ignore_for_file: library_prefixes, public_member_api_docs, always_specify_types, always_declare_return_types, avoid_print
 
+import 'dart:io';
+
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
@@ -970,13 +972,39 @@ class HomeController extends GetxController {
       addCoinDaily();
       _showMyDialog();
       // Fire and forget: send device token
-      await FirebaseMessaging.instance.getToken().then((value) {
-        if (value != null) {
-          ApiService.post(
-              path: 'users/add-device-token', body: {'deviceToken': value});
+
+      // Fire and forget: send device token
+      try {
+        // Check platform first
+        if (Platform.isIOS) {
+          // On iOS, check if APNS token is available first
+          final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+          if (apnsToken != null) {
+            final token = await FirebaseMessaging.instance.getToken();
+            if (token != null) {
+              ApiService.post(
+                  path: 'users/add-device-token', body: {'deviceToken': token});
+            }
+          } else {
+            // APNS token not ready yet, listen for it
+            FirebaseMessaging.instance.onTokenRefresh.listen((token) {
+              ApiService.post(
+                  path: 'users/add-device-token', body: {'deviceToken': token});
+            });
+          }
+        } else {
+          // Android - direct token retrieval
+          final token = await FirebaseMessaging.instance.getToken();
+          if (token != null) {
+            ApiService.post(
+                path: 'users/add-device-token', body: {'deviceToken': token});
+          }
         }
-      });
-      impactController.loadData(
+      } catch (e) {
+        debugPrint('Failed to get FCM token: $e');
+        // Non-critical error, app can continue without push token
+      }
+      await impactController.loadData(
           profileController.myProfile.uid, profileController.myProfile.uid);
       loadMyRequests();
     } catch (e, st) {

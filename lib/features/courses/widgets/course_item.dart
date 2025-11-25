@@ -7,7 +7,6 @@ import 'package:business_bosses_v2/features/courses/controller/course_controller
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
-import 'package:business_bosses_v2/features/courses/presentation/boost_course.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_reviews.dart';
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';

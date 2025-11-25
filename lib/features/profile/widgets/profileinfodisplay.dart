@@ -1,446 +1,238 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/widgets/winnercard.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
 import '../../../utils/theme/theme.dart';
 
 Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
+  final ProfileController profileController = Get.find();
+  final String myUid = profileController.myProfile.uid;
+  final bool isMyProfile = myUid == publicUser.uid;
+
+  // Normalize matchType
+  final String? rawMatchType = publicUser.matchType;
+  final String cleanedMatchType = rawMatchType?.trim().toLowerCase() ?? '';
+  final bool hasMatchType = cleanedMatchType.isNotEmpty;
+
   final int bossCount = publicUser.bossCount ?? 0;
   final int mentorCount = publicUser.mentorCount ?? 0;
   final int backerCount = publicUser.backerCount ?? 0;
   final int ambassadorCount = publicUser.ambassadorCount ?? 0;
-  final ProfileController profileController = Get.find();
 
-  final bool hasAnyAchievement =
-      bossCount > 0 || mentorCount > 0 || backerCount > 0;
+  final bool hasAnyAchievement = bossCount > 0 ||
+      mentorCount > 0 ||
+      backerCount > 0 ||
+      ambassadorCount > 0;
+
   return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const SizedBox(
-          height: 10,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child: Linkify(
-            text: publicUser.bio ?? '',
-            maxLines: 5,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-            options: const LinkifyOptions(humanize: false),
-            linkStyle: bodyText2.copyWith(
-              color: Colors.blue,
-              fontWeight: FontWeight.normal,
-            ),
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      // Bio
+      Padding(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: Linkify(
+          text: publicUser.bio ?? '',
+          maxLines: 5,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          options: const LinkifyOptions(humanize: false),
+          linkStyle: bodyText2.copyWith(
+            color: Colors.blue,
+            fontWeight: FontWeight.normal,
           ),
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 15),
-          child: Row(
-            children: <Widget>[
-              // if (_profileController
-              //         .myProfile.website
-              //         ?.trim()
-              //         .isNotEmpty ??
-              //     false)
-              if (publicUser.website != null)
-                InkWell(
-                  onTap: () async {
-                    String url = MyNativeFunctions.completeURL(
-                        publicUser.website!, MyUrl.url);
-                    await launchUrlString(url);
+      ),
 
-                    // String url =
-                    //     MyNativeFunctions
-                    //         .completeURL(
-                    //             _user
-                    //                 .website!,
-                    //             MyUrl.url);
-                    // _onUrlLaunch(
-                    //     context, url);
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      SvgPicture.asset(
-                        'assets/svgs/link.svg',
-                        height: 14.0,
-                        width: 15.0,
-                      ),
-                      const SizedBox(width: 4.0),
-                      Text(
-                        publicUser.website!,
+      const SizedBox(height: 10),
+
+      // Social Links
+      Padding(
+        padding: const EdgeInsets.only(left: 15),
+        child: Row(
+          children: <Widget>[
+            if (publicUser.website != null)
+              InkWell(
+                onTap: () async {
+                  String url = MyNativeFunctions.completeURL(
+                      publicUser.website!, MyUrl.url);
+                  await launchUrlString(url);
+                },
+                child: Row(
+                  children: <Widget>[
+                    SvgPicture.asset('assets/svgs/link.svg',
+                        height: 14, width: 15),
+                    const SizedBox(width: 4),
+                    Text(publicUser.website!,
                         style: const TextStyle(
                             decoration: TextDecoration.underline,
-                            fontSize: 11.0),
-                      ),
-                      const SizedBox(width: 8.0),
-                    ],
-                  ),
-                ),
-              // if (_profileController
-              //         .myProfile.twitter
-              //         ?.trim()
-              //         .isNotEmpty ??
-              //     false) ...{
-              const SizedBox(width: 8.0),
-              if (publicUser.twitter != null)
-                GestureDetector(
-                  onTap: () async {
-                    String url = MyNativeFunctions.completeURL(
-                        publicUser.twitter!, MyUrl.twitter);
-                    await launchUrlString(url);
-                    // _onUrlLaunch(context, url);
-                  },
-                  child: Container(
-                    height: 25.0,
-                    width: 25.0,
-                    padding: const EdgeInsets.all(6.0),
-                    decoration: BoxDecoration(
-                        color: backgroundcolorinterface,
-                        borderRadius: BorderRadius.circular(30.0)),
-                    child: SvgPicture.asset(
-                      'assets/svgs/twitter_o.svg',
-                    ),
-                  ),
-                ),
-              // },
-              // if (_profileController
-              //         .myProfile.instagram
-              //         ?.trim()
-              //         .isNotEmpty ??
-              //     false) ...{
-              const SizedBox(width: 8.0),
-              if (publicUser.instagram != null)
-                GestureDetector(
-                  onTap: () async {
-                    String url = MyNativeFunctions.completeURL(
-                        publicUser.instagram!, MyUrl.instagram);
-                    await launchUrlString(url);
-
-                    // _onUrlLaunch(context, url);
-                  },
-                  child: Container(
-                    height: 25.0,
-                    width: 25.0,
-                    padding: const EdgeInsets.all(6.0),
-                    decoration: BoxDecoration(
-                        color: backgroundcolorinterface,
-                        borderRadius: BorderRadius.circular(30.0)),
-                    child: SvgPicture.asset(
-                      'assets/svgs/instagram_o.svg',
-                    ),
-                  ),
-                ),
-              //},
-            ],
-          ),
-        ),
-        // _profileController.myProfile
-        //                 .achievements ==
-        //             null ||
-        //         // ignore: unrelated_type_equality_checks
-        //         _profileController.myProfile
-        //                 .achievements ==
-        //             ''
-        //     ? Container()
-        //     :
-        // if (publicUser.achievements != null &&
-        //     publicUser.achievements!.isNotEmpty &&
-        //     publicUser.achievements!
-        //         .where((String element) => element.isNotEmpty)
-        //         .toList()
-        //         .isNotEmpty)
-        if (hasAnyAchievement)
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const SizedBox(
-                height: 35,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 15),
-                child: Text(
-                  'Achievements',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: subtextColor),
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: Column(
-                  spacing: 15,
-                  children: <Widget>[
-                    if (bossCount > 0)
-                      WinnerCard(type: WinnerType.boss, winCount: bossCount),
-                    if (mentorCount > 0)
-                      WinnerCard(
-                          type: WinnerType.mentor, winCount: mentorCount),
-                    if (backerCount > 0)
-                      WinnerCard(
-                          type: WinnerType.backer, winCount: backerCount),
-                    if (ambassadorCount > 0)
-                      WinnerCard(
-                          type: WinnerType.ambassador,
-                          winCount: ambassadorCount),
+                            fontSize: 11)),
+                    const SizedBox(width: 8),
                   ],
                 ),
               ),
-
-              // SizedBox(
-              //   width: double.infinity,
-              //   child: ListView.builder(
-              //     padding: const EdgeInsets.only(
-              //         top: 10.0, bottom: 10, left: 20, right: 20),
-              //     shrinkWrap: true,
-              //     physics: const NeverScrollableScrollPhysics(),
-              //     scrollDirection: Axis.vertical,
-              //     itemCount: publicUser.achievements == null
-              //         ? 0
-              //         : publicUser.achievements!.length,
-              //     // : _profileController.myProfile.achievements
-              //     //     .toString()
-              //     //     .split('+')
-              //     //     .length,
-              //     itemBuilder: (BuildContext context, int index) {
-              //       return Container(
-              //           margin: const EdgeInsets.only(bottom: 15),
-              //           decoration: BoxDecoration(
-              //             color: backgroundcolorinterface,
-              //             borderRadius: BorderRadius.circular(15),
-              //           ),
-              //           child: Padding(
-              //               padding: const EdgeInsets.only(
-              //                   top: 15, bottom: 15, left: 15, right: 20),
-              //               child: Row(
-              //                   mainAxisAlignment: MainAxisAlignment.start,
-              //                   crossAxisAlignment: CrossAxisAlignment.center,
-              //                   children: <Widget>[
-              //                     SvgPicture.asset(
-              //                       'assets/svgs/trophy.svg',
-              //                       color: Colors.black,
-              //                     ),
-              //                     const SizedBox(
-              //                       width: 10,
-              //                     ),
-              //                     Text(
-              //                       publicUser.achievements![index],
-              //                       // _profileController.myProfile.achievements
-              //                       //     .toString()
-              //                       //     .split('+')[index],
-              //                       style: const TextStyle(
-              //                           fontSize: 15,
-              //                           fontWeight: FontWeight.w700,
-              //                           color: Colors.black),
-              //                     ),
-              //                   ])));
-              //     },
-              //   ),
-              // ),
-            ],
-          ),
-        const SizedBox(
-          height: 20,
+            if (publicUser.twitter != null)
+              GestureDetector(
+                onTap: () async {
+                  String url = MyNativeFunctions.completeURL(
+                      publicUser.twitter!, MyUrl.twitter);
+                  await launchUrlString(url);
+                },
+                child: Container(
+                  height: 25,
+                  width: 25,
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                      color: backgroundcolorinterface,
+                      borderRadius: BorderRadius.circular(30)),
+                  child: SvgPicture.asset('assets/svgs/twitter_o.svg'),
+                ),
+              ),
+            const SizedBox(width: 8),
+            if (publicUser.instagram != null)
+              GestureDetector(
+                onTap: () async {
+                  String url = MyNativeFunctions.completeURL(
+                      publicUser.instagram!, MyUrl.instagram);
+                  await launchUrlString(url);
+                },
+                child: Container(
+                  height: 25,
+                  width: 25,
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                      color: backgroundcolorinterface,
+                      borderRadius: BorderRadius.circular(30)),
+                  child: SvgPicture.asset('assets/svgs/instagram_o.svg'),
+                ),
+              ),
+          ],
         ),
+      ),
 
-        // _profileController.myProfile
-        //                 .productsandservices ==
-        //             null ||
-        //         // ignore: unrelated_type_equality_checks
-        //         _profileController.myProfile
-        //                 .productsandservices ==
-        //             ''
-        //     ? Container()
-        //     :
-        // if (publicUser.productsandservices != null &&
-        //     publicUser.productsandservices!.isNotEmpty &&
-        //     publicUser.productsandservices!
-        //         .where((String element) => element.isNotEmpty)
-        //         .toList()
-        //         .isNotEmpty)
-        //   Column(
-        //     mainAxisAlignment: MainAxisAlignment.start,
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: <Widget>[
-        //       const Padding(
-        //         padding: EdgeInsets.only(left: 15),
-        //         child: Text(
-        //           'Products & Services',
-        //           style: TextStyle(
-        //             fontSize: 18,
-        //             fontWeight: FontWeight.bold,
-        //             color: subtextColor,
-        //           ),
-        //         ),
-        //       ),
-        //       const SizedBox(
-        //         height: 5,
-        //       ),
-        //       buildChoiceChips(publicUser.productsandservices != null
-        //           ? publicUser.productsandservices!
-        //               .where((String element) => element.isNotEmpty)
-        //               .toList()
-        //           : <String>[])
-        //     ],
-        //   ),
-        const SizedBox(
-          height: 10,
-        ),
-        if (profileController.myProfile.matchType != null &&
-            profileController.myProfile.matchType!.isNotEmpty)
-          Padding(
-            padding: EdgeInsets.only(left: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Interests',
-                  style: TextStyle(
+      // Achievements
+      if (hasAnyAchievement)
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const SizedBox(height: 35),
+            const Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(
+                'Achievements',
+                style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: subtextColor,
-                  ),
+                    color: subtextColor),
+              ),
+            ),
+            const SizedBox(height: 15),
+            Column(
+              spacing: 15,
+              children: <Widget>[
+                if (bossCount > 0)
+                  WinnerCard(type: WinnerType.boss, winCount: bossCount),
+                if (mentorCount > 0)
+                  WinnerCard(type: WinnerType.mentor, winCount: mentorCount),
+                if (backerCount > 0)
+                  WinnerCard(type: WinnerType.backer, winCount: backerCount),
+                if (ambassadorCount > 0)
+                  WinnerCard(
+                      type: WinnerType.ambassador, winCount: ambassadorCount),
+              ],
+            ),
+          ],
+        ),
+
+      const SizedBox(height: 20),
+
+      // Interests Section
+      if (isMyProfile || hasMatchType)
+        Padding(
+          padding: const EdgeInsets.only(left: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Text(
+                'Interests',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+              ),
+              const SizedBox(height: 10),
+
+              // My profile with matchType (clickable)
+              if (isMyProfile && hasMatchType)
                 GestureDetector(
-                  onTap: () {
-                    Get.to(ExpandedMatchesScreen(
-                      isMarketplace: false,
-                    ));
-                  },
+                  onTap: () =>
+                      Get.to(() => ExpandedMatchesScreen(isMarketplace: false)),
                   child: ListTile(
                     contentPadding: EdgeInsets.zero,
-                    trailing: Padding(
-                      padding: const EdgeInsets.only(right: 10.0),
-                      child: Icon(
-                        LucideIcons.chevronRight,
-                        color: primaryColorLT,
-                      ),
+                    trailing: const Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child:
+                          Icon(LucideIcons.chevronRight, color: primaryColorLT),
                     ),
                     title: Text(
-                        'I Need ${profileController.myProfile.matchType!.capitalizeFirst!}s',
-                        style: TextStyle(
-                            color: subtextColor,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 15)),
+                      'I Need ${cleanedMatchType.capitalizeFirst!}s',
+                      style: const TextStyle(
+                        color: subtextColor,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
+                )
 
-        if (profileController.myProfile.uid != publicUser.uid &&
-            publicUser.matchType != null &&
-            publicUser.matchType!.isNotEmpty)
-          Padding(
-            padding: EdgeInsets.only(left: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Interests',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+              // My profile without matchType (prompt)
+              else if (isMyProfile && !hasMatchType)
+                GestureDetector(
+                  onTap: () => showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (_) => PreMatchModal(),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const <Widget>[
+                        Text('What are you interested in?'),
+                        Icon(LucideIcons.chevronRight, size: 15),
+                      ],
+                    ),
+                  ),
+                )
+
+              // Public profile with matchType (not clickable)
+              else if (!isMyProfile && hasMatchType)
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: Text('Need ${publicUser.matchType!.capitalizeFirst!}s',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                          color: subtextColor)),
+                  title: Text(
+                    'Needs ${cleanedMatchType.capitalizeFirst!}s',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                      color: subtextColor,
+                    ),
+                  ),
                 ),
-              ],
-            ),
+            ],
           ),
-
-        // Column(children: <Widget>[
-        //   ListView.builder(
-        //     shrinkWrap: true,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-        //     itemBuilder: (BuildContext context, int i) {
-        //       return Column(
-        //         children: <Widget>[
-        //           CustomTileInterest(
-        //             label: publicUser.interests != null
-        //                 ? publicUser.interests![i].industry!
-        //                 : '',
-        //             onTap: () {
-        //               if (publicUser.interests![i].categoryId ==
-        //                   Constants.BOSS_UP_CHALLENGE_CATEGORY_ID) {
-        //                 Get.toNamed(
-        //                   Routes.allCommunitiesScreen,
-        //                 );
-        //               } else if (publicUser.interests![i].categoryId ==
-        //                   Constants.MARKET_PLACE_CATEGORY_ID) {
-        //                 Get.toNamed(
-        //                   Routes.marketPlace,
-        //                 );
-        //               } else if (publicUser.interests![i].categoryId ==
-        //                   '6463a069-657d-47ae-b937-9a5d4c336811') {
-        //                 Get.to(() => const AllCommunitiesScreen(
-        //                       initialTabIndex: 2,
-        //                     ));
-        //               } else {
-        //                 Get.toNamed(
-        //                   Routes.allforumscreen,
-        //                   arguments: publicUser.interests![i],
-        //                 );
-        //               }
-        //             },
-        //           ),
-        //         ],
-        //       );
-        //     },
-        //     itemCount:
-        //         publicUser.interests != null ? publicUser.interests!.length : 0,
-        //   ),
-        //   publicUser.interests != null && publicUser.interests!.isNotEmpty
-        //       ? const SizedBox(
-        //           width: double.infinity,
-        //           height: 1,
-        //           child: ColoredBox(color: backgroundcolorinterface),
-        //         )
-        //       : Container(),
-        //   const SizedBox(
-        //     height: 150,
-        //   )
-        // ],
-        // ),
-
-        // if (profileController.myProfile.uid == publicUser.uid)
-        //   const Padding(
-        //     padding: EdgeInsets.symmetric(horizontal: 15.0),
-        //     child: Text(
-        //       'Products and services added on biz-center will appear here',
-        //       style: TextStyle(fontSize: 14),
-        //     ),
-        //   ),
-
-        const SizedBox(
-          height: 100,
         ),
-      ]);
+
+      const SizedBox(height: 100),
+    ],
+  );
 }

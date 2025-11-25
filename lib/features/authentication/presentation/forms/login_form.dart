@@ -234,6 +234,62 @@ class _LoginFormState extends State<LoginForm> {
           children: <Widget>[
             const SizedBox(height: 25.0),
 
+            // Social login buttons first
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: IconTextButton(
+                backgroundColor: Colors.transparent,
+                label: 'Login with Google',
+                labelColor: textColor,
+                onPressed: _handleGoogleSignIn,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+            ),
+
+            const SizedBox(height: 10.0),
+
+            if (Platform.isIOS)
+              SizedBox(
+                height: 55,
+                child: SignInWithAppleButton(
+                  height: 40,
+                  onPressed: _handleAppleSignIn,
+                ),
+              ),
+
+            const SizedBox(height: 20.0),
+
+            // "Or" separator
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(child: Container(color: hintColor, height: 0.8)),
+                const SizedBox(width: 16.0),
+                RichText(
+                  text: const TextSpan(
+                    children: <InlineSpan>[
+                      TextSpan(
+                        text: 'Or Sign in below with Email',
+                        style: TextStyle(
+                          color: hintColor,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16.0),
+                Expanded(child: Container(color: hintColor, height: 0.8)),
+              ],
+            ),
+
+            const SizedBox(height: 20.0),
+
+            // Email/Phone and password fields
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -275,8 +331,9 @@ class _LoginFormState extends State<LoginForm> {
                   )
               ],
             ),
-            //field user name or email
+
             const SizedBox(height: 15.0),
+
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -303,7 +360,9 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ],
             ),
+
             const SizedBox(height: 30.0),
+
             GestureDetector(
               onTap: () {
                 Get.toNamed(Routes.resetPassword);
@@ -365,53 +424,6 @@ class _LoginFormState extends State<LoginForm> {
               buttonType: ButtonType.elevated,
               child: Container(),
             ),
-            const SizedBox(height: 20.0),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(child: Container(color: hintColor, height: 0.8)),
-                const SizedBox(width: 16.0),
-                RichText(
-                  text: const TextSpan(
-                    children: <InlineSpan>[
-                      TextSpan(
-                        text: 'Or',
-                        style: TextStyle(
-                          color: hintColor,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16.0),
-                Expanded(child: Container(color: hintColor, height: 0.8)),
-              ],
-            ),
-            const SizedBox(height: 20.0),
-            OutlinedButton(
-              onPressed: () {},
-              child: IconTextButton(
-                backgroundColor: Colors.transparent,
-                label: 'Sign in with Google',
-                labelColor: textColor,
-                onPressed: _handleGoogleSignIn,
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-            ),
-
-            const SizedBox(height: 10.0),
-
-            if (Platform.isIOS)
-              SizedBox(
-                height: 55,
-                child: SignInWithAppleButton(
-                  height: 40,
-                  onPressed: _handleAppleSignIn,
-                ),
-              ),
           ],
         ),
       ),

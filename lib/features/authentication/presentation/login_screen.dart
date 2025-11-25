@@ -46,7 +46,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                          'Free Promotion App - Sell, Network & Grow Globally',
+                          'Promote your Business - Get Featured & Grow globally',
                           style: TextStyle(
                               fontSize: 14,
                               color: textColor.withValues(alpha: 0.8),
