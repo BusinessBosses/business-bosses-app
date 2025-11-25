@@ -152,7 +152,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               title: 'OOPS!', message: 'Could not upload image. Try again');
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      showSnackbar(
+        title: 'OOPS!',
+        message: 'An error occurred while uploading image. Please try again!',
+        error: true,
+      );
+    }
   }
 
   void setVariableValues(UserModel user) {
@@ -829,7 +835,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                               height: 10,
                                             ),
                                             DropdownButton<String>(
-                                              value: '18-24',
+                                              value: _ageRange ?? '18-24',
                                               borderRadius:
                                                   BorderRadius.circular(radius),
                                               isExpanded: true,
@@ -873,7 +879,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                               height: 10,
                                             ),
                                             DropdownButton<String>(
-                                              value: 'Male',
+                                              value: _gender ?? 'Male',
                                               isExpanded: true,
                                               icon: const Icon(Icons
                                                   .keyboard_arrow_down_sharp),
@@ -1399,6 +1405,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       _isProcessing = true;
     });
     if (_bio == null || _bio?.trim() == '') {
+      setState(() {
+        _isProcessing = false;
+      });
       showSnackBar(
         context,
         message: 'Please enter a bio',
@@ -1406,6 +1415,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       return;
     }
     if (_name == null || _name?.trim() == '') {
+      setState(() {
+        _isProcessing = false;
+      });
       showSnackBar(
         context,
         message: 'Please enter a name',
@@ -1478,7 +1490,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     //   );
     // }
     setState(() {
-      _isProcessing = true;
+      _isProcessing = false;
     });
 
     // if (_referralId != null) {
@@ -1493,6 +1505,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       //   _photoUrl = res.data;
       // }
     }
+    // we already set _isProcessing = false above, keep it false
     setState(() {
       _isProcessing = false;
     });
