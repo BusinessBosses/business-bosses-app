@@ -297,7 +297,70 @@ class _SignUpFormState extends State<SignUpForm> {
         children: <Widget>[
           const SizedBox(height: 15.0),
 
-          //email
+          // Social login buttons first
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black12),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: IconTextButton(
+              label: 'Sign up with Google',
+              onPressed: _handleGoogleSignUp,
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          const SizedBox(height: 10.0),
+
+          if (Platform.isIOS)
+            Stack(children: <Widget>[
+              SizedBox(
+                height: 55,
+                child: SignInWithAppleButton(
+                  height: 40,
+                  text: 'Sign up with Apple',
+                  onPressed: _handleAppleSignIn,
+                ),
+              ),
+            ]),
+
+          const SizedBox(height: 20.0),
+
+          // "Or" separator
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                  child: Container(
+                color: hintColor,
+                height: 0.8,
+              )),
+              const SizedBox(width: 16.0),
+              RichText(
+                text: const TextSpan(
+                  children: <InlineSpan>[
+                    TextSpan(
+                      text: 'Or Sign up below with email',
+                      style: TextStyle(
+                        color: hintColor,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16.0),
+              Expanded(
+                  child: Container(
+                color: hintColor,
+                height: 0.8,
+              )),
+            ],
+          ),
+
+          const SizedBox(height: 20.0),
+
+          // Email signup form fields
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -319,7 +382,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
                 decoration: inputDecoration.copyWith(
-                    hintText: 'Enter your username',
+                    hintText: 'Enter / Create username',
                     hintStyle: const TextStyle(
                       color: iconColor,
                       fontSize: 14,
@@ -484,62 +547,6 @@ class _SignUpFormState extends State<SignUpForm> {
             isProcessing: _isProcessing,
             buttonType: ButtonType.elevated,
           ),
-
-          const SizedBox(height: 20.0),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                  child: Container(
-                color: hintColor,
-                height: 0.8,
-              )),
-              const SizedBox(width: 16.0),
-              RichText(
-                text: const TextSpan(
-                  children: <InlineSpan>[
-                    TextSpan(
-                      text: 'Or',
-                      style: TextStyle(
-                        color: Color.fromARGB(56, 56, 56, 80),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 16.0),
-              Expanded(
-                  child: Container(
-                color: hintColor,
-                height: 0.8,
-              )),
-            ],
-          ),
-          const SizedBox(height: 20.0),
-
-          OutlinedButton(
-            onPressed: () {},
-            child: IconTextButton(
-              label: 'Sign up with Google',
-              onPressed: _handleGoogleSignUp,
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-          const SizedBox(height: 10.0),
-          if (Platform.isIOS)
-            Stack(children: <Widget>[
-              SizedBox(
-                height: 55,
-                child: SignInWithAppleButton(
-                  height: 40,
-                  text: 'Sign up with Apple',
-                  onPressed: _handleAppleSignIn,
-                ),
-              ),
-            ])
         ],
       ),
     );

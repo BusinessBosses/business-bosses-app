@@ -251,14 +251,16 @@ class _DashboardState extends State<Dashboard> {
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 10),
+                                    horizontal: 15, vertical: 2),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(8)),
+                                    borderRadius: BorderRadius.circular(80)),
                                 child: Row(
                                   children: <Widget>[
                                     SvgPicture.asset(
-                                        'assets/svgs/filterprosections.svg'),
+                                      'assets/svgs/filterprosections.svg',
+                                      height: 8,
+                                    ),
                                     const SizedBox(
                                       width: 10,
                                     ),

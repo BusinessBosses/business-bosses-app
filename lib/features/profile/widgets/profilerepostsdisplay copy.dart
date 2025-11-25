@@ -6,8 +6,8 @@ import 'package:business_bosses_v2/features/posts/widgets/post_grid_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 Widget profilerepostsdisplay(
     BuildContext context, UserModel publicUser, List<PostModel> posts,
@@ -20,11 +20,8 @@ Widget profilerepostsdisplay(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SvgPicture.asset(
-              'assets/svgs/repost.svg',
-              height: 40,
-              colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
-            ),
+            Icon(LucideIcons.share,
+                size: 40.0, color: textColor.withValues(alpha: 1)),
             const SizedBox(
               height: 10,
             ),

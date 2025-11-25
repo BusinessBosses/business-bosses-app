@@ -55,10 +55,10 @@ class PersonalizationBanner extends StatelessWidget {
                   ),
                   children: <InlineSpan>[
                     const TextSpan(
-                      text: 'Get seen and increase your visibility. ',
+                      text: 'Discover the right match for your growth. ',
                     ),
                     TextSpan(
-                      text: 'Update your profile',
+                      text: 'Find My Match',
                       style: const TextStyle(
                         color: Color(0xFF1976D2), // Blue color
                         fontWeight: FontWeight.w500,

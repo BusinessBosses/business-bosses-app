@@ -90,7 +90,7 @@ class _BossUpPartnerState extends State<BossUpPartner> {
                   children: <Widget>[
                     const Expanded(
                       child: Text(
-                        'Partner with us, list deals and get customers.',
+                        'Partner with us, list deals, get featured & more customers.',
                         maxLines: 3,
                         style: TextStyle(
                           fontSize: 15,
@@ -98,7 +98,7 @@ class _BossUpPartnerState extends State<BossUpPartner> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 20),
+                    const SizedBox(width: 10),
                     Align(
                       alignment: Alignment.centerRight,
                       child: SizedBox(
@@ -126,7 +126,7 @@ class _BossUpPartnerState extends State<BossUpPartner> {
                 itemCount: partnerController.partners.length,
                 itemBuilder: (BuildContext context, int index) {
                   final Partner partner =
-                      partnerController.partners.reversed.toList()[index];
+                      partnerController.partners.toList()[index];
                   return BossuppartnerItem(
                     companyName: partner.companyName,
                     companyDescription: partner.companyDescription ?? '',

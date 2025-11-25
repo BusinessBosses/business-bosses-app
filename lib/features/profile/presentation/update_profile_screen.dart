@@ -1405,6 +1405,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       );
       return;
     }
+    if (_name == null || _name?.trim() == '') {
+      showSnackBar(
+        context,
+        message: 'Please enter a name',
+      );
+      return;
+    }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     final String? userId = prefs.getString(Constants.USER_ID);

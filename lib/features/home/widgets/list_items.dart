@@ -100,7 +100,10 @@ class _PostsWidgetState extends State<PostsWidget> {
     if (postIndex == 3) {
       widgets.add(Column(
         children: <Widget>[
-          DealsSection(),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 7.0),
+            child: DealsSection(),
+          ),
         ],
       ));
     }

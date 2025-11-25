@@ -27,6 +27,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../action/action.dart';
@@ -281,10 +282,8 @@ class _PostTileState extends State<PostTile> {
                     padding: const EdgeInsets.only(left: 15.0, top: 10),
                     child: Row(
                       children: <Widget>[
-                        SvgPicture.asset(
-                          'assets/svgs/repost.svg',
-                          height: 13,
-                        ),
+                        Icon(LucideIcons.share,
+                            size: 18.0, color: textColor.withValues(alpha: 1)),
                         const SizedBox(
                           width: 5,
                         ),
@@ -1478,21 +1477,17 @@ class _PostTileState extends State<PostTile> {
                                                               const EdgeInsets
                                                                   .only(
                                                                   left: 10),
-                                                          leading:
-                                                              SvgPicture.asset(
+                                                          leading: Icon(
                                                             index == 0
-                                                                ? 'assets/svgs/share.svg'
-                                                                : 'assets/svgs/repost.svg',
-                                                            height: index == 0
-                                                                ? 18
-                                                                : 25,
-                                                            colorFilter:
-                                                                ColorFilter.mode(
-                                                                    textColor.withValues(
-                                                                        alpha:
-                                                                            1),
-                                                                    BlendMode
-                                                                        .srcIn),
+                                                                ? LucideIcons
+                                                                    .share
+                                                                : LucideIcons
+                                                                    .repeat,
+                                                            size: 18,
+                                                            color: textColor
+                                                                .withValues(
+                                                              alpha: 1,
+                                                            ),
                                                           ),
                                                           title: Text(
                                                             index == 0
@@ -1519,11 +1514,9 @@ class _PostTileState extends State<PostTile> {
                                           );
                                         });
                                   },
-                                  child: SvgPicture.asset(
-                                    'assets/svgs/repost.svg',
-                                    height: 18.0,
-                                    width: 18.0,
-                                  ),
+                                  child: Icon(LucideIcons.share,
+                                      size: 18.0,
+                                      color: textColor.withValues(alpha: 1)),
                                 ),
                                 const Spacer(),
                                 Padding(
@@ -1600,15 +1593,13 @@ class _PostTileState extends State<PostTile> {
                                                 contentPadding:
                                                     const EdgeInsets.only(
                                                         left: 10),
-                                                leading: SvgPicture.asset(
+                                                leading: Icon(
                                                   index == 0
-                                                      ? 'assets/svgs/share.svg'
-                                                      : 'assets/svgs/repost.svg',
-                                                  height: index == 0 ? 18 : 25,
-                                                  colorFilter: ColorFilter.mode(
-                                                      textColor.withValues(
-                                                          alpha: 1),
-                                                      BlendMode.srcIn),
+                                                      ? LucideIcons.share
+                                                      : LucideIcons.repeat,
+                                                  size: 18,
+                                                  color: textColor.withValues(
+                                                      alpha: 1),
                                                 ),
                                                 title: Text(
                                                   index == 0
@@ -1635,11 +1626,8 @@ class _PostTileState extends State<PostTile> {
                                 );
                               });
                         },
-                        child: SvgPicture.asset(
-                          'assets/svgs/repost.svg',
-                          height: 18.0,
-                          width: 18.0,
-                        ),
+                        child: Icon(LucideIcons.share,
+                            size: 18.0, color: textColor.withValues(alpha: 1)),
                       ),
                       const Spacer(),
                       Padding(

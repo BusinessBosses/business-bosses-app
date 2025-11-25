@@ -7,6 +7,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
@@ -122,10 +123,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                         padding: const EdgeInsets.only(left: 15.0, top: 10),
                         child: Row(
                           children: <Widget>[
-                            SvgPicture.asset(
-                              'assets/svgs/repost.svg',
-                              height: 13,
-                            ),
+                            Icon(LucideIcons.share,
+                                size: 18.0,
+                                color: textColor.withValues(alpha: 1)),
                             const SizedBox(
                               width: 5,
                             ),

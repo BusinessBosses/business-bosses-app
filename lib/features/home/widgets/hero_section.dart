@@ -97,10 +97,7 @@ class _HeroSectionState extends State<HeroSection> {
     'boss': WinnerCardConfig(
       title: 'Boss of the Week',
       icon: LucideIcons.trophy,
-      gradientColors: <Color>[
-        backgroundColor,
-        backgroundColor,
-      ],
+      gradientColors: <Color>[backgroundColor, backgroundColor],
       iconColor: Color(0xFFFCD34D),
       accentColor: Color(0x33FBBf24),
     ),
@@ -580,8 +577,8 @@ class _HeroSectionState extends State<HeroSection> {
                               borderRadius: BorderRadius.circular(50),
                               child: NetworkImageWithPlaceHolder(
                                 imageUrl: item.image,
-                                width: 45,
-                                height: 45,
+                                width: 50,
+                                height: 50,
                                 fit: BoxFit.cover,
                               ),
                             )
@@ -761,9 +758,9 @@ class _HeroSectionState extends State<HeroSection> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                color: Colors.transparent,
+                                color: primaryColorLT,
                                 borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: textColor)),
+                                border: Border.all(color: proprimaryColor)),
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12,
                               vertical: 8,
@@ -776,15 +773,15 @@ class _HeroSectionState extends State<HeroSection> {
                                       ? LucideIcons.calendar
                                       : LucideIcons.plus,
                                   size: 16,
-                                  color: textColor,
+                                  color: Colors.white,
                                 ),
                                 const SizedBox(width: 5),
                                 Text(
                                   item.action2.isNotEmpty ? item.action2 : '',
                                   style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: textColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ],

@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../common/models/comment_model.dart';
 import '../../../utils/theme/theme.dart';
@@ -222,18 +223,14 @@ class _PostInteractionsState extends State<PostInteractions> {
                                           minVerticalPadding: 0,
                                           contentPadding:
                                               const EdgeInsets.only(left: 10),
-                                          leading: SvgPicture.asset(
+                                          leading: Icon(
                                             index == 0
-                                                ? 'assets/svgs/share.svg'
-                                                : postReposts.contains(widget
-                                                        .profileController
-                                                        .myProfile
-                                                        .uid)
-                                                    ? 'assets/svgs/undo_repost.svg'
-                                                    : 'assets/svgs/repost.svg',
-                                            height: index == 0 ? 18 : 25,
-                                            color:
-                                                textColor.withValues(alpha: 1),
+                                                ? LucideIcons.share
+                                                : LucideIcons.repeat,
+                                            size: 18,
+                                            color: textColor.withValues(
+                                              alpha: 1,
+                                            ),
                                           ),
                                           title: Text(
                                             index == 0
@@ -259,11 +256,8 @@ class _PostInteractionsState extends State<PostInteractions> {
                         },
                       );
                     },
-                    child: SvgPicture.asset(
-                      'assets/svgs/repost.svg',
-                      height: 15.0,
-                      width: 15.0,
-                    ),
+                    child: Icon(LucideIcons.share,
+                        size: 18.0, color: textColor.withValues(alpha: 1)),
                   ),
                   const Spacer(),
                   Row(

@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=C:\xampp\htdocs\flutter\business-bosses--v2\.fvm\flutter_sdk
-FLUTTER_APPLICATION_PATH=C:\xampp\htdocs\flutter\business-bosses--v2
+FLUTTER_ROOT=/Users/eawuku/fvm/versions/3.35.7
+FLUTTER_APPLICATION_PATH=/Users/eawuku/Documents/GitHub/business-bosses-app
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=2.3.6
