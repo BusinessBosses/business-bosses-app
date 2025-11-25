@@ -143,9 +143,12 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
       'title': _titleController.text.trim(),
       'description': _descriptionController.text.trim(),
       'category': _selectedCategory,
-      'budget_start': _startPriceController.text,
-      'budget_end': _endPriceController.text,
-      'deadline': _selectedDeadline?.toIso8601String() ?? '',
+      'budget_start': _startPriceController.text.isEmpty
+          ? null
+          : _startPriceController.text,
+      'budget_end':
+          _endPriceController.text.isEmpty ? null : _endPriceController.text,
+      'deadline': _selectedDeadline?.toIso8601String(),
       'location':
           country.isEmpty ? (shopController.shop?.location ?? '') : country,
     };
@@ -173,13 +176,10 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
       }
       Navigator.pop(Get.context!);
     } else {
-      Get.snackbar(
-        'Error',
-        'Failed to ${widget.request != null ? 'edit' : 'post'} request.',
-        backgroundColor: Colors.red[50],
-        colorText: Colors.red[900],
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      showSnackbar(
+          message:
+              'Failed to ${widget.request != null ? 'edit' : 'post'} request.',
+          error: true);
     }
   }
 

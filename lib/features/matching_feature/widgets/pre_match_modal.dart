@@ -25,22 +25,22 @@ class _PreMatchModalState extends State<PreMatchModal> {
     <String, dynamic>{
       'icon': LucideIcons.coins,
       'title': ' I need Funding / Investment',
-      'subtitle': 'Buyer',
+      'subtitle': 'investor',
     },
     <String, dynamic>{
       'icon': LucideIcons.heartHandshake,
       'title': 'I need Business Partners',
-      'subtitle': 'Seller',
+      'subtitle': 'partner',
     },
     <String, dynamic>{
       'icon': LucideIcons.users,
       'title': 'I need Customers / Supplier',
-      'subtitle': 'Supplier',
+      'subtitle': 'seller',
     },
     <String, dynamic>{
       'icon': LucideIcons.graduationCap,
       'title': 'I need Mentorship',
-      'subtitle': 'Partner',
+      'subtitle': 'mentor',
     },
   ];
 

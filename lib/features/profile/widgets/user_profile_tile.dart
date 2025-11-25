@@ -134,7 +134,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                       if (profileController.myProfile.matchType != null)
                         GestureDetector(
                           onTap: () {
-                            Get.to(ExpandedMatchesScreen());
+                            Get.to(() => ExpandedMatchesScreen());
                           },
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,

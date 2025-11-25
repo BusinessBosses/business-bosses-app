@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
@@ -14,6 +16,7 @@ class BuyerRequestController extends GetxController {
   final RxBool error = false.obs;
   final RxBool loadingMore = false.obs;
   final RxList<BuyerRequestModel> _allRequests = <BuyerRequestModel>[].obs;
+  final HomeController homeController = Get.find();
 
   final ProfileController _profileController = Get.find();
 
@@ -59,7 +62,10 @@ class BuyerRequestController extends GetxController {
       final List<String> urls = await _uploadAttachments(attachments);
       body['attachments'] = urls;
     }
-
+    log((<String, dynamic>{
+      ...body,
+      'user_id': _profileController.myProfile.uid,
+    }).toString());
     final ApiResponseModel response = await ApiService.post(
       path: 'buyer-request',
       body: <String, dynamic>{
@@ -68,13 +74,27 @@ class BuyerRequestController extends GetxController {
       },
     );
 
+    log(response.toJson().toString());
+
     if (response.success && response.data != null) {
       buyerRequests.insert(
-          0,
-          BuyerRequestModel.fromJson(<String, dynamic>{
+        0,
+        BuyerRequestModel.fromJson(
+          <String, dynamic>{
             ...response.data,
             'user': _profileController.myProfile.toMap()
-          }));
+          },
+        ),
+      );
+      homeController.myRequests.insert(
+        0,
+        BuyerRequestModel.fromJson(
+          <String, dynamic>{
+            ...response.data,
+            'user': _profileController.myProfile.toMap()
+          },
+        ),
+      );
     } else {
       error(true);
     }
@@ -183,6 +203,10 @@ class BuyerRequestController extends GetxController {
 
     if (response.success) {
       buyerRequests.removeWhere((BuyerRequestModel r) => r.id == id);
+      if (homeController.myRequests.isNotEmpty) {
+        homeController.myRequests
+            .removeWhere((BuyerRequestModel r) => r.id == id);
+      }
       update();
       return true;
     } else {

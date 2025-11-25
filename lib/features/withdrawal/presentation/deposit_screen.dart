@@ -60,14 +60,22 @@ class _DepositsScreenState extends State<DepositsScreen> {
 
   Future<void> _loadProducts() async {
     try {
-      Offerings offerings = await Purchases.getOfferings();
+      final Offerings offerings = await Purchases.getOfferings();
 
-      // Assuming all coin packages are inside the current offering
       if (offerings.current != null &&
           offerings.current!.availablePackages.isNotEmpty) {
+        // keep only non-subscription / one-time products
+        final List<Package> filteredPackages =
+            offerings.current!.availablePackages.where((Package pkg) {
+          final StoreProduct product = pkg.storeProduct;
+
+          // ProductCategory can be null, so be safe
+          return product.productCategory == ProductCategory.nonSubscription;
+        }).toList();
+
         setState(() {
           _offerings = offerings;
-          _coinPackages = offerings.current!.availablePackages;
+          _coinPackages = filteredPackages;
         });
       }
     } catch (e) {
@@ -223,9 +231,9 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                                                     },
                                                                     child:
                                                                         BuyCoinsListItem(
-                                                                      coinamount:
-                                                                          product
-                                                                              .title, // or your own mapping
+                                                                      coinamount: (product.title).replaceFirst(
+                                                                          ' (Business Bosses - Networking)',
+                                                                          ''), // or your own mapping
                                                                       coinprice:
                                                                           product
                                                                               .priceString, // from Store

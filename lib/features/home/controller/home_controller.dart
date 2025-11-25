@@ -194,6 +194,7 @@ class HomeController extends GetxController {
 
   Future<void> loadMyRequests() async {
     loadingRequests.value = true;
+    myRequests.clear();
     try {
       final response = await ApiService.get(
           path: 'buyer-request/user/${profileController.myProfile.uid}');
@@ -975,8 +976,9 @@ class HomeController extends GetxController {
               path: 'users/add-device-token', body: {'deviceToken': value});
         }
       });
-      await impactController.loadData(
+      impactController.loadData(
           profileController.myProfile.uid, profileController.myProfile.uid);
+      loadMyRequests();
     } catch (e, st) {
       debugPrint('Error loading data: $e\n$st');
       error(true);

@@ -35,7 +35,7 @@ class BuyCoinsListItem extends StatelessWidget {
                   width: 5,
                 ),
                 Text(
-                  '(\$${coinprice ?? '4.99'})',
+                  '(${coinprice ?? '4.99'})',
                   style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: textColor.withValues(alpha: 0.4)),
