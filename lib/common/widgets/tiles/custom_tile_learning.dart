@@ -76,14 +76,14 @@ class CustomTileLearning extends StatelessWidget {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                // Text(
-                                //   '$count Courses' ?? '0',
-                                //   style: const TextStyle(
-                                //     color: Colors.black,
-                                //     fontWeight: FontWeight.w400,
-                                //     fontSize: 10,
-                                //   ),
-                                // ),
+                                Text(
+                                  '$count Courses' ?? '0',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 10,
+                                  ),
+                                ),
                                 Icon(
                                   LucideIcons.chevronRight,
                                   size: 15,

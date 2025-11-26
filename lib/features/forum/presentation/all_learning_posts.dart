@@ -89,11 +89,11 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
                       label: controller
                           .getCategoryIndustries(Constants.LEARNINGID)[index]
                           .industry!,
-                      // count: controller
-                      //     .getCategoryIndustries(Constants.LEARNINGID)[index]
-                      //     .industry
-                      //     ?.length
-                      //     .toString(),
+                      count: controller
+                          .getCategoryIndustries(Constants.LEARNINGID)[index]
+                          .industry
+                          ?.length
+                          .toString(),
                       onTap: () {
                         final Industry industry = controller
                             .getCategoryIndustries(Constants.LEARNINGID)[index];
