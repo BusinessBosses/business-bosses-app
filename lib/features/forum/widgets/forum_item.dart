@@ -11,6 +11,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../action/action.dart';
@@ -855,10 +856,9 @@ class _ForumItemState extends State<ForumItem> {
                             padding: EdgeInsets.only(
                                 right:
                                     widget.isLearningpost == null ? 0 : 15.0),
-                            child: SvgPicture.asset(
-                              'assets/svgs/share.svg',
-                              height: 15.0,
-                              width: 15.0,
+                            child: Icon(
+                              LucideIcons.share,
+                              size: 18.0,
                               color: textColor.withValues(alpha: 1.0),
                             ),
                           ),
@@ -938,7 +938,7 @@ class _ForumItemState extends State<ForumItem> {
               GestureDetector(
                 onTap: () {
                   String message =
-                      'Have a look at ${widget.forum.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
+                      'Vote for ${widget.forum.user?.username} on Business Bosses to win the challenge.'
                       'https://businessbosses.onelink.me/xLWk/36a2ff16';
                   logEvent(widget.forum.forumId, 'donation');
                   socialShare(message);
@@ -948,10 +948,10 @@ class _ForumItemState extends State<ForumItem> {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: Row(
                     children: <Widget>[
-                      SvgPicture.asset(
-                        'assets/svgs/share.svg',
+                      Icon(
+                        LucideIcons.share,
                         color: textColor,
-                        height: 16,
+                        size: 16,
                       ),
                       const SizedBox(
                         width: 10,

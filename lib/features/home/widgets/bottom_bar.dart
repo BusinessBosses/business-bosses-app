@@ -287,7 +287,7 @@ class _BottomBarState extends State<BottomBar> {
                                                   : index == 1
                                                       ? 'Sell your product & service'
                                                       : index == 2
-                                                          ? 'Post content, discussion, etc'
+                                                          ? 'Post content, requests, etc'
                                                           : 'Create press release',
                                               style: const TextStyle(
                                                 fontSize: 18,

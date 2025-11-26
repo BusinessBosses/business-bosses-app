@@ -85,13 +85,13 @@ class _InvitepageState extends State<Invitepage> {
             ),
 
             const Text(
-              'to join Business Bosses and get a Free Promotion',
-              style: TextStyle(color: Colors.black54),
+              'to join Business Bosses, earn & get featured',
+              style: TextStyle(color: Colors.black87),
             ),
 
             const Text(
               'Copy link to share your InviteID with them',
-              style: TextStyle(color: Colors.black45, fontSize: 12),
+              style: TextStyle(color: Colors.black54, fontSize: 12),
             ),
 
             const SizedBox(height: 25),

@@ -27,7 +27,7 @@ class _QuickActionCardState extends State<QuickActionCard> {
     return Column(
       children: <Widget>[
         CircleAvatar(
-            radius: 30,
+            radius: 20,
             backgroundColor: widget.color != null
                 ? widget.color!.withValues(alpha: 0.1)
                 : prosemibackColor,
@@ -35,7 +35,7 @@ class _QuickActionCardState extends State<QuickActionCard> {
               widget.assetlocation!,
               colorFilter: ColorFilter.mode(
                   widget.color ?? Colors.black, BlendMode.srcIn),
-              height: 25,
+              height: 20,
             )),
         const SizedBox(
           height: 5,

@@ -206,7 +206,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
               automaticallyImplyLeading: true,
               leading: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.back(closeOverlays: false);
                 },
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),

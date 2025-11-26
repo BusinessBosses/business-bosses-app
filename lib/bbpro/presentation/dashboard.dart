@@ -474,6 +474,9 @@ class _DashboardState extends State<Dashboard> {
                           );
                         },
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
                     ],
                   ),
                 ),

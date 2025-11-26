@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart'
@@ -137,8 +138,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const SizedBox(height: 20),
-
               // Create Poll Option
               _buildBottomSheetItem(
                 icon: LucideIcons.barChart3,
@@ -162,16 +161,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
               // Free Promotion Option
               _buildBottomSheetItem(
-                icon: LucideIcons.megaphone,
-                title: 'Free Promotion',
+                icon: LucideIcons.coins,
+                title: 'Create Buyer Request',
                 onTap: () {
                   Navigator.pop(context);
 
-                  showPromoteSheet();
+                  Get.to(() => AddBuyerRequests());
                 },
               ),
-
-              const SizedBox(height: 20),
             ],
           ),
         );
@@ -232,7 +229,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ),
                     centerTitle: true,
                     title: widget.postId == null
-                        ? const Text('Post content, discussion, etc')
+                        ? const Text('Post content, requests, etc')
                         : const Text('Update Discussion'),
                   ),
             body: GestureDetector(
@@ -462,7 +459,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     if (widget.isGrow == true)
                       Padding(
                         padding: const EdgeInsets.only(
-                            left: 0.0, top: 10, bottom: 10),
+                            left: 0.0, top: 0, bottom: 10),
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(horizontal: 30),

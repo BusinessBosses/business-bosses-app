@@ -2,6 +2,7 @@
 
 import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
@@ -499,7 +500,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   const Text(
-                                    'Invite friends to increase rank',
+                                    'Invite friends to earn 10 coins',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 16),
@@ -514,7 +515,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  _shareWithFriends();
+                                  Get.to(Invitepage());
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
@@ -571,7 +572,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                           : SvgPicture.asset(
                               'assets/svgs/dropdownexpansion.svg',
                             ),
-                      title: const Text('Top up history',
+                      title: const Text('Earning history',
                           style: TextStyle(
                               fontWeight: FontWeight.w700, fontSize: 16)),
                       children: <Widget>[

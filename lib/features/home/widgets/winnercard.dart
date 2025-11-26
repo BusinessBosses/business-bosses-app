@@ -20,14 +20,14 @@ class WinnerCard extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 15),
-      height: 70,
+      height: 50,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: config.gradientColors,
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: config.gradientColors.first.withValues(alpha: 0.3),

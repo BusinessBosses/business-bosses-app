@@ -80,7 +80,7 @@ class _CoursesPageState extends State<CoursesPage> {
                               child: Text(
                                 'Create learning to become mentor of the week',
                                 style: const TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),

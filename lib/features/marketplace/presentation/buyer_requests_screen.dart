@@ -1,4 +1,7 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
+import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_request_item.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
@@ -6,6 +9,7 @@ import 'package:business_bosses_v2/features/marketplace/models/buyer_request_mod
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -83,9 +87,205 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         (uri.scheme == 'http' || uri.scheme == 'https');
   }
 
+  void _shareRequest(BuyerRequestModel request) {
+    String message = 'Check out this buyer request on Business Bosses\n'
+        'Title: ${request.title}\n'
+        'Budget: \$${request.budgetStart.toStringAsFixed(0)} - \$${request.budgetEnd.toStringAsFixed(0)}\n'
+        'https://vm.businessbosses.co.uk/share/request';
+    logEvent(request.id ?? '', 'buyer_request');
+    socialShare(message);
+  }
+
+  void _showReportBlockDialog(BuyerRequestModel request) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              onTap: () {
+                Navigator.pop(context);
+                _showBlockDialog();
+              },
+              contentPadding: EdgeInsets.zero,
+              title: TextWidget(
+                text: 'Block @${request.user.name ?? "User"}',
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.pop(context);
+                _showReportDialog(request);
+              },
+              contentPadding: EdgeInsets.zero,
+              title: const TextWidget(
+                text: 'Report this request',
+                color: Colors.red,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showBlockDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const TextWidget(
+          text: 'Do you want to block user?',
+          centralize: true,
+          fontWeight: FontWeight.w700,
+          size: 20,
+        ),
+        content: TextWidget(
+          text:
+              'You will no longer see this user\'s buyer requests on your feed',
+          centralize: true,
+          color: Colors.black.withValues(alpha: .6),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const TextWidget(
+              text: 'Cancel',
+              fontWeight: FontWeight.w700,
+              size: 18,
+              color: Colors.grey,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              // if (widget.onRemoveRequest != null) {
+              //   widget.onRemoveRequest!(widget.request.userId);
+              // }
+              Navigator.pop(context);
+              showSnackBar(context, message: 'User has been blocked');
+              setState(() {
+                // hide = true;
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 7,
+                horizontal: 14,
+              ),
+              decoration: BoxDecoration(
+                color: primaryColorLT,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: const TextWidget(
+                text: 'Block',
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _showReportDialog(BuyerRequestModel request) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const TextWidget(
+          text: 'Do you want to report post?',
+          centralize: true,
+          fontWeight: FontWeight.w700,
+          size: 20,
+        ),
+        content: TextWidget(
+          text:
+              'The post will be reported to admin to evaluate if it violates any community policy',
+          centralize: true,
+          color: Colors.black.withValues(alpha: .6),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => navigateTo(context),
+            child: const TextWidget(
+              text: 'Cancel',
+              fontWeight: FontWeight.w700,
+              size: 18,
+              color: Colors.grey,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              navigateTo(context);
+              ApiService.post(path: 'reportedpost', body: <String, dynamic>{
+                'postId': request.id,
+                'reason': 'This is a bad post',
+              });
+              showSnackBar(context, message: 'Post has been Reported');
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 7,
+                horizontal: 14,
+              ),
+              decoration: BoxDecoration(
+                color: primaryColorLT,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: const TextWidget(
+                text: 'Report',
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   void _showRequestDetails(BuyerRequestModel request) {
     final bool hasValidImage = _isValidImageUrl(request.imageUrl);
     final bool hasValidProfilePic = _isValidImageUrl(request.user.photoUrl);
+    final bool isMyRequest =
+        request.user.uid == profileController.myProfile.uid;
+
+    final List<PopupMenuEntry<String>> detailsMenuOwner =
+        <PopupMenuEntry<String>>[
+      const PopupMenuItem<String>(
+        value: 'Edit',
+        child: Text('Edit', style: bodyText2),
+      ),
+      const PopupMenuDivider(height: 0.0),
+      const PopupMenuItem<String>(
+        value: 'Share',
+        child: Text('Share', style: bodyText2),
+      ),
+      const PopupMenuDivider(height: 0.0),
+      const PopupMenuItem<String>(
+        value: 'Delete',
+        child: Text('Delete', style: bodyText2),
+      ),
+    ];
+
+    final List<PopupMenuEntry<String>> detailsMenuOther =
+        <PopupMenuEntry<String>>[
+      const PopupMenuItem<String>(
+        value: 'Share',
+        child: Text('Share', style: bodyText2),
+      ),
+      const PopupMenuDivider(height: 0.0),
+      const PopupMenuItem<String>(
+        value: 'Block',
+        child: Text('Block', style: bodyText2),
+      ),
+      const PopupMenuDivider(height: 0.0),
+      const PopupMenuItem<String>(
+        value: 'Report',
+        child: Text('Report', style: bodyText2),
+      ),
+    ];
 
     showModalBottomSheet(
       context: context,
@@ -117,54 +317,128 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => PublicProfileScreen(),
-                          arguments: request.user);
-                    },
-                    child: Row(
-                      spacing: 10,
-                      children: <Widget>[
-                        if (hasValidProfilePic)
-                          NetworkImageWithPlaceHolder(
-                            imageUrl: request.user.photoUrl!,
-                            height: 40,
-                            width: 40,
-                            radius: 50,
-                            cacheHeight: 256,
-                            cacheWidth: 256,
-                            placeHolder: Icons.person,
-                            iconSize: 24,
-                          )
-                        else
-                          Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: Icon(
-                              Icons.person,
-                              size: 24,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              request.user.name ?? request.user.username,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: textDark,
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(() => PublicProfileScreen(),
+                                arguments: request.user);
+                          },
+                          child: Row(
+                            spacing: 10,
+                            children: <Widget>[
+                              if (hasValidProfilePic)
+                                NetworkImageWithPlaceHolder(
+                                  imageUrl: request.user.photoUrl!,
+                                  height: 40,
+                                  width: 40,
+                                  radius: 50,
+                                  cacheHeight: 256,
+                                  cacheWidth: 256,
+                                  placeHolder: Icons.person,
+                                  iconSize: 24,
+                                )
+                              else
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Icon(
+                                    Icons.person,
+                                    size: 24,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    request.user.name ?? request.user.username,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: textDark,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                      // Three-dot menu
+                      MyPopupMenuButton(
+                        popupItems:
+                            isMyRequest ? detailsMenuOwner : detailsMenuOther,
+                        icon: const Icon(
+                          Icons.more_horiz,
+                          size: 24,
+                          color: Colors.black,
+                        ),
+                        onSelected: (String val) async {
+                          if (val == 'Edit') {
+                            Get.back();
+                            Get.to(() => AddBuyerRequests(request: request));
+                          } else if (val == 'Delete') {
+                            final bool? confirmed =
+                                await _showDeleteConfirmation();
+                            if (confirmed == true) {
+                              Get.dialog(
+                                const Center(
+                                    child: CircularProgressIndicator()),
+                                barrierDismissible: false,
+                              );
+                              final bool success = await _buyerRequestController
+                                  .deleteBuyerRequest(request.id!);
+                              Get.back();
+                              if (success) {
+                                Get.snackbar(
+                                  'Deleted',
+                                  'Request deleted successfully!',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.green[100],
+                                  colorText: Colors.green[900],
+                                );
+                                Future.delayed(
+                                    const Duration(milliseconds: 100), () {
+                                  Get.back(closeOverlays: true);
+                                });
+                              } else {
+                                Get.snackbar(
+                                  'Error',
+                                  'Failed to delete request.',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.red[100],
+                                  colorText: Colors.red[900],
+                                );
+                              }
+                            }
+                          } else if (val == 'Share') {
+                            _shareRequest(request);
+                          } else if (val == 'Block') {
+                            ApiService.post(
+                              path: 'blockedrequest',
+                              body: <String, dynamic>{'requestId': request.id},
+                            );
+                            Get.back();
+                            Get.snackbar(
+                              'Blocked',
+                              'Request has been blocked',
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: Colors.grey[100],
+                              colorText: Colors.grey[900],
+                            );
+                          } else if (val == 'Report') {
+                            Get.back();
+                            _showReportBlockDialog(request);
+                          }
+                        },
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 16),
                   if (hasValidImage) ...<Widget>[
@@ -189,14 +463,6 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Description',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
                   Text(
                     request.description,
                     style: const TextStyle(
@@ -221,8 +487,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                   ],
                   _buildDetailRow(Icons.category, 'Category', request.category),
                   const SizedBox(height: 16),
-                  if (request.user.uid !=
-                      profileController.myProfile.uid) ...<Widget>[
+                  if (!isMyRequest) ...<Widget>[
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -242,95 +507,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                         ),
                       ),
                     ),
-                  ] else ...<Widget>[
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () =>
-                            Get.to(() => AddBuyerRequests(request: request)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColorLT,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Edit Request',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          // 🟡 Confirm before deleting
-                          final bool? confirmed =
-                              await _showDeleteConfirmation();
-
-                          if (confirmed == true) {
-                            print('logged');
-                            // 🟢 Show loading dialog
-                            Get.dialog(
-                              const Center(child: CircularProgressIndicator()),
-                              barrierDismissible: false,
-                            );
-
-                            // 🚀 Perform delete action
-                            final bool success = await _buyerRequestController
-                                .deleteBuyerRequest(
-                                    request.id!); // Assuming request has id
-
-                            // ❌ Hide loader
-                            Get.back();
-
-                            if (success) {
-                              Get.snackbar(
-                                'Deleted',
-                                'Request deleted successfully!',
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.green[100],
-                                colorText: Colors.green[900],
-                              );
-
-                              // Safely close both loader and bottom sheet
-                              Future.delayed(const Duration(milliseconds: 100),
-                                  () {
-                                Get.back(closeOverlays: true);
-                              });
-                            } else {
-                              Get.snackbar(
-                                'Error',
-                                'Failed to delete request.',
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.red[100],
-                                colorText: Colors.red[900],
-                              );
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Delete Request',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    )
-                  ]
+                  ],
                 ],
               ),
             ),

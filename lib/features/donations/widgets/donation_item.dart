@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class DonationItem extends StatefulWidget {
   final DonationModel donation;
@@ -985,10 +986,9 @@ class _DonationItemState extends State<DonationItem> {
                         const SizedBox(width: 8.0),
                         GestureDetector(
                           onTap: () => _sharePost(),
-                          child: SvgPicture.asset(
-                            'assets/svgs/share.svg',
-                            height: 15.0,
-                            width: 15.0,
+                          child: Icon(
+                            LucideIcons.share,
+                            size: 17.0,
                             color: textColor.withValues(alpha: 1.0),
                           ),
                         ),
@@ -1069,7 +1069,7 @@ class _DonationItemState extends State<DonationItem> {
 
   void _sharePost() {
     String message =
-        'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
+        'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s crowdfund post on Business Bosses\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
     logEvent(widget.donation.id, 'donation');
     widget.donation.user?.uid != profileController.myProfile.uid
@@ -1122,7 +1122,7 @@ class _DonationItemState extends State<DonationItem> {
                     GestureDetector(
                       onTap: () {
                         String message =
-                            'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
+                            'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s crowdfund post on Business Bosses\n'
                             'https://businessbosses.onelink.me/xLWk/36a2ff16';
                         logEvent(widget.donation.id, 'donation');
                         socialShare(message);
@@ -1131,10 +1131,10 @@ class _DonationItemState extends State<DonationItem> {
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Row(
                           children: <Widget>[
-                            SvgPicture.asset(
-                              'assets/svgs/share.svg',
+                            Icon(
+                              LucideIcons.share,
                               color: textColor,
-                              height: 16,
+                              size: 16,
                             ),
                             const SizedBox(
                               width: 10,

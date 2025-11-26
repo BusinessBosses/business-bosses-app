@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
@@ -111,18 +112,15 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'onTileClicked': () => Get.to(() => const ChatScreen()),
       },
       {
-        'icon': SvgPicture.asset(
-          'assets/svgs/calendar.svg',
-          height: 35,
-          colorFilter: const ColorFilter.mode(
-            Colors.grey,
-            BlendMode.srcIn,
-          ),
+        'icon': Icon(
+          LucideIcons.users,
+          size: 35,
+          color: Colors.grey,
         ),
-        'title': 'Events',
+        'title': 'Matches',
         'description':
-            'Discover and attend events hosted by other users. Find events that match your interests and goals.',
-        'onTileClicked': () => Get.toNamed(Routes.liveEvents),
+            'Find business matches and opportunities tailored to your profile. Get connected with potential partners, clients, and collaborators.',
+        'onTileClicked': () => Get.to(() => ExpandedMatchesScreen()),
       },
       {
         'icon': SvgPicture.asset(
@@ -204,24 +202,26 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                             onTap: () {
                               Navigator.pop(context);
                               if (index == 0) {
-                                Get.toNamed(Routes.createPost);
+                                // Share business, get featured
+                                Get.to(() => AllCommunitiesScreen());
                               } else if (index == 1) {
+                                // Sell your product & service
                                 sellProduct(context);
                               } else if (index == 2) {
-                                Get.to(() => AddBuyerRequests());
+                                // Post content, requests, etc
+                                Get.toNamed(Routes.createPost);
                               } else if (index == 3) {
-                                Get.to(() => AllCommunitiesScreen());
+                                // Create press release
+                                Get.to(() => AddBuyerRequests());
                               }
                             },
                             minVerticalPadding: 0,
                             contentPadding: const EdgeInsets.only(left: 10),
                             leading: index == 0
-                                ? SvgPicture.asset(
-                                    'assets/svgs/text.svg',
-                                    height: 25,
-                                    colorFilter: ColorFilter.mode(
-                                        textColor.withValues(alpha: 1),
-                                        BlendMode.srcIn),
+                                ? Icon(
+                                    LucideIcons.trophy,
+                                    color: textColor.withValues(alpha: 1),
+                                    size: 26,
                                   )
                                 : index == 1
                                     ? SvgPicture.asset(
@@ -232,26 +232,27 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                                             BlendMode.srcIn),
                                       )
                                     : index == 2
-                                        ? Icon(
-                                            LucideIcons.globe,
-                                            color:
+                                        ? SvgPicture.asset(
+                                            'assets/svgs/text.svg',
+                                            height: 25,
+                                            colorFilter: ColorFilter.mode(
                                                 textColor.withValues(alpha: 1),
-                                            size: 26,
+                                                BlendMode.srcIn),
                                           )
                                         : Icon(
-                                            LucideIcons.gift,
+                                            LucideIcons.globe,
                                             color:
                                                 textColor.withValues(alpha: 1),
                                             size: 26,
                                           ),
                             title: Text(
                               index == 0
-                                  ? 'Post content, discussion, etc'
+                                  ? 'Share business, get featured'
                                   : index == 1
                                       ? 'Sell your product & service'
                                       : index == 2
-                                          ? 'Create press release'
-                                          : 'Enter free promotion',
+                                          ? 'Post content, requests, etc'
+                                          : 'Create press release',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,

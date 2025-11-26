@@ -1010,7 +1010,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
 
   void _sharePost() {
     String message =
-        'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
+        'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s crowdfund post on Business Bosses\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
     logEvent(widget.donation.id, 'donation');
 
@@ -1065,7 +1065,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                     GestureDetector(
                       onTap: () {
                         String message =
-                            'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
+                            'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s crowdfund post on Business Bosses\n'
                             'https://businessbosses.onelink.me/xLWk/36a2ff16';
                         logEvent(widget.donation.id, 'donation');
                         socialShare(message);

@@ -53,7 +53,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(top: 15.0),
+      padding: const EdgeInsets.only(top: 5.0),
       child: SizedBox(
         width: double.infinity,
         child: Row(

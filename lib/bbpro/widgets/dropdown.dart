@@ -112,6 +112,8 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                       isExpanded: true,
                       icon: SvgPicture.asset(
                         widget.iconName,
+                        height: 10,
+                        width: 10,
                         colorFilter: ColorFilter.mode(
                             widget.iconcolor ?? proprimaryColor,
                             BlendMode.srcIn),
