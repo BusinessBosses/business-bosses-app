@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_child_button.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
+import 'package:business_bosses_v2/features/impact/presentation/reachnotifications.dart';
 import 'package:business_bosses_v2/features/impact/widgets/impact_header_card.dart';
 import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -118,22 +119,43 @@ class _ReachScreenState extends State<ReachScreen> {
         ),
         actions: <Widget>[
           if (widget.user == profileController.myProfile)
-            Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: GestureDetector(
-                onTap: () {
-                  Get.to(Invitepage());
-                },
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: backgroundColor,
-                  child: Icon(
-                    LucideIcons.plus,
-                    size: 20,
-                    color: textColor,
-                  ), // Invisible icon to maintain size'),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(ReachNotificationsScreen());
+                    },
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: backgroundColor,
+                      child: Icon(
+                        LucideIcons.bell,
+                        size: 20,
+                        color: textColor,
+                      ), // Invisible icon to maintain size'),
+                    ),
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(Invitepage());
+                    },
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: backgroundColor,
+                      child: Icon(
+                        LucideIcons.plus,
+                        size: 20,
+                        color: textColor,
+                      ), // Invisible icon to maintain size'),
+                    ),
+                  ),
+                ),
+              ],
             )
         ],
       ),
