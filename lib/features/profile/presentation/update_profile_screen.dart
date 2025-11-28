@@ -95,6 +95,21 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     'Vehicle & Transportation'
   ];
 
+  final List<String> _ageRanges = <String>[
+    '18-24',
+    '25-34',
+    '35-44',
+    '45-54',
+    '55-64',
+    '64+'
+  ];
+
+  final List<String> _genders = <String>[
+    'Male',
+    'Female',
+    'Other'
+  ];
+
   TextEditingController achievementController = TextEditingController();
   TextEditingController productsController = TextEditingController();
 
@@ -181,8 +196,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     _website = user.website;
     _instagram = user.instagram;
     _twitter = user.twitter;
-    _ageRange = user.ageRange;
-    _gender = user.gender;
+    if (_ageRanges.contains(user.ageRange)) {
+      _ageRange = user.ageRange;
+    } else {
+      _ageRange = null;
+    }
+
+    if (_genders.contains(user.gender)) {
+      _gender = user.gender;
+    } else {
+      _gender = null;
+    }
     achievements = user.achievements ?? [];
     productsandservices = user.productsandservices ?? [];
 
@@ -852,14 +876,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                   _ageRange = newValue;
                                                 });
                                               },
-                                              items: <String>[
-                                                '18-24',
-                                                '25-34',
-                                                '35-44',
-                                                '45-54',
-                                                '55-64',
-                                                '64+'
-                                              ].map<DropdownMenuItem<String>>(
+                                              items: _ageRanges.map<DropdownMenuItem<String>>(
                                                   (String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
@@ -894,11 +911,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                   _gender = newValue;
                                                 });
                                               },
-                                              items: <String>[
-                                                'Male',
-                                                'Female',
-                                                'Other'
-                                              ].map<DropdownMenuItem<String>>(
+                                              items: _genders.map<DropdownMenuItem<String>>(
                                                   (String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
