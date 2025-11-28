@@ -1,18 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unused_element
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 
 // Your app's theme and model
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 
 // --- CORRECTED AND STANDARDIZED IMPORT PATH ---
 import 'package:business_bosses_v2/features/matching_feature/widgets/blurred_match_card.dart';
 import 'package:get/get.dart';
 
 class PremiumPrompt extends StatelessWidget {
-  final List<MatchModel> blurredMatches;
+  final List<UserModel> blurredMatches;
   final String userType;
 
   const PremiumPrompt({
@@ -76,7 +76,7 @@ class PremiumPrompt extends StatelessWidget {
         SizedBox(height: 20),
         // This map function will now work correctly
         ...blurredMatches
-            .map((MatchModel match) => BlurredMatchCard(match: match)),
+            .map((UserModel match) => BlurredMatchCard(match: match)),
         const SizedBox(height: 8),
       ],
     );

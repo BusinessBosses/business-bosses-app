@@ -49,7 +49,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
     super.initState();
     _selectedOption = profileController.myProfile.matchType != null &&
             profileController.myProfile.matchType!.isNotEmpty
-        ? profileController.myProfile.matchType!.capitalizeFirst
+        ? profileController.myProfile.matchType!
         : null;
   }
 

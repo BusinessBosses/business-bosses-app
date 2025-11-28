@@ -2,18 +2,21 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
-import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MatchController extends GetxController {
   // --- State Variables ---
   RxBool isLoading = true.obs;
   RxString errorMessage = ''.obs;
-  RxList<MatchModel> matchList = <MatchModel>[].obs;
-  RxList<MatchModel> bookmarkedMatches = <MatchModel>[].obs;
+  RxList<UserModel> matchList = <UserModel>[].obs;
+  RxList<SuppliersModel> matchedSuppliers = <SuppliersModel>[].obs;
+  RxList<UserModel> bookmarkedMatches = <UserModel>[].obs;
+  final RxInt matchedSuppliersListenable = RxInt(0);
 
   static const String _bookmarkKey = 'bookmarked_matches';
 
@@ -27,12 +30,12 @@ class MatchController extends GetxController {
     loadBookmarks();
   }
 
-  Future<void> toggleBookmark(MatchModel match) async {
+  Future<void> toggleBookmark(UserModel match) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (bookmarkedMatches.any((MatchModel m) => m.id == match.id)) {
+    if (bookmarkedMatches.any((UserModel m) => m.uid == match.uid)) {
       // remove
-      bookmarkedMatches.removeWhere((MatchModel m) => m.id == match.id);
+      bookmarkedMatches.removeWhere((UserModel m) => m.uid == match.uid);
     } else {
       // add
       bookmarkedMatches.add(match);
@@ -41,12 +44,12 @@ class MatchController extends GetxController {
 
     // save to shared prefs
     final List<String> encoded =
-        bookmarkedMatches.map((MatchModel m) => jsonEncode(m.toMap())).toList();
+        bookmarkedMatches.map((UserModel m) => jsonEncode(m.toMap())).toList();
     await prefs.setStringList(_bookmarkKey, encoded);
   }
 
   bool isBookmarked(String matchId) {
-    return bookmarkedMatches.any((MatchModel m) => m.id == matchId);
+    return bookmarkedMatches.any((UserModel m) => m.uid == matchId);
   }
 
   Future<void> loadBookmarks() async {
@@ -54,7 +57,7 @@ class MatchController extends GetxController {
     final List<String> saved = prefs.getStringList(_bookmarkKey) ?? <String>[];
 
     bookmarkedMatches.value =
-        saved.map((String s) => MatchModel.fromJson(jsonDecode(s))).toList();
+        saved.map((String s) => UserModel.fromMap(jsonDecode(s))).toList();
   }
 
   /// Fetches matches from the API and updates the state.
@@ -70,12 +73,23 @@ class MatchController extends GetxController {
       if (response.success) {
         // --- UPDATED LOGIC ---
         // 1. Safely access the list of matches from the JSON response.
-        final List matchesData = response.data ?? <dynamic>[];
+        final List<dynamic> matchesData =
+            response.data['matches'] ?? <dynamic>[];
+        if (profileController.myProfile.matchType == 'partner') {
+          final List<dynamic> suppliersData =
+              response.data['suppliers'] ?? <dynamic>[];
+          log(suppliersData.toString());
+          final List<SuppliersModel> fetchedSuppliers = suppliersData
+              .map((dynamic json) => SuppliersModel.fromMap(json))
+              .toList();
+
+          matchedSuppliers.assignAll(fetchedSuppliers);
+          matchedSuppliersListenable.value++;
+        }
 
         // 2. Map the raw JSON list to a list of Match objects.
-        final List<MatchModel> fetchedMatches = matchesData
-            .map((dynamic json) => MatchModel.fromJson(json))
-            .toList();
+        final List<UserModel> fetchedMatches =
+            matchesData.map((dynamic json) => UserModel.fromMap(json)).toList();
 
         // 3. Assign the newly parsed list to our observable.
         matchList.assignAll(fetchedMatches);
@@ -88,6 +102,7 @@ class MatchController extends GetxController {
       log('MatchController Error: $e'); // For debugging
     } finally {
       isLoading(false);
+      update();
     }
   }
 }

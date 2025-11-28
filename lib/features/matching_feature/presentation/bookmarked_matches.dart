@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -42,25 +42,25 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
         title: const Text('Saved Matches', textAlign: TextAlign.center),
       ),
       body: Obx(() {
-        List<MatchModel> bookmarked = matchController.bookmarkedMatches;
+        List<UserModel> bookmarked = matchController.bookmarkedMatches;
 
         // 🔍 Search
         if (_searchQuery.isNotEmpty) {
           bookmarked = bookmarked
-              .where((MatchModel m) =>
-                  m.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                  m.description
+              .where((UserModel m) =>
+                  m.name!.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                  m.bio!.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                  m.location!
                       .toLowerCase()
-                      .contains(_searchQuery.toLowerCase()) ||
-                  m.location.toLowerCase().contains(_searchQuery.toLowerCase()))
+                      .contains(_searchQuery.toLowerCase()))
               .toList();
         }
 
         // 🏷️ Filter
         if (_selectedFilter != 'All') {
           bookmarked = bookmarked
-              .where((MatchModel m) =>
-                  m.matchType == _selectedFilter.toLowerCase())
+              .where(
+                  (UserModel m) => m.matchType == _selectedFilter.toLowerCase())
               .toList();
         }
 
@@ -82,7 +82,7 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
                   Expanded(
                     child: _buildStatCard(
                       'Top Tier',
-                      '${matchController.bookmarkedMatches.where((MatchModel m) => m.quality > 90).length}',
+                      '${matchController.bookmarkedMatches.where((UserModel m) => m.averageRating! > 90).length}',
                       LucideIcons.trendingUp,
                     ),
                   ),
@@ -152,7 +152,7 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
                   : ListView.builder(
                       itemCount: bookmarked.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final MatchModel match = bookmarked[index];
+                        final UserModel match = bookmarked[index];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 16),
                           child: MatchCard(
@@ -211,12 +211,12 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
     );
   }
 
-  Widget _buildFilterChip(String filter, List<MatchModel> allBookmarked) {
+  Widget _buildFilterChip(String filter, List<UserModel> allBookmarked) {
     final bool isSelected = _selectedFilter == filter;
     final int count = filter == 'All'
         ? allBookmarked.length
         : allBookmarked
-            .where((MatchModel m) => m.matchType == filter.toLowerCase())
+            .where((UserModel m) => m.matchType == filter.toLowerCase())
             .length;
 
     return Padding(

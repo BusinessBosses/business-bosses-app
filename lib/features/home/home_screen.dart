@@ -61,7 +61,9 @@ class _HomeScreenState extends State<HomeScreen>
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       checkOrderVisit();
-      marketController.initDescription();
+      if (marketController.marketDescription.isEmpty) {
+        marketController.initDescription();
+      }
     });
 
     _scrollController.addListener(_onScrollChanged);

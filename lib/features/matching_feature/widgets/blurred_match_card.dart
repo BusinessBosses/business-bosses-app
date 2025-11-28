@@ -1,5 +1,5 @@
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'dart:ui';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class BlurredMatchCard extends StatelessWidget {
-  final MatchModel match;
+  final UserModel match;
 
   const BlurredMatchCard({
     super.key,
@@ -93,7 +93,7 @@ class BlurredMatchCard extends StatelessWidget {
                                         children: <Widget>[
                                           Flexible(
                                             child: Text(
-                                              match.name,
+                                              match.name ?? match.username,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
@@ -103,7 +103,7 @@ class BlurredMatchCard extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          if (match.verified) ...<Widget>[
+                                          if (match.isSubscribed) ...<Widget>[
                                             const SizedBox(width: 4),
                                             const Icon(
                                               Icons.verified,
@@ -113,16 +113,16 @@ class BlurredMatchCard extends StatelessWidget {
                                           ],
                                         ],
                                       ),
-                                      Text(
-                                        match.type,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: primaryBlue,
-                                        ),
-                                      ),
+                                      // Text(
+                                      //   match.type,
+                                      //   maxLines: 1,
+                                      //   overflow: TextOverflow.ellipsis,
+                                      //   style: const TextStyle(
+                                      //     fontSize: 14,
+                                      //     fontWeight: FontWeight.w600,
+                                      //     color: primaryBlue,
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),
@@ -137,7 +137,7 @@ class BlurredMatchCard extends StatelessWidget {
                                     size: 16, color: premiumGold),
                                 const SizedBox(width: 4),
                                 Text(
-                                  match.rating.toString(),
+                                  match.averageRating.toString(),
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -149,32 +149,32 @@ class BlurredMatchCard extends StatelessWidget {
                                     size: 14, color: textMedium),
                                 const SizedBox(width: 4),
                                 Text(
-                                  match.location,
+                                  match.location ?? '',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     color: textMedium,
                                   ),
                                 ),
                                 const SizedBox(width: 12),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      '${match.quality}% Match',
-                                      style: const TextStyle(
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                // Column(
+                                //   crossAxisAlignment: CrossAxisAlignment.end,
+                                //   mainAxisAlignment:
+                                //       MainAxisAlignment.spaceBetween,
+                                //   children: <Widget>[
+                                //     Text(
+                                //       '${match.quality}% Match',
+                                //       style: const TextStyle(
+                                //         color: Colors.green,
+                                //         fontWeight: FontWeight.bold,
+                                //         fontSize: 12,
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
                               ],
                             ),
                             Text(
-                              match.description,
+                              match.bio ?? '',
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(

@@ -1,5 +1,5 @@
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/matching_feature/models/match_model.dart';
 import 'package:business_bosses_v2/features/withdrawal/presentation/deposit_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class MatchCard extends StatefulWidget {
-  final MatchModel match;
+  final UserModel match;
   final String userType;
   final bool isBookmarked;
   final void Function()? onBookmarkToggle;
@@ -32,7 +32,7 @@ class _MatchCardState extends State<MatchCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.publicProfile, arguments: widget.match.user);
+        Get.toNamed(Routes.publicProfile, arguments: widget.match);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15),
@@ -84,7 +84,7 @@ class _MatchCardState extends State<MatchCard> {
                             children: <Widget>[
                               Flexible(
                                 child: Text(
-                                  widget.match.name,
+                                  widget.match.name ?? widget.match.username,
                                   maxLines: isExpanded ? 100 : 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -94,7 +94,7 @@ class _MatchCardState extends State<MatchCard> {
                                   ),
                                 ),
                               ),
-                              if (widget.match.verified) ...<Widget>[
+                              if (widget.match.isSubscribed) ...<Widget>[
                                 const SizedBox(width: 4),
                                 const Icon(
                                   Icons.verified,
@@ -105,7 +105,7 @@ class _MatchCardState extends State<MatchCard> {
                             ],
                           ),
                           Text(
-                            widget.match.type,
+                            widget.match.matchType ?? '',
                             maxLines: isExpanded ? 100 : 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -127,7 +127,7 @@ class _MatchCardState extends State<MatchCard> {
                     const Icon(Icons.star, size: 16, color: premiumGold),
                     const SizedBox(width: 4),
                     Text(
-                      widget.match.rating.toString(),
+                      widget.match.averageRating.toString(),
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -138,31 +138,31 @@ class _MatchCardState extends State<MatchCard> {
                     const Icon(LucideIcons.mapPin, size: 14, color: textMedium),
                     const SizedBox(width: 4),
                     Text(
-                      widget.match.location,
+                      widget.match.location ?? '',
                       style: const TextStyle(
                         fontSize: 14,
                         color: textMedium,
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          '${widget.match.quality}% Match',
-                          style: const TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.end,
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: <Widget>[
+                    //     Text(
+                    //       '${widget.match.weeklyRank}% Match',
+                    //       style: const TextStyle(
+                    //         color: Colors.green,
+                    //         fontWeight: FontWeight.bold,
+                    //         fontSize: 12,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
                 Text(
-                  widget.match.description,
+                  widget.match.bio ?? '',
                   maxLines: isExpanded ? 100 : 3,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
