@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DrawerContent extends StatefulWidget {
   final UserModel? currentuser;
@@ -432,8 +433,11 @@ class _DrawerContentState extends State<DrawerContent> {
                                               } else if (index == 2) {
                                                 Get.toNamed(Routes.createPost);
                                               } else if (index == 3) {
-                                                Get.to(
-                                                    () => AddBuyerRequests());
+                                                final url = Uri.parse(
+                                                    'https://businessbosses.news/submit-your-press-release');
+                                                launchUrl(url,
+                                                    mode: LaunchMode
+                                                        .platformDefault);
                                               }
                                             },
                                             minVerticalPadding: 0,
