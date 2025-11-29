@@ -50,7 +50,7 @@ class RegisterScreen extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                          'Promote your Business - Get Featured & Grow globally',
+                          'Promote your Business - Get Featured & Reach More Customers',
                           style: TextStyle(
                               fontSize: 14,
                               color: textColor.withValues(alpha: 0.8),
