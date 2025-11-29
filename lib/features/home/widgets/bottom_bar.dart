@@ -240,12 +240,11 @@ class _BottomBarState extends State<BottomBar> {
                                               } else if (index == 2) {
                                                 Get.toNamed(Routes.createPost);
                                               } else if (index == 3) {
-                                                if (!await launchUrl(url,
+                                                final Uri url = Uri.parse(
+                                                    'https://businessbosses.news/submit-your-press-release');
+                                                launchUrl(url,
                                                     mode: LaunchMode
-                                                        .platformDefault)) {
-                                                  throw Exception(
-                                                      'Could not launch $urlString');
-                                                }
+                                                        .platformDefault);
                                               }
                                             },
                                             minVerticalPadding: 0,

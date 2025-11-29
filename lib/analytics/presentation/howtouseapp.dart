@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HowToUseAppScreen extends StatefulWidget {
   const HowToUseAppScreen({super.key});
@@ -212,7 +213,10 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                                 Get.toNamed(Routes.createPost);
                               } else if (index == 3) {
                                 // Create press release
-                                Get.to(() => AddBuyerRequests());
+                                final url = Uri.parse(
+                                    'https://businessbosses.news/submit-your-press-release');
+                                launchUrl(url,
+                                    mode: LaunchMode.platformDefault);
                               }
                             },
                             minVerticalPadding: 0,
