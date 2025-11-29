@@ -65,6 +65,8 @@ class HomeController extends GetxController {
   String notificationStatus = '';
   Map<String, String> votes = {};
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
+  RxList<CourseModel> courses = RxList<CourseModel>(<CourseModel>[]);
+  RxList<DonationModel> donations = RxList<DonationModel>(<DonationModel>[]);
   RxList<CourseModel> usercourses = <CourseModel>[].obs;
   RxBool cError = RxBool(false);
   RxList<DonationModel> userdonations = <DonationModel>[].obs;
@@ -179,6 +181,27 @@ class HomeController extends GetxController {
     posts.addAll(parsed);
   }
 
+  /// Convert dynamic post list to PostModel list efficiently
+  void processCoursesToState(List<dynamic>? list) {
+    if (list == null || list.isEmpty) return;
+
+    final parsed = list.map((e) {
+      return CourseModel.fromMap({...e});
+    });
+
+    courses.addAll(parsed);
+  }
+
+  void processDonationsoState(List<dynamic>? list) {
+    if (list == null || list.isEmpty) return;
+
+    final parsed = list.map((e) {
+      return DonationModel.fromMap({...e});
+    });
+
+    donations.addAll(parsed);
+  }
+
   /// Promoted posts
   void processPromotedPostsToState(dynamic post) {
     final List<dynamic> psts = List<dynamic>.from(post ?? []);
@@ -226,28 +249,79 @@ class HomeController extends GetxController {
   }
 
   /// Mix posts and promoted content for feed
+  /// Mix posts + courses, sort by timestamp and then mix with promoted
   void mixPostandPromoted() {
     final List<Map<String, dynamic>> result = [
       {'type': 'notype'}
     ];
 
+    // 1) Build unified organic list
+    final List<Map<String, dynamic>> organic = [];
+
+    for (int i = 0; i < posts.length; i++) {
+      organic.add({
+        'kind': 'post',
+        'index': i,
+        'id': posts[i].postId,
+        'timestamp': posts[i].timestamp,
+      });
+    }
+
+    for (int i = 0; i < courses.length; i++) {
+      organic.add({
+        'kind': 'course',
+        'index': i,
+        'id': courses[i].id,
+        'timestamp': courses[i].timestamp ?? 0,
+      });
+    }
+
+    for (int i = 0; i < donations.length; i++) {
+      organic.add({
+        'kind': 'donation',
+        'index': i,
+        'id': donations[i].id,
+        'timestamp': donations[i].timestamp ?? (donations[i].timestamp ?? 0),
+      });
+    }
+
+    // 2) Sort by timestamp DESC
+    organic.sort(
+      (a, b) => (b['timestamp'] as int).compareTo(a['timestamp'] as int),
+    );
+
     int promotedPostIndex = 0;
     int promotedCourseIndex = 0;
 
-    // Insert first promoted post
+    // Optional: promote first post at top
     if (promotedPosts.isNotEmpty) {
       result.add({'type': 'promotedPost', 'index': 0});
       promotedPostIndex = 1;
     }
 
-    for (int i = 0; i < posts.length; i++) {
-      result.add({'type': 'post', 'index': i, 'id': posts[i].postId});
+    // 3) Walk & insert promoted
+    for (int i = 0; i < organic.length; i++) {
+      final item = organic[i];
+
+      result.add({
+        'type': item['kind'], // post / course / donation
+        'index': item['index'],
+        'id': item['id'],
+        'source': 'organic',
+      });
 
       if ((i + 1) % 2 == 0) {
         if (promotedPostIndex < promotedPosts.length) {
-          result.add({'type': 'promotedPost', 'index': promotedPostIndex++});
+          result.add({
+            'type': 'promotedPost',
+            'index': promotedPostIndex++,
+          });
         } else if (promotedCourseIndex < promotedCourses.length) {
-          result.add({'type': 'course', 'index': promotedCourseIndex++});
+          result.add({
+            'type': 'course',
+            'index': promotedCourseIndex++,
+            'source': 'promoted',
+          });
         }
       }
     }
@@ -256,8 +330,10 @@ class HomeController extends GetxController {
   }
 
   /// Combine post and forum data
-  void processPostsAndForumsData(dynamic data) {
+  void processPostsAndCoursesData(dynamic data) {
     processPostsToState(data?['posts']?['rows']);
+    processCoursesToState(data?['courses']?['rows']);
+    processDonationsoState(data?['donations']?['rows']);
     mixPostandPromoted();
     update();
   }
@@ -818,7 +894,7 @@ class HomeController extends GetxController {
         paginationPage.value, posts[posts.length - 1].timestamp);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
-      processPostsAndForumsData(response.data);
+      processPostsAndCoursesData(response.data);
     } else {
       // showSnackbar(
       //     title: 'OOPS!',
@@ -931,7 +1007,7 @@ class HomeController extends GetxController {
       if (promoted.success) {
         processPromotedPostsToState(promoted.data['promotedPosts']['rows']);
         processPromotedCoursesToState(promoted.data['promotedCourses']['rows']);
-        processPostsAndForumsData(data['posts']);
+        processPostsAndCoursesData(data['posts']);
       }
 
       // --- Profile Setup ---

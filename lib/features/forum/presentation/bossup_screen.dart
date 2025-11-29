@@ -111,7 +111,7 @@ class _BossUpSectionState extends State<BossUpSection>
   @override
   Widget build(BuildContext context) {
     int userCount = widget.bossUp.joinedUsersCount ?? 0;
-    String formattedUserCount = formatCount(userCount);
+    formatCount(userCount);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

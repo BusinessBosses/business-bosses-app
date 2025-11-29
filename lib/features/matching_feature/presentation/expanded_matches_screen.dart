@@ -243,9 +243,10 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
             child: TabBarView(
               controller: tabController,
               children: <Widget>[
-                if (profileController.myProfile.matchType == 'seller') ...{
+                if (profileController.myProfile.matchType ==
+                    'seller') ...<Widget>{
                   BuyerRequestsScreen(),
-                } else ...{
+                } else ...<Widget>{
                   buildMatchesListSection(),
                 },
                 if (suppliersExist) buildSuppliersTab(),

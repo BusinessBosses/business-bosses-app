@@ -4,6 +4,8 @@ import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
@@ -182,21 +184,37 @@ class _PostsWidgetState extends State<PostsWidget> {
         ),
       );
     } else if (currentPost['type'] == 'course') {
-      final CourseModel course =
-          controller.promotedCourses[currentPost['index']];
+      final bool promoted = (currentPost['source'] == 'promoted');
+      final CourseModel course = promoted
+          ? controller.promotedCourses[currentPost['index']]
+          : controller.courses[currentPost['index']];
 
       postWidget = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            child: TextWidget(
-              text: 'Sponsored',
-              fontWeight: FontWeight.w700,
-              size: 10,
+          if (promoted)
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              child: TextWidget(
+                text: 'Sponsored',
+                fontWeight: FontWeight.w700,
+                size: 10,
+              ),
             ),
-          ),
           CourseItem(course: course),
+        ],
+      );
+    } else if (currentPost['type'] == 'donation') {
+      final DonationModel donationModel =
+          controller.donations[currentPost['index']];
+
+      postWidget = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          DonationItem(
+            donation: donationModel,
+            isLastItem: false,
+          )
         ],
       );
     } else {

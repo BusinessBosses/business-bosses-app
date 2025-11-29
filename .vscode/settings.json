@@ -19,5 +19,5 @@
   "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-24",
   "android.sdk.path": "C:\\Users\\wadas\\AppData\\Local\\Android\\Sdk",
   "cmake.ignoreCMakeListsMissing": true,
-  "dart.flutterSdkPath": ".fvm/versions/3.35.7"
+  "dart.flutterSdkPath": ".fvm/flutter_sdk"
 }

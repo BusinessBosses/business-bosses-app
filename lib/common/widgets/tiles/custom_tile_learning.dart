@@ -77,7 +77,7 @@ class CustomTileLearning extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '$count Courses' ?? '0',
+                                  '$count Courses',
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w400,
