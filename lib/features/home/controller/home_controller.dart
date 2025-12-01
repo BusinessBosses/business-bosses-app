@@ -214,7 +214,10 @@ class HomeController extends GetxController {
     if (list == null || list.isEmpty) return;
 
     final parsed = list.map((e) {
-      return DonationModel.fromMap({...e});
+      return DonationModel.fromMap({
+        ...e,
+        'likes': _extractUserIds(e['likes']),
+      });
     });
 
     donations.addAll(parsed);
