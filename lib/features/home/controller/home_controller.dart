@@ -183,8 +183,9 @@ class HomeController extends GetxController {
 
   /// Convert dynamic post list to PostModel list efficiently
   void processCoursesToState(List<dynamic>? list) {
+    print(list);
     if (list == null || list.isEmpty) return;
-
+    print(list);
     final parsed = list.map((e) {
       return CourseModel.fromMap({...e});
     });

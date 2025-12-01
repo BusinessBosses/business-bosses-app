@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/features/courses/presentation/expanded_course
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
+import 'package:business_bosses_v2/features/posts/widgets/tag.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -99,7 +100,12 @@ class _CourseItemState extends State<CourseItem> {
       child: Container(
         decoration: const BoxDecoration(color: Colors.white),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            PostTag(
+              label: 'Learning',
+              backgroundColor: backgroundColor,
+            ),
             Padding(
               padding: const EdgeInsets.only(
                   left: 15.0, right: 15, top: 15, bottom: 5),
