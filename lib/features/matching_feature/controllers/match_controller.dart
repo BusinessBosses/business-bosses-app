@@ -65,40 +65,48 @@ class MatchController extends GetxController {
     try {
       isLoading(true);
       errorMessage('');
+      matchedSuppliers.clear();
 
-      // Make the API call
-      final ApiResponseModel response = await ApiService.get(
-          path: 'users/${profileController.myProfile.uid}/matches');
+      if (profileController.myProfile.matchType != 'seller') {
+        // Make the API call
+        final ApiResponseModel response = await ApiService.get(
+            path: 'users/${profileController.myProfile.uid}/matches');
 
-      if (response.success) {
-        // --- UPDATED LOGIC ---
-        // 1. Safely access the list of matches from the JSON response.
-        final List<dynamic> matchesData =
-            response.data['matches'] ?? <dynamic>[];
-        if (profileController.myProfile.matchType == 'partner') {
-          final List<dynamic> suppliersData =
-              response.data['suppliers'] ?? <dynamic>[];
-          log(suppliersData.toString());
-          final List<SuppliersModel> fetchedSuppliers = suppliersData
-              .map((dynamic json) => SuppliersModel.fromMap(json))
+        if (response.success) {
+          // --- UPDATED LOGIC ---
+          // 1. Safely access the list of matches from the JSON response.
+          final List<dynamic> matchesData =
+              response.data['matches'] ?? <dynamic>[];
+          if (profileController.myProfile.matchType == 'partner') {
+            final List<dynamic> suppliersData =
+                response.data['suppliers'] ?? <dynamic>[];
+            log(suppliersData.toString());
+            final List<SuppliersModel> fetchedSuppliers = suppliersData
+                .map((dynamic json) => SuppliersModel.fromMap(json))
+                .toList();
+
+            matchedSuppliers.assignAll(fetchedSuppliers);
+            matchedSuppliersListenable.value++;
+          }
+
+          // 2. Map the raw JSON list to a list of Match objects.
+          final List<UserModel> fetchedMatches = matchesData
+              .map((dynamic json) => UserModel.fromMap(json))
               .toList();
 
-          matchedSuppliers.assignAll(fetchedSuppliers);
-          matchedSuppliersListenable.value++;
+          // 3. Assign the newly parsed list to our observable.
+          matchList.assignAll(fetchedMatches);
+        } else {
+          // If the API reports success: false, throw an error to be caught below
+          throw Exception(response.message);
         }
-
-        // 2. Map the raw JSON list to a list of Match objects.
-        final List<UserModel> fetchedMatches =
-            matchesData.map((dynamic json) => UserModel.fromMap(json)).toList();
-
-        // 3. Assign the newly parsed list to our observable.
-        matchList.assignAll(fetchedMatches);
-      } else {
-        // If the API reports success: false, throw an error to be caught below
-        throw Exception(response.message);
       }
     } catch (e) {
-      errorMessage('Failed to load matches. Please try again.');
+      if (profileController.myProfile.matchType == null) {
+        errorMessage('Select a match type to start matching.');
+      } else {
+        errorMessage('Failed to load matches. Please try again.');
+      }
       log('MatchController Error: $e'); // For debugging
     } finally {
       isLoading(false);

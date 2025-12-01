@@ -55,6 +55,10 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
     ever(matchController.matchedSuppliersListenable, (_) {
       _resetTabController();
     });
+
+    if (matchController.matchList.isNotEmpty) {
+      matchController.fetchMatches();
+    }
   }
 
   void _resetTabController() {
@@ -181,8 +185,6 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
 
   @override
   Widget build(BuildContext context) {
-    final bool suppliersExist = matchController.matchedSuppliers.isNotEmpty;
-
     return Scaffold(
       appBar: widget.isMarketplace == true
           ? null
@@ -223,19 +225,25 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
           buildTopSection(),
 
           /// TABBAR BELOW MATCHHEADER
-          if (suppliersExist)
-            Container(
-              color: Colors.white,
-              child: TabBar(
-                controller: tabController,
-                labelColor: Theme.of(context).colorScheme.primary,
-                unselectedLabelColor: Colors.grey,
-                tabs: const <Widget>[
-                  Tab(text: 'Users'),
-                  Tab(text: 'Suppliers'),
-                ],
-              ),
-            ),
+          Obx(() {
+            if (matchController.matchedSuppliers.isNotEmpty) {
+              return Container(
+                color: Colors.white,
+                child: TabBar(
+                  controller: tabController,
+                  labelColor: Theme.of(context).colorScheme.primary,
+                  unselectedLabelColor: Colors.grey,
+                  tabs: const <Widget>[
+                    Tab(text: 'Users'),
+                    Tab(text: 'Suppliers'),
+                  ],
+                ),
+              );
+            } else {
+              return SizedBox();
+            }
+          }),
+
           SizedBox(
             height: 16,
           ),
@@ -243,13 +251,13 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
             child: TabBarView(
               controller: tabController,
               children: <Widget>[
-                if (profileController.myProfile.matchType ==
-                    'seller') ...<Widget>{
-                  BuyerRequestsScreen(),
-                } else ...<Widget>{
-                  buildMatchesListSection(),
-                },
-                if (suppliersExist) buildSuppliersTab(),
+                Obx(
+                  () => profileController.currentMatchType.value == 'seller'
+                      ? BuyerRequestsScreen()
+                      : buildMatchesListSection(),
+                ),
+                if (matchController.matchedSuppliers.isNotEmpty)
+                  buildSuppliersTab(),
               ],
             ),
           ),
@@ -261,7 +269,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
   /// TOP SECTION WITH MATCH HEADER!!
   Widget buildTopSection() {
     final bool isInvestor =
-        profileController.myProfile.matchType?.toLowerCase() == 'investor';
+        profileController.currentMatchType.value.toLowerCase() == 'investor';
 
     return Column(
       children: <Widget>[

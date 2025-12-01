@@ -18,6 +18,7 @@ class ProfileController extends GetxController {
   List<PostModel> posts = <PostModel>[];
   RxBool isLoading = RxBool(false);
   dynamic impact;
+  RxString currentMatchType = ''.obs;
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
   void processDataToState(
@@ -251,6 +252,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     fetchData();
+    currentMatchType.value = myProfile.matchType ?? '';
     super.onInit();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -182,6 +183,8 @@ class _PreMatchModalState extends State<PreMatchModal> {
                                 <String, dynamic>{
                               'matchType': _selectedOption!.toLowerCase(),
                             };
+                            profileController.currentMatchType.value =
+                                _selectedOption!.toLowerCase();
                             setState(() {
                               isSubmitting = true;
                             });
@@ -205,10 +208,12 @@ class _PreMatchModalState extends State<PreMatchModal> {
                               Get.back();
 
                               // Show success message
-                              Get.snackbar(
-                                  'Success', 'Profile Updated Successfully');
+                              showSnackbar(
+                                  message: 'Profile Updated Successfully');
                             } else {
-                              Get.snackbar('Error', 'Profile Update Error');
+                              showSnackbar(
+                                  message: 'Profile Update Error!',
+                                  error: true);
                             }
 
                             // Stop the loading state
