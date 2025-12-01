@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
@@ -66,6 +67,7 @@ class HomeController extends GetxController {
   Map<String, String> votes = {};
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
   RxList<CourseModel> courses = RxList<CourseModel>(<CourseModel>[]);
+  RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
   RxList<DonationModel> donations = RxList<DonationModel>(<DonationModel>[]);
   RxList<CourseModel> usercourses = <CourseModel>[].obs;
   RxBool cError = RxBool(false);
@@ -193,6 +195,21 @@ class HomeController extends GetxController {
     courses.addAll(parsed);
   }
 
+  void processForumsToState(List<dynamic>? list) {
+    print(list);
+    if (list == null || list.isEmpty) return;
+    print(list);
+    final parsed = list.map((e) {
+      return ForumModel.fromMap({
+        ...e,
+        'likes': _extractUserIds(e['likes']),
+        'coins': _extractUserIds(e['coins']),
+      });
+    });
+
+    forums.addAll(parsed);
+  }
+
   void processDonationsoState(List<dynamic>? list) {
     if (list == null || list.isEmpty) return;
 
@@ -251,6 +268,7 @@ class HomeController extends GetxController {
 
   /// Mix posts and promoted content for feed
   /// Mix posts + courses, sort by timestamp and then mix with promoted
+  /// Mix posts + courses + forums + donations
   void mixPostandPromoted() {
     final List<Map<String, dynamic>> result = [
       {'type': 'notype'}
@@ -282,7 +300,16 @@ class HomeController extends GetxController {
         'kind': 'donation',
         'index': i,
         'id': donations[i].id,
-        'timestamp': donations[i].timestamp ?? (donations[i].timestamp ?? 0),
+        'timestamp': donations[i].timestamp ?? 0,
+      });
+    }
+
+    for (int i = 0; i < forums.length; i++) {
+      organic.add({
+        'kind': 'forum',
+        'index': i,
+        'id': forums[i].forumId,
+        'timestamp': forums[i].timestamp ?? 0,
       });
     }
 
@@ -305,7 +332,7 @@ class HomeController extends GetxController {
       final item = organic[i];
 
       result.add({
-        'type': item['kind'], // post / course / donation
+        'type': item['kind'], // post / course / donation / forum
         'index': item['index'],
         'id': item['id'],
         'source': 'organic',
@@ -334,6 +361,7 @@ class HomeController extends GetxController {
   void processPostsAndCoursesData(dynamic data) {
     processPostsToState(data?['posts']?['rows']);
     processCoursesToState(data?['courses']?['rows']);
+    processForumsToState(data?['forums']?['rows']);
     processDonationsoState(data?['donations']?['rows']);
     mixPostandPromoted();
     update();

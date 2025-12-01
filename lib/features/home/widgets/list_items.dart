@@ -6,11 +6,13 @@ import 'package:business_bosses_v2/features/courses/controller/course_controller
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_list.dart';
+import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/hero_section.dart';
 import 'package:business_bosses_v2/features/home/widgets/relevant_people_tile.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
@@ -214,6 +216,18 @@ class _PostsWidgetState extends State<PostsWidget> {
           DonationItem(
             donation: donationModel,
             isLastItem: false,
+          )
+        ],
+      );
+    } else if (currentPost['type'] == 'forum') {
+      final ForumModel forumModel = controller.forums[currentPost['index']];
+
+      postWidget = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          ForumItem(
+            forum: forumModel,
+            controller: controller,
           )
         ],
       );
