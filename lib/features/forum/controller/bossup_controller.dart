@@ -338,6 +338,7 @@ class BossUpController extends GetxController {
     });
 
     forums.insert(0, modelizedNewPost);
+    _homeController.addNewForum(modelizedNewPost.toMap());
 
     Get.off(() => PostonhomePopUp(
           forum: modelizedNewPost,
