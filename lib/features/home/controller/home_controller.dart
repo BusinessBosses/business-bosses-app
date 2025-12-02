@@ -732,6 +732,20 @@ class HomeController extends GetxController {
     });
   }
 
+  void addNewForum(Map<String, dynamic> newPost) async {
+    ForumModel modelizedNewPost = ForumModel.fromMap(<String, dynamic>{
+      ...newPost,
+      'coins': <String>[],
+      'likes': <String>[],
+      'comments': <CommentModel>[],
+      'user': profileController.myProfile.toMap()
+    });
+
+    forums.insert(0, modelizedNewPost);
+    mixPostandPromoted();
+    update();
+  }
+
   void addNewRePost(
       Map<String, dynamic> newPost, ProfileController profileController) async {
     PostModel modelizedNewPost = PostModel.fromMap({
