@@ -113,6 +113,7 @@ dependencies:
   flutter_paystack_plus: ^2.1.0
   lucide_icons: ^0.257.0
   firebase_crashlytics: ^5.0.4
+  firebase_performance: ^0.11.1+2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.3
