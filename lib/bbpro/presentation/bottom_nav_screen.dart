@@ -248,7 +248,7 @@ class BottomTabButton extends StatelessWidget {
                 )
               : SvgPicture.asset(
                   icon,
-                  height: 25,
+                  height: 21,
                   colorFilter: ColorFilter.mode(
                     isActive ? proprimaryColor : textColor,
                     BlendMode.srcIn,
@@ -265,6 +265,8 @@ class BottomTabButton extends StatelessWidget {
                   ),
                 Text(
                   label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 14.0,
                     fontWeight: FontWeight.w700,

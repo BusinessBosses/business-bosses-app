@@ -340,7 +340,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: _buildLabel('Add image or file (Optional)', LucideIcons.image),
+          child: _buildLabel('Add image or file', LucideIcons.image),
         ),
         const SizedBox(height: 8),
         Padding(

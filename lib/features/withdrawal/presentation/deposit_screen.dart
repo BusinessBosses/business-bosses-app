@@ -446,7 +446,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                         fontSize: 16),
                                   ),
                                   Text(
-                                    'Share featured listings and earn',
+                                    'Share featured listings & earn',
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w700),
@@ -500,7 +500,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   const Text(
-                                    'Invite friends to earn 10 coins',
+                                    'Invite friends, earn 10 coins',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 16),

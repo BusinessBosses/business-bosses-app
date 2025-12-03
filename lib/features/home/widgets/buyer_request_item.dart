@@ -10,6 +10,7 @@ class BuyerRequestItem extends StatelessWidget {
   final VoidCallback? onApply;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final VoidCallback? onMoreOptions;
   final bool? ismyrequest;
 
   const BuyerRequestItem({
@@ -20,6 +21,7 @@ class BuyerRequestItem extends StatelessWidget {
     this.onEdit,
     this.onDelete,
     this.ismyrequest,
+    this.onMoreOptions,
   });
 
   bool _isValidImageUrl(String? url) {
@@ -90,6 +92,18 @@ class BuyerRequestItem extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
+                          if (onMoreOptions != null)
+                            GestureDetector(
+                              onTap: onMoreOptions,
+                              child: const Padding(
+                                padding: EdgeInsets.only(left: 8.0),
+                                child: Icon(
+                                  Icons.more_horiz,
+                                  size: 20,
+                                  color: textColor,
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                       Text(

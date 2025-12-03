@@ -381,7 +381,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   _posts,
                                   loading: isLoading,
                                 ),
-                                if (buyerRequests.isNotEmpty)
+                                  if (buyerRequests.isNotEmpty)
                                   MasonryGridView.count(
                                     crossAxisCount: 2,
                                     crossAxisSpacing: 12,
@@ -402,6 +402,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                             _navigateToChatScreen(request),
                                         onTap: () =>
                                             _showRequestDetails(request),
+                                        onMoreOptions: () => _showRequestMenu(request),
                                       );
                                     },
                                   ),
@@ -424,6 +425,155 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     return uri != null &&
         uri.hasAbsolutePath &&
         (uri.scheme == 'http' || uri.scheme == 'https');
+  }
+
+  void _showRequestMenu(BuyerRequestModel request) {
+    final bool isMyRequest = request.user.uid == _profileController.myProfile.uid;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            if (isMyRequest) ...[
+              ListTile(
+                leading: const Icon(Icons.edit, color: Colors.blue),
+                title: const Text('Edit'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Get.to(() => AddBuyerRequests(request: request));
+                },
+              ),
+              const Divider(height: 0),
+              ListTile(
+                leading: const Icon(Icons.delete, color: Colors.red),
+                title: const Text('Delete'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final bool? confirmed = await _showDeleteConfirmation();
+                  if (confirmed == true) {
+                    Get.dialog(
+                      const Center(child: CircularProgressIndicator()),
+                      barrierDismissible: false,
+                    );
+                    final bool success =
+                        await buyerRequestController.deleteBuyerRequest(request.id!);
+                    Get.back();
+                    if (success) {
+                      Get.snackbar(
+                        'Deleted',
+                        'Request deleted successfully!',
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.green[100],
+                        colorText: Colors.green[900],
+                      );
+                      // Refresh the list
+                      setState(() {
+                        buyerRequests.removeWhere((r) => r.id == request.id);
+                      });
+                    } else {
+                      Get.snackbar(
+                        'Error',
+                        'Failed to delete request.',
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red[100],
+                        colorText: Colors.red[900],
+                      );
+                    }
+                  }
+                },
+              ),
+              const Divider(height: 0),
+            ] else ...[
+              ListTile(
+                leading: const Icon(Icons.report, color: Colors.red),
+                title: const Text('Report'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showReportDialog(request);
+                },
+              ),
+              const Divider(height: 0),
+            ],
+            ListTile(
+              leading: const Icon(Icons.share, color: Colors.green),
+              title: const Text('Share'),
+              onTap: () {
+                Navigator.pop(context);
+                _shareRequest(request);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _shareRequest(BuyerRequestModel request) {
+    String message = 'Check out this buyer request on Business Bosses\\n'
+        'Title: ${request.title}\\n'
+        'Budget: \$${request.budgetStart.toStringAsFixed(0)} - \$${request.budgetEnd.toStringAsFixed(0)}\\n'
+        'https://vm.businessbosses.co.uk/share/request';
+    logEvent(request.id ?? '', 'buyer_request');
+    socialShare(message);
+  }
+
+  void _showReportDialog(BuyerRequestModel request) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const TextWidget(
+          text: 'Do you want to report this request?',
+          centralize: true,
+          fontWeight: FontWeight.w700,
+          size: 20,
+        ),
+        content: TextWidget(
+          text:
+              'The request will be reported to admin to evaluate if it violates any community policy',
+          centralize: true,
+          color: Colors.black.withValues(alpha: .6),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const TextWidget(
+              text: 'Cancel',
+              fontWeight: FontWeight.w700,
+              size: 18,
+              color: Colors.grey,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+              ApiService.post(path: 'reportedrequest', body: <String, dynamic>{
+                'requestId': request.id,
+                'reason': 'This request violates community guidelines',
+              });
+              showSnackBar(context, message: 'Request has been reported');
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 7,
+                horizontal: 14,
+              ),
+              decoration: BoxDecoration(
+                color: primaryColorLT,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: const TextWidget(
+                text: 'Report',
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   void _navigateToChatScreen(BuyerRequestModel request) {
