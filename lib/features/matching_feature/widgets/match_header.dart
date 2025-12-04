@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/utils.dart';
 
 class MatchHeader extends StatelessWidget {
   final String title;
@@ -26,9 +27,17 @@ class MatchHeader extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text(
-            title,
+            title == 'investor'
+                ? 'Funding Opportunities'
+                : title == 'partner'
+                    ? 'Partners / Suppliers Opportunities'
+                    : title == 'seller'
+                        ? 'Buyers Opportunities'
+                        : title == 'mentor'
+                            ? 'Mentorship Opportunities'
+                            : title,
             style: const TextStyle(
-              fontSize: 24,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: textColor,
             ),

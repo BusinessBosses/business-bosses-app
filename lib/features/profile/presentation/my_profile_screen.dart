@@ -161,7 +161,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       groupValue: _currentIndex,
                       children: <int, Widget>{
                         0: _segmentLabel('Profile', _currentIndex == 0),
-                        1: _segmentLabel('My-Biz', _currentIndex == 1),
+                        1: _segmentLabel('My Biz', _currentIndex == 1),
                       },
                       onValueChanged: (int? v) {
                         if (v != null) {

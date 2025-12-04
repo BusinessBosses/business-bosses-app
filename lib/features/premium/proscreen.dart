@@ -91,7 +91,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                         const Tab(
                           child: FittedBox(
                             child: Text(
-                              'My-Biz',
+                              'My Biz',
                               style: TextStyle(
                                   fontWeight: FontWeight.w700, fontSize: 14),
                             ),
@@ -315,7 +315,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                           height: 5,
                         ),
                         const Text(
-                          'Benefits of My-Biz',
+                          'Benefits of My Biz',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),

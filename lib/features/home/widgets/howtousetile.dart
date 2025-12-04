@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/analytics/presentation/howtouseapp.dart';
+import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,7 @@ class HowtouseTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const HowToUseAppScreen());
+        Get.to(() => const ExpandedMatchesScreen());
       },
       child: Center(
         child: Padding(
@@ -41,13 +42,14 @@ class HowtouseTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     const Text(
-                      'Explore Business Bosses',
+                      'Find My Match',
                       style: TextStyle(
                         color: textColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    Spacer(),
                     Image.asset(
                       'assets/images/howitworkspic.png',
                       height: 25,
@@ -74,7 +76,7 @@ class HowtouseTile extends StatelessWidget {
                     const Icon(
                       Icons.chevron_right_rounded,
                       color: Colors.green,
-                      size: 20,
+                      size: 30,
                     ),
                     if (isSearch == true)
                       GestureDetector(

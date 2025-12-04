@@ -6,12 +6,14 @@ class WinnerCard extends StatelessWidget {
   final WinnerType type;
   final int winCount;
   final String? avatarUrl;
+  final bool? isMatchCard;
 
   const WinnerCard({
     super.key,
     required this.type,
     required this.winCount,
     this.avatarUrl,
+    this.isMatchCard = false,
   });
 
   @override
@@ -19,8 +21,9 @@ class WinnerCard extends StatelessWidget {
     final CardConfig config = _getConfig();
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15),
-      height: 50,
+      width: isMatchCard! ? null : double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: isMatchCard! ? 0 : 15),
+      height: isMatchCard! ? 25 : 50,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: config.gradientColors,
@@ -48,7 +51,9 @@ class WinnerCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: EdgeInsets.symmetric(
+                horizontal: isMatchCard! ? 5 : 16,
+                vertical: isMatchCard! ? 5 : 12),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -58,9 +63,9 @@ class WinnerCard extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         config.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
-                          fontSize: 15,
+                          fontSize: isMatchCard! ? 8 : 15,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 0.5,
                         ),
@@ -80,7 +85,8 @@ class WinnerCard extends StatelessWidget {
 
   Widget _buildBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(
+          horizontal: isMatchCard! ? 5 : 10, vertical: isMatchCard! ? 0 : 6),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(20),
@@ -95,17 +101,17 @@ class WinnerCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const Icon(
+          Icon(
             Icons.emoji_events,
-            size: 16,
+            size: isMatchCard! ? 12 : 16,
             color: Color(0xFFF59E0B),
           ),
           const SizedBox(width: 4),
           Text(
             '×$winCount',
-            style: const TextStyle(
+            style: TextStyle(
               color: Color(0xFF1F2937),
-              fontSize: 13,
+              fontSize: isMatchCard! ? 10 : 13,
               fontWeight: FontWeight.bold,
             ),
           ),
