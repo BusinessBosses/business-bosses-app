@@ -9,7 +9,7 @@ class SuccessScreen extends StatelessWidget {
   void _handleShare() async {
     try {
       socialShare(
-          'Check out my business! I just created a promotion for my business on BusinessBosses.\nhttps://businessbosses.page.link');
+          'Check out my business! I just created a promotion for my business on BusinessBosses.\nhttps://vm.businessbosses.co.uk');
     } catch (e) {
       // log('Error sharing: $e');
     }
