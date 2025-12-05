@@ -28,6 +28,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../../action/action.dart';
 import '../../../common/widgets/tiles/outlinebuttonheader.dart';
 import '../../marketplace/controllers/market_controller.dart';
 import '../widgets/my_profile_header.dart';
@@ -160,7 +161,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       groupValue: _currentIndex,
                       children: <int, Widget>{
                         0: _segmentLabel('Profile', _currentIndex == 0),
-                        1: _segmentLabel('My-Biz', _currentIndex == 1),
+                        1: _segmentLabel('My Biz', _currentIndex == 1),
                       },
                       onValueChanged: (int? v) {
                         if (v != null) {
@@ -339,10 +340,86 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             request: request,
             onApply: () => _navigateToChatScreen(request),
             onTap: () => _showRequestDetails(request),
+            onMoreOptions: () => _showRequestMenu(request),
           );
         },
       );
     });
+  }
+
+  void _showRequestMenu(BuyerRequestModel request) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.edit, color: Colors.blue),
+              title: const Text('Edit'),
+              onTap: () {
+                Navigator.pop(context);
+                Get.to(() => AddBuyerRequests(request: request));
+              },
+            ),
+            const Divider(height: 0),
+            ListTile(
+              leading: const Icon(Icons.delete, color: Colors.red),
+              title: const Text('Delete'),
+              onTap: () async {
+                Navigator.pop(context);
+                final bool? confirmed = await _showDeleteConfirmation();
+                if (confirmed == true) {
+                  Get.dialog(
+                    const Center(child: CircularProgressIndicator()),
+                    barrierDismissible: false,
+                  );
+                  final bool success =
+                      await buyerRequestController.deleteBuyerRequest(request.id!);
+                  Get.back();
+                  if (success) {
+                    Get.snackbar(
+                      'Deleted',
+                      'Request deleted successfully!',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.green[100],
+                      colorText: Colors.green[900],
+                    );
+                  } else {
+                    Get.snackbar(
+                      'Error',
+                      'Failed to delete request.',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.red[100],
+                      colorText: Colors.red[900],
+                    );
+                  }
+                }
+              },
+            ),
+            const Divider(height: 0),
+            ListTile(
+              leading: const Icon(Icons.share, color: Colors.green),
+              title: const Text('Share'),
+              onTap: () {
+                Navigator.pop(context);
+                _shareRequest(request);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _shareRequest(BuyerRequestModel request) {
+    String message = 'Check out this buyer request on Business Bosses\\n'
+        'Title: ${request.title}\\n'
+        'Budget: \$${request.budgetStart.toStringAsFixed(0)} - \$${request.budgetEnd.toStringAsFixed(0)}\\n'
+        'https://vm.businessbosses.co.uk/share/request';
+    logEvent(request.id ?? '', 'buyer_request');
+    socialShare(message);
   }
 
   void _navigateToChatScreen(BuyerRequestModel request) {

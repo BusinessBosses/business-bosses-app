@@ -1,6 +1,8 @@
 // Import your controllers and other necessary files
+import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
@@ -15,6 +17,7 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -198,7 +201,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                 ),
               ),
               centerTitle: true,
-              title: const Text('Matches', textAlign: TextAlign.center),
+              title: const Text('Find My Match', textAlign: TextAlign.center),
               actions: <Widget>[
                 GestureDetector(
                   onTap: () {
@@ -210,10 +213,28 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 15.0),
-                    child: CircleAvatar(
-                      backgroundColor: backgroundColor,
-                      child: Icon(LucideIcons.refreshCcw,
-                          color: textColor, size: 18),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: primaryBlue.withAlpha(30),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/preferences.svg',
+                            color: primaryBlue,
+                            height: 20,
+                          ),
+                          const SizedBox(width: 5),
+                          Text('Filter',
+                              style: TextStyle(
+                                  color: primaryBlue,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700)),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -234,7 +255,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                   labelColor: Theme.of(context).colorScheme.primary,
                   unselectedLabelColor: Colors.grey,
                   tabs: const <Widget>[
-                    Tab(text: 'Users'),
+                    Tab(text: 'Partners'),
                     Tab(text: 'Suppliers'),
                   ],
                 ),
@@ -244,9 +265,9 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
             }
           }),
 
-          SizedBox(
-            height: 16,
-          ),
+          // SizedBox(
+          //   height: 16,
+          // ),
           Expanded(
             child: TabBarView(
               controller: tabController,
@@ -270,6 +291,8 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
   Widget buildTopSection() {
     final bool isInvestor =
         profileController.currentMatchType.value.toLowerCase() == 'investor';
+    final bool isSeller =
+        profileController.currentMatchType.value.toLowerCase() == 'seller';
 
     return Column(
       children: <Widget>[
@@ -279,8 +302,9 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
             onClosePressed: () => debugPrint('Close pressed'),
           ),
         MatchHeader(
-          title: 'Top Matches',
-          subtitle: 'opportunities for you based on your profile',
+          title:
+              '${profileController.currentMatchType.value.capitalize} matches for you',
+          subtitle: 'based on your profile and filter selection',
           weeklyMatches: 0,
           totalMatches: 0,
           matchQuality: 0,
@@ -290,8 +314,9 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: GestureDetector(
               onTap: () {
-                /// 🔥 navigate to screen
-                Get.to(() => AllCommunitiesScreen());
+                Get.to(() => const DonationsPage(
+                      ishome: false,
+                    ));
               },
               child: Container(
                 padding:
@@ -317,7 +342,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                         color: Colors.green.shade50,
                       ),
                       child: Icon(
-                        LucideIcons.trendingUp,
+                        LucideIcons.plus,
                         color: Colors.green.shade700,
                         size: 20,
                       ),
@@ -325,7 +350,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Create a Crowdfund to Get Donation From Users',
+                        'Create a Crowdfund to get funding for your projects',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
@@ -333,11 +358,77 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                         ),
                       ),
                     ),
+                    SizedBox(width: 12),
                     const Icon(LucideIcons.arrowRight, size: 18),
                   ],
                 ),
               ),
             ),
+          ),
+        if (isSeller)
+          Column(
+            children: <Widget>[
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(() => ProshopdealsScreen());
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 14),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey.shade200),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
+                        )
+                      ],
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.green.shade50,
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/svgs/marketplace.svg',
+                            color: Colors.green.shade700,
+                            width: 20,
+                            height: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'List your products/services in featured listing, get more customers',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey.shade900,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        const Icon(LucideIcons.arrowRight, size: 18),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Text('Showing buyers looking for sellers',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey.shade600,
+                  )),
+            ],
           ),
       ],
     );

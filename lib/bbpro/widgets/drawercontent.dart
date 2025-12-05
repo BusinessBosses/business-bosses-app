@@ -163,7 +163,7 @@ class _DrawerContentState extends State<DrawerContent> {
             BlendMode.srcIn,
           ),
         ),
-        'title': 'My-Biz',
+        'title': 'My Biz',
         'description':
             'Everything you need to manage and grow your business 10X faster, all in one place.',
         'onTileClicked': () {

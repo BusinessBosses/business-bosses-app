@@ -16,6 +16,7 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -339,11 +340,36 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 Expanded(
                   child: CustomEditText(
                     isps: true,
-                    maxLength: 15,
+                    maxLength: 3,
                     caption: 'Discount(%)',
                     hintText: 'Enter discount',
                     controller: _discountController,
                     inputType: TextInputType.number,
+                    validator: (String? value) {
+                      if (value != null && value.isNotEmpty) {
+                        final double? number = double.tryParse(value);
+                        if (number == null) {
+                          return 'Please enter a valid number';
+                        }
+                        if (number < 0 || number > 100) {
+                          return 'Discount must be between 0 and 100';
+                        }
+                      }
+                      return null;
+                    },
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      TextInputFormatter.withFunction(
+                          (TextEditingValue oldValue,
+                              TextEditingValue newValue) {
+                        if (newValue.text.isEmpty) return newValue;
+                        final int? number = int.tryParse(newValue.text);
+                        if (number == null || number > 100) {
+                          return oldValue;
+                        }
+                        return newValue;
+                      }),
+                    ],
                   ),
                 ),
               ],

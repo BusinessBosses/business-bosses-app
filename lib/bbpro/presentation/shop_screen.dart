@@ -38,6 +38,92 @@ class _ShopScreenState extends State<ShopScreen> {
   final ShopController shopController = Get.find();
   final ProfileController profileController = Get.find();
 
+  void showbottomsheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 300,
+          child: ListView.separated(
+            padding: const EdgeInsets.all(10),
+            itemBuilder: (BuildContext context, int index) {
+              if (index == 0) {
+                return ListTile(
+                  subtitle: const Text(
+                      'To showcase your products in biz-centre & marketplace'),
+                  leading: SvgPicture.asset(
+                    'assets/svgs/addproduct.svg',
+                    colorFilter: const ColorFilter.mode(
+                      Colors.black,
+                      BlendMode.srcIn,
+                    ),
+                    height: 24,
+                  ),
+                  title: const Text(
+                    'Add Product',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                  ),
+                  horizontalTitleGap: 20.0,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.to(() => const CreateProductListing());
+                  },
+                );
+              } else if (index == 1) {
+                return ListTile(
+                  subtitle: const Text(
+                      'To showcase your services in biz-centre & marketplace'),
+                  leading: SvgPicture.asset(
+                    'assets/svgs/addservice.svg',
+                    colorFilter: const ColorFilter.mode(
+                      Colors.black,
+                      BlendMode.srcIn,
+                    ),
+                    height: 24,
+                  ),
+                  title: const Text(
+                    'Add Service',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                  ),
+                  horizontalTitleGap: 20.0,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.to(() => const CreateServiceListing());
+                  },
+                );
+              } else {
+                return ListTile(
+                  leading: const Icon(
+                    Icons.add,
+                    color: Colors.black,
+                    size: 24,
+                  ),
+                  subtitle: const Text(
+                      'To showcase your portfolio, demo or affiliate links '),
+                  title: const Text(
+                    'Add Custom Item',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                  ),
+                  horizontalTitleGap: 20.0,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.to(() => const CreateCustomListing());
+                  },
+                );
+              }
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(),
+            itemCount: 3,
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +137,7 @@ class _ShopScreenState extends State<ShopScreen> {
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
               title: const Text(
-                'My-Biz Center',
+                'My Biz-Center',
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -73,6 +159,20 @@ class _ShopScreenState extends State<ShopScreen> {
                             icon: SvgPicture.asset(
                               'assets/svgs/editshop.svg',
                               height: 18,
+                            )),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      CircleAvatar(
+                        backgroundColor: backgroundColor,
+                        child: IconButton(
+                            onPressed: () {
+                              showbottomsheet();
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              color: textColor,
                             )),
                       ),
                       const SizedBox(
@@ -374,92 +474,7 @@ class _ShopScreenState extends State<ShopScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            builder: (BuildContext context) {
-              return SizedBox(
-                height: 250,
-                child: ListView.separated(
-                  padding: const EdgeInsets.all(10),
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      return ListTile(
-                        subtitle: const Text(
-                            'To showcase your products in biz-centre & marketplace'),
-                        leading: SvgPicture.asset(
-                          'assets/svgs/addproduct.svg',
-                          colorFilter: const ColorFilter.mode(
-                            Colors.black,
-                            BlendMode.srcIn,
-                          ),
-                          height: 24,
-                        ),
-                        title: const Text(
-                          'Add Product',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w700),
-                        ),
-                        horizontalTitleGap: 0.0,
-                        onTap: () {
-                          Navigator.pop(context);
-                          Get.to(() => const CreateProductListing());
-                        },
-                      );
-                    } else if (index == 1) {
-                      return ListTile(
-                        subtitle: const Text(
-                            'To showcase your services in biz-centre & marketplace'),
-                        leading: SvgPicture.asset(
-                          'assets/svgs/addservice.svg',
-                          colorFilter: const ColorFilter.mode(
-                            Colors.black,
-                            BlendMode.srcIn,
-                          ),
-                          height: 24,
-                        ),
-                        title: const Text(
-                          'Add Service',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w700),
-                        ),
-                        horizontalTitleGap: 0.0,
-                        onTap: () {
-                          Navigator.pop(context);
-                          Get.to(() => const CreateServiceListing());
-                        },
-                      );
-                    } else {
-                      return ListTile(
-                        leading: const Icon(
-                          Icons.add,
-                          color: Colors.black,
-                          size: 24,
-                        ),
-                        subtitle: const Text(
-                            'To showcase your portfolio, demo or affiliate links '),
-                        title: const Text(
-                          'Add Custom Item',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w700),
-                        ),
-                        horizontalTitleGap: 0.0,
-                        onTap: () {
-                          Navigator.pop(context);
-                          Get.to(() => const CreateCustomListing());
-                        },
-                      );
-                    }
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(),
-                  itemCount: 3,
-                ),
-              );
-            },
-          );
+          showbottomsheet();
         },
         child: const Icon(
           Icons.add,

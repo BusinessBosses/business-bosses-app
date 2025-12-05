@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/home/widgets/winnercard.dart';
 import 'package:business_bosses_v2/features/withdrawal/presentation/deposit_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -104,16 +105,34 @@ class _MatchCardState extends State<MatchCard> {
                               ],
                             ],
                           ),
-                          Text(
-                            widget.match.matchType ?? '',
-                            maxLines: isExpanded ? 100 : 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: primaryBlue,
+                          if (widget.match.matchType != null &&
+                              widget.match.matchType != '')
+                            Text(
+                              widget.match.matchType == 'partner'
+                                  ? 'Partner with me'
+                                  : widget.match.matchType ?? '',
+                              maxLines: isExpanded ? 100 : 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: primaryBlue,
+                              ),
                             ),
-                          ),
+                          if (widget.match.mentorCount! > 0)
+                            IntrinsicWidth(
+                              child: WinnerCard(
+                                  isMatchCard: true,
+                                  type: WinnerType.mentor,
+                                  winCount: widget.match.mentorCount!),
+                            ),
+                          if (widget.match.backerCount! > 0)
+                            IntrinsicWidth(
+                              child: WinnerCard(
+                                  isMatchCard: true,
+                                  type: WinnerType.backer,
+                                  winCount: widget.match.backerCount!),
+                            ),
                         ],
                       ),
                     ),

@@ -43,7 +43,7 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
           title: Text(
             widget.isCoursesTile == true
                 ? 'Community & Networking'
-                : 'Learn New Skils',
+                : 'Learn New Skills',
             textAlign: TextAlign.center,
           ),
         ),

@@ -37,7 +37,7 @@ void showFilterModal(
                 ),
                 const SizedBox(height: 15),
                 const Text(
-                  'Select a category or profession to filter results',
+                  'Select a profession to filter results',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 15),
@@ -97,7 +97,7 @@ void showFilterModal(
                         onFilterSelected(selectedFilter);
                         Get.back();
                       },
-                      child: const Text('Apply'),
+                      child: const Text('Apply', style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),

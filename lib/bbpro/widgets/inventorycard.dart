@@ -105,7 +105,7 @@ class _InventoryCardState extends State<InventoryCard> {
                             Row(
                               children: <Widget>[
                                 Text(
-                                  '${currencyValues[widget.product!.location.toString()]}${formatPrice(widget.product!.price * (1 - widget.product!.discount! / 100))}',
+                                  '${currencyValues[widget.product!.location.toString()]}${formatPrice((widget.product!.price * (1 - widget.product!.discount! / 100)).clamp(0.0, double.infinity))}',
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w700,
@@ -278,9 +278,9 @@ class _InventoryCardState extends State<InventoryCard> {
 
   String formatPrice(double price) {
     if (price >= 1000000) {
-      return '${(price / 1000000).toStringAsFixed(1)}m';
+      return '${(price / 1000000).toStringAsFixed(1)}M';
     } else if (price >= 1000) {
-      return '${(price / 1000).toStringAsFixed(1)}k';
+      return '${(price / 1000).toStringAsFixed(1)}K';
     } else {
       return price.toStringAsFixed(2);
     }

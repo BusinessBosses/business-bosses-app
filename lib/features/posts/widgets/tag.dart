@@ -18,7 +18,8 @@ class PostTag extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(500), color: backgroundColor),
       margin: EdgeInsets.only(left: 15, top: 15),
-      child: Text(label, style: TextStyle(color: textColor ?? textColor)),
+      child: Text(label,
+          style: TextStyle(color: textColor ?? textColor, fontSize: 10)),
     );
   }
 }

@@ -150,7 +150,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                     ),
                     const SizedBox(height: 15),
                     const Text(
-                        'Select a category or profession to filter results',
+                        'Select a profession to filter results',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 15),

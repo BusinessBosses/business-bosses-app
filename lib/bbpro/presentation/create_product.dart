@@ -231,11 +231,18 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter a price';
                             }
-                            if (double.tryParse(value) == null) {
+                            final double? number = double.tryParse(value);
+                            if (number == null) {
                               return 'Please enter a valid number';
+                            }
+                            if (number <= 0) {
+                              return 'Price must be greater than 0';
                             }
                             return null;
                           },
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*\.?[0-9]*')),
+                          ],
                         ),
                       ),
                       Expanded(

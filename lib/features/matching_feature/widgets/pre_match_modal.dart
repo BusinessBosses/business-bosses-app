@@ -25,7 +25,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
   final List<Map<String, dynamic>> options = <Map<String, dynamic>>[
     <String, dynamic>{
       'icon': LucideIcons.coins,
-      'title': ' I need Funding / Investment',
+      'title': ' I need Backers / Funding',
       'subtitle': 'investor',
     },
     <String, dynamic>{
@@ -151,7 +151,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
                             Text(
                               option['title'],
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: isSelected ? Colors.black : textDark,
                               ),

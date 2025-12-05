@@ -68,25 +68,26 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                  color: backgroundColor,
+                                  color: Colors.transparent,
                                   borderRadius: BorderRadius.circular(5)),
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 3),
+                                  horizontal: 0.0, vertical: 0),
                               child: const Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   Text(
                                     'View Biz-Center',
                                     style: TextStyle(
-                                      fontSize: 10,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w700,
-                                      color: textColor,
+                                      color: primaryBlue,
+                                      decoration: TextDecoration.underline,
                                     ),
                                   ),
                                   Icon(
                                     Icons.chevron_right,
-                                    color: Colors.black,
-                                    size: 10,
+                                    color: primaryBlue,
+                                    size: 20,
                                   ),
                                 ],
                               ),

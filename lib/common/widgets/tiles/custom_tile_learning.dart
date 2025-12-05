@@ -31,6 +31,7 @@ class CustomTileLearning extends StatelessWidget {
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(top: 15),
+              padding: const EdgeInsets.symmetric(vertical:10),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),

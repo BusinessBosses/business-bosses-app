@@ -61,7 +61,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
             BlendMode.srcIn,
           ),
         ),
-        'title': 'My-Biz',
+        'title': 'My Biz',
         'description':
             'Everything you need to manage and grow your business 10X faster, all in one place.',
         'onTileClicked': () => Get.to(() => const MyProfileScreen(
