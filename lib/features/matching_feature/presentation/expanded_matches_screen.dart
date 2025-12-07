@@ -257,9 +257,6 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                   unselectedLabelColor: Colors.grey,
                   tabs: const <Widget>[
                     Tab(text: 'Partners'),
-                    Tab(
-                      text: 'Deals',
-                    ),
                     Tab(text: 'Suppliers'),
                   ],
                 ),
@@ -335,14 +332,18 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
             totalMatches: 0,
             matchQuality: 0,
           ),
-          if (isInvestor)
+          if (isInvestor || isPartner)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: GestureDetector(
                 onTap: () {
-                  Get.to(() => const DonationsPage(
-                        ishome: false,
-                      ));
+                  if (isInvestor) {
+                    Get.to(() => const DonationsPage(
+                          ishome: false,
+                        ));
+                  } else {
+                    Get.to(() => BossUpPartner());
+                  }
                 },
                 child: Container(
                   padding:
@@ -376,7 +377,9 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Create a Crowdfund to get funding for your projects',
+                          isInvestor
+                              ? 'Create a Crowdfund to get funding for your projects'
+                              : 'Checkout partner deals',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
