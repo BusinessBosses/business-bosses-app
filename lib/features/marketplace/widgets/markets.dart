@@ -85,7 +85,7 @@ class _MarketsPageState extends State<MarketsPage> {
                   else
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
+                          horizontal: 15, vertical: 10),
                       child: MasonryGridView.count(
                         crossAxisCount: 2,
                         mainAxisSpacing: 10.0,

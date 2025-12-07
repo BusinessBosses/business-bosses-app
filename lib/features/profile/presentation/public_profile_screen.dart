@@ -381,7 +381,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   _posts,
                                   loading: isLoading,
                                 ),
-                                  if (buyerRequests.isNotEmpty)
+                                if (buyerRequests.isNotEmpty)
                                   MasonryGridView.count(
                                     crossAxisCount: 2,
                                     crossAxisSpacing: 12,
@@ -402,7 +402,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                             _navigateToChatScreen(request),
                                         onTap: () =>
                                             _showRequestDetails(request),
-                                        onMoreOptions: () => _showRequestMenu(request),
+                                        onMoreOptions: () =>
+                                            _showRequestMenu(request),
                                       );
                                     },
                                   ),
@@ -428,7 +429,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   }
 
   void _showRequestMenu(BuyerRequestModel request) {
-    final bool isMyRequest = request.user.uid == _profileController.myProfile.uid;
+    final bool isMyRequest =
+        request.user.uid == _profileController.myProfile.uid;
 
     showDialog(
       context: context,
@@ -437,7 +439,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            if (isMyRequest) ...[
+            if (isMyRequest) ...<Widget>[
               ListTile(
                 leading: const Icon(Icons.edit, color: Colors.blue),
                 title: const Text('Edit'),
@@ -458,8 +460,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                       const Center(child: CircularProgressIndicator()),
                       barrierDismissible: false,
                     );
-                    final bool success =
-                        await buyerRequestController.deleteBuyerRequest(request.id!);
+                    final bool success = await buyerRequestController
+                        .deleteBuyerRequest(request.id!);
                     Get.back();
                     if (success) {
                       Get.snackbar(
@@ -471,7 +473,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                       );
                       // Refresh the list
                       setState(() {
-                        buyerRequests.removeWhere((r) => r.id == request.id);
+                        buyerRequests.removeWhere(
+                            (BuyerRequestModel r) => r.id == request.id);
                       });
                     } else {
                       Get.snackbar(
@@ -486,7 +489,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                 },
               ),
               const Divider(height: 0),
-            ] else ...[
+            ] else ...<Widget>[
               ListTile(
                 leading: const Icon(Icons.report, color: Colors.red),
                 title: const Text('Report'),

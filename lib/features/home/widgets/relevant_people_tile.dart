@@ -96,13 +96,16 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
                                 profileController.myProfile.connecteds!
                                     .contains(currentUser.uid);
 
-                        return ConnectionGridTile(
-                          color: Colors.white,
-                          user: currentUser,
-                          status: checkConnected,
-                          onChangeConnectionStatus: () {
-                            controller.connectToUser(currentUser);
-                          },
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: ConnectionGridTile(
+                            color: Colors.white,
+                            user: currentUser,
+                            status: checkConnected,
+                            onChangeConnectionStatus: () {
+                              controller.connectToUser(currentUser);
+                            },
+                          ),
                         );
                       },
                     ),
