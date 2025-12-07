@@ -428,21 +428,51 @@ class HomeController extends GetxController {
           usercourses[courseIndex].likes?.add(userId);
         }
       }
-    } else {
-      final int postIndex = mixedPosts.indexWhere(
-          (Map<String, dynamic> post) => post['shouldCount'] == null);
-      if (postIndex != -1) {
-        final bool checkLiked =
-            mixedPosts[postIndex]['data'].likes!.contains(userId);
+    }
+    // else {
+    //   final int postIndex = mixedPosts.indexWhere(
+    //       (Map<String, dynamic> post) => post['shouldCount'] == null);
+    //   if (postIndex != -1) {
+    //     final bool checkLiked =
+    //         mixedPosts[postIndex]['data'].likes!.contains(userId);
+    //     if (checkLiked) {
+    //       mixedPosts[postIndex]['data']
+    //           .likes!
+    //           .removeWhere((element) => element == userId);
+    //     } else {
+    //       mixedPosts[postIndex]['data'].likes!.add(userId);
+    //     }
+    //   }
+    // }
+
+    // --- FIX: Forum like ---
+    if (type == 'forum') {
+      final int forumIndex =
+          forums.indexWhere((ForumModel element) => element.forumId == postId);
+      if (forumIndex != -1) {
+        final bool checkLiked = forums[forumIndex].likes!.contains(userId);
         if (checkLiked) {
-          mixedPosts[postIndex]['data']
-              .likes!
-              .removeWhere((element) => element == userId);
+          forums[forumIndex].likes!.removeWhere((element) => element == userId);
         } else {
-          mixedPosts[postIndex]['data'].likes!.add(userId);
+          forums[forumIndex].likes!.add(userId);
         }
       }
     }
+
+// --- FIX: Course like (global courses feed) ---
+    if (type == 'course') {
+      final int courseIndex =
+          courses.indexWhere((CourseModel element) => element.id == postId);
+      if (courseIndex != -1) {
+        final bool checkLiked = courses[courseIndex].likes!.contains(userId);
+        if (checkLiked) {
+          courses[courseIndex].likes!.remove(userId);
+        } else {
+          courses[courseIndex].likes!.add(userId);
+        }
+      }
+    }
+
     update();
     if (profileController.myProfile.uid != receiverUid) {
       socket.emit('like', {
@@ -549,6 +579,38 @@ class HomeController extends GetxController {
         }
       }
     }
+    // --- FIX: Forum coin ---
+    if (type == 'forum') {
+      final int forumIndex =
+          forums.indexWhere((ForumModel element) => element.forumId == postId);
+      if (forumIndex != -1) {
+        final bool checkIfCoined = forums[forumIndex].coins!.contains(userId);
+        if (checkIfCoined) {
+          profileController.updateCoinCount(1);
+          forums[forumIndex].coins!.removeWhere((element) => element == userId);
+        } else {
+          profileController.updateCoinCount(-1);
+          forums[forumIndex].coins!.add(userId);
+        }
+      }
+    }
+
+// --- FIX: Course coin (UI only toggle) ---
+    if (type == 'course') {
+      final int courseIndex =
+          courses.indexWhere((CourseModel element) => element.id == postId);
+      if (courseIndex != -1) {
+        final bool checkIfCoined = courses[courseIndex].coins!.contains(userId);
+        if (checkIfCoined) {
+          profileController.updateCoinCount(1);
+          courses[courseIndex].coins!.remove(userId);
+        } else {
+          profileController.updateCoinCount(-1);
+          courses[courseIndex].coins!.add(userId);
+        }
+      }
+    }
+
     update();
     if (profileController.myProfile.uid != receiverUid) {
       socket.emit('coin', {
@@ -742,6 +804,21 @@ class HomeController extends GetxController {
     });
 
     forums.insert(0, modelizedNewPost);
+    mixPostandPromoted();
+    update();
+  }
+
+  void addNewCourse(Map<String, dynamic> newPost, int id) async {
+    courses.insert(
+        0,
+        CourseModel.fromMap(<String, dynamic>{
+          ...newPost,
+          'id': id,
+          'coins': <String>[],
+          'likes': <String>[],
+          'comments': <CommentModel>[],
+          'user': profileController.myProfile.toMap()
+        }));
     mixPostandPromoted();
     update();
   }

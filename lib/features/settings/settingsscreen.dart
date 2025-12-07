@@ -92,7 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     String message = 'Check out Business Bosses.\n'
         'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
-        'Invite id: $profileController.myProfile.inviteId';
+        'Invite id: ${profileController.myProfile.inviteId}';
     logEvent(profileController.myProfile.inviteId, 'invite');
     socialShare(message);
   }

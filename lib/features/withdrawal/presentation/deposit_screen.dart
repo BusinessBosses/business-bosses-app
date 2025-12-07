@@ -16,7 +16,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-import '../../../action/action.dart';
 import '../../../navigation/routes.dart';
 
 bool isExpanded = false;
@@ -38,7 +37,6 @@ class _DepositsScreenState extends State<DepositsScreen> {
       Get.put(CoinHistoryController());
   // ignore: unused_field
   String? _paymentmethods;
-  late String _referralId;
   List<String> coinAmounts = <String>['100', '200', '500', '1000', '10000'];
   List<String> coinPrices = <String>['0.99', '1.99', '4.99', '9.99', '99.99'];
   List<String> coinIDs = <String>[
@@ -56,7 +54,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
     super.initState();
     _loadProducts();
 
-    _referralId = _profileController.myProfile.inviteId!;
+    // _referralId = _profileController.myProfile.inviteId!;
   }
 
   Future<void> _loadProducts() async {
@@ -663,14 +661,14 @@ class _DepositsScreenState extends State<DepositsScreen> {
             )));
   }
 
-  void _shareWithFriends() {
-    // ignore: unnecessary_null_comparison
-    if (_referralId == null) return;
-    String message = 'Check out Business Bosses.\n'
-        'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
-        'Invite id: $_referralId';
-    logEvent(_profileController.myProfile.inviteId, 'invite');
-    socialShare(message);
-  }
+  // void _shareWithFriends() {
+  //   // ignore: unnecessary_null_comparison
+  //   if (_referralId == null) return;
+  //   String message = 'Check out Business Bosses.\n'
+  //       'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
+  //       'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
+  //       'Invite id: $_referralId';
+  //   logEvent(_profileController.myProfile.inviteId, 'invite');
+  //   socialShare(message);
+  // }
 }

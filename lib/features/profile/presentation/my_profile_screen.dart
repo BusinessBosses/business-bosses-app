@@ -5,6 +5,8 @@ import 'package:business_bosses_v2/bbpro/widgets/menubutton.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
+import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -13,10 +15,11 @@ import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
-import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -278,21 +281,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           const Tab(
               child:
                   Text('Posts', style: TextStyle(fontWeight: FontWeight.w700))),
-          if (homeController.myRequests.isNotEmpty)
-            const Tab(
-              child: Text(
-                'Requests',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
-            ),
-          if (homeController.userdonations.isNotEmpty)
-            const Tab(
-                child: Text('Donations',
-                    style: TextStyle(fontWeight: FontWeight.w700))),
-          if (homeController.usercourses.isNotEmpty)
-            const Tab(
-                child: Text('Courses',
-                    style: TextStyle(fontWeight: FontWeight.w700))),
         ],
       ),
     );
@@ -375,8 +363,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     const Center(child: CircularProgressIndicator()),
                     barrierDismissible: false,
                   );
-                  final bool success =
-                      await buyerRequestController.deleteBuyerRequest(request.id!);
+                  final bool success = await buyerRequestController
+                      .deleteBuyerRequest(request.id!);
                   Get.back();
                   if (success) {
                     Get.snackbar(
@@ -746,12 +734,109 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   }
 
   Widget _buildPostsTab() {
-    return profilepostsdisplay(
-      ispublicposts: false,
-      context,
-      profileController.myProfile,
-      profileController.posts,
-      loading: profileController.isLoading.value,
+    final List<UnifiedFeedItem> combinedItems = <UnifiedFeedItem>[];
+
+    // Add normal posts
+    for (final PostModel post in profileController.posts) {
+      combinedItems.add(UnifiedFeedItem(
+        data: post,
+        type: FeedType.post,
+        createdAt: DateTime.fromMillisecondsSinceEpoch(post.timestamp),
+      ));
+    }
+
+    // Add buyer requests
+    for (final BuyerRequestModel req in homeController.myRequests) {
+      if (req.createdAt != null) {
+        combinedItems.add(UnifiedFeedItem(
+          data: req,
+          type: FeedType.request,
+          createdAt: DateTime.tryParse(req.createdAt!) ?? DateTime.now(),
+        ));
+      }
+    }
+
+    // Add donations
+    for (final DonationModel donation in homeController.userdonations) {
+      if (donation.timestamp != null) {
+        combinedItems.add(UnifiedFeedItem(
+          data: donation,
+          type: FeedType.donation,
+          createdAt:
+              DateTime.fromMillisecondsSinceEpoch(donation.timestamp ?? 0),
+        ));
+      }
+    }
+
+    // Add courses
+    for (final CourseModel course in homeController.usercourses) {
+      if (course.timestamp != null) {
+        combinedItems.add(UnifiedFeedItem(
+          data: course,
+          type: FeedType.course,
+          createdAt: DateTime.fromMillisecondsSinceEpoch(course.timestamp ?? 0),
+        ));
+      }
+    }
+
+    // Sort DESC by createdAt
+    combinedItems.sort(
+      (UnifiedFeedItem a, UnifiedFeedItem b) =>
+          b.createdAt.compareTo(a.createdAt),
+    );
+
+    if (combinedItems.isEmpty) {
+      return _emptyState('No Posts Found', 'assets/svgs/text.svg');
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.only(top: 15, bottom: 120),
+      itemCount: combinedItems.length,
+      itemBuilder: (_, int i) {
+        final UnifiedFeedItem item = combinedItems[i];
+
+        switch (item.type) {
+          case FeedType.post:
+            return Container(
+              // enforce height constraints for grid-style tile
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: PostTile(
+                post: item.data,
+                controller: homeController,
+              ),
+            );
+
+          case FeedType.request:
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              child: BuyerRequestItem(
+                request: item.data,
+                onTap: () => _showRequestDetails(item.data),
+                onApply: () => _navigateToChatScreen(item.data),
+                onMoreOptions: () => _showRequestMenu(item.data),
+              ),
+            );
+
+          case FeedType.donation:
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              child: DonationItem(
+                donation: item.data,
+                isLastItem: false,
+              ),
+            );
+
+          case FeedType.course:
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              child: CourseItem(course: item.data),
+            );
+
+          default:
+            return const SizedBox.shrink();
+        }
+      },
     );
   }
 
@@ -811,9 +896,20 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
   int calculateTabLength() {
     int count = 2; // About + Posts
-    if (homeController.userdonations.isNotEmpty) count++;
-    if (homeController.usercourses.isNotEmpty) count++;
-    if (homeController.myRequests.isNotEmpty) count++;
     return count;
   }
 }
+
+class UnifiedFeedItem {
+  final dynamic data;
+  final FeedType type;
+  final DateTime createdAt;
+
+  UnifiedFeedItem({
+    required this.data,
+    required this.type,
+    required this.createdAt,
+  });
+}
+
+enum FeedType { post, request, donation, course }

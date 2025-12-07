@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:get/utils.dart';
 
 class MatchHeader extends StatelessWidget {
   final String title;

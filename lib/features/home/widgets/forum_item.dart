@@ -661,6 +661,7 @@ class _ForumItemState extends State<ForumItem> {
                               'forum',
                               widget.forum.user!.uid,
                             );
+                            setState(() {});
                           },
                           icon: widget.forum.likes?.contains(
                                       profileController.myProfile.uid) ==
@@ -733,6 +734,7 @@ class _ForumItemState extends State<ForumItem> {
                                     'forum',
                                     widget.forum.user!.uid,
                                   );
+                                  setState(() {});
                                 },
                                 icon: widget.forum.coins?.contains(
                                             profileController.myProfile.uid) !=

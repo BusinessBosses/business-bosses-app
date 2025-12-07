@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
-import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/suppliers_grid_tile.dart';
@@ -13,6 +12,7 @@ import 'package:business_bosses_v2/features/matching_feature/widgets/match_card.
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_header.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/premium_prompt.dart';
+import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +65,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
   }
 
   void _resetTabController() {
-    int newLength = matchController.matchedSuppliers.isNotEmpty ? 2 : 1;
+    int newLength = matchController.matchedSuppliers.isNotEmpty ? 3 : 1;
 
     tabController.dispose();
     tabController = TabController(length: newLength, vsync: this);
@@ -256,6 +256,9 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                   unselectedLabelColor: Colors.grey,
                   tabs: const <Widget>[
                     Tab(text: 'Partners'),
+                    Tab(
+                      text: 'Deals',
+                    ),
                     Tab(text: 'Suppliers'),
                   ],
                 ),
@@ -277,8 +280,12 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                       ? BuyerRequestsScreen()
                       : buildMatchesListSection(),
                 ),
-                if (matchController.matchedSuppliers.isNotEmpty)
+                if (matchController.matchedSuppliers.isNotEmpty) ...<Widget>[
+                  BossUpPartner(
+                    isMarketplace: true,
+                  ),
                   buildSuppliersTab(),
+                ]
               ],
             ),
           ),
@@ -293,6 +300,8 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
         profileController.currentMatchType.value.toLowerCase() == 'investor';
     final bool isSeller =
         profileController.currentMatchType.value.toLowerCase() == 'seller';
+    final bool isPartner =
+        profileController.currentMatchType.value.toLowerCase() == 'partner';
 
     return Column(
       children: <Widget>[
@@ -309,14 +318,18 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
           totalMatches: 0,
           matchQuality: 0,
         ),
-        if (isInvestor)
+        if (isInvestor || isPartner)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: GestureDetector(
               onTap: () {
-                Get.to(() => const DonationsPage(
-                      ishome: false,
-                    ));
+                if (isInvestor) {
+                  Get.to(() => const DonationsPage(
+                        ishome: false,
+                      ));
+                } else {
+                  Get.to(() => BossUpPartner());
+                }
               },
               child: Container(
                 padding:
@@ -350,7 +363,9 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Create a Crowdfund to get funding for your projects',
+                        isInvestor
+                            ? 'Create a Crowdfund to get funding for your projects'
+                            : 'Checkout Partner Deals',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w500,

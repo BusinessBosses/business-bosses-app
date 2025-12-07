@@ -107,6 +107,7 @@ class CourseController extends GetxController {
             'comments': <CommentModel>[],
             'user': profileController.myProfile.toMap()
           }));
+      homeController.addNewCourse(course, response.data['id']);
       Get.back();
       Get.snackbar('Success', 'Course created successfully');
     }
