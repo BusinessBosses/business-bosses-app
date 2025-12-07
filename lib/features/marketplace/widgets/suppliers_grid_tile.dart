@@ -42,11 +42,11 @@ class _SuppliersGridTileState extends State<SuppliersGridTile> {
               )
             : Get.to(() => ExpandedSuppliersPage(supplier: widget.supplier));
       },
-      borderRadius: BorderRadius.circular(radius),
+      borderRadius: BorderRadius.circular(0),
       child: Ink(
         padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radius), color: Colors.white),
+            borderRadius: BorderRadius.circular(0), color: Colors.white),
         child: Column(
           children: <Widget>[
             if (widget.supplier.isVerified)

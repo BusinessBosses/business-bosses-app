@@ -139,8 +139,8 @@ class _FilterUsersState extends State<SuppliersPage> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 15.0, vertical: 10),
                               crossAxisCount: 2,
-                              crossAxisSpacing: 8.0,
-                              mainAxisSpacing: 8.0,
+                              crossAxisSpacing: 10.0,
+                              mainAxisSpacing: 10.0,
                               itemCount: supplierController.suppliers.length,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
