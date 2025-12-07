@@ -279,9 +279,6 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                       : buildMatchesListSection(),
                 ),
                 if (matchController.matchedSuppliers.isNotEmpty) ...<Widget>[
-                  BossUpPartner(
-                    isMarketplace: true,
-                  ),
                   buildSuppliersTab(),
                 ]
               ],
