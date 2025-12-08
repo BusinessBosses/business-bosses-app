@@ -252,12 +252,28 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
               return Container(
                 color: Colors.white,
                 child: TabBar(
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicatorWeight: 0.1,
                   controller: tabController,
                   labelColor: Theme.of(context).colorScheme.primary,
                   unselectedLabelColor: Colors.grey,
                   tabs: const <Widget>[
-                    Tab(text: 'Users looking for Partners'),
-                    Tab(text: 'Suppliers'),
+                    Tab(
+                        child: Text(
+                      'Users looking for Partners',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    )),
+                    Tab(
+                        child: Text(
+                      'Suppliers',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    )),
                   ],
                 ),
               );
@@ -376,7 +392,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                         child: Text(
                           isInvestor
                               ? 'Create a Crowdfund to get funding for your projects'
-                              : 'Explore partner deals',
+                              : 'Claim exclusive partner deals',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,

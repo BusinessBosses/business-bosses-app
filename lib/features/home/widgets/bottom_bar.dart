@@ -241,7 +241,7 @@ class _BottomBarState extends State<BottomBar> {
                                                 Get.toNamed(Routes.createPost);
                                               } else if (index == 3) {
                                                 final Uri url = Uri.parse(
-                                                    'https://businessbosses.news/submit-your-press-release');
+                                                    'https://businessbosses.news/instant-pr/');
                                                 launchUrl(url,
                                                     mode: LaunchMode
                                                         .platformDefault);

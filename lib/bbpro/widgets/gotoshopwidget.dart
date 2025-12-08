@@ -78,10 +78,9 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                                   Text(
                                     'View Biz-Center',
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.w700,
                                       color: primaryBlue,
-                                      decoration: TextDecoration.underline,
                                     ),
                                   ),
                                   Icon(
