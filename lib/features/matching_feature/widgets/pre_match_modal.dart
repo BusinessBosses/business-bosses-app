@@ -175,7 +175,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
                     isProcessing: isSubmitting,
                     buttonType: ButtonType.elevated,
                     textColor: Colors.white,
-                    backgroundColor: Colors.black,
+                    backgroundColor: primaryColorLT,
                     onPressed: _selectedOption == null
                         ? () {}
                         : () async {
@@ -223,12 +223,16 @@ class _PreMatchModalState extends State<PreMatchModal> {
                               });
                             }
                           },
-                    child: const Text(
-                      'Find My Match',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    child: Row(
+                      children: <Widget>[
+                        const Text(
+                          'Search',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

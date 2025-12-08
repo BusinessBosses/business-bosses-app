@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 enum WinnerType { boss, backer, mentor, partner, ambassador }
@@ -126,20 +127,15 @@ class WinnerCard extends StatelessWidget {
         return CardConfig(
           title: 'BOSS OF THE WEEK',
           icon: Icons.emoji_events,
-          gradientColors: <Color>[
-            const Color(0xFFFBBF24),
-            const Color(0xFFF97316),
-            const Color(0xFFEF4444),
-          ],
+          gradientColors: <Color>[backgroundColor, backgroundColor],
         );
       case WinnerType.backer:
         return CardConfig(
           title: 'BACKER OF THE WEEK',
           icon: Icons.trending_up,
           gradientColors: <Color>[
-            const Color(0xFF34D399),
-            const Color(0xFF14B8A6),
-            const Color(0xFF0891B2),
+            Color(0xFFE0F2F1),
+            Color(0xFFE0F2F1),
           ],
         );
       case WinnerType.mentor:
@@ -147,9 +143,8 @@ class WinnerCard extends StatelessWidget {
           title: 'MENTOR OF THE WEEK',
           icon: Icons.school,
           gradientColors: <Color>[
-            const Color(0xFF60A5FA),
-            const Color(0xFF0EA5E9),
-            const Color(0xFF06B6D4),
+            Color(0xFFE0F2FE),
+            Color(0xFFE0F2FE),
           ],
         );
       case WinnerType.partner:
@@ -157,19 +152,17 @@ class WinnerCard extends StatelessWidget {
           title: 'PARTNER OF THE WEEK',
           icon: Icons.handshake,
           gradientColors: <Color>[
-            const Color(0xFFFB7185),
-            const Color(0xFFEC4899),
-            const Color(0xFFD946EF),
+            Color.fromARGB(255, 251, 249, 231),
+            Color.fromARGB(255, 251, 249, 231),
           ],
         );
       case WinnerType.ambassador:
         return CardConfig(
-          title: 'PARTNER OF THE WEEK',
+          title: 'AMBASSADOR OF THE WEEK',
           icon: Icons.handshake,
           gradientColors: <Color>[
-            const Color.fromARGB(255, 22, 1, 95),
-            const Color(0xFFEC4899),
-            const Color(0xFFD946EF),
+            Color(0xFFEDE9FE),
+            Color(0xFFEDE9FE),
           ],
         );
     }

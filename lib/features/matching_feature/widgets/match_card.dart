@@ -118,20 +118,22 @@ class _MatchCardState extends State<MatchCard> {
                                   color: primaryBlue,
                                 ),
                               ),
-                          if (widget.match.mentorCount! > 0)
-                            IntrinsicWidth(
-                              child: WinnerCard(
-                                  isMatchCard: true,
-                                  type: WinnerType.mentor,
-                                  winCount: widget.match.mentorCount!),
-                            ),
-                          if (widget.match.backerCount! > 0)
-                            IntrinsicWidth(
-                              child: WinnerCard(
-                                  isMatchCard: true,
-                                  type: WinnerType.backer,
-                                  winCount: widget.match.backerCount!),
-                            ),
+                          if (widget.match.matchType != 'partner')
+                            if (widget.match.mentorCount! > 0)
+                              IntrinsicWidth(
+                                child: WinnerCard(
+                                    isMatchCard: true,
+                                    type: WinnerType.mentor,
+                                    winCount: widget.match.mentorCount!),
+                              ),
+                          if (widget.match.matchType != 'partner')
+                            if (widget.match.backerCount! > 0)
+                              IntrinsicWidth(
+                                child: WinnerCard(
+                                    isMatchCard: true,
+                                    type: WinnerType.backer,
+                                    winCount: widget.match.backerCount!),
+                              ),
                         ],
                       ),
                     ),

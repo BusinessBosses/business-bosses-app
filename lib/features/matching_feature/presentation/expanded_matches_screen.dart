@@ -256,7 +256,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                   labelColor: Theme.of(context).colorScheme.primary,
                   unselectedLabelColor: Colors.grey,
                   tabs: const <Widget>[
-                    Tab(text: 'Partners'),
+                    Tab(text: 'Users looking for Partners'),
                     Tab(text: 'Suppliers'),
                   ],
                 ),
@@ -366,7 +366,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                           color: Colors.green.shade50,
                         ),
                         child: Icon(
-                          LucideIcons.plus,
+                          LucideIcons.heartHandshake,
                           color: Colors.green.shade700,
                           size: 20,
                         ),
@@ -376,7 +376,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                         child: Text(
                           isInvestor
                               ? 'Create a Crowdfund to get funding for your projects'
-                              : 'Checkout partner deals',
+                              : 'Explore partner deals',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
