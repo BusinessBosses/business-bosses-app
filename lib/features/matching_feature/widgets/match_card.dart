@@ -107,18 +107,17 @@ class _MatchCardState extends State<MatchCard> {
                           ),
                           if (widget.match.matchType != null &&
                               widget.match.matchType != '')
-                            Text(
-                              widget.match.matchType == 'partner'
-                                  ? 'Partner with me'
-                                  : widget.match.matchType ?? '',
-                              maxLines: isExpanded ? 100 : 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: primaryBlue,
+                            if (widget.match.matchType == 'partner')
+                              Text(
+                                'Partner with me',
+                                maxLines: isExpanded ? 100 : 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: primaryBlue,
+                                ),
                               ),
-                            ),
                           if (widget.match.mentorCount! > 0)
                             IntrinsicWidth(
                               child: WinnerCard(

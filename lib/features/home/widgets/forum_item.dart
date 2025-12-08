@@ -10,6 +10,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
@@ -795,13 +796,89 @@ class _ForumItemState extends State<ForumItem> {
                         ),
                         const SizedBox(width: 8.0),
                         GestureDetector(
-                          onTap: () => _sharePost(),
-                          child: SvgPicture.asset(
-                            'assets/svgs/share.svg',
-                            height: 15.0,
-                            width: 15.0,
-                            color: textColor.withValues(alpha: 1.0),
-                          ),
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(25.0),
+                                  ),
+                                ),
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                    height: 250,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Expanded(
+                                            // Set a specific height
+                                            child: ListView.separated(
+                                              itemCount: 2,
+                                              separatorBuilder:
+                                                  (BuildContext context,
+                                                          int index) =>
+                                                      const Divider(),
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return ListTile(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    index == 0
+                                                        ? _sharePost()
+                                                        : () async {
+                                                            // widget.controller.postRepost(
+                                                            //     profileController
+                                                            //         .myProfile
+                                                            //         .uid,
+                                                            //     widget.forum
+                                                            //         .forumId,
+                                                            //     'post',
+                                                            //     widget.forum
+                                                            //         .timestamp,
+                                                            //     widget.forum
+                                                            //         .user!.uid,
+                                                            //     widget.forum
+                                                            //         .oldtimestamp);
+                                                          };
+                                                  },
+                                                  minVerticalPadding: 0,
+                                                  contentPadding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  leading: Icon(
+                                                    index == 0
+                                                        ? LucideIcons.share
+                                                        : LucideIcons.repeat,
+                                                    size: 18,
+                                                    color: textColor.withValues(
+                                                      alpha: 1,
+                                                    ),
+                                                  ),
+                                                  title: Text(
+                                                    'Share Post',
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
+                          child: Icon(LucideIcons.share,
+                              size: 18.0,
+                              color: textColor.withValues(alpha: 1)),
                         ),
                         const Spacer(),
                         Padding(
@@ -830,7 +907,7 @@ class _ForumItemState extends State<ForumItem> {
 
   void _sharePost() {
     String message =
-        'Have a look at ${widget.forum.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
+        'Vote for ${widget.forum.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
         'https://vm.businessbosses.co.uk/share/post';
     logEvent(widget.forum.forumId, 'forum');
     socialShare(message);

@@ -1069,7 +1069,8 @@ class _DonationItemState extends State<DonationItem> {
 
   void _sharePost() {
     String message =
-        'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s crowdfund post on Business Bosses\n'
+        'Support ${widget.donation.user?.username ?? 'Business Bosses'}\'s crowdfund project on Business Bosses,\n'
+        'You can become backer of the week\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
     logEvent(widget.donation.id, 'donation');
     widget.donation.user?.uid != profileController.myProfile.uid
@@ -1122,7 +1123,8 @@ class _DonationItemState extends State<DonationItem> {
                     GestureDetector(
                       onTap: () {
                         String message =
-                            'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s crowdfund post on Business Bosses\n'
+                            'Support ${widget.donation.user?.username ?? 'Business Bosses'}\'s crowdfund project on Business Bosses,\n'
+                            'You can become backer of the week\n'
                             'https://businessbosses.onelink.me/xLWk/36a2ff16';
                         logEvent(widget.donation.id, 'donation');
                         socialShare(message);

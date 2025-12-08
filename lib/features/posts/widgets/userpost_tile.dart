@@ -277,13 +277,18 @@ class _PostTileState extends State<PostTile> {
                 //   backgroundColor: backgroundColor,
                 // ),
                 if (widget.post.reposts?.length != null &&
-                    widget.post.reposts!.isNotEmpty) ...<Widget>[
+                    widget.post.reposts!.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(left: 15.0, top: 10),
                     child: Row(
                       children: <Widget>[
-                        Icon(LucideIcons.share,
-                            size: 18.0, color: textColor.withValues(alpha: 1)),
+                        SvgPicture.asset(
+                          'assets/svgs/repost.svg',
+                          height: 14,
+                          width: 14,
+                          colorFilter: const ColorFilter.mode(
+                              Colors.black, BlendMode.srcIn),
+                        ),
                         const SizedBox(
                           width: 5,
                         ),
@@ -322,8 +327,8 @@ class _PostTileState extends State<PostTile> {
                         ),
                       ],
                     ),
-                  )
-                ],
+                  ),
+                // ],
                 ListTile(
                   contentPadding: const EdgeInsets.only(left: 15, right: 15),
                   leading: GestureDetector(

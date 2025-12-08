@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class DonationCreated extends StatefulWidget {
-  const DonationCreated({super.key});
+class PartnerCreated extends StatefulWidget {
+  const PartnerCreated({super.key});
 
   @override
-  State<DonationCreated> createState() => _DonationCreatedState();
+  State<PartnerCreated> createState() => _PartnerCreatedState();
 }
 
-class _DonationCreatedState extends State<DonationCreated> {
+class _PartnerCreatedState extends State<PartnerCreated> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +25,7 @@ class _DonationCreatedState extends State<DonationCreated> {
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        title: const Text('Crowdfund Created Succesfully'),
+        title: const Text('Deal Submitted'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -38,9 +38,9 @@ class _DonationCreatedState extends State<DonationCreated> {
           ),
           const SafetyModel(
             isLoading: false,
-            title: 'Crowdfund Created!',
+            title: 'Partner Deal Submitted Succesfully!',
             subTitle:
-                'Your Crowdfund post is awaiting approval from the admin!',
+                'Your Partner Deal application is awaiting approval from the admin!',
           ),
           Container(
             decoration: BoxDecoration(

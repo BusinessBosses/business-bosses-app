@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/features/donations/presentation/partner_created.dart';
 import 'package:business_bosses_v2/features/partners/controllers/partners_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:country_list_pick/country_list_pick.dart';
@@ -81,6 +82,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
         title: 'Success',
         message: 'Your partnership has been submitted for moderation.',
       );
+      Get.to(() => const PartnerCreated());
     }
   }
 
@@ -112,14 +114,14 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
       return false;
     }
 
-    if (phoneController.text.trim().isEmpty) {
-      showSnackbar(
-        title: 'Validation',
-        message: 'Company phone number is required',
-        error: true,
-      );
-      return false;
-    }
+    // if (phoneController.text.trim().isEmpty) {
+    //   showSnackbar(
+    //     title: 'Validation',
+    //     message: 'Company phone number is required',
+    //     error: true,
+    //   );
+    //   return false;
+    // }
 
     if (country.isEmpty) {
       showSnackbar(
@@ -264,7 +266,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
               inputType: TextInputType.text,
             ),
             CustomEditText(
-              caption: 'Website or link to redeem the deal',
+              caption: 'Website or link to redeem the deal *',
               hintText: 'Enter website or link',
               controller: urlController,
               inputType: TextInputType.url,

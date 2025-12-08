@@ -1,7 +1,7 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -18,6 +18,14 @@ class PostonhomePopUp extends StatelessWidget {
   /// Boss Up Challenge Pop Up
   const PostonhomePopUp(
       {super.key, required this.forum, required this.isBossUp});
+
+  void _sharePost() {
+    String message =
+        'Vote for ${forum.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
+        'https://vm.businessbosses.co.uk/share/post';
+    logEvent(forum.forumId, 'forum');
+    socialShare(message);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,14 +86,7 @@ class PostonhomePopUp extends StatelessWidget {
               // ),
               GestureDetector(
                 onTap: () {
-                  Get.offAndToNamed(
-                    Routes.createPost,
-                    arguments: <String, dynamic>{
-                      'sharemessage': 'Hey there! Check out this post',
-                      'title': forum.title,
-                      'forumdata': forum,
-                    },
-                  );
+                  _sharePost();
                 },
                 child: Container(
                   margin: const EdgeInsets.all(20),
@@ -108,7 +109,7 @@ class PostonhomePopUp extends StatelessWidget {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: <Widget>[
                           const Text(
-                            'Share on homepage',
+                            'Share to get more votes',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,

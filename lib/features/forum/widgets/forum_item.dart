@@ -902,40 +902,6 @@ class _ForumItemState extends State<ForumItem> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               GestureDetector(
-                onTap: () => Get.toNamed(
-                  Routes.createPost,
-                  arguments: <String, dynamic>{
-                    'sharemessage': 'Hey there! Check out this post',
-                    'title': widget.forum.title,
-                    'forumdata': widget.forum,
-                  },
-                ),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Row(
-                    children: <Widget>[
-                      SvgPicture.asset(
-                        'assets/svgs/text.svg',
-                        color: textColor,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        'Post on Business Bosses',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: 1,
-                color: backgroundColor,
-              ),
-              GestureDetector(
                 onTap: () {
                   String message =
                       'Vote for ${widget.forum.user?.username} on Business Bosses to win the challenge.'
@@ -957,7 +923,37 @@ class _ForumItemState extends State<ForumItem> {
                         width: 10,
                       ),
                       const Text(
-                        'Share',
+                        'Share to get more votes',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  String message =
+                      'Vote for ${widget.forum.user?.username} on Business Bosses to win the challenge.'
+                      'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                  logEvent(widget.forum.forumId, 'donation');
+                  socialShare(message);
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/repost.svg',
+                        color: textColor,
+                        height: 16,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Repost on Business Bosses',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),

@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/connects/widgets/connection_grid_tile.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
+import 'package:business_bosses_v2/features/search/presentation/complete_searching_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,7 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: GestureDetector(
                 onTap: () {
-                  Get.toNamed(Routes.relevantusersscreen);
+                  Get.to(CompleteSearchingScreen());
                 },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
