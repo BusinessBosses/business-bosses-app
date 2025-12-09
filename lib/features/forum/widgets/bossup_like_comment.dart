@@ -81,7 +81,8 @@ class _BossUpLikeCommentItemState extends State<BossUpLikeCommentItem> {
                                 icon: SvgPicture.asset(
                                   'assets/svgs/comment.svg',
                                   height: 80.0,
-                                  color: hintColor,
+                                  colorFilter: const ColorFilter.mode(
+                                      hintColor, BlendMode.srcIn),
                                 ),
                                 title: 'There is no comment for now',
                                 subTitle: 'Be the first one to comment!',
@@ -150,7 +151,8 @@ class _BossUpLikeCommentItemState extends State<BossUpLikeCommentItem> {
                                         SvgPicture.asset(
                                           'assets/svgs/premiumbadge.svg',
                                           height: 9,
-                                          color: primaryColorLT,
+                                          colorFilter: const ColorFilter.mode(
+                                              primaryColorLT, BlendMode.srcIn),
                                         )
                                       ],
                                     )

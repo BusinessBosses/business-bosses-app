@@ -141,7 +141,10 @@ class _FilterUsersState extends State<FilterDonationsUsers> {
                                             SvgPicture.asset(
                                               'assets/svgs/premiumbadge.svg',
                                               height: 9,
-                                              color: primaryColorLT,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      primaryColorLT,
+                                                      BlendMode.srcIn),
                                             )
                                           ],
                                         )

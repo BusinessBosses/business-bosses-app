@@ -31,7 +31,7 @@ class MyNativeFunctions {
   static Future<MyResponse> onMultiPicker(
       {required FileType type,
       required List<String> allowedExtension,
-      allowMultiple = true}) async {
+      bool allowMultiple = true}) async {
     MyResponse res;
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(

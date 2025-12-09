@@ -23,7 +23,7 @@ class _AllTransactionsState extends State<AllTransactions> {
         : ListView.builder(
             itemCount: widget.history.length,
             itemBuilder: (BuildContext context, int i) {
-              final history = widget.history[i];
+              final dynamic history = widget.history[i];
               final String prevdate =
                   i == 0 ? '' : formatDate(widget.history[i - 1]['date']);
               return DonationHistoryItem(

@@ -6,7 +6,8 @@ class ProfeatureTile extends StatelessWidget {
   final ProFeatureItem feature;
   final Color? backgroundColor;
 
-  const ProfeatureTile({super.key, required this.feature, this.backgroundColor});
+  const ProfeatureTile(
+      {super.key, required this.feature, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,8 @@ class ProfeatureTile extends StatelessWidget {
                 child: SvgPicture.asset(
                   feature.iconPath,
                   height: 15,
-                  color: proprimaryColor,
+                  colorFilter:
+                      const ColorFilter.mode(proprimaryColor, BlendMode.srcIn),
                 ),
               ),
               Expanded(

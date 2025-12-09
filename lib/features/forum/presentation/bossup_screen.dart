@@ -501,7 +501,12 @@ class _BossUpSectionState extends State<BossUpSection>
                                                             child: SvgPicture
                                                                 .asset(
                                                               'assets/svgs/entries.svg',
-                                                              color: textColor,
+                                                              colorFilter:
+                                                                  const ColorFilter
+                                                                      .mode(
+                                                                      textColor,
+                                                                      BlendMode
+                                                                          .srcIn),
                                                               height: 11.5,
                                                             ),
                                                           ),
@@ -583,8 +588,9 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                       .industry
                                                                       .industryId
                                                             },
-                                                            binding: BindingsBuilder
-                                                                .put(() =>
+                                                            binding: BindingsBuilder<
+                                                                    CreateBossUpController>.put(
+                                                                () =>
                                                                     CreateBossUpController()),
                                                           );
                                                         } else {
@@ -723,7 +729,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                             },
                                             child: ForumItem(
                                               forum: controller.forums[i],
-                                              key: ValueKey(
+                                              key: ValueKey<String>(
                                                   controller.forums[i].forumId),
                                               controller: controller,
                                               isBossUp: true,

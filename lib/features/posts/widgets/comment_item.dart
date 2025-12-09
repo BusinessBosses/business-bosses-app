@@ -76,7 +76,8 @@ class _CommentItemState extends State<CommentItem> {
                                   SvgPicture.asset(
                                     'assets/svgs/premiumbadge.svg',
                                     height: 9,
-                                    color: primaryColorLT,
+                                    colorFilter: const ColorFilter.mode(
+                                        primaryColorLT, BlendMode.srcIn),
                                   )
                                 ],
                               )

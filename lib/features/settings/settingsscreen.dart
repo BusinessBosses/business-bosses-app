@@ -193,7 +193,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                             SvgPicture.asset(
                               'assets/svgs/invite.svg',
-                              color: primaryColorLT,
+                              colorFilter: const ColorFilter.mode(
+                                  primaryColorLT, BlendMode.srcIn),
                               height: 13,
                             )
                           ],
@@ -300,7 +301,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               SvgPicture.asset(
                                                 'assets/svgs/goldcheckmark.svg',
                                                 height: 25,
-                                                color: primaryColorLT,
+                                                colorFilter:
+                                                    const ColorFilter.mode(
+                                                        primaryColorLT,
+                                                        BlendMode.srcIn),
                                               ),
                                               const SizedBox(width: 15),
                                               const Expanded(

@@ -200,20 +200,16 @@ class PostImagesMarket extends StatelessWidget {
                                                 },
                                                 child: Stack(
                                                   children: <Widget>[
-                                                    Container(
-                                                      child:
-                                                          NetworkImageWithPlaceHolder(
-                                                        borderColor:
-                                                            Colors.black12,
-                                                        imageUrl:
-                                                            post.images![i - 1],
-                                                        width: double.infinity,
-                                                        height: double.infinity,
-                                                        placeHolder:
-                                                            Icons.photo,
-                                                        iconSize: 18.0,
-                                                        radius: 8.0,
-                                                      ),
+                                                    NetworkImageWithPlaceHolder(
+                                                      borderColor:
+                                                          Colors.black12,
+                                                      imageUrl:
+                                                          post.images![i - 1],
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                      placeHolder: Icons.photo,
+                                                      iconSize: 18.0,
+                                                      radius: 8.0,
                                                     ),
                                                     if (post.images!.length >
                                                             3 &&

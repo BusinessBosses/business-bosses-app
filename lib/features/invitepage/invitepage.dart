@@ -54,8 +54,7 @@ class _InvitepageState extends State<Invitepage> {
         }
 
         final dynamic invites = controller.data['invitesThisWeek'] ?? 0;
-        final dynamic rank =
-            controller.data['user']['weeklyRankingScore'] ?? 12;
+
         return SingleChildScrollView(
             child: Column(
           children: <Widget>[
@@ -127,7 +126,7 @@ class _InvitepageState extends State<Invitepage> {
                   GestureDetector(
                     onTap: () {
                       socialShare(
-                          'Join Business Bosses using my invite ID $_referralId');
+                          'Join Business Bosses using my invite ID \nhttps://businessbosses.onelink.me/xLWk/36a2ff16\nInvite ID: $_referralId');
                     },
                     child: Container(
                       width: 170,
@@ -174,7 +173,7 @@ class _InvitepageState extends State<Invitepage> {
                 iconBgColor: Colors.green[50]!,
                 title: 'Referrals',
                 subtitle: 'Click to see who',
-                value: 0.toString(),
+                value: invites.toString(),
                 isLast: false,
               ),
             ),
@@ -187,16 +186,6 @@ class _InvitepageState extends State<Invitepage> {
         ));
       }),
     );
-  }
-
-  void _shareWithFriends() {
-    // ignore: unnecessary_null_comparison
-    if (_referralId == null) return;
-    String message = 'Check out Business Bosses.\n'
-        'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
-        'Invite id: $_referralId';
-    socialShare(message);
   }
 
   Widget _buildImpactItem({
@@ -215,12 +204,12 @@ class _InvitepageState extends State<Invitepage> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           width: 1.2,
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),

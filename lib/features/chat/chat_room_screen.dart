@@ -15,7 +15,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../action/action.dart';
+
 import '../../common/widgets/buttons/button.dart';
 import '../../common/widgets/chat_box.dart';
 import '../../common/widgets/popup/my_popup_menu_button.dart';
@@ -261,10 +261,10 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: primaryColorLT.withOpacity(0.3)),
+            border: Border.all(color: primaryColorLT.withValues(alpha: 0.3)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
@@ -313,7 +313,7 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                 request.description,
                 style: TextStyle(
                   fontSize: 14,
-                  color: textColor.withOpacity(0.7),
+                  color: textColor.withValues(alpha: 0.7),
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -387,11 +387,8 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
   @override
   Widget build(BuildContext context) {
     String? previousScreen = Get.previousRoute;
-    return WillPopScope(
-      onWillPop: () async {
-        navigateTo(context);
-        return true;
-      },
+    return PopScope(
+      canPop: true,
       child: GetBuilder<ChatController>(
         builder: (ChatController controller) {
           final List<MessageModel> conversations =
@@ -468,7 +465,7 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium
-                          ?.copyWith(color: textColor.withOpacity(0.6)),
+                          ?.copyWith(color: textColor.withValues(alpha: 0.6)),
                     ),
                   ),
                   previousScreen == '/marketPlaceScreen'
@@ -1059,7 +1056,8 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                                                             BorderRadius
                                                                 .circular(10),
                                                         color: Colors.white70
-                                                            .withAlpha(120)),
+                                                            .withValues(
+                                                                alpha: 0.47)),
                                                     child: Wrap(
                                                       crossAxisAlignment:
                                                           WrapCrossAlignment
@@ -1111,8 +1109,9 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                                                           decoration: BoxDecoration(
                                                               color: Colors
                                                                   .green
-                                                                  .withAlpha(
-                                                                      50),
+                                                                  .withValues(
+                                                                      alpha:
+                                                                          0.2),
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(

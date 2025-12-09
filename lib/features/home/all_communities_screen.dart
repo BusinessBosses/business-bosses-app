@@ -108,7 +108,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                   SvgPicture.asset(
                     'assets/svgs/growfilled.svg',
                     height: 15,
-                    color: primaryColorLT,
+                    colorFilter:
+                        const ColorFilter.mode(primaryColorLT, BlendMode.srcIn),
                   ),
                   const SizedBox(width: 5),
                   const Text(
@@ -309,7 +310,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   icon: SvgPicture.asset(
                                                       'assets/svgs/search.svg',
                                                       // ignore: deprecated_member_use
-                                                      color: hintColor,
+                                                      colorFilter:
+                                                          const ColorFilter
+                                                              .mode(hintColor,
+                                                              BlendMode.srcIn),
                                                       height: 80.0,
                                                       width: 80.0),
                                                   title: 'Search for Posts',

@@ -241,7 +241,8 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             return null;
                           },
                           inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*\.?[0-9]*')),
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^[0-9]*\.?[0-9]*')),
                           ],
                         ),
                       ),

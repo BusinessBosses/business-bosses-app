@@ -185,8 +185,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
           _invisiblePassword
               ? 'assets/svgs/private.svg'
               : 'assets/svgs/eye.svg',
-          // ignore: deprecated_member_use
-          color: hintColor,
+          colorFilter: const ColorFilter.mode(hintColor, BlendMode.srcIn),
         ),
       ),
     );

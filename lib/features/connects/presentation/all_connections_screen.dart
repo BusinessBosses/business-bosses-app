@@ -25,11 +25,14 @@ class AllConnectionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ConnectionController>(
       builder: (ConnectionController controller) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (bool didPop, dynamic result) {
+            if (didPop) {
+              return;
+            }
             if (controller.isSearching) {}
             navigateTo(context);
-            return false;
           },
           child: DefaultTabController(
             length: 3,

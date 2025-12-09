@@ -7,7 +7,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
-import 'package:business_bosses_v2/features/home/sellProduct.dart';
+import 'package:business_bosses_v2/features/home/sell_product.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -47,7 +47,6 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
     ChatController chatController = Get.find();
-    final Uri url = Uri.parse(urlString);
 
     void enterChallenge() {
       int now = DateTime.now().millisecondsSinceEpoch;
@@ -261,17 +260,26 @@ class _BottomBarState extends State<BottomBar> {
                                                     ? SvgPicture.asset(
                                                         'assets/svgs/sellicon.svg',
                                                         height: 25,
-                                                        color: textColor
-                                                            .withValues(
-                                                                alpha: 1),
+                                                        colorFilter:
+                                                            ColorFilter.mode(
+                                                                textColor
+                                                                    .withValues(
+                                                                        alpha:
+                                                                            1),
+                                                                BlendMode
+                                                                    .srcIn),
                                                       )
                                                     : index == 2
                                                         ? SvgPicture.asset(
                                                             'assets/svgs/text.svg',
                                                             height: 25,
-                                                            color: textColor
-                                                                .withValues(
-                                                                    alpha: 1),
+                                                            colorFilter:
+                                                                ColorFilter.mode(
+                                                                    textColor.withValues(
+                                                                        alpha:
+                                                                            1),
+                                                                    BlendMode
+                                                                        .srcIn),
                                                           )
                                                         : Icon(
                                                             LucideIcons.globe,

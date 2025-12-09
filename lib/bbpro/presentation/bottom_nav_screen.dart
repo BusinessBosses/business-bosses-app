@@ -103,7 +103,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
         ? const SafetyModel(isLoading: true)
         : PopScope(
             canPop: true, // Set false to block back navigation
-            onPopInvoked: (bool didPop) async {
+            onPopInvokedWithResult: (bool didPop, dynamic result) async {
               if (!didPop) {
                 await _onWillPop(); // Custom logic on back press
               }

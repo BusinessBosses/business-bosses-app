@@ -402,7 +402,10 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                             ),
                                             SvgPicture.asset(
                                               'assets/svgs/rocket.svg',
-                                              color: Colors.white,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      Colors.white,
+                                                      BlendMode.srcIn),
                                             ),
                                             const SizedBox(
                                               width: 10,

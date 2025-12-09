@@ -127,17 +127,17 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CreatePostController>(
-      builder: (CreatePostController controller) => WillPopScope(
-        onWillPop: () async {
+      builder: (CreatePostController controller) => PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, dynamic result) {
+          if (didPop) return;
           if (_overlayEntry != null) {
             _overlayEntry?.remove();
             _overlayEntry = null;
             setState(() {});
-            return false;
           } else {
             Get.back();
             setState(() {});
-            return false;
           }
         },
         child: Form(

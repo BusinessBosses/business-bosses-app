@@ -15,39 +15,37 @@ class _HometopWidgetState extends State<HometopWidget> {
   Widget build(BuildContext context) {
     final ProfileController profileController = Get.find();
     return Scaffold(
-      body: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Wrap(children: <Widget>[
-              SizedBox(
-                height: 40.0,
-                width: 40.0,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: NetworkImageWithPlaceHolder(
-                      imageUrl: profileController.myProfile.photoUrl ?? '',
-                      radius: 10,
-                      placeHolder: Icons.person,
-                      iconSize: 22.0,
-                      fit: BoxFit.cover,
-                    ),
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Wrap(children: <Widget>[
+            SizedBox(
+              height: 40.0,
+              width: 40.0,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: NetworkImageWithPlaceHolder(
+                    imageUrl: profileController.myProfile.photoUrl ?? '',
+                    radius: 10,
+                    placeHolder: Icons.person,
+                    iconSize: 22.0,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              const Column(
-                children: <Widget>[
-                  Text('data'),
-                  Wrap(
-                    children: <Widget>[Text('data'), Text('Good morning')],
-                  )
-                ],
-              )
-            ])
-          ],
-        ),
+            ),
+            const Column(
+              children: <Widget>[
+                Text('data'),
+                Wrap(
+                  children: <Widget>[Text('data'), Text('Good morning')],
+                )
+              ],
+            )
+          ])
+        ],
       ),
     );
   }

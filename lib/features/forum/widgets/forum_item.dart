@@ -351,8 +351,11 @@ class _ForumItemState extends State<ForumItem> {
                                                                     .asset(
                                                                   'assets/svgs/premiumbadge.svg',
                                                                   height: 9,
-                                                                  color:
+                                                                  colorFilter: const ColorFilter
+                                                                      .mode(
                                                                       primaryColorLT,
+                                                                      BlendMode
+                                                                          .srcIn),
                                                                 )
                                                               ],
                                                             )
@@ -636,7 +639,8 @@ class _ForumItemState extends State<ForumItem> {
                                     SvgPicture.asset(
                                       'assets/svgs/premiumbadge.svg',
                                       height: 9,
-                                      color: primaryColorLT,
+                                      colorFilter: const ColorFilter.mode(
+                                          primaryColorLT, BlendMode.srcIn),
                                     )
                                   ],
                                 ),
@@ -917,7 +921,8 @@ class _ForumItemState extends State<ForumItem> {
                     children: <Widget>[
                       SvgPicture.asset(
                         'assets/svgs/text.svg',
-                        color: textColor,
+                        colorFilter:
+                            const ColorFilter.mode(textColor, BlendMode.srcIn),
                       ),
                       const SizedBox(
                         width: 10,

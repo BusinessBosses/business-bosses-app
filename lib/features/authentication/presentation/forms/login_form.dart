@@ -446,8 +446,7 @@ class _LoginFormState extends State<LoginForm> {
           _invisiblePassword
               ? 'assets/svgs/private.svg'
               : 'assets/svgs/eye.svg',
-          // ignore: deprecated_member_use
-          color: hintColor,
+          colorFilter: const ColorFilter.mode(hintColor, BlendMode.srcIn),
         ),
       ),
     );

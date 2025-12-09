@@ -1,0 +1,173 @@
+﻿Analyzing business-bosses--v2...                                
+
+warning - The asset directory 'assets/users/' doesn't exist - build\app\intermediates\assets\debug\mergeDebugAssets\flutter_assets\pubspec.yaml:153:7 - asset_directory_does_not_exist
+warning - The asset directory 'assets/users/' doesn't exist - build\app\intermediates\assets\release\mergeReleaseAssets\flutter_assets\pubspec.yaml:153:7 - asset_directory_does_not_exist
+warning - The asset directory 'assets/users/' doesn't exist - build\app\intermediates\flutter\debug\flutter_assets\pubspec.yaml:153:7 - asset_directory_does_not_exist
+   info - Don't invoke 'print' in production code - lib\bbpro\controllers\shop_controller.dart:56:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\bbpro\controllers\shop_controller.dart:134:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\bbpro\controllers\shop_controller.dart:250:7 - avoid_print
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\bbpro\widgets\invoiceoptionswidget.dart:42:15 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\bbpro\widgets\invoiceoptionswidget.dart:43:15 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\bbpro\widgets\invoiceoptionswidget.dart:56:15 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\bbpro\widgets\invoiceoptionswidget.dart:57:15 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\bbpro\widgets\invoiceoptionswidget.dart:72:15 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\bbpro\widgets\invoiceoptionswidget.dart:73:15 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\chat\chat_room_screen.dart:264:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\chat\chat_room_screen.dart:267:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\chat\chat_room_screen.dart:316:36 - deprecated_member_use
+   info - 'WillPopScope' is deprecated and shouldn't be used. Use PopScope instead. The Android predictive back feature will not work with WillPopScope. This feature was deprecated after v3.12.0-1.0.pre - lib\features\chat\chat_room_screen.dart:390:12 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\chat\chat_room_screen.dart:471:55 - deprecated_member_use
+   info - 'WillPopScope' is deprecated and shouldn't be used. Use PopScope instead. The Android predictive back feature will not work with WillPopScope. This feature was deprecated after v3.12.0-1.0.pre - lib\features\chat\chat_screen.dart:53:12 - deprecated_member_use
+   info - 'WillPopScope' is deprecated and shouldn't be used. Use PopScope instead. The Android predictive back feature will not work with WillPopScope. This feature was deprecated after v3.12.0-1.0.pre - lib\features\connects\presentation\all_connections_screen.dart:28:16 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course.dart:170:29 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course.dart:171:29 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course.dart:192:29 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course.dart:193:29 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course.dart:214:29 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course.dart:215:29 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course_copy.dart:195:29 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course_copy.dart:196:29 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course_copy.dart:218:29 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course_copy.dart:219:29 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course_copy.dart:243:29 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\courses\presentation\create_course_copy.dart:244:29 - deprecated_member_use
+   info - 'purchaseProduct' is deprecated and shouldn't be used. Use purchase(PurchaseParams) - lib\features\courses\widgets\unpaidcoursepopup.dart:225:53 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\donations\presentation\expanded_donations_screen.dart:980:35 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\donations\presentation\expanded_donations_screen.dart:1047:31 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\donations\presentation\expanded_donations_screen.dart:1080:31 - deprecated_member_use
+   info - Missing type annotation - lib\features\donations\widgets\alltransactions.dart:26:15 - always_specify_types
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\donations\widgets\donation_item.dart:433:47 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\donations\widgets\donation_item.dart:1108:31 - deprecated_member_use
+   info - The prefix 'IO' isn't a lower_case_with_underscores identifier - lib\features\forum\controller\bossup_controller.dart:13:60 - library_prefixes
+   info - Missing type annotation - lib\features\forum\controller\challenge_controller.dart:26:17 - always_specify_types
+   info - The prefix 'IO' isn't a lower_case_with_underscores identifier - lib\features\forum\controller\forum_controller.dart:14:60 - library_prefixes
+   info - Missing type annotation - lib\features\forum\presentation\all_forum_screen.dart:46:5 - always_specify_types
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\forum\presentation\all_forum_screen.dart:167:49 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\forum\presentation\bossup_screen.dart:504:63 - deprecated_member_use
+   info - Missing type annotation - lib\features\forum\presentation\bossup_screen.dart:586:70 - always_specify_types
+   info - Missing type annotation - lib\features\forum\presentation\bossup_screen.dart:726:52 - always_specify_types
+   info - Missing type annotation - lib\features\forum\presentation\create_forum_screen.dart:73:5 - always_specify_types
+   info - Missing type annotation - lib\features\forum\presentation\topics.dart:105:47 - always_specify_types
+   info - The variable name 'OnTap' isn't a lowerCamelCase identifier - lib\features\forum\widgets\challengeitem.dart:7:23 - non_constant_identifier_names
+   info - The variable name 'OnTap' isn't a lowerCamelCase identifier - lib\features\forum\widgets\challengeitem.dart:21:10 - non_constant_identifier_names
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\forum\widgets\forum_item.dart:354:67 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\forum\widgets\forum_item.dart:921:25 - deprecated_member_use
+   info - The variable name 'JoinedButton' isn't a lowerCamelCase identifier - lib\features\forum\widgets\joinedbutton.dart:5:8 - non_constant_identifier_names
+   info - 'WillPopScope' is deprecated and shouldn't be used. Use PopScope instead. The Android predictive back feature will not work with WillPopScope. This feature was deprecated after v3.12.0-1.0.pre - lib\features\home\bottom_nav.dart:93:12 - deprecated_member_use
+   info - 'WillPopScope' is deprecated and shouldn't be used. Use PopScope instead. The Android predictive back feature will not work with WillPopScope. This feature was deprecated after v3.12.0-1.0.pre - lib\features\home\controller\home_controller.dart:873:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\marketplace_screen.dart:587:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\marketplace_screen.dart:650:37 - deprecated_member_use
+   info - The file name 'sellProduct.dart' isn't a lower_case_with_underscores identifier - lib\features\home\sellProduct.dart:1:1 - file_names
+   info - Missing type annotation - lib\features\home\sellProduct.dart:251:28 - always_specify_types
+   info - Unnecessary instance of 'Container' - lib\features\home\widgets\challengessection.dart:25:14 - avoid_unnecessary_containers
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\home\widgets\course_item.dart:680:59 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\home\widgets\course_item.dart:823:31 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\home\widgets\course_item.dart:949:21 - deprecated_member_use
+   info - Unnecessary instance of 'Container' - lib\features\home\widgets\topsection.dart:18:13 - avoid_unnecessary_containers
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\live_event\widgets\attendeesitem.dart:69:37 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\live_event\widgets\attendeesitem.dart:103:55 - deprecated_member_use
+   info - Missing type annotation - lib\features\marketplace\models\market_model.dart:136:21 - always_specify_types
+   info - Missing type annotation - lib\features\marketplace\presentation\buyer_requests_screen.dart:406:33 - always_specify_types
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\marketplace\presentation\subscription_confirmation.dart:167:51 - deprecated_member_use
+   info - Missing type annotation - lib\features\marketplace\widgets\post_images_market.dart:22:21 - always_specify_types
+   info - Missing type annotation - lib\features\marketplace\widgets\post_images_market.dart:50:31 - always_specify_types
+   info - Missing type annotation - lib\features\marketplace\widgets\post_images_market.dart:78:31 - always_specify_types
+   info - Missing type annotation - lib\features\marketplace\widgets\post_images_market.dart:109:31 - always_specify_types
+   info - Missing type annotation - lib\features\marketplace\widgets\post_images_market.dart:140:35 - always_specify_types
+   info - Missing type annotation - lib\features\marketplace\widgets\post_images_market.dart:169:35 - always_specify_types
+   info - Missing type annotation - lib\features\marketplace\widgets\post_images_market.dart:190:53 - always_specify_types
+   info - Unnecessary instance of 'Container' - lib\features\marketplace\widgets\post_images_market.dart:203:53 - avoid_unnecessary_containers
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\marketplace\widgets\review_item.dart:112:33 - deprecated_member_use
+   info - Missing type annotation - lib\features\matching_feature\models\match_model.dart:46:27 - always_specify_types
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\matching_feature\presentation\expanded_matches_screen.dart:228:29 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\matching_feature\presentation\expanded_matches_screen.dart:429:31 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\notifications\widgets\nonotificationfoundwidget.dart:16:15 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\notifications\widgets\notification_item.dart:37:25 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\notifications\widgets\notification_item.dart:42:25 - deprecated_member_use
+   info - Missing type annotation - lib\features\partners\presentation\become_a_partner_screen.dart:79:31 - always_specify_types
+   info - The prefix 'IO' isn't a lower_case_with_underscores identifier - lib\features\posts\controllers\create_post_controller.dart:14:60 - library_prefixes
+   info - Missing type annotation - lib\features\posts\controllers\create_post_controller.dart:208:11 - always_specify_types
+   info - Missing type annotation - lib\features\posts\controllers\create_post_controller.dart:209:11 - always_specify_types
+   info - Missing type annotation - lib\features\posts\controllers\create_post_controller.dart:539:30 - always_specify_types
+   info - Missing type annotation - lib\features\posts\controllers\create_post_controller.dart:540:23 - always_specify_types
+   info - Missing type annotation - lib\features\posts\models\post_model.dart:169:34 - always_specify_types
+   info - Missing type annotation - lib\features\posts\models\post_model.dart:169:45 - always_specify_types
+   info - Missing type annotation - lib\features\posts\models\post_model.dart:179:17 - always_specify_types
+   info - Missing type annotation - lib\features\posts\models\post_model.dart:180:17 - always_specify_types
+   info - 'WillPopScope' is deprecated and shouldn't be used. Use PopScope instead. The Android predictive back feature will not work with WillPopScope. This feature was deprecated after v3.12.0-1.0.pre - lib\features\posts\presentation\create_poll_screen.dart:130:53 - deprecated_member_use
+   info - 'WillPopScope' is deprecated and shouldn't be used. Use PopScope instead. The Android predictive back feature will not work with WillPopScope. This feature was deprecated after v3.12.0-1.0.pre - lib\features\posts\presentation\create_post_screen.dart:204:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\posts\presentation\create_post_screen.dart:387:64 - deprecated_member_use
+   info - Missing type annotation - lib\features\posts\presentation\post_details_screen.dart:67:36 - always_specify_types
+   info - The file name 'PostIntereactions.dart' isn't a lower_case_with_underscores identifier - lib\features\posts\widgets\PostIntereactions.dart:1:1 - file_names
+   info - Missing type annotation - lib\features\posts\widgets\all_forum_images.dart:38:23 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_forum_images.dart:46:23 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_forum_images.dart:63:37 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_forum_images.dart:93:47 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_forum_images.dart:124:47 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_forum_images.dart:157:47 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_forum_images.dart:190:51 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_forum_images.dart:221:51 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_forum_images.dart:247:69 - always_specify_types
+   info - Unnecessary instance of 'Container' - lib\features\posts\widgets\all_forum_images.dart:263:69 - avoid_unnecessary_containers
+   info - Missing type annotation - lib\features\posts\widgets\all_forum_images.dart:331:23 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_images_item.dart:255:21 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_images_item.dart:263:21 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_images_item.dart:295:23 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\all_images_item.dart:342:37 - always_specify_types
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\posts\widgets\create_post_user_tile.dart:44:25 - deprecated_member_use
+   info - 'color' is deprecated and shouldn't be used. Use colorFilter instead - lib\features\posts\widgets\overlay_users_item.dart:73:35 - deprecated_member_use
+   info - Missing type annotation - lib\features\posts\widgets\post_grid_item.dart:171:23 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\post_grid_item.dart:243:27 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\post_images.dart:317:23 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\post_images.dart:325:23 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\post_images.dart:354:37 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\post_images.dart:384:47 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\post_images.dart:415:47 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\post_images.dart:448:47 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\post_images.dart:481:51 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\post_images.dart:512:51 - always_specify_types
+   info - Missing type annotation - lib\features\posts\widgets\post_images.dart:538:69 - always_specify_types
+   info - Unnecessary instance of 'Container' - lib\features\posts\widgets\post_images.dart:554:69 - avoid_unnecessary_containers
+   info - Missing type annotation - lib\features\posts\widgets\post_images.dart:622:23 - always_specify_types
+   info - Unnecessary instance of 'Container' - lib\features\posts\widgets\promote_section.dart:24:20 - avoid_unnecessary_containers
+   info - 'purchasePackage' is deprecated and shouldn't be used. Use purchase(PurchaseParams) - lib\features\premium\premiumscreen.dart:247:27 - deprecated_member_use
+   info - 'purchaseStoreProduct' is deprecated and shouldn't be used. Use purchase(PurchaseParams) - lib\features\premium\premiumscreen.dart:280:27 - deprecated_member_use
+   info - 'purchaseStoreProduct' is deprecated and shouldn't be used. Use purchase(PurchaseParams) - lib\features\premium\premiumscreen.dart:350:33 - deprecated_member_use
+   info - Missing type annotation - lib\features\premium\premiumscreen.dart:433:15 - always_specify_types
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\premium\premiumscreen.dart:784:53 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\premium\premiumscreen.dart:785:53 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\premium\premiumscreen.dart:832:51 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\premium\premiumscreen.dart:833:51 - deprecated_member_use
+   info - Missing type annotation - lib\features\profile\presentation\my_profile_screen.dart:648:31 - always_specify_types
+   info - Missing type annotation - lib\features\profile\presentation\public_profile_screen.dart:809:31 - always_specify_types
+   info - Missing type annotation - lib\features\profile\widgets\additionalinformationtile.dart:436:7 - always_specify_types
+   info - The file name 'profilerepostsdisplay copy.dart' isn't a lower_case_with_underscores identifier - lib\features\profile\widgets\profilerepostsdisplay copy.dart:1:1 - file_names
+   info - Missing type annotation - lib\features\promotions\invite.dart:36:15 - always_specify_types
+   info - Missing type annotation - lib\features\promotions\invite.dart:36:19 - strict_top_level_inference
+   info - Missing type annotation - lib\features\promotions\invite.dart:38:5 - always_specify_types
+   info - Missing type annotation - lib\features\promotions\invite.dart:38:26 - always_specify_types
+   info - Missing type annotation - lib\features\promotions\invite.dart:40:21 - always_specify_types
+   info - Missing type annotation - lib\features\promotions\invite.dart:40:26 - always_specify_types
+   info - Missing type annotation - lib\features\referrals\invited_user_screen.dart:72:29 - always_specify_types
+   info - Missing type annotation - lib\features\referrals\referrals_details_screen.dart:70:29 - always_specify_types
+   info - Missing type annotation - lib\features\search\widgets\filter_modal.dart:22:41 - always_specify_types
+   info - Missing type annotation - lib\features\search\widgets\filter_modal.dart:47:23 - always_specify_types
+   info - Unnecessary instance of 'Container' - lib\features\search\widgets\filterposts.dart:36:17 - avoid_unnecessary_containers
+   info - Missing type annotation - lib\features\search\widgets\people_tab.dart:19:11 - always_specify_types
+   info - Missing type annotation - lib\features\search\widgets\people_tab.dart:20:11 - always_specify_types
+   info - The variable name 'SearchAppBar' isn't a lowerCamelCase identifier - lib\features\search\widgets\search_app_bar.dart:6:21 - non_constant_identifier_names
+   info - Missing type annotation - lib\features\settings\invite_a_friendscreen.dart:41:9 - always_specify_types
+   info - Missing type annotation - lib\features\settings\invite_a_friendscreen.dart:46:11 - always_specify_types
+   info - Missing type annotation - lib\features\settings\invite_a_friendscreen.dart:47:11 - always_specify_types
+   info - Missing type annotation - lib\features\settings\invite_a_friendscreen.dart:48:14 - always_specify_types
+   info - The file name 'settingsItemModal.dart' isn't a lower_case_with_underscores identifier - lib\features\settings\settingsItemModal.dart:1:1 - file_names
+   info - The prefix 'IO' isn't a lower_case_with_underscores identifier - lib\features\withdrawal\controller\coin_history_controller.dart:11:60 - library_prefixes
+   info - Missing type annotation - lib\features\withdrawal\controller\coin_history_controller.dart:98:29 - always_specify_types
+   info - Missing type annotation - lib\features\withdrawal\controller\coin_history_controller.dart:102:36 - always_specify_types
+   info - Missing type annotation - lib\features\withdrawal\controller\coin_history_controller.dart:117:28 - always_specify_types
+   info - Missing type annotation - lib\features\withdrawal\controller\coin_history_controller.dart:118:21 - always_specify_types
+warning - The value of the field '_offerings' isn't used - lib\features\withdrawal\presentation\deposit_screen.dart:49:14 - unused_field
+   info - Unnecessary instance of 'Container' - lib\features\withdrawal\widgets\withdrawal_item.dart:20:12 - avoid_unnecessary_containers
+   info - Missing type annotation - lib\functions\my_native_functions.dart:34:7 - always_specify_types
+   info - The constant name 'CoinHistoryScreen' isn't a lowerCamelCase identifier - lib\navigation\routes.dart:65:23 - constant_identifier_names
+

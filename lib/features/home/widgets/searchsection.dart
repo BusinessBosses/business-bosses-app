@@ -23,7 +23,8 @@ class SearchSection extends StatelessWidget {
             children: <Widget>[
               SvgPicture.asset(
                 'assets/svgs/search.svg',
-                color: Colors.black45,
+                colorFilter:
+                    const ColorFilter.mode(Colors.black45, BlendMode.srcIn),
                 height: 20,
               ),
               const SizedBox(width: 7),

@@ -110,8 +110,9 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                                   padding: const EdgeInsets.all(4),
                                   child: SvgPicture.asset(
                                     'assets/svgs/upicon.svg',
-                                    color: const Color.fromARGB(
-                                        255, 255, 255, 255),
+                                    colorFilter: const ColorFilter.mode(
+                                        Color.fromARGB(255, 255, 255, 255),
+                                        BlendMode.srcIn),
                                     height: 8,
                                   ),
                                 ),
@@ -173,7 +174,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
         children: <Widget>[
           SvgPicture.asset(
             'assets/svgs/report.svg',
-            color: Colors.red,
+            colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),
             height: 26,
           ),
           const SizedBox(width: 8),

@@ -70,7 +70,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
   void initState() {
     super.initState();
 
-    final arguments = Get.arguments;
+    final dynamic arguments = Get.arguments;
 
     debugPrint('CreateForumScreen arguments: $arguments');
 

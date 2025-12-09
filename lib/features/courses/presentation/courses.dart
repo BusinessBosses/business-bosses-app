@@ -233,8 +233,8 @@ class _CoursesPageState extends State<CoursesPage> {
                                   ),
                                   SvgPicture.asset(
                                     'assets/svgs/nexticon.svg',
-                                    // ignore: deprecated_member_use
-                                    color: textColor,
+                                    colorFilter: const ColorFilter.mode(
+                                        textColor, BlendMode.srcIn),
                                   ),
                                 ]),
                           ),

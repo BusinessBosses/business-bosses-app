@@ -300,8 +300,11 @@ class _ForumItemState extends State<ForumItem> {
                                                                     .asset(
                                                                   'assets/svgs/premiumbadge.svg',
                                                                   height: 9,
-                                                                  color:
+                                                                  colorFilter: const ColorFilter
+                                                                      .mode(
                                                                       primaryColorLT,
+                                                                      BlendMode
+                                                                          .srcIn),
                                                                 )
                                                               ],
                                                             )
@@ -575,7 +578,8 @@ class _ForumItemState extends State<ForumItem> {
                                     SvgPicture.asset(
                                       'assets/svgs/premiumbadge.svg',
                                       height: 9,
-                                      color: primaryColorLT,
+                                      colorFilter: const ColorFilter.mode(
+                                          primaryColorLT, BlendMode.srcIn),
                                     ),
                                   ],
                                 ),
@@ -800,7 +804,9 @@ class _ForumItemState extends State<ForumItem> {
                             'assets/svgs/share.svg',
                             height: 15.0,
                             width: 15.0,
-                            color: textColor.withValues(alpha: 1.0),
+                            colorFilter: ColorFilter.mode(
+                                textColor.withValues(alpha: 1.0),
+                                BlendMode.srcIn),
                           ),
                         ),
                         const Spacer(),

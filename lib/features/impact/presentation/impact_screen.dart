@@ -30,7 +30,6 @@ class ReachScreen extends StatefulWidget {
 class _ReachScreenState extends State<ReachScreen> {
   final ReachController controller = Get.put(ReachController());
   final ProfileController profileController = Get.find();
-  late String _referralId;
   late TooltipBehavior _tooltipBehavior;
   bool loading = false;
   bool error = false;
@@ -61,7 +60,7 @@ class _ReachScreenState extends State<ReachScreen> {
     }).toList();
   }
 
-  List<MyConnect> Disconnected(
+  List<MyConnect> disconnected(
     List<MyConnect> disconnections, {
     // String statue,
     num? timestamp,
@@ -76,13 +75,11 @@ class _ReachScreenState extends State<ReachScreen> {
   }
 
   int getConnectionValue(double val, num time) {
-    final ProfileController userCtrl = Get.find();
     return ((_connections(_myConnections, timestamp: time).length) / val)
         .round();
   }
 
   int getConnectedValue(int val, num time) {
-    final ProfileController userCtrl = Get.find();
     return ((_connections(_myConnecteds, timestamp: TimeFormat.ONE_MONTH)
                 .length) /
             val)
@@ -90,8 +87,7 @@ class _ReachScreenState extends State<ReachScreen> {
   }
 
   int getDisconnectedValue(int val, num time) {
-    final ProfileController userCtrl = Get.find();
-    return ((Disconnected(_disconnections, timestamp: time).length) / val)
+    return ((disconnected(_disconnections, timestamp: time).length) / val)
         .round();
   }
 
@@ -99,7 +95,6 @@ class _ReachScreenState extends State<ReachScreen> {
   void initState() {
     super.initState();
     controller.loadData(widget.user.uid, profileController.myProfile.uid);
-    _referralId = profileController.myProfile.inviteId!;
     loadRawConnections();
   }
 
@@ -316,7 +311,7 @@ class _ReachScreenState extends State<ReachScreen> {
                                         ),
                                         Expanded(
                                           child: CustomChildButton(
-                                            value: Disconnected(_disconnections,
+                                            value: disconnected(_disconnections,
                                                     timestamp:
                                                         TimeFormat.ONE_WEEK)
                                                 .length,
@@ -364,7 +359,7 @@ class _ReachScreenState extends State<ReachScreen> {
                                         ),
                                         Expanded(
                                           child: CustomChildButton(
-                                            value: Disconnected(_disconnections,
+                                            value: disconnected(_disconnections,
                                                     timestamp:
                                                         TimeFormat.ONE_MONTH)
                                                 .length,

@@ -119,7 +119,8 @@ class PostonhomePopUp extends StatelessWidget {
                           ),
                           SvgPicture.asset(
                             'assets/svgs/nexticon.svg',
-                            color: Colors.black,
+                            colorFilter: const ColorFilter.mode(
+                                Colors.black, BlendMode.srcIn),
                           )
                         ]),
                   ),

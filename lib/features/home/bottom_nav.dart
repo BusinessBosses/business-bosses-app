@@ -90,8 +90,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (didPop) return;
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -118,7 +120,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
             SystemChannels.platform.invokeMethod('SystemNavigator.pop');
           }
         });
-        return false;
       },
       child: Scaffold(
           body: SizedBox(
@@ -324,7 +325,9 @@ class BottomTabButton extends StatelessWidget {
                         icon!,
                         height: 25,
                         width: 25,
-                        color: isActive ? primaryColorLT : textColor,
+                        colorFilter: ColorFilter.mode(
+                            isActive ? primaryColorLT : textColor,
+                            BlendMode.srcIn),
                       ),
                     )
                   else if (widget != null)

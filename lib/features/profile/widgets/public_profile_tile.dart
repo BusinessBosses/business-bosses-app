@@ -122,8 +122,8 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                           SvgPicture.asset(
                             'assets/svgs/premiumbadge.svg',
                             height: 9,
-                            // ignore: deprecated_member_use
-                            color: primaryColorLT,
+                            colorFilter: const ColorFilter.mode(
+                                primaryColorLT, BlendMode.srcIn),
                           )
                         ],
                       )

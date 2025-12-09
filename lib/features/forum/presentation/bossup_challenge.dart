@@ -71,7 +71,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                           category.industryId == '-MsUOGcOT9oRXGakCcJv'
                               ? 'Free Promotion'
                               : category.award ?? 'Win',
-                      OnTap: () {
+                      onTap: () {
                         DateTime now = DateTime.now();
                         if (category.startAt != null &&
                             now.isBefore(category.startAt!)) {
@@ -133,7 +133,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                   else if (index == controller.categories.length) {
                     return Challengeitem(
                       isCrowdfund: true,
-                      OnTap: () {
+                      onTap: () {
                         Get.to(() => const DonationsPage(
                               ishome: false,
                             ));
@@ -147,7 +147,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                   } else if (index == controller.categories.length + 1) {
                     return Challengeitem(
                       isMentor: true,
-                      OnTap: () {
+                      onTap: () {
                         Get.to(() =>
                             const AllLearningPostsScreen(isCoursesTile: false));
                       },
@@ -160,7 +160,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                   } else {
                     return Challengeitem(
                       isPartner: true,
-                      OnTap: () {
+                      onTap: () {
                         Get.to(() => BossUpPartner());
                       },
                       title: 'Partner\'s Deals',

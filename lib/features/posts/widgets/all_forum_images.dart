@@ -260,25 +260,24 @@ class AllForumsImagesItem extends StatelessWidget {
                                                                 },
                                                                 child: Stack(
                                                                   children: <Widget>[
-                                                                    Container(
-                                                                      child:
-                                                                          NetworkImageWithPlaceHolder(
-                                                                        borderColor:
-                                                                            Colors.black12,
-                                                                        imageUrl:
-                                                                            fileUrls[i -
-                                                                                1],
-                                                                        width: double
-                                                                            .infinity,
-                                                                        height:
-                                                                            double.infinity,
-                                                                        placeHolder:
-                                                                            Icons.photo,
-                                                                        iconSize:
-                                                                            18.0,
-                                                                        radius:
-                                                                            8.0,
-                                                                      ),
+                                                                    NetworkImageWithPlaceHolder(
+                                                                      borderColor:
+                                                                          Colors
+                                                                              .black12,
+                                                                      imageUrl:
+                                                                          fileUrls[i -
+                                                                              1],
+                                                                      width: double
+                                                                          .infinity,
+                                                                      height: double
+                                                                          .infinity,
+                                                                      placeHolder:
+                                                                          Icons
+                                                                              .photo,
+                                                                      iconSize:
+                                                                          18.0,
+                                                                      radius:
+                                                                          8.0,
                                                                     ),
                                                                     if (fileUrls.length >
                                                                             3 &&
