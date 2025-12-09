@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../utils/theme/theme.dart';
 
-PreferredSizeWidget SearchAppBar({
+PreferredSizeWidget searchAppBar({
   String hintText = 'Search',
   Function(String val)? onChange,
   Function(String val)? onSubmit,

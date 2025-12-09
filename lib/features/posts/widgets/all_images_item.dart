@@ -252,7 +252,7 @@ class AllImagesItem extends StatelessWidget {
               onTap: () {
                 if (isYt) {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
+                    MaterialPageRoute<dynamic>(
                       builder: (BuildContext context) => YoutubeVideo(
                         post?.ytUrl ?? '',
                       ),
@@ -260,7 +260,7 @@ class AllImagesItem extends StatelessWidget {
                   );
                 } else {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
+                    MaterialPageRoute<dynamic>(
                       builder: (BuildContext context) => ImagesViewerScreen(
                         urls: fileUrls,
                         text: text,
@@ -292,7 +292,7 @@ class AllImagesItem extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                         builder: (BuildContext context) => YoutubeVideo(
                           post?.ytUrl ?? '',
                         ),
@@ -339,7 +339,7 @@ class AllImagesItem extends StatelessWidget {
                             ? GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
-                                    MaterialPageRoute(
+                                    MaterialPageRoute<dynamic>(
                                       builder: (BuildContext context) =>
                                           ImagesViewerScreen(
                                         urls: fileUrls,

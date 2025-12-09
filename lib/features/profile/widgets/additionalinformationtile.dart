@@ -433,7 +433,7 @@ class _AdditionalInfoTileState extends State<AdditionalInfoTile> {
     required List<ForDataPicker> list,
   }) async {
     final MyResponse? res = await Navigator.of(context).push(
-      MaterialPageRoute(
+      MaterialPageRoute<MyResponse>(
         builder: (BuildContext context) => DataSelectionScreen(
           analyser: analyser,
           // list: list,

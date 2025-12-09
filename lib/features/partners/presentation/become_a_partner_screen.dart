@@ -76,7 +76,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
 
     if (resp.success) {
       // ✅ Pop screen after successful submission
-      if (mounted) Get.until((Route route) => route.isFirst);
+      if (mounted) Get.until((Route<dynamic> route) => route.isFirst);
       showSnackbar(
         title: 'Success',
         message: 'Your partnership has been submitted for moderation.',

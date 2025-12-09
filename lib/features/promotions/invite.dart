@@ -33,11 +33,11 @@ class Invite {
   }
 
   static List<Invite> toInviteList({
-    @required var data,
+    @required dynamic data,
   }) {
-    Map values = data as Map;
+    Map<dynamic, dynamic> values = data as Map<dynamic, dynamic>;
     List<Invite> invites = <Invite>[];
-    values.forEach((key, data) {
+    values.forEach((dynamic key, dynamic data) {
       final Invite invite = Invite.toObject(data);
       invites.add(invite);
     });

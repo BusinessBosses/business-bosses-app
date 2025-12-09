@@ -244,7 +244,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
       log('Purchasing subscription package: ${package.identifier} - ${package.storeProduct.identifier}');
       final PurchaseResult purchaseResult =
-          await Purchases.purchasePackage(package);
+          await Purchases.purchase(PurchaseParams.package(package));
       await handleSuccessfulPurchase(purchaseResult.customerInfo);
     } catch (e) {
       log('Offerings purchase failed: $e');
@@ -277,7 +277,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
       log('Found product: ${products[0].identifier} - ${products[0].title}');
       final PurchaseResult purchaseResult =
-          await Purchases.purchaseStoreProduct(products[0]);
+          await Purchases.purchase(PurchaseParams.storeProduct(products[0]));
       await handleSuccessfulPurchase(purchaseResult.customerInfo);
     } catch (e) {
       log('Direct purchase failed: $e');
@@ -346,8 +346,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
           if (products.isNotEmpty) {
             log('Found product with alternative ID: $altId');
-            final PurchaseResult purchaseResult =
-                await Purchases.purchaseStoreProduct(products[0]);
+            final PurchaseResult purchaseResult = await Purchases.purchase(
+                PurchaseParams.storeProduct(products[0]));
             await handleSuccessfulPurchase(purchaseResult.customerInfo);
             return;
           }
@@ -430,7 +430,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
         await Purchases.logIn(userId);
 
         // Wait a moment for the login to complete
-        await Future.delayed(const Duration(milliseconds: 500));
+        await Future<dynamic>.delayed(const Duration(milliseconds: 500));
 
         // Verify the login was successful
         final CustomerInfo newInfo = await Purchases.getCustomerInfo();

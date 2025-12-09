@@ -314,7 +314,7 @@ class PostImages extends StatelessWidget {
                 onTap: () {
                   if (isYt) {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                         builder: (BuildContext context) => YoutubeVideo(
                           post.ytUrl!,
                         ),
@@ -322,7 +322,7 @@ class PostImages extends StatelessWidget {
                     );
                   } else {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                         builder: (BuildContext context) => ImagesViewerScreen(
                           urls: post.images,
                           text: post.title,
@@ -351,7 +351,7 @@ class PostImages extends StatelessWidget {
                             ? GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
-                                    MaterialPageRoute(
+                                    MaterialPageRoute<dynamic>(
                                       builder: (BuildContext context) =>
                                           ImagesViewerScreen(
                                         urls: post.images,
@@ -381,7 +381,7 @@ class PostImages extends StatelessWidget {
                                         child: GestureDetector(
                                           onTap: () {
                                             Navigator.of(context).push(
-                                              MaterialPageRoute(
+                                              MaterialPageRoute<dynamic>(
                                                 builder:
                                                     (BuildContext context) =>
                                                         ImagesViewerScreen(
@@ -412,7 +412,7 @@ class PostImages extends StatelessWidget {
                                         child: GestureDetector(
                                           onTap: () {
                                             Navigator.of(context).push(
-                                              MaterialPageRoute(
+                                              MaterialPageRoute<dynamic>(
                                                 builder:
                                                     (BuildContext context) =>
                                                         ImagesViewerScreen(
@@ -445,7 +445,7 @@ class PostImages extends StatelessWidget {
                                         child: GestureDetector(
                                           onTap: () {
                                             Navigator.of(context).push(
-                                              MaterialPageRoute(
+                                              MaterialPageRoute<dynamic>(
                                                 builder:
                                                     (BuildContext context) =>
                                                         ImagesViewerScreen(
@@ -478,7 +478,7 @@ class PostImages extends StatelessWidget {
                                             GestureDetector(
                                               onTap: () {
                                                 Navigator.of(context).push(
-                                                  MaterialPageRoute(
+                                                  MaterialPageRoute<dynamic>(
                                                     builder: (BuildContext
                                                             context) =>
                                                         ImagesViewerScreen(
@@ -509,7 +509,7 @@ class PostImages extends StatelessWidget {
                                             GestureDetector(
                                               onTap: () {
                                                 Navigator.of(context).push(
-                                                  MaterialPageRoute(
+                                                  MaterialPageRoute<dynamic>(
                                                     builder: (BuildContext
                                                             context) =>
                                                         ImagesViewerScreen(
@@ -535,7 +535,8 @@ class PostImages extends StatelessWidget {
                                                                   Navigator.of(
                                                                           context)
                                                                       .push(
-                                                                    MaterialPageRoute(
+                                                                    MaterialPageRoute<
+                                                                        dynamic>(
                                                                       builder: (BuildContext
                                                                               context) =>
                                                                           ImagesViewerScreen(
@@ -618,7 +619,7 @@ class PostImages extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                         builder: (BuildContext context) => YoutubeVideo(
                           post.ytUrl!,
                         ),

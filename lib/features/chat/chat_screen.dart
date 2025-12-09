@@ -111,7 +111,7 @@ class ChatScreenState extends State<ChatScreen> {
               // floatingActionButton: Floatingbutton(),
               backgroundColor: Colors.white,
               appBar: _isSearching
-                  ? SearchAppBar(
+                  ? searchAppBar(
                       hintText: 'Search messages',
                       onClose: _onChangeSearching,
                       onChange: (String query) {

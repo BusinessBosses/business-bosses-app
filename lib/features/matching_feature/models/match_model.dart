@@ -43,7 +43,7 @@ class MatchModel {
     List<String> parseStringList(dynamic value) {
       if (value == null) return <String>[];
       if (value is List) {
-        return value.map((e) {
+        return value.map((dynamic e) {
           if (e is Map && e.containsKey('name')) return e['name'].toString();
           return e.toString();
         }).toList();

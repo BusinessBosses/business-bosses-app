@@ -19,7 +19,7 @@ void showFilterModal(
       String selectedFilter = controller.selectedFilter.value;
 
       return StatefulBuilder(
-        builder: (BuildContext context, setState) {
+        builder: (BuildContext context, Function setState) {
           return Container(
             height: 300,
             padding: const EdgeInsets.all(16.0),
@@ -44,7 +44,7 @@ void showFilterModal(
                 GestureDetector(
                   onTap: () async {
                     final MyResponse? res = await Navigator.of(context).push(
-                      MaterialPageRoute(
+                      MaterialPageRoute<MyResponse>(
                         builder: (_) => const DataSelectionScreen(
                             analyser: Analyser.category),
                       ),
@@ -97,7 +97,8 @@ void showFilterModal(
                         onFilterSelected(selectedFilter);
                         Get.back();
                       },
-                      child: const Text('Apply', style: TextStyle(color: Colors.white)),
+                      child: const Text('Apply',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),

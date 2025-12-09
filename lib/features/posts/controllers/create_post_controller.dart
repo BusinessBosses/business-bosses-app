@@ -11,7 +11,7 @@ import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import '../../../common/widgets/gallery_screen.dart';
 import '../../profile/controller/profile_controller.dart';
@@ -21,7 +21,7 @@ import '../presentation/boost_post_screen.dart';
 /// CREATEPOSTCONTROLLER
 class CreatePostController extends GetxController {
   final HomeController _homeController = Get.find();
-  late IO.Socket socket;
+  late io.Socket socket;
 
   /// ALL USERS FOR MENTIONS
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
@@ -205,8 +205,8 @@ class CreatePostController extends GetxController {
           showSnackbar(message: 'Error Uploading image');
         } else {
           final Map<String, dynamic>? files = await uploadFile();
-          final thumbnail = files?['images'];
-          final videoUrl = files?['videoUrl'];
+          final dynamic thumbnail = files?['images'];
+          final dynamic videoUrl = files?['videoUrl'];
           final ApiResponseModel response =
               await PostRepository.createPost(<String, dynamic>{
             ...body,
@@ -527,7 +527,7 @@ class CreatePostController extends GetxController {
 
     super.onInit();
 
-    socket = IO.io(Constants.socketUrl, <String, dynamic>{
+    socket = io.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
       'transports': <String>['websocket'],
     });
@@ -536,8 +536,8 @@ class CreatePostController extends GetxController {
       debugPrint('Connection established');
 
       socket.onDisconnect((_) => debugPrint('Connection Disconnection'));
-      socket.onConnectError((err) => debugPrint(err));
-      socket.onError((err) => debugPrint(err));
+      socket.onConnectError((dynamic err) => debugPrint(err));
+      socket.onError((dynamic err) => debugPrint(err));
     });
   }
 

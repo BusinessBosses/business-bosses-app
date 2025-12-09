@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/posts/widgets/PostIntereactions.dart';
+import 'package:business_bosses_v2/features/posts/widgets/post_interactions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_polls/flutter_polls.dart';
@@ -64,7 +64,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     bool hasVoted = userHasVoted(widget.post, profileController);
     String? selectedVote = userSelectedOption(widget.post, profileController);
 // Create PollOption list based on the vote counts
-    List<PollOption> pollOptions = List.generate(
+    List<PollOption> pollOptions = List<PollOption>.generate(
       widget.post.options != null ? widget.post.options!.length : 0,
       (int index) {
         String option = widget.post.options![index];

@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/settings/settingsItemModal.dart';
+import 'package:business_bosses_v2/features/settings/settings_item_modal.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

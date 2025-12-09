@@ -168,7 +168,7 @@ class PostGridItem extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                         builder: (BuildContext context) => ImagesViewerScreen(
                           urls: post.images,
                           text: post.title,
@@ -204,7 +204,8 @@ class PostGridItem extends StatelessWidget {
                 ),
               ),
             if (hasMore &&
-                (_profileController.myProfile.uid == post.user?.uid)) ...<Widget>[
+                (_profileController.myProfile.uid ==
+                    post.user?.uid)) ...<Widget>[
               Positioned(
                 top: 10.0,
                 right: 10.0,
@@ -240,7 +241,7 @@ class PostGridItem extends StatelessWidget {
                         _showDialog(context);
                       } else if (val == 'Boost') {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          MaterialPageRoute<dynamic>(
                             builder: (BuildContext context) => BoostPost(
                                 postId: post.postId, postTitle: post.title),
                           ),

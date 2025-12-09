@@ -166,7 +166,7 @@ class PostModel {
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
       reposts: map['reposts'] != null
           ? List<String>.from(
-              (map['reposts'] as List).map((item) {
+              (map['reposts'] as List<dynamic>).map((dynamic item) {
                 if (item is Map<String, dynamic>) {
                   return item['userId']?.toString() ?? '';
                 } else if (item is String) {
@@ -176,8 +176,8 @@ class PostModel {
               }).where((String id) => id.isNotEmpty),
             )
           : null,
-      comments: List.from(map['comments'])
-          .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+      comments: List<dynamic>.from(map['comments'])
+          .map((dynamic e) => CommentModel.fromMap(e as Map<String, dynamic>))
           .toList(),
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)

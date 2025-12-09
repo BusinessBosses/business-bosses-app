@@ -403,7 +403,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                                   backgroundColor: Colors.green[100],
                                   colorText: Colors.green[900],
                                 );
-                                Future.delayed(
+                                Future<Null>.delayed(
                                     const Duration(milliseconds: 100), () {
                                   Get.back(closeOverlays: true);
                                 });

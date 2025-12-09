@@ -39,7 +39,7 @@ class AllConnectionsScreen extends StatelessWidget {
             initialIndex: Get.arguments['pageIndex'],
             child: Scaffold(
               appBar: controller.isSearching
-                  ? SearchAppBar(
+                  ? searchAppBar(
                       hintText: 'Search person by name',
                       onClose: () {
                         controller.toggleSearchState();

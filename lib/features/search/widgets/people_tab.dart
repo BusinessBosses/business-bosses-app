@@ -16,8 +16,8 @@ class PeopleTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<UserModel> sortedUsers = controller.isUserSearch.value
-        ? List.from(controller.searchedUsers)
-        : List.from(controller.recommendedConnections);
+        ? List<UserModel>.from(controller.searchedUsers)
+        : List<UserModel>.from(controller.recommendedConnections);
 
     // Sort users with photos first
     sortedUsers.sort((UserModel a, UserModel b) {

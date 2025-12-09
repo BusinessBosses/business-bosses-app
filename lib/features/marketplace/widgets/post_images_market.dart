@@ -19,7 +19,7 @@ class PostImagesMarket extends StatelessWidget {
             ? GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
+                    MaterialPageRoute<dynamic>(
                       builder: (BuildContext context) => ImagesViewerScreen(
                         urls: post.images,
                         text: post.description,
@@ -47,7 +47,7 @@ class PostImagesMarket extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(
-                              MaterialPageRoute(
+                              MaterialPageRoute<dynamic>(
                                 builder: (BuildContext context) =>
                                     ImagesViewerScreen(
                                   urls: post.images,
@@ -75,7 +75,7 @@ class PostImagesMarket extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(
-                              MaterialPageRoute(
+                              MaterialPageRoute<dynamic>(
                                 builder: (BuildContext context) =>
                                     ImagesViewerScreen(
                                   urls: post.images,
@@ -106,7 +106,7 @@ class PostImagesMarket extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(
-                              MaterialPageRoute(
+                              MaterialPageRoute<dynamic>(
                                 builder: (BuildContext context) =>
                                     ImagesViewerScreen(
                                   urls: post.images,
@@ -137,7 +137,7 @@ class PostImagesMarket extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(
+                                  MaterialPageRoute<dynamic>(
                                     builder: (BuildContext context) =>
                                         ImagesViewerScreen(
                                       urls: post.images,
@@ -166,7 +166,7 @@ class PostImagesMarket extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(
+                                  MaterialPageRoute<dynamic>(
                                     builder: (BuildContext context) =>
                                         ImagesViewerScreen(
                                       urls: post.images,
@@ -187,7 +187,7 @@ class PostImagesMarket extends StatelessWidget {
                                             ? GestureDetector(
                                                 onTap: () {
                                                   Navigator.of(context).push(
-                                                    MaterialPageRoute(
+                                                    MaterialPageRoute<dynamic>(
                                                       builder: (BuildContext
                                                               context) =>
                                                           ImagesViewerScreen(

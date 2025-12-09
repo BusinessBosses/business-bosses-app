@@ -402,37 +402,11 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void referuser() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              CircularProgressIndicator(),
-            ],
-          ),
-        );
-      },
-    );
-    final ApiResponseModel res = await ApiService.get(
-        path: '/connection/connecteds/referals/${user?.uid}');
-    Navigator.pop(Get.context!);
-
-    if (res.success) {
-      if (res.data.isEmpty) {
-        String message =
-            'Have a look at ${user?.username}\'s profile on Business Bosses\n'
-            'https://businessbosses.onelink.me/xLWk/36a2ff16';
-        logEvent(user?.uid, 'user');
-        socialShare(message);
-      } else {
-        Get.toNamed(
-          Routes.referscreen,
-          arguments: <String, dynamic>{'user': user},
-        );
-      }
-    }
+    String message =
+        'Have a look at ${user?.username}\'s profile on Business Bosses\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    logEvent(user?.uid, 'user');
+    socialShare(message);
   }
 
   void enterbackeroftheweek() {
