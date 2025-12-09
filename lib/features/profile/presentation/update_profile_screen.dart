@@ -104,11 +104,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     '64+'
   ];
 
-  final List<String> _genders = <String>[
-    'Male',
-    'Female',
-    'Other'
-  ];
+  final List<String> _genders = <String>['Male', 'Female', 'Other'];
 
   TextEditingController achievementController = TextEditingController();
   TextEditingController productsController = TextEditingController();
@@ -565,6 +561,28 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     const SizedBox(
                                       height: 20,
                                     ),
+                                    const Text('Invite ID',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: textColor,
+                                            fontWeight: FontWeight.w700)),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    TextFormField(
+                                      onChanged: (String val) {
+                                        _referralId = val;
+                                      },
+                                      textInputAction: TextInputAction.done,
+                                      keyboardType: TextInputType.text,
+                                      decoration: inputDecoration.copyWith(
+                                          hintText: 'Eg AKUK_D4U16710',
+                                          filled: true,
+                                          fillColor: const Color(0xffF4F4F4)),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                   ]),
                             ),
                           ),
@@ -876,7 +894,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                   _ageRange = newValue;
                                                 });
                                               },
-                                              items: _ageRanges.map<DropdownMenuItem<String>>(
+                                              items: _ageRanges.map<
+                                                      DropdownMenuItem<String>>(
                                                   (String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
@@ -911,40 +930,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                   _gender = newValue;
                                                 });
                                               },
-                                              items: _genders.map<DropdownMenuItem<String>>(
+                                              items: _genders.map<
+                                                      DropdownMenuItem<String>>(
                                                   (String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
                                                   child: Text(value),
                                                 );
                                               }).toList(),
-                                            ),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            const Text('Invite ID',
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: textColor,
-                                                    fontWeight:
-                                                        FontWeight.w700)),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            TextFormField(
-                                              onChanged: (String val) {
-                                                _referralId = val;
-                                              },
-                                              textInputAction:
-                                                  TextInputAction.done,
-                                              keyboardType: TextInputType.text,
-                                              decoration:
-                                                  inputDecoration.copyWith(
-                                                      hintText:
-                                                          'Eg AKUK_D4U16710',
-                                                      filled: true,
-                                                      fillColor: const Color(
-                                                          0xffF4F4F4)),
                                             ),
                                             const SizedBox(
                                               height: 20,
