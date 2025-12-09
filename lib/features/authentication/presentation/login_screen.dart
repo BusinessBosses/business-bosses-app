@@ -83,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                             Get.toNamed(Routes.registration);
                           },
                           child: const TextWidget(
-                            text: 'Sign Up',
+                            text: 'Join Now',
                             color: iconColor,
                             fontWeight: FontWeight.w600,
                             size: 18,

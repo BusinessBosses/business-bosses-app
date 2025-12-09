@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' show Random;
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
+import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
@@ -14,6 +15,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -40,6 +42,7 @@ class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   bool isEmailAuth = true;
+  bool _showEmailForm = false;
   String? _email, _token;
   bool _invisiblePassword = true;
   String countryCode = '+447';
@@ -233,84 +236,182 @@ class _LoginFormState extends State<LoginForm> {
         child: Column(
           children: <Widget>[
             const SizedBox(height: 25.0),
-
-            // Social login buttons first
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black12),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: IconTextButton(
-                backgroundColor: Colors.transparent,
-                label: 'Login with Google',
-                labelColor: textColor,
-                onPressed: _handleGoogleSignIn,
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-            ),
-
-            const SizedBox(height: 10.0),
-
-            if (Platform.isIOS)
-              SizedBox(
-                height: 55,
-                child: SignInWithAppleButton(
-                  height: 40,
-                  onPressed: _handleAppleSignIn,
+            if (!_showEmailForm) ...<Widget>[
+              // Social login buttons first
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: IconTextButton(
+                  backgroundColor: Colors.transparent,
+                  label: 'Continue with Google',
+                  labelColor: textColor,
+                  onPressed: _handleGoogleSignIn,
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
 
-            const SizedBox(height: 20.0),
+              const SizedBox(height: 10.0),
 
-            // "Or" separator
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(child: Container(color: hintColor, height: 0.8)),
-                const SizedBox(width: 16.0),
-                RichText(
-                  text: const TextSpan(
-                    children: <InlineSpan>[
-                      TextSpan(
-                        text: 'Or Sign in below with Email',
-                        style: TextStyle(
-                          color: hintColor,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
+              if (Platform.isIOS)
+                SizedBox(
+                  height: 55,
+                  child: SignInWithAppleButton(
+                    height: 40,
+                    text: 'Continue with Apple',
+                    onPressed: _handleAppleSignIn,
+                  ),
+                ),
+
+              const SizedBox(height: 20.0),
+
+              // "Or" separator
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(child: Container(color: hintColor, height: 0.8)),
+                  const SizedBox(width: 16.0),
+                  RichText(
+                    text: const TextSpan(
+                      children: <InlineSpan>[
+                        TextSpan(
+                          text: 'Or',
+                          style: TextStyle(
+                            color: hintColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                          ),
                         ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16.0),
+                  Expanded(child: Container(color: hintColor, height: 0.8)),
+                ],
+              ),
+
+              const SizedBox(height: 20.0),
+
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isEmailAuth = true;
+                    _showEmailForm = true;
+                  });
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.black12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        LucideIcons.mail,
+                        size: 20,
                       ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Login with Email',
+                          style: TextStyle(
+                              color: textColor,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18)),
                     ],
                   ),
                 ),
-                const SizedBox(width: 16.0),
-                Expanded(child: Container(color: hintColor, height: 0.8)),
-              ],
-            ),
-
-            const SizedBox(height: 20.0),
-
-            // Email/Phone and password fields
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextWidget(
-                  text: isEmailAuth ? 'Email' : 'Phone',
-                  size: 0,
-                  fontWeight: FontWeight.w700,
+              ),
+            ] else ...<Widget>[
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.centerLeft,
+                  icon: Row(
+                    children: <Widget>[
+                      SvgPicture.asset('assets/svgs/backbutton.svg'),
+                      SizedBox(width: 10),
+                      Text('Login with Email',
+                          style: TextStyle(
+                              color: textColor,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18)),
+                    ],
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _showEmailForm = false;
+                    });
+                  },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                if (isEmailAuth)
+              ),
+              const SizedBox(height: 20),
+              // Email/Phone and password fields
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextWidget(
+                    text: isEmailAuth ? 'Email' : 'Phone',
+                    size: 0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  if (isEmailAuth)
+                    TextFormField(
+                      onChanged: (String val) {
+                        _authCred = val;
+                        setState(() {});
+                      },
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: inputDecoration.copyWith(
+                        hintText: 'Enter your email',
+                        hintStyle: const TextStyle(
+                          color: iconColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        filled: true,
+                        fillColor: const Color(0xffF4F4F4),
+                      ),
+                      validator: Validator.emailValidator,
+                    )
+                  else
+                    PhoneNumberInput(
+                      onChangeCountry: onChangeCountry,
+                      countryCode: countryCode,
+                      onChangeText: (String value) {
+                        _authCred = value;
+                      },
+                    )
+                ],
+              ),
+
+              const SizedBox(height: 15.0),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
                   TextFormField(
                     onChanged: (String val) {
-                      _authCred = val;
+                      _password = val;
                       setState(() {});
                     },
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.emailAddress,
+                    validator: Validator.passwordValidator,
+                    textInputAction: TextInputAction.done,
+                    obscureText: _invisiblePassword,
+                    keyboardType: TextInputType.visiblePassword,
                     decoration: inputDecoration.copyWith(
-                      hintText: 'Enter your email',
+                      hintText: 'Enter your password',
+                      suffixIcon: showHideIcon(),
                       hintStyle: const TextStyle(
                         color: iconColor,
                         fontSize: 14,
@@ -319,111 +420,74 @@ class _LoginFormState extends State<LoginForm> {
                       filled: true,
                       fillColor: const Color(0xffF4F4F4),
                     ),
-                    validator: Validator.emailValidator,
-                  )
-                else
-                  PhoneNumberInput(
-                    onChangeCountry: onChangeCountry,
-                    countryCode: countryCode,
-                    onChangeText: (String value) {
-                      _authCred = value;
-                    },
-                  )
-              ],
-            ),
-
-            const SizedBox(height: 15.0),
-
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextFormField(
-                  onChanged: (String val) {
-                    _password = val;
-                    setState(() {});
-                  },
-                  validator: Validator.passwordValidator,
-                  textInputAction: TextInputAction.done,
-                  obscureText: _invisiblePassword,
-                  keyboardType: TextInputType.visiblePassword,
-                  decoration: inputDecoration.copyWith(
-                    hintText: 'Enter your password',
-                    suffixIcon: showHideIcon(),
-                    hintStyle: const TextStyle(
-                      color: iconColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    filled: true,
-                    fillColor: const Color(0xffF4F4F4),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
-            const SizedBox(height: 30.0),
+              const SizedBox(height: 30.0),
 
-            GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.resetPassword);
-              },
-              child: Container(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  'Forgot Password?',
-                  style: headline6.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    decoration: TextDecoration.underline,
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.resetPassword);
+                },
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Forgot Password?',
+                    style: headline6.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            const SizedBox(height: 30.0),
+              const SizedBox(height: 30.0),
 
-            CustomButton(
-              margin: const EdgeInsets.all(2.0),
-              label: 'Login',
-              onPressed: () async {
-                setState(() {
-                  _autoValidateMode = AutovalidateMode.always;
-                });
-                setState(() {
-                  _isProcessing = true;
-                });
-                if (_authCred != null || _password != null) {
-                  dynamic user = await _handleLogin();
-                  if (user['success'] == false) {
-                    Get.snackbar('Error', user['error']);
-                  } else {
-                    await logEvents('login', 'email');
-                    FirebaseMessaging.instance
-                        .getToken()
-                        .then((String? value) async {
-                      Map<String, dynamic> data = <String, dynamic>{
-                        'deviceToken': value,
-                      };
-                      await ApiService.post(
-                          path: 'users/add-device-token', body: data);
-                    });
-                    if (user['data']['bio'] != null) {
-                      // GetStorage().write('isFirstTime', false);
-                      Get.offAndToNamed(Routes.home);
+              CustomButton(
+                margin: const EdgeInsets.all(2.0),
+                label: 'Login',
+                onPressed: () async {
+                  setState(() {
+                    _autoValidateMode = AutovalidateMode.always;
+                  });
+                  setState(() {
+                    _isProcessing = true;
+                  });
+                  if (_authCred != null || _password != null) {
+                    dynamic user = await _handleLogin();
+                    if (user['success'] == false) {
+                      Get.snackbar('Error', user['error']);
                     } else {
-                      Get.off(() => UpdateProfileScreen(
-                          user: UserModel.fromMap(user['data'])));
+                      await logEvents('login', 'email');
+                      FirebaseMessaging.instance
+                          .getToken()
+                          .then((String? value) async {
+                        Map<String, dynamic> data = <String, dynamic>{
+                          'deviceToken': value,
+                        };
+                        await ApiService.post(
+                            path: 'users/add-device-token', body: data);
+                      });
+                      if (user['data']['bio'] != null) {
+                        // GetStorage().write('isFirstTime', false);
+                        Get.offAndToNamed(Routes.home);
+                      } else {
+                        Get.off(() => UpdateProfileScreen(
+                            user: UserModel.fromMap(user['data'])));
+                      }
                     }
                   }
-                }
-                setState(() {
-                  _isProcessing = false;
-                });
-              },
-              isProcessing: _isProcessing,
-              buttonType: ButtonType.elevated,
-              child: Container(),
-            ),
+                  setState(() {
+                    _isProcessing = false;
+                  });
+                },
+                isProcessing: _isProcessing,
+                buttonType: ButtonType.elevated,
+                child: Container(),
+              ),
+            ]
           ],
         ),
       ),

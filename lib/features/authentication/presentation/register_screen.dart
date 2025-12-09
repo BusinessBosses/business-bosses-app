@@ -81,7 +81,7 @@ class RegisterScreen extends StatelessWidget {
                     const Column(
                       children: <Widget>[
                         TextWidget(
-                          text: 'Sign Up',
+                          text: 'Join Now',
                           color: primaryColorLT,
                           fontWeight: FontWeight.w700,
                           size: 20,
