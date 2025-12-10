@@ -133,7 +133,8 @@ class MarketModel {
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
       comments: map['comments'] != null
           ? List<dynamic>.from(map['comments'])
-              .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+              .map((dynamic e) =>
+                  CommentModel.fromMap(e as Map<String, dynamic>))
               .toList()
           : null,
       isProduct: map['isProduct'] as bool,

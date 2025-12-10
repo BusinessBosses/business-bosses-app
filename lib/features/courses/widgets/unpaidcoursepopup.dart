@@ -222,8 +222,26 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
                               return GestureDetector(
                                 onTap: () async {
                                   try {
-                                    await Purchases.purchaseProduct(
-                                        coinIDs[index]);
+                                    // Fetch the StoreProduct for the selected product ID
+                                    final List<StoreProduct> products =
+                                        await Purchases.getProducts(
+                                            <String>[coinIDs[index]]);
+
+                                    if (products.isEmpty) {
+                                      showSnackbar(
+                                        title: 'OOPS!',
+                                        message:
+                                            'Product not available, please try again later!',
+                                        error: true,
+                                      );
+                                      return;
+                                    }
+
+                                    // Purchase the product using the new API
+                                    await Purchases.purchase(
+                                        PurchaseParams.storeProduct(
+                                            products.first));
+
                                     if (kDebugMode) {
                                       print('coin increase');
                                     }

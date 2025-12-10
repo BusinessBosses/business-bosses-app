@@ -23,7 +23,7 @@ class ChallengeController extends GetxController {
       List<dynamic> responseData = response.data['rows'];
 
       categories = responseData
-          .map((categoryMap) => Industry.fromMap(categoryMap))
+          .map((dynamic categoryMap) => Industry.fromMap(categoryMap))
           .where((Industry category) =>
               category.categoryId == '-Mos1VMlx3oxZFRaw_BH' &&
                   (category.endedAt == null ||

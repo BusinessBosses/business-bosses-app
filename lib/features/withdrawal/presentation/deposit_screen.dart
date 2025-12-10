@@ -537,7 +537,8 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                       ),
                                       SvgPicture.asset(
                                         'assets/svgs/invite.svg',
-                                        color: primaryColorLT,
+                                        colorFilter: const ColorFilter.mode(
+                                            primaryColorLT, BlendMode.srcIn),
                                         height: 13,
                                       )
                                     ],
@@ -604,7 +605,10 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                             SvgPicture.asset(
                                               'assets/svgs/coinnn.svg',
                                               height: 40,
-                                              color: Colors.grey,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      Colors.grey,
+                                                      BlendMode.srcIn),
                                             ),
                                             const SizedBox(
                                               height: 10,

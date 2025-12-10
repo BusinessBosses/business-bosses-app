@@ -351,8 +351,11 @@ class _ForumItemState extends State<ForumItem> {
                                                                     .asset(
                                                                   'assets/svgs/premiumbadge.svg',
                                                                   height: 9,
-                                                                  color:
+                                                                  colorFilter: const ColorFilter
+                                                                      .mode(
                                                                       primaryColorLT,
+                                                                      BlendMode
+                                                                          .srcIn),
                                                                 )
                                                               ],
                                                             )
@@ -636,7 +639,8 @@ class _ForumItemState extends State<ForumItem> {
                                     SvgPicture.asset(
                                       'assets/svgs/premiumbadge.svg',
                                       height: 9,
-                                      color: primaryColorLT,
+                                      colorFilter: const ColorFilter.mode(
+                                          primaryColorLT, BlendMode.srcIn),
                                     )
                                   ],
                                 ),

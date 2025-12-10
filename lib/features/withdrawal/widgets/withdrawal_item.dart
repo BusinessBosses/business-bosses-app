@@ -17,51 +17,46 @@ class _WithdrawalItemState extends State<WithdrawalItem> {
   @override
   Widget build(BuildContext context) {
     String dateTimeString = widget.item['date'];
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                        Text(
-                          widget.item['amount'],
-                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          '(\$${(num.parse(widget.item['amount']) / 100).toStringAsFixed(1)})',
-                          style: const TextStyle(color: Colors.black26),
-                        ),
-                      ]),
-                      Text(formatDateTimeToAgo(dateTimeString)),
-                    ],
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
+                  Text(
+                    widget.item['amount'],
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(
+                    width: 5,
                   ),
                   Text(
-                    widget.item['status'],
-                    style: widget.item['status'] == 'Pending'
-                        ? const TextStyle(color: Colors.grey)
-                        : const TextStyle(color: Colors.greenAccent),
+                    '(\$${(num.parse(widget.item['amount']) / 100).toStringAsFixed(1)})',
+                    style: const TextStyle(color: Colors.black26),
                   ),
                 ]),
-          ),
-          Container(
-            color: backgroundcolorinterface,
-            height: 1,
-          )
-        ],
-      ),
+                Text(formatDateTimeToAgo(dateTimeString)),
+              ],
+            ),
+            Text(
+              widget.item['status'],
+              style: widget.item['status'] == 'Pending'
+                  ? const TextStyle(color: Colors.grey)
+                  : const TextStyle(color: Colors.greenAccent),
+            ),
+          ]),
+        ),
+        Container(
+          color: backgroundcolorinterface,
+          height: 1,
+        )
+      ],
     );
   }
 }

@@ -205,7 +205,8 @@ class _DonationItemState extends State<DonationItem> {
                             SvgPicture.asset(
                               'assets/svgs/premiumbadge.svg',
                               height: 7,
-                              color: primaryColorLT,
+                              colorFilter: const ColorFilter.mode(
+                                  primaryColorLT, BlendMode.srcIn),
                             )
                           ]),
                       ],
@@ -429,8 +430,11 @@ class _DonationItemState extends State<DonationItem> {
                                             SvgPicture.asset(
                                               'assets/svgs/premiumbadge.svg',
                                               height: 7,
-                                              color: primaryColorLT,
-                                            )
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      primaryColorLT,
+                                                      BlendMode.srcIn),
+                                            ),
                                           ])
                                         : Container()
                                   ],
@@ -783,8 +787,11 @@ class _DonationItemState extends State<DonationItem> {
                                                                     .asset(
                                                                   'assets/svgs/premiumbadge.svg',
                                                                   height: 9,
-                                                                  color:
+                                                                  colorFilter: const ColorFilter
+                                                                      .mode(
                                                                       primaryColorLT,
+                                                                      BlendMode
+                                                                          .srcIn),
                                                                 )
                                                               ],
                                                             )
@@ -1102,7 +1109,8 @@ class _DonationItemState extends State<DonationItem> {
                           children: <Widget>[
                             SvgPicture.asset(
                               'assets/svgs/text.svg',
-                              color: textColor,
+                              colorFilter:
+                                  ColorFilter.mode(textColor, BlendMode.srcIn),
                             ),
                             const SizedBox(
                               width: 10,

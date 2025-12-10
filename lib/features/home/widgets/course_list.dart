@@ -125,7 +125,8 @@ class CourseListState extends State<CourseList>
                         // const SizedBox(width: 5.0),
                         SvgPicture.asset(
                           'assets/svgs/nexticon.svg',
-                          color: textColor,
+                          colorFilter: const ColorFilter.mode(
+                              textColor, BlendMode.srcIn),
                           height: 8,
                         ),
                       ]),

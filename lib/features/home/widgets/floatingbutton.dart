@@ -59,7 +59,8 @@ class FloatingbuttonState extends State<Floatingbutton> {
                 'assets/svgs/bot.svg',
                 width: 20,
                 height: 22,
-                color: Colors.white,
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               ),
             ),
           ),

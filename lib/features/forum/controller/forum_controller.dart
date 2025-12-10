@@ -11,10 +11,10 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class ForumController extends GetxController {
-  late IO.Socket socket;
+  late io.Socket socket;
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
   List<ForumModel> forums = <ForumModel>[];

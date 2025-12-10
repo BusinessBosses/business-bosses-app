@@ -66,7 +66,8 @@ class _SupporterItemState extends State<SupporterItem> {
                                     icon: SvgPicture.asset(
                                       'assets/svgs/supporter.svg',
                                       height: 80.0,
-                                      color: hintColor,
+                                      colorFilter: const ColorFilter.mode(
+                                          hintColor, BlendMode.srcIn),
                                     ),
                                     title: 'There is no supporter for now',
                                     subTitle: 'Be the first one to support!',

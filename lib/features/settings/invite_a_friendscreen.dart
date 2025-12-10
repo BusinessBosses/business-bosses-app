@@ -38,14 +38,14 @@ class _InviteAFriendTermsAndConditionsState
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final dynamic data = jsonDecode(response.body);
 
         if (data != null &&
             data['data'] != null &&
             data['data']['rows'] != null) {
-          final rows = data['data']['rows'];
-          final terms = rows.firstWhere(
-            (item) => item['title'] == 'terms',
+          final dynamic rows = data['data']['rows'];
+          final dynamic terms = rows.firstWhere(
+            (dynamic item) => item['title'] == 'terms',
             orElse: () => null,
           );
 

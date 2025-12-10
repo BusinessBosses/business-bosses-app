@@ -67,7 +67,7 @@ class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {
                       children: <Widget>[
                         ListTile(
                           onTap: () async {
-                            var result = await navigateTo(
+                            dynamic result = await navigateTo(
                               context,
                               routeName: PublicProfileScreen.routeName,
                               arguments: Params(arg1: _users[i].uid),

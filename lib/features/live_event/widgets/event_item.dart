@@ -434,7 +434,10 @@ class _EventItemState extends State<EventItem> {
                                             padding: const EdgeInsets.all(10.0),
                                             child: SvgPicture.asset(
                                               'assets/svgs/text.svg',
-                                              color: Colors.white,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      Colors.white,
+                                                      BlendMode.srcIn),
                                             ),
                                           ),
                                           backgroundColor: Colors.red,
@@ -460,8 +463,10 @@ class _EventItemState extends State<EventItem> {
                                               height: 15.0,
                                               width: 15.0,
                                               // ignore: deprecated_member_use
-                                              color: textColor.withValues(
-                                                  alpha: 1.0),
+                                              colorFilter: ColorFilter.mode(
+                                                  textColor.withValues(
+                                                      alpha: 1.0),
+                                                  BlendMode.srcIn),
                                             ),
                                           ),
                                           backgroundColor: Colors.white,
@@ -481,7 +486,10 @@ class _EventItemState extends State<EventItem> {
                                                   const EdgeInsets.all(13.0),
                                               child: SvgPicture.asset(
                                                 'assets/svgs/calendar.svg',
-                                                color: Colors.black,
+                                                colorFilter:
+                                                    const ColorFilter.mode(
+                                                        Colors.black,
+                                                        BlendMode.srcIn),
                                               ),
                                             ),
                                             backgroundColor: Colors.white,

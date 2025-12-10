@@ -6,7 +6,7 @@ import 'package:business_bosses_v2/features/forum/controller/challenge_controlle
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
-import 'package:business_bosses_v2/features/home/sellProduct.dart';
+import 'package:business_bosses_v2/features/home/sell_product.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';

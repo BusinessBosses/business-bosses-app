@@ -87,7 +87,7 @@ class ShopController extends GetxController {
         ..addAll(
           _parseRows<Product>(
             response: productResponse,
-            fromMap: (data) => Product.fromJson(data),
+            fromMap: (dynamic data) => Product.fromJson(data),
           ),
         );
 
@@ -97,7 +97,7 @@ class ShopController extends GetxController {
         ..addAll(
           _parseRows<Service>(
             response: servicesResponse,
-            fromMap: (data) => Service.fromJson(data),
+            fromMap: (dynamic data) => Service.fromJson(data),
           ),
         );
 
@@ -107,7 +107,7 @@ class ShopController extends GetxController {
         ..addAll(
           _parseAnyList<Customitem>(
             response: customResponse,
-            fromMap: (data) => Customitem.fromJson(data),
+            fromMap: (dynamic data) => Customitem.fromJson(data),
           ),
         );
 
@@ -124,7 +124,7 @@ class ShopController extends GetxController {
         ..addAll(
           _parseRows<Vendor>(
             response: vendorsResponse,
-            fromMap: (data) => Vendor.fromMap(data),
+            fromMap: (dynamic data) => Vendor.fromMap(data),
           ),
         );
 
@@ -142,8 +142,8 @@ class ShopController extends GetxController {
     required T Function(dynamic) fromMap,
   }) {
     if (response.success && response.data['rows'] is List) {
-      return (response.data['rows'] as List)
-          .map((item) => fromMap(item))
+      return (response.data['rows'] as List<dynamic>)
+          .map((dynamic item) => fromMap(item))
           .toList();
     }
     return <T>[];
@@ -155,7 +155,9 @@ class ShopController extends GetxController {
     required T Function(dynamic) fromMap,
   }) {
     if (response.success && response.data is List) {
-      return (response.data as List).map((item) => fromMap(item)).toList();
+      return (response.data as List<dynamic>)
+          .map((dynamic item) => fromMap(item))
+          .toList();
     }
     return <T>[];
   }

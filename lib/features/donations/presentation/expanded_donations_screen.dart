@@ -977,7 +977,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                   'assets/svgs/share.svg',
                                   height: 15.0,
                                   width: 15.0,
-                                  color: textColor.withValues(alpha: 1.0),
+                                  colorFilter: ColorFilter.mode(
+                                      textColor.withValues(alpha: 1.0),
+                                      BlendMode.srcIn),
                                 ),
                                 const SizedBox(
                                   width: 15,
@@ -1044,7 +1046,8 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                           children: <Widget>[
                             SvgPicture.asset(
                               'assets/svgs/text.svg',
-                              color: textColor,
+                              colorFilter: const ColorFilter.mode(
+                                  textColor, BlendMode.srcIn),
                             ),
                             const SizedBox(
                               width: 10,
@@ -1077,7 +1080,8 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                           children: <Widget>[
                             SvgPicture.asset(
                               'assets/svgs/share.svg',
-                              color: textColor,
+                              colorFilter: const ColorFilter.mode(
+                                  textColor, BlendMode.srcIn),
                               height: 16,
                             ),
                             const SizedBox(

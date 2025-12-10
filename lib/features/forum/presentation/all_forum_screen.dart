@@ -43,7 +43,7 @@ class _AllForumScreenState extends State<AllForumScreen>
   void initState() {
     super.initState();
 
-    final args = Get.arguments;
+    final dynamic args = Get.arguments;
 
     if (args != null && args is Industry) {
       industry = args;
@@ -112,7 +112,8 @@ class _AllForumScreenState extends State<AllForumScreen>
                       ? const Icon(Icons.close)
                       : SvgPicture.asset(
                           'assets/svgs/preferences.svg',
-                          color: const Color.fromARGB(255, 62, 55, 55),
+                          colorFilter: const ColorFilter.mode(
+                              Color.fromARGB(255, 62, 55, 55), BlendMode.srcIn),
                           height: 20,
                         ),
                   onPressed: () {
@@ -163,7 +164,10 @@ class _AllForumScreenState extends State<AllForumScreen>
                                                       vertical: 10.0),
                                               child: SvgPicture.asset(
                                                 'assets/svgs/search.svg',
-                                                color: hintColor,
+                                                colorFilter:
+                                                    const ColorFilter.mode(
+                                                        hintColor,
+                                                        BlendMode.srcIn),
                                               ),
                                             ),
                                             hintText: 'Search Courses',
@@ -245,7 +249,8 @@ class _AllForumScreenState extends State<AllForumScreen>
                       ? const Icon(Icons.close)
                       : SvgPicture.asset(
                           'assets/svgs/search.svg',
-                          color: Colors.black,
+                          colorFilter: const ColorFilter.mode(
+                              Colors.black, BlendMode.srcIn),
                         ),
                   onPressed: () {
                     _isSearching = !_isSearching;

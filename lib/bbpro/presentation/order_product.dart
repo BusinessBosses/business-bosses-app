@@ -1020,7 +1020,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
   Future<void> _shareProduct() async {
     String message = '${widget.product.name}:\n'
         '${widget.product.description}\n'
-        'https://my-biz.io/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
+        'https://biz-center.io/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 }

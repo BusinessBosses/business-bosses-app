@@ -13,7 +13,7 @@ Center noNotificationsFoundWidget(String title) {
             isLoading: false,
             icon: SvgPicture.asset(
               'assets/svgs/notification.svg',
-              color: iconColor,
+              colorFilter: const ColorFilter.mode(iconColor, BlendMode.srcIn),
               height: 80.0,
               width: 80.0,
             ),

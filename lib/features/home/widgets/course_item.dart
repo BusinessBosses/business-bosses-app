@@ -138,7 +138,8 @@ class _CourseItemState extends State<CourseItem> {
                                         child: SvgPicture.asset(
                                           'assets/svgs/pdf.svg',
                                           height: 22,
-                                          color: Colors.white,
+                                          colorFilter: const ColorFilter.mode(
+                                              Colors.white, BlendMode.srcIn),
                                         ),
                                       ),
                                     ),
@@ -677,7 +678,12 @@ class _CourseItemState extends State<CourseItem> {
                                                         SvgPicture.asset(
                                                           'assets/svgs/premiumbadge.svg',
                                                           height: 9,
-                                                          color: primaryColorLT,
+                                                          colorFilter:
+                                                              const ColorFilter
+                                                                  .mode(
+                                                                  primaryColorLT,
+                                                                  BlendMode
+                                                                      .srcIn),
                                                         )
                                                       ],
                                                     )
@@ -820,7 +826,8 @@ class _CourseItemState extends State<CourseItem> {
                             SvgPicture.asset(
                               'assets/svgs/premiumbadge.svg',
                               height: 7,
-                              color: primaryColorLT,
+                              colorFilter: const ColorFilter.mode(
+                                  primaryColorLT, BlendMode.srcIn),
                             )
                           ],
                         )

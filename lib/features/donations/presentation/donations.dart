@@ -215,7 +215,8 @@ class DonationsHeader extends StatelessWidget {
                                 children: <Widget>[
                                   SvgPicture.asset(
                                     'assets/svgs/entries.svg',
-                                    color: textColor,
+                                    colorFilter: const ColorFilter.mode(
+                                        textColor, BlendMode.srcIn),
                                     height: 11.5,
                                   ),
                                   const SizedBox(width: 5),

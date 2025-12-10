@@ -201,17 +201,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CreatePostController>(
-      builder: (CreatePostController controller) => WillPopScope(
-        onWillPop: () async {
+      builder: (CreatePostController controller) => PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, dynamic result) {
+          if (didPop) return;
           if (_overlayEntry != null) {
             _overlayEntry?.remove();
             _overlayEntry = null;
             setState(() {});
-            return false;
           } else {
             Get.back();
             setState(() {});
-            return false;
           }
         },
         child: Form(
@@ -383,8 +383,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                           shape: BoxShape.circle,
                                           boxShadow: <BoxShadow>[
                                             BoxShadow(
-                                              color:
-                                                  Colors.black.withOpacity(0.2),
+                                              color: Colors.black
+                                                  .withValues(alpha: 0.2),
                                               blurRadius: 4,
                                               offset: const Offset(0, 2),
                                             ),
@@ -518,7 +518,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         children: <Widget>[
                           SvgPicture.asset(
                             'assets/svgs/report.svg',
-                            color: primaryColorLT,
+                            colorFilter: const ColorFilter.mode(
+                                primaryColorLT, BlendMode.srcIn),
                             height: 18,
                           ),
                           const SizedBox(
@@ -583,7 +584,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     children: <Widget>[
                       SvgPicture.asset(
                         'assets/svgs/rocket.svg',
-                        color: textColor,
+                        colorFilter:
+                            const ColorFilter.mode(textColor, BlendMode.srcIn),
                       ),
                       const SizedBox(width: 5),
                       const Text(

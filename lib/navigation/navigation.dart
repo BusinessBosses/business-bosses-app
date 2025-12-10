@@ -260,7 +260,7 @@ var routes = [
     page: () => const BottomNavigationScreen(),
   ),
   GetPage(
-    name: Routes.CoinHistoryScreen,
+    name: Routes.coinHistoryScreen,
     page: () => const CoinHistoryScreen(),
   ),
   GetPage(

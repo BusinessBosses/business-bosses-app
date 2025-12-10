@@ -69,7 +69,7 @@ class _InvitedUsersScreenState extends State<InvitedUsersScreen> {
                       children: <Widget>[
                         ListTile(
                           onTap: () async {
-                            var result = await navigateTo(
+                            dynamic result = await navigateTo(
                               context,
                               routeName: PublicProfileScreen.routeName,
                               arguments: Params(arg1: _users[i].uid),

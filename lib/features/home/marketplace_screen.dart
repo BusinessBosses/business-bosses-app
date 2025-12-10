@@ -584,7 +584,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         controller: _marketplaceTabController,
         labelPadding: const EdgeInsets.symmetric(horizontal: 15),
         labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-        unselectedLabelColor: textColor.withOpacity(0.7),
+        unselectedLabelColor: textColor.withValues(alpha: 0.7),
         tabs: const <Widget>[
           Tab(text: 'Listing'),
           Tab(text: 'Requests'),
@@ -647,7 +647,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           : 'assets/svgs/addservice.svg',
                       height: 25,
                       colorFilter: ColorFilter.mode(
-                          textColor.withOpacity(1), BlendMode.srcIn),
+                          textColor.withValues(alpha: 1), BlendMode.srcIn),
                     ),
                     title: Text(
                       index == 0 ? 'Sell your product' : 'Sell your service',

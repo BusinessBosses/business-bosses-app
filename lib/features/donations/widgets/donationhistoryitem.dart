@@ -77,11 +77,13 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
                                   profileController.myProfile.uid
                               ? SvgPicture.asset(
                                   'assets/svgs/upicon.svg',
-                                  color: Colors.red,
+                                  colorFilter: const ColorFilter.mode(
+                                      Colors.red, BlendMode.srcIn),
                                 )
                               : SvgPicture.asset(
                                   'assets/svgs/downicon.svg',
-                                  color: Colors.green,
+                                  colorFilter: const ColorFilter.mode(
+                                      Colors.green, BlendMode.srcIn),
                                 ),
                         ),
                         const SizedBox(

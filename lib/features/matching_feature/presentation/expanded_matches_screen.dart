@@ -226,7 +226,8 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                         children: <Widget>[
                           SvgPicture.asset(
                             'assets/svgs/preferences.svg',
-                            color: primaryBlue,
+                            colorFilter: const ColorFilter.mode(
+                                primaryBlue, BlendMode.srcIn),
                             height: 20,
                           ),
                           const SizedBox(width: 5),

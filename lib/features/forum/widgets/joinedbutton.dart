@@ -2,7 +2,7 @@ import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dar
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-Widget JoinedButton(bool joined, VoidCallback onTap) {
+Widget joinedButton(bool joined, VoidCallback onTap) {
   return GestureDetector(
     onTap: () {
       onTap();

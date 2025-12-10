@@ -154,74 +154,66 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   const SizedBox(height: 8.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: RadioListTile<ContentType>(
-                            contentPadding: const EdgeInsets.all(0),
-                            title: const Text('Link'),
-                            value: ContentType.link,
-                            groupValue: _selectedContentType,
-                            onChanged: (ContentType? value) {
-                              setState(() {
-                                _selectedContentType = value!;
-                                _resetContentFields();
-                                contentLinks = <String>[''];
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: RadioListTile<ContentType>(
-                            contentPadding: const EdgeInsets.all(0),
-                            title: const Text('Video'),
-                            value: ContentType.video,
-                            groupValue: _selectedContentType,
-                            onChanged: (ContentType? value) {
-                              setState(() {
-                                _selectedContentType = value!;
-                                _resetContentFields();
-                                contentLinks = <String>[''];
-                              });
-                            },
+                  RadioGroup<ContentType>(
+                    groupValue: _selectedContentType,
+                    onChanged: (ContentType? value) {
+                      if (value != null) {
+                        setState(() {
+                          _selectedContentType = value;
+                          _resetContentFields();
+                          if (_selectedContentType == ContentType.link ||
+                              _selectedContentType == ContentType.video) {
+                            contentLinks = <String>[''];
+                          }
+                        });
+                      }
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const RadioListTile<ContentType>(
+                              contentPadding: EdgeInsets.all(0),
+                              title: Text('Link'),
+                              value: ContentType.link,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: RadioListTile<ContentType>(
-                            contentPadding: const EdgeInsets.all(0),
-                            title: const Text('File'),
-                            value: ContentType.file,
-                            groupValue: _selectedContentType,
-                            onChanged: (ContentType? value) {
-                              setState(() {
-                                _selectedContentType = value!;
-                                _resetContentFields();
-                              });
-                            },
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const RadioListTile<ContentType>(
+                              contentPadding: EdgeInsets.all(0),
+                              title: Text('Video'),
+                              value: ContentType.video,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const RadioListTile<ContentType>(
+                              contentPadding: EdgeInsets.all(0),
+                              title: Text('File'),
+                              value: ContentType.file,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 20.0),
 

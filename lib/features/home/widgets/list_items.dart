@@ -16,6 +16,7 @@ import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/hero_section.dart';
 import 'package:business_bosses_v2/features/home/widgets/relevant_people_tile.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/buyer_requests_deal.dart';
 import 'package:business_bosses_v2/features/partners/widgets/deals_section.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
@@ -137,6 +138,12 @@ class _PostsWidgetState extends State<PostsWidget> {
           ),
           const SizedBox(height: 7),
         ],
+      ));
+    }
+
+    if (postIndex == 4) {
+      widgets.add(BuyerRequestDealsWidget(
+        isHome: true,
       ));
     }
 

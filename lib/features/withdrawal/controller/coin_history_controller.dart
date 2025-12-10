@@ -8,10 +8,10 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class CoinHistoryController extends GetxController {
-  late IO.Socket socket;
+  late io.Socket socket;
   final ProfileController profileController = Get.find();
   RxList<DonationModel> donations = <DonationModel>[].obs;
   RxList<UserModel> users = <UserModel>[].obs;
@@ -85,7 +85,7 @@ class CoinHistoryController extends GetxController {
   }
 
   void initSocket() {
-    socket = IO.io(Constants.socketUrl, <String, dynamic>{
+    socket = io.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
       'transports': <String>['websocket'],
     });
@@ -95,11 +95,11 @@ class CoinHistoryController extends GetxController {
       print('Connection established');
     });
 
-    socket.on('handshake', (data) {
+    socket.on('handshake', (dynamic data) {
       // print(data);
     });
 
-    socket.on('new-notification', (data) {
+    socket.on('new-notification', (dynamic data) {
       // print(data);
       profileController.updateProfile(<String, dynamic>{
         ...profileController.myProfile.toMap(),
@@ -114,7 +114,7 @@ class CoinHistoryController extends GetxController {
     });
 
     socket.onDisconnect((_) => debugPrint('Connection Disconnection'));
-    socket.onConnectError((err) => debugPrint(err));
-    socket.onError((err) => debugPrint(err));
+    socket.onConnectError((dynamic err) => debugPrint(err));
+    socket.onError((dynamic err) => debugPrint(err));
   }
 }

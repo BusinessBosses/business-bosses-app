@@ -26,7 +26,9 @@ class MySearchIndustries extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             isLoading: isLoading,
             icon: SvgPicture.asset('assets/svgs/search.svg',
-                color: hintColor, height: 80.0, width: 80.0),
+                colorFilter: const ColorFilter.mode(hintColor, BlendMode.srcIn),
+                height: 80.0,
+                width: 80.0),
             title: 'Search for groups',
             subTitle: 'Search for specific groups!',
           )
@@ -43,14 +45,17 @@ class MySearchIndustries extends StatelessWidget {
                 label: searchIndustries[i].industry!,
                 photo: searchIndustries[i].photo!,
                 onTap: () {
-                  searchIndustries[i].categoryId!.contains('-Mos1VMnV53H7AZa0W8p') ?  
-                  Get.toNamed(
-                    Routes.allforumscreen,
-                    arguments: searchIndustries[i],
-                  ) : Get.to(() => BossUpSection(
-                          industry: searchIndustries[i],
-                          bossUp: searchIndustries[i],
-                        ));
+                  searchIndustries[i]
+                          .categoryId!
+                          .contains('-Mos1VMnV53H7AZa0W8p')
+                      ? Get.toNamed(
+                          Routes.allforumscreen,
+                          arguments: searchIndustries[i],
+                        )
+                      : Get.to(() => BossUpSection(
+                            industry: searchIndustries[i],
+                            bossUp: searchIndustries[i],
+                          ));
                   // searchIndustries[i]
                   //         .industryId!
                   //         .contains('-MsUPNEHnp8-An5VLI_v')

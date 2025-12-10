@@ -17,7 +17,7 @@ import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../../action/action.dart';
+
 import '../../common/dialogs/snackbar.dart';
 import '../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../common/widgets/safety_model.dart';
@@ -50,15 +50,16 @@ class ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: !_isSearching,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (didPop) {
+          return;
+        }
         if (_isSearching) {
           _onCloseSearching();
           _chatController.clearSearch();
-          return false;
         }
-        navigateTo(context);
-        return true;
       },
       child: GetBuilder<ChatController>(
         builder: (ChatController controller) {
@@ -110,7 +111,7 @@ class ChatScreenState extends State<ChatScreen> {
               // floatingActionButton: Floatingbutton(),
               backgroundColor: Colors.white,
               appBar: _isSearching
-                  ? SearchAppBar(
+                  ? searchAppBar(
                       hintText: 'Search messages',
                       onClose: _onChangeSearching,
                       onChange: (String query) {

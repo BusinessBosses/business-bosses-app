@@ -45,33 +45,29 @@ class _ProNotificationSettingsState extends State<ProNotificationSettings> {
           if (sendNotification != null && onSendNotificationChanged != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: <Widget>[
-                  const Text('Send me a notification as well?'),
-                  const SizedBox(width: 8),
-                  Radio<bool>(
-                    value: true,
-                    groupValue: sendNotification,
-                    onChanged: (bool? value) {
-                      if (value != null) {
-                        onSendNotificationChanged(value);
-                      }
-                    },
-                    activeColor: proprimaryColor,
-                  ),
-                  const Text('Yes'),
-                  Radio<bool>(
-                    value: false,
-                    groupValue: sendNotification,
-                    onChanged: (bool? value) {
-                      if (value != null) {
-                        onSendNotificationChanged(value);
-                      }
-                    },
-                    activeColor: proprimaryColor,
-                  ),
-                  const Text('No'),
-                ],
+              child: RadioGroup<bool>(
+                groupValue: sendNotification,
+                onChanged: (bool? value) {
+                  if (value != null) {
+                    onSendNotificationChanged(value);
+                  }
+                },
+                child: Row(
+                  children: <Widget>[
+                    const Text('Send me a notification as well?'),
+                    const SizedBox(width: 8),
+                    Radio<bool>(
+                      value: true,
+                      activeColor: proprimaryColor,
+                    ),
+                    const Text('Yes'),
+                    Radio<bool>(
+                      value: false,
+                      activeColor: proprimaryColor,
+                    ),
+                    const Text('No'),
+                  ],
+                ),
               ),
             ),
           Padding(

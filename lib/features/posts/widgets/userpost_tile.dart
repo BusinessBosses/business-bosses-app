@@ -948,8 +948,12 @@ class _PostTileState extends State<PostTile> {
                                                       : SvgPicture.asset(
                                                           'assets/svgs/liveeventt.svg',
                                                           height: 12,
-                                                          // ignore: deprecated_member_use
-                                                          color: Colors.white,
+                                                          colorFilter:
+                                                              const ColorFilter
+                                                                  .mode(
+                                                                  Colors.white,
+                                                                  BlendMode
+                                                                      .srcIn),
                                                         ),
                                                   const SizedBox(
                                                     width: 5,

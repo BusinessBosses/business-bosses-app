@@ -33,15 +33,12 @@ class FilterPosts extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  child: const Padding(
-                    padding: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 0),
-                    child: Text(
-                      'Recommended Posts',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
+                const Padding(
+                  padding:
+                      EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 0),
+                  child: Text(
+                    'Recommended Posts',
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                   ),
                 ),
                 GridView.builder(

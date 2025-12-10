@@ -41,7 +41,8 @@ class CreatePostUserTile extends StatelessWidget {
                       SvgPicture.asset(
                         'assets/svgs/premiumbadge.svg',
                         height: 9,
-                        color: primaryColorLT,
+                        colorFilter: const ColorFilter.mode(
+                            primaryColorLT, BlendMode.srcIn),
                       )
                     ],
                   ),

@@ -21,58 +21,56 @@ class PromoteSection extends StatelessWidget {
           alignment: Alignment.center,
           child: GestureDetector(
             onTap: () => <void>{controller.togglePromote()},
-            child: Container(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 10, bottom: 10, left: 20, right: 20),
-                child: Row(
-                  children: <Widget>[
-                    SvgPicture.asset('assets/svgs/rocket.svg'),
-                    const SizedBox(width: 15),
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Boost Post',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
-                            ),
-                          ),
-                          Text(
-                            'Reach a wider audience and get more views',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 11,
-                              color: Color(0xFF777777),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  top: 10, bottom: 10, left: 20, right: 20),
+              child: Row(
+                children: <Widget>[
+                  SvgPicture.asset('assets/svgs/rocket.svg'),
+                  const SizedBox(width: 15),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text(
-                          'No',
+                        Text(
+                          'Boost Post',
                           style: TextStyle(
-                              fontSize: 8, fontWeight: FontWeight.w700),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
                         ),
-                        Switch(
-                          value: controller.shouldPromote.value,
-                          onChanged: (bool value) {
-                            controller.togglePromote();
-                          },
-                        ),
-                        const Text(
-                          'Yes',
+                        Text(
+                          'Reach a wider audience and get more views',
                           style: TextStyle(
-                              fontSize: 8, fontWeight: FontWeight.w700),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 11,
+                            color: Color(0xFF777777),
+                          ),
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'No',
+                        style:
+                            TextStyle(fontSize: 8, fontWeight: FontWeight.w700),
+                      ),
+                      Switch(
+                        value: controller.shouldPromote.value,
+                        onChanged: (bool value) {
+                          controller.togglePromote();
+                        },
+                      ),
+                      const Text(
+                        'Yes',
+                        style:
+                            TextStyle(fontSize: 8, fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

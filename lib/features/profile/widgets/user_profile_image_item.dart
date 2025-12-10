@@ -100,8 +100,8 @@ class UserProfileImageItem extends StatelessWidget {
         width: 50,
         child: SvgPicture.asset(
           'assets/svgs/person.svg',
-          // ignore: deprecated_member_use
-          color: primaryColorLT.withValues(alpha: 0.5),
+          colorFilter: ColorFilter.mode(
+              primaryColorLT.withValues(alpha: 0.5), BlendMode.srcIn),
         ),
       ),
     );

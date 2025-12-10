@@ -34,12 +34,14 @@ class NotificationItem extends StatelessWidget {
                 child: myNotification.title.contains('New Message')
                     ? SvgPicture.asset(
                         'assets/svgs/message.svg',
-                        color: primaryColorLT,
+                        colorFilter: const ColorFilter.mode(
+                            primaryColorLT, BlendMode.srcIn),
                         height: 20,
                       )
                     : SvgPicture.asset(
                         'assets/svgs/notification.svg',
-                        color: primaryColorLT,
+                        colorFilter: const ColorFilter.mode(
+                            primaryColorLT, BlendMode.srcIn),
                         height: 20,
                       )),
             const SizedBox(width: 16.0),

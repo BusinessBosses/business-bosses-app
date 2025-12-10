@@ -246,7 +246,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   void _showRequestDetails(BuyerRequestModel request) {
-    final bool hasValidImage = _isValidImageUrl(request.imageUrl);
+    final bool hasValidImage = _isValidImageUrl(request.attachments[0]);
     final bool hasValidProfilePic = _isValidImageUrl(request.user.photoUrl);
     final bool isMyRequest =
         request.user.uid == profileController.myProfile.uid;
@@ -403,7 +403,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                                   backgroundColor: Colors.green[100],
                                   colorText: Colors.green[900],
                                 );
-                                Future.delayed(
+                                Future<Null>.delayed(
                                     const Duration(milliseconds: 100), () {
                                   Get.back(closeOverlays: true);
                                 });
@@ -448,7 +448,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         image: DecorationImage(
-                          image: NetworkImage(request.imageUrl!),
+                          image: NetworkImage(request.attachments[0]),
                           fit: BoxFit.cover,
                         ),
                       ),

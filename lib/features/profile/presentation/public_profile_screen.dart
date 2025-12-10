@@ -806,8 +806,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                               );
 
                               // Safely close both loader and bottom sheet
-                              Future.delayed(const Duration(milliseconds: 100),
-                                  () {
+                              Future<Null>.delayed(
+                                  const Duration(milliseconds: 100), () {
                                 Get.back(closeOverlays: true);
                               });
                             } else {

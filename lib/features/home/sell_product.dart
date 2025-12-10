@@ -246,23 +246,20 @@ void sellProduct(BuildContext context) {
                     }
 
                     return ListTile(
-                      onTap: () => <void>{
-                        if (!profileController.myProfile.hasShop)
-                          <Future?>{
-                            Get.to(() => const MyProfileScreen(
-                                  currentIndex: 1,
-                                ))
-                          }
-                        else
-                          <void>{
-                            handleSellOptionTap(
-                              context: context,
-                              index: index,
-                              profileController: profileController,
-                              shopController: shopController,
-                              supplierController: supplierController,
-                            )
-                          },
+                      onTap: () {
+                        if (!profileController.myProfile.hasShop) {
+                          Get.to(() => const MyProfileScreen(
+                                currentIndex: 1,
+                              ));
+                        } else {
+                          handleSellOptionTap(
+                            context: context,
+                            index: index,
+                            profileController: profileController,
+                            shopController: shopController,
+                            supplierController: supplierController,
+                          );
+                        }
                       },
                       minVerticalPadding: 0,
                       contentPadding: const EdgeInsets.only(left: 10),

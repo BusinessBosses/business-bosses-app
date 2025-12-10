@@ -66,7 +66,8 @@ class _AttendeesItemState extends State<AttendeesItem> {
                                   icon: SvgPicture.asset(
                                     'assets/svgs/person.svg',
                                     height: 80.0,
-                                    color: hintColor,
+                                    colorFilter: const ColorFilter.mode(
+                                        hintColor, BlendMode.srcIn),
                                   ),
                                   title: 'There is no attendee for now',
                                   subTitle: 'Be the first one to attend!',
@@ -100,7 +101,11 @@ class _AttendeesItemState extends State<AttendeesItem> {
                                                     SvgPicture.asset(
                                                       'assets/svgs/premiumbadge.svg',
                                                       height: 9,
-                                                      color: primaryColorLT,
+                                                      colorFilter:
+                                                          const ColorFilter
+                                                              .mode(
+                                                              primaryColorLT,
+                                                              BlendMode.srcIn),
                                                     )
                                                   ],
                                                 )

@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class Challengeitem extends StatelessWidget {
-  final VoidCallback? OnTap;
+  final VoidCallback? onTap;
   final String? title;
   final String? imageurl;
   final String? time;
@@ -18,7 +18,7 @@ class Challengeitem extends StatelessWidget {
 
   const Challengeitem({
     super.key,
-    this.OnTap,
+    this.onTap,
     this.title,
     this.imageurl,
     this.time,
@@ -34,7 +34,7 @@ class Challengeitem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: OnTap,
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
@@ -114,7 +114,7 @@ class Challengeitem extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: OnTap,
+              onPressed: onTap,
               child: Text(
                 isPartner == true
                     ? 'Partners Deals'
@@ -172,7 +172,7 @@ class Challengeitem extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: OutlinedButton(
-            onPressed: OnTap,
+            onPressed: onTap,
             child: const Text(
               'Enter',
               style: TextStyle(

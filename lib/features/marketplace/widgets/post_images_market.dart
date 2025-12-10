@@ -19,7 +19,7 @@ class PostImagesMarket extends StatelessWidget {
             ? GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
+                    MaterialPageRoute<void>(
                       builder: (BuildContext context) => ImagesViewerScreen(
                         urls: post.images,
                         text: post.description,
@@ -47,7 +47,7 @@ class PostImagesMarket extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(
-                              MaterialPageRoute(
+                              MaterialPageRoute<dynamic>(
                                 builder: (BuildContext context) =>
                                     ImagesViewerScreen(
                                   urls: post.images,
@@ -75,7 +75,7 @@ class PostImagesMarket extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(
-                              MaterialPageRoute(
+                              MaterialPageRoute<dynamic>(
                                 builder: (BuildContext context) =>
                                     ImagesViewerScreen(
                                   urls: post.images,
@@ -106,7 +106,7 @@ class PostImagesMarket extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(
-                              MaterialPageRoute(
+                              MaterialPageRoute<dynamic>(
                                 builder: (BuildContext context) =>
                                     ImagesViewerScreen(
                                   urls: post.images,
@@ -137,7 +137,7 @@ class PostImagesMarket extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(
+                                  MaterialPageRoute<dynamic>(
                                     builder: (BuildContext context) =>
                                         ImagesViewerScreen(
                                       urls: post.images,
@@ -166,7 +166,7 @@ class PostImagesMarket extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(
+                                  MaterialPageRoute<dynamic>(
                                     builder: (BuildContext context) =>
                                         ImagesViewerScreen(
                                       urls: post.images,
@@ -187,7 +187,7 @@ class PostImagesMarket extends StatelessWidget {
                                             ? GestureDetector(
                                                 onTap: () {
                                                   Navigator.of(context).push(
-                                                    MaterialPageRoute(
+                                                    MaterialPageRoute<dynamic>(
                                                       builder: (BuildContext
                                                               context) =>
                                                           ImagesViewerScreen(
@@ -200,20 +200,16 @@ class PostImagesMarket extends StatelessWidget {
                                                 },
                                                 child: Stack(
                                                   children: <Widget>[
-                                                    Container(
-                                                      child:
-                                                          NetworkImageWithPlaceHolder(
-                                                        borderColor:
-                                                            Colors.black12,
-                                                        imageUrl:
-                                                            post.images![i - 1],
-                                                        width: double.infinity,
-                                                        height: double.infinity,
-                                                        placeHolder:
-                                                            Icons.photo,
-                                                        iconSize: 18.0,
-                                                        radius: 8.0,
-                                                      ),
+                                                    NetworkImageWithPlaceHolder(
+                                                      borderColor:
+                                                          Colors.black12,
+                                                      imageUrl:
+                                                          post.images![i - 1],
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                      placeHolder: Icons.photo,
+                                                      iconSize: 18.0,
+                                                      radius: 8.0,
                                                     ),
                                                     if (post.images!.length >
                                                             3 &&

@@ -102,7 +102,7 @@ class _TopicsPageState extends State<TopicsPage> {
                           Row(
                             children: <Widget>[
                               GestureDetector(
-                                onTap: () => <Future>{
+                                onTap: () async {
                                   industry.categoryId!.toString() ==
                                           Constants.LEARNINGID
                                       ? showDialog(
@@ -114,7 +114,7 @@ class _TopicsPageState extends State<TopicsPage> {
                                           context: context,
                                           builder: (BuildContext context) =>
                                               const OpportunitiesPopup(),
-                                        )
+                                        );
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 15.0),
@@ -346,7 +346,7 @@ class _TopicsPageState extends State<TopicsPage> {
                                         const Spacer(),
                                         Align(
                                           alignment: Alignment.centerRight,
-                                          child: JoinedButton(
+                                          child: joinedButton(
                                             industry.joinedUsers?.contains(
                                                     _myProfile.myProfile.uid) ??
                                                 false,

@@ -164,7 +164,10 @@ class SubscriptionConfirmation extends StatelessWidget {
                                                 SvgPicture.asset(
                                                   'assets/svgs/goldcheckmark.svg',
                                                   height: 25,
-                                                  color: primaryColorLT,
+                                                  colorFilter:
+                                                      const ColorFilter.mode(
+                                                          primaryColorLT,
+                                                          BlendMode.srcIn),
                                                 ),
                                                 const SizedBox(width: 15),
                                                 const Text(

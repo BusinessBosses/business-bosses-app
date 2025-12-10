@@ -870,8 +870,8 @@ class HomeController extends GetxController {
     showDialog(
       barrierDismissible: false,
       context: Get.context!,
-      builder: (BuildContext context) => WillPopScope(
-        onWillPop: () async => false,
+      builder: (BuildContext context) => PopScope(
+        canPop: false,
         child: AlertDialog(
           title: const TextWidget(
             text: 'Access Expired',
@@ -1243,7 +1243,10 @@ class HomeController extends GetxController {
       if (response.success) {
         showSnackbar(message: 'Course deleted successfully!', title: 'Success');
         usercourses.removeWhere((CourseModel course) => course.id == courseId);
+        courses.removeWhere((CourseModel course) => course.id == courseId);
+        mixPostandPromoted();
         update();
+
         return;
       } else {
         showSnackbar(

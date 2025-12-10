@@ -22,7 +22,7 @@ class ReferalsScreen extends StatelessWidget {
       builder: (ReferralsController controller) {
         return Scaffold(
           appBar: controller.isSearching
-              ? SearchAppBar(
+              ? searchAppBar(
                   hintText: 'Search person by name',
                   onClose: () {
                     controller.toggleSearchState();

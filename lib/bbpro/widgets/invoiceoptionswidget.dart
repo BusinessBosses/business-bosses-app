@@ -23,63 +23,53 @@ class _InvoiceOptionsWidgetState extends State<InvoiceOptionsWidget> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const Text(
-              'Do you want to send invoice for this order',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+        child: RadioGroup<int>(
+          groupValue: selectedOption,
+          onChanged: (int? value) {
+            if (value != null) {
+              setState(() {
+                selectedOption = value;
+                widget.onOptionSelected(selectedOption);
+              });
+            }
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Text(
+                'Do you want to send invoice for this order',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            RadioListTile<int>(
-              contentPadding: EdgeInsets.zero,
-              activeColor: proprimaryColor, // Set selected thumb color
-              value: 0,
-              groupValue: selectedOption,
-              onChanged: (int? value) {
-                setState(() {
-                  selectedOption = value!;
-                  widget.onOptionSelected(selectedOption); // Call callback
-                });
-              },
-              title: const Text('Don\'t send invoice',
-                  style: TextStyle(fontSize: 13)),
-            ),
-            RadioListTile<int>(
-              contentPadding: EdgeInsets.zero,
-              activeColor: proprimaryColor, // Set selected thumb color
-              value: 1,
-              groupValue: selectedOption,
-              onChanged: (int? value) {
-                setState(() {
-                  selectedOption = value!;
-                  widget.onOptionSelected(selectedOption); // Call callback
-                });
-              },
-              title: const Text(
-                'Send invoice with Payment link',
-                style: TextStyle(fontSize: 13),
+              const SizedBox(height: 16.0),
+              RadioListTile<int>(
+                contentPadding: EdgeInsets.zero,
+                activeColor: proprimaryColor,
+                value: 0,
+                title: const Text('Don\'t send invoice',
+                    style: TextStyle(fontSize: 13)),
               ),
-            ),
-            RadioListTile<int>(
-              contentPadding: EdgeInsets.zero,
-              activeColor: proprimaryColor, // Set selected thumb color
-              value: 2,
-              groupValue: selectedOption,
-              onChanged: (int? value) {
-                setState(() {
-                  selectedOption = value!;
-                  widget.onOptionSelected(selectedOption); // Call callback
-                });
-              },
-              title: const Text('Send invoice without Payment link',
-                  style: TextStyle(fontSize: 13)),
-            ),
-          ],
+              RadioListTile<int>(
+                contentPadding: EdgeInsets.zero,
+                activeColor: proprimaryColor,
+                value: 1,
+                title: const Text(
+                  'Send invoice with Payment link',
+                  style: TextStyle(fontSize: 13),
+                ),
+              ),
+              RadioListTile<int>(
+                contentPadding: EdgeInsets.zero,
+                activeColor: proprimaryColor,
+                value: 2,
+                title: const Text('Send invoice without Payment link',
+                    style: TextStyle(fontSize: 13)),
+              ),
+            ],
+          ),
         ),
       ),
     );
