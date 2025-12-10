@@ -56,19 +56,19 @@ class OptionsButton extends StatelessWidget {
         const PopupMenuDivider(
           height: 0.0,
         ),
-      if (isBoost == true)
-        PopupMenuItem<String>(
-          onTap: onBoost,
-          value: 'Boost',
-          child: const Text(
-            'Boost',
-            style: bodyText2,
-          ),
-        ),
-      if (isBoost == true)
-        const PopupMenuDivider(
-          height: 0.0,
-        ),
+      // if (isBoost == true)
+      //   PopupMenuItem<String>(
+      //     onTap: onBoost,
+      //     value: 'Boost',
+      //     child: const Text(
+      //       'Boost',
+      //       style: bodyText2,
+      //     ),
+      //   ),
+      // if (isBoost == true)
+      //   const PopupMenuDivider(
+      //     height: 0.0,
+      //   ),
       PopupMenuItem<String>(
         value: 'Delete',
         onTap: onDelete,

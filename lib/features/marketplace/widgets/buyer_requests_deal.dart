@@ -37,7 +37,9 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
 
   @override
   void initState() {
-    requestController.initBuyerRequests();
+    if (requestController.buyerRequests.isEmpty) {
+      requestController.initBuyerRequests();
+    }
     super.initState();
   }
 
