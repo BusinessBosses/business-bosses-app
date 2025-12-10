@@ -3,7 +3,7 @@ import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
-
+import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/suppliers_grid_tile.dart';
@@ -345,7 +345,9 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
             totalMatches: 0,
             matchQuality: 0,
           ),
-          if (isInvestor || isPartner)
+          if (isInvestor ||
+              isPartner ||
+              (!isSeller && !isInvestor && !isPartner))
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: GestureDetector(
@@ -354,6 +356,8 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                     Get.to(() => const DonationsPage(
                           ishome: false,
                         ));
+                  } else if (!isPartner && !isSeller && !isInvestor) {
+                    Get.to(AllForumScreen());
                   } else {
                     Get.to(() => BossUpPartner());
                   }
@@ -382,7 +386,9 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                           color: Colors.green.shade50,
                         ),
                         child: Icon(
-                          LucideIcons.heartHandshake,
+                          (!isSeller && !isInvestor && !isPartner)
+                              ? LucideIcons.bookOpen
+                              : LucideIcons.heartHandshake,
                           color: Colors.green.shade700,
                           size: 20,
                         ),
@@ -392,7 +398,9 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                         child: Text(
                           isInvestor
                               ? 'Create a Crowdfund to get funding for your projects'
-                              : 'Claim exclusive partner deals',
+                              : !isSeller && !isInvestor && !isPartner
+                                  ? 'Access learning resources to help you upskill'
+                                  : 'Claim exclusive partner deals',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
@@ -407,6 +415,18 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                 ),
               ),
             ),
+          if (isInvestor)
+            Text('Showing backers funding entrepreneurs',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey.shade600,
+                )),
+          if (!isPartner && !isSeller && !isInvestor)
+            Text('Showing coaches available for mentorship',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey.shade600,
+                )),
           if (isSeller)
             Column(
               children: <Widget>[

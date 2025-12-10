@@ -150,7 +150,6 @@ flutter:
     - assets/anim/
     - assets/app/
     - assets/images/
-    - assets/users/
     - assets/svgs/
     - pubspec.yaml
     - shorebird.yaml

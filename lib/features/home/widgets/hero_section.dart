@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
