@@ -61,6 +61,15 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
                       true
                   ? Container()
                   : CustomTileLearning(
+                      url: controller
+                          .getCategoryIndustries(Constants.LEARNINGID)[index]
+                          .photo,
+                      count: (controller
+                                  .getCategoryIndustries(
+                                      Constants.LEARNINGID)[index]
+                                  .joinedUsersCount ??
+                              0)
+                          .toString(),
                       label: controller
                           .getCategoryIndustries(Constants.LEARNINGID)[index]
                           .industry!,

@@ -33,6 +33,7 @@ class ProfileController extends GetxController {
       'monthlyRank': userRanking['rankMonthly']
     });
     myProfile = modelizedData;
+    currentMatchType.value = myProfile.matchType ?? '';
     update();
   }
 
@@ -58,6 +59,7 @@ class ProfileController extends GetxController {
   /// UPDATE USER DATA
   void updateProfile(Map<String, dynamic> newData) {
     myProfile = UserModel.fromMap(newData);
+    currentMatchType.value = myProfile.matchType ?? '';
     update();
   }
 

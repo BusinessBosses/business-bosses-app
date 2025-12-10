@@ -30,7 +30,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
     },
     <String, dynamic>{
       'icon': LucideIcons.heartHandshake,
-      'title': 'I need Business Partners / Suppliers',
+      'title': 'I need Business Partners',
       'subtitle': 'partner',
     },
     <String, dynamic>{
