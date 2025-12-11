@@ -321,7 +321,7 @@ class _ReachScreenState extends State<ReachScreen> {
                                             ),
                                             Expanded(
                                               child: CustomChildButton(
-                                                value: Disconnected(
+                                                value: disconnected(
                                                         _disconnections,
                                                         timestamp:
                                                             TimeFormat.ONE_WEEK)
@@ -372,7 +372,7 @@ class _ReachScreenState extends State<ReachScreen> {
                                             ),
                                             Expanded(
                                               child: CustomChildButton(
-                                                value: Disconnected(
+                                                value: disconnected(
                                                         _disconnections,
                                                         timestamp: TimeFormat
                                                             .ONE_MONTH)
