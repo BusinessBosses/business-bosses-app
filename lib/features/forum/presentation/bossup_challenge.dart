@@ -138,8 +138,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                               ishome: false,
                             ));
                       },
-                      description:
-                          'Share your project to receive funding support ',
+                      description: 'Share your project to get funding support',
                       iscustom: true,
                       title: 'Crowdfund',
                       imageurl: 'assets/images/donationpic.png',
@@ -152,8 +151,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                             const AllLearningPostsScreen(isCoursesTile: false));
                       },
                       title: 'Mentor of the Week',
-                      description:
-                          'Share learnings and resources for upskilling and mentorship',
+                      description: 'Explore learning resources for upskilling',
                       imageurl:
                           'https://images.pexels.com/photos/247819/pexels-photo-247819.jpeg',
                     );
@@ -164,7 +162,8 @@ class _BossupChallengeState extends State<BossupChallenge> {
                         Get.to(() => BossUpPartner());
                       },
                       title: 'Partner\'s Deals',
-                      description: 'Discover and list deals and get customers.',
+                      description:
+                          'Discover & list deals to get more customers.',
                       imageurl:
                           'https://images.pexels.com/photos/5520322/pexels-photo-5520322.jpeg',
                     );

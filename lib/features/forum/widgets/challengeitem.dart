@@ -108,7 +108,7 @@ class Challengeitem extends StatelessWidget {
             softWrap: true,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 12),
+            style: const TextStyle(fontSize: 14),
           ),
           const SizedBox(height: 10),
           SizedBox(
@@ -119,13 +119,13 @@ class Challengeitem extends StatelessWidget {
                 isPartner == true
                     ? 'Partners Deals'
                     : isCrowdfund == true
-                        ? 'Crowdfund'
+                        ? 'Fund Project'
                         : isMentor == true
                             ? 'Start Learning'
                             : 'Enter',
                 style: const TextStyle(
                   color: primaryColorLT,
-                  fontSize: 12,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -148,7 +148,7 @@ class Challengeitem extends StatelessWidget {
               style: const TextStyle(
                 color: primaryColorLT,
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
+                fontSize: 16,
               ),
             ),
           ],
@@ -177,7 +177,7 @@ class Challengeitem extends StatelessWidget {
               'Enter',
               style: TextStyle(
                 color: primaryColorLT,
-                fontSize: 12,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
               ),
             ),

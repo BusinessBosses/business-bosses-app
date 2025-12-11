@@ -124,7 +124,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
+                padding: const EdgeInsets.only(left: 15.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -142,9 +142,9 @@ class _UserProfileTileState extends State<UserProfileTile> {
                               crossAxisAlignment: WrapCrossAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  'Find My Match',
+                                  'Find Your Match',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w800,
                                     color: Colors.blueAccent,
                                   ),
                                 ),

@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
@@ -223,7 +224,7 @@ class _BottomBarState extends State<BottomBar> {
                                         shrinkWrap: true,
                                         physics:
                                             const NeverScrollableScrollPhysics(),
-                                        itemCount: 4,
+                                        itemCount: 5,
                                         separatorBuilder:
                                             (BuildContext context, int index) =>
                                                 const Divider(),
@@ -237,8 +238,11 @@ class _BottomBarState extends State<BottomBar> {
                                               } else if (index == 1) {
                                                 sellProduct(context);
                                               } else if (index == 2) {
-                                                Get.toNamed(Routes.createPost);
+                                                Get.to(
+                                                    () => AddBuyerRequests());
                                               } else if (index == 3) {
+                                                Get.toNamed(Routes.createPost);
+                                              } else if (index == 4) {
                                                 final Uri url = Uri.parse(
                                                     'https://businessbosses.news/instant-pr/');
                                                 launchUrl(url,
@@ -270,32 +274,44 @@ class _BottomBarState extends State<BottomBar> {
                                                                     .srcIn),
                                                       )
                                                     : index == 2
-                                                        ? SvgPicture.asset(
-                                                            'assets/svgs/text.svg',
-                                                            height: 25,
-                                                            colorFilter:
-                                                                ColorFilter.mode(
+                                                        ? Icon(
+                                                            LucideIcons
+                                                                .shoppingBag,
+                                                            color: textColor
+                                                                .withValues(
+                                                                    alpha: 1),
+                                                            size: 26,
+                                                          )
+                                                        : index == 3
+                                                            ? SvgPicture.asset(
+                                                                'assets/svgs/text.svg',
+                                                                height: 25,
+                                                                colorFilter: ColorFilter.mode(
                                                                     textColor.withValues(
                                                                         alpha:
                                                                             1),
                                                                     BlendMode
                                                                         .srcIn),
-                                                          )
-                                                        : Icon(
-                                                            LucideIcons.globe,
-                                                            color: textColor
-                                                                .withValues(
-                                                                    alpha: 1),
-                                                            size: 26,
-                                                          ),
+                                                              )
+                                                            : Icon(
+                                                                LucideIcons
+                                                                    .globe,
+                                                                color: textColor
+                                                                    .withValues(
+                                                                        alpha:
+                                                                            1),
+                                                                size: 26,
+                                                              ),
                                             title: Text(
                                               index == 0
                                                   ? 'Share business, get featured'
                                                   : index == 1
                                                       ? 'Sell your product & service'
                                                       : index == 2
-                                                          ? 'Post content, requests, etc'
-                                                          : 'Create press release',
+                                                          ? 'Create buyer requests'
+                                                          : index == 3
+                                                              ? 'Post content, discussion, etc'
+                                                              : 'Submit news for instant PR',
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w700,

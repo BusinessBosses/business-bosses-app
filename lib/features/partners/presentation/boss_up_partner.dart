@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/features/partners/controllers/partners_controller.dart';
 import 'package:business_bosses_v2/features/partners/models/partner_model.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
@@ -9,6 +10,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/theme/theme.dart';
@@ -168,6 +170,12 @@ class BossuppartnerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void sharePartner() {
+      String message = 'Have a look at $companyName on Business Bosses\n'
+          'https://vm.businessbosses.co.uk/share/post';
+      socialShare(message);
+    }
+
     List<dynamic> photos = <dynamic>[companyPhoto];
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
@@ -182,6 +190,7 @@ class BossuppartnerItem extends StatelessWidget {
           children: <Widget>[
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
@@ -219,14 +228,36 @@ class BossuppartnerItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        companyName,
-                        softWrap: true,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: textColor,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              companyName,
+                              softWrap: true,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                color: textColor,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              sharePartner();
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: backgroundColor,
+                              radius: 16,
+                              child: Icon(
+                                LucideIcons.share,
+                                color: Colors.black,
+                                size: 16,
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                       const SizedBox(height: 5),
                       Padding(

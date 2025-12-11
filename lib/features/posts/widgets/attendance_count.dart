@@ -57,7 +57,7 @@ class _AttendeesCountWidgetState extends State<AttendeesCountWidget> {
         'Event not found',
         style: TextStyle(
           fontWeight: FontWeight.w700,
-          color: Colors.red, // You can choose a color for the message
+          color: Colors.red,
         ),
       );
     }

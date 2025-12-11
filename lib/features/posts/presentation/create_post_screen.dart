@@ -229,7 +229,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ),
                     centerTitle: true,
                     title: widget.postId == null
-                        ? const Text('Post content, requests, etc')
+                        ? const Text('Post content, discussion, etc')
                         : const Text('Update Discussion'),
                   ),
             body: GestureDetector(
