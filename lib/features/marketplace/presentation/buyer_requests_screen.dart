@@ -246,7 +246,10 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   void _showRequestDetails(BuyerRequestModel request) {
-    final bool hasValidImage = _isValidImageUrl(request.attachments[0]);
+    bool hasValidImage = false;
+    if (request.attachments.isNotEmpty) {
+      hasValidImage = _isValidImageUrl(request.attachments[0]);
+    }
     final bool hasValidProfilePic = _isValidImageUrl(request.user.photoUrl);
     final bool isMyRequest =
         request.user.uid == profileController.myProfile.uid;

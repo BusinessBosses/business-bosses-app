@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
@@ -248,6 +249,104 @@ class _OrderProductScreenState extends State<OrderProductScreen>
               padding: const EdgeInsets.only(right: 15.0),
               child: InkWell(
                   onTap: () {
+                    if (profileController.myProfile.uid ==
+                        widget.product.shop!.userId) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              /// ---------------- EDIT ----------------
+                              ListTile(
+                                onTap: () {
+                                  navigateTo(context);
+                                  Get.to(
+                                    () => CreateProductListing(
+                                      product: widget.product,
+                                    ),
+                                  );
+                                },
+                                contentPadding: EdgeInsets.zero,
+                                title: const TextWidget(
+                                  text: 'Edit',
+                                  color: Colors.blue,
+                                ),
+                              ),
+
+                              /// ---------------- DELETE ----------------
+                              ListTile(
+                                onTap: () {
+                                  navigateTo(context);
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const TextWidget(
+                                        text: 'Delete this listing?',
+                                        centralize: true,
+                                        fontWeight: FontWeight.w700,
+                                        size: 20,
+                                      ),
+                                      content: TextWidget(
+                                        text:
+                                            'This action cannot be undone. Are you sure you want to delete it?',
+                                        centralize: true,
+                                        color:
+                                            Colors.black.withValues(alpha: .6),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () => navigateTo(context),
+                                          child: const TextWidget(
+                                            text: 'Cancel',
+                                            fontWeight: FontWeight.w700,
+                                            size: 18,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            navigateTo(context);
+                                            shopController.deleteProduct(
+                                                widget.product.id);
+                                            showSnackBar(context,
+                                                message: 'Product deleted');
+                                            Get.back();
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 7,
+                                              horizontal: 14,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: primaryColorLT,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: const TextWidget(
+                                              text: 'Delete',
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                contentPadding: EdgeInsets.zero,
+                                title: const TextWidget(
+                                  text: 'Delete',
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                      return;
+                    }
                     showDialog(
                       context: context,
                       builder: (BuildContext context) => AlertDialog(

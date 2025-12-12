@@ -281,6 +281,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           const Tab(
               child:
                   Text('Posts', style: TextStyle(fontWeight: FontWeight.w700))),
+          if (homeController.myRequests.isNotEmpty)
+            const Tab(
+              child: Text('Requests',
+                  style: TextStyle(fontWeight: FontWeight.w700)),
+            )
         ],
       ),
     );
@@ -745,17 +750,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       ));
     }
 
-    // Add buyer requests
-    for (final BuyerRequestModel req in homeController.myRequests) {
-      if (req.createdAt != null) {
-        combinedItems.add(UnifiedFeedItem(
-          data: req,
-          type: FeedType.request,
-          createdAt: DateTime.tryParse(req.createdAt!) ?? DateTime.now(),
-        ));
-      }
-    }
-
     // Add donations
     for (final DonationModel donation in homeController.userdonations) {
       if (donation.timestamp != null) {
@@ -896,6 +890,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
   int calculateTabLength() {
     int count = 2; // About + Posts
+    if (homeController.myRequests.isNotEmpty) count++;
     return count;
   }
 }
