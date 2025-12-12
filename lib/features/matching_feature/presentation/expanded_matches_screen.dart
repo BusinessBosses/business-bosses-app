@@ -441,7 +441,10 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                         ),
                         child: SvgPicture.asset(
                           'assets/svgs/marketplace.svg',
-                          color: Colors.green.shade700,
+                          colorFilter: ColorFilter.mode(
+                            Colors.green.shade700,
+                            BlendMode.srcIn,
+                          ),
                           width: 20,
                           height: 20,
                         ),

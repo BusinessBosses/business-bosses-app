@@ -46,7 +46,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
     '1000_bb_coins',
     '10000_bb_coins'
   ];
-  Offerings? _offerings;
+
   List<Package> _coinPackages = [];
 
   @override
@@ -73,7 +73,6 @@ class _DepositsScreenState extends State<DepositsScreen> {
         }).toList();
 
         setState(() {
-          _offerings = offerings;
           _coinPackages = filteredPackages;
         });
       }

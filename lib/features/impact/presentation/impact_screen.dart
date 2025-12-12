@@ -244,13 +244,9 @@ class _ReachScreenState extends State<ReachScreen> {
 
               if (widget.user == profileController.myProfile)
                 ExpansionTile(
-                  trailing: false
-                      ? SvgPicture.asset(
-                          'assets/svgs/dropdownexpansionup.svg',
-                        )
-                      : SvgPicture.asset(
-                          'assets/svgs/dropdownexpansion.svg',
-                        ),
+                  trailing: SvgPicture.asset(
+                    'assets/svgs/dropdownexpansion.svg',
+                  ),
                   title: RichText(
                     text: const TextSpan(
                       style:
