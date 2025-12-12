@@ -49,6 +49,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String? _referralId;
+  bool _isVerifyingCode = false;
 
   String? _location;
   String? _category;
@@ -254,6 +255,44 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   //     return true;
   //   }
   // }
+
+  Future<void> _confirmInviteCode() async {
+    if (_referralId == null || _referralId!.trim().isEmpty) {
+      showSnackbar(
+          title: 'Error', message: 'Please enter an invite code', error: true);
+      return;
+    }
+    setState(() {
+      _isVerifyingCode = true;
+    });
+
+    try {
+      final ApiResponseModel res = await ApiService.post(
+          path: 'users/claim-invite',
+          body: <String, dynamic>{'code': _referralId!.trim()});
+
+      if (res.success) {
+        showSnackbar(
+            title: 'Success!',
+            message: 'Invite code verified. You received 10 BB Coins!',
+            error: false);
+      } else {
+        showSnackbar(
+            title: 'OOPS!',
+            message: res.message ?? 'Invalid invite code',
+            error: true);
+      }
+    } catch (e) {
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'Could not verify invite code. Please try again.',
+          error: true);
+    } finally {
+      setState(() {
+        _isVerifyingCode = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -561,24 +600,92 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    const Text('Invite ID',
-                                        style: TextStyle(
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          'Enter invite code and get up to 10 BB Coins',
+                                          style: TextStyle(
                                             fontSize: 14,
                                             color: textColor,
-                                            fontWeight: FontWeight.w700)),
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        SvgPicture.asset(
+                                          'assets/svgs/coin.svg',
+                                          height: 20,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    const Text(
+                                      'Available for new sign-ups only',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    TextFormField(
-                                      onChanged: (String val) {
-                                        _referralId = val;
-                                      },
-                                      textInputAction: TextInputAction.done,
-                                      keyboardType: TextInputType.text,
-                                      decoration: inputDecoration.copyWith(
-                                          hintText: 'Eg AKUK_D4U16710',
-                                          filled: true,
-                                          fillColor: const Color(0xffF4F4F4)),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: TextFormField(
+                                            onChanged: (String val) {
+                                              _referralId = val;
+                                            },
+                                            textInputAction:
+                                                TextInputAction.done,
+                                            keyboardType: TextInputType.text,
+                                            decoration:
+                                                inputDecoration.copyWith(
+                                              hintText: 'B534849521',
+                                              filled: true,
+                                              fillColor:
+                                                  const Color(0xffF4F4F4),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        ElevatedButton(
+                                          onPressed: _isVerifyingCode
+                                              ? null
+                                              : _confirmInviteCode,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: primaryColorLT,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 18),
+                                          ),
+                                          child: _isVerifyingCode
+                                              ? const SizedBox(
+                                                  height: 20,
+                                                  width: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: Colors.white,
+                                                    strokeWidth: 2,
+                                                  ),
+                                                )
+                                              : const Text(
+                                                  'Confirm',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                        )
+                                      ],
                                     ),
                                     const SizedBox(
                                       height: 20,
