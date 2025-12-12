@@ -1,15 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
-import '../../../navigation/routes.dart';
 import 'forms/login_form.dart';
+import 'forms/signup_form.dart';
 
 /// LOGIN SCREEEN
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  final bool isLogin;
+
   /// LOGIN SCREEN CONSTRUCTOR
-  const LoginScreen({super.key});
+  const LoginScreen({
+    super.key,
+    this.isLogin = true,
+  });
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  late bool _isLogin;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLogin = widget.isLogin;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,51 +75,62 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Column(
-                      children: <Widget>[
-                        TextWidget(
-                          text: 'Log In',
-                          color: primaryColorLT,
-                          fontWeight: FontWeight.w700,
-                          size: 18,
-                        ),
-                        SizedBox(
-                          height: 6,
-                        ),
-                        CircleAvatar(
-                          backgroundColor: primaryColorLT,
-                          radius: 3,
-                        )
-                      ],
-                    ),
-                    const SizedBox(width: 46),
-                    Column(
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.registration);
-                          },
-                          child: const TextWidget(
-                            text: 'Join Now',
-                            color: iconColor,
-                            fontWeight: FontWeight.w600,
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isLogin = true;
+                        });
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          TextWidget(
+                            text: 'Log In',
+                            color: _isLogin ? primaryColorLT : iconColor,
+                            fontWeight: FontWeight.w700,
                             size: 18,
                           ),
-                        ),
-                      ],
+                          if (_isLogin) ...<Widget>[
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            const CircleAvatar(
+                              backgroundColor: primaryColorLT,
+                              radius: 3,
+                            )
+                          ]
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 46),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isLogin = false;
+                        });
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          TextWidget(
+                            text: 'Join Now',
+                            color: !_isLogin ? primaryColorLT : iconColor,
+                            fontWeight: FontWeight.w700,
+                            size: 18,
+                          ),
+                          if (!_isLogin) ...<Widget>[
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            const CircleAvatar(
+                              backgroundColor: primaryColorLT,
+                              radius: 3,
+                            )
+                          ]
+                        ],
+                      ),
                     )
                   ],
                 ),
-
-                // Text(
-                //   'Login',
-                //   style: Theme.of(context).textTheme.headline6.copyWith(
-                //         fontWeight: FontWeight.w800,
-                //       ),
-                // ),
-                //field user name or email
-
-                const LoginForm(),
+                _isLogin ? const LoginForm() : const SignUpForm(),
                 const SizedBox(height: 20.0),
               ],
             ),
@@ -117,26 +145,6 @@ class LoginScreen extends StatelessWidget {
     FocusScopeNode currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
-    }
-  }
-
-  Future<dynamic> navigateTo(
-    BuildContext context, {
-    String? routeName,
-    dynamic arguments,
-    bool isRemoveUntil = false,
-  }) async {
-    // print("=====>>>> $routeName");
-    if (routeName == null) {
-      // print('+++++++ pop');
-      Navigator.of(context).pop(arguments);
-    } else if (isRemoveUntil) {
-      return await Navigator.of(context).pushNamedAndRemoveUntil(
-          routeName, (Route<dynamic> route) => false,
-          arguments: arguments);
-    } else {
-      return await Navigator.of(context)
-          .pushNamed(routeName, arguments: arguments);
     }
   }
 }

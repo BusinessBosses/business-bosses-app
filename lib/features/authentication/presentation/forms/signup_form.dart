@@ -16,7 +16,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -50,8 +50,7 @@ class _SignUpFormState extends State<SignUpForm> {
   bool? _isUniqueName = false;
   bool? _isUniqueEmail = false;
   bool isEmailAuth = true;
-  bool _showEmailForm = false;
-  bool _invisibleCPassword = true, _invisiblePassword = true;
+  bool _invisiblePassword = true;
   bool agreedToTerms = true;
   final ApiService _apiService = ApiService();
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
@@ -298,316 +297,228 @@ class _SignUpFormState extends State<SignUpForm> {
       child: Column(
         children: <Widget>[
           const SizedBox(height: 25.0),
-          if (!_showEmailForm) ...<Widget>[
-            // Social login buttons first
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: primaryColorLT),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: IconTextButton(
-                label: 'Sign up with Google',
-                onPressed: _handleGoogleSignUp,
-                borderRadius: BorderRadius.circular(20),
+          // Social login buttons first
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: primaryColorLT),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: IconTextButton(
+              label: 'Sign up with Google',
+              onPressed: _handleGoogleSignUp,
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          const SizedBox(height: 10.0),
+
+          if (Platform.isIOS) ...<Widget>[
+            SizedBox(
+              height: 55,
+              child: SignInWithAppleButton(
+                height: 40,
+                text: 'Sign up with Apple',
+                onPressed: _handleAppleSignIn,
               ),
             ),
-            const SizedBox(height: 10.0),
+          ],
 
-            if (Platform.isIOS) ...<Widget>[
-              SizedBox(
-                height: 55,
-                child: SignInWithAppleButton(
-                  height: 40,
-                  text: 'Sign up with Apple',
-                  onPressed: _handleAppleSignIn,
+          const SizedBox(height: 20.0),
+
+          // "Or" separator
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                  child: Container(
+                color: hintColor,
+                height: 0.8,
+              )),
+              const SizedBox(width: 16.0),
+              RichText(
+                text: const TextSpan(
+                  children: <InlineSpan>[
+                    TextSpan(
+                      text: 'Or',
+                      style: TextStyle(
+                        color: hintColor,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16.0),
+              Expanded(
+                  child: Container(
+                color: hintColor,
+                height: 0.8,
+              )),
+            ],
+          ),
+
+          const SizedBox(height: 20.0),
+
+          // Email signup form fields
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextFormField(
+                onChanged: (String val) async {
+                  // Process the value by removing spaces and converting to lowercase
+                  final String processedVal =
+                      val.replaceAll(' ', '').toLowerCase();
+                  _username = processedVal;
+                  bool? result = await _verifyUnique(processedVal, '');
+                  setState(() {
+                    _isUniqueName = result;
+                  });
+                },
+                validator: (String? val) => Validator.usernameValidator(
+                  val!,
+                  isUnique: _isUniqueName ?? false,
+                ),
+                keyboardType: TextInputType.name,
+                textInputAction: TextInputAction.next,
+                decoration: inputDecoration.copyWith(
+                    hintText: 'Enter / Create username',
+                    hintStyle: const TextStyle(
+                      color: iconColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    suffixIcon: _isUniqueName == true
+                        ? const Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                          )
+                        : const SizedBox(),
+                    filled: true,
+                    fillColor: const Color(0xffF4F4F4)),
+              ),
+              const SizedBox(height: 15.0),
+              if (isEmailAuth)
+                TextFormField(
+                  onChanged: (String val) async {
+                    _authCred = val;
+                    bool? result = await _verifyUnique('', val);
+                    setState(() {
+                      _isUniqueEmail = result;
+                    });
+                  },
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: inputDecoration.copyWith(
+                    hintText: 'Enter your email',
+                    hintStyle: const TextStyle(
+                      color: iconColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xffF4F4F4),
+                    suffixIcon: _isUniqueEmail == true
+                        ? const Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                          )
+                        : const SizedBox(),
+                  ),
+                  validator: (String? val) => Validator.emailValidatorSignUp(
+                    _authCred,
+                    isUnique: true,
+                  ),
+                )
+              else
+                PhoneNumberInput(
+                  onChangeCountry: onChangeCountry,
+                  countryCode: countryCode,
+                  onChangeText: (String value) {
+                    _authCred = value;
+                  },
+                )
+            ],
+          ),
+          const SizedBox(height: 15.0),
+
+          // Password
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextFormField(
+                onChanged: (String val) {
+                  _password = val;
+                  setState(() {});
+                },
+                validator: Validator.signuppasswordValidator,
+                textInputAction: TextInputAction.done,
+                obscureText: _invisiblePassword,
+                keyboardType: TextInputType.visiblePassword,
+                maxLength: 16,
+                decoration: inputDecoration.copyWith(
+                  counterText: '',
+                  hintText: 'Password (8-16 chars, include numbers)',
+                  suffixIcon: _showHideIcon(PasswordField.password),
+                  hintStyle: const TextStyle(
+                    color: iconColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: const Color(0xffF4F4F4),
                 ),
               ),
             ],
+          ),
 
-            const SizedBox(height: 20.0),
+          const SizedBox(height: 24.0),
 
-            // "Or" separator
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                    child: Container(
-                  color: hintColor,
-                  height: 0.8,
-                )),
-                const SizedBox(width: 16.0),
-                RichText(
-                  text: const TextSpan(
-                    children: <InlineSpan>[
-                      TextSpan(
-                        text: 'Or',
-                        style: TextStyle(
-                          color: hintColor,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16.0),
-                Expanded(
-                    child: Container(
-                  color: hintColor,
-                  height: 0.8,
-                )),
-              ],
-            ),
+          agreementText(context),
+          const SizedBox(height: 24.0),
+          CustomButton(
+            label: 'Join Now',
+            onPressed: () async {
+              _formKey.currentState!.save();
+              setState(() {
+                _autoValidateMode = AutovalidateMode.always;
+              });
+              if (!_formKey.currentState!.validate()) return;
 
-            const SizedBox(height: 20.0),
-
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isEmailAuth = true;
-                  _showEmailForm = true;
-                });
-              },
-              child: Container(
-                width: double.infinity,
-                height: 55,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.black12),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      LucideIcons.mail,
-                      size: 20,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text('Sign up with Email',
-                        style: TextStyle(
-                            color: textColor,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18)),
-                  ],
-                ),
-              ),
-            ),
-          ] else ...<Widget>[
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                padding: EdgeInsets.zero,
-                alignment: Alignment.centerLeft,
-                icon: Row(
-                  children: <Widget>[
-                    SvgPicture.asset('assets/svgs/backbutton.svg'),
-                    SizedBox(width: 10),
-                    Text('Sign up with Email',
-                        style: TextStyle(
-                            color: textColor,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18)),
-                  ],
-                ),
-                onPressed: () {
-                  setState(() {
-                    _showEmailForm = false;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Email signup form fields
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextFormField(
-                  onChanged: (String val) async {
-                    // Process the value by removing spaces and converting to lowercase
-                    final String processedVal =
-                        val.replaceAll(' ', '').toLowerCase();
-                    _username = processedVal;
-                    bool? result = await _verifyUnique(processedVal, '');
-                    setState(() {
-                      _isUniqueName = result;
-                    });
-                  },
-                  validator: (String? val) => Validator.usernameValidator(
-                    val!,
-                    isUnique: _isUniqueName ?? false,
-                  ),
-                  keyboardType: TextInputType.name,
-                  textInputAction: TextInputAction.next,
-                  decoration: inputDecoration.copyWith(
-                      hintText: 'Enter / Create username',
-                      hintStyle: const TextStyle(
-                        color: iconColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      suffixIcon: _isUniqueName == true
-                          ? const Icon(
-                              Icons.check_circle,
-                              color: Colors.green,
-                            )
-                          : const SizedBox(),
-                      filled: true,
-                      fillColor: const Color(0xffF4F4F4)),
-                ),
-                const SizedBox(height: 15.0),
-                if (isEmailAuth)
-                  TextFormField(
-                    onChanged: (String val) async {
-                      _authCred = val;
-                      bool? result = await _verifyUnique('', val);
-                      setState(() {
-                        _isUniqueEmail = result;
-                      });
-                    },
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: inputDecoration.copyWith(
-                      hintText: 'Enter your email',
-                      hintStyle: const TextStyle(
-                        color: iconColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      filled: true,
-                      fillColor: const Color(0xffF4F4F4),
-                      suffixIcon: _isUniqueEmail == true
-                          ? const Icon(
-                              Icons.check_circle,
-                              color: Colors.green,
-                            )
-                          : const SizedBox(),
-                    ),
-                    validator: (String? val) => Validator.emailValidatorSignUp(
-                      _authCred,
-                      isUnique: true,
-                    ),
-                  )
-                else
-                  PhoneNumberInput(
-                    onChangeCountry: onChangeCountry,
-                    countryCode: countryCode,
-                    onChangeText: (String value) {
-                      _authCred = value;
-                    },
-                  )
-              ],
-            ),
-            const SizedBox(height: 15.0),
-
-            // Confirm Password
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextFormField(
-                  onChanged: (String val) {
-                    _password = val;
-                    setState(() {});
-                  },
-                  validator: Validator.signuppasswordValidator,
-                  textInputAction: TextInputAction.done,
-                  obscureText: _invisiblePassword,
-                  keyboardType: TextInputType.visiblePassword,
-                  maxLength: 16,
-                  decoration: inputDecoration.copyWith(
-                    counterText: '',
-                    hintText: 'Password (8-16 chars, include numbers)',
-                    suffixIcon: _showHideIcon(PasswordField.password),
-                    hintStyle: const TextStyle(
-                      color: iconColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    filled: true,
-                    fillColor: const Color(0xffF4F4F4),
-                  ),
-                ),
-                const SizedBox(height: 15.0),
-                TextFormField(
-                  onChanged: (String val) {
-                    setState(() {});
-                  },
-                  validator: (String? val) {
-                    if (val != _password) {
-                      return 'Passwords do not match';
-                    }
-                    return null;
-                  },
-                  textInputAction: TextInputAction.done,
-                  obscureText: _invisiblePassword,
-                  keyboardType: TextInputType.visiblePassword,
-                  decoration: inputDecoration.copyWith(
-                    counterText: '',
-                    hintText: 'Confirm Password',
-                    suffixIcon: _showHideIcon(PasswordField.password),
-                    hintStyle: const TextStyle(
-                      color: iconColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    filled: true,
-                    fillColor: const Color(0xffF4F4F4),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 24.0),
-
-            agreementText(context),
-            const SizedBox(height: 24.0),
-            CustomButton(
-              label: 'Join Now',
-              onPressed: () async {
-                _formKey.currentState!.save();
+              if (agreedToTerms) {
                 setState(() {
                   _autoValidateMode = AutovalidateMode.always;
+                  _isProcessing = true;
                 });
-                if (!_formKey.currentState!.validate()) return;
-
-                if (agreedToTerms) {
-                  setState(() {
-                    _autoValidateMode = AutovalidateMode.always;
-                    _isProcessing = true;
-                  });
-                  AuthController().sendOtp(
-                      emailAddress: _authCred!,
-                      userName: _username!,
-                      password: _password!,
-                      inviteId: _inviteId,
-                      onError: () {
-                        setState(() {
-                          _isProcessing = false;
-                        });
+                AuthController().sendOtp(
+                    emailAddress: _authCred!,
+                    userName: _username!,
+                    password: _password!,
+                    inviteId: _inviteId,
+                    onError: () {
+                      setState(() {
+                        _isProcessing = false;
                       });
-                } else {
-                  Get.snackbar('Error',
-                      'Before signing up, you must agree to our Terms and Conditions');
-                  setState(() {
-                    _isProcessing = false;
-                  });
-                }
-                // } else {
-                //   Get.snackbar('Error', 'Invalid Entries in Form');
-                //   setState(() {
-                //     _isProcessing = false;
-                //   });
-                // }
+                    });
+              } else {
+                Get.snackbar('Error',
+                    'Before signing up, you must agree to our Terms and Conditions');
                 setState(() {
                   _isProcessing = false;
                 });
-              },
-              isProcessing: _isProcessing,
-              buttonType: ButtonType.elevated,
-            ),
-          ]
+              }
+              // } else {
+              //   Get.snackbar('Error', 'Invalid Entries in Form');
+              //   setState(() {
+              //     _isProcessing = false;
+              //   });
+              // }
+              setState(() {
+                _isProcessing = false;
+              });
+            },
+            isProcessing: _isProcessing,
+            buttonType: ButtonType.elevated,
+          ),
         ],
       ),
     );
@@ -617,11 +528,7 @@ class _SignUpFormState extends State<SignUpForm> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          if (passwordField == PasswordField.password) {
-            _invisiblePassword = !_invisiblePassword;
-          } else {
-            _invisibleCPassword = !_invisibleCPassword;
-          }
+          _invisiblePassword = !_invisiblePassword;
         });
       },
       child: Container(
@@ -629,13 +536,9 @@ class _SignUpFormState extends State<SignUpForm> {
         width: 40.0,
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         child: SvgPicture.asset(
-          passwordField == PasswordField.password
-              ? !_invisiblePassword
-                  ? 'assets/svgs/eye.svg'
-                  : 'assets/svgs/private.svg'
-              : !_invisibleCPassword
-                  ? 'assets/svgs/eye.svg'
-                  : 'assets/svgs/private.svg',
+          !_invisiblePassword
+              ? 'assets/svgs/eye.svg'
+              : 'assets/svgs/private.svg',
           colorFilter: const ColorFilter.mode(hintColor, BlendMode.srcIn),
         ),
       ),

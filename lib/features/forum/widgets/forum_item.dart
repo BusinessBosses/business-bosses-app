@@ -950,8 +950,10 @@ class _ForumItemState extends State<ForumItem> {
                     children: <Widget>[
                       SvgPicture.asset(
                         'assets/svgs/repost.svg',
-                        colorFilter:
-                            ColorFilter.mode(textColor, BlendMode.srcIn),
+                        colorFilter: ColorFilter.mode(
+                          textColor,
+                          BlendMode.srcIn,
+                        ),
                         height: 16,
                       ),
                       const SizedBox(
