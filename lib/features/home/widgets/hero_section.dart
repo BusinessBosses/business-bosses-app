@@ -198,7 +198,7 @@ class _HeroSectionState extends State<HeroSection> {
           action: _profileController.myProfile.connecteds!.contains(backer!.uid)
               ? 'Refer'
               : 'Follow',
-          action2: 'Crowdfund'),
+          action2: 'Fund Project'),
       HeroItem(
           id: '4',
           type: 'partner',
@@ -228,7 +228,7 @@ class _HeroSectionState extends State<HeroSection> {
         subtitle:
             'See your top matches and connect with people and opportunities that can help your business grow.',
         image: '',
-        action: 'View Matches',
+        action: 'View your Match',
       ),
     ];
   }

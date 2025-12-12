@@ -35,7 +35,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
 
   final ShopController shopController = Get.find();
   final BuyerRequestController buyerRequestController =
-      Get.find<BuyerRequestController>();
+      Get.put(BuyerRequestController());
 
   final ProfileController profileController = Get.find();
 

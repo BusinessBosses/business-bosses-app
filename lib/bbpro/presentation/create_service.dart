@@ -645,7 +645,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
             // Delivery Method Dropdown
             ExpansionTile(
-              initiallyExpanded: true,
+              initiallyExpanded: false,
               trailing: isExpanded
                   ? SvgPicture.asset(
                       'assets/svgs/dropdownexpansionup.svg',
@@ -936,7 +936,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               onPressed: _submitForm,
             ),
 
-            const SizedBox(height: 16),
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(

@@ -1080,7 +1080,13 @@ class _PostTileState extends State<PostTile> {
 
                                                 setState(() {});
                                               },
-                                              child: const Text('Attend'),
+                                              child: const Text(
+                                                'Attend',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.white),
+                                              ),
                                             ),
                                     ],
                                   ),

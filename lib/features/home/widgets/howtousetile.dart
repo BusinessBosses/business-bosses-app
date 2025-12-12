@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/features/matching_feature/presentation/expand
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class HowtouseTile extends StatelessWidget {
   final bool? isSearch;
@@ -42,7 +43,7 @@ class HowtouseTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     const Text(
-                      'Find My Match',
+                      'Find Your Business Match',
                       style: TextStyle(
                         color: textColor,
                         fontSize: 16,
@@ -74,7 +75,7 @@ class HowtouseTile extends StatelessWidget {
                         height: 10,
                       ),
                     const Icon(
-                      Icons.chevron_right_rounded,
+                      LucideIcons.chevronRight,
                       color: Colors.green,
                       size: 30,
                     ),

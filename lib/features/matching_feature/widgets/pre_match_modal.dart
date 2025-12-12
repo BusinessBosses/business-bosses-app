@@ -151,7 +151,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
                             Text(
                               option['title'],
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w600,
                                 color: isSelected ? Colors.black : textDark,
                               ),

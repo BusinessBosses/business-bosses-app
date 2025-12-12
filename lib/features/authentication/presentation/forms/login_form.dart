@@ -238,12 +238,12 @@ class _LoginFormState extends State<LoginForm> {
               // Social login buttons first
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black12),
+                  border: Border.all(color: primaryColorLT),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: IconTextButton(
                   backgroundColor: Colors.transparent,
-                  label: 'Continue with Google',
+                  label: 'Sign in with Google',
                   labelColor: textColor,
                   onPressed: _handleGoogleSignIn,
                   borderRadius: BorderRadius.circular(20.0),
@@ -257,7 +257,7 @@ class _LoginFormState extends State<LoginForm> {
                   height: 55,
                   child: SignInWithAppleButton(
                     height: 40,
-                    text: 'Continue with Apple',
+                    text: 'Sign in with Apple',
                     onPressed: _handleAppleSignIn,
                   ),
                 ),

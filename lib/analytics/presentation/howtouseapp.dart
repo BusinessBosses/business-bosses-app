@@ -1,5 +1,4 @@
-// ignore_for_file: always_specify_types
-
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
@@ -37,7 +36,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
     // ignore: unused_local_variable
     final Industry category = controller.categories[0];
     List<Map<String, dynamic>> tilesData = <Map<String, dynamic>>[
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/cartu.svg',
           height: 35,
@@ -51,7 +50,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
             'Browse and purchase items from other users. You can find a wide variety of items here.',
         'onTileClicked': () => Get.to(() => const MarketplaceScreen()),
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/marketplaceoutlined.svg',
           height: 35,
@@ -67,7 +66,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
               currentIndex: 1,
             )),
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/coin.svg',
           height: 35,
@@ -83,7 +82,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
           Get.toNamed(Routes.promotionscreen);
         },
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/bossupu.svg',
           height: 40,
@@ -97,7 +96,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
             'Connect with other users and build your network. Find connections who share your interests.',
         'onTileClicked': () => Get.to(() => const AllCommunitiesScreen()),
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/messages.svg',
           height: 35,
@@ -111,7 +110,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
             'Communicate with other users through private messages. Stay connected with your connections and customers',
         'onTileClicked': () => Get.to(() => const ChatScreen()),
       },
-      {
+      <String, dynamic>{
         'icon': Icon(
           LucideIcons.users,
           size: 35,
@@ -122,7 +121,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
             'Find business matches and opportunities tailored to your profile. Get connected with potential partners, clients, and collaborators.',
         'onTileClicked': () => Get.to(() => ExpandedMatchesScreen()),
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/supporter.svg',
           height: 35,
@@ -134,13 +133,13 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Crowdfund',
         'description':
             'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
-        'onTileClicked': () => {
+        'onTileClicked': () => <Future?>{
               Get.to(() => const DonationsPage(
                     ishome: false,
                   ))
             }
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/partner.svg',
           height: 35,
@@ -154,7 +153,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
             'Partner with us to expand your reach, list exclusive deals, and attract new customers. Collaborate on business opportunities, gain visibility, and grow your network through strategic partnerships on Business Bosses.',
         'onTileClicked': () => Get.to(() => const BossUpPartner())
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/settings.svg',
           height: 35,
@@ -168,7 +167,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
             'Customize your app preferences and manage your account settings. ',
         'onTileClicked': () => Get.to(() => const SettingsScreen()),
       },
-      {
+      <String, dynamic>{
         'icon': const Icon(
           Icons.add,
           size: 35,
@@ -194,7 +193,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                       ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 4,
+                        itemCount: 5,
                         separatorBuilder: (BuildContext context, int index) =>
                             const Divider(),
                         itemBuilder: (BuildContext context, int index) {
@@ -208,11 +207,13 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                                 // Sell your product & service
                                 sellProduct(context);
                               } else if (index == 2) {
-                                // Post content, requests, etc
-                                Get.toNamed(Routes.createPost);
+                                Get.to(() => AddBuyerRequests());
                               } else if (index == 3) {
-                                // Create press release
-                                final url = Uri.parse(
+                                // Post content, discussion, etc
+                                Get.toNamed(Routes.createPost);
+                              } else if (index == 4) {
+                                // Submit news for instant PR
+                                final Uri url = Uri.parse(
                                     'https://businessbosses.news/submit-your-press-release');
                                 launchUrl(url,
                                     mode: LaunchMode.platformDefault);
@@ -235,27 +236,37 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                                             BlendMode.srcIn),
                                       )
                                     : index == 2
-                                        ? SvgPicture.asset(
-                                            'assets/svgs/text.svg',
-                                            height: 25,
-                                            colorFilter: ColorFilter.mode(
-                                                textColor.withValues(alpha: 1),
-                                                BlendMode.srcIn),
-                                          )
-                                        : Icon(
-                                            LucideIcons.globe,
+                                        ? Icon(
+                                            LucideIcons.shoppingBag,
                                             color:
                                                 textColor.withValues(alpha: 1),
                                             size: 26,
-                                          ),
+                                          )
+                                        : index == 3
+                                            ? SvgPicture.asset(
+                                                'assets/svgs/text.svg',
+                                                height: 25,
+                                                colorFilter: ColorFilter.mode(
+                                                    textColor.withValues(
+                                                        alpha: 1),
+                                                    BlendMode.srcIn),
+                                              )
+                                            : Icon(
+                                                LucideIcons.globe,
+                                                color: textColor.withValues(
+                                                    alpha: 1),
+                                                size: 26,
+                                              ),
                             title: Text(
                               index == 0
                                   ? 'Share business, get featured'
                                   : index == 1
                                       ? 'Sell your product & service'
                                       : index == 2
-                                          ? 'Post content, requests, etc'
-                                          : 'Create press release',
+                                          ? 'Create buyer requests'
+                                          : index == 3
+                                              ? 'Post content, discussion, etc'
+                                              : 'Submit news for instant PR',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,

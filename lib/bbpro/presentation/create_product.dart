@@ -489,7 +489,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   ),
                   const SizedBox(height: 16),
                   ExpansionTile(
-                      initiallyExpanded: true,
+                      initiallyExpanded: false,
                       trailing: isExpanded
                           ? SvgPicture.asset(
                               'assets/svgs/dropdownexpansionup.svg',
@@ -698,7 +698,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       _showBoostBottomSheet();
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 0),
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.only(

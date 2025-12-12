@@ -202,7 +202,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                 ),
               ),
               centerTitle: true,
-              title: const Text('Find My Match', textAlign: TextAlign.center),
+              title: const Text('Find Your Match', textAlign: TextAlign.center),
               actions: <Widget>[
                 GestureDetector(
                   onTap: () {
@@ -248,40 +248,6 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
           buildTopSection(),
 
           /// TABBAR BELOW MATCHHEADER
-          Obx(() {
-            if (matchController.matchedSuppliers.isNotEmpty) {
-              return Container(
-                color: Colors.white,
-                child: TabBar(
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicatorWeight: 0.1,
-                  controller: tabController,
-                  labelColor: Theme.of(context).colorScheme.primary,
-                  unselectedLabelColor: Colors.grey,
-                  tabs: const <Widget>[
-                    Tab(
-                        child: Text(
-                      'Users looking for Partners',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
-                    )),
-                    Tab(
-                        child: Text(
-                      'Suppliers',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
-                    )),
-                  ],
-                ),
-              );
-            } else {
-              return SizedBox();
-            }
-          }),
 
           // const SizedBox(
           //   height: 16,
@@ -295,9 +261,6 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                       ? BuyerRequestsScreen()
                       : buildMatchesListSection(),
                 ),
-                if (matchController.matchedSuppliers.isNotEmpty) ...<Widget>[
-                  buildSuppliersTab(),
-                ]
               ],
             ),
           ),
@@ -311,7 +274,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
       case 'investor':
         return 'Funding opportunities for you';
       case 'partner':
-        return 'Partner / Supplier Opportunities for you';
+        return 'Partner Opportunities for you';
       case 'seller':
         return 'Customer opportunities for you';
       case 'mentor':
@@ -431,7 +394,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
           if (isPartner)
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
-              child: Text('Showing users looking for partners',
+              child: Text('Showing users looking for partnership',
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey.shade600,
@@ -440,7 +403,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
           if (!isPartner && !isSeller && !isInvestor)
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
-              child: Text('Showing coaches to available mentor you',
+              child: Text('Showing coaches available for mentorship',
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey.shade600,
