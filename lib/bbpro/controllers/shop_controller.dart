@@ -53,7 +53,6 @@ class ShopController extends GetxController {
       update();
       return true;
     } catch (e) {
-      print('Error initializing shop: $e');
       return false;
     }
   }
@@ -131,7 +130,6 @@ class ShopController extends GetxController {
       update();
       return true;
     } catch (e) {
-      print('Error initializing shop data: $e');
       return false;
     }
   }
@@ -247,7 +245,6 @@ class ShopController extends GetxController {
       );
       return true; // Everything successful
     } catch (e) {
-      print('Error initializing shop: $e');
       return false;
     }
   }

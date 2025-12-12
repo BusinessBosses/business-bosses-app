@@ -50,7 +50,7 @@ class _DrawerContentState extends State<DrawerContent> {
     super.initState();
     industry = controller.categories.isNotEmpty
         ? controller.categories[0]
-        : Industry.fromMap({
+        : Industry.fromMap(<String, dynamic>{
             'industryId': '-MsUOGcOT9oRXGakCcJv',
             'industry': 'Boss Up Challenge ',
             'categoryId': '-Mos1VMlx3oxZFRaw_BH',
@@ -84,7 +84,7 @@ class _DrawerContentState extends State<DrawerContent> {
     // ignore: unused_local_variable
     final Industry category = controller.categories.isNotEmpty
         ? controller.categories[0]
-        : Industry.fromMap({
+        : Industry.fromMap(<String, dynamic>{
             'industryId': '-MsUOGcOT9oRXGakCcJv',
             'industry': 'Boss Up Challenge ',
             'categoryId': '-Mos1VMlx3oxZFRaw_BH',
@@ -103,7 +103,7 @@ class _DrawerContentState extends State<DrawerContent> {
             'joinedUsersCount': 41789
           });
     List<Map<String, dynamic>> tilesData = <Map<String, dynamic>>[
-      {
+      <String, dynamic>{
         'icon': Icon(LucideIcons.bell,
             size: 25,
             color: widget.hasUnreadNotification
@@ -118,7 +118,7 @@ class _DrawerContentState extends State<DrawerContent> {
           Get.to(() => NotificationsScreen());
         },
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/bossupu.svg',
           height: 24,
@@ -135,7 +135,7 @@ class _DrawerContentState extends State<DrawerContent> {
           Get.to(() => const AllCommunitiesScreen());
         },
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/cartu.svg',
           height: 25,
@@ -152,7 +152,7 @@ class _DrawerContentState extends State<DrawerContent> {
           Get.to(() => const MarketplaceScreen());
         },
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/marketplaceoutlined.svg',
           height: 25,
@@ -171,7 +171,7 @@ class _DrawerContentState extends State<DrawerContent> {
               ));
         },
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/coin.svg',
           height: 30,
@@ -184,7 +184,7 @@ class _DrawerContentState extends State<DrawerContent> {
           Get.toNamed(Routes.promotionscreen);
         },
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/calendar.svg',
           height: 25,
@@ -201,7 +201,7 @@ class _DrawerContentState extends State<DrawerContent> {
           Get.toNamed(Routes.liveEvents);
         },
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/shoppingcart.svg',
           height: 25,
@@ -218,7 +218,7 @@ class _DrawerContentState extends State<DrawerContent> {
           Get.to(() => const MyOrdersScreen());
         },
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/partner.svg',
           height: 25,
@@ -235,7 +235,7 @@ class _DrawerContentState extends State<DrawerContent> {
           Get.to(() => const BossUpPartner());
         }
       },
-      {
+      <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/settings.svg',
           height: 25,
@@ -315,13 +315,13 @@ class _DrawerContentState extends State<DrawerContent> {
               padding: const EdgeInsets.all(15.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   GestureDetector(
                     onTap: () {
                       Get.to(() => const HomeScreen());
                     },
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Container(
                           width: 35.0,
                           height: 35.0,
@@ -348,7 +348,7 @@ class _DrawerContentState extends State<DrawerContent> {
                     ),
                   ),
                   Row(
-                    children: [
+                    children: <Widget>[
                       GestureDetector(
                         onTap: widget.oncloseclick,
                         child: const CircleAvatar(
@@ -365,11 +365,11 @@ class _DrawerContentState extends State<DrawerContent> {
               ),
             ),
             Column(
-              children: [
+              children: <Widget>[
                 const SizedBox(height: 20),
-                ...List.generate(
+                ...List<Widget>.generate(
                     tilesData.length,
-                    (index) => Padding(
+                    (int index) => Padding(
                           padding: const EdgeInsets.only(left: 15.0, right: 15),
                           child: ListTile(
                             minVerticalPadding: 0,
@@ -434,7 +434,7 @@ class _DrawerContentState extends State<DrawerContent> {
                                               } else if (index == 3) {
                                                 Get.toNamed(Routes.createPost);
                                               } else if (index == 4) {
-                                                final url = Uri.parse(
+                                                final Uri url = Uri.parse(
                                                     'https://businessbosses.news/instant-pr/');
                                                 launchUrl(url,
                                                     mode: LaunchMode
@@ -528,7 +528,7 @@ class _DrawerContentState extends State<DrawerContent> {
               child: GestureDetector(
                 onTap: () => Get.to(() => const MyProfileScreen()),
                 child: Row(
-                  children: [
+                  children: <Widget>[
                     SizedBox(
                       height: 40.0,
                       width: 40.0,
@@ -552,13 +552,13 @@ class _DrawerContentState extends State<DrawerContent> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                             '@${widget.currentuser?.username.toLowerCase() ?? ''}',
                             style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w700)),
                         Row(
-                          children: [
+                          children: <Widget>[
                             Text(
                               widget.currentuser != null
                                   ? widget.currentuser!.connectionCount

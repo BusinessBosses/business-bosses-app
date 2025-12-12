@@ -117,6 +117,9 @@ class BossUpController extends GetxController {
 
   void deleteForum(String forumId) async {
     forums.removeWhere((ForumModel element) => element.forumId == forumId);
+    _homeController.forums
+        .removeWhere((ForumModel element) => element.forumId == forumId);
+    _homeController.mixPostandPromoted();
     await ForumRepository.deleteForum(forumId);
     ApiService.put(
       path: 'users/${_profileController.myProfile.uid}',
