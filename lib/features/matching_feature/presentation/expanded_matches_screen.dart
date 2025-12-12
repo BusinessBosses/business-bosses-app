@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
-import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
@@ -479,7 +478,8 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                         ),
                         child: SvgPicture.asset(
                           'assets/svgs/marketplace.svg',
-                          color: Colors.green.shade700,
+                          colorFilter: ColorFilter.mode(
+                              Colors.green.shade700, BlendMode.srcIn),
                           width: 20,
                           height: 20,
                         ),

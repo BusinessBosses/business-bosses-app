@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
 import 'package:business_bosses_v2/bbpro/widgets/add_package_bottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
@@ -1464,362 +1463,356 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     return slots;
   }
 
-  void _showBoostBottomSheet() {
-    showModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15), topRight: Radius.circular(15))),
-      context: context,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SvgPicture.asset(
-                        'assets/svgs/rocket.svg',
-                        colorFilter:
-                            const ColorFilter.mode(textColor, BlendMode.srcIn),
-                      ),
-                      const SizedBox(width: 5),
-                      const Text(
-                        'Boost Post',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Text(
-                    'Reach a wider audience and get more views',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 11,
-                      color: Color(0xFF777777),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Do you want to boost this post/listing?',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll<Color>(
-                            widget.isMarketplace == true
-                                ? primaryColorLT
-                                : proprimaryColor)),
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      if (_formKey.currentState?.validate() ?? false) {
-                        _formKey.currentState?.save();
-                        setState(() {
-                          isSubmitted = true;
-                        });
-                        // 1. Clear the final images list
-                        List<String> finalImages = <String>[];
+  void _showBoostBottomSheet() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      _formKey.currentState?.save();
+      setState(() {
+        isSubmitted = true;
+      });
+      // 1. Clear the final images list
+      List<String> finalImages = <String>[];
 
 // 2. Add back any *retained* old images
 //    (i.e., those still in updateImages)
-                        for (String oldImageUrl in updateImages!) {
-                          finalImages.add(oldImageUrl);
-                        }
+      for (String oldImageUrl in updateImages!) {
+        finalImages.add(oldImageUrl);
+      }
 
 // 3. Upload and add newly selected images
-                        for (File image in _selectedImages) {
-                          final dynamic response =
-                              await ApiService.uploadFile(image);
-                          if (response['success']) {
-                            finalImages.add(response['fileUrl']);
-                          }
-                        }
-                        // Create a map to hold form data
-                        try {
-                          // First validate required fields
-                          if (_serviceNameController.text.isEmpty ||
-                              _priceController.text.isEmpty ||
-                              _descriptionController.text.isEmpty) {
-                            showSnackbar(
-                                message: 'Please fill in all required fields',
-                                error: true);
-                            return;
-                          }
+      for (File image in _selectedImages) {
+        final dynamic response = await ApiService.uploadFile(image);
+        if (response['success']) {
+          finalImages.add(response['fileUrl']);
+        }
+      }
+      // Create a map to hold form data
+      try {
+        // First validate required fields
+        if (_serviceNameController.text.isEmpty ||
+            _priceController.text.isEmpty ||
+            _descriptionController.text.isEmpty) {
+          showSnackbar(
+              message: 'Please fill in all required fields', error: true);
+          return;
+        }
 
-                          final Map<String, dynamic> serviceData =
-                              <String, dynamic>{
-                            'userId': profileController.myProfile.uid,
-                            'shopId': shopController.shop?.id,
-                            'name': _serviceNameController.text.trim(),
-                            'price': _priceController.text
-                                .replaceAll(RegExp(r'[^0-9.]'), ''),
-                            'description': _descriptionController.text.trim(),
-                            'discount': _discountController.text.isEmpty
-                                ? '0'
-                                : _discountController.text.trim(),
-                            'category': category,
-                            'serviceDuration': duration,
-                            'isAppointment': isAppointment,
-                            'location': location.isEmpty
-                                ? shopController.shop!.location
-                                : location,
-                            'participants': groupmembersController.text,
-                            'repeat': frequency,
-                            'images': finalImages.isEmpty ? null : finalImages,
-                            'paymentMethod': '',
-                            'deliveryMethod': deliveryMethod ?? '',
-                            'availableTime': availableTime.toIso8601String(),
-                            'serviceType': serviceType ?? '1:1',
-                            'itemType': 'service',
-                            'isActive': _isSwitched,
-                            'deliveryTime': _isAlwaysAvailable.toString(),
-                            'serviceAvailability': <String, dynamic>{
-                              'dayOfWeek': selectedSubmitWeekdays.isEmpty
-                                  ? <String>[
-                                      'Mon',
-                                      'Tue',
-                                      'Wed',
-                                      'Thu',
-                                      'Fri',
-                                    ]
-                                  : selectedSubmitWeekdays,
-                              'startTime':
-                                  '${_startTime?.hour.toString().padLeft(2, '0')}:${_startTime?.minute.toString().padLeft(2, '0')}:00',
-                              'endTime':
-                                  '${_endTime?.hour.toString().padLeft(2, '0')}:${_endTime?.minute.toString().padLeft(2, '0')}:00',
-                              'startDate': _startDate?.toIso8601String(),
-                              'endDate': _endDate?.toIso8601String(),
-                            },
-                            'servicePackages': packages,
-                            'url': addressorlinkController.text,
-                            'notes': notesController.text.trim().isEmpty
-                                ? null
-                                : notesController.text.trim(),
-                            'selectedDates': _selectedDates.isEmpty ||
-                                    (_selectedDates.length == 1 &&
-                                        _selectedDates.first.toString() == '')
-                                ? null
-                                : _selectedDates
-                                    .map((DateTime date) => date.toString())
-                                    .toList(),
-                          };
+        final Map<String, dynamic> serviceData = <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'shopId': shopController.shop?.id,
+          'name': _serviceNameController.text.trim(),
+          'price': _priceController.text.replaceAll(RegExp(r'[^0-9.]'), ''),
+          'description': _descriptionController.text.trim(),
+          'discount': _discountController.text.isEmpty
+              ? '0'
+              : _discountController.text.trim(),
+          'category': category,
+          'serviceDuration': duration,
+          'isAppointment': isAppointment,
+          'location':
+              location.isEmpty ? shopController.shop!.location : location,
+          'participants': groupmembersController.text,
+          'repeat': frequency,
+          'images': finalImages.isEmpty ? null : finalImages,
+          'paymentMethod': '',
+          'deliveryMethod': deliveryMethod ?? '',
+          'availableTime': availableTime.toIso8601String(),
+          'serviceType': serviceType ?? '1:1',
+          'itemType': 'service',
+          'isActive': _isSwitched,
+          'deliveryTime': _isAlwaysAvailable.toString(),
+          'serviceAvailability': <String, dynamic>{
+            'dayOfWeek': selectedSubmitWeekdays.isEmpty
+                ? <String>[
+                    'Mon',
+                    'Tue',
+                    'Wed',
+                    'Thu',
+                    'Fri',
+                  ]
+                : selectedSubmitWeekdays,
+            'startTime':
+                '${_startTime?.hour.toString().padLeft(2, '0')}:${_startTime?.minute.toString().padLeft(2, '0')}:00',
+            'endTime':
+                '${_endTime?.hour.toString().padLeft(2, '0')}:${_endTime?.minute.toString().padLeft(2, '0')}:00',
+            'startDate': _startDate?.toIso8601String(),
+            'endDate': _endDate?.toIso8601String(),
+          },
+          'servicePackages': packages,
+          'url': addressorlinkController.text,
+          'notes': notesController.text.trim().isEmpty
+              ? null
+              : notesController.text.trim(),
+          'selectedDates': _selectedDates.isEmpty ||
+                  (_selectedDates.length == 1 &&
+                      _selectedDates.first.toString() == '')
+              ? null
+              : _selectedDates.map((DateTime date) => date.toString()).toList(),
+        };
 
-                          // Log the cleaned data
+        // Log the cleaned data
 
-                          if (widget.service == null) {
-                            final ServiceAddResult result =
-                                await shopController.addService(serviceData);
-                            if (result.success) {
-                              showSnackbar(
-                                  message: 'Service Added Successfully!');
+        if (widget.service == null) {
+          final ServiceAddResult result =
+              await shopController.addService(serviceData);
+          if (result.success) {
+            Get.back();
+            showSnackbar(message: 'Service Added Successfully!');
 
-                              Get.off(() => BoostItem(
-                                    service: result.service,
-                                  ));
-                              return;
-                            } else {
-                              String errorMessage = 'Failed to add service';
-                              showSnackbar(message: errorMessage, error: true);
-                            }
-                          } else {
-                            final bool result = await shopController
-                                .updateService(widget.service!.id, serviceData);
-                            if (result) {
-                              showSnackbar(
-                                  message: 'Service Updated Successfully!');
+            return;
+          } else {
+            String errorMessage = 'Failed to add service';
+            showSnackbar(message: errorMessage, error: true);
+          }
+        } else {
+          final bool result = await shopController.updateService(
+              widget.service!.id, serviceData);
+          if (result) {
+            Get.back();
+            showSnackbar(message: 'Service Updated Successfully!');
 
-                              Get.off(() => BoostItem(
-                                    service: widget.service,
-                                  ));
-                              return;
-                            } else {
-                              String errorMessage = 'Failed to edit service';
-                              showSnackbar(message: errorMessage, error: true);
-                            }
-                          }
-                        } catch (e) {
-                          String errorMessage = 'Failed to add service';
-                          showSnackbar(message: errorMessage, error: true);
-                        } finally {
-                          setState(() {
-                            isSubmitted = false;
-                          });
-                        }
-                      }
-                    },
-                    child: const Text(
-                      'Yes',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: widget.isMarketplace == true
-                          ? primaryColorLT
-                          : proprimaryColor,
-                      side: BorderSide(
-                          color: widget.isMarketplace == true
-                              ? primaryColorLT
-                              : proprimaryColor,
-                          width: 1),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      if (_formKey.currentState?.validate() ?? false) {
-                        _formKey.currentState?.save();
-                        setState(() {
-                          isSubmitted = true;
-                        });
-                        // 1. Clear the final images list
-                        List<String> finalImages = <String>[];
+            return;
+          } else {
+            String errorMessage = 'Failed to edit service';
+            showSnackbar(message: errorMessage, error: true);
+          }
+        }
+      } catch (e) {
+        String errorMessage = 'Failed to add service';
+        showSnackbar(message: errorMessage, error: true);
+      } finally {
+        setState(() {
+          isSubmitted = false;
+        });
+      }
+    }
+//     showModalBottomSheet(
+//       shape: const RoundedRectangleBorder(
+//           borderRadius: BorderRadius.only(
+//               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+//       context: context,
+//       builder: (BuildContext context) {
+//         return Padding(
+//           padding: const EdgeInsets.all(20.0),
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: <Widget>[
+//               Column(
+//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 children: <Widget>[
+//                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: <Widget>[
+//                       SvgPicture.asset(
+//                         'assets/svgs/rocket.svg',
+//                         colorFilter:
+//                             const ColorFilter.mode(textColor, BlendMode.srcIn),
+//                       ),
+//                       const SizedBox(width: 5),
+//                       const Text(
+//                         'Boost Post',
+//                         style: TextStyle(
+//                           fontWeight: FontWeight.w700,
+//                           fontSize: 18,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   const Text(
+//                     'Reach a wider audience and get more views',
+//                     style: TextStyle(
+//                       fontWeight: FontWeight.w600,
+//                       fontSize: 11,
+//                       color: Color(0xFF777777),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               const SizedBox(height: 10),
+//               const Text(
+//                 'Do you want to boost this post/listing?',
+//                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//               ),
+//               const SizedBox(height: 20),
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: <Widget>[
+//                   ElevatedButton(
+//                     style: ButtonStyle(
+//                       backgroundColor: WidgetStatePropertyAll<Color>(
+//                         widget.isMarketplace == true
+//                             ? primaryColorLT
+//                             : proprimaryColor,
+//                       ),
+//                     ),
+//                     onPressed: () async {
+//                       Navigator.pop(context);
+//                       if (_formKey.currentState?.validate() ?? false) {
+//                         _formKey.currentState?.save();
+//                         setState(() {
+//                           isSubmitted = true;
+//                         });
+//                         // 1. Clear the final images list
+//                         List<String> finalImages = <String>[];
 
-// 2. Add back any *retained* old images
-//    (i.e., those still in updateImages)
-                        for (String oldImageUrl in updateImages!) {
-                          finalImages.add(oldImageUrl);
-                        }
+// // 2. Add back any *retained* old images
+// //    (i.e., those still in updateImages)
+//                         for (String oldImageUrl in updateImages!) {
+//                           finalImages.add(oldImageUrl);
+//                         }
 
-// 3. Upload and add newly selected images
-                        for (File image in _selectedImages) {
-                          final dynamic response =
-                              await ApiService.uploadFile(image);
-                          if (response['success']) {
-                            finalImages.add(response['fileUrl']);
-                          }
-                        }
-                        // Create a map to hold form data
-                        try {
-                          // First validate required fields
-                          if (_serviceNameController.text.isEmpty ||
-                              _priceController.text.isEmpty ||
-                              _descriptionController.text.isEmpty) {
-                            showSnackbar(
-                                message: 'Please fill in all required fields',
-                                error: true);
-                            return;
-                          }
+// // 3. Upload and add newly selected images
+//                         for (File image in _selectedImages) {
+//                           final dynamic response =
+//                               await ApiService.uploadFile(image);
+//                           if (response['success']) {
+//                             finalImages.add(response['fileUrl']);
+//                           }
+//                         }
+//                         // Create a map to hold form data
+//                         try {
+//                           // First validate required fields
+//                           if (_serviceNameController.text.isEmpty ||
+//                               _priceController.text.isEmpty ||
+//                               _descriptionController.text.isEmpty) {
+//                             showSnackbar(
+//                                 message: 'Please fill in all required fields',
+//                                 error: true);
+//                             return;
+//                           }
 
-                          final Map<String, dynamic> serviceData =
-                              <String, dynamic>{
-                            'userId': profileController.myProfile.uid,
-                            'shopId': shopController.shop?.id,
-                            'name': _serviceNameController.text.trim(),
-                            'price': _priceController.text
-                                .replaceAll(RegExp(r'[^0-9.]'), ''),
-                            'description': _descriptionController.text.trim(),
-                            'discount': _discountController.text.isEmpty
-                                ? '0'
-                                : _discountController.text.trim(),
-                            'category': category,
-                            'serviceDuration': duration,
-                            'isAppointment': isAppointment,
-                            'location': location.isEmpty
-                                ? shopController.shop!.location
-                                : location,
-                            'participants': groupmembersController.text,
-                            'repeat': frequency,
-                            'images': finalImages.isEmpty ? null : finalImages,
-                            'paymentMethod': '',
-                            'deliveryMethod': deliveryMethod ?? '',
-                            'availableTime': availableTime.toIso8601String(),
-                            'serviceType': serviceType ?? '1:1',
-                            'itemType': 'service',
-                            'isActive': _isSwitched,
-                            'deliveryTime': _isAlwaysAvailable.toString(),
-                            'serviceAvailability': <String, dynamic>{
-                              'dayOfWeek': selectedSubmitWeekdays.isEmpty
-                                  ? <String>[
-                                      'Mon',
-                                      'Tue',
-                                      'Wed',
-                                      'Thu',
-                                      'Fri',
-                                    ]
-                                  : selectedSubmitWeekdays,
-                              'startTime':
-                                  '${_startTime?.hour.toString().padLeft(2, '0')}:${_startTime?.minute.toString().padLeft(2, '0')}:00',
-                              'endTime':
-                                  '${_endTime?.hour.toString().padLeft(2, '0')}:${_endTime?.minute.toString().padLeft(2, '0')}:00',
-                              'startDate': _startDate?.toIso8601String(),
-                              'endDate': _endDate?.toIso8601String(),
-                            },
-                            'servicePackages': packages,
-                            'url': addressorlinkController.text,
-                            'notes': notesController.text.trim().isEmpty
-                                ? null
-                                : notesController.text.trim(),
-                            'selectedDates': _selectedDates.isEmpty ||
-                                    (_selectedDates.length == 1 &&
-                                        _selectedDates.first.toString() == '')
-                                ? null
-                                : _selectedDates
-                                    .map((DateTime date) => date.toString())
-                                    .toList(),
-                          };
+//                           final Map<String, dynamic> serviceData =
+//                               <String, dynamic>{
+//                             'userId': profileController.myProfile.uid,
+//                             'shopId': shopController.shop?.id,
+//                             'name': _serviceNameController.text.trim(),
+//                             'price': _priceController.text
+//                                 .replaceAll(RegExp(r'[^0-9.]'), ''),
+//                             'description': _descriptionController.text.trim(),
+//                             'discount': _discountController.text.isEmpty
+//                                 ? '0'
+//                                 : _discountController.text.trim(),
+//                             'category': category,
+//                             'serviceDuration': duration,
+//                             'isAppointment': isAppointment,
+//                             'location': location.isEmpty
+//                                 ? shopController.shop!.location
+//                                 : location,
+//                             'participants': groupmembersController.text,
+//                             'repeat': frequency,
+//                             'images': finalImages.isEmpty ? null : finalImages,
+//                             'paymentMethod': '',
+//                             'deliveryMethod': deliveryMethod ?? '',
+//                             'availableTime': availableTime.toIso8601String(),
+//                             'serviceType': serviceType ?? '1:1',
+//                             'itemType': 'service',
+//                             'isActive': _isSwitched,
+//                             'deliveryTime': _isAlwaysAvailable.toString(),
+//                             'serviceAvailability': <String, dynamic>{
+//                               'dayOfWeek': selectedSubmitWeekdays.isEmpty
+//                                   ? <String>[
+//                                       'Mon',
+//                                       'Tue',
+//                                       'Wed',
+//                                       'Thu',
+//                                       'Fri',
+//                                     ]
+//                                   : selectedSubmitWeekdays,
+//                               'startTime':
+//                                   '${_startTime?.hour.toString().padLeft(2, '0')}:${_startTime?.minute.toString().padLeft(2, '0')}:00',
+//                               'endTime':
+//                                   '${_endTime?.hour.toString().padLeft(2, '0')}:${_endTime?.minute.toString().padLeft(2, '0')}:00',
+//                               'startDate': _startDate?.toIso8601String(),
+//                               'endDate': _endDate?.toIso8601String(),
+//                             },
+//                             'servicePackages': packages,
+//                             'url': addressorlinkController.text,
+//                             'notes': notesController.text.trim().isEmpty
+//                                 ? null
+//                                 : notesController.text.trim(),
+//                             'selectedDates': _selectedDates.isEmpty ||
+//                                     (_selectedDates.length == 1 &&
+//                                         _selectedDates.first.toString() == '')
+//                                 ? null
+//                                 : _selectedDates
+//                                     .map((DateTime date) => date.toString())
+//                                     .toList(),
+//                           };
 
-                          // Log the cleaned data
+//                           // Log the cleaned data
 
-                          if (widget.service == null) {
-                            final ServiceAddResult result =
-                                await shopController.addService(serviceData);
-                            if (result.success) {
-                              Get.back();
-                              showSnackbar(
-                                  message: 'Service Added Successfully!');
+//                           if (widget.service == null) {
+//                             final ServiceAddResult result =
+//                                 await shopController.addService(serviceData);
+//                             if (result.success) {
+//                               showSnackbar(
+//                                   message: 'Service Added Successfully!');
 
-                              return;
-                            } else {
-                              String errorMessage = 'Failed to add service';
-                              showSnackbar(message: errorMessage, error: true);
-                            }
-                          } else {
-                            final bool result = await shopController
-                                .updateService(widget.service!.id, serviceData);
-                            if (result) {
-                              Get.back();
-                              showSnackbar(
-                                  message: 'Service Updated Successfully!');
+//                               Get.off(() => BoostItem(
+//                                     service: result.service,
+//                                   ));
+//                               return;
+//                             } else {
+//                               String errorMessage = 'Failed to add service';
+//                               showSnackbar(message: errorMessage, error: true);
+//                             }
+//                           } else {
+//                             final bool result = await shopController
+//                                 .updateService(widget.service!.id, serviceData);
+//                             if (result) {
+//                               showSnackbar(
+//                                   message: 'Service Updated Successfully!');
 
-                              return;
-                            } else {
-                              String errorMessage = 'Failed to edit service';
-                              showSnackbar(message: errorMessage, error: true);
-                            }
-                          }
-                        } catch (e) {
-                          String errorMessage = 'Failed to add service';
-                          showSnackbar(message: errorMessage, error: true);
-                        } finally {
-                          setState(() {
-                            isSubmitted = false;
-                          });
-                        }
-                      }
-                    },
-                    child: const Text('No'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
+//                               Get.off(() => BoostItem(
+//                                     service: widget.service,
+//                                   ));
+//                               return;
+//                             } else {
+//                               String errorMessage = 'Failed to edit service';
+//                               showSnackbar(message: errorMessage, error: true);
+//                             }
+//                           }
+//                         } catch (e) {
+//                           String errorMessage = 'Failed to add service';
+//                           showSnackbar(message: errorMessage, error: true);
+//                         } finally {
+//                           setState(() {
+//                             isSubmitted = false;
+//                           });
+//                         }
+//                       }
+//                     },
+//                     child: const Text(
+//                       'Yes',
+//                       style: TextStyle(color: Colors.white),
+//                     ),
+//                   ),
+//                   const SizedBox(
+//                     width: 10,
+//                   ),
+//                   OutlinedButton(
+//                     style: OutlinedButton.styleFrom(
+//                       foregroundColor: widget.isMarketplace == true
+//                           ? primaryColorLT
+//                           : proprimaryColor,
+//                       side: BorderSide(
+//                           color: widget.isMarketplace == true
+//                               ? primaryColorLT
+//                               : proprimaryColor,
+//                           width: 1),
+//                     ),
+//                     onPressed: () async {
+//                       Navigator.pop(context);
+
+//                     },
+//                     child: const Text('No'),
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         );
+//       },
+//     );
   }
 }
 

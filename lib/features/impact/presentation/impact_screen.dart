@@ -242,13 +242,9 @@ class _ReachScreenState extends State<ReachScreen> {
 
               const SizedBox(height: 15),
               ExpansionTile(
-                trailing: false
-                    ? SvgPicture.asset(
-                        'assets/svgs/dropdownexpansionup.svg',
-                      )
-                    : SvgPicture.asset(
-                        'assets/svgs/dropdownexpansion.svg',
-                      ),
+                trailing: SvgPicture.asset(
+                  'assets/svgs/dropdownexpansion.svg',
+                ),
                 title: RichText(
                   text: const TextSpan(
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),

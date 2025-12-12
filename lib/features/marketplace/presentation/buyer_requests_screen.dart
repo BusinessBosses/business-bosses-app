@@ -91,7 +91,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
     String message = 'Check out this buyer request on Business Bosses\n'
         'Title: ${request.title}\n'
         'Budget: \$${request.budgetStart.toStringAsFixed(0)} - \$${request.budgetEnd.toStringAsFixed(0)}\n'
-        'https://vm.businessbosses.co.uk/share/request';
+        'https://vm.businessbosses.co.uk/share/post';
     logEvent(request.id ?? '', 'buyer_request');
     socialShare(message);
   }

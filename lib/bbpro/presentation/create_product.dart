@@ -10,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
@@ -759,277 +758,271 @@ class _CreateProductListingState extends State<CreateProductListing> {
     );
   }
 
-  void _showBoostBottomSheet() {
-    showModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15),
-          topRight: Radius.circular(15),
-        ),
-      ),
-      context: context,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SvgPicture.asset(
-                        'assets/svgs/rocket.svg',
-                        colorFilter:
-                            const ColorFilter.mode(textColor, BlendMode.srcIn),
-                      ),
-                      const SizedBox(width: 5),
-                      const Text(
-                        'Boost Post',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Text(
-                    'Reach a wider audience and get more views',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 11,
-                      color: Color(0xFF777777),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Do you want to boost this post/listing?',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll<Color>(
-                            widget.isMarketplace == true
-                                ? primaryColorLT
-                                : proprimaryColor)),
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      if (_formKey.currentState?.validate() ?? false) {
-                        _formKey.currentState?.save();
+  void _showBoostBottomSheet() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      _formKey.currentState?.save();
 
-                        setState(() {
-                          isSubmitted = true;
-                        });
-                        List<String> finalImages =
-                            List<String>.from(updateImages ?? <String>[]);
+      setState(() {
+        isSubmitted = true;
+      });
+      List<String> finalImages = List<String>.from(updateImages ?? <String>[]);
 
-                        for (File image in _selectedImages) {
-                          final dynamic response =
-                              await ApiService.uploadFile(image);
-                          if (response['success']) {
-                            finalImages.add(response['fileUrl']);
-                          }
-                        }
-                        final Map<String, dynamic> productListing =
-                            <String, dynamic>{
-                          'userId': profileController.myProfile.uid,
-                          'shopId': shopController.shop?.id,
-                          'name': _productNameController.text,
-                          'price': _priceController.text
-                              .replaceAll(',', '')
-                              .replaceAll(RegExp(r'[^0-9.]'), ''),
-                          'discount': _discountController.text.isEmpty
-                              ? 0
-                              : _discountController.text,
-                          'description': _descriptionController.text,
-                          'category': category,
-                          'location': country.isEmpty
-                              ? shopController.shop!.location
-                              : country,
-                          'images': finalImages,
-                          'paymentMethod': paymentMethod,
-                          'deliveryMethod': deliveryMethod,
-                          'url': 'http://example.com/product',
-                          'notes': notesController.text.trim().isEmpty
-                              ? null
-                              : notesController.text.trim(),
-                          'deliveryDuration': deliverydayscontroller.text,
-                          'itemType': 'product',
-                          'isActive': _isSwitched,
-                          'supplierId': null,
-                          'storageLocation': storageLocationController.text,
-                          'productNumber': productNumberController.text,
-                          'quantity': quantityController.text.isEmpty
-                              ? 0
-                              : quantityController.text,
-                          'startAt': startDate?.toIso8601String(),
-                          'endAt': endDate?.toIso8601String(),
-                          'color': colors,
-                          'size': sizes,
-                        };
-                        if (widget.product == null) {
-                          ProductAddResult response =
-                              await shopController.addProducts(productListing);
-                          if (response.success) {
-                            showSnackbar(
-                              message: 'Product Added Successfully!',
-                            );
-                            Get.off(() => BoostItem(
-                                  product: response.product,
-                                ));
-                          } else {
-                            showSnackbar(
-                              message: 'Error While Adding Product',
-                              error: true,
-                            );
-                          }
-                        } else {
-                          bool response = await shopController.updateProduct(
-                              widget.product!.id, productListing);
-                          if (response) {
-                            showSnackbar(
-                              message: 'Product Updated Successfully!',
-                            );
-                            Get.off(() => BoostItem(
-                                  product: widget.product,
-                                ));
-                            return;
-                          } else {
-                            showSnackbar(
-                              message: 'Error While Updating Product',
-                              error: true,
-                            );
-                          }
-                        }
-                        setState(() {
-                          isSubmitted = false;
-                        });
-                      }
-                    },
-                    child: const Text(
-                      'Yes',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: widget.isMarketplace == true
-                          ? primaryColorLT
-                          : proprimaryColor,
-                      side: BorderSide(
-                          color: widget.isMarketplace == true
-                              ? primaryColorLT
-                              : proprimaryColor,
-                          width: 1),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      if (_formKey.currentState?.validate() ?? false) {
-                        _formKey.currentState?.save();
+      for (File image in _selectedImages) {
+        final dynamic response = await ApiService.uploadFile(image);
+        if (response['success']) {
+          finalImages.add(response['fileUrl']);
+        }
+      }
+      final Map<String, dynamic> productListing = <String, dynamic>{
+        'userId': profileController.myProfile.uid,
+        'shopId': shopController.shop?.id,
+        'name': _productNameController.text,
+        'price': double.parse(_priceController.text.trim()),
+        'discount':
+            _discountController.text.isEmpty ? 0 : _discountController.text,
+        'description': _descriptionController.text,
+        'category': category,
+        'location': country.isEmpty ? shopController.shop!.location : country,
+        'images': finalImages,
+        'paymentMethod': paymentMethod,
+        'deliveryMethod': deliveryMethod,
+        'url': 'http://example.com/product',
+        'notes': notesController.text.trim().isEmpty
+            ? null
+            : notesController.text.trim(),
+        'deliveryDuration': deliverydayscontroller.text,
+        'itemType': 'product',
+        'isActive': _isSwitched,
+        'supplierId': null,
+        'storageLocation': storageLocationController.text,
+        'productNumber': productNumberController.text,
+        'quantity':
+            quantityController.text.isEmpty ? 0 : quantityController.text,
+        'startAt': startDate?.toIso8601String(),
+        'endAt': endDate?.toIso8601String(),
+        'color': colors,
+        'size': sizes,
+      };
+      if (widget.product == null) {
+        ProductAddResult response =
+            await shopController.addProducts(productListing);
+        if (response.success) {
+          Get.back();
+          showSnackbar(
+            message: 'Product Added Successfully!',
+          );
+        } else {
+          showSnackbar(
+            message: 'Error While Adding Product',
+            error: true,
+          );
+        }
+      } else {
+        bool response = await shopController.updateProduct(
+            widget.product!.id, productListing);
+        if (response) {
+          Get.back();
+          showSnackbar(
+            message: 'Product Updated Successfully!',
+          );
+        } else {
+          showSnackbar(
+            message: 'Error While Updating Product',
+            error: true,
+          );
+        }
+      }
+      setState(() {
+        isSubmitted = false;
+      });
+    }
+    // showModalBottomSheet(
+    //   shape: const RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.only(
+    //       topLeft: Radius.circular(15),
+    //       topRight: Radius.circular(15),
+    //     ),
+    //   ),
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return Padding(
+    //       padding: const EdgeInsets.all(20.0),
+    //       child: Column(
+    //         mainAxisSize: MainAxisSize.min,
+    //         children: <Widget>[
+    //           Column(
+    //             crossAxisAlignment: CrossAxisAlignment.center,
+    //             children: <Widget>[
+    //               Row(
+    //                 mainAxisAlignment: MainAxisAlignment.center,
+    //                 children: <Widget>[
+    //                   SvgPicture.asset(
+    //                     'assets/svgs/rocket.svg',
+    //                     colorFilter:
+    //                         const ColorFilter.mode(textColor, BlendMode.srcIn),
+    //                   ),
+    //                   const SizedBox(width: 5),
+    //                   const Text(
+    //                     'Boost Post',
+    //                     style: TextStyle(
+    //                       fontWeight: FontWeight.w700,
+    //                       fontSize: 18,
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //               const Text(
+    //                 'Reach a wider audience and get more views',
+    //                 style: TextStyle(
+    //                   fontWeight: FontWeight.w600,
+    //                   fontSize: 11,
+    //                   color: Color(0xFF777777),
+    //                 ),
+    //               ),
+    //             ],
+    //           ),
+    //           const SizedBox(height: 10),
+    //           const Text(
+    //             'Do you want to boost this post/listing?',
+    //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    //           ),
+    //           const SizedBox(height: 20),
+    //           Row(
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             children: <Widget>[
+    //               ElevatedButton(
+    //                 style: ButtonStyle(
+    //                     backgroundColor: WidgetStatePropertyAll<Color>(
+    //                         widget.isMarketplace == true
+    //                             ? primaryColorLT
+    //                             : proprimaryColor)),
+    //                 onPressed: () async {
+    //                   Navigator.pop(context);
+    //                   if (_formKey.currentState?.validate() ?? false) {
+    //                     _formKey.currentState?.save();
 
-                        setState(() {
-                          isSubmitted = true;
-                        });
-                        List<String> finalImages =
-                            List<String>.from(updateImages ?? <String>[]);
+    //                     setState(() {
+    //                       isSubmitted = true;
+    //                     });
+    //                     List<String> finalImages =
+    //                         List<String>.from(updateImages ?? <String>[]);
 
-                        for (File image in _selectedImages) {
-                          final dynamic response =
-                              await ApiService.uploadFile(image);
-                          if (response['success']) {
-                            finalImages.add(response['fileUrl']);
-                          }
-                        }
-                        final Map<String, dynamic> productListing =
-                            <String, dynamic>{
-                          'userId': profileController.myProfile.uid,
-                          'shopId': shopController.shop?.id,
-                          'name': _productNameController.text,
-                          'price': double.parse(_priceController.text.trim()),
-                          'discount': _discountController.text.isEmpty
-                              ? 0
-                              : _discountController.text,
-                          'description': _descriptionController.text,
-                          'category': category,
-                          'location': country.isEmpty
-                              ? shopController.shop!.location
-                              : country,
-                          'images': finalImages,
-                          'paymentMethod': paymentMethod,
-                          'deliveryMethod': deliveryMethod,
-                          'url': 'http://example.com/product',
-                          'notes': notesController.text.trim().isEmpty
-                              ? null
-                              : notesController.text.trim(),
-                          'deliveryDuration': deliverydayscontroller.text,
-                          'itemType': 'product',
-                          'isActive': _isSwitched,
-                          'supplierId': null,
-                          'storageLocation': storageLocationController.text,
-                          'productNumber': productNumberController.text,
-                          'quantity': quantityController.text.isEmpty
-                              ? 0
-                              : quantityController.text,
-                          'startAt': startDate?.toIso8601String(),
-                          'endAt': endDate?.toIso8601String(),
-                          'color': colors,
-                          'size': sizes,
-                        };
-                        if (widget.product == null) {
-                          ProductAddResult response =
-                              await shopController.addProducts(productListing);
-                          if (response.success) {
-                            Get.back();
-                            showSnackbar(
-                              message: 'Product Added Successfully!',
-                            );
-                          } else {
-                            showSnackbar(
-                              message: 'Error While Adding Product',
-                              error: true,
-                            );
-                          }
-                        } else {
-                          bool response = await shopController.updateProduct(
-                              widget.product!.id, productListing);
-                          if (response) {
-                            Get.back();
-                            showSnackbar(
-                              message: 'Product Updated Successfully!',
-                            );
-                          } else {
-                            showSnackbar(
-                              message: 'Error While Updating Product',
-                              error: true,
-                            );
-                          }
-                        }
-                        setState(() {
-                          isSubmitted = false;
-                        });
-                      }
-                    },
-                    child: const Text('No'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
+    //                     for (File image in _selectedImages) {
+    //                       final dynamic response =
+    //                           await ApiService.uploadFile(image);
+    //                       if (response['success']) {
+    //                         finalImages.add(response['fileUrl']);
+    //                       }
+    //                     }
+    //                     final Map<String, dynamic> productListing =
+    //                         <String, dynamic>{
+    //                       'userId': profileController.myProfile.uid,
+    //                       'shopId': shopController.shop?.id,
+    //                       'name': _productNameController.text,
+    //                       'price': _priceController.text
+    //                           .replaceAll(',', '')
+    //                           .replaceAll(RegExp(r'[^0-9.]'), ''),
+    //                       'discount': _discountController.text.isEmpty
+    //                           ? 0
+    //                           : _discountController.text,
+    //                       'description': _descriptionController.text,
+    //                       'category': category,
+    //                       'location': country.isEmpty
+    //                           ? shopController.shop!.location
+    //                           : country,
+    //                       'images': finalImages,
+    //                       'paymentMethod': paymentMethod,
+    //                       'deliveryMethod': deliveryMethod,
+    //                       'url': 'http://example.com/product',
+    //                       'notes': notesController.text.trim().isEmpty
+    //                           ? null
+    //                           : notesController.text.trim(),
+    //                       'deliveryDuration': deliverydayscontroller.text,
+    //                       'itemType': 'product',
+    //                       'isActive': _isSwitched,
+    //                       'supplierId': null,
+    //                       'storageLocation': storageLocationController.text,
+    //                       'productNumber': productNumberController.text,
+    //                       'quantity': quantityController.text.isEmpty
+    //                           ? 0
+    //                           : quantityController.text,
+    //                       'startAt': startDate?.toIso8601String(),
+    //                       'endAt': endDate?.toIso8601String(),
+    //                       'color': colors,
+    //                       'size': sizes,
+    //                     };
+    //                     if (widget.product == null) {
+    //                       ProductAddResult response =
+    //                           await shopController.addProducts(productListing);
+    //                       if (response.success) {
+    //                         showSnackbar(
+    //                           message: 'Product Added Successfully!',
+    //                         );
+    //                         Get.off(() => BoostItem(
+    //                               product: response.product,
+    //                             ));
+    //                       } else {
+    //                         showSnackbar(
+    //                           message: 'Error While Adding Product',
+    //                           error: true,
+    //                         );
+    //                       }
+    //                     } else {
+    //                       bool response = await shopController.updateProduct(
+    //                           widget.product!.id, productListing);
+    //                       if (response) {
+    //                         showSnackbar(
+    //                           message: 'Product Updated Successfully!',
+    //                         );
+    //                         Get.off(() => BoostItem(
+    //                               product: widget.product,
+    //                             ));
+    //                         return;
+    //                       } else {
+    //                         showSnackbar(
+    //                           message: 'Error While Updating Product',
+    //                           error: true,
+    //                         );
+    //                       }
+    //                     }
+    //                     setState(() {
+    //                       isSubmitted = false;
+    //                     });
+    //                   }
+    //                 },
+    //                 child: const Text(
+    //                   'Yes',
+    //                   style: TextStyle(
+    //                     color: Colors.white,
+    //                   ),
+    //                 ),
+    //               ),
+    //               const SizedBox(
+    //                 width: 10,
+    //               ),
+    //               OutlinedButton(
+    //                 style: OutlinedButton.styleFrom(
+    //                   foregroundColor: widget.isMarketplace == true
+    //                       ? primaryColorLT
+    //                       : proprimaryColor,
+    //                   side: BorderSide(
+    //                       color: widget.isMarketplace == true
+    //                           ? primaryColorLT
+    //                           : proprimaryColor,
+    //                       width: 1),
+    //                 ),
+    //                 onPressed: () async {
+    //                   Navigator.pop(context);
+
+    //                 },
+    //                 child: const Text('No'),
+    //               ),
+    //             ],
+    //           ),
+    //         ],
+    //       ),
+    //     );
+    //   },
+    // );
   }
 }

@@ -39,7 +39,8 @@ class DonationItem extends StatefulWidget {
 
 class _DonationItemState extends State<DonationItem> {
   final ProfileController profileController = Get.find();
-  final DonationsController donationsController = Get.find();
+  final DonationsController donationsController =
+      Get.put(DonationsController());
   List<String> blocked = <String>[];
   NumberFormat formatter = NumberFormat.compact();
 
