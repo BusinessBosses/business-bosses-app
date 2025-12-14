@@ -598,7 +598,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     Row(
                                       children: [
                                         const Text(
-                                          'Enter invite code and get up to 10 BB Coins',
+                                          'Enter invite code and get 10 BB Coins',
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: textColor,
@@ -626,61 +626,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: TextFormField(
-                                            onChanged: (String val) {
-                                              _referralId = val;
-                                            },
-                                            textInputAction:
-                                                TextInputAction.done,
-                                            keyboardType: TextInputType.text,
-                                            decoration:
-                                                inputDecoration.copyWith(
-                                              hintText: 'B534849521',
-                                              filled: true,
-                                              fillColor:
-                                                  const Color(0xffF4F4F4),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        ElevatedButton(
-                                          onPressed: _isVerifyingCode
-                                              ? null
-                                              : _confirmInviteCode,
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: primaryColorLT,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20, vertical: 18),
-                                          ),
-                                          child: _isVerifyingCode
-                                              ? const SizedBox(
-                                                  height: 20,
-                                                  width: 20,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: Colors.white,
-                                                    strokeWidth: 2,
-                                                  ),
-                                                )
-                                              : const Text(
-                                                  'Confirm',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                        )
-                                      ],
+                                    TextFormField(
+                                      onChanged: (String val) {
+                                        _referralId = val;
+                                      },
+                                      textInputAction: TextInputAction.done,
+                                      keyboardType: TextInputType.text,
+                                      decoration: inputDecoration.copyWith(
+                                        hintText: 'B534849521',
+                                        filled: true,
+                                        fillColor: const Color(0xffF4F4F4),
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 20,
