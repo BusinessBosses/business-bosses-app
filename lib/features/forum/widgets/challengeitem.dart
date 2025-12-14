@@ -123,9 +123,12 @@ class Challengeitem extends StatelessWidget {
                         : isMentor == true
                             ? 'Start Learning'
                             : 'Enter',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
                 style: const TextStyle(
                   color: primaryColorLT,
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -175,9 +178,12 @@ class Challengeitem extends StatelessWidget {
             onPressed: onTap,
             child: const Text(
               'Enter',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
               style: TextStyle(
                 color: primaryColorLT,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w700,
               ),
             ),

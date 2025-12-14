@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -46,6 +47,23 @@ class _TodoTaskViewState extends State<TodoTaskView> {
             },
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: CircleAvatar(
+                backgroundColor: backgroundColor,
+                child: IconButton(
+                  onPressed: () {
+                    Get.to(() => const Addproject());
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                    color: textColor,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         body: loading
             ? const SafetyModel()

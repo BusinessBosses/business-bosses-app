@@ -380,7 +380,7 @@ class _DashboardState extends State<Dashboard> {
                                               ),
                                               subtitle: const Text(
                                                   'To showcase your products in biz-centre & marketplace'),
-                                              horizontalTitleGap: 0.0,
+                                              horizontalTitleGap: 10.0,
                                               onTap: () {
                                                 Navigator.pop(context);
                                                 Get.to(() =>
@@ -407,7 +407,7 @@ class _DashboardState extends State<Dashboard> {
                                                     fontWeight:
                                                         FontWeight.w700),
                                               ),
-                                              horizontalTitleGap: 0.0,
+                                              horizontalTitleGap: 10.0,
                                               onTap: () {
                                                 Navigator.pop(context);
                                                 Get.to(() =>
@@ -430,7 +430,7 @@ class _DashboardState extends State<Dashboard> {
                                                     fontWeight:
                                                         FontWeight.w700),
                                               ),
-                                              horizontalTitleGap: 0.0,
+                                              horizontalTitleGap: 10.0,
                                               onTap: () {
                                                 Navigator.pop(context);
                                                 Get.to(() =>
