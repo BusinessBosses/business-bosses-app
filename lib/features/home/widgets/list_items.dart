@@ -223,6 +223,7 @@ class _PostsWidgetState extends State<PostsWidget> {
           DonationItem(
             donation: donationModel,
             isLastItem: false,
+            isHome: false,
           )
         ],
       );

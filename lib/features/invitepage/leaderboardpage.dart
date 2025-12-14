@@ -8,7 +8,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class LeaderboardScreen extends StatefulWidget {
-  const LeaderboardScreen({super.key});
+  final bool isBossUp;
+  const LeaderboardScreen({super.key, this.isBossUp = false});
 
   @override
   State<LeaderboardScreen> createState() => _LeaderboardScreenState();
@@ -33,8 +34,12 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         _error = null;
       });
 
-      final ApiResponseModel response =
-          await ApiService.get(path: 'users/backer-winners');
+      final ApiResponseModel response;
+      if (widget.isBossUp) {
+        response = await ApiService.get(path: 'users/bossup-winners');
+      } else {
+        response = await ApiService.get(path: 'users/backer-winners');
+      }
 
       if (response.success) {
         for (dynamic user in response.data) {
@@ -145,7 +150,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${user.backerCount} achievements',
+                      '${!widget.isBossUp ? user.backerCount : user.bossCount} achievement(s)',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[600],

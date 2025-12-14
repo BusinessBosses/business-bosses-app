@@ -913,150 +913,140 @@ class _DonationItemState extends State<DonationItem> {
                   // const SizedBox(
                   //   height: 10,
                   // ),
-
-                  if (widget.isHome == false)
-                    Row(
-                      children: <Widget>[
-                        TextButton.icon(
-                          onPressed: () async {
-                            donationsController.postLike(
-                              profileController.myProfile.uid,
-                              widget.donation.id,
-                              widget.donation.user!.uid,
-                            );
-                            setState(() {});
-                          },
-                          icon: widget.donation.likes?.contains(
-                                      profileController.myProfile.uid) ==
-                                  true
-                              ? SvgPicture.asset(
-                                  'assets/svgs/likefilled.svg',
-                                  height: 15,
-                                )
-                              : SvgPicture.asset(
-                                  'assets/svgs/like.svg',
-                                  height: 15,
-                                ),
-                          label: Text(
-                            widget.donation.likes!.length.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: textColor.withValues(alpha: 0.8),
-                                ),
-                          ),
-                        ),
-                        TextButton.icon(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  DonationCommentItem(
-                                donation: widget.donation,
-                                onComment: (CommentModel newComment) async {
-                                  setState(() {});
-                                },
+                  Row(
+                    children: <Widget>[
+                      TextButton.icon(
+                        onPressed: () async {
+                          donationsController.postLike(
+                            profileController.myProfile.uid,
+                            widget.donation.id,
+                            widget.donation.user!.uid,
+                          );
+                          setState(() {});
+                        },
+                        icon: widget.donation.likes?.contains(
+                                    profileController.myProfile.uid) ==
+                                true
+                            ? SvgPicture.asset(
+                                'assets/svgs/likefilled.svg',
+                                height: 15,
+                              )
+                            : SvgPicture.asset(
+                                'assets/svgs/like.svg',
+                                height: 15,
                               ),
-                            );
+                        label: Text(
+                          widget.donation.likes!.length.toString(),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withValues(alpha: 0.8),
+                                  ),
+                        ),
+                      ),
+                      TextButton.icon(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                DonationCommentItem(
+                              donation: widget.donation,
+                              onComment: (CommentModel newComment) async {
+                                setState(() {});
+                              },
+                            ),
+                          );
+                        },
+                        icon: SvgPicture.asset(
+                          'assets/svgs/comment.svg',
+                          height: 15,
+                        ),
+                        label: Text(
+                          '${widget.donation.comments?.length ?? 0}',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withValues(alpha: 0.8),
+                                  ),
+                        ),
+                      ),
+                      TextButton.icon(
+                        onPressed: () async {},
+                        icon: const Icon(Icons.remove_red_eye_outlined,
+                            size: 19, color: Colors.black),
+                        label: Text(
+                          widget.donation.views.toString(),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withValues(alpha: 0.8),
+                                  ),
+                        ),
+                      ),
+                      const SizedBox(width: 8.0),
+                      GestureDetector(
+                        onTap: () => _sharePost(),
+                        child: Icon(
+                          LucideIcons.share,
+                          size: 17.0,
+                          color: textColor.withValues(alpha: 1.0),
+                        ),
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            widget.donation
+                                .setViews(widget.donation.views! + 1);
+                            ApiService.put(
+                                path: 'donation/approve/${widget.donation.id}',
+                                body: <String, dynamic>{
+                                  'views': widget.donation.views! + 1,
+                                  'isActive': true,
+                                  'isApproved': true,
+                                });
+                            Get.to(() => ExpandedDonationScreen(
+                                donation: widget.donation));
                           },
-                          icon: SvgPicture.asset(
-                            'assets/svgs/comment.svg',
-                            height: 15,
-                          ),
-                          label: Text(
-                            '${widget.donation.comments?.length ?? 0}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: textColor.withValues(alpha: 0.8),
-                                ),
-                          ),
-                        ),
-                        TextButton.icon(
-                          onPressed: () async {},
-                          icon: const Icon(Icons.remove_red_eye_outlined,
-                              size: 19, color: Colors.black),
-                          label: Text(
-                            widget.donation.views.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: textColor.withValues(alpha: 0.8),
-                                ),
-                          ),
-                        ),
-                        const SizedBox(width: 8.0),
-                        GestureDetector(
-                          onTap: () => _sharePost(),
-                          child: Icon(
-                            LucideIcons.share,
-                            size: 17.0,
-                            color: textColor.withValues(alpha: 1.0),
-                          ),
-                        ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              widget.donation
-                                  .setViews(widget.donation.views! + 1);
-                              ApiService.put(
-                                  path:
-                                      'donation/approve/${widget.donation.id}',
-                                  body: <String, dynamic>{
-                                    'views': widget.donation.views! + 1,
-                                    'isActive': true,
-                                    'isApproved': true,
-                                  });
-                              Get.to(() => ExpandedDonationScreen(
-                                  donation: widget.donation));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                      width: 1.5, color: primaryColorLT)),
-                              child: const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5.0, horizontal: 30),
-                                  child: Text(
-                                    'Support',
-                                    style: TextStyle(
-                                      color: primaryColorLT,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 11,
-                                    ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                    width: 1.5, color: primaryColorLT)),
+                            child: const Center(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5.0, horizontal: 30),
+                                child: Text(
+                                  'Support',
+                                  style: TextStyle(
+                                    color: primaryColorLT,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 11,
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(right: 15),
-                        //   child: Text(
-                        //     formattedDifference,
-                        //     style: Theme.of(context)
-                        //         .textTheme
-                        //         .bodyMedium
-                        //         ?.copyWith(color: textColor.withValues(alpha: 0.4)),
-                        //   ),
-                        // )
-                      ],
-                    ),
-                  if (widget.isHome == false)
-                    Container(
-                      color: backgroundcolorinterface,
-                      height: 7,
-                    ),
+                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(right: 15),
+                      //   child: Text(
+                      //     formattedDifference,
+                      //     style: Theme.of(context)
+                      //         .textTheme
+                      //         .bodyMedium
+                      //         ?.copyWith(color: textColor.withValues(alpha: 0.4)),
+                      //   ),
+                      // )
+                    ],
+                  ),
+                  Container(
+                    color: backgroundcolorinterface,
+                    height: 7,
+                  ),
                 ],
               ),
             ),

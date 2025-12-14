@@ -162,6 +162,7 @@ class HomeController extends GetxController {
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   List<String> _extractUserIds(dynamic items) {
     if (items is List) {
+      print(items.map((e) => e['userId'].toString()).toList());
       return items.map((e) => e['userId'].toString()).toList();
     }
     return [];

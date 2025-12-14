@@ -449,46 +449,52 @@ class _BossUpSectionState extends State<BossUpSection>
                                                         CrossAxisAlignment
                                                             .center,
                                                     children: <Widget>[
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(
-                                                              LeaderboardScreen());
-                                                        },
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 8.0,
-                                                                  top: 5,
-                                                                  right: 2),
-                                                          child: Row(
-                                                            children: <Widget>[
-                                                              Icon(
-                                                                LucideIcons
-                                                                    .award,
-                                                                size: 15,
-                                                                color:
-                                                                    primaryColorLT,
-                                                              ),
-                                                              Text(
-                                                                  'Previous Winners',
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    decoration:
-                                                                        TextDecoration
-                                                                            .underline,
-                                                                    fontSize:
-                                                                        13,
-                                                                    color:
-                                                                        primaryColorLT,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                  ))
-                                                            ],
+                                                      if (widget.industry
+                                                              .industry ==
+                                                          'Boss Up Challenge ')
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Get.to(() =>
+                                                                LeaderboardScreen(
+                                                                  isBossUp:
+                                                                      true,
+                                                                ));
+                                                          },
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    left: 8.0,
+                                                                    top: 5,
+                                                                    right: 2),
+                                                            child: Row(
+                                                              children: <Widget>[
+                                                                Icon(
+                                                                  LucideIcons
+                                                                      .award,
+                                                                  size: 15,
+                                                                  color:
+                                                                      primaryColorLT,
+                                                                ),
+                                                                Text(
+                                                                    'Previous Winners',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      decoration:
+                                                                          TextDecoration
+                                                                              .underline,
+                                                                      fontSize:
+                                                                          13,
+                                                                      color:
+                                                                          primaryColorLT,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                    ))
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
                                                       Row(
                                                         children: <Widget>[
                                                           Padding(
