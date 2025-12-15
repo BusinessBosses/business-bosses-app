@@ -46,11 +46,17 @@ class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _passwordFormKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
-  String? _username, _authCred, _password, _inviteId, _authusername;
+  String? _username,
+      _authCred,
+      _password,
+      _confirmPassword,
+      _inviteId,
+      _authusername;
   bool? _isUniqueName = false;
   bool? _isUniqueEmail = false;
   bool isEmailAuth = true;
   bool _invisiblePassword = true;
+  bool _invisibleCPassword = true;
   bool agreedToTerms = true;
   final ApiService _apiService = ApiService();
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
@@ -451,7 +457,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   setState(() {});
                 },
                 validator: Validator.signuppasswordValidator,
-                textInputAction: TextInputAction.done,
+                textInputAction: TextInputAction.next,
                 obscureText: _invisiblePassword,
                 keyboardType: TextInputType.visiblePassword,
                 maxLength: 16,
@@ -459,6 +465,32 @@ class _SignUpFormState extends State<SignUpForm> {
                   counterText: '',
                   hintText: 'Password (8-16 chars, include numbers)',
                   suffixIcon: _showHideIcon(PasswordField.password),
+                  hintStyle: const TextStyle(
+                    color: iconColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: const Color(0xffF4F4F4),
+                ),
+              ),
+              const SizedBox(height: 15.0),
+              TextFormField(
+                onChanged: (String val) {
+                  _confirmPassword = val;
+                  setState(() {});
+                },
+                validator: (val) {
+                  if (val!.isEmpty) return 'Confirm Password is required';
+                  if (val != _password) return 'Passwords do not match';
+                  return null;
+                },
+                textInputAction: TextInputAction.done,
+                obscureText: _invisibleCPassword,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: inputDecoration.copyWith(
+                  hintText: 'Confirm Password',
+                  suffixIcon: _showHideIcon(PasswordField.confirmPassword),
                   hintStyle: const TextStyle(
                     color: iconColor,
                     fontSize: 14,
@@ -528,7 +560,11 @@ class _SignUpFormState extends State<SignUpForm> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _invisiblePassword = !_invisiblePassword;
+          if (passwordField == PasswordField.password) {
+            _invisiblePassword = !_invisiblePassword;
+          } else {
+            _invisibleCPassword = !_invisibleCPassword;
+          }
         });
       },
       child: Container(
@@ -536,9 +572,13 @@ class _SignUpFormState extends State<SignUpForm> {
         width: 40.0,
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         child: SvgPicture.asset(
-          !_invisiblePassword
-              ? 'assets/svgs/eye.svg'
-              : 'assets/svgs/private.svg',
+          passwordField == PasswordField.password
+              ? !_invisiblePassword
+                  ? 'assets/svgs/eye.svg'
+                  : 'assets/svgs/private.svg'
+              : !_invisibleCPassword
+                  ? 'assets/svgs/eye.svg'
+                  : 'assets/svgs/private.svg',
           colorFilter: const ColorFilter.mode(hintColor, BlendMode.srcIn),
         ),
       ),
