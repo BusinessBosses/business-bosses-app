@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
@@ -1278,9 +1279,8 @@ class _PostTileState extends State<PostTile> {
                               widget.post.user!.uid);
                           setState(() {});
                         },
-                        icon: widget.post.likes?.contains(
-                                    profileController.myProfile.uid) ==
-                                true
+                        icon: widget.post.likes!
+                                .contains(profileController.myProfile.uid)
                             ? SvgPicture.asset(
                                 'assets/svgs/likefilled.svg',
                                 height: 15,

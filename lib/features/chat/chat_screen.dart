@@ -530,17 +530,23 @@ class _ChatItemState extends State<ChatItem> {
                                             color: Colors.red,
                                           ),
                                     )
-                                  : Text(
-                                      widget.myChatUser.messageText ?? 'Image',
-                                      maxLines: 1,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            color: textColor.withValues(
-                                                alpha: 0.8),
-                                          ),
-                                    ),
+                                  : widget.myChatUser.messageText != null
+                                      ? widget.myChatUser.messageText!
+                                              .startsWith('BUYER_REQUEST::')
+                                          ? Text('Buyer Request')
+                                          : Text(
+                                              widget.myChatUser.messageText ??
+                                                  'Image',
+                                              maxLines: 1,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    color: textColor.withValues(
+                                                        alpha: 0.8),
+                                                  ),
+                                            )
+                                      : SizedBox(),
                             ),
                           ],
                         ),

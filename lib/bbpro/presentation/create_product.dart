@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   final ProfileController profileController = Get.find();
   final ShopController shopController =
       Get.put(ShopController(), permanent: true);
+  final MarketController marketController = Get.find();
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];
   final TextEditingController _productNameController = TextEditingController();
@@ -810,6 +812,9 @@ class _CreateProductListingState extends State<CreateProductListing> {
           Get.back();
           showSnackbar(
             message: 'Product Added Successfully!',
+          );
+          marketController.initProItems(
+            page: 1,
           );
         } else {
           showSnackbar(
