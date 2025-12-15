@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
@@ -685,6 +686,9 @@ class _HeroSectionState extends State<HeroSection> {
                                 break;
                               case 'Crowdfund':
                                 enterbackeroftheweek();
+                                break;
+                              case 'Fund Project':
+                                Get.to(() => const CreateDonationScreen());
                                 break;
                               case 'Become a Partner':
                                 enterpartneroftheweek();

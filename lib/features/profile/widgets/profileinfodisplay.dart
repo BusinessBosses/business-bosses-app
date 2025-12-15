@@ -1,7 +1,7 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/widgets/winnercard.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
-import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
+
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:flutter/material.dart';
@@ -197,12 +197,8 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
               // My profile without matchType (prompt)
               else if (isMyProfile && !hasMatchType)
                 GestureDetector(
-                  onTap: () => showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (_) => PreMatchModal(),
-                  ),
+                  onTap: () =>
+                      Get.to(() => ExpandedMatchesScreen(isMarketplace: false)),
                   child: Padding(
                     padding: const EdgeInsets.only(right: 15),
                     child: Row(

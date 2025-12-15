@@ -27,7 +27,8 @@ class CreateDonationScreen extends StatefulWidget {
 }
 
 class _CreateDonationScreenState extends State<CreateDonationScreen> {
-  final DonationsController donationsController = Get.find();
+  final DonationsController donationsController =
+      Get.put(DonationsController());
   final ProfileController profileController = Get.find();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
