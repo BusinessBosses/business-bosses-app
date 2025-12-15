@@ -50,6 +50,7 @@ class UserModel {
   final int? unReadCount;
   final bool? isRanked;
   final String? inviteId;
+  final String? inviteBy;
   final double? averageRating;
   final bool? isUpdated;
   final String? matchType; // ✅ NEW FIELD
@@ -99,6 +100,7 @@ class UserModel {
     this.connecteds,
     this.referalCount,
     this.inviteId,
+    this.inviteBy,
     this.averageRating,
     this.isSubscribed = false,
     this.isUpdated,
@@ -156,6 +158,7 @@ class UserModel {
     int? unReadCount,
     bool? isRanked,
     String? inviteId,
+    String? inviteBy,
     double? averageRating,
     bool? isSubscribed,
     bool? isUpdated,
@@ -204,6 +207,7 @@ class UserModel {
       unReadCount: unReadCount ?? this.unReadCount,
       isRanked: isRanked ?? this.isRanked,
       inviteId: inviteId ?? this.inviteId,
+      inviteBy: inviteBy ?? this.inviteBy,
       connections: connections ?? this.connections,
       connecteds: connecteds ?? this.connecteds,
       averageRating: averageRating ?? this.averageRating,
@@ -263,6 +267,7 @@ class UserModel {
       'unReadCount': unReadCount,
       'isRanked': isRanked,
       'inviteId': inviteId,
+      'inviteBy': inviteBy,
       'averageRating': averageRating,
       'isSubscribed': isSubscribed,
       'isUpdated': isUpdated,
@@ -345,6 +350,7 @@ class UserModel {
       toPost: map['toPost'] == true,
       isUpdated: map['isUpdated'] == true,
       inviteId: map['inviteId']?.toString(),
+      inviteBy: map['inviteBy']?.toString(),
       weeklyRank: map['weeklyRank']?.toString(),
       monthlyRank: map['monthlyRank']?.toString(),
       averageRating: map['averageRating'] is num

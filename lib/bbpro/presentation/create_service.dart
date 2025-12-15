@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -42,6 +43,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ShopController shopController =
       Get.put(ShopController(), permanent: true);
+  final MarketController marketController = Get.find();
   final ProfileController profileController = Get.find();
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];
@@ -1557,6 +1559,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             Get.back();
             showSnackbar(message: 'Service Added Successfully!');
 
+            marketController.initProItems(page: 1);
             return;
           } else {
             String errorMessage = 'Failed to add service';

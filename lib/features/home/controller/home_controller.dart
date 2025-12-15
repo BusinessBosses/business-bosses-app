@@ -1,5 +1,6 @@
 // ignore_for_file: library_prefixes, public_member_api_docs, always_specify_types, always_declare_return_types, avoid_print
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
@@ -174,9 +175,9 @@ class HomeController extends GetxController {
     final parsed = list.map((e) {
       return PostModel.fromMap({
         ...e,
-        'likes': _extractUserIds(e['likes']),
-        'reposts': _extractUserIds(e['reposts']),
-        'coins': _extractUserIds(e['coins']),
+        'likes': e['likes'].map((e) => e['userId']).toList(),
+        'reposts': e['reposts'].map((e) => e['userId']).toList(),
+        'coins': e['coins'].map((e) => e['userId']).toList(),
       });
     });
 
@@ -185,9 +186,8 @@ class HomeController extends GetxController {
 
   /// Convert dynamic post list to PostModel list efficiently
   void processCoursesToState(List<dynamic>? list) {
-    print(list);
     if (list == null || list.isEmpty) return;
-    print(list);
+
     final parsed = list.map((e) {
       return CourseModel.fromMap({...e});
     });
@@ -196,9 +196,8 @@ class HomeController extends GetxController {
   }
 
   void processForumsToState(List<dynamic>? list) {
-    print(list);
     if (list == null || list.isEmpty) return;
-    print(list);
+
     final parsed = list.map((e) {
       return ForumModel.fromMap({
         ...e,

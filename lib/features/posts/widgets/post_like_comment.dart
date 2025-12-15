@@ -379,12 +379,14 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   Future<void> _loadRepostsWithDetails(String postId) async {
     final ApiResponseModel response =
         await ApiService.get(path: 'post/reposts/$postId');
+    debugPrint(response.toMap().toString());
     if (response.success) {
-      for (int i = 0; i < response.data['rows'].length; i++) {
-        _reposters.add(UserModel.fromMap(response.data['rows'][i]['user']));
+      if (response.data != null) {
+        for (int i = 0; i < response.data.length; i++) {
+          _reposters.add(UserModel.fromMap(response.data['user']));
+        }
       }
     }
-    debugPrint(response.toString());
     // for (dynamic l in widget.post.likes ?? []) {
     //   final Map<String, dynamic> response = await ProfileController.loadData(l);
     //   _users.add(

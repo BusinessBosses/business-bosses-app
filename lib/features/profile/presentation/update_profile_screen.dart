@@ -269,18 +269,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     try {
       final ApiResponseModel res = await ApiService.post(
           path: 'users/claim-invite',
-          body: <String, dynamic>{'code': _referralId!.trim()});
+          body: <String, dynamic>{'inviteCode': _referralId!.trim()});
 
       if (res.success) {
         showSnackbar(
-            title: 'Success!',
-            message: 'Invite code verified. You received 10 BB Coins!',
-            error: false);
+            title: 'Success!', message: 'Invite code verified.', error: false);
       } else {
-        showSnackbar(
-            title: 'OOPS!',
-            message: res.message ?? 'Invalid invite code',
-            error: true);
+        showSnackbar(title: 'OOPS!', message: res.message, error: true);
       }
     } catch (e) {
       showSnackbar(
