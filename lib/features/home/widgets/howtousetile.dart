@@ -53,7 +53,7 @@ class HowtouseTile extends StatelessWidget {
                     Spacer(),
                     Image.asset(
                       'assets/images/howitworkspic.png',
-                      height: 25,
+                      height: 20,
                     ),
                     if (isSearch == true) const SizedBox(height: 10),
                     // Subscription message

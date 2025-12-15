@@ -33,7 +33,7 @@ class ProfeatureTile extends StatelessWidget {
                   feature.iconPath,
                   height: 15,
                   colorFilter:
-                      const ColorFilter.mode(proprimaryColor, BlendMode.srcIn),
+                      const ColorFilter.mode(Colors.green, BlendMode.srcIn),
                 ),
               ),
               Expanded(

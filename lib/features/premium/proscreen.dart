@@ -249,7 +249,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
   static final List<ProFeatureItem> _profeatures = <ProFeatureItem>[
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'Your Own Biz-Centre',
+        caption: 'Your Own Mini Business Site',
         subtext:
             'Showcase your products/services and convert visits into sales'),
     ProFeatureItem(
@@ -274,7 +274,8 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
         caption: 'Virtual Office Address',
-        subtext: 'Boost your professional image'),
+        subtext:
+            'Boost your professional image with your own onlinen business address'),
   ];
   String paymentMethodId = 'Proyear';
   bool loading = false;
@@ -315,7 +316,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                           height: 5,
                         ),
                         const Text(
-                          'Benefits of My Biz',
+                          'Benefits of having your own biz-center',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
