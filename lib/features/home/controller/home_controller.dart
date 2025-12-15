@@ -458,6 +458,22 @@ class HomeController extends GetxController {
       }
     }
 
+    if (type == 'donation') {
+      final int donationIndex =
+          donations.indexWhere((DonationModel element) => element.id == postId);
+      if (donationIndex != -1) {
+        final bool checkLiked =
+            donations[donationIndex].likes!.contains(userId);
+        if (checkLiked) {
+          donations[donationIndex]
+              .likes!
+              .removeWhere((element) => element == userId);
+        } else {
+          donations[donationIndex].likes!.add(userId);
+        }
+      }
+    }
+
 // --- FIX: Course like (global courses feed) ---
     if (type == 'course') {
       final int courseIndex =
