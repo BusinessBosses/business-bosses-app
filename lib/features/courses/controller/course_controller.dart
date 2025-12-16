@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/gallery_screen.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/courses/presentation/learning_created.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -108,8 +109,7 @@ class CourseController extends GetxController {
             'user': profileController.myProfile.toMap()
           }));
       // homeController.addNewCourse(course, response.data['id']);
-      Get.back();
-      Get.snackbar('Success', 'Course created successfully');
+      Get.offAll(() => const LearningCreated());
     }
     loading(false);
     update();

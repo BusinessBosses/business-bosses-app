@@ -59,9 +59,10 @@ class ServiceCard extends StatefulWidget {
 
 class _ServiceCardState extends State<ServiceCard> {
   String formatPrice(double price) {
-    if (price >= 1000000) {
+    double absPrice = price.abs();
+    if (absPrice >= 1000000) {
       return '${(price / 1000000).toStringAsFixed(1)}m';
-    } else if (price >= 1000) {
+    } else if (absPrice >= 1000) {
       return '${(price / 1000).toStringAsFixed(1)}k';
     } else {
       return price.toStringAsFixed(2);
@@ -130,7 +131,9 @@ class _ServiceCardState extends State<ServiceCard> {
                           ),
                           if (widget.service?.discount != null &&
                               widget.service!.discount > 0)
-                            Row(
+                            Wrap(
+                              spacing: 5,
+                              crossAxisAlignment: WrapCrossAlignment.center,
                               children: <Widget>[
                                 Text(
                                   '${currencyValues[widget.service!.location.toString()]}${formatPrice(widget.service!.price * (1 - widget.service!.discount / 100))}',
@@ -140,7 +143,6 @@ class _ServiceCardState extends State<ServiceCard> {
                                     fontSize: 13,
                                   ),
                                 ),
-                                const SizedBox(width: 5),
                                 Text(
                                   '${currencyValues[widget.service!.location.toString()]}${formatPrice(widget.service!.price)}',
                                   style: const TextStyle(
