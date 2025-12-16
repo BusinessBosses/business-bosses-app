@@ -1,6 +1,3 @@
-// ignore_for_file: library_prefixes, public_member_api_docs, always_specify_types, always_declare_return_types, avoid_print
-
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
@@ -468,22 +465,6 @@ class HomeController extends GetxController {
       }
     }
 
-    if (type == 'donation') {
-      final int donationIndex =
-          donations.indexWhere((DonationModel element) => element.id == postId);
-      if (donationIndex != -1) {
-        final bool checkLiked =
-            donations[donationIndex].likes!.contains(userId);
-        if (checkLiked) {
-          donations[donationIndex]
-              .likes!
-              .removeWhere((String element) => element == userId);
-        } else {
-          donations[donationIndex].likes!.add(userId);
-        }
-      }
-    }
-
 // --- FIX: Course like (global courses feed) ---
     if (type == 'course') {
       final int courseIndex =
@@ -771,18 +752,18 @@ class HomeController extends GetxController {
               path: 'post/update-post/$postId',
               body: oldtimestamp == 0 ? timestampData : timestampDataoldpost);
           if (timeresponse.success) {
-            print('true');
+            debugPrint('true');
           } else {
-            print('false');
+            debugPrint('false');
           }
         } else {
           profileController.removePost(response.data['postId']);
         }
       } else {
-        print('Repost failed with status code: $response');
+        debugPrint('Repost failed with status code: $response');
       }
     } catch (e) {
-      print('Error during repost API request: $e');
+      debugPrint('Error during repost API request: $e');
     }
   }
 
@@ -837,6 +818,11 @@ class HomeController extends GetxController {
   void addNewForum(Map<String, dynamic> newPost) async {
     ForumModel modelizedNewPost = ForumModel.fromMap(<String, dynamic>{
       ...newPost,
+      'industry': industries
+          .where(
+              (Industry element) => element.industryId == newPost['industryId'])
+          .first
+          .toMap(),
       'coins': <String>[],
       'likes': <String>[],
       'comments': <CommentModel>[],
@@ -1108,6 +1094,13 @@ class HomeController extends GetxController {
     posts.removeWhere((PostModel element) => element.postId == postId);
 
     profileController.removePost(postId);
+    update();
+  }
+
+  void removeForum(String postId) {
+    mixedPosts.removeWhere((Map<String, dynamic> element) =>
+        element['type'] == 'forum' && element['id'] == postId);
+    forums.removeWhere((ForumModel element) => element.forumId == postId);
     update();
   }
 
@@ -1411,7 +1404,7 @@ class HomeController extends GetxController {
     });
     socket.connect();
     socket.onConnect((_) {
-      print('Connection established');
+      debugPrint('Connection established');
     });
 
     socket.on('handshake', (dynamic data) {
@@ -1434,12 +1427,12 @@ class HomeController extends GetxController {
     socket.onReconnect((_) {
       socket.emit('handshake', profileController.myProfile.uid);
 
-      print('reconnected');
+      debugPrint('reconnected');
     });
 
-    socket.onDisconnect((_) => print('Connection Disconnection'));
-    socket.onConnectError((dynamic err) => print(err));
-    socket.onError((dynamic err) => print(err));
+    socket.onDisconnect((_) => debugPrint('Connection Disconnection'));
+    socket.onConnectError((dynamic err) => debugPrint(err));
+    socket.onError((dynamic err) => debugPrint(err));
   }
 
   @override

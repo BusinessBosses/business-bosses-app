@@ -15,6 +15,9 @@ import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/partners/controllers/partners_controller.dart';
+import 'package:business_bosses_v2/features/partners/models/partner_model.dart';
+import 'package:business_bosses_v2/features/partners/widgets/bossup_partner_item.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -56,6 +59,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   final MarketController marketController = Get.find();
   final ShopController shopController = Get.find();
   final HomeController homeController = Get.find();
+  final PartnerController partnerController = Get.put(PartnerController());
   final BuyerRequestController buyerRequestController =
       Get.put(BuyerRequestController());
 
@@ -285,6 +289,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             const Tab(
               child: Text('Requests',
                   style: TextStyle(fontWeight: FontWeight.w700)),
+            ),
+          if (partnerController.myPartners.isNotEmpty)
+            const Tab(
+              child:
+                  Text('Deals', style: TextStyle(fontWeight: FontWeight.w700)),
             )
         ],
       ),
@@ -299,6 +308,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         if (homeController.myRequests.isNotEmpty) _buildRequestsTab(),
         if (homeController.userdonations.isNotEmpty) _buildDonationsTab(),
         if (homeController.usercourses.isNotEmpty) _buildCoursesTab(),
+        if (partnerController.myPartners.isNotEmpty) _buildPartnersTab(),
       ],
     );
   }
@@ -334,6 +344,32 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             onApply: () => _navigateToChatScreen(request),
             onTap: () => _showRequestDetails(request),
             onMoreOptions: () => _showRequestMenu(request),
+          );
+        },
+      );
+    });
+  }
+
+  Widget _buildPartnersTab() {
+    return Obx(() {
+      if (partnerController.myPartners.isEmpty) {
+        return _emptyState('No Partners Found', 'assets/svgs/supporter.svg');
+      }
+
+      return ListView.builder(
+        padding: const EdgeInsets.only(top: 10, bottom: 100),
+        itemCount: partnerController.myPartners.length,
+        itemBuilder: (BuildContext context, int index) {
+          final Partner partner = partnerController.myPartners[index];
+          return BossuppartnerItem(
+            companyName: partner.companyName,
+            companyDescription: partner.companyDescription ?? '',
+            companyUrl: partner.companyUrl ?? '',
+            companyPhoto: partner.companyPhoto,
+            clicks: partner.clicks,
+            id: partner.id ?? 0,
+            partner: partner,
+            showPartnerMessage: false,
           );
         },
       );
@@ -891,6 +927,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   int calculateTabLength() {
     int count = 2; // About + Posts
     if (homeController.myRequests.isNotEmpty) count++;
+    if (partnerController.myPartners.isNotEmpty) count++;
     return count;
   }
 }

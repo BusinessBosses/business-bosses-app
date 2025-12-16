@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/donations/presentation/filterdonatio
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
+import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -209,7 +210,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
               automaticallyImplyLeading: true,
               leading: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.off(() => HomeScreen());
                 },
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),

@@ -47,7 +47,6 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   @override
   void initState() {
     super.initState();
-    descriptionController.text = forum.description ?? '';
     if (Get.arguments == null) {
       Get.back();
     } else {
@@ -55,6 +54,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
       if (Get.arguments['isUpdating'] != null) {
         isUpdating = true;
         forum = Get.arguments['forum'];
+        descriptionController.text = forum.description ?? '';
       } else {
         industryId = Get.arguments['industryId'];
       }
@@ -107,6 +107,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   ),
                   const SizedBox(height: 24.0),
                   DetectableTextField(
+                    controller: descriptionController,
                     regExp: detectionRegExp(hashtag: false)!,
                     keyboardType: TextInputType.multiline,
                     // minLines: 5,

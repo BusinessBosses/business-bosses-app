@@ -16,6 +16,7 @@ class PartnerController extends GetxController {
   final Rx<ApiResponseModel?> lastResult = Rx<ApiResponseModel?>(null);
   final RxString lastError = ''.obs;
   final RxList<Partner> partners = <Partner>[].obs;
+  final RxList<Partner> myPartners = <Partner>[].obs;
   final RxBool loading = false.obs;
 
   final String createPath = 'partner';
@@ -157,6 +158,13 @@ class PartnerController extends GetxController {
           .toList();
 
       partners.assignAll(loaded);
+      if (partners
+          .where((Partner p) => p.userId == profileController.myProfile.uid)
+          .isNotEmpty) {
+        myPartners.assignAll(partners
+            .where((Partner p) => p.userId == profileController.myProfile.uid)
+            .toList());
+      }
     } catch (e, stack) {
       debugPrint('❌ loadPartners failed: $e\n$stack');
       showSnackbar(

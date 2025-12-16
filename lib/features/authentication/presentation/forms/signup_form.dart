@@ -46,12 +46,7 @@ class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _passwordFormKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
-  String? _username,
-      _authCred,
-      _password,
-      _confirmPassword,
-      _inviteId,
-      _authusername;
+  String? _username, _authCred, _password, _inviteId, _authusername;
   bool? _isUniqueName = false;
   bool? _isUniqueEmail = false;
   bool isEmailAuth = true;
@@ -477,7 +472,6 @@ class _SignUpFormState extends State<SignUpForm> {
               const SizedBox(height: 15.0),
               TextFormField(
                 onChanged: (String val) {
-                  _confirmPassword = val;
                   setState(() {});
                 },
                 validator: (String? val) {
