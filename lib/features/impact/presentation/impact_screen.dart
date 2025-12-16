@@ -157,9 +157,9 @@ class _ReachScreenState extends State<ReachScreen> {
           return const SafetyModel();
         }
 
-        final dynamic invites = controller.data['invitesThisWeek'] ?? 0;
+        final dynamic invites = controller.data?['invitesThisWeek'] ?? 0;
         final dynamic rank =
-            controller.data['user']['weeklyRankingScore'] ?? 12;
+            controller.data?['user']['weeklyRankingScore'] ?? 12;
 
         return SingleChildScrollView(
           child: Column(

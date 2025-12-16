@@ -1088,7 +1088,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void removePost(String postId) {
+  Future<void> removePost(String postId) async {
     mixedPosts.removeWhere((Map<String, dynamic> element) =>
         element['type'] == 'post' && element['id'] == postId);
     posts.removeWhere((PostModel element) => element.postId == postId);
@@ -1097,7 +1097,8 @@ class HomeController extends GetxController {
     update();
   }
 
-  void removeForum(String postId) {
+  Future<void> removeForum(String postId) async {
+    await ApiService.delete(path: 'forum/delete/$postId');
     mixedPosts.removeWhere((Map<String, dynamic> element) =>
         element['type'] == 'forum' && element['id'] == postId);
     forums.removeWhere((ForumModel element) => element.forumId == postId);

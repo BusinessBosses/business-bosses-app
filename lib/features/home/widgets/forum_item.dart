@@ -934,12 +934,12 @@ class _ForumItemState extends State<ForumItem> {
             child: const Text('No'),
           ),
           TextButton(
-            onPressed: () {
-              widget.controller.removeForum(widget.forum.forumId);
+            onPressed: () async {
+              await widget.controller.removeForum(widget.forum.forumId);
               if (Get.isRegistered<BossUpController>()) {
                 Get.find<BossUpController>().deleteForum(widget.forum.forumId);
               }
-              // ForumController().onDeleteForum(widget.forum.forumId);
+              setState(() {});
               Get.back();
             },
             child: const Text('Yes'),

@@ -306,9 +306,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         _buildAboutTab(),
         _buildPostsTab(),
         if (homeController.myRequests.isNotEmpty) _buildRequestsTab(),
-        if (homeController.userdonations.isNotEmpty) _buildDonationsTab(),
-        if (homeController.usercourses.isNotEmpty) _buildCoursesTab(),
         if (partnerController.myPartners.isNotEmpty) _buildPartnersTab(),
+        // if (homeController.userdonations.isNotEmpty) _buildDonationsTab(),
+        // if (homeController.usercourses.isNotEmpty) _buildCoursesTab(),
       ],
     );
   }
@@ -870,45 +870,45 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     );
   }
 
-  Widget _buildDonationsTab() {
-    return Obx(() {
-      if (homeController.userdonations.isEmpty) {
-        return _emptyState('No Crowdfunds Found', 'assets/svgs/supporter.svg');
-      }
+  // Widget _buildDonationsTab() {
+  //   return Obx(() {
+  //     if (homeController.userdonations.isEmpty) {
+  //       return _emptyState('No Crowdfunds Found', 'assets/svgs/supporter.svg');
+  //     }
 
-      return ListView.builder(
-        itemCount: homeController.userdonations.length,
-        itemBuilder: (_, int i) {
-          return DonationItem(
-            donation: homeController.userdonations[i],
-            isLastItem: i == homeController.userdonations.length - 1,
-          );
-        },
-      );
-    });
-  }
+  //     return ListView.builder(
+  //       itemCount: homeController.userdonations.length,
+  //       itemBuilder: (_, int i) {
+  //         return DonationItem(
+  //           donation: homeController.userdonations[i],
+  //           isLastItem: i == homeController.userdonations.length - 1,
+  //         );
+  //       },
+  //     );
+  //   });
+  // }
 
-  Widget _buildCoursesTab() {
-    return Obx(() {
-      if (homeController.loading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
+  // Widget _buildCoursesTab() {
+  //   return Obx(() {
+  //     if (homeController.loading.value) {
+  //       return const Center(child: CircularProgressIndicator());
+  //     }
 
-      if (homeController.cError.value) {
-        return _emptyState('Error Loading Courses!', 'assets/svgs/courses.svg');
-      }
+  //     if (homeController.cError.value) {
+  //       return _emptyState('Error Loading Courses!', 'assets/svgs/courses.svg');
+  //     }
 
-      if (homeController.usercourses.isEmpty) {
-        return _emptyState('No Courses Found', 'assets/svgs/courses.svg');
-      }
+  //     if (homeController.usercourses.isEmpty) {
+  //       return _emptyState('No Courses Found', 'assets/svgs/courses.svg');
+  //     }
 
-      return ListView.builder(
-        itemCount: homeController.usercourses.length,
-        itemBuilder: (_, int i) =>
-            CourseItem(course: homeController.usercourses[i]),
-      );
-    });
-  }
+  //     return ListView.builder(
+  //       itemCount: homeController.usercourses.length,
+  //       itemBuilder: (_, int i) =>
+  //           CourseItem(course: homeController.usercourses[i]),
+  //     );
+  //   });
+  // }
 
   Widget _emptyState(String msg, String icon) {
     return Column(
