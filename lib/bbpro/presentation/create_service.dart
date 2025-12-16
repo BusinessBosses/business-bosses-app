@@ -336,6 +336,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     hintText: 'Enter price',
                     controller: _priceController,
                     inputType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'^[0-9]*\.?[0-9]*')),
+                    ],
                   ),
                 ),
                 Expanded(

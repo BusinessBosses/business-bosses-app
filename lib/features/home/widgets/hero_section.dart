@@ -618,7 +618,7 @@ class _HeroSectionState extends State<HeroSection> {
                             case 'Refer':
                               referuser();
                               break;
-                            case 'View Matches':
+                            case 'View your Match':
                               Get.to(() => ExpandedMatchesScreen());
                               break;
                             case 'Claim Deal':
