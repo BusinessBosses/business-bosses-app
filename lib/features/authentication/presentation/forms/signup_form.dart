@@ -502,7 +502,7 @@ class _SignUpFormState extends State<SignUpForm> {
           agreementText(context),
           const SizedBox(height: 24.0),
           CustomButton(
-            label: 'Join Now',
+            label: 'Sign Up',
             onPressed: () async {
               _formKey.currentState!.save();
               setState(() {

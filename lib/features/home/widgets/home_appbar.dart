@@ -62,8 +62,8 @@ class HomeAppBar extends StatelessWidget {
                             'Boss Up & Grow',
                             style: TextStyle(
                               color: textColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         ],

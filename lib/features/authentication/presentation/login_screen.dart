@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Flexible(
                       child: Text(
-                          'Promote your Business - Get Featured & Reach More Customers',
+                          'Promote Your Business - Get featured, Sell, Network & Grow Globally',
                           style: TextStyle(
                               fontSize: 14,
                               color: textColor.withValues(alpha: 0.8),
@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: <Widget>[
                           TextWidget(
-                            text: 'Join Now',
+                            text: 'Sign Up for Free',
                             color: !_isLogin ? primaryColorLT : iconColor,
                             fontWeight: FontWeight.w700,
                             size: 18,
