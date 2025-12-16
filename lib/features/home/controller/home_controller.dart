@@ -1,6 +1,3 @@
-// ignore_for_file: library_prefixes, public_member_api_docs, always_specify_types, always_declare_return_types, avoid_print
-
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
@@ -43,29 +40,34 @@ class HomeController extends GetxController {
   final GetStorage sandBox = GetStorage();
   RxBool error = RxBool(false);
   RxBool noConnection = RxBool(false);
-  List<Industry> industries = [];
-  List<UserModel> bossupMembers = [];
+  List<Industry> industries = <Industry>[];
+  List<UserModel> bossupMembers = <UserModel>[];
 
   RxInt paginationPage = RxInt(1);
   RxBool loading = RxBool(false);
   RxBool loadingMore = RxBool(false);
   RxBool refreshing = RxBool(false);
-  List<Map<String, dynamic>> mixedPosts = [
-    {'type': 'notype'},
+  List<Map<String, dynamic>> mixedPosts = <Map<String, dynamic>>[
+    <String, dynamic>{'type': 'notype'},
   ];
-  List<Map<String, dynamic>> sponsoredPosts = [
-    {'isForum': false, 'data': {}, 'shouldCount': false, 'isSponsored': true}
+  List<Map<String, dynamic>> sponsoredPosts = <Map<String, dynamic>>[
+    <String, dynamic>{
+      'isForum': false,
+      'data': <dynamic, dynamic>{},
+      'shouldCount': false,
+      'isSponsored': true
+    }
   ];
-  List<String> blocked = [];
+  List<String> blocked = <String>[];
   RxList<PostModel> promotedPosts = RxList<PostModel>(<PostModel>[]);
   RxList<CourseModel> promotedCourses = RxList<CourseModel>(<CourseModel>[]);
   RxList<EventModel> events = RxList<EventModel>(<EventModel>[]);
   RxList<EventModel> myEvents = RxList<EventModel>(<EventModel>[]);
   // RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
-  Set<dynamic> itemsWithIncrementedViews = {};
+  Set<dynamic> itemsWithIncrementedViews = <dynamic>{};
   String notificationDescription = '';
   String notificationStatus = '';
-  Map<String, String> votes = {};
+  Map<String, String> votes = <String, String>{};
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
   RxList<CourseModel> courses = RxList<CourseModel>(<CourseModel>[]);
   RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
@@ -104,7 +106,7 @@ class HomeController extends GetxController {
   // }
 
   void pollVote(PostModel post, String selectedOption) {
-    ApiService.post(path: 'pollvote', body: {
+    ApiService.post(path: 'pollvote', body: <String, dynamic>{
       'postId': post.postId,
       'selectedOption': selectedOption,
     });
@@ -163,21 +165,21 @@ class HomeController extends GetxController {
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   List<String> _extractUserIds(dynamic items) {
     if (items is List) {
-      return items.map((e) => e['userId'].toString()).toList();
+      return items.map((dynamic e) => e['userId'].toString()).toList();
     }
-    return [];
+    return <String>[];
   }
 
   /// Convert dynamic post list to PostModel list efficiently
   void processPostsToState(List<dynamic>? list) {
     if (list == null || list.isEmpty) return;
 
-    final parsed = list.map((e) {
-      return PostModel.fromMap({
+    final Iterable<PostModel> parsed = list.map((dynamic e) {
+      return PostModel.fromMap(<String, dynamic>{
         ...e,
-        'likes': e['likes'].map((e) => e['userId']).toList(),
-        'reposts': e['reposts'].map((e) => e['userId']).toList(),
-        'coins': e['coins'].map((e) => e['userId']).toList(),
+        'likes': e['likes'].map((dynamic e) => e['userId']).toList(),
+        'reposts': e['reposts'].map((dynamic e) => e['userId']).toList(),
+        'coins': e['coins'].map((dynamic e) => e['userId']).toList(),
       });
     });
 
@@ -188,8 +190,8 @@ class HomeController extends GetxController {
   void processCoursesToState(List<dynamic>? list) {
     if (list == null || list.isEmpty) return;
 
-    final parsed = list.map((e) {
-      return CourseModel.fromMap({...e});
+    final Iterable<CourseModel> parsed = list.map((dynamic e) {
+      return CourseModel.fromMap(<String, dynamic>{...e});
     });
 
     courses.addAll(parsed);
@@ -198,8 +200,8 @@ class HomeController extends GetxController {
   void processForumsToState(List<dynamic>? list) {
     if (list == null || list.isEmpty) return;
 
-    final parsed = list.map((e) {
-      return ForumModel.fromMap({
+    final Iterable<ForumModel> parsed = list.map((dynamic e) {
+      return ForumModel.fromMap(<String, dynamic>{
         ...e,
         'likes': _extractUserIds(e['likes']),
         'coins': _extractUserIds(e['coins']),
@@ -212,8 +214,8 @@ class HomeController extends GetxController {
   void processDonationsoState(List<dynamic>? list) {
     if (list == null || list.isEmpty) return;
 
-    final parsed = list.map((e) {
-      return DonationModel.fromMap({
+    final Iterable<DonationModel> parsed = list.map((dynamic e) {
+      return DonationModel.fromMap(<String, dynamic>{
         ...e,
         'likes': _extractUserIds(e['likes']),
       });
@@ -224,11 +226,11 @@ class HomeController extends GetxController {
 
   /// Promoted posts
   void processPromotedPostsToState(dynamic post) {
-    final List<dynamic> psts = List<dynamic>.from(post ?? []);
+    final List<dynamic> psts = List<dynamic>.from(post ?? <dynamic>[]);
     if (psts.isEmpty) return;
 
-    promotedPosts.addAll(psts.map((e) {
-      return PostModel.fromMap({
+    promotedPosts.addAll(psts.map((dynamic e) {
+      return PostModel.fromMap(<String, dynamic>{
         ...e,
         'likes': _extractUserIds(e['likes']),
         'reposts': _extractUserIds(e['reposts']),
@@ -241,7 +243,7 @@ class HomeController extends GetxController {
     loadingRequests.value = true;
     myRequests.clear();
     try {
-      final response = await ApiService.get(
+      final ApiResponseModel response = await ApiService.get(
           path: 'buyer-request/user/${profileController.myProfile.uid}');
       if (response.success) {
         myRequests.clear();
@@ -256,11 +258,11 @@ class HomeController extends GetxController {
 
   /// Promoted courses
   void processPromotedCoursesToState(dynamic post) {
-    final List<dynamic> psts = List<dynamic>.from(post ?? []);
+    final List<dynamic> psts = List<dynamic>.from(post ?? <dynamic>[]);
     if (psts.isEmpty) return;
 
-    promotedCourses.addAll(psts.map((e) {
-      return CourseModel.fromMap({
+    promotedCourses.addAll(psts.map((dynamic e) {
+      return CourseModel.fromMap(<String, dynamic>{
         ...e,
         'likes': _extractUserIds(e['likes']),
         'coins': _extractUserIds(e['coins']),
@@ -272,15 +274,15 @@ class HomeController extends GetxController {
   /// Mix posts + courses, sort by timestamp and then mix with promoted
   /// Mix posts + courses + forums + donations
   void mixPostandPromoted() {
-    final List<Map<String, dynamic>> result = [
-      {'type': 'notype'}
+    final List<Map<String, dynamic>> result = <Map<String, dynamic>>[
+      <String, dynamic>{'type': 'notype'}
     ];
 
     // 1) Build unified organic list
-    final List<Map<String, dynamic>> organic = [];
+    final List<Map<String, dynamic>> organic = <Map<String, dynamic>>[];
 
     for (int i = 0; i < posts.length; i++) {
-      organic.add({
+      organic.add(<String, dynamic>{
         'kind': 'post',
         'index': i,
         'id': posts[i].postId,
@@ -289,7 +291,7 @@ class HomeController extends GetxController {
     }
 
     for (int i = 0; i < courses.length; i++) {
-      organic.add({
+      organic.add(<String, dynamic>{
         'kind': 'course',
         'index': i,
         'id': courses[i].id,
@@ -298,7 +300,7 @@ class HomeController extends GetxController {
     }
 
     for (int i = 0; i < donations.length; i++) {
-      organic.add({
+      organic.add(<String, dynamic>{
         'kind': 'donation',
         'index': i,
         'id': donations[i].id,
@@ -307,7 +309,7 @@ class HomeController extends GetxController {
     }
 
     for (int i = 0; i < forums.length; i++) {
-      organic.add({
+      organic.add(<String, dynamic>{
         'kind': 'forum',
         'index': i,
         'id': forums[i].forumId,
@@ -317,7 +319,8 @@ class HomeController extends GetxController {
 
     // 2) Sort by timestamp DESC
     organic.sort(
-      (a, b) => (b['timestamp'] as int).compareTo(a['timestamp'] as int),
+      (Map<String, dynamic> a, Map<String, dynamic> b) =>
+          (b['timestamp'] as int).compareTo(a['timestamp'] as int),
     );
 
     int promotedPostIndex = 0;
@@ -325,15 +328,15 @@ class HomeController extends GetxController {
 
     // Optional: promote first post at top
     if (promotedPosts.isNotEmpty) {
-      result.add({'type': 'promotedPost', 'index': 0});
+      result.add(<String, dynamic>{'type': 'promotedPost', 'index': 0});
       promotedPostIndex = 1;
     }
 
     // 3) Walk & insert promoted
     for (int i = 0; i < organic.length; i++) {
-      final item = organic[i];
+      final Map<String, dynamic> item = organic[i];
 
-      result.add({
+      result.add(<String, dynamic>{
         'type': item['kind'], // post / course / donation / forum
         'index': item['index'],
         'id': item['id'],
@@ -342,12 +345,12 @@ class HomeController extends GetxController {
 
       if ((i + 1) % 2 == 0) {
         if (promotedPostIndex < promotedPosts.length) {
-          result.add({
+          result.add(<String, dynamic>{
             'type': 'promotedPost',
             'index': promotedPostIndex++,
           });
         } else if (promotedCourseIndex < promotedCourses.length) {
-          result.add({
+          result.add(<String, dynamic>{
             'type': 'course',
             'index': promotedCourseIndex++,
             'source': 'promoted',
@@ -378,7 +381,9 @@ class HomeController extends GetxController {
       if (postIndex != -1) {
         final bool checkLiked = posts[postIndex].likes!.contains(userId);
         if (checkLiked) {
-          posts[postIndex].likes!.removeWhere((element) => element == userId);
+          posts[postIndex]
+              .likes!
+              .removeWhere((String element) => element == userId);
         } else {
           posts[postIndex].likes!.add(userId);
         }
@@ -392,7 +397,7 @@ class HomeController extends GetxController {
         if (checkLiked) {
           promotedPosts[promotedPostIndex]
               .likes!
-              .removeWhere((element) => element == userId);
+              .removeWhere((String element) => element == userId);
         } else {
           promotedPosts[promotedPostIndex].likes!.add(userId);
         }
@@ -410,7 +415,7 @@ class HomeController extends GetxController {
         if (checkLiked) {
           sponsoredPosts[spIndex]['data']
               .likes!
-              .removeWhere((element) => element == userId);
+              .removeWhere((dynamic element) => element == userId);
         } else {
           sponsoredPosts[spIndex]['data'].likes!.add(userId);
         }
@@ -451,7 +456,9 @@ class HomeController extends GetxController {
       if (forumIndex != -1) {
         final bool checkLiked = forums[forumIndex].likes!.contains(userId);
         if (checkLiked) {
-          forums[forumIndex].likes!.removeWhere((element) => element == userId);
+          forums[forumIndex]
+              .likes!
+              .removeWhere((String element) => element == userId);
         } else {
           forums[forumIndex].likes!.add(userId);
         }
@@ -467,7 +474,7 @@ class HomeController extends GetxController {
         if (checkLiked) {
           donations[donationIndex]
               .likes!
-              .removeWhere((element) => element == userId);
+              .removeWhere((String element) => element == userId);
         } else {
           donations[donationIndex].likes!.add(userId);
         }
@@ -490,7 +497,7 @@ class HomeController extends GetxController {
 
     update();
     if (profileController.myProfile.uid != receiverUid) {
-      socket.emit('like', {
+      socket.emit('like', <String, Object>{
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -498,7 +505,7 @@ class HomeController extends GetxController {
         'receiverUid': receiverUid,
       });
     } else {
-      socket.emit('like', {
+      socket.emit('like', <String, Object>{
         'postId': postId,
         'userId': userId,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
@@ -602,7 +609,9 @@ class HomeController extends GetxController {
         final bool checkIfCoined = forums[forumIndex].coins!.contains(userId);
         if (checkIfCoined) {
           profileController.updateCoinCount(1);
-          forums[forumIndex].coins!.removeWhere((element) => element == userId);
+          forums[forumIndex]
+              .coins!
+              .removeWhere((String element) => element == userId);
         } else {
           profileController.updateCoinCount(-1);
           forums[forumIndex].coins!.add(userId);
@@ -628,7 +637,7 @@ class HomeController extends GetxController {
 
     update();
     if (profileController.myProfile.uid != receiverUid) {
-      socket.emit('coin', {
+      socket.emit('coin', <String, Object>{
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -636,7 +645,7 @@ class HomeController extends GetxController {
         'receiverUid': receiverUid,
       });
     } else {
-      socket.emit('coin', {
+      socket.emit('coin', <String, Object>{
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -650,14 +659,14 @@ class HomeController extends GetxController {
       ProfileController profileController, String type, String receiverUid) {
     update();
     if (profileController.myProfile.uid != receiverUid) {
-      socket.emit('coin', {
+      socket.emit('coin', <String, Object>{
         'postId': courseId,
         'userId': userId,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'receiverUid': receiverUid,
       });
     } else {
-      socket.emit('coin', {
+      socket.emit('coin', <String, Object>{
         'postId': courseId,
         'userId': userId,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
@@ -676,7 +685,9 @@ class HomeController extends GetxController {
         final bool checkReposted = posts[postIndex].reposts!.contains(userId);
 
         if (checkReposted) {
-          posts[postIndex].reposts!.removeWhere((element) => element == userId);
+          posts[postIndex]
+              .reposts!
+              .removeWhere((String element) => element == userId);
           showSnackbar(
               title: 'Success!',
               message: 'Post successfully unreposted',
@@ -702,7 +713,7 @@ class HomeController extends GetxController {
         if (checkReposts) {
           sponsoredPosts[spIndex]['data']
               .reposts!
-              .removeWhere((element) => element == userId);
+              .removeWhere((dynamic element) => element == userId);
           showSnackbar(
               title: 'Success!',
               message: 'Post successfully unreposted',
@@ -719,17 +730,17 @@ class HomeController extends GetxController {
     update();
 
     // Prepare the data for the repost request
-    Map<String, dynamic> repostData = {
+    Map<String, dynamic> repostData = <String, dynamic>{
       'postId': postId,
       'oldtimestamp': timestamp,
     };
 
-    Map<String, dynamic> timestampData = {
+    Map<String, dynamic> timestampData = <String, dynamic>{
       'oldtimestamp': timestamp,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     };
 
-    Map<String, dynamic> timestampDataoldpost = {
+    Map<String, dynamic> timestampDataoldpost = <String, dynamic>{
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     };
 
@@ -740,8 +751,7 @@ class HomeController extends GetxController {
       // Handle the response if needed
 
       if (response.success) {
-        print('Repost successful');
-        var reposted = response.data['repost']['reposted'];
+        dynamic reposted = response.data['repost']['reposted'];
         if (reposted) {
           profileController.addRePost(response.data);
           addNewRePost(response.data, profileController);
@@ -767,13 +777,13 @@ class HomeController extends GetxController {
   /// ADD NEW POST TO STATE
   void addNewPost(
       Map<String, dynamic> newPost, ProfileController profileController) async {
-    PostModel modelizedNewPost = PostModel.fromMap({
+    PostModel modelizedNewPost = PostModel.fromMap(<String, dynamic>{
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],
       'reposts': <String>[],
       'comments': <CommentModel>[],
-      'user': {
+      'user': <String, String?>{
         'username': profileController.myProfile.username,
         'email': profileController.myProfile.email,
         'uid': profileController.myProfile.uid,
@@ -782,12 +792,15 @@ class HomeController extends GetxController {
       }
     });
     posts.insert(0, modelizedNewPost);
-    mixedPosts
-        .insert(1, {'type': 'post', 'index': 0, 'id': modelizedNewPost.postId});
+    mixedPosts.insert(1, <String, dynamic>{
+      'type': 'post',
+      'index': 0,
+      'id': modelizedNewPost.postId
+    });
 
     for (int i = 2; i < mixedPosts.length; i++) {
       if (mixedPosts[i]['type'] == 'post') {
-        mixedPosts[i] = {
+        mixedPosts[i] = <String, dynamic>{
           'type': 'post',
           'index': mixedPosts[i]['index'] + 1,
           'id': mixedPosts[i]['id']
@@ -797,9 +810,9 @@ class HomeController extends GetxController {
 
     // posts.insert(0, modelizedNewPost);
     update();
-    socket.emit('newPostEvent', {
+    socket.emit('newPostEvent', <String, Map<String, dynamic>>{
       'newPost': newPost,
-      'user': {
+      'user': <String, String?>{
         'username': profileController.myProfile.username,
         'email': profileController.myProfile.email,
         'uid': profileController.myProfile.uid,
@@ -840,7 +853,7 @@ class HomeController extends GetxController {
 
   void addNewRePost(
       Map<String, dynamic> newPost, ProfileController profileController) async {
-    PostModel modelizedNewPost = PostModel.fromMap({
+    PostModel modelizedNewPost = PostModel.fromMap(<String, dynamic>{
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],
@@ -848,11 +861,14 @@ class HomeController extends GetxController {
       'comments': <CommentModel>[],
     });
     posts.insert(0, modelizedNewPost);
-    mixedPosts
-        .insert(1, {'type': 'post', 'index': 0, 'id': modelizedNewPost.postId});
+    mixedPosts.insert(1, <String, dynamic>{
+      'type': 'post',
+      'index': 0,
+      'id': modelizedNewPost.postId
+    });
     for (int i = 2; i < mixedPosts.length; i++) {
       if (mixedPosts[i]['type'] == 'post') {
-        mixedPosts[i] = {
+        mixedPosts[i] = <String, dynamic>{
           'type': 'post',
           'index': mixedPosts[i]['index'] + 1,
           'id': mixedPosts[i]['id']
@@ -862,7 +878,7 @@ class HomeController extends GetxController {
 
     // posts.insert(0, modelizedNewPost);
     update();
-    socket.emit('newPostEvent', {
+    socket.emit('newPostEvent', <String, Object>{
       'newPost': newPost,
       'coins': <String>[],
       'likes': <String>[],
@@ -897,7 +913,7 @@ class HomeController extends GetxController {
             text:
                 'Your Session Has Expired. Login Again To Continue Using Business Bosses!',
           ),
-          actions: [
+          actions: <Widget>[
             TextButton(
               onPressed: () {
                 Get.dialog(
@@ -987,8 +1003,10 @@ class HomeController extends GetxController {
           'isUpdated': false,
         },
       );
-      profileController.myProfile = UserModel.fromMap(
-          {...profileController.myProfile.toMap(), 'isUpdated': false});
+      profileController.myProfile = UserModel.fromMap(<dynamic, dynamic>{
+        ...profileController.myProfile.toMap(),
+        'isUpdated': false
+      });
       sandBox.write('lastExecutionTimestamp', currentTimestamp);
       profileController.updateCoinCount(100);
       showCoinDialogFirst();
@@ -1004,7 +1022,7 @@ class HomeController extends GetxController {
             'bossOfTheWeekUpTimeStamp': currentTimestamp,
           },
         );
-        ApiService.post(path: 'transaction-history', body: {
+        ApiService.post(path: 'transaction-history', body: <String, dynamic>{
           'userId': profileController.myProfile.uid,
           'transactionType': 'credit',
           'amount': 1,
@@ -1053,7 +1071,7 @@ class HomeController extends GetxController {
 
   Future<void> sinkPosts(Map<String, dynamic> data) async {
     if (profileController.myProfile.uid != data['user']['uid']) {
-      PostModel modelizedNewPost = PostModel.fromMap({
+      PostModel modelizedNewPost = PostModel.fromMap(<String, dynamic>{
         ...data['newPost'],
         'coins': <String>[],
         'likes': <String>[],
@@ -1062,8 +1080,11 @@ class HomeController extends GetxController {
         'user': data['user']
       });
       posts.insert(1, modelizedNewPost);
-      mixedPosts.insert(
-          1, {'type': 'posts', 'index': 1, 'id': modelizedNewPost.postId});
+      mixedPosts.insert(1, <String, dynamic>{
+        'type': 'posts',
+        'index': 1,
+        'id': modelizedNewPost.postId
+      });
 
       update();
     }
@@ -1072,7 +1093,7 @@ class HomeController extends GetxController {
   void removePost(String postId) {
     mixedPosts.removeWhere((Map<String, dynamic> element) =>
         element['type'] == 'post' && element['id'] == postId);
-    posts.removeWhere((element) => element.postId == postId);
+    posts.removeWhere((PostModel element) => element.postId == postId);
 
     profileController.removePost(postId);
     update();
@@ -1105,7 +1126,8 @@ class HomeController extends GetxController {
 
     try {
       // Run multiple API calls concurrently
-      final results = await Future.wait([
+      final List<ApiResponseModel> results =
+          await Future.wait(<Future<ApiResponseModel>>[
         HomeRepository.fetchData(),
         HomeRepository.fetchPromoted(),
       ]);
@@ -1127,10 +1149,10 @@ class HomeController extends GetxController {
       }
 
       // --- Main Data Processing ---
-      final data = response.data;
+      final dynamic data = response.data;
 
       profileController.processDataToState(
-        {...data['user'], 'connecteds': data['connecteds']},
+        <dynamic, dynamic>{...data['user'], 'connecteds': data['connecteds']},
         data['interests'],
         data['userRanking'],
       );
@@ -1154,18 +1176,21 @@ class HomeController extends GetxController {
       }
 
       // --- Courses ---
-      final courseRows =
-          List<Map<String, dynamic>>.from(data['courses']?['rows'] ?? []);
-      usercourses.addAll(courseRows.map((e) => CourseModel.fromMap(e)));
+      final List<Map<String, dynamic>> courseRows =
+          List<Map<String, dynamic>>.from(
+              data['courses']?['rows'] ?? <dynamic>[]);
+      usercourses.addAll(
+          courseRows.map((Map<String, dynamic> e) => CourseModel.fromMap(e)));
 
       // --- Donations ---
-      final donationRows =
-          List<Map<String, dynamic>>.from(data['donations']?['rows'] ?? []);
-      userdonations.addAll(donationRows.map((e) {
-        return DonationModel.fromMap({
+      final List<Map<String, dynamic>> donationRows =
+          List<Map<String, dynamic>>.from(
+              data['donations']?['rows'] ?? <dynamic>[]);
+      userdonations.addAll(donationRows.map((Map<String, dynamic> e) {
+        return DonationModel.fromMap(<String, dynamic>{
           ...e,
-          'likes': (e['likes'] as List)
-              .map((like) => like['userId'].toString())
+          'likes': (e['likes'] as List<dynamic>)
+              .map((dynamic like) => like['userId'].toString())
               .toList(),
         });
       }));
@@ -1192,26 +1217,30 @@ class HomeController extends GetxController {
         // Check platform first
         if (Platform.isIOS) {
           // On iOS, check if APNS token is available first
-          final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+          final String? apnsToken =
+              await FirebaseMessaging.instance.getAPNSToken();
           if (apnsToken != null) {
-            final token = await FirebaseMessaging.instance.getToken();
+            final String? token = await FirebaseMessaging.instance.getToken();
             if (token != null) {
               ApiService.post(
-                  path: 'users/add-device-token', body: {'deviceToken': token});
+                  path: 'users/add-device-token',
+                  body: <String, dynamic>{'deviceToken': token});
             }
           } else {
             // APNS token not ready yet, listen for it
-            FirebaseMessaging.instance.onTokenRefresh.listen((token) {
+            FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
               ApiService.post(
-                  path: 'users/add-device-token', body: {'deviceToken': token});
+                  path: 'users/add-device-token',
+                  body: <String, dynamic>{'deviceToken': token});
             });
           }
         } else {
           // Android - direct token retrieval
-          final token = await FirebaseMessaging.instance.getToken();
+          final String? token = await FirebaseMessaging.instance.getToken();
           if (token != null) {
             ApiService.post(
-                path: 'users/add-device-token', body: {'deviceToken': token});
+                path: 'users/add-device-token',
+                body: <String, dynamic>{'deviceToken': token});
           }
         }
       } catch (e) {
@@ -1324,29 +1353,41 @@ class HomeController extends GetxController {
   // }
 
   void processBossToState(dynamic userData) {
-    final UserModel modelizedData = UserModel.fromMap(
-        <dynamic, dynamic>{...userData, 'connections': [], 'connecteds': []});
+    final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
+      ...userData,
+      'connections': <dynamic>[],
+      'connecteds': <dynamic>[]
+    });
     bossOfTheWeek = modelizedData;
     update();
   }
 
   void processMentorToState(dynamic userData) {
-    final UserModel modelizedData = UserModel.fromMap(
-        <dynamic, dynamic>{...userData, 'connections': [], 'connecteds': []});
+    final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
+      ...userData,
+      'connections': <dynamic>[],
+      'connecteds': <dynamic>[]
+    });
     mentorOfTheWeek = modelizedData;
     update();
   }
 
   void processBackerToState(dynamic userData) {
-    final UserModel modelizedData = UserModel.fromMap(
-        <dynamic, dynamic>{...userData, 'connections': [], 'connecteds': []});
+    final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
+      ...userData,
+      'connections': <dynamic>[],
+      'connecteds': <dynamic>[]
+    });
     backerOfTheWeek = modelizedData;
     update();
   }
 
   void processAmbassadorToState(dynamic userData) {
-    final UserModel modelizedData = UserModel.fromMap(
-        <dynamic, dynamic>{...userData, 'connections': [], 'connecteds': []});
+    final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
+      ...userData,
+      'connections': <dynamic>[],
+      'connecteds': <dynamic>[]
+    });
     ambassadorOfTheWeek = modelizedData;
     update();
   }
@@ -1354,26 +1395,28 @@ class HomeController extends GetxController {
   void initSocket() {
     socket = io.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
-      'transports': ['websocket'],
+      'transports': <String>['websocket'],
     });
     socket.connect();
     socket.onConnect((_) {
       print('Connection established');
     });
 
-    socket.on('handshake', (data) {
+    socket.on('handshake', (dynamic data) {
       // print(data);
     });
 
-    socket.on('new-message', (data) {
+    socket.on('new-message', (dynamic data) {
       // print(data);
       _chatController.newMessage(data);
     });
 
-    socket.on('new-notification', (data) {
+    socket.on('new-notification', (dynamic data) {
       // print(data);
-      profileController.updateProfile(
-          {...profileController.myProfile.toMap(), 'unReadCount': 1});
+      profileController.updateProfile(<String, dynamic>{
+        ...profileController.myProfile.toMap(),
+        'unReadCount': 1
+      });
     });
 
     socket.onReconnect((_) {
@@ -1383,8 +1426,8 @@ class HomeController extends GetxController {
     });
 
     socket.onDisconnect((_) => print('Connection Disconnection'));
-    socket.onConnectError((err) => print(err));
-    socket.onError((err) => print(err));
+    socket.onConnectError((dynamic err) => print(err));
+    socket.onError((dynamic err) => print(err));
   }
 
   @override
