@@ -275,7 +275,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
         iconPath: 'assets/svgs/checkfilled.svg',
         caption: 'Virtual Office Address',
         subtext:
-            'Boost your professional image with your own onlinen business address'),
+            'Boost your professional image with your own online business address'),
   ];
   String paymentMethodId = 'Proyear';
   bool loading = false;

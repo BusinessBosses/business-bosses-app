@@ -480,7 +480,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   _confirmPassword = val;
                   setState(() {});
                 },
-                validator: (val) {
+                validator: (String? val) {
                   if (val!.isEmpty) return 'Confirm Password is required';
                   if (val != _password) return 'Passwords do not match';
                   return null;
@@ -508,7 +508,7 @@ class _SignUpFormState extends State<SignUpForm> {
           agreementText(context),
           const SizedBox(height: 24.0),
           CustomButton(
-            label: 'Join Now',
+            label: 'Sign Up',
             onPressed: () async {
               _formKey.currentState!.save();
               setState(() {
