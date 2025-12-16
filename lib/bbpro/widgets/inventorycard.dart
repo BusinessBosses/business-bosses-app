@@ -102,7 +102,9 @@ class _InventoryCardState extends State<InventoryCard> {
                           ),
                           if (widget.product?.discount != null &&
                               widget.product!.discount! > 0)
-                            Row(
+                            Wrap(
+                              spacing: 5,
+                              crossAxisAlignment: WrapCrossAlignment.center,
                               children: <Widget>[
                                 Text(
                                   '${currencyValues[widget.product!.location.toString()]}${formatPrice((widget.product!.price * (1 - widget.product!.discount! / 100)).clamp(0.0, double.infinity))}',
@@ -112,7 +114,6 @@ class _InventoryCardState extends State<InventoryCard> {
                                     fontSize: 13,
                                   ),
                                 ),
-                                const SizedBox(width: 5),
                                 Text(
                                   '${currencyValues[widget.product!.location.toString()]}${formatPrice(widget.product!.price)}',
                                   style: const TextStyle(
