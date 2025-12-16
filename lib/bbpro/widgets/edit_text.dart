@@ -227,7 +227,7 @@ class CustomEditText extends StatelessWidget {
         children: <Widget>[
           SizedBox(
             height: 30,
-            width: 40,
+            width: 55,
             child: TextFormField(
               inputFormatters: inputFormatters,
               controller: currencycontroller,

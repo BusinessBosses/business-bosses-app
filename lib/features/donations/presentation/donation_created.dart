@@ -20,7 +20,7 @@ class _DonationCreatedState extends State<DonationCreated> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.back();
+            Get.offAll(() => HomeScreen());
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
@@ -53,7 +53,7 @@ class _DonationCreatedState extends State<DonationCreated> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      Get.to(HomeScreen());
+                      Get.offAll(() => HomeScreen());
                     },
                     child: const Text(
                       'Go Back',
