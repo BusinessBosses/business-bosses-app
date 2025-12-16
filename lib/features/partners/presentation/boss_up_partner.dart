@@ -156,6 +156,7 @@ class BossuppartnerItem extends StatelessWidget {
   final String? companyPhoto;
   final bool showPartnerMessage;
   final int id;
+  final Partner? partner;
 
   const BossuppartnerItem({
     super.key,
@@ -166,6 +167,7 @@ class BossuppartnerItem extends StatelessWidget {
     this.companyPhoto,
     required this.id,
     required this.clicks,
+    this.partner,
   });
 
   @override
@@ -288,6 +290,34 @@ class BossuppartnerItem extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 5),
+            // if (partner?.user != null)
+            Row(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 0.5, color: Colors.black12),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: CachedNetworkImage(
+                      imageUrl: partner?.user!.photoUrl ?? '',
+                      width: 20.0,
+                      height: 20.0,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    'Added by: ${partner?.user!.name}',
+                    style: bodyText2.copyWith(color: textColor),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               height: 45,
