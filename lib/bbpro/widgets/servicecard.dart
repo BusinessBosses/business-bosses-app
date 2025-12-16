@@ -59,9 +59,10 @@ class ServiceCard extends StatefulWidget {
 
 class _ServiceCardState extends State<ServiceCard> {
   String formatPrice(double price) {
-    if (price >= 1000000) {
+    double absPrice = price.abs();
+    if (absPrice >= 1000000) {
       return '${(price / 1000000).toStringAsFixed(1)}m';
-    } else if (price >= 1000) {
+    } else if (absPrice >= 1000) {
       return '${(price / 1000).toStringAsFixed(1)}k';
     } else {
       return price.toStringAsFixed(2);

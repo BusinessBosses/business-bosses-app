@@ -277,9 +277,10 @@ class _InventoryCardState extends State<InventoryCard> {
   }
 
   String formatPrice(double price) {
-    if (price >= 1000000) {
+    double absPrice = price.abs();
+    if (absPrice >= 1000000) {
       return '${(price / 1000000).toStringAsFixed(1)}M';
-    } else if (price >= 1000) {
+    } else if (absPrice >= 1000) {
       return '${(price / 1000).toStringAsFixed(1)}K';
     } else {
       return price.toStringAsFixed(2);
