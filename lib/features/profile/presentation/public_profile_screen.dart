@@ -3,11 +3,15 @@ import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_request_item.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/partners/controllers/partners_controller.dart';
+import 'package:business_bosses_v2/features/partners/models/partner_model.dart';
+import 'package:business_bosses_v2/features/partners/widgets/bossup_partner_item.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
@@ -44,6 +48,7 @@ class PublicProfileScreen extends StatefulWidget {
 class _PublicProfileScreenState extends State<PublicProfileScreen> {
   final ProfileController _profileController = Get.find();
   final ShopController shopController = Get.find();
+  final PartnerController partnerController = Get.put(PartnerController());
   final BuyerRequestController buyerRequestController =
       Get.put(BuyerRequestController());
   List<PostModel> _posts = <PostModel>[];
@@ -51,6 +56,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   bool isLoading = true;
   bool blocked = false;
   bool hasShop = false;
+  List<Partner> myPartners = <Partner>[];
   List<BuyerRequestModel> buyerRequests = <BuyerRequestModel>[];
 
   bool hasUser = true;
@@ -59,6 +65,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
   int? _selectedIndex;
   int _currentIndex = 0;
+  int tabLength = 2;
 
   Future<void> loadData() async {
     if (!mounted) return;
@@ -91,11 +98,20 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
           buyerRequests.add(BuyerRequestModel.fromJson(request));
         }
       }
+      if (partnerController.partners
+          .where((Partner p) => p.userId == publicUser.uid)
+          .isNotEmpty) {
+        myPartners.assignAll(partnerController.partners
+            .where((Partner p) => p.userId == publicUser.uid)
+            .toList());
+      }
       // All state updates at once
       if (mounted) {
         setState(() {
           publicUser = updatedUser;
           _posts = res['posts'];
+          if (buyerRequests.isNotEmpty) tabLength++;
+          if (myPartners.isNotEmpty) tabLength++;
           hasShop = updatedUser.hasShop;
           isLoading = false; // Done loading
         });
@@ -311,7 +327,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                         ];
                       },
                       body: DefaultTabController(
-                        length: buyerRequests.isEmpty ? 2 : 3,
+                        length: tabLength,
                         initialIndex: widget.store != null ? 2 : 0,
                         child: Column(
                           children: <Widget>[
@@ -347,6 +363,10 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   if (buyerRequests.isNotEmpty)
                                     const Tab(
                                       text: 'Requests',
+                                    ),
+                                  if (myPartners.isNotEmpty)
+                                    const Tab(
+                                      text: 'Deals',
                                     ),
                                 ],
                               ),
@@ -407,6 +427,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                       );
                                     },
                                   ),
+                                if (myPartners.isNotEmpty) _buildPartnersTab()
                               ]),
                             ),
                           ],
@@ -426,6 +447,35 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     return uri != null &&
         uri.hasAbsolutePath &&
         (uri.scheme == 'http' || uri.scheme == 'https');
+  }
+
+  Widget _buildPartnersTab() {
+    return Obx(() {
+      if (myPartners.isEmpty) {
+        return SafetyModel(
+          title: 'No Partners Found',
+          icon: Icon(Icons.warning),
+        );
+      }
+
+      return ListView.builder(
+        padding: const EdgeInsets.only(top: 10, bottom: 100),
+        itemCount: partnerController.myPartners.length,
+        itemBuilder: (BuildContext context, int index) {
+          final Partner partner = partnerController.myPartners[index];
+          return BossuppartnerItem(
+            companyName: partner.companyName,
+            companyDescription: partner.companyDescription ?? '',
+            companyUrl: partner.companyUrl ?? '',
+            companyPhoto: partner.companyPhoto,
+            clicks: partner.clicks,
+            id: partner.id ?? 0,
+            partner: partner,
+            showPartnerMessage: false,
+          );
+        },
+      );
+    });
   }
 
   void _showRequestMenu(BuyerRequestModel request) {

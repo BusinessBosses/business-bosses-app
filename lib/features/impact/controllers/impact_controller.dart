@@ -48,10 +48,10 @@ class ReachController extends GetxController {
       final ApiResponseModel response =
           await ApiService.get(path: 'users/invites');
 
-      final List list = _parseList(response.data);
+      final List<dynamic> list = _parseList(response.data);
 
       referrals.assignAll(
-        list.map((e) => UserModel.fromMap(e)).toList(),
+        list.map((dynamic e) => UserModel.fromMap(e)).toList(),
       );
     } catch (e) {
       log(e.toString());
@@ -73,7 +73,7 @@ class ReachController extends GetxController {
   }
 
   /// Safely extract List from API response
-  List _parseList(dynamic source) {
+  List<dynamic> _parseList(dynamic source) {
     if (source is List) {
       return source;
     }
