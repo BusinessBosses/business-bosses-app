@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
@@ -5,7 +7,13 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
+import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_request_item.dart';
+import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
+import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
@@ -13,8 +21,8 @@ import 'package:business_bosses_v2/features/partners/controllers/partners_contro
 import 'package:business_bosses_v2/features/partners/models/partner_model.dart';
 import 'package:business_bosses_v2/features/partners/widgets/bossup_partner_item.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
-import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
 
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,6 +38,7 @@ import '../../../utils/theme/theme.dart';
 import '../controller/profile_controller.dart';
 import '../widgets/friendoutlinebuttonheader.dart';
 import '../widgets/friend_profile_header.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 
 // ignore: public_member_api_docs, must_be_immutable
 class PublicProfileScreen extends StatefulWidget {
@@ -37,6 +46,7 @@ class PublicProfileScreen extends StatefulWidget {
   bool? store;
   final int? selectedIndex;
   final int? currentIndex;
+
   // ignore: public_member_api_docs
   PublicProfileScreen(
       {super.key, this.store, this.selectedIndex, this.currentIndex});
@@ -48,12 +58,15 @@ class PublicProfileScreen extends StatefulWidget {
 class _PublicProfileScreenState extends State<PublicProfileScreen> {
   final ProfileController _profileController = Get.find();
   final ShopController shopController = Get.find();
+  final HomeController homeController = Get.find();
   final PartnerController partnerController = Get.put(PartnerController());
   final BuyerRequestController buyerRequestController =
       Get.put(BuyerRequestController());
   List<PostModel> _posts = <PostModel>[];
   late UserModel publicUser;
   bool isLoading = true;
+  List<UnifiedFeedItem> feedItems = <UnifiedFeedItem>[];
+
   bool blocked = false;
   bool hasShop = false;
   List<Partner> myPartners = <Partner>[];
@@ -82,7 +95,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       final UserModel modelizedUser = UserModel.fromMap(
         <dynamic, dynamic>{...res['user'], 'interests': res['industries']},
       );
-
+      log(res.toString());
       // Assign values locally first
       UserModel updatedUser = modelizedUser;
 
@@ -105,13 +118,84 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
             .where((Partner p) => p.userId == publicUser.uid)
             .toList());
       }
+
       // All state updates at once
       if (mounted) {
         setState(() {
           publicUser = updatedUser;
-          _posts = res['posts'];
+          _posts = res['posts'] ?? <PostModel>[];
+          feedItems.clear();
+
+          /// ---------------- POSTS ----------------
+          for (final PostModel post in _posts) {
+            feedItems.add(
+              UnifiedFeedItem(
+                data: post,
+                type: FeedType.post,
+                createdAt: DateTime.fromMillisecondsSinceEpoch(post.timestamp),
+              ),
+            );
+          }
+
+          /// ---------------- DONATIONS ----------------
+          final List<dynamic> donations =
+              res['donations']?['rows'] ?? <dynamic>[];
+
+          for (final dynamic d in donations) {
+            final DonationModel donation = DonationModel.fromMap(d);
+            feedItems.add(
+              UnifiedFeedItem(
+                data: donation,
+                type: FeedType.donation,
+                createdAt: DateTime.fromMillisecondsSinceEpoch(
+                  donation.timestamp ?? 0,
+                ),
+              ),
+            );
+          }
+
+          /// ---------------- COURSES ----------------
+          final List<dynamic> courses = res['courses']?['rows'] ?? <dynamic>[];
+
+          for (final dynamic c in courses) {
+            final CourseModel course = CourseModel.fromMap(c);
+            feedItems.add(
+              UnifiedFeedItem(
+                data: course,
+                type: FeedType.course,
+                createdAt: DateTime.fromMillisecondsSinceEpoch(
+                  course.timestamp ?? 0,
+                ),
+              ),
+            );
+          }
+
+          /// ---------------- FORUMS ----------------
+          final List<dynamic> forums = res['forums']?['rows'] ?? <dynamic>[];
+
+          for (final dynamic f in forums) {
+            final ForumModel forum = ForumModel.fromMap(f);
+            feedItems.add(
+              UnifiedFeedItem(
+                data: forum,
+                type: FeedType.forum,
+                createdAt:
+                    DateTime.fromMillisecondsSinceEpoch(forum.timestamp!),
+              ),
+            );
+          }
+
+          /// 🔽 SORT ALL BY DATE DESC
+          feedItems.sort(
+            (UnifiedFeedItem a, UnifiedFeedItem b) =>
+                b.createdAt.compareTo(a.createdAt),
+          );
+
+          tabLength = 2; // RESET FIRST
+
           if (buyerRequests.isNotEmpty) tabLength++;
           if (myPartners.isNotEmpty) tabLength++;
+
           hasShop = updatedUser.hasShop;
           isLoading = false; // Done loading
         });
@@ -327,6 +411,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                         ];
                       },
                       body: DefaultTabController(
+                        key: ValueKey<int>(tabLength),
                         length: tabLength,
                         initialIndex: widget.store != null ? 2 : 0,
                         child: Column(
@@ -394,13 +479,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   ),
                                 ),
                                 // Container()
-                                profilepostsdisplay(
-                                  ispublicposts: true,
-                                  context,
-                                  publicUser,
-                                  _posts,
-                                  loading: isLoading,
-                                ),
+                                _buildMixedPostsTab(),
                                 if (buyerRequests.isNotEmpty)
                                   MasonryGridView.count(
                                     crossAxisCount: 2,
@@ -449,6 +528,50 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
         (uri.scheme == 'http' || uri.scheme == 'https');
   }
 
+  Widget _buildMixedPostsTab() {
+    if (feedItems.isEmpty) {
+      return const SafetyModel(
+        title: 'No Posts Found',
+        isLoading: false,
+        icon: Icon(Icons.text_snippet),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.only(top: 10, bottom: 120),
+      itemCount: feedItems.length,
+      itemBuilder: (BuildContext context, int index) {
+        final UnifiedFeedItem item = feedItems[index];
+
+        switch (item.type) {
+          case FeedType.post:
+            return PostTile(
+              post: item.data,
+              controller: homeController,
+            );
+
+          case FeedType.donation:
+            return DonationItem(
+              donation: item.data,
+              isLastItem: false,
+            );
+
+          case FeedType.course:
+            return CourseItem(course: item.data);
+
+          case FeedType.forum:
+            return ForumItem(
+              forum: item.data,
+              controller: homeController,
+            );
+
+          default:
+            return const SizedBox.shrink();
+        }
+      },
+    );
+  }
+
   Widget _buildPartnersTab() {
     return Obx(() {
       if (myPartners.isEmpty) {
@@ -460,9 +583,9 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
       return ListView.builder(
         padding: const EdgeInsets.only(top: 10, bottom: 100),
-        itemCount: partnerController.myPartners.length,
+        itemCount: myPartners.length,
         itemBuilder: (BuildContext context, int index) {
-          final Partner partner = partnerController.myPartners[index];
+          final Partner partner = myPartners[index];
           return BossuppartnerItem(
             companyName: partner.companyName,
             companyDescription: partner.companyDescription ?? '',
@@ -1293,4 +1416,18 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
               child: SvgPicture.asset('assets/svgs/more.svg'))),
     );
   }
+}
+
+enum FeedType { post, donation, course, forum }
+
+class UnifiedFeedItem {
+  final dynamic data;
+  final FeedType type;
+  final DateTime createdAt;
+
+  UnifiedFeedItem({
+    required this.data,
+    required this.type,
+    required this.createdAt,
+  });
 }
