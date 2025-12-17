@@ -241,7 +241,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
               child: IconTextButton(
                 backgroundColor: Colors.transparent,
-                label: 'Sign in with Google',
+                label: 'Login with Google',
                 labelColor: textColor,
                 onPressed: _handleGoogleSignIn,
                 borderRadius: BorderRadius.circular(20.0),
@@ -255,7 +255,7 @@ class _LoginFormState extends State<LoginForm> {
                 height: 55,
                 child: SignInWithAppleButton(
                   height: 40,
-                  text: 'Sign in with Apple',
+                  text: 'Login with Apple',
                   onPressed: _handleAppleSignIn,
                 ),
               ),
