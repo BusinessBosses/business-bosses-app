@@ -424,9 +424,12 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                             _shareRequest(request);
                           } else if (val == 'Block') {
                             ApiService.post(
-                              path: 'blockedrequest',
-                              body: <String, dynamic>{'requestId': request.id},
+                              path: 'blockedpost',
+                              body: <String, dynamic>{'postId': request.id},
                             );
+                            _buyerRequestController.buyerRequests.removeWhere(
+                                (BuyerRequestModel element) =>
+                                    element.id == request.id);
                             Get.back();
                             Get.snackbar(
                               'Blocked',

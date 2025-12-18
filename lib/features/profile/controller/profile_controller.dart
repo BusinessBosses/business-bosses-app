@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
@@ -112,7 +114,6 @@ class ProfileController extends GetxController {
       } else {
         impact = <dynamic, dynamic>{}; // fallback if error
       }
-
       final List<dynamic> psts = response.data['posts']['rows'];
       for (int i = 0; i < psts.length; i++) {
         posts.add(PostModel.fromMap(<String, dynamic>{
@@ -156,6 +157,9 @@ class ProfileController extends GetxController {
           ...f,
           'likes': f['likes']
               .map((dynamic like) => like['userId'].toString())
+              .toList(),
+          'coins': f['coins']
+              .map((dynamic coin) => coin['userId'].toString())
               .toList(),
         }));
       }

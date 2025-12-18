@@ -482,12 +482,6 @@ class HomeController extends GetxController {
     update();
 
     // REST API call to persist the like
-    ApiService.post(path: 'likes', body: <String, dynamic>{
-      'postId': postId,
-      'userId': userId,
-      'type': type,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
 
     if (profileController.myProfile.uid != receiverUid) {
       socket.emit('like', <String, Object>{
