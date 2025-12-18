@@ -501,53 +501,6 @@ class _BossUpSectionState extends State<BossUpSection>
                                                             ),
                                                           ),
                                                         ),
-                                                      if (widget.industry
-                                                              .industry !=
-                                                          'Boss Up Challenge ')
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            Get.to(
-                                                                Invitepage());
-                                                          },
-                                                          child: Row(
-                                                            children: <Widget>[
-                                                              Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .only(
-                                                                          left:
-                                                                              8.0,
-                                                                          top:
-                                                                              5,
-                                                                          right:
-                                                                              2),
-                                                                  child: Icon(
-                                                                    LucideIcons
-                                                                        .share,
-                                                                    size: 15,
-                                                                  )),
-                                                              Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .only(
-                                                                          top:
-                                                                              5.0),
-                                                                  child: Text(
-                                                                      'Share Invite',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        decoration:
-                                                                            TextDecoration.underline,
-                                                                        fontSize:
-                                                                            14,
-                                                                        color:
-                                                                            textColor,
-                                                                        fontWeight:
-                                                                            FontWeight.w600,
-                                                                      ))),
-                                                            ],
-                                                          ),
-                                                        ),
                                                       Row(
                                                         children: <Widget>[
                                                           Padding(
@@ -597,6 +550,53 @@ class _BossUpSectionState extends State<BossUpSection>
                                                           ),
                                                         ],
                                                       ),
+                                                      if (widget.industry
+                                                              .industry !=
+                                                          'Boss Up Challenge ')
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Get.to(
+                                                                Invitepage());
+                                                          },
+                                                          child: Row(
+                                                            children: <Widget>[
+                                                              Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          left:
+                                                                              8.0,
+                                                                          top:
+                                                                              5,
+                                                                          right:
+                                                                              2),
+                                                                  child: Icon(
+                                                                    LucideIcons
+                                                                        .share,
+                                                                    size: 15,
+                                                                  )),
+                                                              Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          top:
+                                                                              5.0),
+                                                                  child: Text(
+                                                                      'Share Invite',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        decoration:
+                                                                            TextDecoration.underline,
+                                                                        fontSize:
+                                                                            14,
+                                                                        color:
+                                                                            textColor,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                      ))),
+                                                            ],
+                                                          ),
+                                                        ),
                                                     ],
                                                   ),
                                                   ElevatedButton(
