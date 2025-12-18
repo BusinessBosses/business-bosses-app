@@ -197,7 +197,7 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  '${widget.currency} ${widget.total}',
+                  '${widget.currency} ${widget.total.toStringAsFixed(2)}',
                   style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       color: Colors.black,
