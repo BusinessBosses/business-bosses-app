@@ -675,7 +675,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                     .of(context)
                                                                 .showSnackBar(
                                                                     snackBar);
-                                                            return;
+                                                            // return;
                                                           }
                                                           Get.to(
                                                             () => CreateBossUpScreen(

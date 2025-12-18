@@ -1,5 +1,8 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
@@ -91,6 +94,9 @@ class ProfileController extends GetxController {
 
   Future<Map<String, dynamic>> loadData(String userId) async {
     List<PostModel> posts = <PostModel>[];
+    List<CourseModel> courses = <CourseModel>[];
+    List<DonationModel> donations = <DonationModel>[];
+    List<ForumModel> forums = <ForumModel>[];
     final List<ApiResponseModel> results =
         await Future.wait(<Future<ApiResponseModel>>[
       ProfileRepository.fetchData(0, 50, userId), // Profile API
@@ -123,8 +129,42 @@ class ProfileController extends GetxController {
         }));
       }
 
+      /// ---------------- COURSES ----------------
+      final List<dynamic> crs =
+          response.data['courses']?['rows'] ?? <dynamic>[];
+      for (final dynamic c in crs) {
+        courses.add(CourseModel.fromMap(<String, dynamic>{...c}));
+      }
+
+      /// ---------------- DONATIONS ----------------
+      final List<dynamic> dns =
+          response.data['donations']?['rows'] ?? <dynamic>[];
+      for (final dynamic d in dns) {
+        donations.add(DonationModel.fromMap(<String, dynamic>{
+          ...d,
+          'likes': d['likes']
+              .map((dynamic like) => like['userId'].toString())
+              .toList(),
+        }));
+      }
+
+      /// ---------------- FORUMS ----------------
+      final List<dynamic> frms =
+          response.data['forums']?['rows'] ?? <dynamic>[];
+      for (final dynamic f in frms) {
+        forums.add(ForumModel.fromMap(<String, dynamic>{
+          ...f,
+          'likes': f['likes']
+              .map((dynamic like) => like['userId'].toString())
+              .toList(),
+        }));
+      }
+
       return <String, dynamic>{
         'posts': posts,
+        'courses': courses,
+        'donations': donations,
+        'forums': forums,
         'user': <dynamic, dynamic>{
           ...response.data['user']['data'],
           'connections': response.data['user']['data']['connections']
@@ -136,6 +176,9 @@ class ProfileController extends GetxController {
     } else {
       return <String, dynamic>{
         'posts': <PostModel>[],
+        'courses': <CourseModel>[],
+        'donations': <DonationModel>[],
+        'forums': <ForumModel>[],
         'user': <String, dynamic>{},
         'industries': <Industry>[]
       };

@@ -66,6 +66,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   String? _twitter;
   String? _ageRange;
   String? _gender;
+  String? _invitedBy;
   List<String>? _productsandservices;
 // String? blas;
   final bool _isInit = false;
@@ -185,6 +186,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           'Vehicle & Transportation'; // Default to "Other" if the category is invalid
     }
     _photoUrl = user.photoUrl;
+    _invitedBy = user.invitedBy;
     _companyName = user.companyName;
     _username = user.username;
     _name = user.name;
@@ -272,6 +274,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           body: <String, dynamic>{'inviteCode': _referralId!.trim()});
 
       if (res.success) {
+        setState(() {
+          _invitedBy = _referralId;
+        });
         showSnackbar(
             title: 'Success!', message: 'Invite code verified.', error: false);
       } else {
@@ -595,52 +600,102 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    Row(
-                                      children: [
-                                        const Text(
-                                          'Enter invite code and get 10 BB Coins',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: textColor,
-                                            fontWeight: FontWeight.w700,
+                                    if (_invitedBy == null) ...[
+                                      Row(
+                                        children: [
+                                          const Text(
+                                            'Enter invite code and get 10 BB Coins',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: textColor,
+                                              fontWeight: FontWeight.w700,
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(width: 5),
-                                        SvgPicture.asset(
-                                          'assets/svgs/coin.svg',
-                                          height: 20,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    const Text(
-                                      'Available for new sign-ups only',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
+                                          const SizedBox(width: 5),
+                                          SvgPicture.asset(
+                                            'assets/svgs/coin.svg',
+                                            height: 20,
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextFormField(
-                                      onChanged: (String val) {
-                                        _referralId = val;
-                                      },
-                                      textInputAction: TextInputAction.done,
-                                      keyboardType: TextInputType.text,
-                                      decoration: inputDecoration.copyWith(
-                                        hintText: 'B534849521',
-                                        filled: true,
-                                        fillColor: const Color(0xffF4F4F4),
+                                      const SizedBox(
+                                        height: 5,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
+                                      const Text(
+                                        'Available for new sign-ups only',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextFormField(
+                                              onChanged: (String val) {
+                                                _referralId = val;
+                                              },
+                                              readOnly: _invitedBy != null,
+                                              textInputAction:
+                                                  TextInputAction.done,
+                                              keyboardType: TextInputType.text,
+                                              decoration:
+                                                  inputDecoration.copyWith(
+                                                hintText: 'user123',
+                                                filled: true,
+                                                fillColor:
+                                                    const Color(0xffF4F4F4),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          SizedBox(
+                                            height: 48,
+                                            child: ElevatedButton(
+                                              onPressed: (_isVerifyingCode ||
+                                                      _invitedBy != null)
+                                                  ? null
+                                                  : _confirmInviteCode,
+                                              style: ElevatedButton.styleFrom(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              child: _isVerifyingCode
+                                                  ? const SizedBox(
+                                                      height: 20,
+                                                      width: 20,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                        color: Colors.white,
+                                                      ),
+                                                    )
+                                                  : const Text(
+                                                      'Confirm',
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                    ]
                                   ]),
                             ),
                           ),

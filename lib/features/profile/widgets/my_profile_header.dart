@@ -77,8 +77,8 @@ class MyProfileHeader extends StatelessWidget {
                     )),
                     Expanded(
                       child: CustomChildButton(
-                        value: (reachController.myReach['totalLikes'] ?? 0) +
-                            ((reachController.myReach['totalViews'] ?? 0)),
+                        value: (reachController.myReach?['totalLikes'] ?? 0) +
+                            ((reachController.myReach?['totalViews'] ?? 0)),
                         caption: 'Reach',
                         onPressed: () {
                           Get.to(() => ReachScreen(user: myProfile));

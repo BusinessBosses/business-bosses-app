@@ -53,7 +53,7 @@ class _InvitepageState extends State<Invitepage> {
           return const SafetyModel();
         }
 
-        final dynamic invites = controller.data['invitesThisWeek'] ?? 0;
+        final dynamic invites = controller.referrals.length;
 
         return SingleChildScrollView(
             child: Column(

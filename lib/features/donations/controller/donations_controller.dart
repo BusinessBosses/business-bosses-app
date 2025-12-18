@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
@@ -42,6 +44,7 @@ class DonationsController extends GetxController {
 
   @override
   void onInit() async {
+    initSocket();
     fetchDonations();
     super.onInit();
   }
@@ -500,6 +503,19 @@ class DonationsController extends GetxController {
     }
     update();
 
+    final int homeDonationIndex = homeController.donations
+        .indexWhere((DonationModel donation) => donation.id == postId);
+    if (homeDonationIndex != -1) {
+      final bool checkLiked =
+          homeController.donations[homeDonationIndex].likes!.contains(userId);
+      if (checkLiked) {
+        homeController.donations[homeDonationIndex].likes?.remove(userId);
+      } else {
+        homeController.donations[homeDonationIndex].likes?.add(userId);
+      }
+    }
+    update();
+
     if (profileController.myProfile.uid != receiverUid) {
       socket.emit('like', <String, dynamic>{
         'postId': postId,
@@ -531,5 +547,37 @@ class DonationsController extends GetxController {
     }
 
     update();
+  }
+
+  void initSocket() {
+    socket = io.io(Constants.socketUrl, <String, dynamic>{
+      'autoConnect': false,
+      'transports': <String>['websocket'],
+    });
+    socket.connect();
+    socket.onConnect((_) {
+      debugPrint('Connection established');
+    });
+
+    socket.on('handshake', (dynamic data) {
+      // print(data);
+    });
+    socket.on('new-notification', (dynamic data) {
+      // print(data);
+      profileController.updateProfile(<String, dynamic>{
+        ...profileController.myProfile.toMap(),
+        'unReadCount': 1
+      });
+    });
+
+    socket.onReconnect((_) {
+      socket.emit('handshake', profileController.myProfile.uid);
+
+      debugPrint('reconnected');
+    });
+
+    socket.onDisconnect((_) => debugPrint('Connection Disconnection'));
+    socket.onConnectError((dynamic err) => debugPrint(err));
+    socket.onError((dynamic err) => debugPrint(err));
   }
 }

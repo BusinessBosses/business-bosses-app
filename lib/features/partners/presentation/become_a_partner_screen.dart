@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/partner_created.dart';
 import 'package:business_bosses_v2/features/partners/controllers/partners_controller.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:file_picker/file_picker.dart';
@@ -29,6 +30,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
   final TextEditingController bioController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController urlController = TextEditingController();
+  final ProfileController profileController = Get.find();
 
   final ShopController shopController = Get.find();
   final PartnerController partnerController = Get.put(PartnerController());
@@ -73,6 +75,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
       companyUrl: urlController.text.trim(),
       companyDescription: descriptionController.text.trim(),
       image: image,
+      userId: profileController.myProfile.uid,
     );
 
     if (resp.success) {
