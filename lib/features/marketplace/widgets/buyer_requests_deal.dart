@@ -163,7 +163,8 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
                               );
                             },
                           ),
-              )
+              ),
+              Container(height: 7, color: backgroundColor),
             ],
           ),
         ),

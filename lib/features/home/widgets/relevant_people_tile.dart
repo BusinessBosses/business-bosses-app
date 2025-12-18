@@ -46,72 +46,75 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
           return _compareUsersByPhotoUrl(a, b);
         });
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: GestureDetector(
-                onTap: () {
-                  Get.to(CompleteSearchingScreen());
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Find Collaborators',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                    ),
-                    Icon(Icons.chevron_right, color: textColor, size: 20),
-                  ],
+        return Container(
+          color: backgroundColor,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(CompleteSearchingScreen());
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Find Collaborators',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 14),
+                      ),
+                      Icon(Icons.chevron_right, color: textColor, size: 20),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            controller.loading.value
-                ? const SizedBox(
-                    height: 180,
-                    child: Center(child: CircularProgressIndicator()),
-                  )
-                : SizedBox(
-                    height: 180,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: filteredConnections.length > 10
-                          ? 11
-                          : filteredConnections.length + 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (index == 0) {
-                          return const SizedBox(width: 15);
-                        }
+              const SizedBox(height: 10),
+              controller.loading.value
+                  ? const SizedBox(
+                      height: 180,
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  : SizedBox(
+                      height: 180,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: filteredConnections.length > 10
+                            ? 11
+                            : filteredConnections.length + 1,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (index == 0) {
+                            return const SizedBox(width: 15);
+                          }
 
-                        final UserModel currentUser =
-                            filteredConnections[index - 1];
+                          final UserModel currentUser =
+                              filteredConnections[index - 1];
 
-                        bool checkConnected =
-                            profileController.myProfile.connecteds != null &&
-                                profileController.myProfile.connecteds!
-                                    .contains(currentUser.uid);
+                          bool checkConnected =
+                              profileController.myProfile.connecteds != null &&
+                                  profileController.myProfile.connecteds!
+                                      .contains(currentUser.uid);
 
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: ConnectionGridTile(
-                            color: Colors.white,
-                            user: currentUser,
-                            status: checkConnected,
-                            onChangeConnectionStatus: () {
-                              controller.connectToUser(currentUser);
-                            },
-                          ),
-                        );
-                      },
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: ConnectionGridTile(
+                              color: Colors.white,
+                              user: currentUser,
+                              status: checkConnected,
+                              onChangeConnectionStatus: () {
+                                controller.connectToUser(currentUser);
+                              },
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-            const SizedBox(height: 10),
-          ],
+              const SizedBox(height: 10),
+            ],
+          ),
         );
       },
     );
