@@ -338,7 +338,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                   children: <InlineSpan>[
                     WidgetSpan(
                       child: Text(
-                        'Setup BizCentre',
+                        'Setup BizCenter',
                         style: TextStyle(
                           decoration: TextDecoration.underline,
                           decorationColor: primaryColorLT, // underline color

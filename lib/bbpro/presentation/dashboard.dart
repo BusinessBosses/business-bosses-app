@@ -379,7 +379,7 @@ class _DashboardState extends State<Dashboard> {
                                                         FontWeight.w700),
                                               ),
                                               subtitle: const Text(
-                                                  'To showcase your products in biz-centre & marketplace'),
+                                                  'To showcase your products in biz-center & marketplace'),
                                               horizontalTitleGap: 10.0,
                                               onTap: () {
                                                 Navigator.pop(context);
@@ -399,7 +399,7 @@ class _DashboardState extends State<Dashboard> {
                                                 height: 24,
                                               ),
                                               subtitle: const Text(
-                                                  'To showcase your services in biz-centre & marketplace'),
+                                                  'To showcase your services in biz-center & marketplace'),
                                               title: const Text(
                                                 'Add Service',
                                                 style: TextStyle(

@@ -82,7 +82,7 @@ class _PostsWidgetState extends State<PostsWidget> {
             }
 
             if (index == 1) {
-              return Column(children: <Widget>[HeroSection()]);
+              return HeroSection();
             }
 
             // Loader at the bottom when loadingMore is true

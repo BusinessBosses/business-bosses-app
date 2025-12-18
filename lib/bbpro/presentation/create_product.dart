@@ -653,7 +653,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       },
                       caption: 'Status',
                       subtext:
-                          'This listing will show in your biz-centre and business bosses marketplace',
+                          'This listing will show in your biz-center and business bosses marketplace',
                       activeColor: widget.isMarketplace != null
                           ? primaryColorLT
                           : proprimaryColor,

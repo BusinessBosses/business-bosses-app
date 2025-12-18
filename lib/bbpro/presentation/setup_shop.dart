@@ -566,7 +566,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                 child: Column(
                   children: <Widget>[
                     if (widget.shop == null)
-                      const Text('Set Up Your Biz-Centre & Start Selling',
+                      const Text('Set Up Your Biz-Center & Start Selling',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,

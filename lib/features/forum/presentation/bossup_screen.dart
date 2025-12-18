@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/features/donations/presentation/filterdonatio
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/filterchallengeposts.dart';
+import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/invitepage/leaderboardpage.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -205,6 +206,7 @@ class _BossUpSectionState extends State<BossUpSection>
               builder: (BossUpController controller) {
               int postCount = controller.totalForums.value;
               String formattedpostCount = formatCount(postCount);
+
               if (controller.loading.value) {
                 return const Center(
                   child: CircularProgressIndicator(),
@@ -456,8 +458,12 @@ class _BossUpSectionState extends State<BossUpSection>
                                                           onTap: () {
                                                             Get.to(() =>
                                                                 LeaderboardScreen(
-                                                                  isBossUp:
-                                                                      true,
+                                                                  isBossUp: widget
+                                                                              .industry
+                                                                              .industry ==
+                                                                          'Boss Up Challenge'
+                                                                      ? true
+                                                                      : false,
                                                                 ));
                                                           },
                                                           child: Padding(
@@ -493,6 +499,53 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                     ))
                                                               ],
                                                             ),
+                                                          ),
+                                                        ),
+                                                      if (widget.industry
+                                                              .industry !=
+                                                          'Boss Up Challenge ')
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Get.to(
+                                                                Invitepage());
+                                                          },
+                                                          child: Row(
+                                                            children: <Widget>[
+                                                              Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          left:
+                                                                              8.0,
+                                                                          top:
+                                                                              5,
+                                                                          right:
+                                                                              2),
+                                                                  child: Icon(
+                                                                    LucideIcons
+                                                                        .share,
+                                                                    size: 15,
+                                                                  )),
+                                                              Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          top:
+                                                                              5.0),
+                                                                  child: Text(
+                                                                      'Share Invite',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        decoration:
+                                                                            TextDecoration.underline,
+                                                                        fontSize:
+                                                                            14,
+                                                                        color:
+                                                                            textColor,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                      ))),
+                                                            ],
                                                           ),
                                                         ),
                                                       Row(

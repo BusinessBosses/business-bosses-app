@@ -720,13 +720,13 @@ class _UserShopScreenState extends State<UserShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            '${shopController.userShop!.appId} Biz-Centre,\nBusiness Bosses, ${shopController.userShop!.location}',
+            '${shopController.userShop!.appId} Biz-Center,\nBusiness Bosses, ${shopController.userShop!.location}',
             12,
             () async {
               await Clipboard.setData(
                 ClipboardData(
                   text:
-                      '${shopController.userShop!.appId} Biz-Centre, Business Bosses, ${shopController.userShop!.location}',
+                      '${shopController.userShop!.appId} Biz-Center, Business Bosses, ${shopController.userShop!.location}',
                 ),
               );
 
