@@ -88,7 +88,9 @@ class Service {
         createdAt: DateTime.parse(json['createdAt']),
         availability: json['availability'] ?? json['serviceAvailability'],
         packages: json['packages'] ?? <dynamic>[],
-        selectedDates: json['selectedDates'] ?? <dynamic>[],
+        selectedDates: (json['selectedDates'] is List)
+            ? json['selectedDates']
+            : <dynamic>[],
         notes: json['notes'],
         serviceDuration: json['serviceDuration'],
         isAppointment: json['isAppointment']);
