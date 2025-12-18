@@ -7,7 +7,6 @@ import 'package:business_bosses_v2/features/forum/controller/challenge_controlle
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -250,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Stack(
       children: <Widget>[
         Container(
-          color: backgroundColor,
+          color: Colors.white,
           child: PostsWidget(
             onPageChange: widget.onPageChange,
             scrollController: _scrollController,

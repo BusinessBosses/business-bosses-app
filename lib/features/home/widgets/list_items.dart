@@ -21,6 +21,7 @@ import 'package:business_bosses_v2/features/partners/widgets/deals_section.dart'
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -109,6 +110,10 @@ class _PostsWidgetState extends State<PostsWidget> {
             padding: const EdgeInsets.only(bottom: 7.0),
             child: DealsSection(),
           ),
+          Container(
+            height: 7,
+            color: backgroundColor,
+          ),
         ],
       ));
     }
@@ -136,7 +141,10 @@ class _PostsWidgetState extends State<PostsWidget> {
                 }).take(10).toList(),
             ],
           ),
-          const SizedBox(height: 7),
+          Container(
+            height: 7,
+            color: backgroundColor,
+          ),
         ],
       ));
     }
