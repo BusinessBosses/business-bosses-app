@@ -81,133 +81,130 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   int tabLength = 2;
 
   Future<void> loadData() async {
-    if (!mounted) return;
-
     setState(() {
       isLoading = true;
     });
 
-    try {
-      final Map<String, dynamic> res =
-          await _profileController.loadData(publicUser.uid);
+    // try {
+    final Map<String, dynamic> res =
+        await _profileController.loadData(publicUser.uid);
 
-      // Process user model outside of setState
-      final UserModel modelizedUser = UserModel.fromMap(
-        <dynamic, dynamic>{...res['user'], 'interests': res['industries']},
-      );
-      log(res.toString());
-      // Assign values locally first
-      UserModel updatedUser = modelizedUser;
+    log(res.toString());
 
-      // Initialize shop asynchronously and await result
-      if (updatedUser.hasShop) {
-        await shopController.initUserShop(modelizedUser);
-      }
+    // Process user model outside of setState
+    final UserModel modelizedUser = UserModel.fromMap(
+      <dynamic, dynamic>{...res['user'], 'interests': res['industries']},
+    );
+    // Assign values locally first
+    UserModel updatedUser = modelizedUser;
+    log(updatedUser.toMap.toString());
+    // Initialize shop asynchronously and await result
+    if (updatedUser.hasShop) {
+      await shopController.initUserShop(modelizedUser);
+    }
 
-      final ApiResponseModel requestResponse =
-          await ApiService.get(path: 'buyer-request/user/${publicUser.uid}');
-      if (requestResponse.success) {
-        for (dynamic request in requestResponse.data) {
-          buyerRequests.add(BuyerRequestModel.fromJson(request));
-        }
-      }
-      if (partnerController.partners
-          .where((Partner p) => p.userId == publicUser.uid)
-          .isNotEmpty) {
-        myPartners.assignAll(partnerController.partners
-            .where((Partner p) => p.userId == publicUser.uid)
-            .toList());
-      }
-
-      // All state updates at once
-      if (mounted) {
-        setState(() {
-          publicUser = updatedUser;
-          _posts = res['posts'] ?? <PostModel>[];
-          feedItems.clear();
-
-          /// ---------------- POSTS ----------------
-          for (final PostModel post in _posts) {
-            feedItems.add(
-              UnifiedFeedItem(
-                data: post,
-                type: FeedType.post,
-                createdAt: DateTime.fromMillisecondsSinceEpoch(post.timestamp),
-              ),
-            );
-          }
-
-          /// ---------------- DONATIONS ----------------
-          final List<dynamic> donations =
-              res['donations']?['rows'] ?? <dynamic>[];
-
-          for (final dynamic d in donations) {
-            final DonationModel donation = DonationModel.fromMap(d);
-            feedItems.add(
-              UnifiedFeedItem(
-                data: donation,
-                type: FeedType.donation,
-                createdAt: DateTime.fromMillisecondsSinceEpoch(
-                  donation.timestamp ?? 0,
-                ),
-              ),
-            );
-          }
-
-          /// ---------------- COURSES ----------------
-          final List<dynamic> courses = res['courses']?['rows'] ?? <dynamic>[];
-
-          for (final dynamic c in courses) {
-            final CourseModel course = CourseModel.fromMap(c);
-            feedItems.add(
-              UnifiedFeedItem(
-                data: course,
-                type: FeedType.course,
-                createdAt: DateTime.fromMillisecondsSinceEpoch(
-                  course.timestamp ?? 0,
-                ),
-              ),
-            );
-          }
-
-          /// ---------------- FORUMS ----------------
-          final List<dynamic> forums = res['forums']?['rows'] ?? <dynamic>[];
-
-          for (final dynamic f in forums) {
-            final ForumModel forum = ForumModel.fromMap(f);
-            feedItems.add(
-              UnifiedFeedItem(
-                data: forum,
-                type: FeedType.forum,
-                createdAt:
-                    DateTime.fromMillisecondsSinceEpoch(forum.timestamp!),
-              ),
-            );
-          }
-
-          /// 🔽 SORT ALL BY DATE DESC
-          feedItems.sort(
-            (UnifiedFeedItem a, UnifiedFeedItem b) =>
-                b.createdAt.compareTo(a.createdAt),
-          );
-
-          tabLength = 2; // RESET FIRST
-
-          if (buyerRequests.isNotEmpty) tabLength++;
-          if (myPartners.isNotEmpty) tabLength++;
-
-          hasShop = updatedUser.hasShop;
-          isLoading = false; // Done loading
-        });
-      }
-    } catch (e) {
-      // Handle errors
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
+    final ApiResponseModel requestResponse =
+        await ApiService.get(path: 'buyer-request/user/${publicUser.uid}');
+    if (requestResponse.success) {
+      for (dynamic request in requestResponse.data) {
+        buyerRequests.add(BuyerRequestModel.fromJson(request));
       }
     }
+    if (partnerController.partners
+        .where((Partner p) => p.userId == publicUser.uid)
+        .isNotEmpty) {
+      myPartners.assignAll(partnerController.partners
+          .where((Partner p) => p.userId == publicUser.uid)
+          .toList());
+    }
+
+    // All state updates at once
+
+    setState(() {
+      publicUser = updatedUser;
+      log(publicUser.toMap().toString());
+      _posts = res['posts'] ?? <PostModel>[];
+      feedItems.clear();
+
+      /// ---------------- POSTS ----------------
+      for (final PostModel post in _posts) {
+        feedItems.add(
+          UnifiedFeedItem(
+            data: post,
+            type: FeedType.post,
+            createdAt: DateTime.fromMillisecondsSinceEpoch(post.timestamp),
+          ),
+        );
+      }
+
+      /// ---------------- DONATIONS ----------------
+      final List<DonationModel> donations = res['donations'] ?? <dynamic>[];
+
+      for (final DonationModel d in donations) {
+        final DonationModel donation = d;
+        feedItems.add(
+          UnifiedFeedItem(
+            data: donation,
+            type: FeedType.donation,
+            createdAt: DateTime.fromMillisecondsSinceEpoch(
+              donation.timestamp ?? 0,
+            ),
+          ),
+        );
+      }
+
+      /// ---------------- COURSES ----------------
+      final List<dynamic> courses = res['courses'] ?? <dynamic>[];
+
+      for (final dynamic c in courses) {
+        final CourseModel course = c;
+        feedItems.add(
+          UnifiedFeedItem(
+            data: course,
+            type: FeedType.course,
+            createdAt: DateTime.fromMillisecondsSinceEpoch(
+              course.timestamp ?? 0,
+            ),
+          ),
+        );
+      }
+
+      /// ---------------- FORUMS ----------------
+      final List<dynamic> forums = res['forums'] ?? <dynamic>[];
+
+      for (final dynamic f in forums) {
+        final ForumModel forum = f;
+        feedItems.add(
+          UnifiedFeedItem(
+            data: forum,
+            type: FeedType.forum,
+            createdAt: DateTime.fromMillisecondsSinceEpoch(forum.timestamp!),
+          ),
+        );
+      }
+
+      /// 🔽 SORT ALL BY DATE DESC
+      feedItems.sort(
+        (UnifiedFeedItem a, UnifiedFeedItem b) =>
+            b.createdAt.compareTo(a.createdAt),
+      );
+
+      tabLength = 2; // RESET FIRST
+
+      if (buyerRequests.isNotEmpty) tabLength++;
+      if (myPartners.isNotEmpty) tabLength++;
+
+      hasShop = publicUser.hasShop;
+      isLoading = false; // Done loading
+    });
+    // } catch (e) {
+    //   // Handle errors
+    //   if (mounted) {
+    //     setState(() {
+    //       isLoading = false;
+    //     });
+    //   }
+    // }
   }
 
   Future<void> report(

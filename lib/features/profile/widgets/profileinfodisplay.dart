@@ -21,7 +21,16 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
 
   // Normalize matchType
   final String? rawMatchType = publicUser.matchType;
-  final String cleanedMatchType = rawMatchType?.trim().toLowerCase() ?? '';
+  String cleanedMatchType = '';
+  if (rawMatchType == 'seller') {
+    cleanedMatchType = 'customer';
+  } else if (rawMatchType == 'investor') {
+    cleanedMatchType = 'backer';
+  } else if (rawMatchType == 'partner') {
+    cleanedMatchType = 'partner';
+  } else if (rawMatchType == 'mentor') {
+    cleanedMatchType = 'mentor';
+  }
   final bool hasMatchType = cleanedMatchType.isNotEmpty;
 
   final int bossCount = publicUser.bossCount ?? 0;

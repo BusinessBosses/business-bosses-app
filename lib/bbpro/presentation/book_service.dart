@@ -725,7 +725,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
 
                       // Calendar Section
                       if (widget.service.isAppointment == true)
-                        if (widget.service.availability!['startDate'] != null)
+                        if (widget.service.availability != null &&
+                            widget.service.availability!['startDate'] != null)
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.white,
