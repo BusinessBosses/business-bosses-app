@@ -250,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Stack(
       children: <Widget>[
         Container(
-          color: backgroundColor,
+          color: Colors.white,
           child: PostsWidget(
             onPageChange: widget.onPageChange,
             scrollController: _scrollController,

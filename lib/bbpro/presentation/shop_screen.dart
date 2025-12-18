@@ -53,7 +53,7 @@ class _ShopScreenState extends State<ShopScreen> {
               if (index == 0) {
                 return ListTile(
                   subtitle: const Text(
-                      'To showcase your products in biz-centre & marketplace'),
+                      'To showcase your products in biz-center & marketplace'),
                   leading: SvgPicture.asset(
                     'assets/svgs/addproduct.svg',
                     colorFilter: const ColorFilter.mode(
@@ -75,7 +75,7 @@ class _ShopScreenState extends State<ShopScreen> {
               } else if (index == 1) {
                 return ListTile(
                   subtitle: const Text(
-                      'To showcase your services in biz-centre & marketplace'),
+                      'To showcase your services in biz-center & marketplace'),
                   leading: SvgPicture.asset(
                     'assets/svgs/addservice.svg',
                     colorFilter: const ColorFilter.mode(
@@ -507,7 +507,7 @@ class _ShopScreenState extends State<ShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            '${shopController.shop!.appId} Biz-Centre,\nBusiness Bosses, ${shopController.shop!.location}',
+            '${shopController.shop!.appId} Biz-Center,\nBusiness Bosses, ${shopController.shop!.location}',
             12,
             null,
           ),

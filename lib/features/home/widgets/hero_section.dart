@@ -104,20 +104,14 @@ class _HeroSectionState extends State<HeroSection> {
     'backer': WinnerCardConfig(
       title: 'Backer of the Week',
       icon: LucideIcons.dollarSign,
-      gradientColors: <Color>[
-        Color(0xFFE0F2F1),
-        Color(0xFFE0F2F1),
-      ],
+      gradientColors: <Color>[Color(0xFFE0F2F1), Color(0xFFE0F2F1)],
       iconColor: Color(0xFF6EE7B7),
       accentColor: Color(0x3334D399),
     ),
     'mentor': WinnerCardConfig(
       title: 'Mentor of the Week',
       icon: LucideIcons.graduationCap,
-      gradientColors: <Color>[
-        Color(0xFFE0F2FE),
-        Color(0xFFE0F2FE),
-      ],
+      gradientColors: <Color>[Color(0xFFE0F2FE), Color(0xFFE0F2FE)],
       iconColor: Color(0xFF93C5FD),
       accentColor: Color(0x3360A5FA),
     ),
@@ -134,20 +128,14 @@ class _HeroSectionState extends State<HeroSection> {
     'ambassador': WinnerCardConfig(
       title: 'Ambassador of the Week',
       icon: LucideIcons.users,
-      gradientColors: <Color>[
-        Color(0xFFEDE9FE),
-        Color(0xFFEDE9FE),
-      ],
+      gradientColors: <Color>[Color(0xFFEDE9FE), Color(0xFFEDE9FE)],
       iconColor: Color(0xFFC4B5FD),
       accentColor: Color(0x338B5CF6),
     ),
     'matches': WinnerCardConfig(
       title: 'Matches',
       icon: LucideIcons.users,
-      gradientColors: <Color>[
-        Color(0xFFE0F2FE),
-        Color(0xFFE0F2FE),
-      ],
+      gradientColors: <Color>[Color(0xFFE0F2FE), Color(0xFFE0F2FE)],
       iconColor: Color(0xFF93C5FD),
       accentColor: Color(0x3360A5FA),
     ),
@@ -165,51 +153,55 @@ class _HeroSectionState extends State<HeroSection> {
     _startAutoRotation();
     heroItems = <HeroItem>[
       HeroItem(
-          id: '1',
-          type: 'boss',
-          icon: 'assets/images/app_logo_2.png',
-          title: 'Boss of the Week',
-          subtitle: user?.name ?? user!.username,
-          description: user?.bio ?? '',
-          image: user?.photoUrl ?? '',
-          action: _profileController.myProfile.connecteds!.contains(user!.uid)
-              ? 'Refer'
-              : 'Follow',
-          action2: 'Get Featured'),
+        id: '1',
+        type: 'boss',
+        icon: 'assets/images/app_logo_2.png',
+        title: 'Boss of the Week',
+        subtitle: user?.name ?? user!.username,
+        description: user?.bio ?? '',
+        image: user?.photoUrl ?? '',
+        action: _profileController.myProfile.connecteds!.contains(user!.uid)
+            ? 'Refer'
+            : 'Follow',
+        action2: 'Get Featured',
+      ),
       HeroItem(
-          id: '2',
-          type: 'mentor',
-          icon: 'assets/images/app_logo_2.png',
-          title: 'Mentor of the Week',
-          subtitle: mentor?.name ?? mentor!.username,
-          image: mentor?.photoUrl ?? '',
-          description: mentor?.bio ?? '',
-          action: _profileController.myProfile.connecteds!.contains(mentor!.uid)
-              ? 'Refer'
-              : 'Follow',
-          action2: 'Share Learning'),
+        id: '2',
+        type: 'mentor',
+        icon: 'assets/images/app_logo_2.png',
+        title: 'Mentor of the Week',
+        subtitle: mentor?.name ?? mentor!.username,
+        image: mentor?.photoUrl ?? '',
+        description: mentor?.bio ?? '',
+        action: _profileController.myProfile.connecteds!.contains(mentor!.uid)
+            ? 'Refer'
+            : 'Follow',
+        action2: 'Share Learning',
+      ),
       HeroItem(
-          id: '3',
-          type: 'backer',
-          icon: 'assets/images/app_logo_2.png',
-          title: 'Backer of the Week',
-          subtitle: backer?.name ?? backer!.username,
-          image: backer?.photoUrl ?? '',
-          description: backer?.bio ?? '',
-          action: _profileController.myProfile.connecteds!.contains(backer!.uid)
-              ? 'Refer'
-              : 'Follow',
-          action2: 'Fund Project'),
+        id: '3',
+        type: 'backer',
+        icon: 'assets/images/app_logo_2.png',
+        title: 'Backer of the Week',
+        subtitle: backer?.name ?? backer!.username,
+        image: backer?.photoUrl ?? '',
+        description: backer?.bio ?? '',
+        action: _profileController.myProfile.connecteds!.contains(backer!.uid)
+            ? 'Refer'
+            : 'Follow',
+        action2: 'Fund Project',
+      ),
       HeroItem(
-          id: '4',
-          type: 'partner',
-          title: 'Partner of the Week',
-          icon: 'assets/images/app_logo_2.png',
-          subtitle: partner['companyName'] ?? '',
-          image: partner['companyPhoto'],
-          description: partner['companyDescription'] ?? '',
-          action: 'Claim Deal',
-          action2: 'Become a Partner'),
+        id: '4',
+        type: 'partner',
+        title: 'Partner of the Week',
+        icon: 'assets/images/app_logo_2.png',
+        subtitle: partner['companyName'] ?? '',
+        image: partner['companyPhoto'],
+        description: partner['companyDescription'] ?? '',
+        action: 'Claim Deal',
+        action2: 'Become a Partner',
+      ),
       HeroItem(
         id: '5',
         type: 'ambassador',
@@ -236,10 +228,11 @@ class _HeroSectionState extends State<HeroSection> {
 
   void _startAutoRotation() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 12), (Timer timer) {
-      final Duration timeSinceLast =
-          DateTime.now().difference(_lastInteraction);
-      if (timeSinceLast.inSeconds >= 12) {
+    _timer = Timer.periodic(const Duration(seconds: 9), (Timer timer) {
+      final Duration timeSinceLast = DateTime.now().difference(
+        _lastInteraction,
+      );
+      if (timeSinceLast.inSeconds >= 9) {
         final int nextIndex = (_currentIndex + 1) % heroItems.length;
         _pageController.animateToPage(
           nextIndex,
@@ -309,20 +302,24 @@ class _HeroSectionState extends State<HeroSection> {
 
   Future<void> disconnect(String userId) async {
     await ApiService.post(
-        path: 'connection/disconnect',
-        body: <String, dynamic>{
-          'userId': _profileController.myProfile.uid,
-          'connectedId': userId,
-          'timestamp': DateTime.now().millisecondsSinceEpoch,
-        });
+      path: 'connection/disconnect',
+      body: <String, dynamic>{
+        'userId': _profileController.myProfile.uid,
+        'connectedId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      },
+    );
   }
 
   Future<void> connect(String userId) async {
-    await ApiService.post(path: 'connection/connect', body: <String, dynamic>{
-      'userId': _profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
+    await ApiService.post(
+      path: 'connection/connect',
+      body: <String, dynamic>{
+        'userId': _profileController.myProfile.uid,
+        'connectedId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      },
+    );
   }
 
   void enterChallenge() {
@@ -349,11 +346,13 @@ class _HeroSectionState extends State<HeroSection> {
             'industryId': industry.industryId,
           },
           binding: BindingsBuilder<CreateBossUpController>.put(
-              () => CreateBossUpController()),
+            () => CreateBossUpController(),
+          ),
         );
       } else {
-        if (_profileController.myProfile.postChallenges!
-            .contains(industry.industryId)) {
+        if (_profileController.myProfile.postChallenges!.contains(
+          industry.industryId,
+        )) {
           const SnackBar snackBar = SnackBar(
             duration: Duration(seconds: 4),
             content: Text('You can only post once in a challenge'),
@@ -384,9 +383,7 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void enterbackeroftheweek() {
-    Get.to(() => DonationsPage(
-          ishome: false,
-        ));
+    Get.to(() => DonationsPage(ishome: false));
   }
 
   void entermentoroftheweek() {
@@ -429,11 +426,7 @@ class _HeroSectionState extends State<HeroSection> {
             right: -20,
             child: Opacity(
               opacity: 0.05,
-              child: Icon(
-                config.icon,
-                size: 128,
-                color: Colors.white,
-              ),
+              child: Icon(config.icon, size: 128, color: Colors.white),
             ),
           ),
           Padding(
@@ -449,11 +442,7 @@ class _HeroSectionState extends State<HeroSection> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         // if (item.icon.isNotEmpty)
-                        Image.asset(
-                          item.icon,
-                          width: 22,
-                          height: 22,
-                        ),
+                        Image.asset(item.icon, width: 22, height: 22),
                         SizedBox(width: item.icon.isNotEmpty ? 4 : 0),
                         Text(
                           config.title,
@@ -465,11 +454,7 @@ class _HeroSectionState extends State<HeroSection> {
                         ),
                       ],
                     ),
-                    Icon(
-                      LucideIcons.chevronRight,
-                      color: textColor,
-                      size: 20,
-                    ),
+                    Icon(LucideIcons.chevronRight, color: textColor, size: 20),
                   ],
                 ),
                 // FIXED: Only show user info if not matches card
@@ -497,8 +482,10 @@ class _HeroSectionState extends State<HeroSection> {
                       }
 
                       if (targetUser != null) {
-                        Get.toNamed(Routes.publicProfile,
-                            arguments: targetUser);
+                        Get.toNamed(
+                          Routes.publicProfile,
+                          arguments: targetUser,
+                        );
                       }
                       if (partner != null) {
                         Uri url = Uri.parse(partner['companyUrl']);
@@ -607,8 +594,9 @@ class _HeroSectionState extends State<HeroSection> {
                                           .contains(ambassador!.uid);
                                   if (!isConnected) {
                                     await connect(ambassador!.uid);
-                                    _profileController
-                                        .updateConnections(ambassador!.uid);
+                                    _profileController.updateConnections(
+                                      ambassador!.uid,
+                                    );
                                   }
                                 }
                               } else {
@@ -645,17 +633,18 @@ class _HeroSectionState extends State<HeroSection> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Icon(
-                                  item.action == 'View Events'
-                                      ? LucideIcons.calendar
-                                      : item.action == 'Refer'
-                                          ? LucideIcons.forward
-                                          : item.action == 'Claim Deal'
-                                              ? LucideIcons.checkCircle2
-                                              : item.action == 'View Matches'
-                                                  ? LucideIcons.users
-                                                  : LucideIcons.userPlus,
-                                  size: 16,
-                                  color: primaryColorLT),
+                                item.action == 'View Events'
+                                    ? LucideIcons.calendar
+                                    : item.action == 'Refer'
+                                        ? LucideIcons.forward
+                                        : item.action == 'Claim Deal'
+                                            ? LucideIcons.checkCircle2
+                                            : item.action == 'View Matches'
+                                                ? LucideIcons.users
+                                                : LucideIcons.userPlus,
+                                size: 16,
+                                color: primaryColorLT,
+                              ),
                               const SizedBox(width: 5),
                               Text(
                                 item.action,
@@ -709,9 +698,10 @@ class _HeroSectionState extends State<HeroSection> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                color: primaryColorLT,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: proprimaryColor)),
+                              color: primaryColorLT,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: proprimaryColor),
+                            ),
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12,
                               vertical: 8,
@@ -846,15 +836,15 @@ class _HeroSectionState extends State<HeroSection> {
                                           category.criteria!,
                                           textAlign: TextAlign.center,
                                         ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
+                                        const SizedBox(height: 10),
                                         Text(
                                           _calculateStartDate(
-                                              category.startAt!),
+                                            category.startAt!,
+                                          ),
                                           style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -871,20 +861,23 @@ class _HeroSectionState extends State<HeroSection> {
                               );
                               return;
                             }
-                            Get.to(() => BossUpSection(
-                                  industry: category,
-                                  bossUp: challengeController.categories[0],
-                                ));
+                            Get.to(
+                              () => BossUpSection(
+                                industry: category,
+                                bossUp: challengeController.categories[0],
+                              ),
+                            );
 
                             break;
                           case 'mentor':
-                            Get.to(() => const AllLearningPostsScreen(
-                                isCoursesTile: false));
+                            Get.to(
+                              () => const AllLearningPostsScreen(
+                                isCoursesTile: false,
+                              ),
+                            );
                             break;
                           case 'backer':
-                            Get.to(() => DonationsPage(
-                                  ishome: false,
-                                ));
+                            Get.to(() => DonationsPage(ishome: false));
                             break;
                           case 'partner':
                             Get.to(() => BossUpPartner());
@@ -895,7 +888,7 @@ class _HeroSectionState extends State<HeroSection> {
                         }
                       },
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
+                        padding: const EdgeInsets.only(top: 0.0),
                         child: _buildWinnerCard(item),
                       ),
                     );
@@ -921,8 +914,11 @@ class _HeroSectionState extends State<HeroSection> {
                                 imageUrl: item.image,
                                 fit: BoxFit.cover,
                                 memCacheHeight: 1000,
-                                errorWidget: (BuildContext context, String url,
-                                        Object error) =>
+                                errorWidget: (
+                                  BuildContext context,
+                                  String url,
+                                  Object error,
+                                ) =>
                                     const Icon(Icons.error),
                               ),
                             GestureDetector(
@@ -989,15 +985,18 @@ class _HeroSectionState extends State<HeroSection> {
                                           switch (item.action) {
                                             case 'View Deals':
                                               Get.to(
-                                                  () => const BossUpPartner());
+                                                () => const BossUpPartner(),
+                                              );
                                               break;
                                             case 'View Challenges':
                                               Get.toNamed(
-                                                  Routes.allCommunitiesScreen);
+                                                Routes.allCommunitiesScreen,
+                                              );
                                               break;
                                             case 'View Matches':
-                                              Get.to(() =>
-                                                  ExpandedMatchesScreen());
+                                              Get.to(
+                                                () => ExpandedMatchesScreen(),
+                                              );
                                               break;
                                             default:
                                               Get.toNamed(Routes.liveEvents);
@@ -1007,8 +1006,9 @@ class _HeroSectionState extends State<HeroSection> {
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
                                           ),
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 12,
@@ -1052,8 +1052,9 @@ class _HeroSectionState extends State<HeroSection> {
                                                 ? item.action2
                                                 : '') {
                                               case 'Become a Partner':
-                                                Get.to(() =>
-                                                    BecomeaPartnerScreen());
+                                                Get.to(
+                                                  () => BecomeaPartnerScreen(),
+                                                );
                                                 break;
                                               case 'Create an event':
                                                 Get.toNamed(Routes.liveEvents);

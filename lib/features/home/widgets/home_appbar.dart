@@ -187,10 +187,10 @@ class HomeAppBar extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          height: 1,
-          color: backgroundColor,
-        ),
+        // Container(
+        //   height: 1,
+        //   color: backgroundColor,
+        // ),
       ],
     );
   }
