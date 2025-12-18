@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/widgets/winnercard.dart';
+import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 
 import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 
@@ -176,12 +177,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
               if (isMyProfile && hasMatchType)
                 GestureDetector(
                   onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (BuildContext context) => const PreMatchModal(),
-                    );
+                    Get.to(ExpandedMatchesScreen());
                   },
                   child: ListTile(
                     contentPadding: EdgeInsets.zero,
