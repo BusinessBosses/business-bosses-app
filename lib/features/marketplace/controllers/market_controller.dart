@@ -154,54 +154,54 @@ class MarketController extends GetxController {
       paginationPage.value = 1;
     }
 
-    // try {
-    final List<ApiResponseModel> responses =
-        await Future.wait(<Future<ApiResponseModel>>[
-      ApiService.get(path: 'goods/all?page=$page&size=$size'),
-      ApiService.get(path: 'services/all?page=$page&size=$size'),
-    ]);
+    try {
+      final List<ApiResponseModel> responses =
+          await Future.wait(<Future<ApiResponseModel>>[
+        ApiService.get(path: 'goods/all?page=$page&size=$size'),
+        ApiService.get(path: 'services/all?page=$page&size=$size'),
+      ]);
 
-    final ApiResponseModel responseProducts = responses[0];
-    final ApiResponseModel responseServices = responses[1];
+      final ApiResponseModel responseProducts = responses[0];
+      final ApiResponseModel responseServices = responses[1];
 
-    if (page == 1) {
-      totalItemCount.value = (responseProducts.data['count'] ?? 0) +
-          (responseServices.data['count'] ?? 0);
+      if (page == 1) {
+        totalItemCount.value = (responseProducts.data['count'] ?? 0) +
+            (responseServices.data['count'] ?? 0);
+      }
+
+      if (responseProducts.success) {
+        final List<dynamic> productRows =
+            responseProducts.data['rows'] ?? <dynamic>[];
+        final List<Product> newProducts = productRows
+            .map((dynamic e) => Product.fromJson(e as Map<String, dynamic>))
+            .where((Product p) => p.isActive)
+            .toList();
+        proProducts.addAll(newProducts);
+        proItems.addAll(newProducts);
+      }
+
+      if (responseServices.success) {
+        final List<dynamic> serviceRows =
+            responseServices.data['rows'] ?? <dynamic>[];
+        final List<Service> newServices = serviceRows
+            .map((dynamic e) => Service.fromJson(e as Map<String, dynamic>))
+            .where((Service s) => s.isActive)
+            .toList();
+        proServices.addAll(newServices);
+        proItems.addAll(newServices);
+      }
+
+      if (proItems.length >= totalItemCount.value) {
+        hasMoreItems(false);
+      } else {
+        paginationPage.value = page;
+      }
+    } catch (e) {
+      error(true);
+      debugPrint('❌ initProItems error: $e');
+    } finally {
+      loading(false);
     }
-
-    if (responseProducts.success) {
-      final List<dynamic> productRows =
-          responseProducts.data['rows'] ?? <dynamic>[];
-      final List<Product> newProducts = productRows
-          .map((dynamic e) => Product.fromJson(e as Map<String, dynamic>))
-          .where((Product p) => p.isActive)
-          .toList();
-      proProducts.addAll(newProducts);
-      proItems.addAll(newProducts);
-    }
-
-    if (responseServices.success) {
-      final List<dynamic> serviceRows =
-          responseServices.data['rows'] ?? <dynamic>[];
-      final List<Service> newServices = serviceRows
-          .map((dynamic e) => Service.fromJson(e as Map<String, dynamic>))
-          .where((Service s) => s.isActive)
-          .toList();
-      proServices.addAll(newServices);
-      proItems.addAll(newServices);
-    }
-
-    if (proItems.length >= totalItemCount.value) {
-      hasMoreItems(false);
-    } else {
-      paginationPage.value = page;
-    }
-    // } catch (e) {
-    //   error(true);
-    //   debugPrint('❌ initProItems error: $e');
-    // } finally {
-    loading(false);
-    // }
   }
 
   Future<void> loadMore() async {
