@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import '../../common/models/my_user.dart';
 
 class Invite {
@@ -33,7 +31,7 @@ class Invite {
   }
 
   static List<Invite> toInviteList({
-    @required dynamic data,
+    required dynamic data,
   }) {
     Map<dynamic, dynamic> values = data as Map<dynamic, dynamic>;
     List<Invite> invites = <Invite>[];

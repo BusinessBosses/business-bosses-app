@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class MyConnect {
   String? id;
   // String? connectedBy;
@@ -68,7 +66,7 @@ class MyConnect {
   // }
 
   static List<MyConnect> toListFormMap({
-    @required Map<dynamic, dynamic>? map,
+    required Map<dynamic, dynamic>? map,
   }) {
     if (map?.isEmpty ?? false) return <MyConnect>[];
     List<MyConnect> items = <MyConnect>[];
