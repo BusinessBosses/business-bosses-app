@@ -564,10 +564,12 @@ class _HeroSectionState extends State<HeroSection> {
                       ),
                     ),
                   ),
-                // FIXED: For matches card, show description text
+                // FIXED: For matches card, show description text with same height as user info section
                 if (item.type == 'matches')
-                  Padding(
+                  Container(
+                    height: 75,
                     padding: const EdgeInsets.symmetric(vertical: 10),
+                    alignment: Alignment.centerLeft,
                     child: Text(
                       item.subtitle,
                       style: const TextStyle(
@@ -575,6 +577,8 @@ class _HeroSectionState extends State<HeroSection> {
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 Expanded(
@@ -799,7 +803,7 @@ class _HeroSectionState extends State<HeroSection> {
                         Get.to(() => ExpandedMatchesScreen());
                       },
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
+                        padding: const EdgeInsets.only(top: 0.0),
                         child: _buildWinnerCard(item),
                       ),
                     );

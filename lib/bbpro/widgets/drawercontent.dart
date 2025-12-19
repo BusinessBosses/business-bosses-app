@@ -364,165 +364,176 @@ class _DrawerContentState extends State<DrawerContent> {
                 ],
               ),
             ),
-            Column(
-              children: <Widget>[
-                const SizedBox(height: 20),
-                ...List<Widget>.generate(
-                    tilesData.length,
-                    (int index) => Padding(
-                          padding: const EdgeInsets.only(left: 15.0, right: 15),
-                          child: ListTile(
-                            minVerticalPadding: 0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            onTap: tilesData[index]['onTileClicked'] as void
-                                Function(),
-                            leading: tilesData[index]['icon'] as Widget,
-                            title: Text(
-                              tilesData[index]['title'] as String,
-                              style: const TextStyle(
-                                  color: textColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15),
-                            ),
-                          ),
-                        )),
-                Padding(
-                  padding: const EdgeInsets.only(top: 30.0),
-                  child: SizedBox(
-                      width: double.infinity,
-                      child: ProCustomButton(
-                          color: primaryColorLT,
-                          icon: const Icon(Icons.add, color: Colors.white),
-                          text: 'Create',
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25.0),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    const SizedBox(height: 20),
+                    ...List<Widget>.generate(
+                        tilesData.length,
+                        (int index) => Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15.0, right: 15),
+                              child: ListTile(
+                                minVerticalPadding: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8)),
+                                onTap: tilesData[index]['onTileClicked'] as void
+                                    Function(),
+                                leading: tilesData[index]['icon'] as Widget,
+                                title: Text(
+                                  tilesData[index]['title'] as String,
+                                  style: const TextStyle(
+                                      color: textColor,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 15),
                                 ),
                               ),
-                              builder: (BuildContext context) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      ListView.separated(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: 5,
-                                        separatorBuilder:
-                                            (BuildContext context, int index) =>
-                                                const Divider(),
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return ListTile(
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              if (index == 0) {
-                                                enterChallenge();
-                                              } else if (index == 1) {
-                                                sellProduct(context);
-                                              } else if (index == 2) {
-                                                Get.to(
-                                                    () => AddBuyerRequests());
-                                              } else if (index == 3) {
-                                                Get.toNamed(Routes.createPost);
-                                              } else if (index == 4) {
-                                                final Uri url = Uri.parse(
-                                                    'https://businessbosses.news/instant-pr/');
-                                                launchUrl(url,
-                                                    mode: LaunchMode
-                                                        .platformDefault);
-                                              }
-                                            },
-                                            minVerticalPadding: 0,
-                                            contentPadding:
-                                                const EdgeInsets.only(left: 10),
-                                            leading: index == 0
-                                                ? Icon(
-                                                    LucideIcons.trophy,
-                                                    color: textColor.withValues(
-                                                        alpha: 1),
-                                                    size: 26,
-                                                  )
-                                                : index == 1
-                                                    ? SvgPicture.asset(
-                                                        'assets/svgs/sellicon.svg',
-                                                        height: 25,
-                                                        colorFilter:
-                                                            ColorFilter.mode(
-                                                          textColor.withValues(
-                                                              alpha: 1),
-                                                          BlendMode.srcIn,
-                                                        ),
+                            )),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30.0, bottom: 20.0),
+                      child: SizedBox(
+                          width: double.infinity,
+                          child: ProCustomButton(
+                              color: primaryColorLT,
+                              icon: const Icon(Icons.add, color: Colors.white),
+                              text: 'Create',
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(25.0),
+                                    ),
+                                  ),
+                                  builder: (BuildContext context) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListView.separated(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: 5,
+                                            separatorBuilder:
+                                                (BuildContext context,
+                                                        int index) =>
+                                                    const Divider(),
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return ListTile(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  if (index == 0) {
+                                                    enterChallenge();
+                                                  } else if (index == 1) {
+                                                    sellProduct(context);
+                                                  } else if (index == 2) {
+                                                    Get.to(() =>
+                                                        AddBuyerRequests());
+                                                  } else if (index == 3) {
+                                                    Get.toNamed(
+                                                        Routes.createPost);
+                                                  } else if (index == 4) {
+                                                    final Uri url = Uri.parse(
+                                                        'https://businessbosses.news/instant-pr/');
+                                                    launchUrl(url,
+                                                        mode: LaunchMode
+                                                            .platformDefault);
+                                                  }
+                                                },
+                                                minVerticalPadding: 0,
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 10),
+                                                leading: index == 0
+                                                    ? Icon(
+                                                        LucideIcons.trophy,
+                                                        color: textColor
+                                                            .withValues(
+                                                                alpha: 1),
+                                                        size: 26,
                                                       )
-                                                    : index == 2
-                                                        ? Icon(
-                                                            LucideIcons
-                                                                .shoppingBag,
-                                                            color: textColor
-                                                                .withValues(
-                                                                    alpha: 1),
-                                                            size: 26,
+                                                    : index == 1
+                                                        ? SvgPicture.asset(
+                                                            'assets/svgs/sellicon.svg',
+                                                            height: 25,
+                                                            colorFilter:
+                                                                ColorFilter
+                                                                    .mode(
+                                                              textColor
+                                                                  .withValues(
+                                                                      alpha: 1),
+                                                              BlendMode.srcIn,
+                                                            ),
                                                           )
-                                                        : index == 3
-                                                            ? SvgPicture.asset(
-                                                                'assets/svgs/text.svg',
-                                                                height: 25,
-                                                                colorFilter:
-                                                                    ColorFilter
-                                                                        .mode(
-                                                                  textColor
-                                                                      .withValues(
-                                                                          alpha:
-                                                                              1),
-                                                                  BlendMode
-                                                                      .srcIn,
-                                                                ),
-                                                              )
-                                                            : Icon(
+                                                        : index == 2
+                                                            ? Icon(
                                                                 LucideIcons
-                                                                    .globe,
+                                                                    .shoppingBag,
                                                                 color: textColor
                                                                     .withValues(
                                                                         alpha:
                                                                             1),
                                                                 size: 26,
-                                                              ),
-                                            title: Text(
-                                              index == 0
-                                                  ? 'Share business, get featured'
-                                                  : index == 1
-                                                      ? 'Sell your product & service'
-                                                      : index == 2
-                                                          ? 'Create buyer requests'
-                                                          : index == 3
-                                                              ? 'Post content, discussion, etc'
-                                                              : 'Submit news for instant PR',
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-                                          );
-                                        },
+                                                              )
+                                                            : index == 3
+                                                                ? SvgPicture
+                                                                    .asset(
+                                                                    'assets/svgs/text.svg',
+                                                                    height: 25,
+                                                                    colorFilter:
+                                                                        ColorFilter
+                                                                            .mode(
+                                                                      textColor.withValues(
+                                                                          alpha:
+                                                                              1),
+                                                                      BlendMode
+                                                                          .srcIn,
+                                                                    ),
+                                                                  )
+                                                                : Icon(
+                                                                    LucideIcons
+                                                                        .globe,
+                                                                    color: textColor
+                                                                        .withValues(
+                                                                            alpha:
+                                                                                1),
+                                                                    size: 26,
+                                                                  ),
+                                                title: Text(
+                                                  index == 0
+                                                      ? 'Share business, get featured'
+                                                      : index == 1
+                                                          ? 'Sell your product & service'
+                                                          : index == 2
+                                                              ? 'Create buyer requests'
+                                                              : index == 3
+                                                                  ? 'Post content, discussion, etc'
+                                                                  : 'Submit news for instant PR',
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          })),
-                )
-              ],
+                              })),
+                    )
+                  ],
+                ),
+              ),
             ),
-            const Spacer(),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: GestureDetector(

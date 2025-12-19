@@ -319,15 +319,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
           selectedLocationChanged(code?.name, code?.code);
         },
         pickerBuilder: (BuildContext context, CountryCode? code) => Row(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const Icon(Icons.place, size: 18),
             const SizedBox(width: 5),
-            Text(
-              _marketController.selectedLocation ?? '',
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
+            Flexible(
+              child: Text(
+                _marketController.selectedLocation ?? '',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ),
             const SizedBox(width: 5),
@@ -367,7 +372,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               text: _marketplaceTabController.index == 2
                   ? 'Add'
                   : _marketplaceTabController.index == 1
-                      ? 'Create request'
+                      ? 'Create'
                       : 'Sell',
             ),
           ),
