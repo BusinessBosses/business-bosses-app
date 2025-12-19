@@ -62,14 +62,14 @@ class HomeAppBar extends StatelessWidget {
                                 SvgPicture.asset('assets/svgs/bossupu.svg',
                                     colorFilter: const ColorFilter.mode(
                                         textColor, BlendMode.srcIn),
-                                    height: 22),
+                                    height: 19),
                                 const SizedBox(width: 8),
                                 Flexible(
                                   child: Text(
                                     'Boss Up & Grow',
                                     style: const TextStyle(
                                       color: textColor,
-                                      fontSize: 15,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w900,
                                     ),
                                     overflow: TextOverflow.ellipsis,
