@@ -460,7 +460,8 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                 LeaderboardScreen(
                                                                   isBossUp: widget
                                                                               .industry
-                                                                              .industry ==
+                                                                              .industry!
+                                                                              .trim() ==
                                                                           'Boss Up Challenge'
                                                                       ? true
                                                                       : false,
