@@ -40,76 +40,47 @@ class HomeAppBar extends StatelessWidget {
                 spacing: 15,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  // Search button
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.to(() => AllCommunitiesScreen());
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 5),
-                        decoration: BoxDecoration(
-                            color: backgroundcolorinterface,
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Row(
-                          spacing: 8,
-                          children: <Widget>[
-                            SvgPicture.asset('assets/svgs/bossupu.svg',
-                                colorFilter: const ColorFilter.mode(
-                                    textColor, BlendMode.srcIn),
-                                height: 22),
-                            Text(
-                              'Boss Up & Grow',
-                              style: const TextStyle(
-                                color: textColor,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w900,
-                              ),
+                  // Search button - expands to fill available space
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(() => AllCommunitiesScreen());
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 5),
+                            decoration: BoxDecoration(
+                                color: backgroundcolorinterface,
+                                borderRadius: BorderRadius.circular(50)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                SvgPicture.asset('assets/svgs/bossupu.svg',
+                                    colorFilter: const ColorFilter.mode(
+                                        textColor, BlendMode.srcIn),
+                                    height: 22),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    'Boss Up & Grow',
+                                    style: const TextStyle(
+                                      color: textColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-
-                  // Coins button
-                  Expanded(
-                    child: Row(
-                      children: <Widget>[
-                        // GestureDetector(
-                        //   onTap: () => Get.toNamed(Routes.notifications),
-                        //   child: Stack(
-                        //     children: <Widget>[
-                        //       GestureDetector(
-                        //           child: const CircleAvatar(
-                        //         radius: 16,
-                        //         backgroundColor: backgroundColor,
-                        //         child: Icon(
-                        //           LucideIcons.bell,
-                        //           size: 17,
-                        //           color: textColor,
-                        //         ),
-                        //       )),
-                        //       if (hasUnreadNotification)
-                        //         Positioned(
-                        //           right: 0,
-                        //           child: Container(
-                        //             width: 10,
-                        //             height: 10,
-                        //             decoration: const BoxDecoration(
-                        //               color: Colors.red,
-                        //               shape: BoxShape.circle,
-                        //             ),
-                        //           ),
-                        //         ),
-                        //     ],
-                        //   ),
-                        // ),
-
-//Search
-                      ],
                     ),
                   ),
 
