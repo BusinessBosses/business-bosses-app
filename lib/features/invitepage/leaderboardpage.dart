@@ -29,6 +29,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   /// LOAD DUMMY DATA ONLY (no Supabase)
   Future<void> _loadLeaderboard() async {
     try {
+      _leaderboardData.clear();
       setState(() {
         _isLoading = true;
         _error = null;
