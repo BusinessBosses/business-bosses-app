@@ -66,7 +66,7 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
           .toList();
 
       return GestureDetector(
-        onTap: () => Get.off(() => const MarketplaceScreen()),
+        onTap: () => Get.to(() => const MarketplaceScreen()),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
