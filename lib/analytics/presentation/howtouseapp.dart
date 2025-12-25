@@ -214,7 +214,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                               } else if (index == 4) {
                                 // Submit news for instant PR
                                 final Uri url = Uri.parse(
-                                    'https://businessbosses.news/submit-your-press-release');
+                                    'https://businessbosses.news/submit-your-news/');
                                 launchUrl(url,
                                     mode: LaunchMode.platformDefault);
                               }
