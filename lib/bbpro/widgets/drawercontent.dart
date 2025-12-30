@@ -418,7 +418,7 @@ class _DrawerContentState extends State<DrawerContent> {
                                             shrinkWrap: true,
                                             physics:
                                                 const NeverScrollableScrollPhysics(),
-                                            itemCount: 5,
+                                            itemCount: 4,
                                             separatorBuilder:
                                                 (BuildContext context,
                                                         int index) =>
@@ -512,9 +512,11 @@ class _DrawerContentState extends State<DrawerContent> {
                                                           ? 'Sell your product & service'
                                                           : index == 2
                                                               ? 'Create buyer requests'
-                                                              : index == 3
-                                                                  ? 'Post content, discussion, etc'
-                                                                  : 'Submit news for instant PR',
+                                                              :
+                                                              // index == 3
+                                                              //     ?
+                                                              'Post content, discussion, etc',
+                                                  // : 'Submit news for instant PR',
                                                   style: const TextStyle(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w700,

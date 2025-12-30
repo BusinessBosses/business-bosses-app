@@ -1,11 +1,11 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\Users\wadas\.shorebird\bin\cache\flutter\9f7708cb33113734ed1d6b67f016d13fdcce9268"
+export "FLUTTER_ROOT=C:\Users\wadas\fvm\versions\3.35.7"
 export "FLUTTER_APPLICATION_PATH=C:\xampp\htdocs\flutter\business-bosses--v2"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=3.0.0"
-export "FLUTTER_BUILD_NUMBER=86"
+export "FLUTTER_BUILD_NUMBER=90"
 export "DART_OBFUSCATION=false"
 export "TRACK_WIDGET_CREATION=true"
 export "TREE_SHAKE_ICONS=false"
