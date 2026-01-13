@@ -1,9 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:math';
-
 import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/foundation.dart';
@@ -165,16 +162,20 @@ class _BoostDonationState extends State<BoostDonation> {
         -(int.parse(initPlan) * 100),
       );
 
+      if (!mounted) return;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const Confirmation()),
+        MaterialPageRoute<void>(
+            builder: (BuildContext context) => const Confirmation()),
       );
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
     } finally {
-      setState(() => _isProcessing = false);
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
     }
   }
 
@@ -204,22 +205,27 @@ class _BoostDonationState extends State<BoostDonation> {
       if (purchased) {
         await updatePost('card');
 
+        if (!mounted) return;
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (_) => const Confirmation(),
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => const Confirmation(),
           ),
         );
       } else {
+        if (!mounted) return;
         showSnackBar(context, message: 'Payment not completed');
       }
     } on PlatformException catch (e) {
+      if (!mounted) return;
       showSnackBar(
         context,
         message: e.message ?? 'Payment cancelled',
       );
     } finally {
-      setState(() => _isProcessing = false);
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
     }
   }
 

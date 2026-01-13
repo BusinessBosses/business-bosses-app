@@ -1,16 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:developer';
-import 'dart:math' hide log;
-
 import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
@@ -167,14 +162,20 @@ class _BoostPostState extends State<BoostPost> {
         -(int.parse(initPlan) * 100),
       );
 
+      if (!mounted) return;
+
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const Confirmation()),
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => const Confirmation(),
+        ),
       );
     } catch (e) {
       debugPrint(e.toString());
     } finally {
-      setState(() => _isProcessing = false);
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
     }
   }
 
@@ -194,6 +195,8 @@ class _BoostPostState extends State<BoostPost> {
 
       final PurchaseResult result = await Purchases.purchasePackage(pkg);
 
+      if (!mounted) return;
+
       final CustomerInfo info = result.customerInfo;
 
       final bool purchased = info.nonSubscriptionTransactions.any(
@@ -204,9 +207,11 @@ class _BoostPostState extends State<BoostPost> {
       if (purchased) {
         await updatePost('card');
 
+        if (!mounted) return;
+
         Navigator.push(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
             builder: (_) => const Confirmation(),
           ),
         );
@@ -214,12 +219,15 @@ class _BoostPostState extends State<BoostPost> {
         showSnackBar(context, message: 'Payment not completed');
       }
     } on PlatformException catch (e) {
+      if (!mounted) return;
       showSnackBar(
         context,
         message: e.message ?? 'Payment cancelled',
       );
     } finally {
-      setState(() => _isProcessing = false);
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
     }
   }
 

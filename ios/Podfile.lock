@@ -12,9 +12,6 @@ PODS:
   - OrderedSet (6.0.3)
   - pdfx (1.0.0):
     - Flutter
-  - photo_manager (3.7.1):
-    - Flutter
-    - FlutterMacOS
   - sign_in_with_apple (0.0.1):
     - Flutter
 
@@ -23,7 +20,6 @@ DEPENDENCIES:
   - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
   - flutter_inappwebview_ios (from `.symlinks/plugins/flutter_inappwebview_ios/ios`)
   - pdfx (from `.symlinks/plugins/pdfx/ios`)
-  - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
 
 SPEC REPOS:
@@ -39,8 +35,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_inappwebview_ios/ios"
   pdfx:
     :path: ".symlinks/plugins/pdfx/ios"
-  photo_manager:
-    :path: ".symlinks/plugins/photo_manager/ios"
   sign_in_with_apple:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
 
@@ -50,7 +44,6 @@ SPEC CHECKSUMS:
   flutter_inappwebview_ios: b89ba3482b96fb25e00c967aae065701b66e9b99
   OrderedSet: e539b66b644ff081c73a262d24ad552a69be3a94
   pdfx: 77f4dddc48361fbb01486fa2bdee4532cbb97ef3
-  photo_manager: 1d80ae07a89a67dfbcae95953a1e5a24af7c3e62
   sign_in_with_apple: c5dcc141574c8c54d5ac99dd2163c0c72ad22418
 
 PODFILE CHECKSUM: a39c5f092da89a4270b8c1344c7cfc8ab0bdc723
