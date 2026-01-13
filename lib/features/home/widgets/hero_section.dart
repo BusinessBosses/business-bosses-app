@@ -432,7 +432,7 @@ class _HeroSectionState extends State<HeroSection> {
           Padding(
             padding: const EdgeInsets.all(15),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Row(
@@ -581,43 +581,117 @@ class _HeroSectionState extends State<HeroSection> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () async {
+                        switch (item.action) {
+                          case 'Follow':
+                            if (item.type == 'ambassador') {
+                              if (ambassador != null) {
+                                final bool isConnected =
+                                    _profileController.myProfile.connecteds !=
+                                            null &&
+                                        _profileController.myProfile.connecteds!
+                                            .contains(ambassador!.uid);
+                                if (!isConnected) {
+                                  await connect(ambassador!.uid);
+                                  _profileController.updateConnections(
+                                    ambassador!.uid,
+                                  );
+                                }
+                              }
+                            } else {
+                              connectToUser();
+                            }
+                            break;
+                          case 'Refer':
+                            referuser();
+                            break;
+                          case 'View your Match':
+                            Get.to(() => ExpandedMatchesScreen());
+                            break;
+                          case 'Claim Deal':
+                            final Uri url = Uri.parse(partner['companyUrl']);
+                            if (!await launchUrl(url)) {
+                              throw Exception('Could not launch $url');
+                            }
+                            break;
+                          default:
+                            Get.toNamed(Routes.liveEvents);
+                            break;
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Icon(
+                              item.action == 'View Events'
+                                  ? LucideIcons.calendar
+                                  : item.action == 'Refer'
+                                      ? LucideIcons.forward
+                                      : item.action == 'Claim Deal'
+                                          ? LucideIcons.checkCircle2
+                                          : item.action == 'View Matches'
+                                              ? LucideIcons.users
+                                              : LucideIcons.userPlus,
+                              size: 16,
+                              color: primaryColorLT,
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              item.action,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: primaryColorLT,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    if (item.action2.isNotEmpty)
                       GestureDetector(
                         onTap: () async {
-                          switch (item.action) {
-                            case 'Follow':
-                              if (item.type == 'ambassador') {
-                                if (ambassador != null) {
-                                  final bool isConnected = _profileController
-                                              .myProfile.connecteds !=
-                                          null &&
-                                      _profileController.myProfile.connecteds!
-                                          .contains(ambassador!.uid);
-                                  if (!isConnected) {
-                                    await connect(ambassador!.uid);
-                                    _profileController.updateConnections(
-                                      ambassador!.uid,
-                                    );
-                                  }
-                                }
-                              } else {
-                                connectToUser();
-                              }
+                          switch (item.action2.isNotEmpty ? item.action2 : '') {
+                            case 'Get Featured':
+                              item.id == '1'
+                                  ? enterChallenge()
+                                  : item.id == '2'
+                                      ? entermentoroftheweek()
+                                      : item.id == '3'
+                                          ? enterbackeroftheweek()
+                                          : enterpartneroftheweek();
                               break;
-                            case 'Refer':
-                              referuser();
+                            case 'Crowdfund':
+                              enterbackeroftheweek();
                               break;
-                            case 'View your Match':
+                            case 'Fund Project':
+                              Get.to(() => const CreateDonationScreen());
+                              break;
+                            case 'Become a Partner':
+                              enterpartneroftheweek();
+                              break;
+                            case 'Become Ambassador':
+                              enterambassadoroftheweek();
+                              break;
+                            case 'Share Learning':
+                              entermentoroftheweek();
+                              break;
+                            case 'View Matches':
                               Get.to(() => ExpandedMatchesScreen());
-                              break;
-                            case 'Claim Deal':
-                              final Uri url = Uri.parse(partner['companyUrl']);
-                              if (!await launchUrl(url)) {
-                                throw Exception('Could not launch $url');
-                              }
                               break;
                             default:
                               Get.toNamed(Routes.liveEvents);
@@ -626,8 +700,9 @@ class _HeroSectionState extends State<HeroSection> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: primaryColorLT,
                             borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: proprimaryColor),
                           ),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
@@ -639,102 +714,24 @@ class _HeroSectionState extends State<HeroSection> {
                               Icon(
                                 item.action == 'View Events'
                                     ? LucideIcons.calendar
-                                    : item.action == 'Refer'
-                                        ? LucideIcons.forward
-                                        : item.action == 'Claim Deal'
-                                            ? LucideIcons.checkCircle2
-                                            : item.action == 'View Matches'
-                                                ? LucideIcons.users
-                                                : LucideIcons.userPlus,
+                                    : LucideIcons.plus,
                                 size: 16,
-                                color: primaryColorLT,
+                                color: Colors.white,
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                item.action,
+                                item.action2.isNotEmpty ? item.action2 : '',
                                 style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: primaryColorLT,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      if (item.action2.isNotEmpty)
-                        GestureDetector(
-                          onTap: () async {
-                            switch (
-                                item.action2.isNotEmpty ? item.action2 : '') {
-                              case 'Get Featured':
-                                item.id == '1'
-                                    ? enterChallenge()
-                                    : item.id == '2'
-                                        ? entermentoroftheweek()
-                                        : item.id == '3'
-                                            ? enterbackeroftheweek()
-                                            : enterpartneroftheweek();
-                                break;
-                              case 'Crowdfund':
-                                enterbackeroftheweek();
-                                break;
-                              case 'Fund Project':
-                                Get.to(() => const CreateDonationScreen());
-                                break;
-                              case 'Become a Partner':
-                                enterpartneroftheweek();
-                                break;
-                              case 'Become Ambassador':
-                                enterambassadoroftheweek();
-                                break;
-                              case 'Share Learning':
-                                entermentoroftheweek();
-                                break;
-                              case 'View Matches':
-                                Get.to(() => ExpandedMatchesScreen());
-                                break;
-                              default:
-                                Get.toNamed(Routes.liveEvents);
-                                break;
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: primaryColorLT,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: proprimaryColor),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Icon(
-                                  item.action == 'View Events'
-                                      ? LucideIcons.calendar
-                                      : LucideIcons.plus,
-                                  size: 16,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  item.action2.isNotEmpty ? item.action2 : '',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                  ],
                 ),
               ],
             ),
@@ -784,7 +781,7 @@ class _HeroSectionState extends State<HeroSection> {
             onPanDown: (_) => _onUserInteraction(),
             // FIXED: Changed IntrinsicHeight to SizedBox with fixed height
             child: SizedBox(
-              height: 185, // Adjust this height as needed
+              height: 170, // Adjust this height as needed
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: heroItems.length,
