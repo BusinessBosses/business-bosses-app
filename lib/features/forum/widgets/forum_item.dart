@@ -507,11 +507,11 @@ class _ForumItemState extends State<ForumItem> {
                                             } else if (val == 'Delete') {
                                               _showDialog(widget.forum.forumId);
                                             } else if (val == 'Boost') {
-                                              Get.to(
-                                                () => BoostForumScreen(
-                                                  postId: widget.forum.forumId,
-                                                ),
-                                              );
+                                              // Get.to(
+                                              //   () => BoostForumScreen(
+                                              //     postId: widget.forum.forumId,
+                                              //   ),
+                                              // );
                                             }
                                           },
                                         )

@@ -193,7 +193,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                       ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 5,
+                        itemCount: 4,
                         separatorBuilder: (BuildContext context, int index) =>
                             const Divider(),
                         itemBuilder: (BuildContext context, int index) {
@@ -214,7 +214,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                               } else if (index == 4) {
                                 // Submit news for instant PR
                                 final Uri url = Uri.parse(
-                                    'https://businessbosses.news/submit-your-press-release');
+                                    'https://businessbosses.news/submit-your-news/');
                                 launchUrl(url,
                                     mode: LaunchMode.platformDefault);
                               }
@@ -264,9 +264,11 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                                       ? 'Sell your product & service'
                                       : index == 2
                                           ? 'Create buyer requests'
-                                          : index == 3
-                                              ? 'Post content, discussion, etc'
-                                              : 'Submit news for instant PR',
+                                          :
+                                          // index == 3
+                                          //     ?
+                                          'Post content, discussion, etc',
+                              // : 'Submit news for instant PR',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,

@@ -224,7 +224,7 @@ class _BottomBarState extends State<BottomBar> {
                                         shrinkWrap: true,
                                         physics:
                                             const NeverScrollableScrollPhysics(),
-                                        itemCount: 5,
+                                        itemCount: 4,
                                         separatorBuilder:
                                             (BuildContext context, int index) =>
                                                 const Divider(),
@@ -309,9 +309,11 @@ class _BottomBarState extends State<BottomBar> {
                                                       ? 'Sell your product & service'
                                                       : index == 2
                                                           ? 'Create buyer requests'
-                                                          : index == 3
-                                                              ? 'Post content, discussion, etc'
-                                                              : 'Submit news for instant PR',
+                                                          :
+                                                          // index == 3
+                                                          //     ?
+                                                          'Post content, discussion, etc',
+                                              // : 'Submit news for instant PR',
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w700,

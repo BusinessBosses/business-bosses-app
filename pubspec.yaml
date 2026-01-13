@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 3.0.0+85
+version: 3.0.0+91
 
 environment:
   sdk: ">=2.19.2 <3.0.0"
@@ -52,7 +52,7 @@ dependencies:
   # flutter_secure_storage: ^10.0.0-beta.4
   flutter_staggered_grid_view: ^0.7.0
   flutter_sticky_header: ^0.8.0
-  flutter_stripe: ^12.0.2
+  # flutter_stripe: ^12.0.2
   flutter_svg: ^2.0.5
   flutter_swiper_plus: ^2.0.4
   flutter_switch: ^0.3.1
@@ -75,7 +75,7 @@ dependencies:
   sign_in_with_apple: ^7.0.1
   # social_share: ^2.3.1
   socket_io_client: ^3.0.2
-  syncfusion_flutter_charts: ^31.1.19
+  syncfusion_flutter_charts: ^32.1.21
   text_scroll: ^0.2.0
   timezone: ^0.10.0
   # uni_links: ^0.5.1
@@ -90,7 +90,7 @@ dependencies:
   # zego_uikit_prebuilt_live_audio_room:
   flutter_speed_dial: ^7.0.0
   purchases_flutter: ^9.1.0
-  syncfusion_flutter_calendar: ^31.1.19
+  syncfusion_flutter_calendar: ^32.1.21
   # add_2_calendar:
   # tutorial_coach_mark: ^1.2.11
   # zego_uikit_signaling_plugin: ^2.7.4
@@ -110,7 +110,7 @@ dependencies:
   app_links: ^6.4.0
   # paystack_for_flutter: ^1.0.4
   flutter_markdown_plus: ^1.0.3
-  flutter_paystack_plus: ^2.1.0
+  # flutter_paystack_plus: ^2.1.0
   lucide_icons: ^0.257.0
   firebase_crashlytics: ^5.0.4
   firebase_performance: ^0.11.1+2

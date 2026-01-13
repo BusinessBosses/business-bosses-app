@@ -1,10 +1,10 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=/Users/eawuku/.shorebird/bin/cache/flutter/7e3858aedc3b37e9a6a15e1021206b9decb72eb7
-FLUTTER_APPLICATION_PATH=/Users/eawuku/Documents/GitHub/business-bosses-app
+FLUTTER_ROOT=C:\Users\wadas\fvm\versions\3.35.7
+FLUTTER_APPLICATION_PATH=C:\xampp\htdocs\flutter\business-bosses--v2
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_BUILD_DIR=build
-FLUTTER_BUILD_NAME=2.3.6
-FLUTTER_BUILD_NUMBER=82
+FLUTTER_BUILD_NAME=3.0.0
+FLUTTER_BUILD_NUMBER=90
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false

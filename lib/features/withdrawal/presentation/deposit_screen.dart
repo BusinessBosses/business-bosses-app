@@ -63,13 +63,12 @@ class _DepositsScreenState extends State<DepositsScreen> {
 
       if (offerings.current != null &&
           offerings.current!.availablePackages.isNotEmpty) {
-        // keep only non-subscription / one-time products
         final List<Package> filteredPackages =
             offerings.current!.availablePackages.where((Package pkg) {
           final StoreProduct product = pkg.storeProduct;
 
-          // ProductCategory can be null, so be safe
-          return product.productCategory == ProductCategory.nonSubscription;
+          return product.productCategory == ProductCategory.nonSubscription &&
+              coinIDs.contains(product.identifier);
         }).toList();
 
         setState(() {

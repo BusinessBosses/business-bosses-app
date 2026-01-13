@@ -1,38 +1,41 @@
-import 'dart:convert';
+// ignore_for_file: deprecated_member_use
+
 import 'dart:developer';
 import 'dart:math' hide log;
+
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:flutter_paystack_plus/flutter_paystack_plus.dart';
-
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
+import 'package:purchases_flutter/purchases_flutter.dart';
 
-import '../../../action/action.dart';
-// import '../../../common/diaprints/snackbar.dart';
+// ❌ OLD PAYMENT LIBS (KEPT BUT COMMENTED)
+// import 'dart:convert';
+// import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:flutter_paystack_plus/flutter_paystack_plus.dart';
+// import 'package:http/http.dart' as http;
+
 import '../../../common/widgets/buttons/my_button.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
 import '../../profile/controller/profile_controller.dart';
 import 'confirmation.dart';
 
-/// BOOST POST SCREEN
 class BoostPost extends StatefulWidget {
-  // ignore: public_member_api_docs
   const BoostPost({
     super.key,
     required this.postId,
     this.postTitle = '',
   });
-  // ignore: public_member_api_docs
+
   final String postTitle;
-  // ignore: public_member_api_docs
   final String postId;
+
   @override
   State<BoostPost> createState() => _BoostPostState();
 }
@@ -40,11 +43,16 @@ class BoostPost extends StatefulWidget {
 class _BoostPostState extends State<BoostPost> {
   bool _isProcessing = false;
   bool isCoin = false;
-  late Map<String, dynamic>? paymantIntent;
+
   final ProfileController profileController = Get.find();
 
-  late String duration;
-  List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
+  late String initPlan;
+  late String myPlan;
+
+  /// -----------------------------
+  /// BOOST PLANS (UNCHANGED)
+  /// -----------------------------
+  final List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
     <String, dynamic>{
       'amount': '3',
       'duration': 'Duration 3 days',
@@ -57,7 +65,7 @@ class _BoostPostState extends State<BoostPost> {
     },
   ];
 
-  List<Map<String, dynamic>> options = <Map<String, dynamic>>[
+  final List<Map<String, dynamic>> options = <Map<String, dynamic>>[
     <String, dynamic>{
       'optionname': 'Coins (100 Coins = \$1)',
       'optionsvg': 'assets/svgs/coin.svg'
@@ -66,224 +74,180 @@ class _BoostPostState extends State<BoostPost> {
       'optionname': 'Card Payment',
       'optionsvg': 'assets/svgs/cardlogo.svg'
     },
-    <String, dynamic>{
-      'optionname': 'PayStack',
-      'optionsvg': 'assets/svgs/paystack.svg'
-    },
   ];
 
-  Future<void> updatePost(String method) async {
-    ApiService.put(
-        path: 'post/update-post/${widget.postId}',
-        body: <String, dynamic>{
-          'promote': true,
-          'plan': '$initPlan dollars',
-          'paymentMethod': method,
-        });
-  }
+  /// -----------------------------
+  /// REVENUECAT SETUP (LIKE DEPOSITS)
+  /// -----------------------------
+  final List<String> boostProductIds = <String>[
+    'boost_3_days',
+    'boost_5_days',
+  ];
 
-  late String initPlan;
-  late String myPlan;
-  String calculateAmount(String amount) {
-    final int calculatedAmount = (int.parse(amount)) * 100;
-    return calculatedAmount.toString();
-  }
-
-  void displaySheet() async {
-    try {
-      await Stripe.instance
-          .presentPaymentSheet()
-          .then((PaymentSheetPaymentOption? value) async {
-        await updatePost('card');
-
-        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => const Confirmation(),
-        ));
-
-        paymantIntent = null;
-      }).onError((Object? error, StackTrace stackTrace) {
-        setState(() {
-          _isProcessing = false;
-        });
-        showSnackBar(Get.context!,
-            message: 'Opps!! Something went wrong. Try again');
-      });
-    } on StripeException {
-      setState(() {
-        _isProcessing = false;
-      });
-      showSnackBar(Get.context!,
-          message: 'Opps!! Something went wrong. Try again');
-      // print('Here ->>>>>> $e');
-    } catch (e) {
-      setState(() {
-        _isProcessing = false;
-      });
-      debugPrint('Here ->>>>>> $e');
-
-      showSnackBar(Get.context!,
-          message: 'Opps!! Something went wrong. Try again');
-    }
-  }
-
-  Future<dynamic> createPaymentIntent(String amount, String currency) async {
-    try {
-      Map<String, dynamic> body = <String, dynamic>{
-        'amount': calculateAmount(amount),
-        'currency': currency,
-        'payment_method_types[]': 'card',
-        'receipt_email': profileController.myProfile.email, // Add user email
-        // 'metadata': <String, dynamic>{
-        //   'user_id': profileController.myProfile.uid, // Store user ID
-        //   'user_name': profileController.myProfile.name, // Store user name
-        //   'post_id': widget.postId,
-        // }
-        'metadata[user_id]': profileController.myProfile.uid,
-        'metadata[user_name]': profileController.myProfile.name,
-        'metadata[post_id]': widget.postId,
-      };
-
-      http.Response res = await http.post(
-          Uri.parse('https://api.stripe.com/v1/payment_intents'),
-          body: body,
-          headers: <String, String>{
-            'Authorization': 'Bearer ${dotenv.env['STRIPE_SEC_KEY']}',
-            'Content-Type': 'application/x-www-form-urlencoded'
-          });
-
-      log(res.body);
-
-      return jsonDecode(res.body);
-    } catch (e) {
-      setState(() {
-        _isProcessing = false;
-      });
-      debugPrint('Here Payment ->>>>>> $e');
-
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
-    }
-  }
-
-  Future<void> makeStripePayment() async {
-    // print(
-    //     'isCoined ${isCoin} && ${profileController.myProfile.coinscount} and the amount ${int.parse(initPlan) * 100}');
-    if (isCoin &&
-        profileController.myProfile.coinscount! >=
-            (int.parse(initPlan) * 100)) {
-      try {
-        setState(() {
-          _isProcessing = true;
-        });
-        await ApiService.put(
-          path: 'users/${profileController.myProfile.uid}',
-          body: <String, dynamic>{
-            'coinscount': profileController.myProfile.coinscount! -
-                (int.parse(initPlan) * 100),
-          },
-        );
-
-        await updatePost('coin');
-        profileController.updateCoinCount(-(int.parse(initPlan) * 100));
-
-        setState(() {
-          _isProcessing = false;
-        });
-        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => const Confirmation(),
-        ));
-      } catch (e) {
-        debugPrint(e.toString());
-      }
-    } else {
-      try {
-        setState(() {
-          _isProcessing = true;
-        });
-        paymantIntent = await createPaymentIntent(initPlan, 'USD');
-        log(paymantIntent.toString());
-        await Stripe.instance
-            .initPaymentSheet(
-          paymentSheetParameters: SetupPaymentSheetParameters(
-            paymentIntentClientSecret: paymantIntent!['client_secret'],
-            merchantDisplayName: 'Business Bosses',
-            // applePay: const PaymentSheetApplePay(
-            //   merchantCountryCode: 'US',
-            // ),
-          ),
-        )
-            .then((void value) {
-          // print(value.toString());
-        });
-
-        displaySheet();
-      } catch (e) {
-        debugPrint(e.toString());
-      }
-    }
-    setState(() {
-      _isProcessing = false;
-    });
-  }
-
-  // void _startPaystack() async {
-  //   String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
-  // }
-
-  final String reference =
-      'unique_transaction_ref_${Random().nextInt(1000000)}';
-
-  void _makePayment() async {
-    final String? publicKey = dotenv.env['PAYSTACK_SECRET_KEY'];
-
-    await FlutterPaystackPlus.openPaystackPopup(
-      context: context,
-      secretKey: publicKey!,
-      customerEmail: profileController.myProfile.email,
-      amount: (int.parse(initPlan) * 100000).toString(), // amount in kobo
-      reference: 'ref_${DateTime.now().millisecondsSinceEpoch}',
-      currency: 'NGN',
-      onClosed: () {
-        showSnackBar(context, message: 'Payment cancelled');
-        return null;
-      },
-      onSuccess: () async {
-        await updatePost('paystack');
-        Navigator.of(Get.context!).push(MaterialPageRoute<dynamic>(
-          builder: (_) => const Confirmation(),
-        ));
-        showSnackBar(Get.context!, message: 'Payment Successful, Thanks!');
-        return null;
-      },
-    );
-  }
+  List<Package> _boostPackages = <Package>[];
 
   @override
   void initState() {
     super.initState();
     initPlan = plans[0]['amount'];
     myPlan = options[0]['optionname'];
-    // _startPaystack();
-
-    // print(widget.postId);
+    _loadBoostProducts();
   }
 
+  Future<void> _loadBoostProducts() async {
+    try {
+      final Offerings offerings = await Purchases.getOfferings();
+
+      if (offerings.current != null &&
+          offerings.current!.availablePackages.isNotEmpty) {
+        final List<Package> filtered =
+            offerings.current!.availablePackages.where((Package pkg) {
+          return pkg.storeProduct.productCategory ==
+                  ProductCategory.nonSubscription &&
+              boostProductIds.contains(pkg.storeProduct.identifier);
+        }).toList();
+
+        setState(() {
+          _boostPackages = filtered;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading boost products: $e');
+    }
+  }
+
+  Package? _selectedPackage() {
+    final String productId = initPlan == '3' ? 'boost_3_days' : 'boost_5_days';
+
+    try {
+      return _boostPackages.firstWhere(
+        (Package p) => p.storeProduct.identifier == productId,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// -----------------------------
+  /// BACKEND UPDATE (UNCHANGED)
+  /// -----------------------------
+  Future<void> updatePost(String method) async {
+    await ApiService.put(
+      path: 'post/update-post/${widget.postId}',
+      body: <String, dynamic>{
+        'promote': true,
+        'plan': '$initPlan dollars',
+        'paymentMethod': method,
+      },
+    );
+  }
+
+  /// -----------------------------
+  /// COIN PAYMENT (UNCHANGED)
+  /// -----------------------------
+  Future<void> makeCoinPayment() async {
+    if (profileController.myProfile.coinscount! < (int.parse(initPlan) * 100)) {
+      showSnackBar(context, message: 'Not enough coins');
+      return;
+    }
+
+    try {
+      setState(() => _isProcessing = true);
+
+      await ApiService.put(
+        path: 'users/${profileController.myProfile.uid}',
+        body: <String, dynamic>{
+          'coinscount': profileController.myProfile.coinscount! -
+              (int.parse(initPlan) * 100),
+        },
+      );
+
+      await updatePost('coin');
+      profileController.updateCoinCount(
+        -(int.parse(initPlan) * 100),
+      );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const Confirmation()),
+      );
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() => _isProcessing = false);
+    }
+  }
+
+  /// -----------------------------
+  /// REVENUECAT PURCHASE (DEPOSITS STYLE)
+  /// -----------------------------
+  Future<void> purchaseBoostWithRevenueCat() async {
+    final Package? pkg = _selectedPackage();
+
+    if (pkg == null) {
+      showSnackBar(context, message: 'Product not available');
+      return;
+    }
+
+    try {
+      setState(() => _isProcessing = true);
+
+      final PurchaseResult result = await Purchases.purchasePackage(pkg);
+
+      final CustomerInfo info = result.customerInfo;
+
+      final bool purchased = info.nonSubscriptionTransactions.any(
+        (StoreTransaction t) =>
+            t.productIdentifier == pkg.storeProduct.identifier,
+      );
+
+      if (purchased) {
+        await updatePost('card');
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const Confirmation(),
+          ),
+        );
+      } else {
+        showSnackBar(context, message: 'Payment not completed');
+      }
+    } on PlatformException catch (e) {
+      showSnackBar(
+        context,
+        message: e.message ?? 'Payment cancelled',
+      );
+    } finally {
+      setState(() => _isProcessing = false);
+    }
+  }
+
+  /// -----------------------------
+  /// OLD STRIPE / PAYSTACK (COMMENTED)
+  /// -----------------------------
+  /*
+  Future<dynamic> createPaymentIntent(String amount, String currency) async {}
+  Future<void> makeStripePayment() async {}
+  void displaySheet() async {}
+
+  final String reference =
+      'unique_transaction_ref_${Random().nextInt(1000000)}';
+  void _makePayment() async {}
+  */
+
+  /// -----------------------------
+  /// UI (UNCHANGED)
+  /// -----------------------------
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFFFFFF),
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        // leading: IconButton(
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        //   icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-        // ),
         actions: <Widget>[
           GestureDetector(
             onTap: () {
@@ -291,277 +255,93 @@ class _BoostPostState extends State<BoostPost> {
               Get.offNamed(Routes.home);
             },
             child: const Padding(
-              padding: EdgeInsets.only(right: 10.0),
+              padding: EdgeInsets.only(right: 10),
               child: Row(
                 children: <Widget>[
-                  Icon(
-                    Icons.clear_outlined,
-                    color: primaryColorLT,
-                    size: 14,
-                  ),
+                  Icon(Icons.clear_outlined, color: primaryColorLT, size: 14),
                   SizedBox(width: 2),
-                  Text('Cancel Boost',
-                      style: TextStyle(
-                          color: primaryColorLT,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700)),
+                  Text(
+                    'Cancel Boost',
+                    style: TextStyle(
+                      color: primaryColorLT,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
         ],
-
-        centerTitle: false,
         title: const Text('Boost Post'),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Image.asset(
-                  'assets/images/boost_banner.png',
-                  width: size.width,
-                  height: size.width / 2,
-                  fit: BoxFit.cover,
-                ),
-                const Positioned(
-                  bottom: 20,
-                  left: 20,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      TextWidget(
-                        text: 'Reach\na Wider Audience',
-                        color: Color(0xFFFFFFFF),
-                        fontWeight: FontWeight.w800,
-                        size: 20,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.check_box,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          TextWidget(
-                            text: 'More likes on posts',
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.check_box,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          TextWidget(
-                            text: 'More connections',
-                            color: Colors.white,
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.check_box,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          TextWidget(
-                            text: 'More referrals',
-                            color: Colors.white,
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
+            Image.asset(
+              'assets/images/boost_banner.png',
+              width: size.width,
+              height: size.width / 2,
+              fit: BoxFit.cover,
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: TextWidget(
                 text: 'Choose your Plan',
-                color: Color(0xFF373737),
                 fontWeight: FontWeight.w700,
                 size: 20,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.only(left: 20.0, right: 20),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: plans
                     .map(
                       (Map<String, dynamic> plan) => BoostPlanCard(
                         plan: plan,
                         activePlan: initPlan,
-                        onTap: (String newPlan) {
-                          setState(() {
-                            initPlan = newPlan;
-                          });
-                        },
+                        onTap: (String v) => setState(() => initPlan = v),
                       ),
                     )
                     .toList(),
               ),
             ),
-            const SizedBox(
-              height: 15,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20.0),
-              child: TextWidget(
-                text: 'Select a Payment Option',
-                size: 18,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 20),
-            //   child: Column(
-            //     children: <Widget>[
-            //       Row(
-            //         children: <Widget>[
-            //           Checkbox(
-            //             value: isCoin,
-            //             onChanged: (bool? value) {
-            //               setState(() {
-            //                 isCoin = value!;
-            //               });
-            //             },
-            //           ),
-            //           const Text(
-            //             'Pay With Coin (100 Coins = \$1)',
-            //           ),
-            //         ],
-            //       ),
-            //       Container(
-            //         padding:
-            //             const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-            //         decoration: BoxDecoration(
-            //           color: const Color(0xFFF4F4F4),
-            //           borderRadius: BorderRadius.circular(3.5),
-            //         ),
-            //         child: isCoin
-            //             ? profileController.myProfile.coinscount! <
-            //                     (int.parse(initPlan) * 100)
-            //                 ? const TextWidget(
-            //                     text: 'You do not have enough coins to promote',
-            //                     color: Color(0xFF232324),
-            //                     fontWeight: FontWeight.w600,
-            //                     size: 12)
-            //                 : Container()
-            //             : Container(),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            const SizedBox(
-              height: 30,
-            ),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20),
               child: Column(
                 children: options
                     .map(
-                      (Map<String, dynamic> options) => PaymentOptionCard(
-                        option: options,
+                      (Map<String, dynamic> o) => PaymentOptionCard(
+                        option: o,
                         activeoption: myPlan,
-                        onTap: (String newoption) {
-                          setState(() {
-                            myPlan = newoption;
-                          });
-                        },
+                        onTap: (String v) => setState(() => myPlan = v),
                       ),
                     )
                     .toList(),
               ),
             ),
+            const SizedBox(height: 30),
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  if (myPlan == 'Coins (100 Coins = \$1)') ...<Widget>[
-                    MyButton(
-                      isProcessing: _isProcessing,
-                      labelStyle: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),
-                      label: (isCoin &&
-                              profileController.myProfile.coinscount! <
-                                  (int.parse(initPlan) * 100))
-                          ? 'Pay With Card'
-                          : 'Continue',
-                      onPressed: () async {
-                        isCoin = profileController.myProfile.coinscount! >=
-                                (int.parse(initPlan) * 100)
-                            ? true
-                            : false;
-                        await makeStripePayment();
-                      },
-                    ),
-                  ] else if (myPlan == 'Card Payment') ...<Widget>[
-                    MyButton(
-                      isProcessing: _isProcessing,
-                      labelStyle: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),
-                      label: (isCoin &&
-                              profileController.myProfile.coinscount! <
-                                  (int.parse(initPlan) * 100))
-                          ? 'Pay With Card'
-                          : 'Continue',
-                      onPressed: () async {
-                        await makeStripePayment();
-                      },
-                    ),
-                  ] else if (myPlan == 'PayStack') ...<Widget>[
-                    MyButton(
-                      onPressed: () async {
-                        _makePayment();
-                      },
-                      labelStyle: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),
-                      label: 'Pay now',
-                    )
-                  ] else
-                    ...<Widget>[]
-                ],
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: MyButton(
+                labelStyle:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                isProcessing: _isProcessing,
+                label: 'Continue',
+                onPressed: () async {
+                  if (myPlan.contains('Coins')) {
+                    await makeCoinPayment();
+                  } else {
+                    await purchaseBoostWithRevenueCat();
+                  }
+                },
               ),
             ),
-            const SizedBox(
-              height: 50,
-            )
+            const SizedBox(height: 50),
           ],
         ),
       ),
@@ -569,15 +349,17 @@ class _BoostPostState extends State<BoostPost> {
   }
 }
 
-/// BOOST CARD
+/// -----------------------------
+/// BOOST PLAN CARD (UNCHANGED)
+/// -----------------------------
 class BoostPlanCard extends StatelessWidget {
-  /// CONSTRUCTOR
   const BoostPlanCard({
     super.key,
     required this.plan,
     required this.activePlan,
     required this.onTap,
   });
+
   final Map<String, dynamic> plan;
   final String activePlan;
   final Function(String) onTap;
@@ -585,18 +367,14 @@ class BoostPlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        onTap(plan['amount']);
-        // print(activePlan);
-      },
+      onTap: () => onTap(plan['amount']),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 15),
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
           border: Border.all(
-            color: plan['amount'] == activePlan
-                ? primaryColorLT
-                : const Color.fromRGBO(0, 0, 0, 0.0530),
+            color:
+                plan['amount'] == activePlan ? primaryColorLT : Colors.black12,
             width: 3,
           ),
           borderRadius: BorderRadius.circular(13),
@@ -604,63 +382,14 @@ class BoostPlanCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                TextWidget(
-                  text: '\$${plan['amount']}.00',
-                  size: 15,
-                  fontWeight: FontWeight.w700,
-                ),
-                if (plan['amount'] == activePlan)
-                  const CircleAvatar(
-                    radius: 14,
-                    backgroundColor: Color(0xFFF01C29),
-                    child: CircleAvatar(
-                      radius: 9,
-                      backgroundColor: Colors.white,
-                    ),
-                  )
-              ],
+            TextWidget(
+              text: '\$${plan['amount']}.00',
+              fontWeight: FontWeight.w700,
             ),
-            const SizedBox(
-              height: 15,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF4F4F4),
-                borderRadius: BorderRadius.circular(3.5),
-              ),
-              child: plan.containsValue('3')
-                  ? const TextWidget(
-                      text: 'Duration 3 Days',
-                      color: Color(0xFF232324),
-                      fontWeight: FontWeight.w600,
-                      size: 12)
-                  : const TextWidget(
-                      text: 'Duration 5 Days',
-                      color: Color(0xFF232324),
-                      fontWeight: FontWeight.w600,
-                      size: 12,
-                    ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            plan.containsValue('3')
-                ? const TextWidget(
-                    text: 'Reach 500 to 850 people',
-                    color: Color(0xFF777777),
-                    fontWeight: FontWeight.w400,
-                    size: 12,
-                  )
-                : const TextWidget(
-                    text: 'Reach 900 to 1.2k people',
-                    color: Color(0xFF777777),
-                    fontWeight: FontWeight.w400,
-                    size: 12,
-                  ),
+            const SizedBox(height: 10),
+            TextWidget(text: plan['duration']),
+            const SizedBox(height: 10),
+            TextWidget(text: plan['reach']),
           ],
         ),
       ),

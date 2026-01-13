@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/marketplace/presentation/subscriptio
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -184,7 +185,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
       final bool backendResponse = await makePayment();
       if (!backendResponse) {
         showSnackbar(
-          title: 'Backend Error',
+          title: 'Error',
           message: 'Failed to initialize subscription on server.',
           error: true,
         );
@@ -246,7 +247,14 @@ class _PremiumScreenState extends State<PremiumScreen> {
       final PurchaseResult purchaseResult =
           await Purchases.purchase(PurchaseParams.package(package));
       await handleSuccessfulPurchase(purchaseResult.customerInfo);
-    } catch (e) {
+    } on PlatformException catch (e) {
+      final PurchasesErrorCode errorCode = PurchasesErrorHelper.getErrorCode(e);
+
+      if (errorCode == PurchasesErrorCode.purchaseCancelledError) {
+        // ✅ User cancelled → do nothing
+        log('User cancelled Google Play purchase');
+        return;
+      }
       log('Offerings purchase failed: $e');
       // Fall back to direct product purchase
       await purchaseUsingProducts();
@@ -279,7 +287,14 @@ class _PremiumScreenState extends State<PremiumScreen> {
       final PurchaseResult purchaseResult =
           await Purchases.purchase(PurchaseParams.storeProduct(products[0]));
       await handleSuccessfulPurchase(purchaseResult.customerInfo);
-    } catch (e) {
+    } on PlatformException catch (e) {
+      final PurchasesErrorCode errorCode = PurchasesErrorHelper.getErrorCode(e);
+
+      if (errorCode == PurchasesErrorCode.purchaseCancelledError) {
+        // ✅ User cancelled → do nothing
+        log('User cancelled Google Play purchase');
+        return;
+      }
       log('Direct purchase failed: $e');
       showSnackbar(
         title: 'Purchase Failed',
