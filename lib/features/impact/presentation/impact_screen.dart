@@ -14,6 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
+import 'package:business_bosses_v2/features/impact/widgets/ranking_card.dart';
+
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../services/api_service.dart';
 
@@ -157,7 +160,6 @@ class _ReachScreenState extends State<ReachScreen> {
           return const SafetyModel();
         }
 
-        final dynamic invites = controller.data?['invitesThisWeek'] ?? 0;
         final dynamic rank =
             controller.data?['user']['weeklyRankingScore'] ?? 12;
 
@@ -165,80 +167,23 @@ class _ReachScreenState extends State<ReachScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              ReachHeaderCard(data: controller.data),
-
               /// Ambassador Challenge Sectionuser
               if (widget.user == profileController.myProfile)
-                Container(
-                  width: double.infinity,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade200),
+                if (widget.user == profileController.myProfile) ...<Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 10),
+                    child: ReachRankingCard(
+                      rank: rank,
+                      industry: widget.user.industry ?? 'General',
+                      location: widget.user.location ?? 'Global',
+                      onViewLeaderboard: () {
+                        Get.to(() => const LeaderboardScreen());
+                      },
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        'Boost Your Reach Score!',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'Boost your Reach and Ranking by creating content that earns more likes, views, and referrals. The higher your ranking, the more people you reach.',
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          color: Colors.black87,
-                          height: 1.3,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Challenge + Progress
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: LinearProgressIndicator(
-                          value: invites / 10,
-                          minHeight: 8,
-                          backgroundColor: Colors.grey.shade50,
-                          color: Colors.blueAccent,
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      // Rank Display
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Text(
-                            'Your Rank:',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          Text(
-                            '#$rank',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blueAccent,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                  ReachHeaderCard(data: controller.data),
+                ],
 
               const SizedBox(height: 15),
 
