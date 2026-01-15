@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
+import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
@@ -8,7 +8,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
 
 class ReachHeaderCard extends StatefulWidget {
   final dynamic data;
@@ -27,7 +26,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
     // Calculate Breakdown scores
     final Map<String, dynamic> dataMap =
         widget.data is Map ? widget.data : <String, dynamic>{};
-    final double profileScore = (dataMap['profileScore'] ?? 45).toDouble();
+    final double profileScore = (dataMap['profileScore'] ?? 10).toDouble();
     final double engagementScore =
         (dataMap['engagementScore'] ?? 30).toDouble();
     final double discoveryScore = (dataMap['discoveryScore'] ?? 20).toDouble();
@@ -342,7 +341,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
         'score': trustScore,
         'title': 'Verify your Business',
         'subtitle': 'Increase Trust Reach',
-        'expectedIncrease': 25,
+        'expectedIncrease': 100,
         'ctaLabel': 'Get Verified',
         'color': Colors.white,
         'iconColor': primaryColorLT,
