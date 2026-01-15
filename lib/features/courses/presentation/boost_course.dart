@@ -162,9 +162,11 @@ class _BoostCourseState extends State<BoostCourse> {
         -(int.parse(initPlan) * 100),
       );
 
+      if (!mounted) return;
+
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const Confirmation()),
+        MaterialPageRoute<void>(builder: (_) => const Confirmation()),
       );
     } catch (e) {
       if (kDebugMode) {
@@ -201,16 +203,20 @@ class _BoostCourseState extends State<BoostCourse> {
       if (purchased) {
         await updatePost('card');
 
+        if (!mounted) return;
+
         Navigator.push(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
             builder: (_) => const Confirmation(),
           ),
         );
       } else {
+        if (!mounted) return;
         showSnackBar(context, message: 'Payment not completed');
       }
     } on PlatformException catch (e) {
+      if (!mounted) return;
       showSnackBar(
         context,
         message: e.message ?? 'Payment cancelled',

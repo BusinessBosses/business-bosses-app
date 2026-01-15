@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
-import 'package:business_bosses_v2/features/forum/presentation/boost_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
 import 'package:business_bosses_v2/features/posts/widgets/all_forum_images.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
