@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class ProCustomButton extends StatefulWidget {
   final String text;
   final Widget? icon;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   bool back;
   bool loading;
   final Color? color;
@@ -15,7 +15,7 @@ class ProCustomButton extends StatefulWidget {
     super.key,
     required this.text,
     this.icon,
-    required this.onPressed,
+    this.onPressed,
     this.back = false,
     this.loading = false,
     this.color,

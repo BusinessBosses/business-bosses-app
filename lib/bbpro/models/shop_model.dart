@@ -27,6 +27,10 @@ class Shop {
   final UserModel? user;
   final String? imageType;
   final String category; // Added category field
+  final List<dynamic> keyIndividualDocs;
+  final List<dynamic> businessRegDocs;
+  final List<dynamic> proofOfAddressDocs;
+  final String verificationStatus;
 
   Shop({
     required this.id,
@@ -55,6 +59,10 @@ class Shop {
     this.url,
     this.imageType = 'circle',
     required this.category, // Added parameter in constructor
+    required this.keyIndividualDocs,
+    required this.businessRegDocs,
+    required this.proofOfAddressDocs,
+    required this.verificationStatus,
   });
 
   factory Shop.fromMap(Map<String, dynamic> json) {
@@ -86,6 +94,10 @@ class Shop {
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
       imageType: json['imageType'] ?? 'circle',
       category: json['category'] ?? '', // Added fromMap mapping
+      keyIndividualDocs: json['keyIndividualDocs'] ?? <dynamic>[],
+      businessRegDocs: json['businessRegDocs'] ?? <dynamic>[],
+      proofOfAddressDocs: json['proofOfAddressDocs'] ?? <dynamic>[],
+      verificationStatus: json['verificationStatus'] ?? 'pending',
     );
   }
 
@@ -117,6 +129,10 @@ class Shop {
       'user': user?.toMap(),
       'imageType': imageType,
       'category': category, // Added toMap mapping
+      'keyIndividualDocs': keyIndividualDocs,
+      'businessRegDocs': businessRegDocs,
+      'proofOfAddressDocs': proofOfAddressDocs,
+      'verificationStatus': verificationStatus,
     };
   }
 }
