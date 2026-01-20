@@ -1246,7 +1246,10 @@ class _PostTileState extends State<PostTile> {
                                         Get.to(() => ExpandedDonationScreen(
                                             donation: donation));
                                       },
-                                      child: const Text('Support'),
+                                      child: const Text(
+                                        'Support',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                     ),
                                 ],
                               ),
@@ -1423,7 +1426,10 @@ class _PostTileState extends State<PostTile> {
                                       },
                                     );
                                   },
-                                  child: const Text('Join')),
+                                  child: const Text(
+                                    'Join',
+                                    style: TextStyle(color: Colors.white),
+                                  )),
                             ))
                           : Expanded(
                               child: Row(

@@ -179,8 +179,10 @@ class ReachRankingCard extends StatelessWidget {
   }
 
   void _shareRanking() {
-    Share.share(
-      'I just ranked #$rank in the $industry industry on Business Bosses! 🚀 Check out my business reach.',
+    SharePlus.instance.share(
+      ShareParams(
+          text:
+              'I just ranked #$rank in the $industry industry on Business Bosses! 🚀 Check out my business reach.'),
     );
   }
 }
