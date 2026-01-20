@@ -65,7 +65,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   String? _instagram;
   String? _twitter;
   String? _ageRange;
-  String? _gender;
+  String? _gender = 'Male';
   String? _invitedBy;
   List<String>? _productsandservices;
 // String? blas;
@@ -204,7 +204,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     if (_genders.contains(user.gender)) {
       _gender = user.gender;
     } else {
-      _gender = null;
+      _gender = 'Male';
     }
     achievements = user.achievements ?? [];
     productsandservices = user.productsandservices ?? [];

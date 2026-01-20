@@ -78,49 +78,58 @@ class ReachRankingCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          const Icon(
-                            LucideIcons.briefcase,
-                            color: Colors.white70,
-                            size: 14,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            industry,
-                            style: const TextStyle(
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            const Icon(
+                              LucideIcons.briefcase,
                               color: Colors.white70,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                              size: 14,
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 2),
-                      Row(
-                        children: <Widget>[
-                          const Icon(
-                            LucideIcons.mapPin,
-                            color: Colors.white70,
-                            size: 14,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            location,
-                            style: const TextStyle(
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: ClipRect(
+                                child: Text(
+                                  industry,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.clip,
+                                  softWrap: false,
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: <Widget>[
+                            const Icon(
+                              LucideIcons.mapPin,
                               color: Colors.white70,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                              size: 14,
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            const SizedBox(width: 4),
+                            Text(
+                              location,
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

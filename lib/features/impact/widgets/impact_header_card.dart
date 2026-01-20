@@ -26,11 +26,11 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
     // Calculate Breakdown scores
     final Map<String, dynamic> dataMap =
         widget.data is Map ? widget.data : <String, dynamic>{};
-    final double profileScore = (dataMap['profileScore'] ?? 10).toDouble();
+    final double profileScore = (dataMap['profileReach'] ?? 10).toDouble();
     final double engagementScore =
-        (dataMap['engagementScore'] ?? 30).toDouble();
-    final double discoveryScore = (dataMap['discoveryScore'] ?? 20).toDouble();
-    final double trustScore = (dataMap['trustScore'] ?? 20).toDouble();
+        (dataMap['engagementReach'] ?? 30).toDouble();
+    final double discoveryScore = (dataMap['discoveryReach'] ?? 20).toDouble();
+    final double trustScore = (dataMap['trustReach'] ?? 20).toDouble();
 
     final int totalLikes = widget.data['totalLikes'] ?? 0;
     final int totalViews = widget.data['totalViews'] ?? 0;

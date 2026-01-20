@@ -9,6 +9,24 @@ import '../../../navigation/routes.dart';
 
 Widget friendProfileHeader(UserModel publicUser) {
   final ProfileController profileController = Get.find();
+  final Map<String, dynamic> dataMap = profileController.impact is Map
+      ? profileController.impact
+      : <String, dynamic>{};
+  final double profileScore = (dataMap['profileReach'] ?? 10).toDouble();
+  final double engagementScore = (dataMap['engagementReach'] ?? 30).toDouble();
+  final double discoveryScore = (dataMap['discoveryReach'] ?? 20).toDouble();
+  final double trustScore = (dataMap['trustReach'] ?? 20).toDouble();
+
+  final int totalLikes = profileController.impact['totalLikes'] ?? 0;
+  final int totalViews = profileController.impact ?? 0;
+
+  final int totalReachScore = (totalLikes +
+          totalViews +
+          profileScore +
+          engagementScore +
+          discoveryScore +
+          trustScore)
+      .toInt();
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     child: Column(
@@ -47,8 +65,7 @@ Widget friendProfileHeader(UserModel publicUser) {
             )),
             Expanded(
               child: CustomChildButton(
-                value: profileController.impact['totalLikes'] +
-                    profileController.impact['totalViews'],
+                value: totalReachScore,
                 caption: 'Reach',
                 onPressed: () {
                   Get.to(() => ReachScreen(user: publicUser));
