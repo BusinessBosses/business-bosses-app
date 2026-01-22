@@ -113,11 +113,11 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                   const SizedBox(width: 10),
                   const Row(
                     children: <Widget>[
-                      Text(
-                        'Share & Earn ',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w600),
-                      ),
+                      // Text(
+                      //   'Share & Earn ',
+                      //   style: TextStyle(
+                      //       fontSize: 12, fontWeight: FontWeight.w600),
+                      // ),
                       Icon(Icons.chevron_right, color: textColor, size: 20),
                     ],
                   ),

@@ -18,10 +18,13 @@ class SupplierController extends GetxController {
   RxBool loadingSearch = RxBool(false);
   RxBool isSupplierSearch = RxBool(false);
   RxString filterCategory = RxString('');
+  RxString filterLocation = RxString('');
 
   void clearSupplierSearch() {
     isSupplierSearch(false);
     searchedSuppliers.clear(); // Clear the search list
+    filterLocation.value = '';
+    filterCategory.value = '';
     update();
   }
 
@@ -81,9 +84,12 @@ class SupplierController extends GetxController {
     searchedSuppliers.clear();
     String lowerCaseQuery = query.toLowerCase().trim();
     String normalizedCategory = filterCategory.value.toLowerCase().trim();
+    String normalizedLocation = filterLocation.value.toLowerCase().trim();
 
-    // If search query is empty, clear the search results and exit early
-    if (lowerCaseQuery.isEmpty) {
+    // If all filters are empty, clear search and exit
+    if (lowerCaseQuery.isEmpty &&
+        normalizedCategory.isEmpty &&
+        normalizedLocation.isEmpty) {
       loadingSearch(false);
       isSupplierSearch(false); // Indicate that search is not active
       update();
@@ -100,13 +106,15 @@ class SupplierController extends GetxController {
 
         bool matchesCategory =
             normalizedCategory.isEmpty || itemCategory == normalizedCategory;
+        bool matchesLocation = normalizedLocation.isEmpty ||
+            (supplier.location?.toLowerCase() == normalizedLocation);
         bool matchesQuery = lowerCaseName.isEmpty ||
             lowerCaseName.contains(lowerCaseQuery) ||
             lowerCaseDescription.contains(lowerCaseQuery) ||
             (userName?.contains(lowerCaseQuery) ?? false) ||
             (userUsername?.contains(lowerCaseQuery) ?? false);
 
-        return matchesCategory && matchesQuery;
+        return matchesCategory && matchesQuery && matchesLocation;
       }),
     );
 

@@ -95,6 +95,16 @@ class MatchController extends GetxController {
               .toList();
 
           // 3. Assign the newly parsed list to our observable.
+          final String myIndustry = profileController.myProfile.industry ?? '';
+          if (myIndustry.isNotEmpty) {
+            fetchedMatches.sort((UserModel a, UserModel b) {
+              final bool aSame = (a.industry == myIndustry);
+              final bool bSame = (b.industry == myIndustry);
+              if (aSame && !bSame) return -1;
+              if (!aSame && bSame) return 1;
+              return 0;
+            });
+          }
           matchList.assignAll(fetchedMatches);
         } else {
           // If the API reports success: false, throw an error to be caught below

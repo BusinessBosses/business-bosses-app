@@ -1426,8 +1426,9 @@ class HomeController extends GetxController {
     });
 
     socket.onDisconnect((_) => debugPrint('Connection Disconnection'));
-    socket.onConnectError((dynamic err) => debugPrint(err));
-    socket.onError((dynamic err) => debugPrint(err));
+    socket.onConnectError(
+        (dynamic err) => debugPrint('Socket connection error: $err'));
+    socket.onError((dynamic err) => debugPrint('Socket error: $err'));
   }
 
   @override

@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/paymentoptioncard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicetypesection.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
@@ -701,7 +702,56 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                               ],
                             ),
                             // Text('Category: ${widget.service.category}'),
-                            // const SizedBox(height: 15),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    const Icon(Icons.place,
+                                        color: Colors.grey, size: 15),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      CountryCodes.nameToCode[
+                                              widget.service.location.trim()] ??
+                                          'N/A',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(width: 15),
+                                Row(
+                                  children: <Widget>[
+                                    const Icon(Icons.star,
+                                        color: Colors.amber, size: 15),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      (widget.service.user?.averageRating !=
+                                              null)
+                                          ? widget.service.user!.averageRating!
+                                              .toStringAsFixed(1)
+                                          : '0.0',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(width: 15),
+                                if (widget.service.category != null)
+                                  Flexible(
+                                    child: Text(
+                                      widget.service.category!,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 12),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 15),
                             DetectableText(
                               text: widget.service.description,
                               detectionRegExp: detectionRegExp(hashtag: false)!,

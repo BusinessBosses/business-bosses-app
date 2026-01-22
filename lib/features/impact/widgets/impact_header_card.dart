@@ -105,8 +105,8 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   icon: LucideIcons.heart,
                   iconColor: Colors.red[400]!,
                   iconBgColor: backgroundColor,
-                  title: 'Likes',
-                  subtitle: 'Post engagement',
+                  title: 'Interest',
+                  subtitle: 'Post Reaction',
                   value: totalLikes.toString(),
                 ),
 
@@ -115,7 +115,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   iconColor: Colors.blue[400]!,
                   iconBgColor: backgroundColor,
                   title: 'Views',
-                  subtitle: 'Content reach',
+                  subtitle: 'Listing/Post Views',
                   value: totalViews.toString(),
                 ),
 
@@ -123,8 +123,8 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   icon: LucideIcons.userCircle,
                   iconColor: Colors.green[400]!,
                   iconBgColor: backgroundColor,
-                  title: 'Profile Reach',
-                  subtitle: 'Profile effectiveness',
+                  title: 'Profile Strength',
+                  subtitle: 'Profile Completion Score',
                   value: profileScore.toInt().toString(),
                 ),
 
@@ -132,23 +132,23 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   icon: LucideIcons.messageCircle,
                   iconColor: Colors.purple[400]!,
                   iconBgColor: backgroundColor,
-                  title: 'Engagement Reach',
-                  subtitle: 'Interaction quality',
+                  title: 'Authority',
+                  subtitle: 'Challenge Wins',
                   value: engagementScore.toInt().toString(),
                 ),
                 _buildReachItem(
                   icon: LucideIcons.globe,
                   iconColor: Colors.orange[400]!,
                   iconBgColor: backgroundColor,
-                  title: 'Discovery Reach',
-                  subtitle: 'Visibility score',
+                  title: 'Interactions',
+                  subtitle: 'Business Actions',
                   value: discoveryScore.toInt().toString(),
                 ),
                 _buildReachItem(
                   icon: LucideIcons.shieldCheck,
                   iconColor: Colors.teal[400]!,
                   iconBgColor: backgroundColor,
-                  title: 'Trust Reach',
+                  title: 'Trust',
                   subtitle: 'Verification status',
                   value: trustScore.toInt().toString(),
                 ),
@@ -299,7 +299,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
       <String, dynamic>{
         'score': profileScore,
         'title': 'Complete Profile',
-        'subtitle': 'Maximize Profile Reach',
+        'subtitle': 'Maximize Profile Strength',
         'expectedIncrease': 10,
         'ctaLabel': 'Edit Profile',
         'color': Colors.white,
@@ -314,7 +314,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
       <String, dynamic>{
         'score': engagementScore,
         'title': 'Join a Challenge',
-        'subtitle': 'Boost Engagement Reach',
+        'subtitle': 'Boost Authority',
         'expectedIncrease': 15,
         'ctaLabel': 'Get Featured',
         'color': Colors.white,
@@ -327,7 +327,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
       <String, dynamic>{
         'score': discoveryScore,
         'title': 'Boost a Post',
-        'subtitle': 'Expand Discovery Reach',
+        'subtitle': 'Increase Interactions',
         'expectedIncrease': 20,
         'ctaLabel': 'Boost',
         'color': Colors.white,
@@ -340,7 +340,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
       <String, dynamic>{
         'score': trustScore,
         'title': 'Verify your Business',
-        'subtitle': 'Increase Trust Reach',
+        'subtitle': 'Increase Trust',
         'expectedIncrease': 100,
         'ctaLabel': 'Get Verified',
         'color': Colors.white,
@@ -352,10 +352,19 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
       },
     ];
 
-    allActions.sort((Map<String, dynamic> a, Map<String, dynamic> b) =>
+    // Filter out sections with a score of 100
+    final List<Map<String, dynamic>> pendingActions = allActions
+        .where(
+            (Map<String, dynamic> action) => (action['score'] as double) < 100)
+        .toList();
+
+    // Sort by lowest score
+    pendingActions.sort((Map<String, dynamic> a, Map<String, dynamic> b) =>
         (a['score'] as double).compareTo(b['score'] as double));
 
-    final List<Map<String, dynamic>> topActions = allActions.take(3).toList();
+    // Take top 3
+    final List<Map<String, dynamic>> topActions =
+        pendingActions.take(3).toList();
 
     return Column(
       children: topActions.map((Map<String, dynamic> action) {
