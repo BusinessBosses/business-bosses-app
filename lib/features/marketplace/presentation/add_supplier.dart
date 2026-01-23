@@ -21,13 +21,15 @@ import '../../../action/action.dart';
 import '../../../utils/theme/theme.dart';
 import '../../forum/widgets/field_container.dart';
 import '../../profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 
 /// SELLING SCREEN MARKETPLACE
 class AddSupplierScreen extends StatefulWidget {
   /// SELLING SCREEN MARKETPLACE
-  const AddSupplierScreen({super.key, this.supplier});
+  const AddSupplierScreen({super.key, this.supplier, this.shop});
 
   final SuppliersModel? supplier;
+  final Shop? shop;
   @override
   // ignore: library_private_types_in_public_api
   _AddSupplierScreenState createState() => _AddSupplierScreenState();
@@ -79,13 +81,35 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
     email = _supplier?.email ?? '';
     _emailController.text = _supplier?.email ?? '';
     String? existingCategory = _supplier?.category;
+
+    if (_supplier == null && widget.shop != null) {
+      descriptionController.text = widget.shop!.description;
+      description = widget.shop!.description;
+      _nameController.text = widget.shop!.name;
+      name = widget.shop!.name;
+      existingCategory = widget.shop!.category;
+      _selectedLocation = widget.shop!.location;
+
+      if (widget.shop!.email != null) {
+        _emailController.text = widget.shop!.email!;
+        email = widget.shop!.email;
+      }
+      if (widget.shop!.phone != null) {
+        _phoneController.text = widget.shop!.phone!;
+      }
+      if (widget.shop!.url != null) {
+        _urlController.text = widget.shop!.url!;
+        url = widget.shop!.url;
+      }
+    }
+
     if (categories.contains(existingCategory)) {
       _selectedCategory = existingCategory;
     } else {
       _selectedCategory =
           'Vehicle & Transportation'; // Default to "Other" if the category is invalid
     }
-    _selectedLocation = _supplier?.location;
+    _selectedLocation ??= _supplier?.location;
   }
 
   @override

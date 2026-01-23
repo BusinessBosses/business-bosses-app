@@ -16,6 +16,7 @@ import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_m
 import 'package:business_bosses_v2/features/matching_feature/widgets/premium_prompt.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -359,9 +360,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                       title: 'Create crowdfund',
                       icon: LucideIcons.coins,
                       color: Colors.green,
-                      onTap: () => Get.to(() => const DonationsPage(
-                            ishome: false,
-                          )),
+                      onTap: () => Get.toNamed(Routes.createdonationsscreen),
                     ),
                   ),
                   const SizedBox(width: 10),

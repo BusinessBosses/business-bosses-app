@@ -10,9 +10,11 @@ import 'package:business_bosses_v2/features/marketplace/controllers/requests_con
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 
 import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:country_list_pick/country_list_pick.dart';
@@ -648,7 +650,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     if (index == 1) {
       Get.to(() => AddBuyerRequests());
     } else if (index == 2) {
-      Get.to(() => const CreateServiceListing(isMarketplace: true));
+      _showSupplierOptions(context);
     } else {
       _showSellOptions(context);
     }
@@ -694,6 +696,63 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     ),
                     title: Text(
                       index == 0 ? 'Sell your product' : 'Sell your service',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showSupplierOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (_) => SizedBox(
+        height: 200,
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: ListView.separated(
+                  itemCount: 2,
+                  separatorBuilder: (_, __) => const Divider(),
+                  itemBuilder: (_, int index) => ListTile(
+                    onTap: () {
+                      Navigator.pop(context);
+                      if (index == 0) {
+                        Get.to(() => const AddSupplierScreen());
+                      } else {
+                        if (shopController.shop != null) {
+                          Get.to(() =>
+                              AddSupplierScreen(shop: shopController.shop));
+                        } else {
+                          showSnackbar(
+                              message:
+                                  "You don't have a shop in Biz Center yet!",
+                              error: true);
+                        }
+                      }
+                    },
+                    leading: SvgPicture.asset(
+                      index == 0
+                          ? 'assets/svgs/addproduct.svg'
+                          : 'assets/svgs/addservice.svg',
+                      height: 25,
+                      colorFilter: ColorFilter.mode(
+                          textColor.withValues(alpha: 1), BlendMode.srcIn),
+                    ),
+                    title: Text(
+                      index == 0 ? 'Add New Business' : 'Add from Biz Center',
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w700),
                     ),
