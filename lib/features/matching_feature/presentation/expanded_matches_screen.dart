@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
+import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
@@ -15,11 +16,13 @@ import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_m
 import 'package:business_bosses_v2/features/matching_feature/widgets/premium_prompt.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class ExpandedMatchesScreen extends StatefulWidget {
@@ -287,12 +290,13 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
   /// TOP SECTION WITH MATCH HEADER!!
   Widget buildTopSection() {
     return Obx(() {
-      final bool isInvestor =
-          profileController.currentMatchType.value.toLowerCase() == 'investor';
-      final bool isSeller =
-          profileController.currentMatchType.value.toLowerCase() == 'seller';
-      final bool isPartner =
-          profileController.currentMatchType.value.toLowerCase() == 'partner';
+      final String matchType =
+          profileController.currentMatchType.value.toLowerCase();
+      final bool isInvestor = matchType == 'investor';
+      final bool isSeller = matchType == 'seller';
+      final bool isPartner = matchType == 'partner';
+      // Default to Mentor if none of the above
+      final bool isMentor = !isSeller && !isInvestor && !isPartner;
 
       return Column(
         children: <Widget>[
@@ -309,79 +313,93 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
             totalMatches: 0,
             matchQuality: 0,
           ),
-          if (isInvestor ||
-              isPartner ||
-              (!isSeller && !isInvestor && !isPartner))
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: GestureDetector(
-                onTap: () {
-                  if (isInvestor) {
-                    Get.to(() => const DonationsPage(
-                          ishome: false,
-                        ));
-                  } else if (!isPartner && !isSeller && !isInvestor) {
-                    Get.to(() =>
-                        const AllLearningPostsScreen(isCoursesTile: false));
-                  } else {
-                    Get.to(() => BossUpPartner());
-                  }
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey.shade200),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
-                      )
-                    ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: <Widget>[
+                if (isPartner) ...<Widget>[
+                  Expanded(
+                    child: _buildActionCard(
+                      title: 'Claim partners Deals',
+                      icon: LucideIcons.heartHandshake,
+                      color: Colors.green,
+                      onTap: () => Get.to(() => BossUpPartner()),
+                    ),
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.green.shade50,
-                        ),
-                        child: Icon(
-                          isInvestor
-                              ? LucideIcons.coins
-                              : (!isSeller && !isInvestor && !isPartner)
-                                  ? LucideIcons.bookOpen
-                                  : LucideIcons.heartHandshake,
-                          color: Colors.green.shade700,
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          isInvestor
-                              ? 'Create a Crowdfund to get funding for your projects'
-                              : !isSeller && !isInvestor && !isPartner
-                                  ? 'Access learning resources to help you upskill'
-                                  : 'Access exclusive partner deals',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey.shade900,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      const Icon(LucideIcons.arrowRight, size: 18),
-                    ],
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _buildActionCard(
+                      title: 'Contact Ranking Business',
+                      icon: LucideIcons.trophy,
+                      color: Colors.orange,
+                      onTap: () => Get.to(() => const LeaderboardScreen()),
+                    ),
                   ),
-                ),
-              ),
+                ] else if (isSeller) ...<Widget>[
+                  Expanded(
+                    child: _buildActionCard(
+                      title: 'Boost your ranking',
+                      icon: LucideIcons.trendingUp,
+                      color: Colors.blue,
+                      onTap: () => Get.to(() => const LeaderboardScreen()),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _buildActionCard(
+                      title: 'Get more buyers',
+                      icon: LucideIcons.users,
+                      color: Colors.green,
+                      // Assuming ProshopdealsScreen is the marketplace listing page
+                      onTap: () => Get.to(() => ProshopdealsScreen()),
+                    ),
+                  ),
+                ] else if (isInvestor) ...<Widget>[
+                  Expanded(
+                    child: _buildActionCard(
+                      title: 'Create crowdfund',
+                      icon: LucideIcons.coins,
+                      color: Colors.green,
+                      onTap: () => Get.toNamed(Routes.createdonationsscreen),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _buildActionCard(
+                      title: 'Fund a project',
+                      icon: LucideIcons.heart,
+                      color: Colors.red,
+                      onTap: () => Get.to(() => const DonationsPage(
+                            ishome: false,
+                          )),
+                    ),
+                  ),
+                ] else ...<Widget>[
+                  // Mentor
+                  Expanded(
+                    child: _buildActionCard(
+                      title: 'Learn new skill',
+                      icon: LucideIcons.bookOpen,
+                      color: Colors.blue,
+                      onTap: () => Get.to(() =>
+                          const AllLearningPostsScreen(isCoursesTile: false)),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _buildActionCard(
+                      title: 'Create a course',
+                      icon: LucideIcons.plusCircle,
+                      color: Colors.purple,
+                      onTap: () => Get.to(() => AllForumScreen(
+                            isCourses: true,
+                          )),
+                    ),
+                  ),
+                ],
+              ],
             ),
+          ),
           if (isInvestor)
             Padding(
               padding: const EdgeInsets.only(bottom: 15.0),
@@ -400,7 +418,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                     color: Colors.grey.shade600,
                   )),
             ),
-          if (!isPartner && !isSeller && !isInvestor)
+          if (isMentor)
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text('Showing coaches available for mentorship',
@@ -409,64 +427,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                     color: Colors.grey.shade600,
                   )),
             ),
-          if (isSeller) ...<Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: GestureDetector(
-                onTap: () {
-                  Get.to(() => ProshopdealsScreen());
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey.shade200),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.green.shade50,
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/svgs/marketplace.svg',
-                          colorFilter: ColorFilter.mode(
-                            Colors.green.shade700,
-                            BlendMode.srcIn,
-                          ),
-                          width: 20,
-                          height: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'List your products/services in featured listing, get more customers',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey.shade900,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      const Icon(LucideIcons.arrowRight, size: 18),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+          if (isSeller)
             Padding(
               padding: const EdgeInsets.only(bottom: 0.0),
               child: Text('Showing buyers looking for sellers',
@@ -475,10 +436,65 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                     color: Colors.grey.shade600,
                   )),
             ),
-          ],
         ],
       );
     });
+  }
+
+  Widget _buildActionCard({
+    required String title,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 80,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            )
+          ],
+        ),
+        child: Row(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color.withValues(alpha: 0.1),
+              ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 18,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey.shade900,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// CONTENT SEPARATE FROM HEADER

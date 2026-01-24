@@ -15,6 +15,8 @@ class BuyerRequestController extends GetxController {
   final RxBool loading = false.obs;
   final RxBool error = false.obs;
   final RxBool loadingMore = false.obs;
+  final RxString filterCategory = ''.obs;
+  final RxString filterLocation = ''.obs;
   final RxList<BuyerRequestModel> _allRequests = <BuyerRequestModel>[].obs;
   final HomeController homeController = Get.find();
 
@@ -217,16 +219,29 @@ class BuyerRequestController extends GetxController {
 
   /// Filter requests by category or search query
   void filterBuyerRequests(String query) {
-    query = query.toLowerCase();
+    final String lowerQuery = query.toLowerCase().trim();
+    final String lowerCat = filterCategory.value.toLowerCase().trim();
+    final String lowerLoc = filterLocation.value.toLowerCase().trim();
 
-    if (query.isEmpty) {
+    if (lowerQuery.isEmpty && lowerCat.isEmpty && lowerLoc.isEmpty) {
       buyerRequests.assignAll(_allRequests);
     } else {
-      final List<BuyerRequestModel> filtered = _allRequests
-          .where((BuyerRequestModel r) =>
-              r.title.toLowerCase().contains(query) ||
-              r.description.toLowerCase().contains(query))
-          .toList();
+      final List<BuyerRequestModel> filtered = _allRequests.where(
+        (BuyerRequestModel r) {
+          final bool matchQuery = lowerQuery.isEmpty ||
+              r.title.toLowerCase().contains(lowerQuery) ||
+              r.description.toLowerCase().contains(lowerQuery);
+
+          final bool matchCat =
+              lowerCat.isEmpty || r.category.toLowerCase().trim() == lowerCat;
+
+          final bool matchLoc = lowerLoc.isEmpty ||
+              (r.user.location != null &&
+                  r.user.location!.toLowerCase() == lowerLoc);
+
+          return matchQuery && matchCat && matchLoc;
+        },
+      ).toList();
       buyerRequests.assignAll(filtered);
     }
     update();

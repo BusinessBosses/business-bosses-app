@@ -10,7 +10,6 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -29,33 +28,52 @@ class _MarketsPageState extends State<MarketsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (ScrollNotification scrollInfo) {
-          if (scrollInfo.metrics.pixels >=
-                  scrollInfo.metrics.maxScrollExtent - 100 &&
-              !Get.find<MarketController>().loadingMore.value &&
-              Get.find<MarketController>().hasMoreItems.value) {
-            Get.find<MarketController>().loadMore();
-          }
-          return false;
-        },
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
+    return GetBuilder<MarketController>(
+      builder: (MarketController controller) {
+        // Show loading state
+        if (controller.loading.value && controller.proItems.isEmpty) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: CircularProgressIndicator(),
             ),
-            child: GetBuilder<MarketController>(
-                builder: (MarketController controller) {
-              bool isFiltering = controller.isfiltered.value;
-              List<Object> markets = isFiltering
-                  ? controller.allFilteredItems
-                  : controller.proItems;
-              return Column(
+          );
+        }
+
+        bool isFiltering = controller.isfiltered.value;
+        List<Object> markets =
+            isFiltering ? controller.allFilteredItems : controller.proItems;
+
+        // Show empty state if no items
+        if (markets.isEmpty && !controller.loading.value) {
+          return const SafetyModel(
+            isLoading: false,
+            title: 'No Items Available',
+          );
+        }
+
+        return NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification scrollInfo) {
+            if (scrollInfo.metrics.pixels >=
+                    scrollInfo.metrics.maxScrollExtent - 100 &&
+                !controller.loadingMore.value &&
+                controller.hasMoreItems.value) {
+              controller.loadMore();
+            }
+            return false;
+          },
+          child: RefreshIndicator(
+            onRefresh: () async {
+              // Clear filters and reload data
+              controller.clearFilter();
+              await controller.initMarket();
+              controller.sortItems();
+            },
+            child: SingleChildScrollView(
+              child: Column(
                 children: <Widget>[
                   Container(
-                    margin: const EdgeInsets.only(top: 10),
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
                     child: ProshopdealsWidget(
                       title: 'NEW',
                       combinedList: controller.proItems
@@ -85,8 +103,9 @@ class _MarketsPageState extends State<MarketsPage> {
                   else
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 10),
+                          horizontal: 10, vertical: 0),
                       child: MasonryGridView.count(
+                        padding: EdgeInsets.zero,
                         crossAxisCount: 2,
                         mainAxisSpacing: 10.0,
                         crossAxisSpacing: 10.0,
@@ -160,11 +179,11 @@ class _MarketsPageState extends State<MarketsPage> {
                     ),
                   const SizedBox(height: 100),
                 ],
-              );
-            }),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

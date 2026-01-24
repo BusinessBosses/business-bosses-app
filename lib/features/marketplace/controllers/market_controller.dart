@@ -74,6 +74,25 @@ class MarketController extends GetxController {
     filteredProducts.clear();
     filteredServices.clear();
     allFilteredItems.clear();
+    searchQuery = '';
+    selectedCategory = null;
+
+    // Restore proItems from original data - ensure no duplicates
+    proItems.clear();
+    final Set<int> itemIds = <int>{};
+    for (final Product p in proProducts) {
+      if (!itemIds.contains(p.id)) {
+        proItems.add(p);
+        itemIds.add(p.id);
+      }
+    }
+    for (final Service s in proServices) {
+      if (!itemIds.contains(s.id)) {
+        proItems.add(s);
+        itemIds.add(s.id);
+      }
+    }
+
     isfiltered(false);
     update();
   }
@@ -146,13 +165,6 @@ class MarketController extends GetxController {
     if (!loadingMore.value) {
       loading(true);
     }
-    if (page == 1) {
-      proProducts.clear();
-      proServices.clear();
-      proItems.clear();
-      hasMoreItems(true);
-      paginationPage.value = 1;
-    }
 
     try {
       final List<ApiResponseModel> responses =
@@ -164,7 +176,13 @@ class MarketController extends GetxController {
       final ApiResponseModel responseProducts = responses[0];
       final ApiResponseModel responseServices = responses[1];
 
+      // Clear existing items only after successful fetch for first page
       if (page == 1) {
+        proProducts.clear();
+        proServices.clear();
+        proItems.clear();
+        hasMoreItems(true);
+        paginationPage.value = 1;
         totalItemCount.value = (responseProducts.data['count'] ?? 0) +
             (responseServices.data['count'] ?? 0);
       }
@@ -176,8 +194,18 @@ class MarketController extends GetxController {
             .map((dynamic e) => Product.fromJson(e as Map<String, dynamic>))
             .where((Product p) => p.isActive)
             .toList();
-        proProducts.addAll(newProducts);
-        proItems.addAll(newProducts);
+
+        // Prevent duplicates
+        final Set<int> existingProductIds =
+            proProducts.map((Product p) => p.id).toSet();
+        final List<Product> uniqueProducts = newProducts
+            .where((Product p) => !existingProductIds.contains(p.id))
+            .toList();
+
+        proProducts.addAll(uniqueProducts);
+        if (!isfiltered.value) {
+          proItems.addAll(uniqueProducts);
+        }
       }
 
       if (responseServices.success) {
@@ -187,8 +215,18 @@ class MarketController extends GetxController {
             .map((dynamic e) => Service.fromJson(e as Map<String, dynamic>))
             .where((Service s) => s.isActive)
             .toList();
-        proServices.addAll(newServices);
-        proItems.addAll(newServices);
+
+        // Prevent duplicates
+        final Set<int> existingServiceIds =
+            proServices.map((Service s) => s.id).toSet();
+        final List<Service> uniqueServices = newServices
+            .where((Service s) => !existingServiceIds.contains(s.id))
+            .toList();
+
+        proServices.addAll(uniqueServices);
+        if (!isfiltered.value) {
+          proItems.addAll(uniqueServices);
+        }
       }
 
       if (proItems.length >= totalItemCount.value) {
@@ -201,6 +239,7 @@ class MarketController extends GetxController {
       debugPrint('❌ initProItems error: $e');
     } finally {
       loading(false);
+      update(); // Ensure UI is updated
     }
   }
 
@@ -266,11 +305,11 @@ class MarketController extends GetxController {
     filteredServices.clear();
     allFilteredItems.clear();
 
-    // If query is empty, reset state and return
+    // If all filters are empty, reset state and return
     if (searchQuery.isEmpty &&
-        (selectedCategory == null || selectedCategory!.isEmpty)) {
-      isfiltered(false);
-      update();
+        (selectedCategory == null || selectedCategory!.isEmpty) &&
+        (selectedLocation == null || selectedLocation!.isEmpty)) {
+      clearFilter();
       return;
     }
 
@@ -282,8 +321,13 @@ class MarketController extends GetxController {
           p.name.toLowerCase().contains(searchQuery) ||
           p.description.toLowerCase().contains(searchQuery);
 
+      final String pCat = p.category.toLowerCase().trim();
       final bool matchesCategory = normalizedCategory == null ||
-          p.category.toLowerCase().trim() == normalizedCategory;
+          normalizedCategory.isEmpty ||
+          pCat == normalizedCategory ||
+          (pCat.isNotEmpty &&
+              (pCat.contains(normalizedCategory) ||
+                  normalizedCategory.contains(pCat)));
 
       if (matchesQuery && matchesCategory) {
         filteredProducts.add(p);
@@ -297,8 +341,13 @@ class MarketController extends GetxController {
           s.name.toLowerCase().contains(searchQuery) ||
           s.description.toLowerCase().contains(searchQuery);
 
+      final String sCat = s.category?.toLowerCase().trim() ?? '';
       final bool matchesCategory = normalizedCategory == null ||
-          (s.category?.toLowerCase().trim() == normalizedCategory);
+          normalizedCategory.isEmpty ||
+          (sCat.isNotEmpty &&
+              (sCat == normalizedCategory ||
+                  sCat.contains(normalizedCategory) ||
+                  normalizedCategory.contains(sCat)));
 
       if (matchesQuery && matchesCategory) {
         filteredServices.add(s);
@@ -309,7 +358,7 @@ class MarketController extends GetxController {
     // ✅ Update GetX observables so UI rebuilds
     proProducts.refresh();
     proServices.refresh();
-    proItems.assignAll(allFilteredItems);
+    // NOTE: Don't modify proItems here - MarketsPage uses isfiltered to choose display list
 
     // ✅ Apply sorting again for location/date
     sortItems();
@@ -343,8 +392,8 @@ class MarketController extends GetxController {
               ? b.createdAt
               : (b as Customitem).createdAt;
 
-      String aLoc = _extractLocation(a).toLowerCase();
-      String bLoc = _extractLocation(b).toLowerCase();
+      String aLoc = extractLocation(a).toLowerCase();
+      String bLoc = extractLocation(b).toLowerCase();
 
       bool aIsMyLocation = aLoc == myLocation;
       bool bIsMyLocation = bLoc == myLocation;
@@ -382,7 +431,7 @@ class MarketController extends GetxController {
     }
   }
 
-  String _extractLocation(Object item) {
+  String extractLocation(Object item) {
     if (item is Product) return item.location ?? '';
     if (item is Service) return item.location;
     if (item is Customitem) return item.shop?.location ?? '';
