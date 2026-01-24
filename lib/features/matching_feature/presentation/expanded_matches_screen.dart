@@ -34,7 +34,7 @@ class ExpandedMatchesScreen extends StatefulWidget {
 class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
     with TickerProviderStateMixin {
   final MatchController matchController = Get.put(MatchController());
-  final ProfileController profileController = Get.put(ProfileController());
+  final ProfileController profileController = Get.find();
 
   late TabController tabController;
   int selectedTabIndex = 0;

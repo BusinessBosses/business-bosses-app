@@ -255,10 +255,10 @@ var routes = [
     name: Routes.createevent,
     page: () => const CreateEvent(),
   ),
-  GetPage(
-    name: Routes.bottomnavscreen,
-    page: () => const BottomNavigationScreen(),
-  ),
+  // GetPage(
+  //   name: Routes.bottomnavscreen,
+  //   page: () => const BottomNavigationScreen(),
+  // ),
   GetPage(
     name: Routes.coinHistoryScreen,
     page: () => const CoinHistoryScreen(),

@@ -40,7 +40,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   Industry industry = Industry();
   bool isScrolled = true;
 
-  final ProfileController profileController = Get.put(ProfileController());
+  final ProfileController profileController = Get.find();
 
   // ignore: unused_field
   final CommunitiesController _communitiesController =

@@ -16,7 +16,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 
 class ShopController extends GetxController {
-  final ProfileController profileController = Get.put(ProfileController());
+  final ProfileController profileController = Get.find();
   final MarketController marketController = Get.put(MarketController());
   Shop? shop;
   Shop? userShop;

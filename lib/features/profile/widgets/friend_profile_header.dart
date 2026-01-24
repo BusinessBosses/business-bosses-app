@@ -18,7 +18,7 @@ Widget friendProfileHeader(UserModel publicUser) {
   final double trustScore = (dataMap['trustReach'] ?? 20).toDouble();
 
   final int totalLikes = profileController.impact['totalLikes'] ?? 0;
-  final int totalViews = profileController.impact ?? 0;
+  final int totalViews = profileController.impact['totalViews'] ?? 0;
 
   final int totalReachScore = (totalLikes +
           totalViews +

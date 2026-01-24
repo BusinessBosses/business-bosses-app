@@ -1,7 +1,12 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class LeaderboardScreen extends StatefulWidget {
@@ -15,11 +20,62 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final List<String> _filters = <String>['Global', 'Industry', 'Country'];
+  final ProfileController profileController = Get.find();
+
+  bool isLoading = false;
+
+  List<Map<String, dynamic>> globalLeaders = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>> industryLeaders = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>> countryLeaders = <Map<String, dynamic>>[];
+
+  Future<void> loadUsers() async {
+    setState(() => isLoading = true);
+
+    final ApiResponseModel globalResponse =
+        await ApiService.get(path: 'impact/top?limit=30');
+
+    final ApiResponseModel industryResponse = await ApiService.get(
+      path: 'impact/top/industry/${profileController.myProfile.uid}?limit=30',
+    );
+
+    final ApiResponseModel countryResponse = await ApiService.get(
+      path: 'impact/top/location/${profileController.myProfile.uid}?limit=30',
+    );
+
+    if (globalResponse.success) {
+      globalLeaders = _mapApiResponse(globalResponse.data);
+    }
+
+    if (industryResponse.success) {
+      industryLeaders = _mapApiResponse(industryResponse.data);
+    }
+
+    if (countryResponse.success) {
+      countryLeaders = _mapApiResponse(countryResponse.data);
+    }
+
+    setState(() => isLoading = false);
+  }
+
+  List<Map<String, dynamic>> _mapApiResponse(dynamic data) {
+    return (data as List).map((item) {
+      final UserModel user = UserModel.fromMap(item['user']);
+
+      return <String, dynamic>{
+        'rank': item['globalRank'],
+        'name': user.name,
+        'score': item['impactScore'],
+        'image': user.photoUrl ?? '',
+        'verified': user.hasShop, // keeping logic simple & safe
+      };
+    }).toList();
+  }
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: _filters.length, vsync: this);
+    loadUsers();
   }
 
   @override
@@ -63,61 +119,32 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   }
 
   Widget _buildLeaderboardList(String filterType) {
-    // Mock data for leaderboards
-    final List<Map<String, dynamic>> learderboardData = <Map<String, dynamic>>[
-      <String, dynamic>{
-        'rank': 1,
-        'name': 'Tech Innovators Inc.',
-        'score': 985,
-        'image': '',
-        'verified': true,
-      },
-      <String, dynamic>{
-        'rank': 2,
-        'name': 'Green Earth Solutions',
-        'score': 950,
-        'image': '',
-        'verified': true,
-      },
-      <String, dynamic>{
-        'rank': 3,
-        'name': 'Creative Minds Studio',
-        'score': 920,
-        'image': '',
-        'verified': false,
-      },
-      <String, dynamic>{
-        'rank': 4,
-        'name': 'Global Logistics',
-        'score': 890,
-        'image': '',
-        'verified': true,
-      },
-      <String, dynamic>{
-        'rank': 5,
-        'name': 'Healthy Living',
-        'score': 850,
-        'image': '',
-        'verified': false,
-      },
-      // Add more items to demonstrate list
-      ...List<Map<String, dynamic>>.generate(
-        10,
-        (int index) => <String, dynamic>{
-          'rank': index + 6,
-          'name': 'Business #${index + 6}',
-          'score': 800 - (index * 10),
-          'image': '',
-          'verified': index % 3 == 0,
-        },
-      ),
-    ];
+    List<Map<String, dynamic>> leaderboardData;
+
+    switch (filterType) {
+      case 'Industry':
+        leaderboardData = industryLeaders;
+        break;
+      case 'Country':
+        leaderboardData = countryLeaders;
+        break;
+      default:
+        leaderboardData = globalLeaders;
+    }
+
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (leaderboardData.isEmpty) {
+      return const Center(child: Text('No leaderboard data'));
+    }
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: learderboardData.length,
+      itemCount: leaderboardData.length,
       itemBuilder: (BuildContext context, int index) {
-        final Map<String, dynamic> item = learderboardData[index];
+        final Map<String, dynamic> item = leaderboardData[index];
         return _buildLeaderboardItem(item);
       },
     );
@@ -125,10 +152,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
   Widget _buildLeaderboardItem(Map<String, dynamic> item) {
     bool isTop3 = item['rank'] <= 3;
-    Color rankColor =
-        isTop3 ? const Color(0xFFFFD700) : Colors.grey.shade400; // Gold or Grey
-    if (item['rank'] == 2) rankColor = const Color(0xFFC0C0C0); // Silver
-    if (item['rank'] == 3) rankColor = const Color(0xFFCD7F32); // Bronze
+    Color rankColor = isTop3 ? const Color(0xFFFFD700) : Colors.grey.shade400;
+    if (item['rank'] == 2) rankColor = const Color(0xFFC0C0C0);
+    if (item['rank'] == 3) rankColor = const Color(0xFFCD7F32);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
