@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
 import 'package:business_bosses_v2/features/posts/widgets/all_forum_images.dart';
 import 'package:business_bosses_v2/features/posts/widgets/tag.dart';
+import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/time_format.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -607,11 +608,12 @@ class _ForumItemState extends State<ForumItem> {
                           if (widget.forum.user?.hasShop == true)
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => UserShopScreen(
-                                      user: widget.forum.user,
-                                      ismyshop: widget.forum.user!.uid ==
-                                          profileController.myProfile.uid,
-                                    ));
+                                Get.to(
+                                  () => PublicProfileScreen(
+                                    currentIndex: 1,
+                                  ),
+                                  arguments: widget.forum.user,
+                                );
                               },
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
