@@ -60,6 +60,9 @@ class MarketController extends GetxController {
 
   late List<String> connecteds =
       _profileController.myProfile.connecteds ?? <String>[];
+  RxList<Product> searchedProducts = <Product>[].obs;
+  RxList<Service> searchedServices = <Service>[].obs;
+  RxBool isSearching = false.obs;
 
   String marketDescription = '';
   String donationDescription = '';
@@ -104,6 +107,54 @@ class MarketController extends GetxController {
 
   void updateFiltered() {
     isfiltered(false);
+  }
+
+  Future<void> searchProducts(String query) async {
+    if (query.isEmpty) {
+      searchedProducts.clear();
+      isSearching(false);
+      update();
+      return;
+    }
+
+    isSearching(true);
+    loading(true);
+
+    final ApiResponseModel res =
+        await ApiService.get(path: 'goods/search?q=$query');
+
+    if (res.success) {
+      searchedProducts.assignAll(
+        (res.data['rows'] as List).map((e) => Product.fromJson(e)).toList(),
+      );
+    }
+
+    loading(false);
+    update();
+  }
+
+  Future<void> searchServices(String query) async {
+    if (query.isEmpty) {
+      searchedServices.clear();
+      isSearching(false);
+      update();
+      return;
+    }
+
+    isSearching(true);
+    loading(true);
+
+    final ApiResponseModel res =
+        await ApiService.get(path: 'services/search?q=$query');
+
+    if (res.success) {
+      searchedServices.assignAll(
+        (res.data['rows'] as List).map((e) => Service.fromJson(e)).toList(),
+      );
+    }
+
+    loading(false);
+    update();
   }
 
   void clearUserSearch() => isUserSearch(false);

@@ -77,7 +77,8 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
   }
 
   void _onSearchChanged(String query) {
-    _marketController.filterItems(query);
+    _marketController.searchProducts(query);
+    _marketController.searchServices(query);
     _supplierController.searchSuppliers(query);
     _buyerRequestController.filterBuyerRequests(query);
   }
@@ -463,8 +464,16 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
       return GetBuilder<MarketController>(
         builder: (MarketController controller) {
           final bool isFiltering = controller.isfiltered.value;
-          List<Object> items =
-              isFiltering ? controller.allFilteredItems : controller.proItems;
+          List<Object> items;
+
+          if (controller.isSearching.value) {
+            items = <Object>[
+              ...controller.searchedProducts,
+              ...controller.searchedServices,
+            ];
+          } else {
+            items = controller.proItems;
+          }
 
           // Filter locally based on tab
           if (_selectedTab == 1) {
