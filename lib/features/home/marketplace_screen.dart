@@ -1,28 +1,28 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
-
+import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
-
-import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
+import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-
-import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../bbpro/models/product_model.dart';
 import '../../utils/theme/theme.dart';
 import '../marketplace/controllers/market_controller.dart';
 import '../marketplace/presentation/marketplace_search_screen.dart';
@@ -50,7 +50,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   final List<String> categories = const <String>[
     'Agriculture, Food & Beverage',
-    'Books & Education',
+    'Learning & Education',
     'Construction & Real Estate',
     'Fashion & Beauty',
     'Finance & Legal',
@@ -61,7 +61,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     'Security, Safety & Equipment',
     'Technology, Games & Electronic',
     'Vehicle & Transportation',
-    'Other'
+    'Business Services & Consulting'
   ];
 
   @override
@@ -146,6 +146,31 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   child: _buildMainTabs(),
                 ),
                 // Category chips - only for first tab
+                SliverToBoxAdapter(
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: ProshopdealsWidget(
+                      title: 'NEW',
+                      combinedList: _marketController.proItems
+                          .where((Object item) {
+                            if (item is Product) {
+                              return item.images != null &&
+                                  item.images!.isNotEmpty &&
+                                  item.images!.first.isNotEmpty &&
+                                  item.user!.isSubscribed;
+                            } else {
+                              final Service service = item as Service;
+                              return service.images != null &&
+                                  service.images!.isNotEmpty &&
+                                  service.images![0].isNotEmpty &&
+                                  service.user!.isSubscribed;
+                            }
+                          })
+                          .take(10)
+                          .toList(),
+                    ),
+                  ),
+                ),
                 if (_marketplaceTabController.index == 0)
                   SliverToBoxAdapter(
                     child: _buildCategoryChips(),
@@ -431,6 +456,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     final List<String> displayCategories = <String>['All', ...categories];
 
     return Container(
+      margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
       color: Colors.white,
       child: Column(

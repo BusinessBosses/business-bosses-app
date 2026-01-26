@@ -47,7 +47,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
 
   final List<String> _categories = <String>[
     'Agriculture, Food & Beverage',
-    'Books & Education',
+    'Learning & Education',
     'Construction & Real Estate',
     'Fashion & Beauty',
     'Finance & Legal',
@@ -58,7 +58,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
     'Security, Safety & Equipment',
     'Technology, Games & Electronic',
     'Vehicle & Transportation',
-    'Other'
+    'Business Services & Consulting'
   ];
 
   @override

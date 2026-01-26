@@ -419,6 +419,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                               connectToUser,
                               context,
                             ),
+
                             const SizedBox(height: 15.0),
                             // },
                             const SizedBox(

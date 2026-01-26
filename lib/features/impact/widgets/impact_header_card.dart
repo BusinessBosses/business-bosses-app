@@ -11,7 +11,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 class ReachHeaderCard extends StatefulWidget {
   final dynamic data;
-  const ReachHeaderCard({super.key, this.data});
+  final bool isMe;
+  const ReachHeaderCard({super.key, this.data, this.isMe = false});
 
   @override
   State<ReachHeaderCard> createState() => _ReachHeaderCardState();
@@ -196,29 +197,30 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
         const SizedBox(height: 15),
 
         // Recommended Actions Card
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text(
-                'Recommended Actions',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: textColor,
+        if (widget.isMe)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Text(
+                  'Recommended Actions',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 15),
-              _buildImprovementActions(
-                profileScore,
-                engagementScore,
-                discoveryScore,
-                trustScore,
-              ),
-            ],
+                const SizedBox(height: 15),
+                _buildImprovementActions(
+                  profileScore,
+                  engagementScore,
+                  discoveryScore,
+                  trustScore,
+                ),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }

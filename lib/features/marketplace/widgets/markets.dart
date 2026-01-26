@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
-import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
@@ -72,29 +71,6 @@ class _MarketsPageState extends State<MarketsPage> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.only(top: 10, bottom: 10),
-                    child: ProshopdealsWidget(
-                      title: 'NEW',
-                      combinedList: controller.proItems
-                          .where((Object item) {
-                            if (item is Product) {
-                              return item.images != null &&
-                                  item.images!.isNotEmpty &&
-                                  item.images!.first.isNotEmpty &&
-                                  item.user!.isSubscribed;
-                            } else {
-                              final Service service = item as Service;
-                              return service.images != null &&
-                                  service.images!.isNotEmpty &&
-                                  service.images![0].isNotEmpty &&
-                                  service.user!.isSubscribed;
-                            }
-                          })
-                          .take(10)
-                          .toList(),
-                    ),
-                  ),
                   if (isFiltering && markets.isEmpty)
                     const SafetyModel(
                       isLoading: false,

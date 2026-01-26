@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
@@ -594,10 +595,41 @@ class _ForumItemState extends State<ForumItem> {
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                       ),
-                      subtitle: Text(
-                        widget.forum.user?.bio ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      subtitle: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            widget.forum.user?.bio ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if (widget.forum.user?.hasShop == true)
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => UserShopScreen(
+                                      user: widget.forum.user,
+                                      ismyshop: widget.forum.user!.uid ==
+                                          profileController.myProfile.uid,
+                                    ));
+                              },
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  const Text(
+                                    'View my Biz-Center',
+                                    style: TextStyle(
+                                        color: Colors.blue, fontSize: 14),
+                                  ),
+                                  const Icon(
+                                    LucideIcons.chevronRight,
+                                    size: 15,
+                                    color: Colors.blue,
+                                  ),
+                                ],
+                              ),
+                            )
+                        ],
                       ),
                     ),
                     widget.forum.title == null

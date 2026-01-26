@@ -38,7 +38,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
   List<PlatformFile> _attachments = <PlatformFile>[];
   String country = '';
   String selectedPartnershipType = 'Brand deals/Discounts';
-  String selectedCategory = 'Other';
+  String selectedCategory = 'Business Services & Consulting';
 
   /// Pick image (single)
   Future<void> _pickFile() async {
@@ -278,7 +278,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
               caption: 'Company Category *',
               items: const <String>[
                 'Agriculture, Food & Beverage',
-                'Books & Education',
+                'Learning & Education',
                 'Construction & Real Estate',
                 'Fashion & Beauty',
                 'Finance & Legal',
@@ -289,7 +289,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
                 'Security, Safety & Equipment',
                 'Technology, Games & Electronic',
                 'Vehicle & Transportation',
-                'Other'
+                'Business Services & Consulting'
               ],
               iconName: 'assets/svgs/dropdown.svg',
               onChanged: (String? val) => selectedCategory = val!,

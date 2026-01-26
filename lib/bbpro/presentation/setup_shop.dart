@@ -91,7 +91,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   };
   final List<String> categories = <String>[
     'Agriculture, Food & Beverage',
-    'Books & Education',
+    'Learning & Education',
     'Construction & Real Estate',
     'Fashion & Beauty',
     'Finance & Legal',

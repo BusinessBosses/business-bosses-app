@@ -38,6 +38,27 @@ class _ShopScreenState extends State<ShopScreen> {
   final ShopController shopController = Get.find();
   final ProfileController profileController = Get.find();
 
+  late final Map<String, dynamic> dataMap = profileController.impact is Map
+      ? profileController.impact
+      : <String, dynamic>{};
+  late final double profileScore = (dataMap['profileReach'] ?? 10).toDouble();
+  late final double engagementScore =
+      (dataMap['engagementReach'] ?? 30).toDouble();
+  late final double discoveryScore =
+      (dataMap['discoveryReach'] ?? 20).toDouble();
+  late final double trustScore = (dataMap['trustReach'] ?? 20).toDouble();
+
+  late final int totalLikes = profileController.impact['totalLikes'] ?? 0;
+  late final int totalViews = profileController.impact['totalViews'] ?? 0;
+
+  late final int totalReachScore = (totalLikes +
+          totalViews +
+          profileScore +
+          engagementScore +
+          discoveryScore +
+          trustScore)
+      .toInt();
+
   void showbottomsheet() {
     showModalBottomSheet(
       context: context,
@@ -339,6 +360,23 @@ class _ShopScreenState extends State<ShopScreen> {
                                   ),
                                 ),
                               ],
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            const CircleAvatar(
+                              radius: 2,
+                              backgroundColor: Colors.black87,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              '$totalReachScore Reach',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                              ),
                             ),
                           ],
                         ),

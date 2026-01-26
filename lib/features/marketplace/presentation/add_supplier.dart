@@ -61,7 +61,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final List<String> categories = <String>[
     'Agriculture, Food & Beverage',
-    'Books & Education',
+    'Learning & Education',
     'Construction & Real Estate',
     'Fashion & Beauty',
     'Finance & Legal',

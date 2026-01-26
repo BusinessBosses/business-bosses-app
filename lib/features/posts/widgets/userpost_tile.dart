@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/expanded_forum_view.dart';
@@ -564,13 +565,44 @@ class _PostTileState extends State<PostTile> {
                       ],
                     ),
                   ),
-                  subtitle: Text(
-                    widget.post.user?.bio != null &&
-                            widget.post.user!.bio!.isNotEmpty
-                        ? widget.post.user!.bio!
-                        : '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  subtitle: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        widget.post.user?.bio != null &&
+                                widget.post.user!.bio!.isNotEmpty
+                            ? widget.post.user!.bio!
+                            : '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (widget.post.user?.hasShop == true)
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(() => UserShopScreen(
+                                  user: widget.post.user,
+                                  ismyshop: widget.post.user!.uid ==
+                                      profileController.myProfile.uid,
+                                ));
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const Text(
+                                'View my Biz-Center',
+                                style:
+                                    TextStyle(color: Colors.blue, fontSize: 14),
+                              ),
+                              const Icon(
+                                LucideIcons.chevronRight,
+                                size: 15,
+                                color: Colors.blue,
+                              ),
+                            ],
+                          ),
+                        )
+                    ],
                   ),
                 ),
                 Padding(
