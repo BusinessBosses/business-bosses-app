@@ -1,5 +1,7 @@
+import 'dart:developer';
+
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -20,7 +22,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final List<String> _filters = <String>['Global', 'Industry', 'Country'];
+
   final ProfileController profileController = Get.find();
+  final ShopController shopController = Get.find();
 
   bool isLoading = false;
 
@@ -28,45 +32,58 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   List<Map<String, dynamic>> industryLeaders = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> countryLeaders = <Map<String, dynamic>>[];
 
+  /// ===============================
+  /// LOAD SHOPS (NOT USERS)
+  /// ===============================
   Future<void> loadUsers() async {
     setState(() => isLoading = true);
 
+    ApiResponseModel? industryResponse;
+    ApiResponseModel? countryResponse;
+
     final ApiResponseModel globalResponse =
-        await ApiService.get(path: 'impact/top?limit=30');
+        await ApiService.get(path: 'impact/top/shops?limit=30');
 
-    final ApiResponseModel industryResponse = await ApiService.get(
-      path: 'impact/top/industry/${profileController.myProfile.uid}?limit=30',
-    );
+    if (profileController.myProfile.hasShop && shopController.shop != null) {
+      industryResponse = await ApiService.get(
+        path: 'impact/top/shops/industry/${shopController.shop!.id}?limit=30',
+      );
 
-    final ApiResponseModel countryResponse = await ApiService.get(
-      path: 'impact/top/location/${profileController.myProfile.uid}?limit=30',
-    );
+      countryResponse = await ApiService.get(
+        path: 'impact/top/shops/location/${shopController.shop!.id}?limit=30',
+      );
+    }
 
     if (globalResponse.success) {
+      log(globalResponse.data.toString());
       globalLeaders = _mapApiResponse(globalResponse.data);
     }
 
-    if (industryResponse.success) {
-      industryLeaders = _mapApiResponse(industryResponse.data);
+    if (industryResponse?.success == true) {
+      industryLeaders = _mapApiResponse(industryResponse!.data);
     }
 
-    if (countryResponse.success) {
-      countryLeaders = _mapApiResponse(countryResponse.data);
+    if (countryResponse?.success == true) {
+      countryLeaders = _mapApiResponse(countryResponse!.data);
     }
 
     setState(() => isLoading = false);
   }
 
+  /// ===============================
+  /// MAP SHOP RESPONSE → SAME UI DATA
+  /// ===============================
   List<Map<String, dynamic>> _mapApiResponse(dynamic data) {
     return (data as List).map((item) {
-      final UserModel user = UserModel.fromMap(item['user']);
+      final Map<String, dynamic> shop =
+          Map<String, dynamic>.from(item['shop'] ?? <dynamic, dynamic>{});
 
       return <String, dynamic>{
-        'rank': item['globalRank'],
-        'name': user.name,
-        'score': item['impactScore'],
-        'image': user.photoUrl ?? '',
-        'verified': user.hasShop, // keeping logic simple & safe
+        'rank': item['globalRank'] ?? 0,
+        'name': shop['name'] ?? '',
+        'score': item['impactScore'] ?? 0,
+        'image': shop['image'] ?? '',
+        'verified': shop['verificationStatus'] == 'approved',
       };
     }).toList();
   }
@@ -150,6 +167,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     );
   }
 
+  /// ===============================
+  /// SAME LEADERBOARD ITEM UI
+  /// ===============================
   Widget _buildLeaderboardItem(Map<String, dynamic> item) {
     bool isTop3 = item['rank'] <= 3;
     Color rankColor = isTop3 ? const Color(0xFFFFD700) : Colors.grey.shade400;
@@ -199,7 +219,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: NetworkImageWithPlaceHolder(
-                placeHolder: LucideIcons.user,
+                placeHolder: LucideIcons.store,
                 imageUrl: item['image'] ?? '',
                 width: 45,
                 height: 45,
@@ -215,17 +235,22 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                   children: <Widget>[
                     Flexible(
                       child: Text(
+                        item['name'],
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        item['name'],
                         style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     if (item['verified'] == true) ...<Widget>[
                       const SizedBox(width: 4),
-                      const Icon(LucideIcons.badgeCheck,
-                          size: 16, color: Colors.blue),
+                      const Icon(
+                        LucideIcons.badgeCheck,
+                        size: 16,
+                        color: Colors.blue,
+                      ),
                     ],
                   ],
                 ),

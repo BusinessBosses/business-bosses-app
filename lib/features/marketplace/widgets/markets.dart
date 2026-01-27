@@ -41,8 +41,7 @@ class _MarketsPageState extends State<MarketsPage> {
         }
 
         bool isFiltering = controller.isfiltered.value;
-        List<Object> markets =
-            isFiltering ? controller.allFilteredItems : controller.proItems;
+        List<Object> markets = controller.proItems;
 
         // Show empty state if no items
         if (markets.isEmpty && !controller.loading.value) {

@@ -169,22 +169,20 @@ class _ReachScreenState extends State<ReachScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               /// Ambassador Challenge Sectionuser
-              if (widget.user == profileController.myProfile)
-                if (widget.user == profileController.myProfile) ...<Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0, vertical: 10),
-                    child: ReachRankingCard(
-                      rank: rank,
-                      industry: widget.user.industry ?? 'General',
-                      location: widget.user.location ?? 'Global',
-                      onViewLeaderboard: () {
-                        Get.to(() => const LeaderboardScreen());
-                      },
-                    ),
-                  ),
-                  ReachHeaderCard(data: controller.data),
-                ],
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                child: ReachRankingCard(
+                  data: controller.data,
+                  rank: rank,
+                  industry: widget.user.industry ?? 'General',
+                  location: widget.user.location ?? 'Global',
+                  onViewLeaderboard: () {
+                    Get.to(() => const LeaderboardScreen());
+                  },
+                ),
+              ),
+              ReachHeaderCard(data: controller.data),
 
               const SizedBox(height: 15),
 

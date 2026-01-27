@@ -2,7 +2,6 @@
 
 import 'package:business_bosses_v2/analytics/presentation/explorebusinessbosses_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
-import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_history.dart';

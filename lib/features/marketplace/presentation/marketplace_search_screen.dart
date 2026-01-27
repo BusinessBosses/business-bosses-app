@@ -463,7 +463,6 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
       // Products, Services, or All
       return GetBuilder<MarketController>(
         builder: (MarketController controller) {
-          final bool isFiltering = controller.isfiltered.value;
           List<Object> items;
 
           if (controller.isSearching.value) {

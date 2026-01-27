@@ -1,10 +1,14 @@
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ReachRankingCard extends StatelessWidget {
+  final dynamic data;
   final int rank;
   final String industry;
   final String location;
@@ -12,6 +16,7 @@ class ReachRankingCard extends StatelessWidget {
 
   const ReachRankingCard({
     super.key,
+    required this.data,
     required this.rank,
     required this.industry,
     required this.location,
@@ -20,6 +25,7 @@ class ReachRankingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController = Get.find<ProfileController>();
     return Stack(children: <Widget>[
       Container(
         width: double.infinity,
@@ -48,8 +54,8 @@ class ReachRankingCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Text(
-                  'Your Global Rank',
+                Text(
+                  '${data['user']['uid'] == profileController.myProfile.uid ? 'Your ' : ''}Global Rank',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -69,7 +75,7 @@ class ReachRankingCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
-                  '#$rank',
+                  '#${data['globalRank'] ?? 10}',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 48,
