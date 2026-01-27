@@ -192,6 +192,7 @@ class _ReachScreenState extends State<ReachScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
                 child: ReachRankingCard(
+                  data: controller.data,
                   rank: rank,
                   industry: widget.user.industry ?? 'General',
                   location: widget.user.location ?? 'Global',
