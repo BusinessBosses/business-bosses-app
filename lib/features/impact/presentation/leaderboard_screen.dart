@@ -74,7 +74,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   /// MAP SHOP RESPONSE → SAME UI DATA
   /// ===============================
   List<Map<String, dynamic>> _mapApiResponse(dynamic data) {
-    return (data as List).map((item) {
+    return (data as List<dynamic>)
+        .cast<Map<String, dynamic>>()
+        .map<Map<String, dynamic>>((Map<String, dynamic> item) {
       final Map<String, dynamic> shop =
           Map<String, dynamic>.from(item['shop'] ?? <dynamic, dynamic>{});
 

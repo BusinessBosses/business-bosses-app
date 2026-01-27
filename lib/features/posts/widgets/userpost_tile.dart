@@ -1,6 +1,6 @@
 import 'dart:convert';
+
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/expanded_forum_view.dart';
@@ -32,6 +32,7 @@ import 'package:lottie/lottie.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';

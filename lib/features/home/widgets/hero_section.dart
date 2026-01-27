@@ -12,7 +12,9 @@ import 'package:business_bosses_v2/features/forum/presentation/all_learning_post
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
+import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
@@ -92,6 +94,8 @@ class _HeroSectionState extends State<HeroSection> {
   final ChallengeController challengeController = Get.find();
   late Industry industry;
 
+  late final ReachController controller;
+
   static const Map<String, WinnerCardConfig> cardConfigs =
       <String, WinnerCardConfig>{
     'boss': WinnerCardConfig(
@@ -139,11 +143,19 @@ class _HeroSectionState extends State<HeroSection> {
       iconColor: Color(0xFF93C5FD),
       accentColor: Color(0x3360A5FA),
     ),
+    'ranking': WinnerCardConfig(
+      title: 'Top Ranked This Week',
+      icon: LucideIcons.barChart2,
+      gradientColors: <Color>[backgroundColor, backgroundColor],
+      iconColor: primaryColorLT,
+      accentColor: primaryColorLT,
+    ),
   };
 
   @override
   void initState() {
     super.initState();
+    controller = Get.find<ReachController>();
     user = homeController.bossOfTheWeek;
     mentor = homeController.mentorOfTheWeek;
     backer = homeController.backerOfTheWeek;
@@ -152,6 +164,16 @@ class _HeroSectionState extends State<HeroSection> {
     industry = challengeController.categories[0];
     _startAutoRotation();
     heroItems = <HeroItem>[
+      HeroItem(
+        id: '0',
+        type: 'ranking',
+        title: 'Top Ranked This Week',
+        icon: 'assets/images/app_logo_2.png',
+        subtitle: _profileController.myProfile.weeklyRank ?? 'N/A',
+        image: '',
+        description: '',
+        action: 'View your Match',
+      ),
       HeroItem(
         id: '1',
         type: 'boss',
@@ -212,16 +234,6 @@ class _HeroSectionState extends State<HeroSection> {
         description: ambassador?.bio ?? '',
         action: 'Follow',
         action2: 'Become Ambassador',
-      ),
-      HeroItem(
-        id: '6',
-        type: 'matches',
-        title: 'Find your business matches',
-        icon: 'assets/images/app_logo_2.png',
-        subtitle:
-            'See your top matches and connect with people and opportunities that can help your business grow.',
-        image: '',
-        action: 'View your Match',
       ),
     ];
   }
@@ -402,6 +414,25 @@ class _HeroSectionState extends State<HeroSection> {
     final WinnerCardConfig? config = cardConfigs[item.type];
     if (config == null) return const SizedBox();
 
+    final Map<String, dynamic>? dataMap =
+        controller.myReach is Map ? controller.myReach : <String, dynamic>{};
+    final double profileScore = (dataMap?['profileReach'] ?? 10).toDouble();
+    final double engagementScore =
+        (dataMap?['engagementReach'] ?? 30).toDouble();
+    final double discoveryScore = (dataMap?['discoveryReach'] ?? 20).toDouble();
+    final double trustScore = (dataMap?['trustReach'] ?? 20).toDouble();
+
+    final int totalLikes = controller.myReach?['totalLikes'] ?? 0;
+    final int totalViews = controller.myReach?['totalViews'] ?? 0;
+
+    final int totalReachScore = (totalLikes +
+            totalViews +
+            profileScore +
+            engagementScore +
+            discoveryScore +
+            trustScore)
+        .toInt();
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
@@ -457,8 +488,8 @@ class _HeroSectionState extends State<HeroSection> {
                     Icon(LucideIcons.chevronRight, color: textColor, size: 20),
                   ],
                 ),
-                // FIXED: Only show user info if not matches card
-                if (item.type != 'matches')
+                // FIXED: Only show user info if not matches or ranking card
+                if (item.type != 'matches' && item.type != 'ranking')
                   GestureDetector(
                     onTap: () {
                       UserModel? targetUser;
@@ -581,6 +612,43 @@ class _HeroSectionState extends State<HeroSection> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+
+                if (item.type == 'ranking')
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Obx(
+                      () => controller.loading.value
+                          ? const Center(
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            )
+                          : RichText(
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: textColor,
+                                ),
+                                children: <TextSpan>[
+                                  const TextSpan(
+                                      text: 'Your Reach Ranking is '),
+                                  TextSpan(
+                                    text:
+                                        '#${controller.data?['globalRank'] ?? 'N/A'}',
+                                    style: const TextStyle(
+                                      color: primaryColorLT,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                    ),
+                  ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -602,7 +670,9 @@ class _HeroSectionState extends State<HeroSection> {
                                   );
                                 }
                               }
-                            } else {
+                            } else if (item.type == 'boss' ||
+                                item.type == 'mentor' ||
+                                item.type == 'backer') {
                               connectToUser();
                             }
                             break;
@@ -610,7 +680,7 @@ class _HeroSectionState extends State<HeroSection> {
                             referuser();
                             break;
                           case 'View your Match':
-                            Get.to(() => ExpandedMatchesScreen());
+                            Get.to(() => const LeaderboardScreen());
                             break;
                           case 'Claim Deal':
                             final Uri url = Uri.parse(partner['companyUrl']);
@@ -625,7 +695,9 @@ class _HeroSectionState extends State<HeroSection> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: item.type == 'ranking'
+                              ? const Color(0xFFEF4444)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         padding: const EdgeInsets.symmetric(
@@ -644,17 +716,23 @@ class _HeroSectionState extends State<HeroSection> {
                                           ? LucideIcons.checkCircle2
                                           : item.action == 'View Matches'
                                               ? LucideIcons.users
-                                              : LucideIcons.userPlus,
+                                              : item.type == 'ranking'
+                                                  ? LucideIcons.userPlus
+                                                  : LucideIcons.userPlus,
                               size: 16,
-                              color: primaryColorLT,
+                              color: item.type == 'ranking'
+                                  ? Colors.white
+                                  : primaryColorLT,
                             ),
                             const SizedBox(width: 5),
                             Text(
                               item.action,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
-                                color: primaryColorLT,
+                                color: item.type == 'ranking'
+                                    ? Colors.white
+                                    : primaryColorLT,
                               ),
                             ),
                           ],
@@ -798,6 +876,18 @@ class _HeroSectionState extends State<HeroSection> {
                     return GestureDetector(
                       onTap: () {
                         Get.to(() => ExpandedMatchesScreen());
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 0.0),
+                        child: _buildWinnerCard(item),
+                      ),
+                    );
+                  }
+
+                  if (item.type == 'ranking') {
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(() => const LeaderboardScreen());
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 0.0),
