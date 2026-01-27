@@ -49,7 +49,7 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
 
   final List<String> categories = const <String>[
     'Agriculture, Food & Beverage',
-    'Books & Education',
+    'Learning & Education',
     'Construction & Real Estate',
     'Fashion & Beauty',
     'Finance & Legal',
@@ -59,7 +59,7 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
     'Media & Entertainment',
     'Transport & Logistics',
     'Travel & Hospitality',
-    'Others',
+    'Business Services & Consulting',
   ];
 
   @override

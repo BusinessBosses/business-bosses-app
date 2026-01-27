@@ -13,6 +13,8 @@ class ReachRankingCard extends StatelessWidget {
   final String industry;
   final String location;
   final VoidCallback onViewLeaderboard;
+  final bool showShareButton;
+  final bool isMe;
 
   const ReachRankingCard({
     super.key,
@@ -21,6 +23,8 @@ class ReachRankingCard extends StatelessWidget {
     required this.industry,
     required this.location,
     required this.onViewLeaderboard,
+    this.showShareButton = true,
+    this.isMe = true,
   });
 
   @override
@@ -55,19 +59,20 @@ class ReachRankingCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  '${data['user']['uid'] == profileController.myProfile.uid ? 'Your ' : ''}Global Rank',
-                  style: TextStyle(
+                  isMe ? 'Your Global Rank' : 'Global Rank',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                IconButton(
-                  onPressed: _shareRanking,
-                  icon: const Icon(LucideIcons.share, color: Colors.white),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
+                if (showShareButton)
+                  IconButton(
+                    onPressed: _shareRanking,
+                    icon: const Icon(LucideIcons.share, color: Colors.white),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
               ],
             ),
             const SizedBox(height: 15),

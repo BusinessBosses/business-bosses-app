@@ -54,7 +54,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
     <String, String>{'id': '6', 'name': 'Manufacturing'},
     <String, String>{'id': '7', 'name': 'Real Estate'},
     <String, String>{'id': '8', 'name': 'Hospitality'},
-    <String, String>{'id': '9', 'name': 'Other'},
+    <String, String>{'id': '9', 'name': 'Business Services & Consulting'},
   ];
 
   final List<Map<String, String>> categories = <Map<String, String>>[
