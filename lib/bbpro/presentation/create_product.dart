@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/listing_success_screen.dart';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
@@ -809,7 +810,12 @@ class _CreateProductListingState extends State<CreateProductListing> {
         ProductAddResult response =
             await shopController.addProducts(productListing);
         if (response.success) {
-          Get.back();
+          Get.off(() => ListingSuccessScreen(
+                isBuyerRequest: false,
+                industry: category!,
+                location:
+                    country.isEmpty ? shopController.shop!.location : country,
+              ));
           showSnackbar(
             message: 'Product Added Successfully!',
           );

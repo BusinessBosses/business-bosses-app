@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/listing_success_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
@@ -174,7 +175,18 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
               'Request ${widget.request == null ? 'added' : 'edited'} succesfully!',
         );
       }
-      Navigator.pop(Get.context!);
+      if (widget.request == null) {
+        // Only show success screen for NEW requests
+        Get.to(() => ListingSuccessScreen(
+              isBuyerRequest: true,
+              industry: _selectedCategory,
+              location: country.isEmpty
+                  ? (shopController.shop?.location ?? '')
+                  : country,
+            ));
+      } else {
+        Navigator.pop(Get.context!);
+      }
     } else {
       showSnackbar(
           message:

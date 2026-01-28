@@ -617,8 +617,8 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
-                  padding: const EdgeInsets.only(
-                      left: 15, right: 15, top: 10, bottom: 100),
+                  padding:
+                      const EdgeInsets.only(left: 15, right: 15, bottom: 100),
                   itemCount: _filteredRequests.length,
                   itemBuilder: (BuildContext context, int index) {
                     final BuyerRequestModel request = _filteredRequests[index];

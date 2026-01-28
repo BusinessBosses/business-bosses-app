@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/listing_success_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/gestures.dart';
@@ -1560,7 +1561,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           final ServiceAddResult result =
               await shopController.addService(serviceData);
           if (result.success) {
-            Get.back();
+            Get.off(() => ListingSuccessScreen(
+                  isBuyerRequest: false,
+                  industry: category!,
+                  location: location.isEmpty
+                      ? shopController.shop!.location
+                      : location,
+                ));
             showSnackbar(message: 'Service Added Successfully!');
 
             marketController.initProItems(page: 1);
