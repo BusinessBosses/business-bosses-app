@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/common/widgets/tiles/custom_tile.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
-import 'package:business_bosses_v2/features/forum/presentation/all_learning_posts.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -57,7 +56,13 @@ class _LearningPageState extends State<LearningPage> {
                           builder: (BuildContext context) {
                             List<Industry> activeIndustries = controller
                                 .getCategoryIndustries(Constants.LEARNINGID)
-                                .where((Industry industry) => industry.active!)
+                                .where((Industry industry) =>
+                                    industry.active! &&
+                                    // Hide "Courses & Tutorial" and "Groups & Community"
+                                    industry.industryId !=
+                                        '4acc0db7-7c89-4122-b15d-7552f590af23' &&
+                                    industry.industryId !=
+                                        '6bfb3524-f05e-4148-b4b2-a7a47b768b56')
                                 .toList();
 
                             return GridView.builder(
@@ -93,22 +98,11 @@ class _LearningPageState extends State<LearningPage> {
                                   label: industry.industry!,
                                   photo: industry.photo!,
                                   onTap: () {
-                                    // Courses & Tutorials tiles
-                                    if (industry.industryId ==
-                                        '4acc0db7-7c89-4122-b15d-7552f590af23') {
-                                      Get.to(() => const AllLearningPostsScreen(
-                                          isCoursesTile: true));
-                                    } else if (industry.industryId ==
-                                        '6bfb3524-f05e-4148-b4b2-a7a47b768b56') {
-                                      Get.to(() => const AllLearningPostsScreen(
-                                          isCoursesTile: false));
-                                    } else {
-                                      // Pass only the ID to avoid type error
-                                      Get.toNamed(
-                                        Routes.allforumscreen,
-                                        arguments: industry.industryId,
-                                      );
-                                    }
+                                    // Pass only the ID to avoid type error
+                                    Get.toNamed(
+                                      Routes.allforumscreen,
+                                      arguments: industry.industryId,
+                                    );
                                   },
                                 );
                               },

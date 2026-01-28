@@ -1,11 +1,15 @@
 // Import your controllers and other necessary files
-import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
-import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/suppliers_grid_tile.dart';
 import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
@@ -17,12 +21,12 @@ import 'package:business_bosses_v2/features/matching_feature/widgets/premium_pro
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class ExpandedMatchesScreen extends StatefulWidget {
@@ -103,12 +107,17 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
           ));
     }
     return Obx(() {
+      // Sort matches by industry - same industry first
+      final String? myIndustry = profileController.myProfile.industry;
+      final List<UserModel> sortedMatches =
+          _sortMatchesByIndustry(matches, myIndustry);
+
       return ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: matches.length,
+        itemCount: sortedMatches.length,
         itemBuilder: (BuildContext context, int index) {
-          final UserModel match = matches[index];
+          final UserModel match = sortedMatches[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: MatchCard(
@@ -131,8 +140,13 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
       return const Center(child: Text('No matches to display.'));
     }
 
-    final List<UserModel> clearMatches = matches.take(2).toList();
-    final List<UserModel> blurredMatches = matches.skip(2).toList();
+    // Sort matches by industry - same industry first
+    final String? myIndustry = profileController.myProfile.industry;
+    final List<UserModel> sortedMatches =
+        _sortMatchesByIndustry(matches, myIndustry);
+
+    final List<UserModel> clearMatches = sortedMatches.take(2).toList();
+    final List<UserModel> blurredMatches = sortedMatches.skip(2).toList();
 
     return Column(
       children: <Widget>[
@@ -261,7 +275,10 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
               children: <Widget>[
                 Obx(
                   () => profileController.currentMatchType.value == 'seller'
-                      ? BuyerRequestsScreen()
+                      ? BuyerRequestsScreen(
+                          filterByIndustry:
+                              profileController.myProfile.industry,
+                        )
                       : buildMatchesListSection(),
                 ),
               ],
@@ -320,7 +337,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                 if (isPartner) ...<Widget>[
                   Expanded(
                     child: _buildActionCard(
-                      title: 'Claim partners Deals',
+                      title: 'Claim Partners Deals',
                       icon: LucideIcons.heartHandshake,
                       color: Colors.green,
                       onTap: () => Get.to(() => BossUpPartner()),
@@ -329,35 +346,34 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                   const SizedBox(width: 10),
                   Expanded(
                     child: _buildActionCard(
-                      title: 'Contact Ranking Business',
-                      icon: LucideIcons.trophy,
+                      title: 'Create buying Request',
+                      icon: LucideIcons.shoppingCart,
                       color: Colors.orange,
-                      onTap: () => Get.to(() => const LeaderboardScreen()),
+                      onTap: () => Get.to(() => AddBuyerRequests()),
                     ),
                   ),
                 ] else if (isSeller) ...<Widget>[
                   Expanded(
                     child: _buildActionCard(
-                      title: 'Boost your ranking',
-                      icon: LucideIcons.trendingUp,
+                      title: 'Reach More Buyers',
+                      icon: LucideIcons.users,
                       color: Colors.blue,
-                      onTap: () => Get.to(() => const LeaderboardScreen()),
+                      onTap: () => Get.to(() => AddBuyerRequests()),
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: _buildActionCard(
-                      title: 'Get more buyers',
-                      icon: LucideIcons.users,
-                      color: Colors.green,
-                      // Assuming ProshopdealsScreen is the marketplace listing page
-                      onTap: () => Get.to(() => ProshopdealsScreen()),
+                    child: _buildPopupMenuActionCard(
+                      title: 'Get Listing Featured',
+                      icon: LucideIcons.star,
+                      color: Colors.amber,
+                      context: context,
                     ),
                   ),
                 ] else if (isInvestor) ...<Widget>[
                   Expanded(
                     child: _buildActionCard(
-                      title: 'Create crowdfund',
+                      title: 'Create Crowdfund',
                       icon: LucideIcons.coins,
                       color: Colors.green,
                       onTap: () => Get.toNamed(Routes.createdonationsscreen),
@@ -366,7 +382,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                   const SizedBox(width: 10),
                   Expanded(
                     child: _buildActionCard(
-                      title: 'Fund a project',
+                      title: 'Support a Project',
                       icon: LucideIcons.heart,
                       color: Colors.red,
                       onTap: () => Get.to(() => const DonationsPage(
@@ -388,12 +404,10 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                   const SizedBox(width: 10),
                   Expanded(
                     child: _buildActionCard(
-                      title: 'Create a course',
-                      icon: LucideIcons.plusCircle,
+                      title: 'Share expertise',
+                      icon: LucideIcons.graduationCap,
                       color: Colors.purple,
-                      onTap: () => Get.to(() => AllForumScreen(
-                            isCourses: true,
-                          )),
+                      onTap: _showIndustrySelectionBottomSheet,
                     ),
                   ),
                 ],
@@ -430,7 +444,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
           if (isSeller)
             Padding(
               padding: const EdgeInsets.only(bottom: 0.0),
-              child: Text('Showing buyers looking for sellers',
+              child: Text('Showing buyer requests from your industry',
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey.shade600,
@@ -449,6 +463,120 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
   }) {
     return GestureDetector(
       onTap: onTap,
+      child: Container(
+        height: 80,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            )
+          ],
+        ),
+        child: Row(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color.withValues(alpha: 0.1),
+              ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 18,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey.shade900,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPopupMenuActionCard({
+    required String title,
+    required IconData icon,
+    required Color color,
+    required BuildContext context,
+  }) {
+    return PopupMenuButton<String>(
+      offset: const Offset(0, 80),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      onSelected: (String value) {
+        if (value == 'product') {
+          Get.to(() => const CreateProductListing());
+        } else if (value == 'service') {
+          Get.to(() => const CreateServiceListing());
+        }
+      },
+      itemBuilder: (BuildContext context) {
+        return <PopupMenuEntry<String>>[
+          PopupMenuItem<String>(
+            value: 'product',
+            child: Row(
+              children: <Widget>[
+                SvgPicture.asset(
+                  'assets/svgs/addproduct.svg',
+                  colorFilter: const ColorFilter.mode(
+                    textColor,
+                    BlendMode.srcIn,
+                  ),
+                  height: 15,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Create a Product',
+                  style: TextStyle(
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          PopupMenuItem<String>(
+            value: 'service',
+            child: Row(
+              children: <Widget>[
+                SvgPicture.asset(
+                  'assets/svgs/addservice.svg',
+                  height: 15,
+                  colorFilter: const ColorFilter.mode(
+                    textColor,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Create a Service',
+                  style: TextStyle(
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ];
+      },
       child: Container(
         height: 80,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
@@ -531,6 +659,234 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
           buildSupplierView(),
           const SizedBox(height: 200),
         ],
+      ),
+    );
+  }
+
+  /// Helper method to sort matches by industry
+  /// Users with the same industry as the current user appear first
+  List<UserModel> _sortMatchesByIndustry(
+      List<UserModel> matches, String? myIndustry) {
+    if (myIndustry == null || myIndustry.isEmpty) {
+      return matches; // Return unsorted if user has no industry
+    }
+
+    final List<UserModel> sameIndustry = <UserModel>[];
+    final List<UserModel> otherIndustry = <UserModel>[];
+
+    for (final UserModel match in matches) {
+      if (match.industry?.toLowerCase() == myIndustry.toLowerCase()) {
+        sameIndustry.add(match);
+      } else {
+        otherIndustry.add(match);
+      }
+    }
+
+    return <UserModel>[...sameIndustry, ...otherIndustry];
+  }
+
+  /// Show bottom sheet with industry selection
+  void _showIndustrySelectionBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) => _buildIndustrySelectionBottomSheet(),
+    );
+  }
+
+  /// Build the industry selection bottom sheet
+  Widget _buildIndustrySelectionBottomSheet() {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.75,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      child: Column(
+        children: <Widget>[
+          // Handle bar
+          Container(
+            margin: const EdgeInsets.only(top: 12),
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          // Header
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                const Expanded(
+                  child: Text(
+                    'Where do you want to share your expertise?',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1),
+          // Industry list
+          Expanded(
+            child: GetBuilder<CommunitiesController>(
+              builder: (CommunitiesController controller) {
+                if (controller.loading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (controller.error.value) {
+                  return const Center(
+                    child: Text('Error loading industries'),
+                  );
+                }
+
+                // Get only learning industries and filter out specific ones
+                final List<Industry> learningIndustries = controller
+                    .getCategoryIndustries(Constants.LEARNINGID)
+                    .where((Industry industry) =>
+                        // Hide "Courses & Tutorial" and "Groups & Community"
+                        industry.industryId !=
+                            '4acc0db7-7c89-4122-b15d-7552f590af23' &&
+                        industry.industryId !=
+                            '6bfb3524-f05e-4148-b4b2-a7a47b768b56')
+                    .toList();
+
+                if (learningIndustries.isEmpty) {
+                  return const Center(
+                    child: Text('No learning topics available'),
+                  );
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: learningIndustries.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final Industry industry = learningIndustries[index];
+                    return _buildIndustryTile(industry);
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Build individual industry tile
+  Widget _buildIndustryTile(Industry industry) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context); // Close bottom sheet
+        Get.to(
+          () => CreateCourseScreen(
+            industryId: industry.industryId ?? '',
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: <Widget>[
+            // Industry image
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: industry.photo != null && industry.photo!.isNotEmpty
+                  ? Image.network(
+                      industry.photo!,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                      errorBuilder: (BuildContext context, Object error,
+                          StackTrace? stackTrace) {
+                        return _buildPlaceholderImage();
+                      },
+                    )
+                  : _buildPlaceholderImage(),
+            ),
+            const SizedBox(width: 12),
+            // Industry name and description
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    industry.industry ?? 'Unknown Industry',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  if (industry.description != null &&
+                      industry.description!.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        industry.description!,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade600,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            // Arrow icon
+            Icon(
+              LucideIcons.chevronRight,
+              color: Colors.grey.shade400,
+              size: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Build placeholder image for industries without photos
+  Widget _buildPlaceholderImage() {
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        color: primaryBlue.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: const Icon(
+        LucideIcons.briefcase,
+        color: primaryBlue,
+        size: 30,
       ),
     );
   }

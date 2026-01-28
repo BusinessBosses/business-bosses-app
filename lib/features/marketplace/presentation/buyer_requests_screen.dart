@@ -17,7 +17,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class BuyerRequestsScreen extends StatefulWidget {
-  const BuyerRequestsScreen({super.key});
+  final String? filterByIndustry;
+
+  const BuyerRequestsScreen({super.key, this.filterByIndustry});
 
   @override
   State<BuyerRequestsScreen> createState() => _BuyerRequestsScreenState();
@@ -45,19 +47,32 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
     final RxList<BuyerRequestModel> allRequests =
         _buyerRequestController.buyerRequests;
     setState(() {
+      List<BuyerRequestModel> baseRequests =
+          List<BuyerRequestModel>.from(allRequests);
+
+      // Filter by industry if specified (for seller matches)
+      if (widget.filterByIndustry != null &&
+          widget.filterByIndustry!.isNotEmpty) {
+        baseRequests = baseRequests
+            .where((BuyerRequestModel r) =>
+                r.user.industry?.toLowerCase() ==
+                widget.filterByIndustry!.toLowerCase())
+            .toList();
+      }
+
       if (_selectedFilter == 'All') {
-        _filteredRequests = List<BuyerRequestModel>.from(allRequests);
+        _filteredRequests = baseRequests;
       } else if (_selectedFilter == 'Active') {
-        _filteredRequests = allRequests
+        _filteredRequests = baseRequests
             .where((BuyerRequestModel r) =>
                 DateTime.tryParse(r.deadline)?.isAfter(DateTime.now()) == true)
             .toList();
       } else if (_selectedFilter == 'Has Offers') {
-        _filteredRequests = allRequests
+        _filteredRequests = baseRequests
             .where((BuyerRequestModel r) => r.offerCount > 0)
             .toList();
       } else if (_selectedFilter == 'Closing Soon') {
-        _filteredRequests = allRequests
+        _filteredRequests = baseRequests
             .where((BuyerRequestModel r) =>
                 DateTime.tryParse(r.deadline)!
                     .difference(DateTime.now())

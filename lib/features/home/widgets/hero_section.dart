@@ -414,25 +414,6 @@ class _HeroSectionState extends State<HeroSection> {
     final WinnerCardConfig? config = cardConfigs[item.type];
     if (config == null) return const SizedBox();
 
-    final Map<String, dynamic>? dataMap =
-        controller.myReach is Map ? controller.myReach : <String, dynamic>{};
-    final double profileScore = (dataMap?['profileReach'] ?? 10).toDouble();
-    final double engagementScore =
-        (dataMap?['engagementReach'] ?? 30).toDouble();
-    final double discoveryScore = (dataMap?['discoveryReach'] ?? 20).toDouble();
-    final double trustScore = (dataMap?['trustReach'] ?? 20).toDouble();
-
-    final int totalLikes = controller.myReach?['totalLikes'] ?? 0;
-    final int totalViews = controller.myReach?['totalViews'] ?? 0;
-
-    final int totalReachScore = (totalLikes +
-            totalViews +
-            profileScore +
-            engagementScore +
-            discoveryScore +
-            trustScore)
-        .toInt();
-
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
@@ -680,7 +661,7 @@ class _HeroSectionState extends State<HeroSection> {
                             referuser();
                             break;
                           case 'View your Match':
-                            Get.to(() => const LeaderboardScreen());
+                            Get.to(() => const ExpandedMatchesScreen());
                             break;
                           case 'Claim Deal':
                             final Uri url = Uri.parse(partner['companyUrl']);
