@@ -368,50 +368,32 @@ class _PostTileState extends State<PostTile> {
                       }
                     },
                     child: widget.post.user!.isSubscribed
-                        ? profileController.myProfile.uid ==
-                                widget.post.user!.uid
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 0.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Text(
-                                      widget.post.user!.name != null
-                                          ? widget.post.user!.name!
-                                          : widget.post.user!.username,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    SvgPicture.asset(
-                                      'assets/svgs/premiumbadge.svg',
-                                      height: 9,
-                                      colorFilter: ColorFilter.mode(
-                                          primaryColorLT, BlendMode.srcIn),
-                                    ),
-                                  ],
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 0.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Flexible(
+                                  child: Text(
+                                    widget.post.user!.name != null
+                                        ? widget.post.user!.name!
+                                        : widget.post.user!.username,
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
                                 ),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.only(top: 0.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Text(
-                                      widget.post.user!.name != null
-                                          ? widget.post.user!.name!
-                                          : widget.post.user!.username,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    SvgPicture.asset(
-                                      'assets/svgs/premiumbadge.svg',
-                                      height: 9,
-                                      colorFilter: ColorFilter.mode(
-                                          primaryColorLT, BlendMode.srcIn),
-                                    ),
-                                  ],
+                                const SizedBox(width: 5),
+                                SvgPicture.asset(
+                                  'assets/svgs/premiumbadge.svg',
+                                  height: 9,
+                                  colorFilter: ColorFilter.mode(
+                                      primaryColorLT, BlendMode.srcIn),
                                 ),
-                              )
+                              ],
+                            ),
+                          )
                         : Text(
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
