@@ -1,5 +1,6 @@
-import 'dart:developer';
-
+import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:country_list_pick/country_list_pick.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -27,19 +28,42 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   final ShopController shopController = Get.find();
 
   bool isLoading = false;
+  bool isCountryLoading = false;
+  bool isIndustryLoading = false;
+
+  String? selectedCountry;
+  String? selectedCountryCode;
+  String? selectedIndustry;
 
   List<Map<String, dynamic>> globalLeaders = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> industryLeaders = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> countryLeaders = <Map<String, dynamic>>[];
 
-  /// ===============================
-  /// LOAD SHOPS (NOT USERS)
-  /// ===============================
+  final List<String> categories = const <String>[
+    'Agriculture, Food & Beverage',
+    'Learning & Education',
+    'Construction & Real Estate',
+    'Fashion & Beauty',
+    'Finance & Legal',
+    'Healthcare & Wellness',
+    'Home, Gardens & Outdoors',
+    'Jewellery & Timepieces',
+    'Media & Entertainment',
+    'Transport & Logistics',
+    'Travel & Hospitality',
+    'Business Services & Consulting',
+  ];
+
   Future<void> loadUsers() async {
     setState(() => isLoading = true);
 
-    ApiResponseModel? industryResponse;
-    ApiResponseModel? countryResponse;
+    final UserModel user = profileController.myProfile;
+    selectedCountry = user.location ?? 'Nigeria';
+    selectedCountryCode = CountryCodes.nameToCode[selectedCountry!] ?? 'NG';
+    selectedIndustry = user.industry ?? 'General';
+
+    ApiResponseModel industryResponse;
+    ApiResponseModel countryResponse;
 
     final ApiResponseModel globalResponse =
         await ApiService.get(path: 'impact/top/shops?limit=30');
@@ -52,36 +76,69 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
       countryResponse = await ApiService.get(
         path: 'impact/top/shops/location/${shopController.shop!.id}?limit=30',
       );
+    } else {
+      industryResponse = await ApiService.get(
+        path: 'impact/top/shops/industry_name/$selectedIndustry?limit=30',
+      );
+
+      countryResponse = await ApiService.get(
+        path: 'impact/top/shops/location_name/$selectedCountry?limit=30',
+      );
     }
 
     if (globalResponse.success) {
-      log(globalResponse.data.toString());
       globalLeaders = _mapApiResponse(globalResponse.data);
     }
 
-    if (industryResponse?.success == true) {
-      industryLeaders = _mapApiResponse(industryResponse!.data);
+    if (industryResponse.success) {
+      industryLeaders = _mapApiResponse(industryResponse.data);
     }
 
-    if (countryResponse?.success == true) {
-      countryLeaders = _mapApiResponse(countryResponse!.data);
+    if (countryResponse.success) {
+      countryLeaders = _mapApiResponse(countryResponse.data);
     }
 
     setState(() => isLoading = false);
+  }
+
+  Future<void> loadCountryLeaders(String country) async {
+    setState(() => isCountryLoading = true);
+    final ApiResponseModel response = await ApiService.get(
+      path: 'impact/top/shops/location_name/$country?limit=30',
+    );
+    if (response.success) {
+      countryLeaders = _mapApiResponse(response.data);
+    }
+    setState(() => isCountryLoading = false);
+  }
+
+  Future<void> loadIndustryLeaders(String industry) async {
+    setState(() => isIndustryLoading = true);
+    final ApiResponseModel response = await ApiService.get(
+      path: 'impact/top/shops/industry_name/$industry?limit=30',
+    );
+    if (response.success) {
+      industryLeaders = _mapApiResponse(response.data);
+    }
+    setState(() => isIndustryLoading = false);
   }
 
   /// ===============================
   /// MAP SHOP RESPONSE → SAME UI DATA
   /// ===============================
   List<Map<String, dynamic>> _mapApiResponse(dynamic data) {
-    return (data as List<dynamic>)
-        .cast<Map<String, dynamic>>()
-        .map<Map<String, dynamic>>((Map<String, dynamic> item) {
+    final List<dynamic> list = data is List<dynamic> ? data : <dynamic>[];
+    return list
+        .asMap()
+        .entries
+        .map<Map<String, dynamic>>((MapEntry<int, dynamic> entry) {
+      final int index = entry.key;
+      final Map<String, dynamic> item = Map<String, dynamic>.from(entry.value);
       final Map<String, dynamic> shop =
           Map<String, dynamic>.from(item['shop'] ?? <dynamic, dynamic>{});
 
       return <String, dynamic>{
-        'rank': item['globalRank'] ?? 0,
+        'rank': item['globalRank'] ?? (index + 1),
         'name': shop['name'] ?? '',
         'score': item['impactScore'] ?? 0,
         'image': shop['image'] ?? '',
@@ -139,39 +196,202 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
   Widget _buildLeaderboardList(String filterType) {
     List<Map<String, dynamic>> leaderboardData;
+    bool currentLoading = false;
 
     switch (filterType) {
       case 'Industry':
         leaderboardData = industryLeaders;
+        currentLoading = isIndustryLoading;
         break;
       case 'Country':
         leaderboardData = countryLeaders;
+        currentLoading = isCountryLoading;
         break;
       default:
         leaderboardData = globalLeaders;
+        currentLoading = false;
     }
 
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (leaderboardData.isEmpty) {
-      return const Center(child: Text('No leaderboard data'));
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: leaderboardData.length,
-      itemBuilder: (BuildContext context, int index) {
-        final Map<String, dynamic> item = leaderboardData[index];
-        return _buildLeaderboardItem(item);
-      },
+    return Column(
+      children: <Widget>[
+        if (filterType == 'Country')
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          CountryCodes.nameToCode[selectedCountry] != null
+                              ? _generateFlag(
+                                  CountryCodes.nameToCode[selectedCountry]!)
+                              : '📍',
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const Text(
+                                'Current Country',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Text(
+                                selectedCountry ?? 'Not Set',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        CountryListPick(
+                          appBar: AppBar(
+                            title: const Text('Select Country'),
+                            backgroundColor: Colors.white,
+                          ),
+                          theme: CountryTheme(
+                            isShowFlag: true,
+                            isShowTitle: false,
+                            isShowCode: false,
+                            isDownIcon: true,
+                            showEnglishName: true,
+                          ),
+                          initialSelection: selectedCountryCode,
+                          onChanged: (CountryCode? code) {
+                            if (code != null && code.name != null) {
+                              setState(() {
+                                selectedCountry = code.name;
+                                selectedCountryCode = code.code;
+                              });
+                              loadCountryLeaders(code.name!);
+                            }
+                          },
+                          pickerBuilder:
+                              (BuildContext context, CountryCode? countryCode) {
+                            return const Icon(LucideIcons.edit3,
+                                size: 20, color: primaryColorLT);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (filterType == 'Industry')
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.shade200),
+              ),
+              child: Row(
+                children: <Widget>[
+                  const Icon(LucideIcons.briefcase,
+                      size: 20, color: Colors.grey),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          'Selected Industry',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          selectedIndustry ?? 'N/A',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuButton<String>(
+                    icon: const Icon(LucideIcons.edit3,
+                        size: 20, color: primaryColorLT),
+                    onSelected: (String value) {
+                      setState(() {
+                        selectedIndustry = value;
+                      });
+                      loadIndustryLeaders(value);
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return categories.map((String category) {
+                        return PopupMenuItem<String>(
+                          value: category,
+                          child: Text(category),
+                        );
+                      }).toList();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        Expanded(
+          child: currentLoading
+              ? const Center(child: CircularProgressIndicator())
+              : leaderboardData.isEmpty
+                  ? Center(
+                      child: Text(
+                        filterType == 'Global'
+                            ? 'No global data'
+                            : filterType == 'Industry'
+                                ? 'No data for this industry'
+                                : 'No data for this country',
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 16),
+                      itemCount: leaderboardData.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Map<String, dynamic> item =
+                            leaderboardData[index];
+                        return _buildLeaderboardItem(item);
+                      },
+                    ),
+        ),
+      ],
     );
   }
 
-  /// ===============================
-  /// SAME LEADERBOARD ITEM UI
-  /// ===============================
+  String _generateFlag(String countryCode) {
+    if (countryCode.length != 2) return '🌐';
+    final int firstLetter = countryCode.codeUnitAt(0) - 0x41 + 0x1F1E6;
+    final int secondLetter = countryCode.codeUnitAt(1) - 0x41 + 0x1F1E6;
+    return String.fromCharCode(firstLetter) + String.fromCharCode(secondLetter);
+  }
+
   Widget _buildLeaderboardItem(Map<String, dynamic> item) {
     bool isTop3 = item['rank'] <= 3;
     Color rankColor = isTop3 ? const Color(0xFFFFD700) : Colors.grey.shade400;
