@@ -60,9 +60,15 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     setState(() => isLoading = true);
 
     final UserModel user = profileController.myProfile;
-    selectedCountry = user.location ?? 'Nigeria';
+    selectedCountry =
+        (profileController.myProfile.hasShop && shopController.shop != null)
+            ? shopController.shop!.location
+            : user.location ?? 'Nigeria';
     selectedCountryCode = CountryCodes.nameToCode[selectedCountry!] ?? 'NG';
-    selectedIndustry = user.industry ?? 'General';
+    selectedIndustry =
+        (profileController.myProfile.hasShop && shopController.shop != null)
+            ? shopController.shop!.category
+            : user.industry ?? 'General';
 
     ApiResponseModel industryResponse;
     ApiResponseModel countryResponse;
@@ -73,11 +79,12 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     if (profileController.myProfile.hasShop && shopController.shop != null) {
       industryResponse = await ApiService.get(
         path:
-            'impact/top/shops/category?category=${shopController.shop!.category}?limit=30',
+            'impact/top/shops/category?category=${Uri.encodeComponent(shopController.shop!.category)}&limit=30',
       );
 
       countryResponse = await ApiService.get(
-        path: 'impact/top/shops/location/${shopController.shop!.id}?limit=30',
+        path:
+            'impact/top/shops/location?location=${Uri.encodeComponent(shopController.shop!.location)}&limit=30',
       );
     } else {
       industryResponse = await ApiService.get(
