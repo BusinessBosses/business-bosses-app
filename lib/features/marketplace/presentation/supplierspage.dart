@@ -137,7 +137,7 @@ class _FilterUsersState extends State<SuppliersPage> {
                             },
                             child: MasonryGridView.count(
                               padding: const EdgeInsets.only(
-                                  left: 15, right: 15, bottom: 100),
+                                  left: 15, top: 10, right: 15, bottom: 100),
                               crossAxisCount: 2,
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 10,

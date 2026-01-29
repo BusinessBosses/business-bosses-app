@@ -80,9 +80,7 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: widget.isHome != null && widget.isHome == true
-              ? Colors.white
-              : Colors.white,
+          color: Color.fromARGB(255, 252, 231, 230),
           borderRadius: BorderRadius.circular(
               widget.isHome != null && widget.isHome! ? 0 : 15),
         ),
@@ -118,7 +116,12 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                       //   style: TextStyle(
                       //       fontSize: 12, fontWeight: FontWeight.w600),
                       // ),
-                      Icon(Icons.chevron_right, color: textColor, size: 20),
+                      Icon(
+                        Icons.chevron_right,
+                        color: textColor,
+                        size: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ],
                   ),
                 ],

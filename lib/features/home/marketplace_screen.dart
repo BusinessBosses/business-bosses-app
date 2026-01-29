@@ -6,12 +6,12 @@ import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -146,31 +146,32 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   child: _buildMainTabs(),
                 ),
                 // Category chips - only for first tab
-                SliverToBoxAdapter(
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 10, bottom: 10),
-                    child: ProshopdealsWidget(
-                      title: 'NEW',
-                      combinedList: _marketController.proItems
-                          .where((Object item) {
-                            if (item is Product) {
-                              return item.images != null &&
-                                  item.images!.isNotEmpty &&
-                                  item.images!.first.isNotEmpty &&
-                                  item.user!.isSubscribed;
-                            } else {
-                              final Service service = item as Service;
-                              return service.images != null &&
-                                  service.images!.isNotEmpty &&
-                                  service.images![0].isNotEmpty &&
-                                  service.user!.isSubscribed;
-                            }
-                          })
-                          .take(10)
-                          .toList(),
+                if (_marketplaceTabController.index == 0)
+                  SliverToBoxAdapter(
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 10, bottom: 10),
+                      child: ProshopdealsWidget(
+                        title: 'NEW',
+                        combinedList: _marketController.proItems
+                            .where((Object item) {
+                              if (item is Product) {
+                                return item.images != null &&
+                                    item.images!.isNotEmpty &&
+                                    item.images!.first.isNotEmpty &&
+                                    item.user!.isSubscribed;
+                              } else {
+                                final Service service = item as Service;
+                                return service.images != null &&
+                                    service.images!.isNotEmpty &&
+                                    service.images![0].isNotEmpty &&
+                                    service.user!.isSubscribed;
+                              }
+                            })
+                            .take(10)
+                            .toList(),
+                      ),
                     ),
                   ),
-                ),
                 if (_marketplaceTabController.index == 0)
                   SliverToBoxAdapter(
                     child: _buildCategoryChips(),
@@ -183,7 +184,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 // Tab 1: Marketplace Listings
                 const MarketsPage(),
                 const BuyerRequestsScreen(),
-                const SuppliersPage(),
+                const LeaderboardScreen(isMarketplace: true),
               ],
             ),
           ),
@@ -298,7 +299,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
-          bottom: BorderSide(color: Colors.grey.withValues(alpha: 0.1)),
+          bottom: BorderSide(color: Colors.grey.withValues(alpha: 0.15)),
         ),
       ),
       child: Row(
@@ -353,7 +354,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 Text(
                   'Find Your Match',
                   style: TextStyle(
-                    color: Colors.blue,
+                    color: Color.fromARGB(255, 9, 93, 237),
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
                   ),
@@ -388,13 +389,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         controller: _marketplaceTabController,
         isScrollable: false,
         labelColor: Colors.black87,
-        unselectedLabelColor: Colors.grey.shade500,
+        unselectedLabelColor: Colors.black87,
         labelStyle: const TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 12,
         ),
         unselectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
           fontSize: 12,
         ),
         indicatorColor: primaryColorLT,
@@ -405,7 +406,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
-                Icon(Icons.grid_view, color: Color(0xFFFF5722), size: 20),
+                Icon(Icons.grid_view, color: Colors.deepOrange, size: 20),
                 SizedBox(width: 6),
                 Text(
                   'Seller\nListing',
@@ -420,7 +421,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
-                Icon(LucideIcons.target, size: 20, color: Color(0xFFFF5722)),
+                Icon(LucideIcons.target, size: 20, color: Colors.deepOrange),
                 SizedBox(width: 6),
                 Text(
                   'Buyer\nRequest',
@@ -435,7 +436,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
-                Icon(LucideIcons.trophy, size: 20, color: Color(0xFFFFC107)),
+                Icon(LucideIcons.trophy, size: 20, color: Colors.deepOrange),
                 SizedBox(width: 6),
                 Text(
                   'Ranking\nBusiness',
@@ -541,9 +542,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 child: const Padding(
                   padding: EdgeInsets.only(left: 8.0),
                   child: Icon(
-                    Icons.keyboard_arrow_down,
+                    LucideIcons.chevronRight,
                     color: Colors.black54,
-                    size: 24,
+                    size: 15,
                   ),
                 ),
               ),
