@@ -603,7 +603,7 @@ class _HeroSectionState extends State<HeroSection> {
                     ),
                   if (item.type == 'ranking')
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       child: Obx(
                         () => controller.loading.value
                             ? const Center(
@@ -879,7 +879,7 @@ class _HeroSectionState extends State<HeroSection> {
             onPanDown: (_) => _onUserInteraction(),
             // FIXED: Changed IntrinsicHeight to SizedBox with fixed height
             child: SizedBox(
-              height: 170, // Adjust this height as needed
+              height: 185, // Adjust this height as needed
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: heroItems.length,
