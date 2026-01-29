@@ -624,7 +624,7 @@ class _HeroSectionState extends State<HeroSection> {
                                     RichText(
                                       text: TextSpan(
                                         style: const TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w600,
                                           color: textColor,
                                         ),
@@ -632,7 +632,7 @@ class _HeroSectionState extends State<HeroSection> {
                                           const TextSpan(
                                               text: 'Your Reach Ranking is ',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Colors.black87,
                                                   fontWeight: FontWeight.w600)),
                                           TextSpan(
@@ -641,14 +641,13 @@ class _HeroSectionState extends State<HeroSection> {
                                             style: const TextStyle(
                                               color: Colors.brown,
                                               fontWeight: FontWeight.w900,
-                                              fontSize: 25,
+                                              fontSize: 18,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
                                   ]),
-                                  const SizedBox(height: 4),
                                   const Text(
                                     'Higher activity increases your reach and ranking',
                                     style: TextStyle(
