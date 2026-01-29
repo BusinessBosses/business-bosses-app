@@ -12,21 +12,8 @@ Widget friendProfileHeader(UserModel publicUser) {
   final Map<String, dynamic> dataMap = profileController.impact is Map
       ? profileController.impact
       : <String, dynamic>{};
-  final double profileScore = (dataMap['profileReach'] ?? 10).toDouble();
-  final double engagementScore = (dataMap['engagementReach'] ?? 30).toDouble();
-  final double discoveryScore = (dataMap['discoveryReach'] ?? 20).toDouble();
-  final double trustScore = (dataMap['trustReach'] ?? 20).toDouble();
 
-  final int totalLikes = profileController.impact['totalLikes'] ?? 0;
-  final int totalViews = profileController.impact['totalViews'] ?? 0;
-
-  final int totalReachScore = (totalLikes +
-          totalViews +
-          profileScore +
-          engagementScore +
-          discoveryScore +
-          trustScore)
-      .toInt();
+  final int totalReachScore = dataMap['totalReachPoints'].toInt();
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     child: Column(

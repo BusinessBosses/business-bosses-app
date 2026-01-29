@@ -30,19 +30,15 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
     final double profileScore = (dataMap['profileReach'] ?? 10).toDouble();
     final double engagementScore =
         (dataMap['engagementReach'] ?? 30).toDouble();
-    final double discoveryScore = (dataMap['discoveryReach'] ?? 20).toDouble();
+    final double discoveryScore =
+        (dataMap['shopPoints'] + dataMap['shopImpactScore'] ?? 0).toDouble();
     final double trustScore = (dataMap['trustReach'] ?? 20).toDouble();
 
     final int totalLikes = widget.data['totalLikes'] ?? 0;
     final int totalViews = widget.data['totalViews'] ?? 0;
+    final int totalComments = widget.data['totalComments'] ?? 0;
 
-    final int totalReachScore = (totalLikes +
-            totalViews +
-            profileScore +
-            engagementScore +
-            discoveryScore +
-            trustScore)
-        .toInt();
+    final int totalReachScore = widget.data['totalReachPoints'].toInt();
 
     return Column(
       children: <Widget>[
@@ -107,8 +103,8 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   iconColor: Colors.red[400]!,
                   iconBgColor: backgroundColor,
                   title: 'Interest',
-                  subtitle: 'Post Reaction',
-                  value: totalLikes.toString(),
+                  subtitle: 'Active Interactions',
+                  value: (totalLikes + totalComments).toString(),
                 ),
 
                 _buildReachItem(
@@ -141,9 +137,9 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   icon: LucideIcons.globe,
                   iconColor: Colors.orange[400]!,
                   iconBgColor: backgroundColor,
-                  title: 'Interactions',
-                  subtitle: 'Business Actions',
-                  value: discoveryScore.toInt().toString(),
+                  title: 'Biz-Center Actions',
+                  subtitle: 'Sales Intent & Buyer Demand',
+                  value: (discoveryScore).toInt().toString(),
                 ),
                 _buildReachItem(
                   icon: LucideIcons.shieldCheck,

@@ -70,7 +70,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
     if (profileController.myProfile.hasShop && shopController.shop != null) {
       industryResponse = await ApiService.get(
-        path: 'impact/top/shops/industry/${shopController.shop!.id}?limit=30',
+        path:
+            'impact/top/shops/category?category=${shopController.shop!.category}?limit=30',
       );
 
       countryResponse = await ApiService.get(
@@ -78,11 +79,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
       );
     } else {
       industryResponse = await ApiService.get(
-        path: 'impact/top/shops/industry_name/$selectedIndustry?limit=30',
+        path: 'impact/top/shops/category?category=$selectedIndustry&limit=30',
       );
 
       countryResponse = await ApiService.get(
-        path: 'impact/top/shops/location_name/$selectedCountry?limit=30',
+        path: 'impact/top/shops/location?location=$selectedCountry&limit=30',
       );
     }
 
@@ -104,7 +105,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   Future<void> loadCountryLeaders(String country) async {
     setState(() => isCountryLoading = true);
     final ApiResponseModel response = await ApiService.get(
-      path: 'impact/top/shops/location_name/$country?limit=30',
+      path:
+          'impact/top/shops/location?location=${Uri.encodeComponent(country)}&limit=30',
     );
     if (response.success) {
       countryLeaders = _mapApiResponse(response.data);
@@ -115,7 +117,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   Future<void> loadIndustryLeaders(String industry) async {
     setState(() => isIndustryLoading = true);
     final ApiResponseModel response = await ApiService.get(
-      path: 'impact/top/shops/industry_name/$industry?limit=30',
+      path:
+          'impact/top/shops/category?category=${Uri.encodeComponent(industry)}&limit=30',
     );
     if (response.success) {
       industryLeaders = _mapApiResponse(response.data);
