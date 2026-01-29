@@ -146,9 +146,12 @@ class _HeroSectionState extends State<HeroSection> {
     'ranking': WinnerCardConfig(
       title: 'Top Ranked This Week',
       icon: LucideIcons.barChart2,
-      gradientColors: <Color>[backgroundColor, backgroundColor],
-      iconColor: primaryColorLT,
-      accentColor: primaryColorLT,
+      gradientColors: <Color>[
+        Color(0xFFE0F2FE),
+        Color(0xFFE0F2FE),
+      ],
+      iconColor: Colors.blue,
+      accentColor: Colors.blue,
     ),
   };
 
@@ -172,7 +175,8 @@ class _HeroSectionState extends State<HeroSection> {
         subtitle: _profileController.myProfile.weeklyRank ?? 'N/A',
         image: '',
         description: '',
-        action: 'View your Match',
+        action: 'Get Featured',
+        action2: 'View your Match',
       ),
       HeroItem(
         id: '1',
@@ -414,343 +418,295 @@ class _HeroSectionState extends State<HeroSection> {
     final WinnerCardConfig? config = cardConfigs[item.type];
     if (config == null) return const SizedBox();
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: config.gradientColors,
-        ),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: config.gradientColors[0].withValues(alpha: 0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+    return GestureDetector(
+      onTap: () {
+        if (item.type == 'ranking') {
+          Get.to(() => const LeaderboardScreen());
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: config.gradientColors,
           ),
-        ],
-      ),
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-            top: -50,
-            right: -20,
-            child: Opacity(
-              opacity: 0.05,
-              child: Icon(config.icon, size: 128, color: Colors.white),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: config.gradientColors[0].withValues(alpha: 0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        // if (item.icon.isNotEmpty)
-                        Image.asset(item.icon, width: 22, height: 22),
-                        SizedBox(width: item.icon.isNotEmpty ? 4 : 0),
-                        Text(
-                          config.title,
-                          style: const TextStyle(
-                            color: textColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Icon(LucideIcons.chevronRight, color: textColor, size: 20),
-                  ],
-                ),
-                // FIXED: Only show user info if not matches or ranking card
-                if (item.type != 'matches' && item.type != 'ranking')
-                  GestureDetector(
-                    onTap: () {
-                      UserModel? targetUser;
-                      dynamic partner;
-                      switch (item.type) {
-                        case 'boss':
-                          targetUser = user;
-                          break;
-                        case 'mentor':
-                          targetUser = mentor;
-                          break;
-                        case 'backer':
-                          targetUser = backer;
-                          break;
-                        case 'ambassador':
-                          targetUser = ambassador;
-                          break;
-                        case 'partner':
-                          partner = homeController.partnerOfTheWeek;
-                          break;
-                      }
-
-                      if (targetUser != null) {
-                        Get.toNamed(
-                          Routes.publicProfile,
-                          arguments: targetUser,
-                        );
-                      }
-                      if (partner != null) {
-                        Uri url = Uri.parse(partner['companyUrl']);
-                        canLaunchUrl(url).then((bool canLaunch) {
-                          if (canLaunch) {
-                            launchUrl(url);
-                          }
-                        });
-                      }
-                    },
-                    child: Container(
-                      height: 75,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+          ],
+        ),
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              top: -50,
+              right: -20,
+              child: Opacity(
+                opacity: 0.05,
+                child: Icon(config.icon, size: 128, color: Colors.white),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          if (item.image.isNotEmpty)
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: NetworkImageWithPlaceHolder(
-                                imageUrl: item.image,
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          else
-                            _buildDefaultAvatar(config, item.subtitle),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  item.subtitle,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                if (item.description.isNotEmpty)
-                                  Text(
-                                    item.description,
-                                    style: const TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: 12,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                if (item.type == 'ambassador' &&
-                                    item.metrics != null)
-                                  Text(
-                                    '${item.metrics!['invites']} Invites • ${item.metrics!['conversions']} Conversions',
-                                    style: TextStyle(
-                                      color: Colors.grey[700],
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                              ],
+                          Image.asset(item.icon, width: 22, height: 22),
+                          const SizedBox(width: 4),
+                          Text(
+                            config.title,
+                            style: const TextStyle(
+                              color: textColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],
                       ),
-                    ),
+                      const Icon(LucideIcons.chevronRight,
+                          color: textColor, size: 20),
+                    ],
                   ),
-                // FIXED: For matches card, show description text with same height as user info section
-                if (item.type == 'matches')
-                  Container(
-                    height: 75,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      item.subtitle,
-                      style: const TextStyle(
-                        color: Colors.black87,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-
-                if (item.type == 'ranking')
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Obx(
-                      () => controller.loading.value
-                          ? const Center(
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
-                              ),
-                            )
-                          : RichText(
-                              text: TextSpan(
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: textColor,
-                                ),
-                                children: <TextSpan>[
-                                  const TextSpan(
-                                      text: 'Your Reach Ranking is '),
-                                  TextSpan(
-                                    text:
-                                        '#${controller.data?['globalRank'] ?? 'N/A'}',
-                                    style: const TextStyle(
-                                      color: primaryColorLT,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                    ),
-                  ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
+                  if (item.type != 'matches' && item.type != 'ranking')
                     GestureDetector(
-                      onTap: () async {
-                        switch (item.action) {
-                          case 'Follow':
-                            if (item.type == 'ambassador') {
-                              if (ambassador != null) {
-                                final bool isConnected =
-                                    _profileController.myProfile.connecteds !=
-                                            null &&
-                                        _profileController.myProfile.connecteds!
-                                            .contains(ambassador!.uid);
-                                if (!isConnected) {
-                                  await connect(ambassador!.uid);
-                                  _profileController.updateConnections(
-                                    ambassador!.uid,
-                                  );
-                                }
-                              }
-                            } else if (item.type == 'boss' ||
-                                item.type == 'mentor' ||
-                                item.type == 'backer') {
-                              connectToUser();
+                      onTap: () {
+                        UserModel? targetUser;
+                        dynamic partner;
+                        switch (item.type) {
+                          case 'boss':
+                            targetUser = user;
+                            break;
+                          case 'mentor':
+                            targetUser = mentor;
+                            break;
+                          case 'backer':
+                            targetUser = backer;
+                            break;
+                          case 'ambassador':
+                            targetUser = ambassador;
+                            break;
+                          case 'partner':
+                            partner = homeController.partnerOfTheWeek;
+                            break;
+                        }
+
+                        if (targetUser != null) {
+                          Get.toNamed(
+                            Routes.publicProfile,
+                            arguments: targetUser,
+                          );
+                        }
+                        if (partner != null) {
+                          Uri url = Uri.parse(partner['companyUrl']);
+                          canLaunchUrl(url).then((bool canLaunch) {
+                            if (canLaunch) {
+                              launchUrl(url);
                             }
-                            break;
-                          case 'Refer':
-                            referuser();
-                            break;
-                          case 'View your Match':
-                            Get.to(() => const ExpandedMatchesScreen());
-                            break;
-                          case 'Claim Deal':
-                            final Uri url = Uri.parse(partner['companyUrl']);
-                            if (!await launchUrl(url)) {
-                              throw Exception('Could not launch $url');
-                            }
-                            break;
-                          default:
-                            Get.toNamed(Routes.liveEvents);
-                            break;
+                          });
                         }
                       },
                       child: Container(
+                        height: 75,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
-                          color: item.type == 'ranking'
-                              ? const Color(0xFFEF4444)
-                              : Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
-                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Icon(
-                              item.action == 'View Events'
-                                  ? LucideIcons.calendar
-                                  : item.action == 'Refer'
-                                      ? LucideIcons.forward
-                                      : item.action == 'Claim Deal'
-                                          ? LucideIcons.checkCircle2
-                                          : item.action == 'View Matches'
-                                              ? LucideIcons.users
-                                              : item.type == 'ranking'
-                                                  ? LucideIcons.userPlus
-                                                  : LucideIcons.userPlus,
-                              size: 16,
-                              color: item.type == 'ranking'
-                                  ? Colors.white
-                                  : primaryColorLT,
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              item.action,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: item.type == 'ranking'
-                                    ? Colors.white
-                                    : primaryColorLT,
+                            if (item.image.isNotEmpty)
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: NetworkImageWithPlaceHolder(
+                                  imageUrl: item.image,
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            else
+                              _buildDefaultAvatar(config, item.subtitle),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    item.subtitle,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  if (item.description.isNotEmpty)
+                                    Text(
+                                      item.description,
+                                      style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 12,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  if (item.type == 'ambassador' &&
+                                      item.metrics != null)
+                                    Text(
+                                      '${item.metrics!['invites']} Invites • ${item.metrics!['conversions']} Conversions',
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    if (item.action2.isNotEmpty)
+                  if (item.type == 'matches')
+                    Container(
+                      height: 75,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        item.subtitle,
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  if (item.type == 'ranking')
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Obx(
+                        () => controller.loading.value
+                            ? const Center(
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
+                                ),
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(children: <Widget>[
+                                    const Icon(LucideIcons.arrowUp,
+                                        color: textColor),
+                                    const SizedBox(width: 5),
+                                    RichText(
+                                      text: TextSpan(
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                          color: textColor,
+                                        ),
+                                        children: <TextSpan>[
+                                          const TextSpan(
+                                              text: 'Your Reach Ranking is ',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black87,
+                                                  fontWeight: FontWeight.w600)),
+                                          TextSpan(
+                                            text:
+                                                '#${controller.data?['globalRank'] ?? 'N/A'}',
+                                            style: const TextStyle(
+                                              color: Colors.brown,
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 25,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ]),
+                                  const SizedBox(height: 4),
+                                  const Text(
+                                    'Higher activity increases your reach and ranking',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                      ),
+                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
                       GestureDetector(
                         onTap: () async {
-                          switch (item.action2.isNotEmpty ? item.action2 : '') {
+                          switch (item.action) {
+                            case 'Follow':
+                              if (item.type == 'ambassador') {
+                                if (ambassador != null) {
+                                  final bool isConnected = _profileController
+                                              .myProfile.connecteds !=
+                                          null &&
+                                      _profileController.myProfile.connecteds!
+                                          .contains(ambassador!.uid);
+                                  if (!isConnected) {
+                                    await connect(ambassador!.uid);
+                                    _profileController.updateConnections(
+                                      ambassador!.uid,
+                                    );
+                                  }
+                                }
+                              } else if (item.type == 'boss' ||
+                                  item.type == 'mentor' ||
+                                  item.type == 'backer') {
+                                connectToUser();
+                              }
+                              break;
+                            case 'Refer':
+                              referuser();
+                              break;
                             case 'Get Featured':
-                              item.id == '1'
-                                  ? enterChallenge()
-                                  : item.id == '2'
-                                      ? entermentoroftheweek()
-                                      : item.id == '3'
-                                          ? enterbackeroftheweek()
-                                          : enterpartneroftheweek();
+                              if (item.type == 'ranking') {
+                                Get.to(() => BossUpSection(
+                                    industry: industry, bossUp: industry));
+                              } else {
+                                enterChallenge();
+                              }
                               break;
-                            case 'Crowdfund':
-                              enterbackeroftheweek();
+                            case 'View your Match':
+                              Get.to(() => const ExpandedMatchesScreen());
                               break;
-                            case 'Fund Project':
-                              Get.to(() => const CreateDonationScreen());
-                              break;
-                            case 'Become a Partner':
-                              enterpartneroftheweek();
-                              break;
-                            case 'Become Ambassador':
-                              enterambassadoroftheweek();
-                              break;
-                            case 'Share Learning':
-                              entermentoroftheweek();
-                              break;
-                            case 'View Matches':
-                              Get.to(() => ExpandedMatchesScreen());
+                            case 'Claim Deal':
+                              final Uri url = Uri.parse(partner['companyUrl']);
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
                               break;
                             default:
                               Get.toNamed(Routes.liveEvents);
@@ -759,9 +715,8 @@ class _HeroSectionState extends State<HeroSection> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: primaryColorLT,
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: proprimaryColor),
                           ),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
@@ -773,29 +728,114 @@ class _HeroSectionState extends State<HeroSection> {
                               Icon(
                                 item.action == 'View Events'
                                     ? LucideIcons.calendar
-                                    : LucideIcons.plus,
+                                    : item.action == 'Refer'
+                                        ? LucideIcons.forward
+                                        : item.action == 'Claim Deal'
+                                            ? LucideIcons.checkCircle2
+                                            : item.action == 'View your Match'
+                                                ? LucideIcons.user
+                                                : item.action == 'Get Featured'
+                                                    ? LucideIcons.plus
+                                                    : LucideIcons.userPlus,
                                 size: 16,
-                                color: Colors.white,
+                                color: primaryColorLT,
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                item.action2.isNotEmpty ? item.action2 : '',
+                                item.action,
                                 style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: primaryColorLT,
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                  ],
-                ),
-              ],
+                      const SizedBox(width: 8),
+                      if (item.action2.isNotEmpty)
+                        GestureDetector(
+                          onTap: () async {
+                            switch (
+                                item.action2.isNotEmpty ? item.action2 : '') {
+                              case 'Get Featured':
+                                item.id == '1'
+                                    ? enterChallenge()
+                                    : item.id == '2'
+                                        ? entermentoroftheweek()
+                                        : item.id == '3'
+                                            ? enterbackeroftheweek()
+                                            : enterpartneroftheweek();
+                                break;
+                              case 'View your Match':
+                                Get.to(() => const ExpandedMatchesScreen());
+                                break;
+                              case 'Crowdfund':
+                                enterbackeroftheweek();
+                                break;
+                              case 'Fund Project':
+                                Get.to(() => const CreateDonationScreen());
+                                break;
+                              case 'Become a Partner':
+                                enterpartneroftheweek();
+                                break;
+                              case 'Become Ambassador':
+                                enterambassadoroftheweek();
+                                break;
+                              case 'Share Learning':
+                                entermentoroftheweek();
+                                break;
+                              case 'View Matches':
+                                Get.to(() => const ExpandedMatchesScreen());
+                                break;
+                              default:
+                                Get.toNamed(Routes.liveEvents);
+                                break;
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: primaryColorLT,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: proprimaryColor),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Icon(
+                                  item.action2 == 'View your Match'
+                                      ? LucideIcons.user
+                                      : (item.action2 == 'View Events'
+                                          ? LucideIcons.calendar
+                                          : LucideIcons.plus),
+                                  size: 16,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  item.action2.isNotEmpty ? item.action2 : '',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

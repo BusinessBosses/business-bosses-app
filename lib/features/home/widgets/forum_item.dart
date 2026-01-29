@@ -619,14 +619,15 @@ class _ForumItemState extends State<ForumItem> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   const Text(
-                                    'View my Biz-Center',
+                                    'Visit my Biz-Center',
                                     style: TextStyle(
-                                        color: Colors.blue, fontSize: 14),
+                                        color: Color.fromARGB(255, 9, 93, 237),
+                                        fontSize: 14),
                                   ),
                                   const Icon(
                                     LucideIcons.chevronRight,
                                     size: 15,
-                                    color: Colors.blue,
+                                    color: Color.fromARGB(255, 9, 93, 237),
                                   ),
                                 ],
                               ),

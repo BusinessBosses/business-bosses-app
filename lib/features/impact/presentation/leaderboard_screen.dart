@@ -13,7 +13,9 @@ import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class LeaderboardScreen extends StatefulWidget {
-  const LeaderboardScreen({super.key});
+  const LeaderboardScreen({super.key, this.isMarketplace = false});
+
+  final bool isMarketplace;
 
   @override
   State<LeaderboardScreen> createState() => _LeaderboardScreenState();
@@ -164,31 +166,34 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Reach Leaderboards'),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-        ),
-        elevation: 0,
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: primaryColorLT,
-          unselectedLabelColor: Colors.grey,
-          indicatorColor: primaryColorLT,
-          tabs: _filters.map((String filter) => Tab(text: filter)).toList(),
-        ),
-      ),
+      appBar: widget.isMarketplace
+          ? null
+          : AppBar(
+              title: const Text('Reach Leaderboards'),
+              centerTitle: true,
+              backgroundColor: Colors.white,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
+              elevation: 0,
+              bottom: TabBar(
+                controller: _tabController,
+                labelColor: primaryColorLT,
+                unselectedLabelColor: Colors.grey,
+                indicatorColor: primaryColorLT,
+                tabs:
+                    _filters.map((String filter) => Tab(text: filter)).toList(),
+              ),
+            ),
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
           _buildLeaderboardList('Global'),
-          _buildLeaderboardList('Industry'),
-          _buildLeaderboardList('Country'),
+          if (!widget.isMarketplace) _buildLeaderboardList('Industry'),
+          if (!widget.isMarketplace) _buildLeaderboardList('Country'),
         ],
       ),
     );

@@ -145,11 +145,12 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                   'Find Your Match',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w800,
-                                    color: Colors.blue,
+                                    color: Color.fromARGB(255, 9, 93, 237),
                                   ),
                                 ),
                                 Icon(LucideIcons.chevronRight,
-                                    size: 15, color: Colors.blue)
+                                    size: 15,
+                                    color: Color.fromARGB(255, 9, 93, 237))
                               ],
                             ),
                           ),
