@@ -42,9 +42,17 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
 
   String country = '';
   String _selectedCategory = '';
+  String _requestType = 'I need a service provider';
   DateTime? _selectedDeadline;
   final List<PlatformFile> _attachments = <PlatformFile>[];
   List<String> _existingAttachments = <String>[];
+
+  final List<String> _requestTypes = <String>[
+    'I need a service provider',
+    'I need a product supplier'
+  ];
+
+  bool _isExpanded = false;
 
   final List<String> _categories = <String>[
     'Agriculture, Food & Beverage',
@@ -141,6 +149,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
     buyerRequestController.error(false);
 
     final Map<String, dynamic> body = <String, dynamic>{
+      'request_type': _requestType,
       'title': _titleController.text.trim(),
       'description': _descriptionController.text.trim(),
       'category': _selectedCategory,
@@ -201,14 +210,26 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
       backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
-          widget.request != null
-              ? 'Edit Buyer Request'
-              : 'Create Buyer Request',
-          style: TextStyle(
-            color: textColor,
-            fontWeight: FontWeight.bold,
-          ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              widget.request != null
+                  ? 'Edit Buyer Request'
+                  : 'Create Buyer Request',
+              style: TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              'We\'ll select the top ranking service provider or supplier for you',
+              style: TextStyle(
+                color: textColor,
+                fontSize: 12,
+              ),
+            ),
+          ],
         ),
         actions: <Widget>[
           IconButton(
@@ -226,10 +247,21 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 const SizedBox(height: 0),
+                CustomDropdownWidget(
+                  caption: 'What do you need to buy',
+                  items: _requestTypes,
+                  iconName: 'assets/svgs/dropdown.svg',
+                  initialValue: _requestType,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _requestType = newValue!;
+                    });
+                  },
+                ),
                 CustomEditText(
-                  caption: 'Request Title *',
+                  caption: 'Request name *',
                   maxLength: 30,
-                  hintText: 'e.g., Need a responsive website for my startup',
+                  hintText: 'Enter the name of what you need to buy',
                   controller: _titleController,
                   validator: (String? value) =>
                       value == null || value.trim().isEmpty
@@ -239,7 +271,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                 CustomEditText(
                   caption: 'Description *',
                   hintText:
-                      'Describe your requirements in detail. Include specific deliverables, quality expectations, and any important constraints...',
+                      'Describe what you need to buy. E.g, I need digital marketer, I need fashion designers',
                   controller: _descriptionController,
                   maxLength: 300,
                   validator: (String? value) => value == null || value.isEmpty
@@ -302,93 +334,134 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                     useSafeArea: false,
                   ),
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                _buildAttachmentSection(),
+                const SizedBox(
+                  width: double.infinity,
+                  height: 1.5,
+                  child: ColoredBox(color: backgroundcolorinterface),
+                ),
+                ExpansionTile(
+                  shape: const Border(),
+                  onExpansionChanged: (bool expanded) {
+                    setState(() {
+                      _isExpanded = expanded;
+                    });
+                  },
+                  trailing: _isExpanded
+                      ? SvgPicture.asset(
+                          'assets/svgs/dropdownexpansionup.svg',
+                        )
+                      : SvgPicture.asset(
+                          'assets/svgs/dropdownexpansion.svg',
+                        ),
+                  title: RichText(
+                    text: const TextSpan(
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Additional Information',
+                          style: TextStyle(color: textColor),
+                        ),
+                        TextSpan(
+                          text: ' (Optional)',
+                          style: TextStyle(color: hintColor),
+                        ),
+                      ],
+                    ),
+                  ),
                   children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                _buildLabel('Budget (optional)',
-                                    LucideIcons.dollarSign),
-                                const SizedBox(height: 10),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            spacing: 10,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: CustomEditText(
-                                  padding: 5,
-                                  currencycontroller: currencyController,
-                                  caption: 'Starting Price',
-                                  iscurrencyfield: true,
-                                  maxLength: 15,
-                                  hintText: 'Enter price',
-                                  controller: _startPriceController,
-                                  inputType: TextInputType.number,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    _buildLabel('Budget (optional)',
+                                        LucideIcons.dollarSign),
+                                    const SizedBox(height: 10),
+                                  ],
                                 ),
                               ),
-                              Expanded(
-                                child: CustomEditText(
-                                  padding: 5,
-                                  currencycontroller: currencyController,
-                                  caption: ' Ending Price',
-                                  iscurrencyfield: true,
-                                  maxLength: 15,
-                                  hintText: 'Enter price',
-                                  controller: _endPriceController,
-                                  inputType: TextInputType.number,
-                                ),
+                              Row(
+                                spacing: 10,
+                                children: <Widget>[
+                                  const SizedBox(width: 5),
+                                  Expanded(
+                                    child: CustomEditText(
+                                      padding: 5,
+                                      currencycontroller: currencyController,
+                                      caption: 'Starting Price',
+                                      iscurrencyfield: true,
+                                      maxLength: 15,
+                                      hintText: 'Enter price',
+                                      controller: _startPriceController,
+                                      inputType: TextInputType.number,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: CustomEditText(
+                                      padding: 5,
+                                      currencycontroller: currencyController,
+                                      caption: ' Ending Price',
+                                      iscurrencyfield: true,
+                                      maxLength: 15,
+                                      hintText: 'Enter price',
+                                      controller: _endPriceController,
+                                      inputType: TextInputType.number,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 16),
+                      ],
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: _buildLabel(
+                              'Deadline (optional)', Icons.calendar_today),
+                        ),
+                        const SizedBox(height: 8),
+                        GestureDetector(
+                          onTap: _selectDate,
+                          child: CustomTextWidget(
+                            padding: 15,
+                            textpadding: 15,
+                            hashint: true,
+                            caption: 'When do you need responses by?',
+                            iconName: 'assets/svgs/dropdown.svg',
+                            text: _selectedDeadline == null
+                                ? 'Select date'
+                                : DateFormat('EEEE dd MMMM, yyyy')
+                                    .format(_selectedDeadline!),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
                   ],
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: _buildLabel(
-                          'Deadline (optional)', Icons.calendar_today),
-                    ),
-                    const SizedBox(height: 8),
-                    GestureDetector(
-                      onTap: _selectDate,
-                      child: CustomTextWidget(
-                        padding: 15,
-                        textpadding: 15,
-                        hashint: true,
-                        caption: 'When do you need responses by?',
-                        iconName: 'assets/svgs/dropdown.svg',
-                        text: _selectedDeadline == null
-                            ? 'Select date'
-                            : DateFormat('EEEE dd MMMM, yyyy')
-                                .format(_selectedDeadline!),
-                      ),
-                    ),
-                  ],
-                ),
-                _buildAttachmentSection(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
 
                   /// ONLY OBSERVING THIS PART
                   child: Obx(() {
                     return CustomButton(
+                      buttonType: ButtonType.elevated,
                       backgroundColor: Colors.red,
                       textColor: Colors.white,
                       onPressed: _handleSubmit,

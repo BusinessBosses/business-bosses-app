@@ -22,6 +22,8 @@ import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.d
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
+import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -45,6 +47,7 @@ class UserShopScreen extends StatefulWidget {
 class _UserShopScreenState extends State<UserShopScreen> {
   final ShopController shopController = Get.find();
   final ProfileController profileController = Get.find();
+  late final ReachController reachController;
 
   late final Map<String, dynamic> dataMap = profileController.impact is Map
       ? profileController.impact
@@ -71,6 +74,8 @@ class _UserShopScreenState extends State<UserShopScreen> {
   @override
   void initState() {
     super.initState();
+    reachController = Get.put(ReachController(), tag: widget.user!.uid);
+    reachController.loadData(widget.user!.uid, profileController.myProfile.uid);
     loadData();
   }
 
@@ -436,7 +441,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                   const Icon(Icons.location_on,
                                                       color: Colors.red,
                                                       size: 15),
-                                                  // const SizedBox(width: 5),
+                                                  const SizedBox(width: 2),
                                                   Text(
                                                     shopController
                                                                 .userShop!
@@ -449,7 +454,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                     style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.w700,
-                                                        fontSize: 14),
+                                                        fontSize: 13),
                                                   ),
                                                 ],
                                               ),
@@ -476,14 +481,20 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                   children: <Widget>[
                                                     const Icon(Icons.star,
                                                         color: Colors.amber,
-                                                        size: 18),
-                                                    const SizedBox(width: 4),
+                                                        size: 16),
+                                                    const SizedBox(width: 2),
                                                     Text(
-                                                      '${shopController.userShop!.user?.averageRating?.toStringAsFixed(1)} Reviews',
+                                                      shopController
+                                                              .userShop!
+                                                              .user
+                                                              ?.averageRating
+                                                              ?.toStringAsFixed(
+                                                                  1) ??
+                                                          '0.0',
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.w700,
-                                                          fontSize: 14),
+                                                          fontSize: 13),
                                                     ),
                                                   ],
                                                 ),
@@ -498,12 +509,58 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               const SizedBox(
                                                 width: 5,
                                               ),
-                                              Text(
-                                                '$totalReachScore Reach',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 14,
-                                                ),
+                                              Obx(
+                                                () => reachController
+                                                        .loading.value
+                                                    ? const SizedBox(
+                                                        height: 12,
+                                                        width: 12,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          strokeWidth: 2,
+                                                        ),
+                                                      )
+                                                    : GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(() =>
+                                                              const LeaderboardScreen());
+                                                        },
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: <Widget>[
+                                                            const Icon(
+                                                                Icons
+                                                                    .leaderboard,
+                                                                size: 16,
+                                                                color: Colors
+                                                                    .orange),
+                                                            const SizedBox(
+                                                                width: 4),
+                                                            Text(
+                                                              '#${reachController.data?['globalRank'] ?? widget.user?.weeklyRank ?? "12"} in ${(widget.user?.industry ?? shopController.userShop?.category ?? "Health").split(' ').first} ...',
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 2),
+                                                            const Icon(
+                                                              Icons
+                                                                  .chevron_right,
+                                                              size: 14,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
                                               ),
                                             ],
                                           ),

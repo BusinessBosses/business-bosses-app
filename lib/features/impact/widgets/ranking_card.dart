@@ -55,7 +55,7 @@ class ReachRankingCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  isMe ? 'Your Global Rank' : 'Global Rank',
+                  isMe ? 'Your Ranking this week' : 'Weekly Rank',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -164,7 +164,7 @@ class ReachRankingCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   const Text(
-                    'View Leaderboards',
+                    'View Top Ranking',
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: textColor),
                   ),

@@ -13,12 +13,17 @@ class CustomChildButton extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    String formattedValue = value.toString();
+    if (value >= 1000) {
+      double kmValue = value / 1000;
+      formattedValue = '${kmValue.toStringAsFixed(kmValue % 1 == 0 ? 0 : 1)}k';
+    }
     return TextButton(
       onPressed: onPressed as void Function(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text('$value',
+          Text(formattedValue,
               style: Theme.of(context)
                   .textTheme
                   .titleLarge

@@ -22,6 +22,14 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
   ProfileController profileController = Get.find();
   UserModel get profile => UserModel.fromMap(widget.data['user']);
 
+  String _formatValue(num value) {
+    if (value >= 1000) {
+      double formatted = value / 1000;
+      return '${formatted.toStringAsFixed(formatted % 1 == 0 ? 0 : 1)}k';
+    }
+    return value.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Calculate Breakdown scores
@@ -84,7 +92,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                     ],
                   ),
                   Text(
-                    totalReachScore.toString(),
+                    _formatValue(totalReachScore),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -104,7 +112,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   iconBgColor: backgroundColor,
                   title: 'Interest',
                   subtitle: 'Active Interactions',
-                  value: (totalLikes + totalComments).toString(),
+                  value: _formatValue(totalLikes + totalComments),
                 ),
 
                 _buildReachItem(
@@ -113,7 +121,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   iconBgColor: backgroundColor,
                   title: 'Views',
                   subtitle: 'Listing/Post Views',
-                  value: totalViews.toString(),
+                  value: _formatValue(totalViews),
                 ),
 
                 _buildReachItem(
@@ -122,7 +130,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   iconBgColor: backgroundColor,
                   title: 'Profile Strength',
                   subtitle: 'Profile Completion Score',
-                  value: profileScore.toInt().toString(),
+                  value: _formatValue(profileScore.toInt()),
                 ),
 
                 _buildReachItem(
@@ -131,7 +139,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   iconBgColor: backgroundColor,
                   title: 'Authority',
                   subtitle: 'Challenge Wins',
-                  value: engagementScore.toInt().toString(),
+                  value: _formatValue(engagementScore.toInt()),
                 ),
                 _buildReachItem(
                   icon: LucideIcons.globe,
@@ -139,7 +147,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   iconBgColor: backgroundColor,
                   title: 'Biz-Center Actions',
                   subtitle: 'Sales Intent & Buyer Demand',
-                  value: (discoveryScore).toInt().toString(),
+                  value: _formatValue(discoveryScore.toInt()),
                 ),
                 _buildReachItem(
                   icon: LucideIcons.shieldCheck,
@@ -147,7 +155,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   iconBgColor: backgroundColor,
                   title: 'Trust',
                   subtitle: 'Verification status',
-                  value: trustScore.toInt().toString(),
+                  value: _formatValue(trustScore.toInt()),
                 ),
 
                 // Total Reach Score Section
@@ -174,7 +182,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                           ),
                         ),
                         Text(
-                          totalReachScore.toString(),
+                          _formatValue(totalReachScore),
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,

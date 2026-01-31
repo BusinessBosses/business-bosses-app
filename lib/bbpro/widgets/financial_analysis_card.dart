@@ -100,7 +100,8 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           padding: EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              'Sales from All Orders',
+                              textAlign: TextAlign.center,
+                              'Sales from \n All Orders',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -109,8 +110,11 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           padding: EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              'Expenses from Tasks',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                              'Performance from Buyer Requests',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),

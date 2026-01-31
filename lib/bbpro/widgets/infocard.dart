@@ -29,8 +29,10 @@ class _InfoCardState extends State<InfoCard> {
         children: <Widget>[
           Text(
             widget.cardName,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 13,
               fontWeight: FontWeight.bold,
             ),
           ),

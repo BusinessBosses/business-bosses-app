@@ -15,6 +15,8 @@ import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
+import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -37,27 +39,16 @@ class ShopScreen extends StatefulWidget {
 class _ShopScreenState extends State<ShopScreen> {
   final ShopController shopController = Get.find();
   final ProfileController profileController = Get.find();
+  late final ReachController reachController;
 
-  late final Map<String, dynamic> dataMap = profileController.impact is Map
-      ? profileController.impact
-      : <String, dynamic>{};
-  late final double profileScore = (dataMap['profileReach'] ?? 10).toDouble();
-  late final double engagementScore =
-      (dataMap['engagementReach'] ?? 30).toDouble();
-  late final double discoveryScore =
-      (dataMap['discoveryReach'] ?? 20).toDouble();
-  late final double trustScore = (dataMap['trustReach'] ?? 20).toDouble();
-
-  late final int totalLikes = profileController.impact['totalLikes'] ?? 0;
-  late final int totalViews = profileController.impact['totalViews'] ?? 0;
-
-  late final int totalReachScore = (totalLikes +
-          totalViews +
-          profileScore +
-          engagementScore +
-          discoveryScore +
-          trustScore)
-      .toInt();
+  @override
+  void initState() {
+    super.initState();
+    reachController =
+        Get.put(ReachController(), tag: profileController.myProfile.uid);
+    reachController.loadData(
+        profileController.myProfile.uid, profileController.myProfile.uid);
+  }
 
   void showbottomsheet() {
     showModalBottomSheet(
@@ -371,12 +362,41 @@ class _ShopScreenState extends State<ShopScreen> {
                             const SizedBox(
                               width: 5,
                             ),
-                            Text(
-                              '$totalReachScore Reach',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                              ),
+                            Obx(
+                              () => reachController.loading.value
+                                  ? const SizedBox(
+                                      height: 12,
+                                      width: 12,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const LeaderboardScreen());
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          const Icon(Icons.leaderboard,
+                                              size: 16, color: Colors.orange),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            '#${reachController.data?['globalRank'] ?? profileController.myProfile.weeklyRank ?? "12"} in ${(profileController.myProfile.industry ?? shopController.shop?.category ?? "Health").split(' ').first} ...',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 13,
+                                                color: Colors.black),
+                                          ),
+                                          const SizedBox(width: 2),
+                                          const Icon(
+                                            Icons.chevron_right,
+                                            size: 14,
+                                            color: Colors.grey,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                             ),
                           ],
                         ),
