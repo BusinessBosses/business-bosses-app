@@ -63,6 +63,10 @@ class MarketController extends GetxController {
   RxList<Product> searchedProducts = <Product>[].obs;
   RxList<Service> searchedServices = <Service>[].obs;
   RxBool isSearching = false.obs;
+  RxBool searchLoading = false.obs;
+
+  /// Holds items currently displayed in MarketsPage
+  RxList<Object> activeMarketItems = <Object>[].obs;
 
   String marketDescription = '';
   String donationDescription = '';
@@ -96,6 +100,12 @@ class MarketController extends GetxController {
       }
     }
 
+    isSearching(false);
+
+    activeMarketItems
+      ..clear()
+      ..addAll(proItems);
+
     isfiltered(false);
     update();
   }
@@ -109,58 +119,123 @@ class MarketController extends GetxController {
     isfiltered(false);
   }
 
-  Future<void> searchProducts(String query) async {
-    if (query.isEmpty) {
-      searchedProducts.clear();
+  Future<void> loadCategory(String? category) async {
+    selectedCategory = category;
+    isSearching(true);
+    loading(true);
+
+    searchedProducts.clear();
+    searchedServices.clear();
+
+    if (category == null || category.isEmpty) {
+      // Restore normal marketplace items
       isSearching(false);
+      loading(false);
       update();
       return;
     }
 
-    isSearching(true);
-    loading(true);
+    final String categoryParam =
+        '&category=${Uri.encodeQueryComponent(category)}';
 
-    final ApiResponseModel res =
-        await ApiService.get(path: 'goods/search?q=$query');
+    try {
+      final List<ApiResponseModel> responses =
+          await Future.wait(<Future<ApiResponseModel>>[
+        ApiService.get(
+            path:
+                'goods/search?category=${Uri.encodeQueryComponent(category)}'),
+        ApiService.get(
+            path:
+                'services/search?category=${Uri.encodeQueryComponent(category)}'),
+      ]);
 
-    if (res.success) {
-      searchedProducts.assignAll(
-        (res.data['rows'] as List<dynamic>)
-            .map<Product>(
-                (dynamic e) => Product.fromJson(e as Map<String, dynamic>))
-            .toList(),
-      );
+      final ApiResponseModel productRes = responses[0];
+      final ApiResponseModel serviceRes = responses[1];
+
+      searchedProducts.clear();
+      searchedServices.clear();
+
+      if (productRes.success) {
+        searchedProducts.assignAll(
+          (productRes.data['rows'] as List<dynamic>)
+              .map<Product>(
+                  (dynamic e) => Product.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        );
+      }
+
+      if (serviceRes.success) {
+        searchedServices.assignAll(
+          (serviceRes.data['rows'] as List<dynamic>)
+              .map<Service>(
+                  (dynamic e) => Service.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        );
+      }
+
+      // 🔥 THIS IS THE KEY
+      activeMarketItems
+        ..clear()
+        ..addAll(searchedProducts)
+        ..addAll(searchedServices);
+
+      hasMoreItems(false); // category search does not paginate
+    } finally {
+      loading(false);
+      update();
     }
-
-    loading(false);
-    update();
   }
 
-  Future<void> searchServices(String query) async {
-    if (query.isEmpty) {
+  Future<void> searchMarketplace(String query) async {
+    searchQuery = query.trim();
+
+    if (searchQuery.isEmpty) {
+      searchedProducts.clear();
       searchedServices.clear();
+      activeMarketItems.clear();
       isSearching(false);
+      searchLoading(false);
       update();
       return;
     }
 
     isSearching(true);
-    loading(true);
+    searchLoading(true);
 
-    final ApiResponseModel res =
-        await ApiService.get(path: 'services/search?q=$query');
+    try {
+      final List<ApiResponseModel> responses =
+          await Future.wait(<Future<ApiResponseModel>>[
+        ApiService.get(
+          path: 'goods/search?q=${Uri.encodeQueryComponent(searchQuery)}',
+        ),
+        ApiService.get(
+          path: 'services/search?q=${Uri.encodeQueryComponent(searchQuery)}',
+        ),
+      ]);
 
-    if (res.success) {
-      searchedServices.assignAll(
-        (res.data['rows'] as List<dynamic>)
-            .map<Service>(
-                (dynamic e) => Service.fromJson(e as Map<String, dynamic>))
+      searchedProducts.assignAll(
+        (responses[0].data['rows'] as List<dynamic>)
+            .map<Product>((e) => Product.fromJson(e))
             .toList(),
       );
-    }
 
-    loading(false);
-    update();
+      searchedServices.assignAll(
+        (responses[1].data['rows'] as List<dynamic>)
+            .map<Service>((e) => Service.fromJson(e))
+            .toList(),
+      );
+
+      // ✅ single source of truth for UI
+      activeMarketItems
+        ..clear()
+        ..addAll(searchedProducts)
+        ..addAll(searchedServices);
+    } catch (e) {
+      debugPrint('Search error: $e');
+    } finally {
+      searchLoading(false);
+      update();
+    }
   }
 
   void clearUserSearch() => isUserSearch(false);
@@ -283,6 +358,12 @@ class MarketController extends GetxController {
         proServices.addAll(uniqueServices);
         if (!isfiltered.value) {
           proItems.addAll(uniqueServices);
+        }
+
+        if (!isSearching.value) {
+          activeMarketItems
+            ..clear()
+            ..addAll(proItems);
         }
       }
 

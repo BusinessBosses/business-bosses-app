@@ -1,5 +1,7 @@
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
@@ -146,15 +148,17 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
         .map<Map<String, dynamic>>((MapEntry<int, dynamic> entry) {
       final int index = entry.key;
       final Map<String, dynamic> item = Map<String, dynamic>.from(entry.value);
-      final Map<String, dynamic> shop =
-          Map<String, dynamic>.from(item['shop'] ?? <dynamic, dynamic>{});
+      final Shop shop = Shop.fromMap(item['shop']);
+      final UserModel user = UserModel.fromMap(item['shop']['user']);
 
       return <String, dynamic>{
         'rank': item['globalRank'] ?? (index + 1),
-        'name': shop['name'] ?? '',
+        'name': shop.name,
+        'description': shop.description,
+        'user': user,
         'score': item['impactScore'] ?? 0,
-        'image': shop['image'] ?? '',
-        'verified': shop['verificationStatus'] == 'approved',
+        'image': shop.image ?? '',
+        'verified': shop.verificationStatus == 'approved',
       };
     }).toList();
   }
@@ -413,97 +417,109 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     if (item['rank'] == 2) rankColor = const Color(0xFFC0C0C0);
     if (item['rank'] == 3) rankColor = const Color(0xFFCD7F32);
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+    return GestureDetector(
+      onTap: () {
+        Get.to(
+          () => PublicProfileScreen(
+            currentIndex: 1,
           ),
-        ],
-        border: Border.all(
-          color: isTop3 ? rankColor.withValues(alpha: 0.3) : Colors.transparent,
-          width: 1.5,
+          arguments: item['user'],
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+          border: Border.all(
+            color:
+                isTop3 ? rankColor.withValues(alpha: 0.3) : Colors.transparent,
+            width: 1.5,
+          ),
         ),
-      ),
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: 30,
-            alignment: Alignment.center,
-            child: Text(
-              '#${item['rank']}',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: isTop3 ? rankColor : Colors.grey[600],
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: 30,
+              alignment: Alignment.center,
+              child: Text(
+                '#${item['rank']}',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: isTop3 ? rankColor : Colors.grey[600],
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Container(
-            width: 45,
-            height: 45,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey.shade200),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(50),
-              child: NetworkImageWithPlaceHolder(
-                placeHolder: LucideIcons.store,
-                imageUrl: item['image'] ?? '',
-                width: 45,
-                height: 45,
+            const SizedBox(width: 8),
+            Container(
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.grey.shade200),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: NetworkImageWithPlaceHolder(
+                  imageUrl: item['image'] ?? '',
+                  placeHolder: LucideIcons.store,
+                  width: 45,
+                  height: 45,
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Flexible(
-                      child: Text(
-                        item['name'],
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Flexible(
+                        child: Text(
+                          item['name'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    if (item['verified'] == true) ...<Widget>[
-                      const SizedBox(width: 4),
-                      const Icon(
-                        LucideIcons.badgeCheck,
-                        size: 16,
-                        color: Colors.blue,
-                      ),
+                      if (item['verified'] == true) ...<Widget>[
+                        const SizedBox(width: 4),
+                        const Icon(
+                          LucideIcons.badgeCheck,
+                          size: 16,
+                          color: Colors.blue,
+                        ),
+                      ],
                     ],
-                  ],
-                ),
-                Text(
-                  'Reach Score: ${item['score']}',
-                  style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                ),
-              ],
+                  ),
+                  Text(
+                    '${item['description']}',
+                    maxLines: 1,
+                    style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                  ),
+                ],
+              ),
             ),
-          ),
-          if (isTop3)
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Icon(LucideIcons.trophy, color: rankColor, size: 20),
-            ),
-        ],
+            if (isTop3)
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Icon(LucideIcons.trophy, color: rankColor, size: 20),
+              ),
+          ],
+        ),
       ),
     );
   }

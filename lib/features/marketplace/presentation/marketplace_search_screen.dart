@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
@@ -37,6 +39,7 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
       Get.put(BuyerRequestController());
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
+  Timer? _debounce;
 
   int _selectedTab = 0;
   final List<String> _tabs = <String>[
@@ -77,10 +80,12 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
   }
 
   void _onSearchChanged(String query) {
-    _marketController.searchProducts(query);
-    _marketController.searchServices(query);
-    _supplierController.searchSuppliers(query);
-    _buyerRequestController.filterBuyerRequests(query);
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 450), () {
+      _marketController.searchMarketplace(query);
+      _supplierController.searchSuppliers(query);
+      _buyerRequestController.filterBuyerRequests(query);
+    });
   }
 
   void _showFilterSheet() {
@@ -463,36 +468,18 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
       // Products, Services, or All
       return GetBuilder<MarketController>(
         builder: (MarketController controller) {
-          List<Object> items;
-
-          if (controller.isSearching.value) {
-            items = <Object>[
-              ...controller.searchedProducts,
-              ...controller.searchedServices,
-            ];
-          } else {
-            items = controller.proItems;
+          // 🔥 Correct loader
+          if (controller.searchLoading.value) {
+            return const Center(child: CircularProgressIndicator());
           }
 
-          // Filter locally based on tab
+          List<Object> items = controller.activeMarketItems;
+
+          // Tabs filter LOCAL only
           if (_selectedTab == 1) {
             items = items.whereType<Product>().toList();
           } else if (_selectedTab == 2) {
             items = items.whereType<Service>().toList();
-          }
-
-          // Filter by location strictly
-          if (controller.selectedLocation != null &&
-              controller.selectedLocation!.isNotEmpty) {
-            items = items
-                .where((Object item) =>
-                    controller.extractLocation(item).toLowerCase() ==
-                    controller.selectedLocation!.toLowerCase())
-                .toList();
-          }
-
-          if (controller.loading.value) {
-            return const Center(child: CircularProgressIndicator());
           }
 
           if (items.isEmpty) {
@@ -504,53 +491,31 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
 
           return MasonryGridView.count(
             crossAxisCount: 2,
-            mainAxisSpacing: 10.0,
-            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index) {
               final Object item = items[index];
+
               if (item is Product) {
-                return GestureDetector(
-                  onTap: () {
-                    if (item.user!.uid == _profileController.myProfile.uid) {
-                      // Own item
-                    } else {
-                      Get.to(() => OrderProductScreen(
-                            ismarketplace: true,
-                            product: item,
-                            shop: item.shop!,
-                          ));
-                    }
-                  },
-                  child: InventoryCard(
-                    marketplace: true,
-                    product: item,
-                    shop: item.shop!,
-                    myShop: item.user!.uid == _profileController.myProfile.uid,
-                  ),
-                );
-              } else if (item is Service) {
-                return GestureDetector(
-                  onTap: () {
-                    if (item.user!.uid == _profileController.myProfile.uid) {
-                      // Own item
-                    } else {
-                      Get.to(() => BookServiceScreen(
-                            isMarketplace: true,
-                            service: item,
-                            shop: item.shop!,
-                          ));
-                    }
-                  },
-                  child: ServiceCard(
-                    marketplace: true,
-                    service: item,
-                    shop: item.shop!,
-                    myShop: item.user!.uid == _profileController.myProfile.uid,
-                  ),
+                return InventoryCard(
+                  marketplace: true,
+                  product: item,
+                  shop: item.shop!,
+                  myShop: item.user!.uid == _profileController.myProfile.uid,
                 );
               }
+
+              if (item is Service) {
+                return ServiceCard(
+                  marketplace: true,
+                  service: item,
+                  shop: item.shop!,
+                  myShop: item.user!.uid == _profileController.myProfile.uid,
+                );
+              }
+
               return const SizedBox.shrink();
             },
           );

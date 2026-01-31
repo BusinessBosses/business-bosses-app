@@ -478,19 +478,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                               (_marketController.selectedCategory == category);
 
                       return GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           setState(() {
                             if (category == 'All') {
-                              // Clear the category and restore all items
                               _marketController.selectedCategory = null;
+                              _marketController.isSearching(false);
                               _marketController.clearFilter();
-                              _marketController
-                                  .sortItems(); // Restore sorted list
+                              _marketController.sortItems();
                             } else {
-                              _marketController.selectedCategory = category;
-                              // Trigger filter with current search query and category
-                              _marketController
-                                  .filterItems(_marketController.searchQuery);
+                              _marketController.loadCategory(category);
                             }
                           });
                         },
