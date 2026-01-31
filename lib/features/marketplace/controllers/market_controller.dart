@@ -135,9 +135,6 @@ class MarketController extends GetxController {
       return;
     }
 
-    final String categoryParam =
-        '&category=${Uri.encodeQueryComponent(category)}';
-
     try {
       final List<ApiResponseModel> responses =
           await Future.wait(<Future<ApiResponseModel>>[

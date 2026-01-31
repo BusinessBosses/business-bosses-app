@@ -42,11 +42,13 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   bool isVisible = false;
   String? _ytUrl;
   late String industryId;
-  final DetectableTextEditingController descriptionController =
-      DetectableTextEditingController();
+  late final DetectableTextEditingController descriptionController;
   @override
   void initState() {
     super.initState();
+    descriptionController = DetectableTextEditingController(
+      regExp: detectionRegExp(hashtag: false)!,
+    );
     if (Get.arguments == null) {
       Get.back();
     } else {
@@ -106,21 +108,24 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                     ),
                   ),
                   const SizedBox(height: 24.0),
-                  DetectableTextField(
-                    controller: descriptionController,
-                    regExp: detectionRegExp(hashtag: false)!,
-                    keyboardType: TextInputType.multiline,
-                    // minLines: 5,
-                    maxLength: 1000,
-                    maxLines: 5,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    onChanged: (String val) {
-                      description = val;
-                    },
-
-                    decoration: inputDecoration.copyWith(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    child: DetectableTextField(
+                      controller: descriptionController,
+                      regExp: detectionRegExp(hashtag: false)!,
+                      keyboardType: TextInputType.multiline,
+                      // minLines: 5,
+                      maxLength: 1000,
+                      maxLines: 5,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      onChanged: (String val) {
+                        description = val;
+                      },
+                      decoration: inputDecoration.copyWith(
                         hintText: widget.industryModel.createDescription ??
-                            'What is your business about? Share your story, values, and the benefits you offer to customers.'),
+                            'What is your business about? Share your story, values, and the benefits you offer to customers.',
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 12.0),
                   Row(

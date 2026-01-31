@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
@@ -145,6 +147,13 @@ class _HeroSectionState extends State<HeroSection> {
     ),
     'ranking': WinnerCardConfig(
       title: 'Top Ranked This Week',
+      icon: LucideIcons.trophy,
+      gradientColors: <Color>[backgroundColor, backgroundColor],
+      iconColor: Color(0xFFFCD34D),
+      accentColor: Color(0x33FBBf24),
+    ),
+    'my_ranking': WinnerCardConfig(
+      title: 'Your Reach Ranking',
       icon: LucideIcons.barChart2,
       gradientColors: <Color>[
         Color(0xFFE0F2FE),
@@ -166,17 +175,18 @@ class _HeroSectionState extends State<HeroSection> {
     partner = homeController.partnerOfTheWeek;
     industry = challengeController.categories[0];
     _startAutoRotation();
+    _fetchRankWinner();
     heroItems = <HeroItem>[
       HeroItem(
         id: '0',
         type: 'ranking',
         title: 'Top Ranked This Week',
         icon: 'assets/images/app_logo_2.png',
-        subtitle: _profileController.myProfile.weeklyRank ?? 'N/A',
+        subtitle: 'Loading...',
         image: '',
         description: '',
-        action: 'Get Featured',
-        action2: 'View your Match',
+        action: 'Follow',
+        action2: 'Get Featured',
       ),
       HeroItem(
         id: '1',
@@ -239,7 +249,63 @@ class _HeroSectionState extends State<HeroSection> {
         action: 'Follow',
         action2: 'Become Ambassador',
       ),
+      HeroItem(
+        id: '6',
+        type: 'my_ranking',
+        title: 'Your Reach Ranking',
+        icon: 'assets/images/app_logo_2.png',
+        subtitle: _profileController.myProfile.weeklyRank ?? 'N/A',
+        image: '',
+        description:
+            'Connect with people and opportunities that can help boost your reach and revenue',
+        action: 'View your Match',
+        action2: 'Get Featured',
+      ),
     ];
+  }
+
+  UserModel? rankWinner;
+
+  Future<void> _fetchRankWinner() async {
+    try {
+      final ApiResponseModel response =
+          await ApiService.get(path: 'impact/top/shops?limit=1');
+      if (response.success &&
+          response.data != null &&
+          response.data is List &&
+          (response.data as List).isNotEmpty) {
+        final Map<String, dynamic> data =
+            Map<String, dynamic>.from((response.data as List).first);
+        final Shop shop = Shop.fromMap(data['shop'] ?? <String, dynamic>{});
+        setState(() {
+          rankWinner = shop.user;
+          // Update the first hero item
+          if (heroItems.isNotEmpty) {
+            heroItems[0] = HeroItem(
+              id: '0',
+              type: 'ranking',
+              title: 'Top Ranked This Week',
+              icon: 'assets/images/app_logo_2.png',
+              subtitle: shop.name.isNotEmpty
+                  ? shop.name
+                  : (rankWinner?.name ?? rankWinner?.username ?? 'N/A'),
+              image: shop.image ?? rankWinner?.photoUrl ?? '',
+              description: shop.description.isNotEmpty
+                  ? shop.description
+                  : (rankWinner?.bio ?? ''),
+              action: (rankWinner != null &&
+                      _profileController.myProfile.connecteds!
+                          .contains(rankWinner!.uid))
+                  ? 'Refer'
+                  : 'Follow',
+              action2: 'Get Featured',
+            );
+          }
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching rank winner: $e');
+    }
   }
 
   void _startAutoRotation() {
@@ -458,28 +524,29 @@ class _HeroSectionState extends State<HeroSection> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset(item.icon, width: 22, height: 22),
-                          const SizedBox(width: 4),
-                          Text(
-                            config.title,
-                            style: const TextStyle(
-                              color: textColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
+                      Image.asset(item.icon, width: 22, height: 22),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          item.type == 'my_ranking'
+                              ? 'Your Reach Ranking is #${controller.data?['globalRank'] ?? _profileController.myProfile.weeklyRank ?? 'N/A'}'
+                              : config.title,
+                          style: const TextStyle(
+                            color: textColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
                           ),
-                        ],
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       const Icon(LucideIcons.chevronRight,
                           color: textColor, size: 20),
                     ],
                   ),
-                  if (item.type != 'matches' && item.type != 'ranking')
+                  if (item.type != 'matches' &&
+                      item.type != 'ranking' &&
+                      item.type != 'my_ranking')
                     GestureDetector(
                       onTap: () {
                         UserModel? targetUser;
@@ -602,6 +669,72 @@ class _HeroSectionState extends State<HeroSection> {
                       ),
                     ),
                   if (item.type == 'ranking')
+                    GestureDetector(
+                      onTap: () {
+                        if (rankWinner != null) {
+                          Get.toNamed(
+                            Routes.publicProfile,
+                            arguments: rankWinner,
+                          );
+                        }
+                      },
+                      child: Container(
+                        height: 75,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            if (item.image.isNotEmpty)
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: NetworkImageWithPlaceHolder(
+                                  imageUrl: item.image,
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            else
+                              _buildDefaultAvatar(config, item.subtitle),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    item.subtitle,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  if (item.description.isNotEmpty)
+                                    Text(
+                                      item.description,
+                                      style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 12,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (item.type == 'my_ranking')
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       child: Obx(
@@ -617,44 +750,15 @@ class _HeroSectionState extends State<HeroSection> {
                             : Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Row(children: <Widget>[
-                                    const Icon(LucideIcons.arrowUp,
-                                        color: textColor),
-                                    const SizedBox(width: 5),
-                                    RichText(
-                                      text: TextSpan(
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          color: textColor,
-                                        ),
-                                        children: <TextSpan>[
-                                          const TextSpan(
-                                              text: 'Your Reach Ranking is ',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black87,
-                                                  fontWeight: FontWeight.w600)),
-                                          TextSpan(
-                                            text:
-                                                '#${controller.data?['globalRank'] ?? 'N/A'}',
-                                            style: const TextStyle(
-                                              color: Colors.brown,
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ]),
-                                  const Text(
-                                    'Higher activity increases your reach and ranking',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.black54,
+                                  Text(
+                                    item.description,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black87,
                                       fontWeight: FontWeight.w500,
                                     ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -683,8 +787,25 @@ class _HeroSectionState extends State<HeroSection> {
                                 }
                               } else if (item.type == 'boss' ||
                                   item.type == 'mentor' ||
-                                  item.type == 'backer') {
-                                connectToUser();
+                                  item.type == 'backer' ||
+                                  item.type == 'ranking') {
+                                if (item.type == 'ranking' &&
+                                    rankWinner != null) {
+                                  final bool isConnected = _profileController
+                                              .myProfile.connecteds !=
+                                          null &&
+                                      _profileController.myProfile.connecteds!
+                                          .contains(rankWinner!.uid);
+                                  _profileController
+                                      .updateConnections(rankWinner!.uid);
+                                  if (!isConnected) {
+                                    await connect(rankWinner!.uid);
+                                  } else {
+                                    await disconnect(rankWinner!.uid);
+                                  }
+                                } else {
+                                  connectToUser();
+                                }
                               }
                               break;
                             case 'Refer':
