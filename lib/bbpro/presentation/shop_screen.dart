@@ -267,9 +267,24 @@ class _ShopScreenState extends State<ShopScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text(shopController.shop!.name,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14)),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(shopController.shop!.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 14)),
+                            if (shopController.shop!.verificationStatus ==
+                                'approved')
+                              const Padding(
+                                padding: EdgeInsets.only(left: 5.0),
+                                child: Icon(
+                                  Icons.verified,
+                                  color: Colors.blue,
+                                  size: 16,
+                                ),
+                              ),
+                          ],
+                        ),
                         const SizedBox(height: 2),
                         DetectableText(
                           text: shopController.shop!.description,

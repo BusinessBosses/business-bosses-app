@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
@@ -82,6 +83,9 @@ class HomeController extends GetxController {
   dynamic partnerOfTheWeek;
   RxList<BuyerRequestModel> myRequests = <BuyerRequestModel>[].obs;
   RxBool loadingRequests = false.obs;
+  UserModel? rankWinner;
+  Shop? rankWinnerShop;
+  RxBool loadingRankWinner = true.obs;
   final ReachController impactController = Get.put(ReachController());
 
   void addIndustries(List<Industry> data) {
@@ -159,6 +163,32 @@ class HomeController extends GetxController {
           ],
         ),
       );
+    }
+  }
+
+  Future<void> fetchRankWinner() async {
+    if (rankWinner != null) {
+      loadingRankWinner.value = false;
+      return;
+    }
+    try {
+      loadingRankWinner.value = true;
+      final ApiResponseModel response =
+          await ApiService.get(path: 'impact/top/shops?limit=1');
+      if (response.success &&
+          response.data != null &&
+          response.data is List &&
+          (response.data as List).isNotEmpty) {
+        final Map<String, dynamic> data =
+            Map<String, dynamic>.from((response.data as List).first);
+        rankWinnerShop = Shop.fromMap(data['shop'] ?? <String, dynamic>{});
+        rankWinner = rankWinnerShop?.user;
+      }
+    } catch (e) {
+      debugPrint('Error fetching rank winner: $e');
+    } finally {
+      loadingRankWinner.value = false;
+      update();
     }
   }
 

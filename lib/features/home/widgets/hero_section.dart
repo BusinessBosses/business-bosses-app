@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
-import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
@@ -175,7 +174,11 @@ class _HeroSectionState extends State<HeroSection> {
     partner = homeController.partnerOfTheWeek;
     industry = challengeController.categories[0];
     _startAutoRotation();
-    _fetchRankWinner();
+    homeController.fetchRankWinner();
+    _initializeHeroItems();
+  }
+
+  void _initializeHeroItems() {
     heroItems = <HeroItem>[
       HeroItem(
         id: '0',
@@ -264,49 +267,8 @@ class _HeroSectionState extends State<HeroSection> {
     ];
   }
 
-  UserModel? rankWinner;
-
-  Future<void> _fetchRankWinner() async {
-    try {
-      final ApiResponseModel response =
-          await ApiService.get(path: 'impact/top/shops?limit=1');
-      if (response.success &&
-          response.data != null &&
-          response.data is List &&
-          (response.data as List).isNotEmpty) {
-        final Map<String, dynamic> data =
-            Map<String, dynamic>.from((response.data as List).first);
-        final Shop shop = Shop.fromMap(data['shop'] ?? <String, dynamic>{});
-        setState(() {
-          rankWinner = shop.user;
-          // Update the first hero item
-          if (heroItems.isNotEmpty) {
-            heroItems[0] = HeroItem(
-              id: '0',
-              type: 'ranking',
-              title: 'Top Ranked This Week',
-              icon: 'assets/images/app_logo_2.png',
-              subtitle: shop.name.isNotEmpty
-                  ? shop.name
-                  : (rankWinner?.name ?? rankWinner?.username ?? 'N/A'),
-              image: shop.image ?? rankWinner?.photoUrl ?? '',
-              description: shop.description.isNotEmpty
-                  ? shop.description
-                  : (rankWinner?.bio ?? ''),
-              action: (rankWinner != null &&
-                      _profileController.myProfile.connecteds!
-                          .contains(rankWinner!.uid))
-                  ? 'Refer'
-                  : 'Follow',
-              action2: 'Get Featured',
-            );
-          }
-        });
-      }
-    } catch (e) {
-      debugPrint('Error fetching rank winner: $e');
-    }
-  }
+  UserModel? get rankWinner => homeController.rankWinner;
+  Shop? get rankWinnerShop => homeController.rankWinnerShop;
 
   void _startAutoRotation() {
     _timer?.cancel();
@@ -669,70 +631,114 @@ class _HeroSectionState extends State<HeroSection> {
                       ),
                     ),
                   if (item.type == 'ranking')
-                    GestureDetector(
-                      onTap: () {
-                        if (rankWinner != null) {
-                          Get.toNamed(
-                            Routes.publicProfile,
-                            arguments: rankWinner,
-                          );
-                        }
-                      },
-                      child: Container(
-                        height: 75,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            if (item.image.isNotEmpty)
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(50),
-                                child: NetworkImageWithPlaceHolder(
-                                  imageUrl: item.image,
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            else
-                              _buildDefaultAvatar(config, item.subtitle),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    item.subtitle,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  if (item.description.isNotEmpty)
-                                    Text(
-                                      item.description,
-                                      style: const TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: 12,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                ],
+                    GetBuilder<HomeController>(
+                      builder: (HomeController hController) {
+                        if (hController.loadingRankWinner.value) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 27),
+                            child: Center(
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
+                          );
+                        }
+
+                        // Update the hero item data if rank winner is loaded
+                        if (hController.rankWinner != null &&
+                            hController.rankWinnerShop != null) {
+                          final Shop shop = hController.rankWinnerShop!;
+                          final UserModel rWinner = hController.rankWinner!;
+                          item = HeroItem(
+                            id: '0',
+                            type: 'ranking',
+                            title: 'Top Ranked This Week',
+                            icon: 'assets/images/app_logo_2.png',
+                            subtitle: shop.name.isNotEmpty
+                                ? shop.name
+                                : (rWinner.name ?? rWinner.username),
+                            image: shop.image ?? rWinner.photoUrl ?? '',
+                            description: shop.description.isNotEmpty
+                                ? shop.description
+                                : (rWinner.bio ?? ''),
+                            action: (_profileController.myProfile.connecteds!
+                                    .contains(rWinner.uid))
+                                ? 'Refer'
+                                : 'Follow',
+                            action2: 'Get Featured',
+                          );
+                        }
+
+                        return GestureDetector(
+                          onTap: () {
+                            if (hController.rankWinner != null) {
+                              Get.toNamed(
+                                Routes.publicProfile,
+                                arguments: hController.rankWinner,
+                              );
+                            }
+                          },
+                          child: Container(
+                            height: 75,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                if (item.image.isNotEmpty)
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: NetworkImageWithPlaceHolder(
+                                      imageUrl: item.image,
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                else
+                                  _buildDefaultAvatar(config, item.subtitle),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        item.subtitle,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      if (item.description.isNotEmpty)
+                                        Text(
+                                          item.description,
+                                          style: const TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 12,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   if (item.type == 'my_ranking')
                     Padding(
@@ -880,13 +886,17 @@ class _HeroSectionState extends State<HeroSection> {
                             switch (
                                 item.action2.isNotEmpty ? item.action2 : '') {
                               case 'Get Featured':
-                                item.id == '1'
-                                    ? enterChallenge()
-                                    : item.id == '2'
-                                        ? entermentoroftheweek()
-                                        : item.id == '3'
-                                            ? enterbackeroftheweek()
-                                            : enterpartneroftheweek();
+                                if (item.id == '0' || item.id == '6') {
+                                  Get.toNamed(Routes.allCommunitiesScreen);
+                                } else if (item.id == '1') {
+                                  enterChallenge();
+                                } else if (item.id == '2') {
+                                  entermentoroftheweek();
+                                } else if (item.id == '3') {
+                                  enterbackeroftheweek();
+                                } else {
+                                  enterpartneroftheweek();
+                                }
                                 break;
                               case 'View your Match':
                                 Get.to(() => const ExpandedMatchesScreen());

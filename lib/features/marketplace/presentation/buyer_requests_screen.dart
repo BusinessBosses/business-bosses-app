@@ -18,8 +18,13 @@ import 'package:intl/intl.dart';
 
 class BuyerRequestsScreen extends StatefulWidget {
   final String? filterByIndustry;
+  final bool showOnlyMyRequests;
 
-  const BuyerRequestsScreen({super.key, this.filterByIndustry});
+  const BuyerRequestsScreen({
+    super.key,
+    this.filterByIndustry,
+    this.showOnlyMyRequests = false,
+  });
 
   @override
   State<BuyerRequestsScreen> createState() => _BuyerRequestsScreenState();
@@ -60,6 +65,14 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
             .toList();
       }
 
+      // Filter by my requests if specified
+      if (widget.showOnlyMyRequests) {
+        baseRequests = baseRequests
+            .where((BuyerRequestModel r) =>
+                r.user.uid == profileController.myProfile.uid)
+            .toList();
+      }
+
       if (_selectedFilter == 'All') {
         _filteredRequests = baseRequests;
       } else if (_selectedFilter == 'Active') {
@@ -74,10 +87,11 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
       } else if (_selectedFilter == 'Closing Soon') {
         _filteredRequests = baseRequests
             .where((BuyerRequestModel r) =>
+                r.deadline.isNotEmpty &&
                 DateTime.tryParse(r.deadline)!
-                    .difference(DateTime.now())
-                    .inDays <=
-                7)
+                        .difference(DateTime.now())
+                        .inDays <=
+                    7)
             .toList();
       }
     });

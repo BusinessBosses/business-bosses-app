@@ -6,7 +6,6 @@ import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart'
     as custom_preview;
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -32,7 +31,6 @@ class CreateBossUpScreen extends StatefulWidget {
 class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final ProfileController _profileController = Get.find();
-  // Industry? industry;
   String title = '';
   String description = '';
   ForumModel forum = ForumModel(forumId: '', industryId: '');
@@ -42,13 +40,12 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   bool isVisible = false;
   String? _ytUrl;
   late String industryId;
-  late final DetectableTextEditingController descriptionController;
+  late final TextEditingController descriptionController;
+
   @override
   void initState() {
     super.initState();
-    descriptionController = DetectableTextEditingController(
-      regExp: detectionRegExp(hashtag: false)!,
-    );
+    descriptionController = TextEditingController();
     if (Get.arguments == null) {
       Get.back();
     } else {
@@ -64,6 +61,12 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   }
 
   @override
+  void dispose() {
+    descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GetBuilder<CreateBossUpController>(
       builder: (CreateBossUpController controller) {
@@ -73,11 +76,9 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
             backgroundColor: backgroundcolorinterface,
             key: scaffoldKey,
             appBar: AppBar(
-              title: //Text(Provider.of<AppCommunities>(context, listen: false).label(_industry.categoryId, isUpdating: _isUpdating)),
-                  Text(widget.industryModel.createTitle ??
-                      'Share business to get featured'),
-              automaticallyImplyLeading:
-                  false, // Used for removing back buttoon.
+              title: Text(widget.industryModel.createTitle ??
+                  'Share business to get featured'),
+              automaticallyImplyLeading: false,
               actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -94,7 +95,6 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
-                    // controller: _titleController,
                     initialValue: forum.title,
                     onChanged: (String val) {
                       title = val;
@@ -110,11 +110,9 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   const SizedBox(height: 24.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                    child: DetectableTextField(
+                    child: TextField(
                       controller: descriptionController,
-                      regExp: detectionRegExp(hashtag: false)!,
                       keyboardType: TextInputType.multiline,
-                      // minLines: 5,
                       maxLength: 1000,
                       maxLines: 5,
                       style: Theme.of(context).textTheme.bodyMedium,
@@ -161,11 +159,6 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                                     'assets/svgs/addimagepost.svg',
                                     height: 11,
                                   ),
-
-                                  // const Text(
-                                  //   'Max file size for images is 10Mb',
-                                  //   style: TextStyle(fontSize: 11, color: Colors.red),
-                                  // )
                                 ],
                               ),
                             ),
@@ -203,11 +196,6 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                                     'assets/svgs/yt.svg',
                                     height: 15,
                                   ),
-
-                                  // const Text(
-                                  //   'Max file size for images is 10Mb',
-                                  //   style: TextStyle(fontSize: 11, color: Colors.red),
-                                  // )
                                 ],
                               ),
                             ),
@@ -233,13 +221,6 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                               _ytUrl = val;
                               setState(() {});
                             },
-                            // validator: (value) {
-                            //   if (value == null || value.isEmpty) {
-                            //     return '';
-                            //   }
-                            //   return null;
-                            // },
-                            // textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.visiblePassword,
                             maxLines: 1,
                             decoration: InputDecoration(
@@ -369,8 +350,4 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
       },
     );
   }
-
-  // void _onImagePicker() {}
-
-  // void _onChangeForum() {}
 }

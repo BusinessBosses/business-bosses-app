@@ -1,5 +1,5 @@
-import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
@@ -165,9 +165,35 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
             const SizedBox(height: 16),
             GestureDetector(
               onTap: () {
-                widget.isBuyerRequest
-                    ? Get.to(() => BossUpPartner())
-                    : Get.to(() => ProshopdealsScreen());
+                if (widget.isBuyerRequest) {
+                  Get.to(() => BossUpPartner());
+                } else {
+                  Get.bottomSheet(
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                      ),
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.9,
+                      child: const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    left: 0.0, top: 0, bottom: 10),
+                                child: PremiumScreen()),
+                          ],
+                        ),
+                      ),
+                    ),
+                    backgroundColor: Colors.white,
+                  );
+                }
               },
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 30),

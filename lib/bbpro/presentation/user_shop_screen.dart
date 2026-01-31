@@ -385,10 +385,29 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
-                                          Text(shopController.userShop!.name,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14)),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Text(
+                                                  shopController.userShop!.name,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14)),
+                                              if (shopController.userShop!
+                                                      .verificationStatus ==
+                                                  'approved')
+                                                const Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 5.0),
+                                                  child: Icon(
+                                                    Icons.verified,
+                                                    color: Colors.blue,
+                                                    size: 16,
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
                                           const SizedBox(height: 2),
                                           DetectableText(
                                             text: shopController

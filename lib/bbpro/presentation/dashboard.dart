@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
@@ -7,7 +9,6 @@ import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
-import 'package:business_bosses_v2/bbpro/presentation/todo_tasks_view.dart';
 import 'package:business_bosses_v2/bbpro/widgets/financial_analysis_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
@@ -51,6 +52,7 @@ class _DashboardState extends State<Dashboard> {
       Get.put(ShopController(), permanent: true);
   final ClientsController clientsController = Get.put(ClientsController());
   final ProfileController profileController = Get.find();
+  final HomeController homeController = Get.find();
   String _selectedfilteritem = 'All Time';
   String _selectedDateFilter = 'all_time';
 
@@ -62,6 +64,7 @@ class _DashboardState extends State<Dashboard> {
           ));
     } else {
       shopController.loadStatistics();
+      homeController.loadMyRequests();
     }
     super.initState();
   }
@@ -303,7 +306,9 @@ class _DashboardState extends State<Dashboard> {
                                 } else if (index == 1) {
                                   // Add navigation for Expenses
                                 } else if (index == 2) {
-                                  Get.to(() => const TodoTaskView());
+                                  Get.to(() => const BuyerRequestsScreen(
+                                        showOnlyMyRequests: true,
+                                      ));
                                 } else if (index == 3) {
                                   Get.to(() => const CreateOrder());
                                 }
@@ -321,11 +326,8 @@ class _DashboardState extends State<Dashboard> {
                                                 .toString()
                                             : '0'
                                         : index == 2
-                                            ? shopController.shopStats != null
-                                                ? shopController
-                                                    .shopStats!.projectCount
-                                                    .toString()
-                                                : '0'
+                                            ? homeController.myRequests.length
+                                                .toString()
                                             : '0',
                               ));
                         },
