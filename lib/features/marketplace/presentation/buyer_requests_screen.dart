@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class BuyerRequestsScreen extends StatefulWidget {
   final String? filterByIndustry;
@@ -672,23 +673,36 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   Widget _buildEmptyState() {
+    final bool hasBizCenter = profileController.myProfile.hasShop;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(Icons.inbox_outlined, size: 80, color: Colors.grey[400]),
+          Icon(
+            hasBizCenter ? LucideIcons.inbox : LucideIcons.bellRing,
+            size: 80,
+            color: Colors.grey[400],
+          ),
           const SizedBox(height: 16),
-          Text(
-            'No requests found',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey[700],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Text(
+              hasBizCenter
+                  ? 'No requests found'
+                  : "We'll notify you when we find a customer match for you",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[700],
+              ),
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'Try adjusting your filters',
+            hasBizCenter
+                ? 'Try adjusting your filters'
+                : 'Complete your BizCenter to start matching',
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[500],

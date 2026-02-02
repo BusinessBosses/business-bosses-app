@@ -20,6 +20,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 
 class DonationItem extends StatefulWidget {
   final DonationModel donation;
@@ -247,6 +248,33 @@ class _DonationItemState extends State<DonationItem> {
                             ],
                           ),
                         ),
+                        if (widget.donation.user?.hasShop == true)
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(
+                                () => PublicProfileScreen(
+                                  currentIndex: 1,
+                                ),
+                                arguments: widget.donation.user,
+                              );
+                            },
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                const Text(
+                                  'Visit My Center',
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 9, 93, 237),
+                                      fontSize: 12),
+                                ),
+                                const Icon(
+                                  LucideIcons.chevronRight,
+                                  size: 13,
+                                  color: Color.fromARGB(255, 9, 93, 237),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),

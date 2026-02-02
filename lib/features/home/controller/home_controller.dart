@@ -177,10 +177,10 @@ class HomeController extends GetxController {
           await ApiService.get(path: 'impact/top/shops?limit=1');
       if (response.success &&
           response.data != null &&
-          response.data is List &&
-          (response.data as List).isNotEmpty) {
+          response.data is List<dynamic> &&
+          (response.data as List<dynamic>).isNotEmpty) {
         final Map<String, dynamic> data =
-            Map<String, dynamic>.from((response.data as List).first);
+            Map<String, dynamic>.from((response.data as List<dynamic>).first);
         rankWinnerShop = Shop.fromMap(data['shop'] ?? <String, dynamic>{});
         rankWinner = rankWinnerShop?.user;
       }
@@ -194,7 +194,7 @@ class HomeController extends GetxController {
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   List<String> _extractUserIds(dynamic items) {
-    if (items is List) {
+    if (items is List<dynamic>) {
       return items.map((dynamic e) => e['userId'].toString()).toList();
     }
     return <String>[];

@@ -813,6 +813,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
           Get.off(() => ListingSuccessScreen(
                 isBuyerRequest: false,
                 industry: category!,
+                productId: response.product?.id.toString(),
                 location:
                     country.isEmpty ? shopController.shop!.location : country,
               ));

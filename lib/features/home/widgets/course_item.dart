@@ -18,6 +18,7 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/utils/time_format.dart';
+import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -783,57 +784,93 @@ class _CourseItemState extends State<CourseItem> {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.publicProfile,
-                    arguments: widget.course.user);
-              },
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                    width: 20.0,
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(1000),
-                        child: NetworkImageWithPlaceHolder(
-                          imageUrl: widget.course.user?.photoUrl ?? '',
-                          radius: radius,
-                          placeHolder: Icons.person,
-                          iconSize: 15.0,
-                          fit: BoxFit.cover,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.publicProfile,
+                        arguments: widget.course.user);
+                  },
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                        width: 20.0,
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(1000),
+                            child: NetworkImageWithPlaceHolder(
+                              imageUrl: widget.course.user?.photoUrl ?? '',
+                              radius: radius,
+                              placeHolder: Icons.person,
+                              iconSize: 15.0,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    overflow: TextOverflow.ellipsis, // or TextOverflow.ellipsis
-                    maxLines: 1,
-                    widget.course.user?.name ?? widget.course.user!.name!,
-                    style: const TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                  widget.course.user?.isSubscribed == true
-                      ? Wrap(
-                          children: [
-                            const SizedBox(width: 3),
-                            SvgPicture.asset(
-                              'assets/svgs/premiumbadge.svg',
-                              height: 7,
-                              colorFilter: const ColorFilter.mode(
-                                  primaryColorLT, BlendMode.srcIn),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        overflow:
+                            TextOverflow.ellipsis, // or TextOverflow.ellipsis
+                        maxLines: 1,
+                        widget.course.user?.name ?? widget.course.user!.name!,
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      widget.course.user?.isSubscribed == true
+                          ? Wrap(
+                              children: [
+                                const SizedBox(width: 3),
+                                SvgPicture.asset(
+                                  'assets/svgs/premiumbadge.svg',
+                                  height: 7,
+                                  colorFilter: const ColorFilter.mode(
+                                      primaryColorLT, BlendMode.srcIn),
+                                )
+                              ],
                             )
-                          ],
-                        )
-                      : Container()
-                ],
-              ),
+                          : Container()
+                    ],
+                  ),
+                ),
+                if (widget.course.user?.hasShop == true)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(
+                          () => PublicProfileScreen(
+                            currentIndex: 1,
+                          ),
+                          arguments: widget.course.user,
+                        );
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          const Text(
+                            'Visit My Center',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 9, 93, 237),
+                                fontSize: 12),
+                          ),
+                          const Icon(
+                            LucideIcons.chevronRight,
+                            size: 13,
+                            color: Color.fromARGB(255, 9, 93, 237),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+              ],
             ),
             const SizedBox(
               height: 5,

@@ -218,13 +218,15 @@ class MarketController extends GetxController {
 
       searchedProducts.assignAll(
         (responses[0].data['rows'] as List<dynamic>)
-            .map<Product>((e) => Product.fromJson(e))
+            .map<Product>(
+                (dynamic e) => Product.fromJson(e as Map<String, dynamic>))
             .toList(),
       );
 
       searchedServices.assignAll(
         (responses[1].data['rows'] as List<dynamic>)
-            .map<Service>((e) => Service.fromJson(e))
+            .map<Service>(
+                (dynamic e) => Service.fromJson(e as Map<String, dynamic>))
             .toList(),
       );
 
