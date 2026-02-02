@@ -30,7 +30,7 @@ class _MarketsPageState extends State<MarketsPage> {
     return GetBuilder<MarketController>(
       builder: (MarketController controller) {
         // Show loading state
-        if (controller.loading.value && controller.proItems.isEmpty) {
+        if (controller.loading.value) {
           return const Center(
             child: Padding(
               padding: EdgeInsets.all(20.0),

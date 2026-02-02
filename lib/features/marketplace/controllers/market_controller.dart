@@ -122,8 +122,8 @@ class MarketController extends GetxController {
   Future<void> loadCategory(String? category) async {
     selectedCategory = category;
     isSearching(true);
-    loading(true);
-
+    loading.value = true;
+    update();
     searchedProducts.clear();
     searchedServices.clear();
 
@@ -178,7 +178,7 @@ class MarketController extends GetxController {
 
       hasMoreItems(false); // category search does not paginate
     } finally {
-      loading(false);
+      loading.value = false;
       update();
     }
   }
@@ -189,7 +189,12 @@ class MarketController extends GetxController {
     if (searchQuery.isEmpty) {
       searchedProducts.clear();
       searchedServices.clear();
-      activeMarketItems.clear();
+
+      // 🔥 Restore default marketplace items
+      activeMarketItems
+        ..clear()
+        ..addAll(proItems);
+
       isSearching(false);
       searchLoading(false);
       update();
@@ -198,6 +203,7 @@ class MarketController extends GetxController {
 
     isSearching(true);
     searchLoading(true);
+    update();
 
     try {
       final List<ApiResponseModel> responses =
