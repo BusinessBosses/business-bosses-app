@@ -1564,6 +1564,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             Get.off(() => ListingSuccessScreen(
                   isBuyerRequest: false,
                   industry: category!,
+                  serviceId: result.service?.id.toString(),
                   location: location.isEmpty
                       ? shopController.shop!.location
                       : location,

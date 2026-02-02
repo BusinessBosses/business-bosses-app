@@ -25,6 +25,7 @@ import '../../../utils/theme/theme.dart';
 import '../../../utils/time_format.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../../profile/widgets/premium_profile_tile.dart';
+import '../../profile/presentation/public_profile_screen.dart';
 import 'forum_like_comment.dart';
 
 class ForumItem extends StatefulWidget {
@@ -654,10 +655,43 @@ class _ForumItemState extends State<ForumItem> {
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                       ),
-                      subtitle: Text(
-                        widget.forum.user?.bio ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      subtitle: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            widget.forum.user?.bio ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if (widget.forum.user?.hasShop == true)
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  () => PublicProfileScreen(
+                                    currentIndex: 1,
+                                  ),
+                                  arguments: widget.forum.user,
+                                );
+                              },
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  const Text(
+                                    'Visit My Center',
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 9, 93, 237),
+                                        fontSize: 14),
+                                  ),
+                                  const Icon(
+                                    LucideIcons.chevronRight,
+                                    size: 15,
+                                    color: Color.fromARGB(255, 9, 93, 237),
+                                  ),
+                                ],
+                              ),
+                            )
+                        ],
                       ),
                     ),
                     widget.forum.title == null
