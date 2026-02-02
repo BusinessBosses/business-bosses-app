@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:business_bosses_v2/analytics/presentation/profile_analyse_screen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/my_connect.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -188,19 +190,36 @@ class _ReachScreenState extends State<ReachScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               /// Global Rank Section - shown for all users
+              /// Global Rank Section - shown for all users
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                child: ReachRankingCard(
-                  data: controller.data,
-                  rank: rank,
-                  industry: widget.user.industry ?? 'General',
-                  location: widget.user.location ?? 'Global',
-                  showShareButton: isMe,
-                  isMe: isMe,
-                  onViewLeaderboard: () {
-                    Get.to(() => const LeaderboardScreen());
-                  },
+                child: Stack(
+                  children: <Widget>[
+                    // 👇 Original ranking card
+                    ReachRankingCard(
+                      data: controller.data,
+                      rank: rank,
+                      industry: widget.user.industry ?? 'General',
+                      location: widget.user.location ?? 'Global',
+                      showShareButton: isMe,
+                      isMe: isMe,
+                      onViewLeaderboard: () {
+                        Get.to(() => const LeaderboardScreen());
+                      },
+                    ),
+
+                    // 👇 Overlay when user has NO shop
+                    if (isMe && !profileController.myProfile.hasShop)
+                      Positioned.fill(
+                        child: _BizCenterLockedOverlay(
+                          onTap: () {
+                            // Navigate to BizCenter setup
+                            Get.to(() => Setupshop());
+                          },
+                        ),
+                      ),
+                  ],
                 ),
               ),
 
@@ -593,5 +612,71 @@ class _ReachScreenState extends State<ReachScreen> {
     setState(() {
       loading = false;
     });
+  }
+}
+
+class _BizCenterLockedOverlay extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _BizCenterLockedOverlay({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Stack(
+        children: <Widget>[
+          // Blur layer
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+            child: Container(
+              color: Colors.black.withOpacity(0.35),
+            ),
+          ),
+
+          // Content
+          Center(
+            child: GestureDetector(
+              onTap: onTap,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const <Widget>[
+                    Icon(
+                      LucideIcons.lock,
+                      size: 28,
+                      color: Colors.black,
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Set up BizCenter',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'to see your ranking',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

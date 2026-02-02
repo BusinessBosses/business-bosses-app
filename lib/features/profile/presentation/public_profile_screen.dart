@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -901,25 +902,47 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                   const SizedBox(height: 16),
                   if (request.user.uid !=
                       _profileController.myProfile.uid) ...<Widget>[
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => _navigateToChatScreen(request),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColorLT,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                    if (_profileController.myProfile.hasShop) ...<Widget>[
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => _navigateToChatScreen(request),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryColorLT,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text(
+                            'Send Proposal',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                         ),
-                        child: const Text(
-                          'Send Proposal',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ] else ...<Widget>[
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => Get.to(() => Setupshop()),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryColorLT,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text(
+                            'Setup Shop to Send Proposal',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ] else ...<Widget>[
                     SizedBox(
                       width: double.infinity,

@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
@@ -297,19 +298,47 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
               _detail(Icons.category, 'Category', request.category),
               const SizedBox(height: 16),
               if (!isMine)
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => _navigateToChatScreen(request),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryColorLT,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                if (profileController.myProfile.hasShop) ...<Widget>[
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => _navigateToChatScreen(request),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColorLT,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        'Send Proposal',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
                     ),
-                    child: const Text('Send Proposal',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
-                )
+                ] else ...<Widget>[
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Get.to(() => Setupshop()),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColorLT,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        'Setup Shop to Send Proposal',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                ],
             ],
           ),
         ),
