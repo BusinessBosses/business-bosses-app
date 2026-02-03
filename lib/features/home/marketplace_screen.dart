@@ -91,6 +91,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         setState(() => hasOldData = true);
         await _marketController.checkMigrationReminder();
       }
+
+      _marketController.selectedCategory = null;
+      _marketController.isSearching(false);
+      _marketController.clearFilter();
+      _marketController.sortItems();
     });
   }
 
