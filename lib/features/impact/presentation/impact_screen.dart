@@ -210,7 +210,7 @@ class _ReachScreenState extends State<ReachScreen> {
                     ),
 
                     // 👇 Overlay when user has NO shop
-                    if (isMe && profileController.myProfile.hasShop)
+                    if (isMe && !profileController.myProfile.hasShop)
                       Positioned.fill(
                         child: _BizCenterLockedOverlay(
                           onTap: () {

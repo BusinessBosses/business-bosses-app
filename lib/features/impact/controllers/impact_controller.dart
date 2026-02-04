@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 class ReachController extends GetxController {
   /// Reach data
   Map<String, dynamic>? data;
+  Map<String, dynamic>? shopData;
   Map<String, dynamic>? myReach;
 
   /// Referrals list
@@ -33,6 +34,22 @@ class ReachController extends GetxController {
 
       /// Load referrals (no extra loader toggle)
       await loadReferrals(showLoader: false);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load reach data');
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  Future<void> loadShopData(String shopId) async {
+    try {
+      loading.value = true;
+
+      /// Load reach data
+      final ApiResponseModel response =
+          await ApiService.get(path: 'impact/shop/$shopId');
+
+      shopData = _parseMap(response.data);
     } catch (e) {
       Get.snackbar('Error', 'Failed to load reach data');
     } finally {

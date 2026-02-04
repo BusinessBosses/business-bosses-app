@@ -99,15 +99,24 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     }
 
     if (globalResponse.success) {
-      globalLeaders = _mapApiResponse(globalResponse.data);
+      globalLeaders = _mapApiResponse(
+        globalResponse.data,
+        useGlobalRank: true,
+      );
     }
 
     if (industryResponse.success) {
-      industryLeaders = _mapApiResponse(industryResponse.data);
+      industryLeaders = _mapApiResponse(
+        industryResponse.data,
+        useGlobalRank: false,
+      );
     }
 
     if (countryResponse.success) {
-      countryLeaders = _mapApiResponse(countryResponse.data);
+      countryLeaders = _mapApiResponse(
+        countryResponse.data,
+        useGlobalRank: false,
+      );
     }
 
     setState(() => isLoading = false);
@@ -120,7 +129,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
           'impact/top/shops/location?location=${Uri.encodeComponent(country)}&limit=30',
     );
     if (response.success) {
-      countryLeaders = _mapApiResponse(response.data);
+      countryLeaders = _mapApiResponse(
+        response.data,
+        useGlobalRank: false,
+      );
     }
     setState(() => isCountryLoading = false);
   }
@@ -132,7 +144,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
           'impact/top/shops/category?category=${Uri.encodeComponent(industry)}&limit=30',
     );
     if (response.success) {
-      industryLeaders = _mapApiResponse(response.data);
+      industryLeaders = _mapApiResponse(
+        response.data,
+        useGlobalRank: false,
+      );
     }
     setState(() => isIndustryLoading = false);
   }
@@ -140,8 +155,12 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   /// ===============================
   /// MAP SHOP RESPONSE → SAME UI DATA
   /// ===============================
-  List<Map<String, dynamic>> _mapApiResponse(dynamic data) {
+  List<Map<String, dynamic>> _mapApiResponse(
+    dynamic data, {
+    bool useGlobalRank = false,
+  }) {
     final List<dynamic> list = data is List<dynamic> ? data : <dynamic>[];
+
     return list
         .asMap()
         .entries
@@ -152,7 +171,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
       final UserModel user = UserModel.fromMap(item['shop']['user']);
 
       return <String, dynamic>{
-        'rank': item['globalRank'] ?? (index + 1),
+        'rank': useGlobalRank
+            ? (item['globalRank'] ?? index + 1)
+            : index + 1, // 🔥 ALWAYS 1–30
         'name': shop.name,
         'description': shop.description,
         'user': user,

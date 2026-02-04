@@ -75,19 +75,19 @@ class _UserShopScreenState extends State<UserShopScreen> {
   void initState() {
     super.initState();
     reachController = Get.put(ReachController(), tag: widget.user!.uid);
-    reachController.loadData(widget.user!.uid, profileController.myProfile.uid);
     loadData();
   }
 
-  void loadData() {
+  void loadData() async {
     setState(() {
       loading = true;
     });
-    shopController.initUserShop(widget.user!).then((bool value) {
+    await shopController.initUserShop(widget.user!).then((bool value) {
       setState(() {
         loading = false;
       });
     });
+    reachController.loadShopData(shopController.userShop!.id);
   }
 
   Future<void> connect(String userId) async {
@@ -557,7 +557,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                             const SizedBox(
                                                                 width: 4),
                                                             Text(
-                                                              '#${reachController.data?['globalRank'] ?? "12"}',
+                                                              '#${reachController.shopData?['rank']['globalRank'] ?? "0"}',
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:

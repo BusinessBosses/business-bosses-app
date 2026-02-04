@@ -46,8 +46,7 @@ class _ShopScreenState extends State<ShopScreen> {
     super.initState();
     reachController =
         Get.put(ReachController(), tag: profileController.myProfile.uid);
-    reachController.loadData(
-        profileController.myProfile.uid, profileController.myProfile.uid);
+    reachController.loadShopData(shopController.shop!.id);
   }
 
   void showbottomsheet() {
@@ -397,7 +396,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                               size: 16, color: Colors.orange),
                                           const SizedBox(width: 4),
                                           Text(
-                                            '#${reachController.data?['globalRank'] ?? "13"}',
+                                            '#${reachController.shopData?['rank']['globalRank'] ?? "13"}',
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 13,
