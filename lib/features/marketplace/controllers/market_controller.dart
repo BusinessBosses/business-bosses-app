@@ -83,6 +83,7 @@ class MarketController extends GetxController {
     allFilteredItems.clear();
     searchQuery = '';
     selectedCategory = null;
+    update();
 
     // Restore proItems from original data - ensure no duplicates
     proItems.clear();
@@ -365,7 +366,9 @@ class MarketController extends GetxController {
           proItems.addAll(uniqueServices);
         }
 
-        if (!isSearching.value) {
+        if (!isSearching.value &&
+            selectedCategory == null &&
+            searchQuery.isEmpty) {
           activeMarketItems
             ..clear()
             ..addAll(proItems);

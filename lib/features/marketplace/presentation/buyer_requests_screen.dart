@@ -62,7 +62,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
           widget.filterByIndustry!.isNotEmpty) {
         baseRequests = baseRequests
             .where((BuyerRequestModel r) =>
-                r.user.industry?.toLowerCase() ==
+                r.category.toLowerCase() ==
                 widget.filterByIndustry!.toLowerCase())
             .toList();
       }

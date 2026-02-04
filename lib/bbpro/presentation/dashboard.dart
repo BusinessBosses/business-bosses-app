@@ -333,8 +333,7 @@ class _DashboardState extends State<Dashboard> {
                                             ? buyerRequestsController
                                                 .buyerRequests
                                                 .where((BuyerRequestModel r) =>
-                                                    r.user.industry
-                                                        ?.toLowerCase() ==
+                                                    r.category.toLowerCase() ==
                                                     shopController
                                                         .shop!.category
                                                         .toLowerCase())
