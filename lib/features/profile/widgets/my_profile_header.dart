@@ -81,13 +81,17 @@ class MyProfileHeader extends StatelessWidget {
                       value: myProfile.connecteds?.length ?? 0,
                     )),
                     Expanded(
-                      child: CustomChildButton(
-                        value: totalReachScore,
-                        caption: 'Reach',
-                        onPressed: () {
-                          Get.to(() => ReachScreen(user: myProfile));
-                        },
-                      ),
+                      child: reachController.loading.value
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : CustomChildButton(
+                              value: totalReachScore,
+                              caption: 'Reach',
+                              onPressed: () {
+                                Get.to(() => ReachScreen(user: myProfile));
+                              },
+                            ),
                     ),
                   ],
                 ),
