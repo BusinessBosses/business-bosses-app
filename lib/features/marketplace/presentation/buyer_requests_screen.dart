@@ -676,13 +676,12 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   Widget _buildEmptyState() {
-    final bool hasBizCenter = profileController.myProfile.hasShop;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(
-            hasBizCenter ? LucideIcons.inbox : LucideIcons.bellRing,
+            LucideIcons.bellRing,
             size: 80,
             color: Colors.grey[400],
           ),
@@ -690,9 +689,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Text(
-              hasBizCenter
-                  ? 'No requests found'
-                  : "We'll notify you when we find a customer match for you",
+              "We'll notify you when we find a customer match for you",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
@@ -703,9 +700,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            hasBizCenter
-                ? 'Try adjusting your filters'
-                : 'Complete your BizCenter to start matching',
+            'Check back soon for new opportunities',
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[500],

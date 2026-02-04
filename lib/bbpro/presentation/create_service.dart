@@ -109,6 +109,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   final bool _shouldPromote = true;
   final List<String> categories = <String>[
     'Agriculture, Food & Beverage',
+    'Business Services & Consulting',
     'Learning & Education',
     'Construction & Real Estate',
     'Fashion & Beauty',

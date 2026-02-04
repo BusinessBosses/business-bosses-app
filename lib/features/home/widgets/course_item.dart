@@ -856,7 +856,7 @@ class _CourseItemState extends State<CourseItem> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           const Text(
-                            'Visit My Center',
+                            'Visit My Biz-Center',
                             style: TextStyle(
                                 color: Color.fromARGB(255, 9, 93, 237),
                                 fontSize: 12),
