@@ -619,7 +619,7 @@ class _ForumItemState extends State<ForumItem> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   const Text(
-                                    'Visit My Center',
+                                    'Visit My Biz-Center',
                                     style: TextStyle(
                                         color: Color.fromARGB(255, 9, 93, 237),
                                         fontSize: 14),

@@ -84,6 +84,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   List<String> achievements = <String>[];
   final List<String> categories = <String>[
     'Agriculture, Food & Beverage',
+    'Business Services & Consulting',
     'Learning & Education',
     'Construction & Real Estate',
     'Fashion & Beauty',
