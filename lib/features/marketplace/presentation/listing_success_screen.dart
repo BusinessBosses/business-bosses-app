@@ -99,6 +99,9 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
   }
 
   Widget _buildSuccessHeader() {
+    // Determine if we should show the matching message
+    final bool hasResults = !isLoading && results.isNotEmpty;
+
     return Column(
       children: <Widget>[
         Container(
@@ -127,8 +130,12 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Text(
             widget.isBuyerRequest
-                ? 'Your request is now live. Here are some suppliers who can help.'
-                : 'Your listing is now live. Here are some buyers looking for what you offer.',
+                ? hasResults
+                    ? 'Your request is now live. Here are some suppliers who can help.'
+                    : 'Your request is now live.'
+                : hasResults
+                    ? 'Your listing is now live. Here are some buyers looking for what you offer.'
+                    : 'Your listing is now live.',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: textColor.withValues(alpha: 0.6),

@@ -64,6 +64,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   bool loading = false;
   final List<String> categories = <String>[
     'Agriculture, Food & Beverage',
+    'Business Services & Consulting',
     'Learning & Education',
     'Construction & Real Estate',
     'Fashion & Beauty',

@@ -100,7 +100,7 @@ class _HeroSectionState extends State<HeroSection> {
   static const Map<String, WinnerCardConfig> cardConfigs =
       <String, WinnerCardConfig>{
     'boss': WinnerCardConfig(
-      title: 'Boss of the Week',
+      title: 'Top Ranking of the Week',
       icon: LucideIcons.trophy,
       gradientColors: <Color>[backgroundColor, backgroundColor],
       iconColor: Color(0xFFFCD34D),
@@ -144,23 +144,6 @@ class _HeroSectionState extends State<HeroSection> {
       iconColor: Color(0xFF93C5FD),
       accentColor: Color(0x3360A5FA),
     ),
-    'ranking': WinnerCardConfig(
-      title: 'Top Ranked This Week',
-      icon: LucideIcons.trophy,
-      gradientColors: <Color>[backgroundColor, backgroundColor],
-      iconColor: Color(0xFFFCD34D),
-      accentColor: Color(0x33FBBf24),
-    ),
-    'my_ranking': WinnerCardConfig(
-      title: 'Your Reach Ranking',
-      icon: LucideIcons.barChart2,
-      gradientColors: <Color>[
-        Color(0xFFE0F2FE),
-        Color(0xFFE0F2FE),
-      ],
-      iconColor: Colors.blue,
-      accentColor: Colors.blue,
-    ),
   };
 
   @override
@@ -182,20 +165,9 @@ class _HeroSectionState extends State<HeroSection> {
     heroItems = <HeroItem>[
       HeroItem(
         id: '0',
-        type: 'ranking',
-        title: 'Top Ranked This Week',
-        icon: 'assets/images/app_logo_2.png',
-        subtitle: 'Loading...',
-        image: '',
-        description: '',
-        action: 'Follow',
-        action2: 'Get Featured',
-      ),
-      HeroItem(
-        id: '1',
         type: 'boss',
         icon: 'assets/images/app_logo_2.png',
-        title: 'Boss of the Week',
+        title: 'Top Ranking of the Week',
         subtitle: user?.name ?? user!.username,
         description: user?.bio ?? '',
         image: user?.photoUrl ?? '',
@@ -205,7 +177,7 @@ class _HeroSectionState extends State<HeroSection> {
         action2: 'Get Featured',
       ),
       HeroItem(
-        id: '2',
+        id: '1',
         type: 'mentor',
         icon: 'assets/images/app_logo_2.png',
         title: 'Mentor of the Week',
@@ -218,7 +190,7 @@ class _HeroSectionState extends State<HeroSection> {
         action2: 'Share Learning',
       ),
       HeroItem(
-        id: '3',
+        id: '2',
         type: 'backer',
         icon: 'assets/images/app_logo_2.png',
         title: 'Backer of the Week',
@@ -231,7 +203,7 @@ class _HeroSectionState extends State<HeroSection> {
         action2: 'Fund Project',
       ),
       HeroItem(
-        id: '4',
+        id: '3',
         type: 'partner',
         title: 'Partner of the Week',
         icon: 'assets/images/app_logo_2.png',
@@ -242,7 +214,7 @@ class _HeroSectionState extends State<HeroSection> {
         action2: 'Become a Partner',
       ),
       HeroItem(
-        id: '5',
+        id: '4',
         type: 'ambassador',
         title: 'Ambassador of the Week',
         icon: 'assets/images/app_logo_2.png',
@@ -251,18 +223,6 @@ class _HeroSectionState extends State<HeroSection> {
         description: ambassador?.bio ?? '',
         action: 'Follow',
         action2: 'Become Ambassador',
-      ),
-      HeroItem(
-        id: '6',
-        type: 'my_ranking',
-        title: 'Your Reach Ranking',
-        icon: 'assets/images/app_logo_2.png',
-        subtitle: _profileController.myProfile.weeklyRank ?? 'N/A',
-        image: '',
-        description:
-            'Connect with people and opportunities that can help boost your reach and revenue',
-        action: 'View your Match',
-        action2: 'Get Featured',
       ),
     ];
   }
@@ -448,8 +408,30 @@ class _HeroSectionState extends State<HeroSection> {
 
     return GestureDetector(
       onTap: () {
-        if (item.type == 'ranking') {
-          Get.to(() => const LeaderboardScreen());
+        switch (item.type) {
+          case 'boss':
+            Get.to(() => const LeaderboardScreen());
+            break;
+          case 'ranking':
+            Get.to(() => const LeaderboardScreen());
+            break;
+          case 'mentor':
+            Get.to(() => const AllLearningPostsScreen(isCoursesTile: false));
+            break;
+          case 'backer':
+            Get.to(() => DonationsPage(ishome: false));
+            break;
+          case 'partner':
+            Get.to(() => BossUpPartner());
+            break;
+          case 'ambassador':
+            Get.to(Invitepage());
+            break;
+          case 'matches':
+            Get.to(() => const ExpandedMatchesScreen());
+            break;
+          default:
+            break;
         }
       },
       child: Container(
@@ -1008,9 +990,8 @@ class _HeroSectionState extends State<HeroSection> {
           GestureDetector(
             onTap: _onUserInteraction,
             onPanDown: (_) => _onUserInteraction(),
-            // FIXED: Changed IntrinsicHeight to SizedBox with fixed height
             child: SizedBox(
-              height: 185, // Adjust this height as needed
+              height: 185,
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: heroItems.length,
@@ -1022,7 +1003,7 @@ class _HeroSectionState extends State<HeroSection> {
                   final HeroItem item = heroItems[index];
                   final Industry category = challengeController.categories[0];
 
-                  // FIXED: Handle matches card click navigation
+                  // Handle matches card click navigation
                   if (item.type == 'matches') {
                     return GestureDetector(
                       onTap: () {
@@ -1052,64 +1033,8 @@ class _HeroSectionState extends State<HeroSection> {
                       onTap: () {
                         switch (item.type) {
                           case 'boss':
-                            DateTime now = DateTime.now();
-                            if (category.startAt != null &&
-                                now.isBefore(category.startAt!)) {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text(
-                                      'How It Works!',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          category.criteria!,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          _calculateStartDate(
-                                            category.startAt!,
-                                          ),
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: const Text('OK'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              return;
-                            }
-                            Get.to(
-                              () => BossUpSection(
-                                industry: category,
-                                bossUp: challengeController.categories[0],
-                              ),
-                            );
-
+                            // Navigate to LeaderboardScreen when clicking Top Ranking of the Week
+                            Get.to(() => const LeaderboardScreen());
                             break;
                           case 'mentor':
                             Get.to(

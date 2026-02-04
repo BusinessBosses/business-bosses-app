@@ -1,6 +1,5 @@
 // Import your controllers and other necessary files
-import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
@@ -19,6 +18,7 @@ import 'package:business_bosses_v2/features/matching_feature/widgets/match_heade
 import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/premium_prompt.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
+import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -363,11 +363,20 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: _buildPopupMenuActionCard(
+                    child: _buildActionCard(
                       title: 'Get Listing Featured',
                       icon: LucideIcons.star,
                       color: Colors.amber,
-                      context: context,
+                      onTap: () {
+                        // Check if user has Pro/BizCenter
+                        if (profileController.myProfile.hasShop) {
+                          // User has Pro - go to featured listings screen
+                          Get.to(() => const ProshopdealsScreen());
+                        } else {
+                          // User doesn't have Pro - go to upgrade screen
+                          Get.to(() => const ProScreen());
+                        }
+                      },
                     ),
                   ),
                 ] else if (isInvestor) ...<Widget>[
@@ -469,14 +478,6 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
           color: Colors.white,
-          border: Border.all(color: Colors.grey.shade200),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            )
-          ],
         ),
         child: Row(
           children: <Widget>[
@@ -484,12 +485,12 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: color.withValues(alpha: 0.1),
+                color: color.withValues(alpha: 0.15),
               ),
               child: Icon(
                 icon,
                 color: color,
-                size: 18,
+                size: 20,
               ),
             ),
             const SizedBox(width: 8),
@@ -498,121 +499,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                 title,
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey.shade900,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPopupMenuActionCard({
-    required String title,
-    required IconData icon,
-    required Color color,
-    required BuildContext context,
-  }) {
-    return PopupMenuButton<String>(
-      offset: const Offset(0, 80),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      onSelected: (String value) {
-        if (value == 'product') {
-          Get.to(() => const CreateProductListing());
-        } else if (value == 'service') {
-          Get.to(() => const CreateServiceListing());
-        }
-      },
-      itemBuilder: (BuildContext context) {
-        return <PopupMenuEntry<String>>[
-          PopupMenuItem<String>(
-            value: 'product',
-            child: Row(
-              children: <Widget>[
-                SvgPicture.asset(
-                  'assets/svgs/addproduct.svg',
-                  colorFilter: const ColorFilter.mode(
-                    textColor,
-                    BlendMode.srcIn,
-                  ),
-                  height: 15,
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'Create a Product',
-                  style: TextStyle(
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          PopupMenuItem<String>(
-            value: 'service',
-            child: Row(
-              children: <Widget>[
-                SvgPicture.asset(
-                  'assets/svgs/addservice.svg',
-                  height: 15,
-                  colorFilter: const ColorFilter.mode(
-                    textColor,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'Create a Service',
-                  style: TextStyle(
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ];
-      },
-      child: Container(
-        height: 80,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: Colors.white,
-          border: Border.all(color: Colors.grey.shade200),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            )
-          ],
-        ),
-        child: Row(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: color.withValues(alpha: 0.1),
-              ),
-              child: Icon(
-                icon,
-                color: color,
-                size: 18,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   color: Colors.grey.shade900,
                 ),
                 maxLines: 2,
