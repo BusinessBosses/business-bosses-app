@@ -557,7 +557,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                             const SizedBox(
                                                                 width: 4),
                                                             Text(
-                                                              '#${reachController.data?['globalRank'] ?? widget.user?.weeklyRank ?? "12"} in ${(widget.user?.industry ?? shopController.userShop?.category ?? "Health").split(' ').first} ...',
+                                                              '#${reachController.data?['globalRank'] ?? "12"}',
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:

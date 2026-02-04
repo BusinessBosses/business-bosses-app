@@ -100,13 +100,13 @@ class MarketController extends GetxController {
       }
     }
 
-    isSearching(false);
-
     activeMarketItems
       ..clear()
       ..addAll(proItems);
 
+    isSearching(false);
     isfiltered(false);
+
     update();
   }
 

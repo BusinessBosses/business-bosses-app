@@ -1,4 +1,6 @@
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
@@ -55,6 +57,7 @@ class _DashboardState extends State<Dashboard> {
   final HomeController homeController = Get.find();
   String _selectedfilteritem = 'All Time';
   String _selectedDateFilter = 'all_time';
+  final BuyerRequestController buyerRequestsController = Get.find();
 
   @override
   void initState() {
@@ -306,8 +309,9 @@ class _DashboardState extends State<Dashboard> {
                                 } else if (index == 1) {
                                   // Add navigation for Expenses
                                 } else if (index == 2) {
-                                  Get.to(() => const BuyerRequestsScreen(
-                                        showOnlyMyRequests: true,
+                                  Get.to(() => BuyerRequestsScreen(
+                                        filterByIndustry:
+                                            shopController.shop!.category,
                                       ));
                                 } else if (index == 3) {
                                   Get.to(() => const CreateOrder());
@@ -326,7 +330,15 @@ class _DashboardState extends State<Dashboard> {
                                                 .toString()
                                             : '0'
                                         : index == 2
-                                            ? homeController.myRequests.length
+                                            ? buyerRequestsController
+                                                .buyerRequests
+                                                .where((BuyerRequestModel r) =>
+                                                    r.user.industry
+                                                        ?.toLowerCase() ==
+                                                    shopController
+                                                        .shop!.category
+                                                        .toLowerCase())
+                                                .length
                                                 .toString()
                                             : '0',
                               ));

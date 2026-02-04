@@ -358,7 +358,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 GestureDetector(
                                   onTap: () {},
                                   child: Text(
-                                    '${shopController.shop!.user?.averageRating!.toStringAsFixed(2)} Reviews',
+                                    '${shopController.shop!.user?.averageRating!.toStringAsFixed(2)}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14,
@@ -397,7 +397,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                               size: 16, color: Colors.orange),
                                           const SizedBox(width: 4),
                                           Text(
-                                            '#${reachController.data?['globalRank'] ?? profileController.myProfile.weeklyRank ?? "12"} in ${(profileController.myProfile.industry ?? shopController.shop?.category ?? "Health").split(' ').first} ...',
+                                            '#${reachController.data?['globalRank'] ?? "13"}',
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 13,

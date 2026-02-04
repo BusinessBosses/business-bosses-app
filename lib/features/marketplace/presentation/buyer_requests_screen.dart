@@ -627,6 +627,9 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Buyer Requests'),
+      ),
       backgroundColor: backgroundColor,
       body: Obx(() {
         if (_buyerRequestController.loading.value) {

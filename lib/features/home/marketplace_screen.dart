@@ -92,10 +92,39 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         await _marketController.checkMigrationReminder();
       }
 
+      // FULL marketplace reset when entering screen
       _marketController.selectedCategory = null;
+      _marketController.searchQuery = '';
       _marketController.isSearching(false);
-      _marketController.clearFilter();
+      _marketController.isfiltered(false);
+
+// Restore default list
+      _marketController.activeMarketItems
+        ..clear()
+        ..addAll(_marketController.proItems);
+
       _marketController.sortItems();
+      _marketController.update();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // FULL marketplace reset when entering screen
+      _marketController.selectedCategory = null;
+      _marketController.searchQuery = '';
+      _marketController.isSearching(false);
+      _marketController.isfiltered(false);
+
+// Restore default list
+      _marketController.activeMarketItems
+        ..clear()
+        ..addAll(_marketController.proItems);
+
+      _marketController.sortItems();
+      _marketController.update();
     });
   }
 

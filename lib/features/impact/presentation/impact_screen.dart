@@ -210,7 +210,7 @@ class _ReachScreenState extends State<ReachScreen> {
                     ),
 
                     // 👇 Overlay when user has NO shop
-                    if (isMe && !profileController.myProfile.hasShop)
+                    if (isMe && profileController.myProfile.hasShop)
                       Positioned.fill(
                         child: _BizCenterLockedOverlay(
                           onTap: () {
@@ -630,7 +630,7 @@ class _BizCenterLockedOverlay extends StatelessWidget {
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
             child: Container(
-              color: Colors.black.withOpacity(0.35),
+              color: Colors.black.withValues(alpha: 0.35),
             ),
           ),
 
@@ -647,7 +647,7 @@ class _BizCenterLockedOverlay extends StatelessWidget {
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const <Widget>[
+                  children: <Widget>[
                     Icon(
                       LucideIcons.lock,
                       size: 28,
@@ -668,6 +668,36 @@ class _BizCenterLockedOverlay extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.black54,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        Get.to(() => const LeaderboardScreen());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: primaryColorLT,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: const BorderSide(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: <Widget>[
+                          const Text(
+                            'View Top Ranking',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, color: textColor),
+                          ),
+                        ],
                       ),
                     ),
                   ],
