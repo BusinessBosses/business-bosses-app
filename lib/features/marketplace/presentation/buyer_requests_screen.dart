@@ -21,11 +21,13 @@ import 'package:lucide_icons/lucide_icons.dart';
 class BuyerRequestsScreen extends StatefulWidget {
   final String? filterByIndustry;
   final bool showOnlyMyRequests;
+  final bool showAppBar;
 
   const BuyerRequestsScreen({
     super.key,
     this.filterByIndustry,
     this.showOnlyMyRequests = false,
+    this.showAppBar = true,
   });
 
   @override
@@ -627,9 +629,11 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Buyer Requests'),
-      ),
+      appBar: widget.showAppBar
+          ? AppBar(
+              title: const Text('Buyer Requests'),
+            )
+          : null,
       backgroundColor: backgroundColor,
       body: Obx(() {
         if (_buyerRequestController.loading.value) {

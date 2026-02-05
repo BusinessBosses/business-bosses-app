@@ -276,6 +276,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                 Obx(
                   () => profileController.currentMatchType.value == 'seller'
                       ? BuyerRequestsScreen(
+                          showAppBar: false,
                           filterByIndustry:
                               profileController.myProfile.industry,
                         )
