@@ -158,7 +158,7 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(
-              LucideIcons.searchX,
+              LucideIcons.bell,
               size: 48,
               color: textColor.withValues(alpha: 0.3),
             ),
