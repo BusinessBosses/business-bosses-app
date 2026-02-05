@@ -8,11 +8,14 @@ import 'package:business_bosses_v2/features/donations/presentation/donations.dar
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
+import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/suppliers_grid_tile.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
+
 import 'package:business_bosses_v2/features/matching_feature/widgets/banner.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_card.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_header.dart';
@@ -43,6 +46,8 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
     with TickerProviderStateMixin {
   final MatchController matchController = Get.put(MatchController());
   final ProfileController profileController = Get.find();
+  final BuyerRequestController buyerRequestController =
+      Get.put(BuyerRequestController());
 
   late TabController tabController;
   int selectedTabIndex = 0;
@@ -452,7 +457,10 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                     color: Colors.grey.shade600,
                   )),
             ),
-          if (isSeller)
+          if (isSeller &&
+              buyerRequestController.buyerRequests.any((BuyerRequestModel r) =>
+                  r.category.toLowerCase() ==
+                  profileController.myProfile.industry?.toLowerCase()))
             Padding(
               padding: const EdgeInsets.only(bottom: 0.0),
               child: Text('Showing buyer requests from your industry',
