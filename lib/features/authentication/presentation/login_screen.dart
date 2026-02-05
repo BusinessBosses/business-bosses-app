@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Flexible(
                       child: Text(
-                          'Promote Your Business - Get featured, Sell, Network & Grow Globally',
+                          'Access Business Opportunities – Get featured, reach buyers, partners, and investors worldwide',
                           style: TextStyle(
                               fontSize: 14,
                               color: textColor.withValues(alpha: 0.8),
