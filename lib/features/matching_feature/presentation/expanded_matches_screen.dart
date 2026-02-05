@@ -1,4 +1,5 @@
 // Import your controllers and other necessary files
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
@@ -359,7 +360,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                       title: 'Reach More Buyers',
                       icon: LucideIcons.users,
                       color: Colors.blue,
-                      onTap: () => Get.to(() => AddBuyerRequests()),
+                      onTap: () => Get.to(() => CreateProductListing()),
                     ),
                   ),
                   const SizedBox(width: 10),
