@@ -204,7 +204,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
       appBar: widget.isMarketplace
           ? null
           : AppBar(
-              title: const Text('Reach Leaderboards'),
+              title: const Text('Top Ranking Leaderboard'),
               centerTitle: true,
               backgroundColor: Colors.white,
               leading: IconButton(

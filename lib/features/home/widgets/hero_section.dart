@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
+import 'package:intl/intl.dart';
 
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
@@ -14,8 +16,8 @@ import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dar
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
-import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
+import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
@@ -26,7 +28,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -100,7 +101,7 @@ class _HeroSectionState extends State<HeroSection> {
   static const Map<String, WinnerCardConfig> cardConfigs =
       <String, WinnerCardConfig>{
     'boss': WinnerCardConfig(
-      title: 'Top Ranking of the Week',
+      title: 'Top Ranking this Week',
       icon: LucideIcons.trophy,
       gradientColors: <Color>[backgroundColor, backgroundColor],
       iconColor: Color(0xFFFCD34D),
@@ -410,10 +411,14 @@ class _HeroSectionState extends State<HeroSection> {
       onTap: () {
         switch (item.type) {
           case 'boss':
-            Get.to(() => const LeaderboardScreen());
+            Get.to(() => ReachScreen(
+                  user: _profileController.myProfile,
+                ));
             break;
           case 'ranking':
-            Get.to(() => const LeaderboardScreen());
+            Get.to(() => ReachScreen(
+                  user: _profileController.myProfile,
+                ));
             break;
           case 'mentor':
             Get.to(() => const AllLearningPostsScreen(isCoursesTile: false));
@@ -800,9 +805,64 @@ class _HeroSectionState extends State<HeroSection> {
                               referuser();
                               break;
                             case 'Get Featured':
-                              if (item.type == 'ranking') {
+                              if (item.type == 'ranking' ||
+                                  item.type == 'boss') {
+                                DateTime now = DateTime.now();
+                                if (industry.startAt != null &&
+                                    now.isBefore(industry.startAt!)) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text(
+                                          'How It Works!',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text(
+                                              industry.criteria!,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              _calculateStartDate(
+                                                  industry.startAt!),
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: const Text('OK'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                  return;
+                                }
                                 Get.to(() => BossUpSection(
-                                    industry: industry, bossUp: industry));
+                                      industry: industry,
+                                      bossUp: challengeController.categories[0],
+                                    ));
                               } else {
                                 enterChallenge();
                               }
@@ -869,7 +929,64 @@ class _HeroSectionState extends State<HeroSection> {
                                 item.action2.isNotEmpty ? item.action2 : '') {
                               case 'Get Featured':
                                 if (item.id == '0' || item.id == '6') {
-                                  Get.toNamed(Routes.allCommunitiesScreen);
+                                  DateTime now = DateTime.now();
+                                  if (industry.startAt != null &&
+                                      now.isBefore(industry.startAt!)) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                            'How It Works!',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              if (industry.criteria != null)
+                                                Text(
+                                                  industry.criteria!,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              const SizedBox(height: 10),
+                                              Text(
+                                                _calculateStartDate(
+                                                  industry.startAt!,
+                                                ),
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child: const Text('OK'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                    return;
+                                  }
+                                  Get.to(() => BossUpSection(
+                                        industry: industry,
+                                        bossUp:
+                                            challengeController.categories[0],
+                                      ));
                                 } else if (item.id == '1') {
                                   enterChallenge();
                                 } else if (item.id == '2') {
@@ -1001,8 +1118,6 @@ class _HeroSectionState extends State<HeroSection> {
                 },
                 itemBuilder: (BuildContext context, int index) {
                   final HeroItem item = heroItems[index];
-                  final Industry category = challengeController.categories[0];
-
                   // Handle matches card click navigation
                   if (item.type == 'matches') {
                     return GestureDetector(
@@ -1019,7 +1134,9 @@ class _HeroSectionState extends State<HeroSection> {
                   if (item.type == 'ranking') {
                     return GestureDetector(
                       onTap: () {
-                        Get.to(() => const LeaderboardScreen());
+                        Get.to(() => ReachScreen(
+                              user: _profileController.myProfile,
+                            ));
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 0.0),
@@ -1034,7 +1151,9 @@ class _HeroSectionState extends State<HeroSection> {
                         switch (item.type) {
                           case 'boss':
                             // Navigate to LeaderboardScreen when clicking Top Ranking of the Week
-                            Get.to(() => const LeaderboardScreen());
+                            Get.to(() => ReachScreen(
+                                  user: _profileController.myProfile,
+                                ));
                             break;
                           case 'mentor':
                             Get.to(
@@ -1314,9 +1433,9 @@ class _HeroSectionState extends State<HeroSection> {
       ),
     );
   }
-}
 
-String _calculateStartDate(DateTime startAt) {
-  String formattedDate = DateFormat('d MMM').format(startAt);
-  return 'Starts $formattedDate';
+  String _calculateStartDate(DateTime startAt) {
+    String formattedDate = DateFormat('d MMM').format(startAt);
+    return 'Starts $formattedDate';
+  }
 }

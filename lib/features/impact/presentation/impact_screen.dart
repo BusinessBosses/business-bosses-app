@@ -210,9 +210,23 @@ class _ReachScreenState extends State<ReachScreen> {
                     ),
 
                     // 👇 Overlay when user has NO shop
-                    if (isMe && profileController.myProfile.hasShop)
+                    if (isMe && !profileController.myProfile.hasShop)
                       Positioned.fill(
                         child: _BizCenterLockedOverlay(
+                          isMe: isMe,
+                          hasShop: profileController.myProfile.hasShop,
+                          onTap: () {
+                            // Navigate to BizCenter setup
+                            Get.to(() => Setupshop());
+                          },
+                        ),
+                      ),
+
+                    if (!isMe && !widget.user.hasShop)
+                      Positioned.fill(
+                        child: _BizCenterLockedOverlay(
+                          isMe: isMe,
+                          hasShop: widget.user.hasShop,
                           onTap: () {
                             // Navigate to BizCenter setup
                             Get.to(() => Setupshop());
@@ -617,8 +631,14 @@ class _ReachScreenState extends State<ReachScreen> {
 
 class _BizCenterLockedOverlay extends StatelessWidget {
   final VoidCallback onTap;
+  final bool isMe;
+  final bool hasShop;
 
-  const _BizCenterLockedOverlay({required this.onTap});
+  const _BizCenterLockedOverlay({
+    required this.onTap,
+    required this.isMe,
+    required this.hasShop,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -630,90 +650,108 @@ class _BizCenterLockedOverlay extends StatelessWidget {
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
             child: Container(
-              color: Colors.black.withValues(alpha: 0.35),
+              color: Colors.black.withValues(alpha: 0.40),
             ),
           ),
 
           // Content
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: GestureDetector(
-                  onTap: onTap,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.transparent,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Center(
+                  child: GestureDetector(
+                    onTap: onTap,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            textAlign: TextAlign.center,
+                            (!isMe && !hasShop)
+                                ? 'This profile is not yet ranked'
+                                : 'Set up BizCenter',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          if (isMe && !hasShop)
+                            Text(
+                              'to see your ranking',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                  ),
+                ),
+                SizedBox(height: 10),
+                SizedBox(
+                  height: 70,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => const LeaderboardScreen());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: primaryColorLT,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
-                        Icon(
-                          LucideIcons.lock,
-                          size: 28,
-                          color: Colors.black,
+                        Image.asset(
+                          'assets/images/leaderboard.png',
+                          height: 30,
                         ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Set up BizCenter',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          'to see your ranking',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black54,
-                          ),
+                        const SizedBox(width: 10),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            const Text(
+                              'View Top Ranking',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: textColor),
+                            ),
+                            Icon(
+                              LucideIcons.chevronRight,
+                              size: 18,
+                              color: textColor,
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Get.to(() => const LeaderboardScreen());
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: primaryColorLT,
-                  elevation: 0,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/images/leaderboard.png',
-                      height: 30,
-                    ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      'View Top Ranking',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: textColor),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
