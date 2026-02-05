@@ -409,6 +409,54 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                             ],
                                           ),
                                           const SizedBox(height: 2),
+                                          if (reachController
+                                                      .shopData?['industryRank']
+                                                  ['industryRank'] !=
+                                              null)
+                                            Obx(
+                                              () => reachController
+                                                      .loading.value
+                                                  ? const SizedBox(
+                                                      height: 12,
+                                                      width: 12,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                      ),
+                                                    )
+                                                  : GestureDetector(
+                                                      onTap: () {
+                                                        Get.to(() =>
+                                                            const LeaderboardScreen());
+                                                      },
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          const Icon(
+                                                              Icons.leaderboard,
+                                                              size: 16,
+                                                              color:
+                                                                  Colors.green),
+                                                          const SizedBox(
+                                                              width: 4),
+                                                          Text(
+                                                            '#${reachController.shopData?['industryRank']['industryRank'] ?? "0"} in ${(shopController.userShop?.category ?? "Health")}',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontSize: 13,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                            ),
+                                          const SizedBox(height: 2),
                                           DetectableText(
                                             text: shopController
                                                 .userShop!.description,
@@ -517,69 +565,6 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                     ),
                                                   ],
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              const CircleAvatar(
-                                                radius: 2,
-                                                backgroundColor: Colors.black87,
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              Obx(
-                                                () => reachController
-                                                        .loading.value
-                                                    ? const SizedBox(
-                                                        height: 12,
-                                                        width: 12,
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          strokeWidth: 2,
-                                                        ),
-                                                      )
-                                                    : GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(() =>
-                                                              const LeaderboardScreen());
-                                                        },
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: <Widget>[
-                                                            const Icon(
-                                                                Icons
-                                                                    .leaderboard,
-                                                                size: 16,
-                                                                color: Colors
-                                                                    .orange),
-                                                            const SizedBox(
-                                                                width: 4),
-                                                            Text(
-                                                              '#${reachController.shopData?['rank']['globalRank'] ?? "0"}',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                fontSize: 13,
-                                                                color: Colors
-                                                                    .black,
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                                width: 2),
-                                                            const Icon(
-                                                              Icons
-                                                                  .chevron_right,
-                                                              size: 14,
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
                                               ),
                                             ],
                                           ),

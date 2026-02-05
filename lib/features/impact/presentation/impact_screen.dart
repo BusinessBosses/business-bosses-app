@@ -210,7 +210,7 @@ class _ReachScreenState extends State<ReachScreen> {
                     ),
 
                     // 👇 Overlay when user has NO shop
-                    if (isMe && !profileController.myProfile.hasShop)
+                    if (isMe && profileController.myProfile.hasShop)
                       Positioned.fill(
                         child: _BizCenterLockedOverlay(
                           onTap: () {
@@ -635,75 +635,85 @@ class _BizCenterLockedOverlay extends StatelessWidget {
           ),
 
           // Content
-          Center(
-            child: GestureDetector(
-              onTap: onTap,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(
-                      LucideIcons.lock,
-                      size: 28,
-                      color: Colors.black,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Center(
+                child: GestureDetector(
+                  onTap: onTap,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Set up BizCenter',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'to see your ranking',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.black54,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        Get.to(() => const LeaderboardScreen());
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: primaryColorLT,
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(
-                            color: Colors.black,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(
+                          LucideIcons.lock,
+                          size: 28,
+                          color: Colors.black,
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Set up BizCenter',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      child: Wrap(
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            'View Top Ranking',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, color: textColor),
+                        SizedBox(height: 4),
+                        Text(
+                          'to see your ranking',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black54,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Get.to(() => const LeaderboardScreen());
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: primaryColorLT,
+                  elevation: 0,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/leaderboard.png',
+                      height: 30,
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'View Top Ranking',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: textColor),
                     ),
                   ],
                 ),
               ),
-            ),
+            ],
           ),
         ],
       ),

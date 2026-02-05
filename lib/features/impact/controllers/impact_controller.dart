@@ -48,7 +48,7 @@ class ReachController extends GetxController {
       /// Load reach data
       final ApiResponseModel response =
           await ApiService.get(path: 'impact/shop/$shopId');
-
+      log(response.data.toString());
       shopData = _parseMap(response.data);
     } catch (e) {
       Get.snackbar('Error', 'Failed to load reach data');
