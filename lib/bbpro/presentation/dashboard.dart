@@ -42,7 +42,7 @@ class _DashboardState extends State<Dashboard> {
   final List<String> titles = <String>[
     'Customers',
     'Buyer Interest',
-    'Buyer Requests',
+    'Matched Buyer',
   ];
 
   final List<String> quickactions = <String>[

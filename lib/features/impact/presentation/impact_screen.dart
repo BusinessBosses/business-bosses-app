@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:developer';
 import 'dart:ui';
 
@@ -673,34 +674,46 @@ class _BizCenterLockedOverlay extends StatelessWidget {
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            textAlign: TextAlign.center,
-                            (!isMe && !hasShop)
-                                ? 'This profile is not yet ranked'
-                                : 'Set up BizCenter',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          if (isMe && !hasShop)
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: (!isMe && !hasShop)
+                              ? Colors.transparent
+                              : primaryColorLT,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            if (isMe && !hasShop)
+                              Icon(LucideIcons.lock,
+                                  color: Colors.white, size: 24),
+                            SizedBox(height: 10),
                             Text(
-                              'to see your ranking',
                               textAlign: TextAlign.center,
+                              (!isMe && !hasShop)
+                                  ? 'This profile is not yet ranked'
+                                  : 'Set up BizCenter',
                               style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
-                        ],
+                            if (isMe && hasShop)
+                              Text(
+                                'to check your ranking',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
                 SizedBox(
                   height: 70,
                   width: MediaQuery.of(context).size.width * 0.8,

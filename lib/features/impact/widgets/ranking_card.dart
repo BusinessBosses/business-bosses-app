@@ -163,10 +163,24 @@ class ReachRankingCard extends StatelessWidget {
                     height: 30,
                   ),
                   const SizedBox(width: 10),
-                  const Text(
-                    'View Top Ranking',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: textColor),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      const Text(
+                        'View Top Ranking',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: textColor),
+                      ),
+                      Icon(
+                        LucideIcons.chevronRight,
+                        size: 18,
+                        color: textColor,
+                      ),
+                    ],
                   ),
                 ],
               ),

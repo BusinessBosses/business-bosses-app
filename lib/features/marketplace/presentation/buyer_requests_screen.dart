@@ -631,7 +631,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
     return Scaffold(
       appBar: widget.showAppBar
           ? AppBar(
-              title: const Text('Buyer Requests'),
+              title: const Text('Matched Buyer Requests'),
             )
           : null,
       backgroundColor: backgroundColor,

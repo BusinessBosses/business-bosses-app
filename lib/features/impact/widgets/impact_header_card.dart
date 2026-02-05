@@ -74,7 +74,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Reach Breakdown',
+                        'Reach Score Breakdown',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
