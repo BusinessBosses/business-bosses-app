@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
@@ -184,26 +185,7 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
                   if (profileController.myProfile.isSubscribed) {
                     // They are Pro - in the future this should take them to the featuring flow
                     // For now, we show the Premium screen which explains the benefits
-                    Get.bottomSheet(
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0),
-                        ),
-                      ),
-                      SizedBox(
-                        height: Get.height * 0.9,
-                        child: const Scaffold(
-                          backgroundColor: Colors.white,
-                          body: SafeArea(
-                            child:
-                                SingleChildScrollView(child: PremiumScreen()),
-                          ),
-                        ),
-                      ),
-                      backgroundColor: Colors.white,
-                    );
+                    Get.to(ProshopdealsScreen());
                   } else {
                     // Not Pro -> Redirect to Upgrade Screen
                     Get.to(() => const Scaffold(
