@@ -38,15 +38,17 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
     final double profileScore = (dataMap['profileReach'] ?? 10).toDouble();
     final double engagementScore =
         (dataMap['engagementReach'] ?? 30).toDouble();
-    final double discoveryScore =
-        (dataMap['shopPoints'] + dataMap['shopImpactScore'] ?? 0).toDouble();
+    final double discoveryScore = ((dataMap['shopPoints'] as num? ?? 0) +
+            (dataMap['shopImpactScore'] as num? ?? 0))
+        .toDouble();
     final double trustScore = (dataMap['trustReach'] ?? 20).toDouble();
 
     final int totalLikes = widget.data['totalLikes'] ?? 0;
     final int totalViews = widget.data['totalViews'] ?? 0;
     final int totalComments = widget.data['totalComments'] ?? 0;
 
-    final int totalReachScore = widget.data['totalReachPoints'].toInt();
+    final int totalReachScore =
+        (dataMap['totalReachPoints'] as num? ?? 0).toInt();
 
     return Column(
       children: <Widget>[
@@ -137,15 +139,15 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   icon: LucideIcons.messageCircle,
                   iconColor: Colors.purple[400]!,
                   iconBgColor: backgroundColor,
-                  title: 'Authority',
-                  subtitle: 'Challenge Wins',
+                  title: 'Achievements',
+                  subtitle: 'Featured, Challenge Wins',
                   value: _formatValue(engagementScore.toInt()),
                 ),
                 _buildReachItem(
                   icon: LucideIcons.globe,
                   iconColor: Colors.orange[400]!,
                   iconBgColor: backgroundColor,
-                  title: 'Biz-Center Actions',
+                  title: 'Bizcenter Buyer Activity',
                   subtitle: 'Sales Intent & Buyer Demand',
                   value: _formatValue(discoveryScore.toInt()),
                 ),

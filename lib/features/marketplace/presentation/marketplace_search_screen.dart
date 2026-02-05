@@ -18,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
+import '../../impact/presentation/leaderboard_screen.dart';
+
 class MarketplaceSearchScreen extends StatefulWidget {
   const MarketplaceSearchScreen({super.key});
 
@@ -395,34 +397,7 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
       });
     } else if (_selectedTab == 4) {
       // Ranking Business (Suppliers)
-      return Obx(() {
-        final List<SuppliersModel> suppliers =
-            _supplierController.isSupplierSearch.value
-                ? _supplierController.searchedSuppliers
-                : _supplierController.suppliers;
-
-        if (_supplierController.loading.value ||
-            _supplierController.loadingSearch.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (suppliers.isEmpty) {
-          return const SafetyModel(
-              isLoading: false, title: 'No Business Found');
-        }
-        return MasonryGridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10.0,
-          crossAxisSpacing: 10.0,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          itemCount: suppliers.length,
-          itemBuilder: (BuildContext context, int index) {
-            return SuppliersGridTile(
-              supplier: suppliers[index],
-              status: true, // Assuming this is needed
-            );
-          },
-        );
-      });
+      return LeaderboardScreen(isMarketplace: true);
     } else {
       // Products, Services, or All
       return GetBuilder<MarketController>(

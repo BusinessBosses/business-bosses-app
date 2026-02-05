@@ -107,7 +107,7 @@ class CustomEditText extends StatelessWidget {
                       caption,
                       style: const TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -150,7 +150,7 @@ class CustomEditText extends StatelessWidget {
                               border: InputBorder.none,
                               hintText: hintText,
                               hintStyle: TextStyle(
-                                  color: Colors.grey,
+                                  color: Colors.black87,
                                   fontWeight: FontWeight.w100),
                               filled: false,
                               fillColor: Colors.grey.shade100,
@@ -204,7 +204,7 @@ class CustomEditText extends StatelessWidget {
                           caption,
                           style: const TextStyle(
                             fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       if (caption != '') const SizedBox(width: 10),
@@ -234,8 +234,8 @@ class CustomEditText extends StatelessWidget {
               style: const TextStyle(fontSize: 13),
               decoration: InputDecoration(
                 hintText: 'USD',
-                hintStyle:
-                    TextStyle(color: Colors.grey, fontWeight: FontWeight.w100),
+                hintStyle: TextStyle(
+                    color: Colors.black87, fontWeight: FontWeight.w100),
                 fillColor: currencyfieldcolor ?? prosemibackColor,
                 filled: true,
                 contentPadding: const EdgeInsets.symmetric(
@@ -273,7 +273,8 @@ class CustomEditText extends StatelessWidget {
       decoration: InputDecoration(
         border: InputBorder.none,
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w100),
+        hintStyle:
+            TextStyle(color: Colors.black87, fontWeight: FontWeight.w100),
         filled: false,
         fillColor: Colors.grey.shade100,
         counterText: maxLength != null && maxLength! > 30 ? null : '',

@@ -212,7 +212,23 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         centerTitle: true,
-        title: const Text('Become a Partner', textAlign: TextAlign.center),
+        title: Column(
+          children: <Widget>[
+            const Text('Become a Partner',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                )),
+            const SizedBox(height: 5),
+            const Text('Reach More Buyers & Customers',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black87)),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 200),

@@ -111,7 +111,7 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           child: Center(
                             child: Text(
                               textAlign: TextAlign.center,
-                              'Performance from Buyer Requests',
+                              'Performance from Matched Buyers',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),

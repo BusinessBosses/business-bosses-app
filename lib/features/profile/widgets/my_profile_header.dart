@@ -21,7 +21,8 @@ class MyProfileHeader extends StatelessWidget {
         ? reachController.myReach
         : <String, dynamic>{};
 
-    final int totalReachScore = dataMap?['totalReachPoints'].toInt();
+    final int totalReachScore =
+        (dataMap?['totalReachPoints'] as num? ?? 0).toInt();
     return Column(
       children: <Widget>[
         if (myProfile.matchType == null)

@@ -680,38 +680,45 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            LucideIcons.bellRing,
-            size: 80,
-            color: Colors.grey[400],
-          ),
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Text(
-              "We'll notify you when we find a customer match for you",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey[700],
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Check back soon for new opportunities',
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(height: 16),
+        Text('No matched found',
             style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[500],
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[700])),
+        SizedBox(
+          height: 10,
+        ),
+        Icon(
+          LucideIcons.bellRing,
+          size: 30,
+          color: Colors.grey[400],
+        ),
+        const SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Text(
+            "We'll notify you when we find a customer match for you",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey[700],
             ),
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Check back soon for new opportunities',
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey[500],
+          ),
+        ),
+      ],
     );
   }
 }

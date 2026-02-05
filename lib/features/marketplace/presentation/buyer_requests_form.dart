@@ -222,8 +222,9 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(height: 5),
             Text(
-              'We\'ll select the top ranking service provider or supplier for you',
+              'Get matched with top service providers or suppliers',
               style: TextStyle(
                 color: textColor,
                 fontSize: 12,

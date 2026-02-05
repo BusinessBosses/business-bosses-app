@@ -72,7 +72,7 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                       widget.caption,
                       style: const TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -130,7 +130,7 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                     widget.caption,
                     style: const TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   DropdownButtonFormField<String>(

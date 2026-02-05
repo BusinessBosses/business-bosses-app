@@ -21,7 +21,9 @@ import 'package:business_bosses_v2/features/matching_feature/widgets/match_card.
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_header.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/premium_prompt.dart';
+import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -365,7 +367,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                       title: 'Reach More Buyers',
                       icon: LucideIcons.users,
                       color: Colors.blue,
-                      onTap: () => Get.to(() => CreateProductListing()),
+                      onTap: () => Get.to(() => BecomeaPartnerScreen()),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -381,7 +383,31 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                           Get.to(() => const ProshopdealsScreen());
                         } else {
                           // User doesn't have Pro - go to upgrade screen
-                          Get.to(() => const ProScreen());
+                          Get.bottomSheet(
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(20.0),
+                              ),
+                            ),
+                            SizedBox(
+                              height: Get.height * 0.9,
+                              child: const Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 0.0, top: 0, bottom: 10),
+                                        child: PremiumScreen()),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            backgroundColor: Colors.white,
+                          );
                         }
                       },
                     ),
@@ -508,7 +534,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
               child: Text(
                 title,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: Colors.grey.shade900,
                 ),

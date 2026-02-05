@@ -187,7 +187,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               children: <Widget>[
                 // Tab 1: Marketplace Listings
                 const MarketsPage(),
-                const BuyerRequestsScreen(),
+                const BuyerRequestsScreen(
+                  showAppBar: false,
+                ),
                 const LeaderboardScreen(isMarketplace: true),
               ],
             ),
@@ -279,7 +281,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     _marketplaceTabController.index == 2
                         ? 'Add'
                         : _marketplaceTabController.index == 1
-                            ? 'Create'
+                            ? 'Buy'
                             : 'Sell',
                     style: const TextStyle(
                       color: Colors.white,
