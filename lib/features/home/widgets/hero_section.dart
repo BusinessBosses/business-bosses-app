@@ -225,6 +225,17 @@ class _HeroSectionState extends State<HeroSection> {
         action: 'Follow',
         action2: 'Become Ambassador',
       ),
+      HeroItem(
+        id: '5',
+        type: 'matches',
+        title: 'Matches',
+        icon: 'assets/images/app_logo_2.png',
+        subtitle:
+            'See your top matches and connect with people and opportunities that can help your business grow.',
+        image: '',
+        action: 'View your Match',
+        action2: '',
+      ),
     ];
   }
 
@@ -609,9 +620,9 @@ class _HeroSectionState extends State<HeroSection> {
                       child: Text(
                         item.subtitle,
                         style: const TextStyle(
-                          color: Colors.black87,
+                          color: Colors.black,
                           fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -901,7 +912,7 @@ class _HeroSectionState extends State<HeroSection> {
                                         : item.action == 'Claim Deal'
                                             ? LucideIcons.checkCircle2
                                             : item.action == 'View your Match'
-                                                ? LucideIcons.user
+                                                ? LucideIcons.userPlus
                                                 : item.action == 'Get Featured'
                                                     ? LucideIcons.plus
                                                     : LucideIcons.userPlus,

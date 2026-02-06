@@ -4,12 +4,12 @@ import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
+
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
@@ -275,11 +275,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               ),
               child: Row(
                 children: <Widget>[
-                  const Icon(Icons.add, color: Colors.white, size: 20),
+                  Icon(
+                    _marketplaceTabController.index == 2
+                        ? LucideIcons.mail
+                        : Icons.add,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     _marketplaceTabController.index == 2
-                        ? 'Add'
+                        ? 'Contact'
                         : _marketplaceTabController.index == 1
                             ? 'Buy'
                             : 'Sell',
@@ -545,7 +551,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     if (index == 1) {
       Get.to(() => AddBuyerRequests());
     } else if (index == 2) {
-      _showSupplierOptions(context);
+      Get.to(() => const LeaderboardScreen(isMarketplace: false));
     } else {
       _showSellOptions(context);
     }
@@ -591,63 +597,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     ),
                     title: Text(
                       index == 0 ? 'Sell your product' : 'Sell your service',
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showSupplierOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
-      ),
-      builder: (_) => SizedBox(
-        height: 200,
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: ListView.separated(
-                  itemCount: 2,
-                  separatorBuilder: (_, __) => const Divider(),
-                  itemBuilder: (_, int index) => ListTile(
-                    onTap: () {
-                      Navigator.pop(context);
-                      if (index == 0) {
-                        Get.to(() => const AddSupplierScreen());
-                      } else {
-                        if (shopController.shop != null) {
-                          Get.to(() =>
-                              AddSupplierScreen(shop: shopController.shop));
-                        } else {
-                          showSnackbar(
-                              message:
-                                  "You don't have a shop in Biz Center yet!",
-                              error: true);
-                        }
-                      }
-                    },
-                    leading: SvgPicture.asset(
-                      index == 0
-                          ? 'assets/svgs/addproduct.svg'
-                          : 'assets/svgs/addservice.svg',
-                      height: 25,
-                      colorFilter: ColorFilter.mode(
-                          textColor.withValues(alpha: 1), BlendMode.srcIn),
-                    ),
-                    title: Text(
-                      index == 0 ? 'Add New Business' : 'Add from Biz Center',
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w700),
                     ),

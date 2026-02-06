@@ -297,12 +297,27 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
-          widget.service != null ? 'Edit Service' : 'Create Service Listing',
-          style: const TextStyle(
-            color: textColor,
-            fontWeight: FontWeight.bold,
-          ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              widget.service != null
+                  ? 'Edit Service'
+                  : 'Create Service Listing',
+              style: const TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 5),
+            const Text(
+              'Get matched with buyers looking for your services',
+              style: TextStyle(
+                color: textColor,
+                fontSize: 12,
+              ),
+            ),
+          ],
         ),
         actions: <Widget>[
           IconButton(

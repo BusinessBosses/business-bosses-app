@@ -181,14 +181,27 @@ class _CreateProductListingState extends State<CreateProductListing> {
       backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
-          widget.product == null
-              ? 'Create Product Listing'
-              : 'Edit Product Listing',
-          style: const TextStyle(
-            color: textColor,
-            fontWeight: FontWeight.bold,
-          ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              widget.product == null
+                  ? 'Create Product Listing'
+                  : 'Edit Product Listing',
+              style: const TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 5),
+            const Text(
+              'Get matched with buyers looking for your product',
+              style: TextStyle(
+                color: textColor,
+                fontSize: 12,
+              ),
+            ),
+          ],
         ),
         actions: <Widget>[
           IconButton(
