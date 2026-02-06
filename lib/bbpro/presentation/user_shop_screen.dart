@@ -409,53 +409,54 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                             ],
                                           ),
                                           const SizedBox(height: 2),
-                                          if (reachController
-                                                      .shopData?['industryRank']
-                                                  ['industryRank'] !=
-                                              null)
-                                            Obx(
-                                              () => reachController
-                                                      .loading.value
-                                                  ? const SizedBox(
-                                                      height: 12,
-                                                      width: 12,
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        strokeWidth: 2,
-                                                      ),
-                                                    )
-                                                  : GestureDetector(
-                                                      onTap: () {
-                                                        Get.to(() =>
-                                                            const LeaderboardScreen());
-                                                      },
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: <Widget>[
-                                                          const Icon(
-                                                              Icons.leaderboard,
-                                                              size: 16,
-                                                              color:
-                                                                  Colors.green),
-                                                          const SizedBox(
-                                                              width: 4),
-                                                          Text(
-                                                            '#${reachController.shopData?['industryRank']['industryRank'] ?? "0"} in ${(shopController.userShop?.category ?? "Health")}',
-                                                            style:
-                                                                const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              fontSize: 13,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
+                                          Obx(
+                                            () => reachController.loading.value
+                                                ? const SizedBox(
+                                                    height: 12,
+                                                    width: 12,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 2,
                                                     ),
-                                            ),
+                                                  )
+                                                : reachController.shopData?[
+                                                                'industryRank']
+                                                            ['industryRank'] !=
+                                                        null
+                                                    ? GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(() =>
+                                                              const LeaderboardScreen());
+                                                        },
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: <Widget>[
+                                                            const Icon(
+                                                                Icons
+                                                                    .leaderboard,
+                                                                size: 16,
+                                                                color: Colors
+                                                                    .green),
+                                                            const SizedBox(
+                                                                width: 4),
+                                                            Text(
+                                                              '#${reachController.shopData?['industryRank']['industryRank'] ?? "0"} in ${(shopController.userShop?.category ?? "Health")}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      )
+                                                    : SizedBox(),
+                                          ),
                                           const SizedBox(height: 2),
                                           DetectableText(
                                             text: shopController

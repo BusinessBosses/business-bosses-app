@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
@@ -58,6 +59,7 @@ class _DashboardState extends State<Dashboard> {
   String _selectedfilteritem = 'All Time';
   String _selectedDateFilter = 'all_time';
   final BuyerRequestController buyerRequestsController = Get.find();
+  final ReachController reachController = Get.put(ReachController());
 
   @override
   void initState() {
@@ -325,8 +327,13 @@ class _DashboardState extends State<Dashboard> {
                                             .toString()
                                         : '0'
                                     : index == 1
-                                        ? shopController.shopStats != null
-                                            ? shopController.shopStats!.views
+                                        ? reachController.myReach != null
+                                            ? ((reachController.myReach![
+                                                            'shopPoints'] ??
+                                                        0) +
+                                                    (reachController.myReach![
+                                                            'shopImpactScore'] ??
+                                                        0))
                                                 .toString()
                                             : '0'
                                         : index == 2
