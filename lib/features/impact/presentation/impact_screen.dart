@@ -123,6 +123,7 @@ class _ReachScreenState extends State<ReachScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log(widget.user.uid);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -181,8 +182,13 @@ class _ReachScreenState extends State<ReachScreen> {
         if (controller.loading.value) {
           return const SafetyModel();
         }
-        log(controller.data!.toString());
-        final dynamic rank = controller.data!['globalRank'] ?? 12;
+        final Map<String, dynamic>? data = controller.data;
+
+        if (data == null) {
+          return const SafetyModel();
+        }
+
+        final int rank = data['globalRank'] ?? 0;
 
         final bool isMe = widget.user.uid == profileController.myProfile.uid;
 
@@ -201,8 +207,12 @@ class _ReachScreenState extends State<ReachScreen> {
                     ReachRankingCard(
                       data: controller.data,
                       rank: rank,
-                      industry: widget.user.industry ?? 'General',
-                      location: widget.user.location ?? 'Global',
+                      industry: widget.user.hasShop
+                          ? (data['shop'] as Map<String, dynamic>)['category']
+                          : data['user']?['industry'],
+                      location: widget.user.hasShop
+                          ? (data['shop'] as Map<String, dynamic>)['location']
+                          : data['user']?['location'],
                       showShareButton: isMe,
                       isMe: isMe,
                       onViewLeaderboard: () {
@@ -602,6 +612,10 @@ class _ReachScreenState extends State<ReachScreen> {
 
     final ApiResponseModel response =
         await ApiService.get(path: 'connection/analysis');
+    _myConnections.clear();
+    _myConnecteds.clear();
+    _disconnections.clear();
+
     if (response.success) {
       for (int i = 0; i < response.data['connections'].length; i++) {
         final MyConnect modelizedData =
@@ -678,7 +692,7 @@ class _BizCenterLockedOverlay extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 8),
                         decoration: BoxDecoration(
-                          color: (!isMe && !hasShop)
+                          color: (!isMe && hasShop)
                               ? Colors.transparent
                               : primaryColorLT,
                           borderRadius: BorderRadius.circular(10),
@@ -699,7 +713,7 @@ class _BizCenterLockedOverlay extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),
-                            if (isMe && hasShop)
+                            if (isMe && !hasShop)
                               Text(
                                 'to check your ranking',
                                 textAlign: TextAlign.center,

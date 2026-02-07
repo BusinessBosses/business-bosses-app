@@ -69,7 +69,25 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     super.initState();
     _marketplaceTabController = TabController(length: 3, vsync: this);
     _marketplaceTabController.addListener(() {
-      setState(() {}); // Rebuild when tab changes to show/hide category chips
+      if (_marketplaceTabController.indexIsChanging) {
+        final int index = _marketplaceTabController.index;
+
+        if (index == 0) {
+          // Reset buyer requests fully
+          buyerRequestController.filterCategory.value = '';
+          buyerRequestController.filterLocation.value = '';
+          buyerRequestController.filterBuyerRequests('');
+        }
+
+        if (index == 1) {
+          _marketController.selectedCategory = null;
+          _marketController.isSearching(false);
+          _marketController.clearFilter();
+          _marketController.sortItems();
+        }
+
+        setState(() {}); // Rebuild when tab changes to show/hide category chips
+      }
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -176,7 +194,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       ),
                     ),
                   ),
-                if (_marketplaceTabController.index == 0)
+                if (_marketplaceTabController.index == 0 ||
+                    _marketplaceTabController.index == 1)
                   SliverToBoxAdapter(
                     child: _buildCategoryChips(),
                   ),
@@ -484,21 +503,49 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     children: displayCategories.map((String category) {
                       // Check selection
                       // If selectedCategory is null, 'All' is selected.
-                      final bool isSelected =
-                          (_marketController.selectedCategory == null &&
-                                  category == 'All') ||
-                              (_marketController.selectedCategory == category);
+                      final int tabIndex = _marketplaceTabController.index;
+
+                      bool isSelected;
+
+                      if (tabIndex == 0) {
+                        isSelected = (_marketController.selectedCategory ==
+                                    null &&
+                                category == 'All') ||
+                            (_marketController.selectedCategory == category);
+                      } else {
+                        isSelected = (buyerRequestController
+                                    .filterCategory.value.isEmpty &&
+                                category == 'All') ||
+                            (buyerRequestController.filterCategory.value ==
+                                category);
+                      }
 
                       return GestureDetector(
-                        onTap: () async {
+                        onTap: () {
+                          final int tabIndex = _marketplaceTabController.index;
+
                           setState(() {
-                            if (category == 'All') {
-                              _marketController.selectedCategory = null;
-                              _marketController.isSearching(false);
-                              _marketController.clearFilter();
-                              _marketController.sortItems();
-                            } else {
-                              _marketController.loadCategory(category);
+                            if (tabIndex == 0) {
+                              // 🔵 SELLER LISTING (MarketController)
+
+                              if (category == 'All') {
+                                _marketController.selectedCategory = null;
+                                _marketController.isSearching(false);
+                                _marketController.clearFilter();
+                                _marketController.sortItems();
+                              } else {
+                                _marketController.loadCategory(category);
+                              }
+                            } else if (tabIndex == 1) {
+                              // 🟢 BUYER REQUEST (BuyerRequestController)
+
+                              if (category == 'All') {
+                                buyerRequestController.filterCategory('');
+                              } else {
+                                buyerRequestController.filterCategory(category);
+                              }
+
+                              buyerRequestController.filterBuyerRequests('');
                             }
                           });
                         },

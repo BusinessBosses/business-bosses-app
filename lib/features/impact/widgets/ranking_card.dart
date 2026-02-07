@@ -26,6 +26,14 @@ class ReachRankingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool hasShop = data?['hasShop'] == true;
+
+    final int? industryRank = data?['shopIndustryRank']?['industryRank'];
+
+    final int? globalRank = data?['globalRank'];
+
+    final int displayRank = hasShop ? (industryRank ?? 0) : (globalRank ?? 0);
+
     return Stack(children: <Widget>[
       Container(
         width: double.infinity,
@@ -76,7 +84,7 @@ class ReachRankingCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
-                  '#${data['globalRank'] ?? 10}',
+                  displayRank > 0 ? '#$displayRank' : '--',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 48,

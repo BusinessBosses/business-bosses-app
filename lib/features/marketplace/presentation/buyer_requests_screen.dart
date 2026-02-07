@@ -684,7 +684,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         SizedBox(height: 16),
-        Text('No matched found',
+        Text('No Requests found',
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -701,7 +701,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Text(
-            "We'll notify you when we find a customer match for you",
+            "We'll notify you when we find a buyer request match for you",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18,
