@@ -14,6 +14,7 @@ import 'package:business_bosses_v2/features/home/controller/commumities_controll
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/confirm_create_event.dart';
@@ -300,6 +301,10 @@ var routes = [
   GetPage(
     name: Routes.bookmarkedmatches,
     page: () => const BookmarkedMatches(),
+  ),
+  GetPage(
+    name: Routes.leaderboard,
+    page: () => const LeaderboardScreen(),
   ),
   GetPage(
     name: Routes.invitepage,

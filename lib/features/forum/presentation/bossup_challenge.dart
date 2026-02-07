@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -49,13 +50,13 @@ class _BossupChallengeState extends State<BossupChallenge> {
               color: backgroundColor,
               padding: EdgeInsets.all(15),
               child: MasonryGridView.count(
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
                 scrollDirection:
                     widget.ishome! == true ? Axis.horizontal : Axis.vertical,
 
-                // UPDATED: removed ambassador challenge (+3 instead of +4)
-                itemCount: controller.categories.length + 3,
+                // UPDATED: added events (+4 instead of +3)
+                itemCount: controller.categories.length + 4,
 
                 itemBuilder: (BuildContext context, int index) {
                   if (index < controller.categories.length) {
@@ -132,6 +133,16 @@ class _BossupChallengeState extends State<BossupChallenge> {
 
                   else if (index == controller.categories.length) {
                     return Challengeitem(
+                      isEvents: true,
+                      onTap: () {
+                        Get.toNamed(Routes.liveEvents);
+                      },
+                      title: 'Events',
+                      description: 'Join or share events online & in person',
+                      imageurl: 'assets/images/live_event.png',
+                    );
+                  } else if (index == controller.categories.length + 1) {
+                    return Challengeitem(
                       isCrowdfund: true,
                       onTap: () {
                         Get.to(() => const DonationsPage(
@@ -143,7 +154,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       title: 'Crowdfund',
                       imageurl: 'assets/images/donationpic.png',
                     );
-                  } else if (index == controller.categories.length + 1) {
+                  } else if (index == controller.categories.length + 2) {
                     return Challengeitem(
                       isMentor: true,
                       onTap: () {

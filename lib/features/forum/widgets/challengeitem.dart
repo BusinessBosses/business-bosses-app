@@ -15,6 +15,7 @@ class Challengeitem extends StatelessWidget {
   final bool? isPartner;
   final bool? isCrowdfund;
   final bool? isMentor;
+  final bool? isEvents;
 
   const Challengeitem({
     super.key,
@@ -29,6 +30,7 @@ class Challengeitem extends StatelessWidget {
     this.description,
     this.isCrowdfund,
     this.isMentor,
+    this.isEvents,
   });
 
   @override
@@ -122,7 +124,9 @@ class Challengeitem extends StatelessWidget {
                         ? 'Fund Project'
                         : isMentor == true
                             ? 'Start Learning'
-                            : 'Enter',
+                            : isEvents == true
+                                ? 'Live Events'
+                                : 'Enter',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,

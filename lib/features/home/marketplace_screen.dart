@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
 import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
@@ -29,7 +30,8 @@ import '../marketplace/presentation/marketplace_search_screen.dart';
 
 /// Marketplace main screen
 class MarketplaceScreen extends StatefulWidget {
-  const MarketplaceScreen({super.key});
+  final int initialIndex;
+  const MarketplaceScreen({super.key, this.initialIndex = 0});
 
   @override
   State<MarketplaceScreen> createState() => _MarketplaceScreenState();
@@ -67,7 +69,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   @override
   void initState() {
     super.initState();
-    _marketplaceTabController = TabController(length: 3, vsync: this);
+    _marketplaceTabController = TabController(
+        length: 3, vsync: this, initialIndex: widget.initialIndex);
     _marketplaceTabController.addListener(() {
       setState(() {}); // Rebuild when tab changes to show/hide category chips
     });
@@ -277,7 +280,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 children: <Widget>[
                   Icon(
                     _marketplaceTabController.index == 2
-                        ? LucideIcons.mail
+                        ? LucideIcons.trophy
                         : Icons.add,
                     color: Colors.white,
                     size: 20,
@@ -285,7 +288,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   const SizedBox(width: 4),
                   Text(
                     _marketplaceTabController.index == 2
-                        ? 'Contact'
+                        ? 'Rank'
                         : _marketplaceTabController.index == 1
                             ? 'Buy'
                             : 'Sell',
@@ -551,7 +554,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     if (index == 1) {
       Get.to(() => AddBuyerRequests());
     } else if (index == 2) {
-      Get.to(() => const LeaderboardScreen(isMarketplace: false));
+      Get.to(() => ReachScreen(user: _profileController.myProfile));
     } else {
       _showSellOptions(context);
     }
