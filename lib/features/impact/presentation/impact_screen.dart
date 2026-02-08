@@ -208,10 +208,10 @@ class _ReachScreenState extends State<ReachScreen> {
                       rank: rank,
                       industry: widget.user.hasShop
                           ? (data['shop'] as Map<String, dynamic>)['category']
-                          : data['user']?['industry'],
+                          : data['user']?['industry'] ?? 'General',
                       location: widget.user.hasShop
                           ? (data['shop'] as Map<String, dynamic>)['location']
-                          : data['user']?['location'],
+                          : data['user']?['location'] ?? 'Global',
                       showShareButton: isMe,
                       isMe: isMe,
                       onViewLeaderboard: () {

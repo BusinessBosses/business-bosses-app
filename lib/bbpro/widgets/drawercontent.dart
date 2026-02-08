@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
@@ -191,7 +192,7 @@ class _DrawerContentState extends State<DrawerContent> {
             'See the top ranking business owners and their impact in the community.',
         'onTileClicked': () {
           widget.oncloseclick?.call();
-          Get.toNamed(Routes.leaderboard);
+          Get.to(() => LeaderboardScreen());
         },
       },
       <String, dynamic>{

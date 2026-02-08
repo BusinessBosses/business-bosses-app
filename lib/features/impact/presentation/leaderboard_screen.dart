@@ -65,7 +65,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     selectedCountry =
         (profileController.myProfile.hasShop && shopController.shop != null)
             ? shopController.shop!.location
-            : user.location ?? 'Nigeria';
+            : user.location ?? 'United Kingdom';
     selectedCountryCode = CountryCodes.nameToCode[selectedCountry!] ?? 'NG';
     selectedIndustry =
         (profileController.myProfile.hasShop && shopController.shop != null)

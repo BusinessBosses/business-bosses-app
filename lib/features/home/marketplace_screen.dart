@@ -65,12 +65,25 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     'Vehicle & Transportation',
     'Business Services & Consulting'
   ];
+  final ScrollController _categoryScrollController = ScrollController();
+  bool _showRightChevron = true;
 
   @override
   void initState() {
     super.initState();
     _marketplaceTabController = TabController(
         length: 3, vsync: this, initialIndex: widget.initialIndex);
+    _categoryScrollController.addListener(() {
+      if (!_categoryScrollController.hasClients) return;
+
+      final double maxScroll =
+          _categoryScrollController.position.maxScrollExtent;
+      final double current = _categoryScrollController.offset;
+
+      setState(() {
+        _showRightChevron = current < maxScroll - 10;
+      });
+    });
     _marketplaceTabController.addListener(() {
       if (_marketplaceTabController.indexIsChanging) {
         final int index = _marketplaceTabController.index;
@@ -501,6 +514,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               // Category chips scroll view
               Expanded(
                 child: SingleChildScrollView(
+                  controller: _categoryScrollController,
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: displayCategories.map((String category) {
@@ -582,6 +596,26 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   ),
                 ),
               ),
+
+              // Dropdown arrow for more
+              if (_showRightChevron)
+                GestureDetector(
+                  onTap: () {
+                    _categoryScrollController.animateTo(
+                      _categoryScrollController.offset + 150,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Icon(
+                      LucideIcons.chevronRight,
+                      color: Colors.black54,
+                      size: 15,
+                    ),
+                  ),
+                ),
             ],
           ),
           const Divider(height: 1),

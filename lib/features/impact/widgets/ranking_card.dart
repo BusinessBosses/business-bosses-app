@@ -28,9 +28,9 @@ class ReachRankingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool hasShop = data?['hasShop'] == true;
 
-    final int? industryRank = data?['shopIndustryRank']?['industryRank'];
+    final int? industryRank = data?['shopIndustryRank']?['industryRank'] ?? 0;
 
-    final int? globalRank = data?['globalRank'];
+    final int? globalRank = data?['globalRank'] ?? 0;
 
     final int displayRank = hasShop ? (industryRank ?? 0) : (globalRank ?? 0);
 
@@ -183,10 +183,13 @@ class ReachRankingCard extends StatelessWidget {
                             fontSize: 16,
                             color: textColor),
                       ),
-                      Icon(
-                        LucideIcons.chevronRight,
-                        size: 18,
-                        color: textColor,
+                      GestureDetector(
+                        onTap: onViewLeaderboard,
+                        child: Icon(
+                          LucideIcons.chevronRight,
+                          size: 18,
+                          color: textColor,
+                        ),
                       ),
                     ],
                   ),
@@ -199,9 +202,11 @@ class ReachRankingCard extends StatelessWidget {
       Positioned(
         bottom: 0,
         right: 0,
-        child: SvgPicture.asset(
-          'assets/svgs/chart.svg',
-          height: 150,
+        child: IgnorePointer(
+          child: SvgPicture.asset(
+            'assets/svgs/chart.svg',
+            height: 150,
+          ),
         ),
       ),
     ]);
@@ -211,7 +216,7 @@ class ReachRankingCard extends StatelessWidget {
     SharePlus.instance.share(
       ShareParams(
           text:
-              'I just ranked #$rank on Business Bosses! 🚀 Check out my business reach.\nhttps://businessbosses.onelink.me/xLWk/36a2ff16'),
+              'I just ranked #${data?['shopIndustryRank']?['industryRank'] ?? 0} on Business Bosses! 🚀 Check out my business reach.\nhttps://businessbosses.onelink.me/xLWk/36a2ff16'),
     );
   }
 }

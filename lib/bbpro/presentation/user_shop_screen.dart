@@ -33,6 +33,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserShopScreen extends StatefulWidget {
@@ -451,6 +452,15 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                                 color: Colors
                                                                     .black,
                                                               ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 0,
+                                                            ),
+                                                            Icon(
+                                                              LucideIcons
+                                                                  .chevronRight,
+                                                              size: 18,
+                                                              color: textColor,
                                                             ),
                                                           ],
                                                         ),
