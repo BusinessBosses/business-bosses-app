@@ -105,6 +105,9 @@ class EventPopUp extends StatelessWidget {
                         child: const Text('Cancel')),
                     const SizedBox(width: 8),
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                        ),
                         onPressed: () {
                           _launchMapsUrl(event.address!);
                         },
