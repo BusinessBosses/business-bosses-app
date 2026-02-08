@@ -679,7 +679,7 @@ class _BizCenterLockedOverlay extends StatelessWidget {
               children: <Widget>[
                 Center(
                   child: GestureDetector(
-                    onTap: onTap,
+                    onTap: isMe ? onTap : null,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 14),

@@ -15,9 +15,14 @@ import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class LeaderboardScreen extends StatefulWidget {
-  const LeaderboardScreen({super.key, this.isMarketplace = false});
+  const LeaderboardScreen({
+    super.key,
+    this.isMarketplace = false,
+    this.selectedCategory,
+  });
 
   final bool isMarketplace;
+  final String? selectedCategory;
 
   @override
   State<LeaderboardScreen> createState() => _LeaderboardScreenState();
@@ -25,7 +30,7 @@ class LeaderboardScreen extends StatefulWidget {
 
 class _LeaderboardScreenState extends State<LeaderboardScreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+  TabController? _tabController;
   final List<String> _filters = <String>['Global', 'Industry', 'Country'];
 
   final ProfileController profileController = Get.find();
@@ -187,13 +192,58 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _filters.length, vsync: this);
-    loadUsers();
+
+    if (!widget.isMarketplace) {
+      _tabController = TabController(length: _filters.length, vsync: this);
+      loadUsers();
+    } else {
+      _loadMarketplaceData();
+    }
+  }
+
+  Future<void> _loadMarketplaceData() async {
+    setState(() => isLoading = true);
+
+    if (widget.selectedCategory == null ||
+        widget.selectedCategory!.isEmpty ||
+        widget.selectedCategory == 'All') {
+      // 🔵 ALL → GLOBAL
+      final ApiResponseModel response =
+          await ApiService.get(path: 'impact/top/shops?limit=30');
+
+      if (response.success) {
+        globalLeaders = _mapApiResponse(response.data, useGlobalRank: true);
+      }
+    } else {
+      // 🟢 CATEGORY SELECTED
+      selectedIndustry = widget.selectedCategory;
+
+      final ApiResponseModel response = await ApiService.get(
+        path:
+            'impact/top/shops/category?category=${Uri.encodeComponent(widget.selectedCategory!)}&limit=30',
+      );
+
+      if (response.success) {
+        industryLeaders = _mapApiResponse(response.data, useGlobalRank: false);
+      }
+    }
+
+    setState(() => isLoading = false);
+  }
+
+  @override
+  void didUpdateWidget(covariant LeaderboardScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.isMarketplace &&
+        widget.selectedCategory != oldWidget.selectedCategory) {
+      _loadMarketplaceData();
+    }
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -208,9 +258,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
               centerTitle: true,
               backgroundColor: Colors.white,
               leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: () => Navigator.pop(context),
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
               elevation: 0,
@@ -219,19 +267,43 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                 labelColor: primaryColorLT,
                 unselectedLabelColor: Colors.grey,
                 indicatorColor: primaryColorLT,
-                tabs:
-                    _filters.map((String filter) => Tab(text: filter)).toList(),
+                tabs: _filters.map((String f) => Tab(text: f)).toList(),
               ),
             ),
-      body: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          _buildLeaderboardList('Global'),
-          if (!widget.isMarketplace) _buildLeaderboardList('Industry'),
-          if (!widget.isMarketplace) _buildLeaderboardList('Country'),
-        ],
-      ),
+      body: widget.isMarketplace
+          ? _buildMarketplaceLeaderboard()
+          : TabBarView(
+              controller: _tabController,
+              children: <Widget>[
+                _buildLeaderboardList('Global'),
+                _buildLeaderboardList('Industry'),
+                _buildLeaderboardList('Country'),
+              ],
+            ),
     );
+  }
+
+  Widget _buildMarketplaceLeaderboard() {
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final bool isAll = widget.selectedCategory == null ||
+        widget.selectedCategory!.isEmpty ||
+        widget.selectedCategory == 'All';
+
+    final List<Map<String, dynamic>> data =
+        isAll ? globalLeaders : industryLeaders;
+
+    return data.isEmpty
+        ? const Center(child: Text('No ranking data'))
+        : ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            itemCount: data.length,
+            itemBuilder: (BuildContext context, int index) {
+              return _buildLeaderboardItem(data[index]);
+            },
+          );
   }
 
   Widget _buildLeaderboardList(String filterType) {

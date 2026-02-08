@@ -211,7 +211,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     ),
                   ),
                 if (_marketplaceTabController.index == 0 ||
-                    _marketplaceTabController.index == 1)
+                    _marketplaceTabController.index == 1 ||
+                    _marketplaceTabController.index == 2)
                   SliverToBoxAdapter(
                     child: _buildCategoryChips(),
                   ),
@@ -225,7 +226,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 const BuyerRequestsScreen(
                   showAppBar: false,
                 ),
-                const LeaderboardScreen(isMarketplace: true),
+                LeaderboardScreen(
+                  isMarketplace: true,
+                  selectedCategory: _marketController.selectedCategory,
+                ),
               ],
             ),
           ),
@@ -312,7 +316,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 children: <Widget>[
                   Icon(
                     _marketplaceTabController.index == 2
-                        ? LucideIcons.trophy
+                        ? Icons.add
                         : Icons.add,
                     color: Colors.white,
                     size: 20,
@@ -524,12 +528,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
                       bool isSelected;
 
-                      if (tabIndex == 0) {
+                      if (tabIndex == 0 || tabIndex == 2) {
+                        // Seller + Ranking share same category source
                         isSelected = (_marketController.selectedCategory ==
                                     null &&
                                 category == 'All') ||
                             (_marketController.selectedCategory == category);
                       } else {
+                        // Buyer request
                         isSelected = (buyerRequestController
                                     .filterCategory.value.isEmpty &&
                                 category == 'All') ||
@@ -563,6 +569,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                               }
 
                               buyerRequestController.filterBuyerRequests('');
+                            } else if (tabIndex == 2) {
+                              // 🟡 RANKING BUSINESS
+
+                              if (category == 'All') {
+                                _marketController.selectedCategory = null;
+                              } else {
+                                _marketController.selectedCategory = category;
+                              }
+
+                              // IMPORTANT: no market filtering here
+                              // Just update category so Leaderboard rebuilds
                             }
                           });
                         },
@@ -627,7 +644,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   /// Handles creation button press logic (moved from big nested ifs)
   void _handleCreateButton(BuildContext context) async {
     final int index = _marketplaceTabController.index;
-    if (!_profileController.myProfile.hasShop && index != 1 && index < 4) {
+
+    // Redirect only for index 0 and 3 (example)
+    if (!_profileController.myProfile.hasShop && (index == 0 || index == 3)) {
       Get.to(() => const MyProfileScreen(currentIndex: 1));
       return;
     }
