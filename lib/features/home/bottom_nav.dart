@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
-import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
+import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -136,7 +136,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                 children: const <Widget>[
                   HomeScreen(),
                   AllCommunitiesScreen(),
-                  LiveEvent(),
+                  LeaderboardScreen(),
                   MarketplaceScreen(),
                   MyProfileScreen(),
                 ],
@@ -195,11 +195,11 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                               Expanded(
                                 flex: 10,
                                 child: BottomTabButton(
-                                  icon: 'assets/svgs/liveevent.svg',
+                                  icon: 'assets/svgs/ranking.svg',
                                   onTap: () {
                                     _onChangePage(2);
                                   },
-                                  label: 'Live Events',
+                                  label: 'Ranking',
                                   isActive: _activeIndex == 2,
                                 ),
                               ),

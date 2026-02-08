@@ -185,20 +185,13 @@ class _DrawerContentState extends State<DrawerContent> {
         },
       },
       <String, dynamic>{
-        'icon': SvgPicture.asset(
-          'assets/svgs/calendar.svg',
-          height: 25,
-          colorFilter: const ColorFilter.mode(
-            textColor,
-            BlendMode.srcIn,
-          ),
-        ),
-        'title': 'Events',
+        'icon': const Icon(LucideIcons.trophy, size: 25, color: textColor),
+        'title': 'Ranking',
         'description':
-            'Discover and attend events hosted by other users. Find events that match your interests and goals.',
+            'See the top ranking business owners and their impact in the community.',
         'onTileClicked': () {
           widget.oncloseclick?.call();
-          Get.toNamed(Routes.liveEvents);
+          Get.toNamed(Routes.leaderboard);
         },
       },
       <String, dynamic>{

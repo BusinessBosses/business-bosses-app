@@ -12,11 +12,9 @@ import 'package:business_bosses_v2/features/forum/controller/challenge_controlle
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_learning_posts.dart';
-import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
-import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
@@ -870,10 +868,7 @@ class _HeroSectionState extends State<HeroSection> {
                                   );
                                   return;
                                 }
-                                Get.to(() => BossUpSection(
-                                      industry: industry,
-                                      bossUp: challengeController.categories[0],
-                                    ));
+                                enterChallenge();
                               } else {
                                 enterChallenge();
                               }
@@ -993,11 +988,7 @@ class _HeroSectionState extends State<HeroSection> {
                                     );
                                     return;
                                   }
-                                  Get.to(() => BossUpSection(
-                                        industry: industry,
-                                        bossUp:
-                                            challengeController.categories[0],
-                                      ));
+                                  enterChallenge();
                                 } else if (item.id == '1') {
                                   enterChallenge();
                                 } else if (item.id == '2') {

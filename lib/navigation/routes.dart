@@ -73,5 +73,6 @@ class Routes {
   static const String setupshopscreen = '/setupshop-screen';
   static const String expandedmatchesscreen = '/expandedmatchesscreen';
   static const String bookmarkedmatches = '/bookmarkedmatches';
+  static const String leaderboard = '/leaderboard';
   static const String invitepage = '/invitepage';
 }

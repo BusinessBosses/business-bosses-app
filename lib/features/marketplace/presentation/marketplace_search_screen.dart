@@ -10,8 +10,6 @@ import 'package:business_bosses_v2/features/marketplace/controllers/market_contr
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
-import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/suppliers_grid_tile.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
