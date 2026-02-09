@@ -1,15 +1,14 @@
 import 'dart:convert';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/common/widgets/popup/eventpopup.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/expanded_forum_view.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
-import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
-import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
@@ -145,16 +144,7 @@ class _PostTileState extends State<PostTile> {
 
   @override
   Widget build(BuildContext context) {
-    String? title,
-        roomid,
-        date,
-        starttime,
-        host,
-        photourl,
-        startat,
-        endat,
-        link,
-        description;
+    String? title, roomid, date, starttime, host, photourl, startat, endat;
     int? eventId;
 
     // Get the vote counts for each option
@@ -188,8 +178,6 @@ class _PostTileState extends State<PostTile> {
           date = jsonData['date'];
           starttime = jsonData['starttime'];
           host = jsonData['host'];
-          link = jsonData['link'];
-          description = jsonData['description'];
           photourl = jsonData['photourl'];
           startat = jsonData['startat'];
           endat = jsonData['endat'];
@@ -1372,7 +1360,33 @@ class _PostTileState extends State<PostTile> {
                                   DateTime.now().toIso8601String())) &&
                               DateTime.now().isBefore(DateTime.parse(
                                   endat ?? DateTime.now().toIso8601String())))
-                          ? Expanded(child: SizedBox())
+                          ? Expanded(
+                              child: Padding(
+                              padding: const EdgeInsets.only(right: 15),
+                              child: ElevatedButton(
+                                  onPressed: () async {
+                                    final EventModel? event =
+                                        _getEventFromPost();
+                                    if (event == null) return;
+
+                                    if (event.link != null &&
+                                        event.link!.isNotEmpty) {
+                                      final Uri eventLink =
+                                          Uri.parse(event.link!);
+
+                                      if (!await launchUrl(eventLink)) {
+                                        throw Exception(
+                                            'Could not launch $eventLink');
+                                      }
+                                    } else {
+                                      _showDialogWithLink(context);
+                                    }
+                                  },
+                                  child: const Text(
+                                    'Join',
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ))
                           : Expanded(
                               child: Row(
                               children: <Widget>[
@@ -1773,11 +1787,41 @@ class _PostTileState extends State<PostTile> {
     );
   }
 
-  void _launchURL(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
+  void _showDialogWithLink(BuildContext context) {
+    final EventModel? event = _getEventFromPost();
+
+    if (event == null) return;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return EventPopUp(
+          event: event,
+        );
+      },
+    );
+  }
+
+  EventModel? _getEventFromPost() {
+    if (widget.post.livedata == null) return null;
+
+    try {
+      final dynamic jsonData = jsonDecode(widget.post.livedata!.toString());
+
+      return EventModel(
+        id: jsonData['id'],
+        title: jsonData['title'],
+        roomId: jsonData['roomId'],
+        startAt: DateTime.parse(jsonData['startat']),
+        endAt: DateTime.parse(jsonData['endat']),
+        startTime: jsonData['starttime'],
+        link: jsonData['link'],
+        description: jsonData['description'],
+        image: jsonData['image'],
+        user: widget.post.user,
+      );
+    } catch (e) {
+      return null;
     }
   }
 
