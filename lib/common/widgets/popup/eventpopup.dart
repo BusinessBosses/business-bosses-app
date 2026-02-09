@@ -85,7 +85,7 @@ class EventPopUp extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  event.address!,
+                  event.address != null ? event.address! : 'Online',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: Colors.black,

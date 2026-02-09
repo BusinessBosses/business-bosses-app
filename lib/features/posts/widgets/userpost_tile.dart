@@ -1812,6 +1812,7 @@ class _PostTileState extends State<PostTile> {
         id: jsonData['id'],
         title: jsonData['title'],
         roomId: jsonData['roomId'],
+        address: jsonData['address'],
         startAt: DateTime.parse(jsonData['startat']),
         endAt: DateTime.parse(jsonData['endat']),
         startTime: jsonData['starttime'],
