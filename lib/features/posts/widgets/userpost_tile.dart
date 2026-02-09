@@ -1067,43 +1067,18 @@ class _PostTileState extends State<PostTile> {
                                           events: homeController.events,
                                           currentEventId: eventId,
                                         ),
-                                      isJoinedEvent()
-                                          ? ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.grey,
-                                                foregroundColor: Colors.white,
-                                                minimumSize: const Size(55, 32),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          12), // Set the border radius
-                                                ),
-                                              ),
-                                              onPressed: () async {
-                                                Get.to(() => AttendanceList(
-                                                      eventId: eventId!,
-                                                    ));
-                                              },
-                                              child: const Text(
-                                                'Attending',
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            )
-                                          : ElevatedButton(
-                                              onPressed: () async {
-                                                Get.to(() => LiveEvent());
-                                              },
-                                              child: const Text(
-                                                'Attend',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          Get.toNamed(Routes.liveEvents);
+                                        },
+                                        child: const Text(
+                                          'Attend',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -1397,56 +1372,7 @@ class _PostTileState extends State<PostTile> {
                                   DateTime.now().toIso8601String())) &&
                               DateTime.now().isBefore(DateTime.parse(
                                   endat ?? DateTime.now().toIso8601String())))
-                          ? Expanded(
-                              child: Padding(
-                              padding: const EdgeInsets.only(right: 15),
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    // final String enteredRoomID = event.roomId!;
-                                    // if (profileController.myProfile.uid !=
-                                    //     event.user?.uid) {
-                                    //   jumpToLivePage(
-                                    //     context,
-                                    //     title: event.title!,
-                                    //     roomID: enteredRoomID,
-                                    //     isHost: false,
-                                    //   );
-                                    // } else {
-                                    //   jumpToLivePage(
-                                    //     context,
-                                    //     title: event.title!,
-                                    //     roomID: enteredRoomID,
-                                    //     isHost: true,
-                                    //   );
-                                    // }
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text('Event Details'),
-                                          content: Text(description!),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () => Get.back(),
-                                              child: const Text('Cancel'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                _launchURL(link!);
-                                                Get.back();
-                                              },
-                                              child: const Text('Goto Meeting'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: const Text(
-                                    'Join',
-                                    style: TextStyle(color: Colors.white),
-                                  )),
-                            ))
+                          ? Expanded(child: SizedBox())
                           : Expanded(
                               child: Row(
                               children: <Widget>[

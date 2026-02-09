@@ -104,7 +104,8 @@ void sellProduct(BuildContext context) {
 
                     return ListTile(
                       onTap: () {
-                        if (!profileController.myProfile.hasShop) {
+                        if (!profileController.myProfile.hasShop &&
+                            index != 2) {
                           Get.to(() => const MyProfileScreen(
                                 currentIndex: 1,
                               ));
