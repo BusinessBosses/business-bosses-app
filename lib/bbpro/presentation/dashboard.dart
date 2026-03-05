@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
+import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
@@ -289,6 +290,9 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ],
                       ),
+                      if (shopController.shop != null &&
+                          shopController.shop!.verificationStatus != 'approved')
+                        _buildVerificationBanner(),
                       const OrdersWidget(),
                       const FinancialanalysisWidget(),
                       MasonryGridView.count(
@@ -501,6 +505,70 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
               ),
+      ),
+    );
+  }
+
+  Widget _buildVerificationBanner() {
+    final String status = shopController.shop!.verificationStatus;
+
+    String message =
+        'Verify your Biz-Center to build trust and unlock more features.';
+    if (status == 'pending') {
+      message = 'Biz-Center verification is pending review.';
+    } else if (status == 'rejected') {
+      message = 'Verification rejected. Tap to update documents.';
+    }
+
+    return GestureDetector(
+      onTap: () => Get.to(() => const VerifyBusinessScreen()),
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+        decoration: BoxDecoration(
+          color: status == 'rejected'
+              ? Colors.red.withValues(alpha: 0.1)
+              : proprimaryColor.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: status == 'rejected'
+                ? Colors.red.withValues(alpha: 0.3)
+                : proprimaryColor.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              status == 'pending' ? Icons.hourglass_top : Icons.verified_user,
+              color: status == 'rejected' ? Colors.red : proprimaryColor,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    status == 'rejected'
+                        ? 'Action Required'
+                        : 'Get Verified Badge',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color:
+                          status == 'rejected' ? Colors.red : proprimaryColor,
+                    ),
+                  ),
+                  Text(
+                    message,
+                    style: TextStyle(fontSize: 12, color: Colors.grey[800]),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.chevron_right, color: Colors.grey[600]),
+          ],
+        ),
       ),
     );
   }

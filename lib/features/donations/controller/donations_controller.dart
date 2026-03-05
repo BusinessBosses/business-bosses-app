@@ -97,11 +97,16 @@ class DonationsController extends GetxController {
       if (response.success) {
         for (int i = 0; i < response.data['rows'].length; i++) {
           if (response.data['rows'][i]['user'] != null) {
+            final Map<String, dynamic> row = response.data['rows'][i];
+            final List<String> likes = List<String>.from(row['likes']
+                .map((dynamic like) => like['userId'].toString()));
+
+            profileController.updateInteractionState(row['id'].toString(),
+                likes: likes);
+
             DonationModel donation = DonationModel.fromMap(<String, dynamic>{
-              ...response.data['rows'][i],
-              'likes': response.data['rows'][i]['likes']
-                  .map((dynamic like) => like['userId'].toString())
-                  .toList(),
+              ...row,
+              'likes': likes,
             });
             donations.add(donation);
           }
@@ -110,12 +115,17 @@ class DonationsController extends GetxController {
         if (responseNot.success) {
           for (int i = 0; i < responseNot.data['rows'].length; i++) {
             if (responseNot.data['rows'][i]['user'] != null) {
+              final Map<String, dynamic> row = responseNot.data['rows'][i];
+              final List<String> likes = List<String>.from(row['likes']
+                  .map((dynamic like) => like['userId'].toString()));
+
+              profileController.updateInteractionState(row['id'].toString(),
+                  likes: likes);
+
               DonationModel donationNot =
                   DonationModel.fromMap(<String, dynamic>{
-                ...responseNot.data['rows'][i],
-                'likes': responseNot.data['rows'][i]['likes']
-                    .map((dynamic like) => like['userId'].toString())
-                    .toList(),
+                ...row,
+                'likes': likes,
               });
               donationsNotApproved.add(donationNot);
             }
@@ -313,9 +323,8 @@ class DonationsController extends GetxController {
                       .contains(query.toLowerCase()))) {
             searchedPosts.add(DonationModel.fromMap(<String, dynamic>{
               ...row,
-              'likes': row['likes']
-                  .map((dynamic like) => like['userId'].toString())
-                  .toList(),
+              'likes': List<String>.from(row['likes']
+                  .map((dynamic like) => like['userId'].toString())),
             }));
           }
         }
@@ -487,33 +496,10 @@ class DonationsController extends GetxController {
         donations[donationIndex].likes?.add(userId);
       }
     }
-    update();
 
-    final int userDonationIndex = homeController.userdonations
-        .indexWhere((DonationModel donation) => donation.id == postId);
-    if (userDonationIndex != -1) {
-      final bool checkLiked = homeController
-          .userdonations[userDonationIndex].likes!
-          .contains(userId);
-      if (checkLiked) {
-        homeController.userdonations[userDonationIndex].likes?.remove(userId);
-      } else {
-        homeController.userdonations[userDonationIndex].likes?.add(userId);
-      }
-    }
-    update();
+    // Sync with HomeController
+    homeController.postLike(userId, postId, 'donation', receiverUid);
 
-    final int homeDonationIndex = homeController.donations
-        .indexWhere((DonationModel donation) => donation.id == postId);
-    if (homeDonationIndex != -1) {
-      final bool checkLiked =
-          homeController.donations[homeDonationIndex].likes!.contains(userId);
-      if (checkLiked) {
-        homeController.donations[homeDonationIndex].likes?.remove(userId);
-      } else {
-        homeController.donations[homeDonationIndex].likes?.add(userId);
-      }
-    }
     update();
 
     if (profileController.myProfile.uid != receiverUid) {

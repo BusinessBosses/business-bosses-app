@@ -197,6 +197,8 @@ class CommunitiesController extends GetxController {
       industries.sort((Industry a, Industry b) =>
           a.industry!.compareTo(b.industry!)); // Sort here
       _homeController.addIndustries(industries);
+      // Cache industries
+      _homeController.sandBox.write('industries_cache', response.data['rows']);
     } else {
       error(true);
     }
@@ -208,10 +210,25 @@ class CommunitiesController extends GetxController {
   @override
   void onInit() {
     socket = _homeController.socket;
+
+    // 🔥 Load from cache if available
+    final dynamic cachedIndustries =
+        _homeController.sandBox.read('industries_cache');
+    if (cachedIndustries != null) {
+      industries = Industry.toIndustries(snapshot: cachedIndustries);
+      industries
+          .sort((Industry a, Industry b) => a.industry!.compareTo(b.industry!));
+      _homeController.addIndustries(industries);
+    }
+
     if (_homeController.industries.isEmpty) {
       fetchIndustries();
     } else {
       industries = _homeController.industries;
+      // Also fetch in background to keep fresh if we only had cache
+      if (cachedIndustries != null) {
+        fetchIndustries();
+      }
     }
 
     super.onInit();

@@ -51,29 +51,13 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
 
   @override
   Widget build(BuildContext context) {
-    final List<Object> proItems =
-        marketController.proItems.where((Object object) {
-      if (object is Product) {
-        if (object.user!.isSubscribed) return true;
-      } else if (object is Service) {
-        if (object.user!.isSubscribed) return true;
-      }
-      return false;
-    }).toList();
-    final List<Product> proProducts =
-        marketController.proProducts.where((Product object) {
-      if (object.user!.isSubscribed) return true;
-      return false;
-    }).toList();
-    final List<Service> proServices =
-        marketController.proServices.where((Service object) {
-      if (object.user!.isSubscribed) return true;
-
-      return false;
-    }).toList();
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
+    return Obx(() {
+      final List<Object> proItems = marketController.featuredItems;
+      final List<Product> proProducts = marketController.featuredProducts;
+      final List<Service> proServices = marketController.featuredServices;
+      return Scaffold(
+        backgroundColor: backgroundColor,
+        appBar: AppBar(
         titleSpacing: 0,
         leading: IconButton(
           onPressed: () {
@@ -427,8 +411,9 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
               ),
             ),
           }
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }

@@ -83,8 +83,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
     if (shopController.shop == null) {
       shopController.initShop().then((_) {
-        setState(() => loading = false);
+        if (mounted) setState(() => loading = false);
       });
+      // If initShop() synchronously set the shop from cache
+      if (shopController.shop != null) {
+        loading = false;
+      }
     } else {
       loading = false;
     }

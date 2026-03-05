@@ -16,7 +16,8 @@ import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:get/get.dart';
 
 class VerifyBusinessScreen extends StatefulWidget {
-  const VerifyBusinessScreen({super.key});
+  final Shop? shop;
+  const VerifyBusinessScreen({super.key, this.shop});
 
   @override
   VerifyBusinessScreenState createState() => VerifyBusinessScreenState();
@@ -43,13 +44,15 @@ class VerifyBusinessScreenState extends State<VerifyBusinessScreen> {
       _proofOfAddressDocUrls.isNotEmpty;
 
   bool get _isPending =>
-      shopController.shop?.verificationStatus == 'pending' && _hasAnyDocuments;
+      _targetShop?.verificationStatus == 'pending' && _hasAnyDocuments;
 
-  bool get _isVerified => shopController.shop?.verificationStatus == 'approved';
+  bool get _isVerified => _targetShop?.verificationStatus == 'approved';
 
-  bool get _isRejected => shopController.shop?.verificationStatus == 'rejected';
+  bool get _isRejected => _targetShop?.verificationStatus == 'rejected';
 
-  bool get _canEdit => _isRejected || !_hasAnyDocuments;
+  Shop? get _targetShop => widget.shop ?? shopController.shop;
+
+  bool get _canEdit => (_isRejected || !_hasAnyDocuments);
 
   bool get _canSubmit => _canEdit && !_isProcessing;
 
@@ -64,11 +67,11 @@ class VerifyBusinessScreenState extends State<VerifyBusinessScreen> {
   }
 
   Future<void> _fetchShopDetails() async {
-    if (shopController.shop == null) {
+    if (_targetShop == null) {
       await shopController.initShop();
     }
 
-    final Shop? shop = shopController.shop;
+    final Shop? shop = _targetShop;
     if (shop != null) {
       _keyIndividualDocUrls
         ..clear()
@@ -140,8 +143,8 @@ class VerifyBusinessScreenState extends State<VerifyBusinessScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (shopController.shop != null)
-              _buildShopInfoCard(shopController.shop!),
+            if (_targetShop != null)
+              _buildShopInfoCard(_targetShop!),
             if (_isPending || _isVerified || _isRejected) _buildStatusBanner(),
             _buildSection(
               'Key Individuals',
@@ -346,7 +349,7 @@ class VerifyBusinessScreenState extends State<VerifyBusinessScreen> {
     }
 
     await shopController.updateShop(
-      shopController.shop!.id,
+      _targetShop!.id,
       _buildUpdatePayload(),
     );
 

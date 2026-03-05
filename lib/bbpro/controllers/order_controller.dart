@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class OrderController extends GetxController {
   final ProfileController profileController = Get.find();
@@ -15,22 +16,34 @@ class OrderController extends GetxController {
   final List<Order> allorders = <Order>[];
   final Map<OrderStatus, List<Order>> ordersStatus =
       <OrderStatus, List<Order>>{};
+  final GetStorage sandBox = GetStorage();
 
   Future<void> initOrders(String shopId) async {
-    loading(true);
-    update();
-    orders.clear();
-    allorders.clear();
+    final dynamic cachedOrders = sandBox.read('shop_orders_$shopId');
+    if (cachedOrders != null) {
+      _processOrdersData(cachedOrders);
+      loading.value = false;
+      update();
+    } else {
+      loading(true);
+    }
+
     ApiResponseModel response =
         await ApiService.get(path: 'orders/shop-orders/$shopId');
     if (response.success) {
-      // Map and sort orders by createdAt
-      orders.addAll((response.data['rows'] as List<dynamic>)
-          .map((dynamic order) => Order.fromJson(order))
-          .toList());
-      // ..sort((Order a, Order b) =>
-      //     a.createdAt.compareTo(b.createdAt))); // Newest at the top
+      await sandBox.write('shop_orders_$shopId', response.data);
+      _processOrdersData(response.data);
     }
+    loading(false);
+    update();
+  }
+
+  void _processOrdersData(dynamic data) {
+    orders.clear();
+    allorders.clear();
+    orders.addAll((data['rows'] as List<dynamic>)
+        .map((dynamic order) => Order.fromJson(order))
+        .toList());
 
     // Initialize ordersStatus map
     for (OrderStatus status in OrderStatus.values) {
@@ -42,10 +55,8 @@ class OrderController extends GetxController {
       List<Order> statusOrders =
           orders.where((Order order) => order.status == status).toList();
       ordersStatus[status] = statusOrders;
-      allorders.addAll(statusOrders); // Add tasks to alltasks
+      allorders.addAll(statusOrders);
     }
-    loading(false);
-    update();
   }
 
   Future<void> loadOrder(String orderId) async {

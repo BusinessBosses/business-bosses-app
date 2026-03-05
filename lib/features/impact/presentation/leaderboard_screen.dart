@@ -1,13 +1,11 @@
-import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -35,6 +33,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
   final ProfileController profileController = Get.find();
   final ShopController shopController = Get.find();
+  final ReachController reachController = Get.put(ReachController());
 
   bool isLoading = false;
   bool isCountryLoading = false;
@@ -43,10 +42,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   String? selectedCountry;
   String? selectedCountryCode;
   String? selectedIndustry;
-
-  List<Map<String, dynamic>> globalLeaders = <Map<String, dynamic>>[];
-  List<Map<String, dynamic>> industryLeaders = <Map<String, dynamic>>[];
-  List<Map<String, dynamic>> countryLeaders = <Map<String, dynamic>>[];
 
   final List<String> categories = const <String>[
     'Agriculture, Food & Beverage',
@@ -77,116 +72,22 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
             ? shopController.shop!.category
             : user.industry ?? 'General';
 
-    ApiResponseModel industryResponse;
-    ApiResponseModel countryResponse;
-
-    final ApiResponseModel globalResponse =
-        await ApiService.get(path: 'impact/top/shops?limit=30');
-
-    if (profileController.myProfile.hasShop && shopController.shop != null) {
-      industryResponse = await ApiService.get(
-        path:
-            'impact/top/shops/category?category=${Uri.encodeComponent(shopController.shop!.category)}&limit=30',
-      );
-
-      countryResponse = await ApiService.get(
-        path:
-            'impact/top/shops/location?location=${Uri.encodeComponent(shopController.shop!.location)}&limit=30',
-      );
-    } else {
-      industryResponse = await ApiService.get(
-        path: 'impact/top/shops/category?category=$selectedIndustry&limit=30',
-      );
-
-      countryResponse = await ApiService.get(
-        path: 'impact/top/shops/location?location=$selectedCountry&limit=30',
-      );
-    }
-
-    if (globalResponse.success) {
-      globalLeaders = _mapApiResponse(
-        globalResponse.data,
-        useGlobalRank: true,
-      );
-    }
-
-    if (industryResponse.success) {
-      industryLeaders = _mapApiResponse(
-        industryResponse.data,
-        useGlobalRank: false,
-      );
-    }
-
-    if (countryResponse.success) {
-      countryLeaders = _mapApiResponse(
-        countryResponse.data,
-        useGlobalRank: false,
-      );
-    }
+    await reachController.loadLeaderboardData(
+        industry: selectedIndustry, country: selectedCountry);
 
     setState(() => isLoading = false);
   }
 
   Future<void> loadCountryLeaders(String country) async {
     setState(() => isCountryLoading = true);
-    final ApiResponseModel response = await ApiService.get(
-      path:
-          'impact/top/shops/location?location=${Uri.encodeComponent(country)}&limit=30',
-    );
-    if (response.success) {
-      countryLeaders = _mapApiResponse(
-        response.data,
-        useGlobalRank: false,
-      );
-    }
+    await reachController.loadLeaderboardData(country: country);
     setState(() => isCountryLoading = false);
   }
 
   Future<void> loadIndustryLeaders(String industry) async {
     setState(() => isIndustryLoading = true);
-    final ApiResponseModel response = await ApiService.get(
-      path:
-          'impact/top/shops/category?category=${Uri.encodeComponent(industry)}&limit=30',
-    );
-    if (response.success) {
-      industryLeaders = _mapApiResponse(
-        response.data,
-        useGlobalRank: false,
-      );
-    }
+    await reachController.loadLeaderboardData(industry: industry);
     setState(() => isIndustryLoading = false);
-  }
-
-  /// ===============================
-  /// MAP SHOP RESPONSE → SAME UI DATA
-  /// ===============================
-  List<Map<String, dynamic>> _mapApiResponse(
-    dynamic data, {
-    bool useGlobalRank = false,
-  }) {
-    final List<dynamic> list = data is List<dynamic> ? data : <dynamic>[];
-
-    return list
-        .asMap()
-        .entries
-        .map<Map<String, dynamic>>((MapEntry<int, dynamic> entry) {
-      final int index = entry.key;
-      final Map<String, dynamic> item = Map<String, dynamic>.from(entry.value);
-      final Shop shop = Shop.fromMap(item['shop']);
-      final UserModel user = UserModel.fromMap(item['shop']['user']);
-
-      return <String, dynamic>{
-        'rank': useGlobalRank
-            ? (item['globalRank'] ?? index + 1)
-            : index + 1, // 🔥 ALWAYS 1–30
-        'name': shop.name,
-        'description': shop.description,
-        'user': user,
-        'score': item['impactScore'] ?? 0,
-        'image': shop.image ?? '',
-        'verified': shop.verificationStatus == 'approved',
-      };
-    }).toList();
   }
 
   @override
@@ -208,24 +109,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
         widget.selectedCategory!.isEmpty ||
         widget.selectedCategory == 'All') {
       // 🔵 ALL → GLOBAL
-      final ApiResponseModel response =
-          await ApiService.get(path: 'impact/top/shops?limit=30');
-
-      if (response.success) {
-        globalLeaders = _mapApiResponse(response.data, useGlobalRank: true);
-      }
+      await reachController.loadLeaderboardData();
     } else {
       // 🟢 CATEGORY SELECTED
       selectedIndustry = widget.selectedCategory;
-
-      final ApiResponseModel response = await ApiService.get(
-        path:
-            'impact/top/shops/category?category=${Uri.encodeComponent(widget.selectedCategory!)}&limit=30',
-      );
-
-      if (response.success) {
-        industryLeaders = _mapApiResponse(response.data, useGlobalRank: false);
-      }
+      await reachController.loadLeaderboardData(industry: selectedIndustry);
     }
 
     setState(() => isLoading = false);
@@ -284,7 +172,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   }
 
   Widget _buildMarketplaceLeaderboard() {
-    if (isLoading) {
+    if ((isLoading || reachController.leaderboardLoading.value) &&
+        reachController.globalLeaders.isEmpty &&
+        reachController.industryLeaders.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -293,7 +183,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
         widget.selectedCategory == 'All';
 
     final List<Map<String, dynamic>> data =
-        isAll ? globalLeaders : industryLeaders;
+        isAll ? reachController.globalLeaders : reachController.industryLeaders;
 
     return data.isEmpty
         ? const Center(child: Text('No ranking data'))
@@ -312,19 +202,22 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
     switch (filterType) {
       case 'Industry':
-        leaderboardData = industryLeaders;
+        leaderboardData = reachController.industryLeaders;
         currentLoading = isIndustryLoading;
         break;
       case 'Country':
-        leaderboardData = countryLeaders;
+        leaderboardData = reachController.countryLeaders;
         currentLoading = isCountryLoading;
         break;
       default:
-        leaderboardData = globalLeaders;
+        leaderboardData = reachController.globalLeaders;
         currentLoading = false;
     }
 
-    if (isLoading) {
+    if ((isLoading ||
+            reachController.leaderboardLoading.value ||
+            currentLoading) &&
+        leaderboardData.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 

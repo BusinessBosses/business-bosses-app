@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ClientsController extends GetxController {
   final ProfileController profileController = Get.find();
@@ -14,29 +15,43 @@ class ClientsController extends GetxController {
       <ClientType, List<Client>>{};
   final List<Client> allclients = <Client>[];
   final List<Campaign> campaigns = <Campaign>[];
+  final GetStorage sandBox = GetStorage();
 
   Future<void> initClients(String userId) async {
-    loading(true);
-    clients.clear();
-    allclients.clear();
+    final dynamic cachedClients = sandBox.read('user_clients_$userId');
+    if (cachedClients != null) {
+      _processClientsData(cachedClients);
+      loading.value = false;
+      update();
+    } else {
+      loading(true);
+    }
+
     ApiResponseModel response =
         await ApiService.get(path: 'clients/user-clients/$userId');
     if (response.success) {
-      for (int i = 0; i < response.data['rows'].length; i++) {
-        clients.add(Client.fromMap(response.data['rows'][i]));
-      }
+      await sandBox.write('user_clients_$userId', response.data);
+      _processClientsData(response.data);
+    }
+    loading(false);
+    update();
+  }
+
+  void _processClientsData(dynamic data) {
+    clients.clear();
+    allclients.clear();
+    for (int i = 0; i < data['rows'].length; i++) {
+      clients.add(Client.fromMap(data['rows'][i]));
     }
     for (ClientType clientType in ClientType.values) {
       clientsType[clientType] = <Client>[];
     }
     for (ClientType clientType in ClientType.values) {
-      List<Client> allclients =
+      List<Client> filteredClients =
           clients.where((Client client) => client.type == clientType).toList();
-      clientsType[clientType] = allclients;
-      this.allclients.addAll(allclients);
+      clientsType[clientType] = filteredClients;
+      allclients.addAll(filteredClients);
     }
-    loading(false);
-    update();
   }
 
   Future<bool> addClient(Map<String, dynamic> data) async {
@@ -73,17 +88,30 @@ class ClientsController extends GetxController {
   }
 
   Future<void> initCampaigns(String userId) async {
-    loading(true);
-    campaigns.clear();
+    final dynamic cachedCampaigns = sandBox.read('user_campaigns_$userId');
+    if (cachedCampaigns != null) {
+      _processCampaignsData(cachedCampaigns);
+      loading.value = false;
+      update();
+    } else {
+      loading(true);
+    }
+
     ApiResponseModel response =
         await ApiService.get(path: 'campaign-history/user/$userId');
     if (response.success) {
-      for (int i = 0; i < response.data.length; i++) {
-        campaigns.add(Campaign.fromMap(response.data[i]));
-      }
+      await sandBox.write('user_campaigns_$userId', response.data);
+      _processCampaignsData(response.data);
     }
     loading(false);
     update();
+  }
+
+  void _processCampaignsData(dynamic data) {
+    campaigns.clear();
+    for (int i = 0; i < data.length; i++) {
+      campaigns.add(Campaign.fromMap(data[i]));
+    }
   }
 
   Future<void> deleteCampaign(int id) async {

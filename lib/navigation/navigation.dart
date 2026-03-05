@@ -11,7 +11,6 @@ import 'package:business_bosses_v2/features/donations/presentation/donations.dar
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
@@ -59,6 +58,7 @@ import 'package:business_bosses_v2/features/withdrawal/presentation/coin_history
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
+import 'package:business_bosses_v2/navigation/bindings.dart';
 import 'package:get/get.dart';
 
 import '../features/settings/delete_account_screen.dart';
@@ -88,7 +88,7 @@ var routes = [
   GetPage(
     name: Routes.home,
     page: () => const HomeScreen(),
-    binding: BindingsBuilder.put(() => HomeController()),
+    binding: HomeBinding(),
   ),
   // GetPage(
   //   name: Routes.bottomNavigation,

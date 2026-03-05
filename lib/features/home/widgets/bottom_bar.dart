@@ -41,7 +41,16 @@ class _BottomBarState extends State<BottomBar> {
   @override
   void initState() {
     super.initState();
-    industry = controller.categories[0];
+    if (controller.categories.isNotEmpty) {
+      industry = controller.categories[0];
+    } else {
+      industry = Industry(
+        industryId: '',
+        industry: '',
+        categoryId: '',
+        description: '',
+      );
+    }
   }
 
   @override

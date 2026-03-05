@@ -837,93 +837,92 @@ class _CourseItemState extends State<CourseItem> {
             const SizedBox(
               height: 5,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                TextButton.icon(
-                  onPressed: () async {
-                    courseController.postLike(
-                      profileController.myProfile.uid,
-                      widget.course.id,
-                      widget.course.user!.uid,
-                    );
-                    setState(() {});
-                  },
-                  icon: widget.course.likes
-                              ?.contains(profileController.myProfile.uid) ==
-                          true
-                      ? SvgPicture.asset(
-                          'assets/svgs/likefilled.svg',
-                          height: 15,
-                        )
-                      : SvgPicture.asset('assets/svgs/like.svg', height: 15),
-                  label: Text(
-                    '${widget.course.likes?.length ?? 0}',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: textColor.withValues(alpha: 0.8),
-                        ),
-                  ),
-                ),
-                TextButton.icon(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          CourseCommentBottomSheet(
-                        course: widget.course,
-                        onComment: (CourseCommentModel newComment) async {
-                          setState(() {});
-                        },
-                      ),
-                    );
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/svgs/comment.svg',
-                    height: 15,
-                  ),
-                  label: Text(
-                    '${widget.course.comments?.length}',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: textColor.withValues(alpha: 0.8),
-                        ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(right: 0.0),
-                  child: TextButton.icon(
+            Obx(() {
+              final List<String> courseLikes = profileController.getLikes(
+                  widget.course.id, widget.course.likes);
+              final List<String> courseCoins = profileController.getCoins(
+                  widget.course.id, widget.course.coins);
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  TextButton.icon(
                     onPressed: () async {
-                      if (widget.course.user!.uid !=
-                          profileController.myProfile.uid) {
-                        courseController.postCoin(
-                            profileController.myProfile.uid,
-                            widget.course.id,
-                            profileController,
-                            widget.course.user!.uid);
-                      }
-                      setState(() {});
+                      courseController.postLike(
+                        profileController.myProfile.uid,
+                        widget.course.id,
+                        widget.course.user!.uid,
+                      );
                     },
-                    icon: widget.course.coins
-                                ?.contains(profileController.myProfile.uid) ==
-                            true
+                    icon: courseLikes.contains(profileController.myProfile.uid)
                         ? SvgPicture.asset(
-                            'assets/svgs/coin.svg',
-                            height: 20,
+                            'assets/svgs/likefilled.svg',
+                            height: 15,
                           )
-                        : SvgPicture.asset(
-                            'assets/svgs/coin.svg',
-                            height: 20,
-                          ),
+                        : SvgPicture.asset('assets/svgs/like.svg', height: 15),
                     label: Text(
-                      '${widget.course.coins?.length ?? 0}',
+                      '${courseLikes.length}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
                             color: textColor.withValues(alpha: 0.8),
                           ),
                     ),
                   ),
-                ),
+                  TextButton.icon(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            CourseCommentBottomSheet(
+                          course: widget.course,
+                          onComment: (CourseCommentModel newComment) async {},
+                        ),
+                      );
+                    },
+                    icon: SvgPicture.asset(
+                      'assets/svgs/comment.svg',
+                      height: 15,
+                    ),
+                    label: Text(
+                      '${widget.course.comments?.length ?? 0}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: textColor.withValues(alpha: 0.8),
+                          ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(right: 0.0),
+                    child: TextButton.icon(
+                      onPressed: () async {
+                        if (widget.course.user!.uid !=
+                            profileController.myProfile.uid) {
+                          courseController.postCoin(
+                              profileController.myProfile.uid,
+                              widget.course.id,
+                              profileController,
+                              widget.course.user!.uid);
+                        }
+                      },
+                      icon: courseCoins
+                              .contains(profileController.myProfile.uid)
+                          ? SvgPicture.asset(
+                              'assets/svgs/coin.svg',
+                              height: 20,
+                            )
+                          : SvgPicture.asset(
+                              'assets/svgs/coin.svg',
+                              height: 20,
+                            ),
+                      label: Text(
+                        '${courseCoins.length}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: textColor.withValues(alpha: 0.8),
+                            ),
+                      ),
+                    ),
+                  ),
                 TextButton.icon(
                   onPressed: () async {},
                   icon: const Icon(Icons.remove_red_eye_outlined,
@@ -959,18 +958,19 @@ class _CourseItemState extends State<CourseItem> {
                   ),
                 ),
 
-                // Padding(
-                //   padding: const EdgeInsets.only(right: 15),
-                //   child: Text(
-                //     TimeFormat.formatString(widget.course.timestamp),
-                //     style: Theme.of(context)
-                //         .textTheme
-                //         .bodyMedium
-                //         ?.copyWith(color: textColor.withValues(alpha: 0.4)),
-                //   ),
-                // )
-              ],
-            ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(right: 15),
+                  //   child: Text(
+                  //     TimeFormat.formatString(widget.course.timestamp),
+                  //     style: Theme.of(context)
+                  //         .textTheme
+                  //         .bodyMedium
+                  //         ?.copyWith(color: textColor.withValues(alpha: 0.4)),
+                  //   ),
+                  // )
+                ],
+              );
+            }),
             Container(
               color: backgroundcolorinterface,
               height: 7,

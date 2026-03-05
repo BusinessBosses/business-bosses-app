@@ -122,8 +122,22 @@ class ForumModel {
       timestamp: map['timestamp'] != null
           ? int.parse(map['timestamp'].toString())
           : null,
-      likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
-      coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
+      likes: map['likes'] != null
+          ? List<String>.from(map['likes'].map((dynamic like) {
+              if (like is Map<String, dynamic>) {
+                return like['userId'].toString();
+              }
+              return like.toString();
+            }))
+          : null,
+      coins: map['coins'] != null
+          ? List<String>.from(map['coins'].map((dynamic coin) {
+              if (coin is Map<String, dynamic>) {
+                return coin['userId'].toString();
+              }
+              return coin.toString();
+            }))
+          : null,
       promote: map['promote'] as bool,
       approved: map['approved'] as bool,
       comments: map['comments'] != null

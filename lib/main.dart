@@ -22,6 +22,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_links/app_links.dart';
+import 'package:business_bosses_v2/navigation/bindings.dart';
 
 final PurchasesConfiguration _configuration = Platform.isIOS
     ? PurchasesConfiguration('appl_fpKOUqIrKWZpOCQbxcYdfiIMgjj')
@@ -35,10 +36,17 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  await Purchases.configure(_configuration);
-  await GetStorage.init();
-  await dotenv.load();
-  await Firebase.initializeApp();
+  // 🔥 Parallelize initializations to speed up startup
+  final dynamic results = await Future.wait(<Future<void>>[
+    Firebase.initializeApp(),
+    GetStorage.init(),
+    dotenv.load(),
+    Purchases.configure(_configuration),
+    FlutterDownloader.initialize(),
+    SharedPreferences.getInstance(),
+  ]);
+
+  final SharedPreferences prefs = results[5] as SharedPreferences;
 
   // Crashlytics setup
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
@@ -46,8 +54,6 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-
-  await FlutterDownloader.initialize();
 
   AnalyticsServices();
   // Stripe.publishableKey = dotenv.env['STRIPE_PUB_KEY']!;
@@ -60,7 +66,6 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // 🔥 LOAD PREFS BEFORE runApp
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
   final String? userId = prefs.getString(Constants.USER_ID);
   final String? token = prefs.getString(Constants.ACCESS_TOKEN);
 
@@ -170,6 +175,7 @@ void processPostDeeplink(Uri uri) async {
   }
 }
 
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
@@ -194,6 +200,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: appTheme,
       title: 'Business Bosses',
+      initialBinding: InitialBinding(),
 
       // 🔥 This now works because GetMaterialApp is root from first frame
       initialRoute: initialRoute,

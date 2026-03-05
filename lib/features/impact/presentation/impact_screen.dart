@@ -1,9 +1,7 @@
 import 'dart:developer';
 import 'dart:ui';
 
-import 'package:business_bosses_v2/analytics/presentation/profile_analyse_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
-import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/my_connect.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_child_button.dart';
@@ -22,7 +20,6 @@ import 'package:business_bosses_v2/features/impact/presentation/leaderboard_scre
 import 'package:business_bosses_v2/features/impact/widgets/ranking_card.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../../services/api_service.dart';
 
 class ReachScreen extends StatefulWidget {
   final UserModel user;
@@ -38,9 +35,6 @@ class _ReachScreenState extends State<ReachScreen> {
   late TooltipBehavior _tooltipBehavior;
   bool loading = false;
   bool error = false;
-  final List<MyConnect> _myConnections = <MyConnect>[];
-  final List<MyConnect> _myConnecteds = <MyConnect>[];
-  final List<MyConnect> _disconnections = <MyConnect>[];
   final bool _isInit = false;
 
   @override
@@ -80,19 +74,22 @@ class _ReachScreenState extends State<ReachScreen> {
   }
 
   int getConnectionValue(double val, num time) {
-    return ((_connections(_myConnections, timestamp: time).length) / val)
+    return ((_connections(controller.connections, timestamp: time).length) /
+            val)
         .round();
   }
 
   int getConnectedValue(int val, num time) {
-    return ((_connections(_myConnecteds, timestamp: TimeFormat.ONE_MONTH)
+    return ((_connections(controller.connecteds,
+                    timestamp: TimeFormat.ONE_MONTH)
                 .length) /
             val)
         .round();
   }
 
   int getDisconnectedValue(int val, num time) {
-    return ((disconnected(_disconnections, timestamp: time).length) / val)
+    return ((disconnected(controller.disconnections, timestamp: time).length) /
+            val)
         .round();
   }
 
@@ -109,7 +106,7 @@ class _ReachScreenState extends State<ReachScreen> {
 
     // Only load connections for current user's profile
     if (widget.user.uid == profileController.myProfile.uid) {
-      loadRawConnections();
+      controller.loadConnectionAnalysis(widget.user.uid);
     }
   }
 
@@ -270,320 +267,265 @@ class _ReachScreenState extends State<ReachScreen> {
                     ),
                   ),
                   children: <Widget>[
-                    loading
-                        ? SafetyModel(
-                            isLoading: loading,
-                          )
-                        : error
-                            ? SafetyModel(
-                                clickableText: 'Reload',
-                                isLoading: false,
-                                onTap: () async {
-                                  loadRawConnections();
-                                },
-                                title: 'There was an error loading data',
-                              )
-                            : SingleChildScrollView(
+                    GetBuilder<ReachController>(
+                      tag: widget.user.uid,
+                      builder: (ReachController controller) {
+                        if (controller.analysisLoading.value &&
+                            controller.connections.isEmpty) {
+                          return const SafetyModel();
+                        }
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 20,
+                                  left: 20,
+                                  right: 20,
+                                ),
                                 child: Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 20,
-                                      left: 20,
-                                      right: 20,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    const SizedBox(height: 12.0),
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: const Text(
+                                        'Weekly',
+                                        style: bodyText1,
+                                      ),
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    Row(
                                       children: <Widget>[
-                                        const SizedBox(height: 12.0),
-                                        Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: const Text(
-                                            'Weekly',
-                                            style: bodyText1,
+                                        Expanded(
+                                          child: CustomChildButton(
+                                            value: _connections(
+                                                    controller.connections,
+                                                    timestamp:
+                                                        TimeFormat.ONE_WEEK)
+                                                .length,
+                                            onPressed: () {},
+                                            caption: 'Following',
                                           ),
                                         ),
-                                        Row(
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: CustomChildButton(
-                                                value: _connections(
-                                                        _myConnections,
-                                                        timestamp:
-                                                            TimeFormat.ONE_WEEK)
-                                                    .length,
-                                                onPressed: () {},
-                                                caption: 'Following',
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: CustomChildButton(
-                                                value: _connections(
-                                                        _myConnecteds,
-                                                        timestamp:
-                                                            TimeFormat.ONE_WEEK)
-                                                    .length,
-                                                onPressed: () {},
-                                                caption: 'Followers',
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: CustomChildButton(
-                                                value: disconnected(
-                                                        _disconnections,
-                                                        timestamp:
-                                                            TimeFormat.ONE_WEEK)
-                                                    .length,
-                                                onPressed: () {},
-                                                caption: 'Unfollowed',
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 12.0),
-                                        Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: const Text(
-                                            'Monthly',
-                                            style: bodyText1,
+                                        Expanded(
+                                          child: CustomChildButton(
+                                            value: _connections(
+                                                    controller.connecteds,
+                                                    timestamp:
+                                                        TimeFormat.ONE_WEEK)
+                                                .length,
+                                            onPressed: () {},
+                                            caption: 'Followers',
                                           ),
                                         ),
-                                        Row(
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: CustomChildButton(
-                                                value: _connections(
-                                                        _myConnections,
-                                                        timestamp: TimeFormat
-                                                            .ONE_MONTH)
-                                                    .length,
-
-                                                // value:
-                                                // _connections(_specificUser,
-                                                //         statue: Constants.CONNECTION,
-                                                //         timestamp: TimeFormat.ONE_MONTH)
-                                                //     .length,
-                                                onPressed: () {},
-                                                caption: 'Following',
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: CustomChildButton(
-                                                value: _connections(
-                                                        _myConnecteds,
-                                                        timestamp: TimeFormat
-                                                            .ONE_MONTH)
-                                                    .length,
-                                                onPressed: () {},
-                                                caption: 'Followers',
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: CustomChildButton(
-                                                value: disconnected(
-                                                        _disconnections,
-                                                        timestamp: TimeFormat
-                                                            .ONE_MONTH)
-                                                    .length,
-                                                onPressed: () {},
-                                                caption: 'Unfollowed',
-                                              ),
-                                            ),
-                                          ],
+                                        Expanded(
+                                          child: CustomChildButton(
+                                            value: disconnected(
+                                                    controller.disconnections,
+                                                    timestamp:
+                                                        TimeFormat.ONE_WEEK)
+                                                .length,
+                                            onPressed: () {},
+                                            caption: 'Unfollowed',
+                                          ),
                                         ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        SfCartesianChart(
-                                            primaryXAxis: CategoryAxis(),
-                                            // Chart title
-                                            title: ChartTitle(
-                                              text: 'Monthly Profile Analysis',
-                                            ),
-                                            // Enable legend
-                                            legend: const Legend(
-                                                isVisible: true,
-                                                position:
-                                                    LegendPosition.bottom),
-                                            // Enable tooltip
-                                            tooltipBehavior: _tooltipBehavior,
-                                            series: <LineSeries<SalesData,
-                                                String>>[
-                                              LineSeries<SalesData, String>(
-                                                  name: 'Following',
-                                                  dataSource: <SalesData>[
-                                                    SalesData(
-                                                        name: 'Mon', value: 0),
-                                                    SalesData(
-                                                        name: 'Tue',
-                                                        value:
-                                                            getConnectionValue(
-                                                                8,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Wed',
-                                                        value:
-                                                            getConnectionValue(
-                                                                7,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Thu',
-                                                        value:
-                                                            getConnectionValue(
-                                                                4,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Fri',
-                                                        value:
-                                                            getConnectionValue(
-                                                                2,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Sat',
-                                                        value:
-                                                            getConnectionValue(
-                                                                1.4,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Sun',
-                                                        value:
-                                                            getConnectionValue(
-                                                                1,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                  ],
-                                                  xValueMapper:
-                                                      (SalesData sales, _) =>
-                                                          sales.name,
-                                                  yValueMapper:
-                                                      (SalesData sales, _) =>
-                                                          sales.value,
-                                                  // Enable data label
-                                                  dataLabelSettings:
-                                                      const DataLabelSettings(
-                                                          isVisible: true)),
-                                              LineSeries<SalesData, String>(
-                                                  name: 'Followers',
-                                                  dataSource: <SalesData>[
-                                                    SalesData(
-                                                        name: 'Mon', value: 0),
-                                                    SalesData(
-                                                        name: 'Tue',
-                                                        value: getConnectedValue(
-                                                            8,
-                                                            TimeFormat
-                                                                .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Wed',
-                                                        value: getConnectedValue(
-                                                            5,
-                                                            TimeFormat
-                                                                .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Thu',
-                                                        value: getConnectedValue(
-                                                            4,
-                                                            TimeFormat
-                                                                .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Fri',
-                                                        value: getConnectedValue(
-                                                            3,
-                                                            TimeFormat
-                                                                .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Sat',
-                                                        value: getConnectedValue(
-                                                            2,
-                                                            TimeFormat
-                                                                .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Sun',
-                                                        value: getConnectedValue(
-                                                            1,
-                                                            TimeFormat
-                                                                .ONE_MONTH)),
-                                                  ],
-                                                  xValueMapper:
-                                                      (SalesData sales, _) =>
-                                                          sales.name,
-                                                  yValueMapper:
-                                                      (SalesData sales, _) =>
-                                                          sales.value,
-                                                  // Enable data label
-                                                  dataLabelSettings:
-                                                      const DataLabelSettings(
-                                                          isVisible: true)),
-                                              LineSeries<SalesData, String>(
-                                                  name: 'Unfollowed',
-                                                  dataSource: <SalesData>[
-                                                    SalesData(
-                                                        name: 'Mon', value: 0),
-                                                    SalesData(
-                                                        name: 'Tue',
-                                                        value:
-                                                            getDisconnectedValue(
-                                                                10,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Wed',
-                                                        value:
-                                                            getDisconnectedValue(
-                                                                8,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Thu',
-                                                        value:
-                                                            getDisconnectedValue(
-                                                                5,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Fri',
-                                                        value:
-                                                            getDisconnectedValue(
-                                                                3,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Sat',
-                                                        value:
-                                                            getDisconnectedValue(
-                                                                2,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                    SalesData(
-                                                        name: 'Sun',
-                                                        value:
-                                                            getDisconnectedValue(
-                                                                1,
-                                                                TimeFormat
-                                                                    .ONE_MONTH)),
-                                                  ],
-                                                  xValueMapper:
-                                                      (SalesData sales, _) =>
-                                                          sales.name,
-                                                  yValueMapper:
-                                                      (SalesData sales, _) =>
-                                                          sales.value,
-                                                  // Enable data label
-                                                  dataLabelSettings:
-                                                      const DataLabelSettings(
-                                                          isVisible: true)),
-                                            ]),
                                       ],
                                     ),
-                                  )
-                                ],
-                              )),
+                                    const SizedBox(height: 12.0),
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: const Text(
+                                        'Monthly',
+                                        style: bodyText1,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: CustomChildButton(
+                                            value: _connections(
+                                                    controller.connections,
+                                                    timestamp:
+                                                        TimeFormat.ONE_MONTH)
+                                                .length,
+                                            onPressed: () {},
+                                            caption: 'Following',
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: CustomChildButton(
+                                            value: _connections(
+                                                    controller.connecteds,
+                                                    timestamp:
+                                                        TimeFormat.ONE_MONTH)
+                                                .length,
+                                            onPressed: () {},
+                                            caption: 'Followers',
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: CustomChildButton(
+                                            value: disconnected(
+                                                    controller.disconnections,
+                                                    timestamp:
+                                                        TimeFormat.ONE_MONTH)
+                                                .length,
+                                            onPressed: () {},
+                                            caption: 'Unfollowed',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    SfCartesianChart(
+                                        primaryXAxis: CategoryAxis(),
+                                        // Chart title
+                                        title: ChartTitle(
+                                          text: 'Monthly Profile Analysis',
+                                        ),
+                                        // Enable legend
+                                        legend: const Legend(
+                                            isVisible: true,
+                                            position: LegendPosition.bottom),
+                                        // Enable tooltip
+                                        tooltipBehavior: _tooltipBehavior,
+                                        series: <LineSeries<SalesData, String>>[
+                                          LineSeries<SalesData, String>(
+                                              name: 'Following',
+                                              dataSource: <SalesData>[
+                                                SalesData(
+                                                    name: 'Mon', value: 0),
+                                                SalesData(
+                                                    name: 'Tue',
+                                                    value: getConnectionValue(8,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Wed',
+                                                    value: getConnectionValue(7,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Thu',
+                                                    value: getConnectionValue(4,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Fri',
+                                                    value: getConnectionValue(2,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Sat',
+                                                    value: getConnectionValue(
+                                                        1.4,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Sun',
+                                                    value: getConnectionValue(1,
+                                                        TimeFormat.ONE_MONTH)),
+                                              ],
+                                              xValueMapper:
+                                                  (SalesData sales, _) =>
+                                                      sales.name,
+                                              yValueMapper:
+                                                  (SalesData sales, _) =>
+                                                      sales.value,
+                                              // Enable data label
+                                              dataLabelSettings:
+                                                  const DataLabelSettings(
+                                                      isVisible: true)),
+                                          LineSeries<SalesData, String>(
+                                              name: 'Followers',
+                                              dataSource: <SalesData>[
+                                                SalesData(
+                                                    name: 'Mon', value: 0),
+                                                SalesData(
+                                                    name: 'Tue',
+                                                    value: getConnectedValue(8,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Wed',
+                                                    value: getConnectedValue(5,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Thu',
+                                                    value: getConnectedValue(4,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Fri',
+                                                    value: getConnectedValue(3,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Sat',
+                                                    value: getConnectedValue(2,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Sun',
+                                                    value: getConnectedValue(1,
+                                                        TimeFormat.ONE_MONTH)),
+                                              ],
+                                              xValueMapper:
+                                                  (SalesData sales, _) =>
+                                                      sales.name,
+                                              yValueMapper:
+                                                  (SalesData sales, _) =>
+                                                      sales.value,
+                                              // Enable data label
+                                              dataLabelSettings:
+                                                  const DataLabelSettings(
+                                                      isVisible: true)),
+                                          LineSeries<SalesData, String>(
+                                              name: 'Unfollowed',
+                                              dataSource: <SalesData>[
+                                                SalesData(
+                                                    name: 'Mon', value: 0),
+                                                SalesData(
+                                                    name: 'Tue',
+                                                    value: getDisconnectedValue(
+                                                        10,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Wed',
+                                                    value: getDisconnectedValue(
+                                                        8,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Thu',
+                                                    value: getDisconnectedValue(
+                                                        5,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Fri',
+                                                    value: getDisconnectedValue(
+                                                        3,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Sat',
+                                                    value: getDisconnectedValue(
+                                                        2,
+                                                        TimeFormat.ONE_MONTH)),
+                                                SalesData(
+                                                    name: 'Sun',
+                                                    value: getDisconnectedValue(
+                                                        1,
+                                                        TimeFormat.ONE_MONTH)),
+                                              ],
+                                              xValueMapper:
+                                                  (SalesData sales, _) =>
+                                                      sales.name,
+                                              yValueMapper:
+                                                  (SalesData sales, _) =>
+                                                      sales.value,
+                                              // Enable data label
+                                              dataLabelSettings:
+                                                  const DataLabelSettings(
+                                                      isVisible: true)),
+                                        ]),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
             ],
@@ -592,55 +534,12 @@ class _ReachScreenState extends State<ReachScreen> {
       }),
     );
   }
+}
 
-  // void _shareWithFriends() {
-  //   // ignore: unnecessary_null_comparison
-  //   if (_referralId == null) return;
-  //   String message = 'Check out Business Bosses.\n'
-  //       'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
-  //       'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
-  //       'Invite id: $_referralId';
-  //   socialShare(message);
-  // }
-
-  Future<void> loadRawConnections() async {
-    setState(() {
-      loading = true;
-      error = false;
-    });
-
-    final ApiResponseModel response =
-        await ApiService.get(path: 'connection/analysis');
-    _myConnections.clear();
-    _myConnecteds.clear();
-    _disconnections.clear();
-
-    if (response.success) {
-      for (int i = 0; i < response.data['connections'].length; i++) {
-        final MyConnect modelizedData =
-            MyConnect.fromMap(response.data['connections'][i]);
-        _myConnections.add(modelizedData);
-      }
-
-      for (int i = 0; i < response.data['connecteds'].length; i++) {
-        final MyConnect modelizedData =
-            MyConnect.fromMap(response.data['connecteds'][i]);
-        _myConnecteds.add(modelizedData);
-      }
-
-      for (int i = 0; i < response.data['disconnections'].length; i++) {
-        final MyConnect modelizedData =
-            MyConnect.fromMap(response.data['disconnections'][i]);
-        _disconnections.add(modelizedData);
-      }
-    } else {
-      error = true;
-    }
-
-    setState(() {
-      loading = false;
-    });
-  }
+class SalesData {
+  final String name;
+  final num value;
+  SalesData({required this.name, required this.value});
 }
 
 class _BizCenterLockedOverlay extends StatelessWidget {

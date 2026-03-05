@@ -8,6 +8,8 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
+import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
+import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
@@ -15,6 +17,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
@@ -86,7 +89,7 @@ class HomeController extends GetxController {
   UserModel? rankWinner;
   Shop? rankWinnerShop;
   RxBool loadingRankWinner = true.obs;
-  final ReachController impactController = Get.put(ReachController());
+  final ReachController impactController = Get.find<ReachController>();
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -195,7 +198,8 @@ class HomeController extends GetxController {
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   List<String> _extractUserIds(dynamic items) {
     if (items is List<dynamic>) {
-      return items.map((dynamic e) => e['userId'].toString()).toList();
+      return List<String>.from(
+          items.map((dynamic e) => e['userId'].toString()));
     }
     return <String>[];
   }
@@ -205,11 +209,22 @@ class HomeController extends GetxController {
     if (list == null || list.isEmpty) return;
 
     final Iterable<PostModel> parsed = list.map((dynamic e) {
+      final List<String> likes = List<String>.from(
+          e['likes'].map((dynamic e) => e['userId'].toString()));
+      final List<String> reposts = List<String>.from(
+          e['reposts']?.map((dynamic e) => e['userId'].toString()) ??
+              <dynamic>[]);
+      final List<String> coins = List<String>.from(
+          e['coins'].map((dynamic e) => e['userId'].toString()));
+
+      profileController.updateInteractionState(e['postId'].toString(),
+          likes: likes, reposts: reposts, coins: coins);
+
       return PostModel.fromMap(<String, dynamic>{
         ...e,
-        'likes': e['likes'].map((dynamic e) => e['userId']).toList(),
-        'reposts': e['reposts'].map((dynamic e) => e['userId']).toList(),
-        'coins': e['coins'].map((dynamic e) => e['userId']).toList(),
+        'likes': likes,
+        'reposts': reposts,
+        'coins': coins,
       });
     });
 
@@ -221,7 +236,17 @@ class HomeController extends GetxController {
     if (list == null || list.isEmpty) return;
 
     final Iterable<CourseModel> parsed = list.map((dynamic e) {
-      return CourseModel.fromMap(<String, dynamic>{...e});
+      final List<String> likes = _extractUserIds(e['likes']);
+      final List<String> coins = _extractUserIds(e['coins']);
+
+      profileController.updateInteractionState(e['id'].toString(),
+          likes: likes, coins: coins);
+
+      return CourseModel.fromMap(<String, dynamic>{
+        ...e,
+        'likes': likes,
+        'coins': coins,
+      });
     });
 
     courses.addAll(parsed);
@@ -231,10 +256,16 @@ class HomeController extends GetxController {
     if (list == null || list.isEmpty) return;
 
     final Iterable<ForumModel> parsed = list.map((dynamic e) {
+      final List<String> likes = _extractUserIds(e['likes']);
+      final List<String> coins = _extractUserIds(e['coins']);
+
+      profileController.updateInteractionState(e['forumId'].toString(),
+          likes: likes, coins: coins);
+
       return ForumModel.fromMap(<String, dynamic>{
         ...e,
-        'likes': _extractUserIds(e['likes']),
-        'coins': _extractUserIds(e['coins']),
+        'likes': likes,
+        'coins': coins,
       });
     });
 
@@ -245,9 +276,14 @@ class HomeController extends GetxController {
     if (list == null || list.isEmpty) return;
 
     final Iterable<DonationModel> parsed = list.map((dynamic e) {
+      final List<String> likes = _extractUserIds(e['likes']);
+
+      profileController.updateInteractionState(e['id'].toString(),
+          likes: likes);
+
       return DonationModel.fromMap(<String, dynamic>{
         ...e,
-        'likes': _extractUserIds(e['likes']),
+        'likes': likes,
       });
     });
 
@@ -260,11 +296,19 @@ class HomeController extends GetxController {
     if (psts.isEmpty) return;
 
     promotedPosts.addAll(psts.map((dynamic e) {
+      final List<String> likes = List<String>.from(_extractUserIds(e['likes']));
+      final List<String> reposts =
+          List<String>.from(_extractUserIds(e['reposts']));
+      final List<String> coins = List<String>.from(_extractUserIds(e['coins']));
+
+      profileController.updateInteractionState(e['postId'].toString(),
+          likes: likes, reposts: reposts, coins: coins);
+
       return PostModel.fromMap(<String, dynamic>{
         ...e,
-        'likes': _extractUserIds(e['likes']),
-        'reposts': _extractUserIds(e['reposts']),
-        'coins': _extractUserIds(e['coins']),
+        'likes': likes,
+        'reposts': reposts,
+        'coins': coins,
       });
     }));
   }
@@ -292,10 +336,16 @@ class HomeController extends GetxController {
     if (psts.isEmpty) return;
 
     promotedCourses.addAll(psts.map((dynamic e) {
+      final List<String> likes = List<String>.from(_extractUserIds(e['likes']));
+      final List<String> coins = List<String>.from(_extractUserIds(e['coins']));
+
+      profileController.updateInteractionState(e['id'].toString(),
+          likes: likes, coins: coins);
+
       return CourseModel.fromMap(<String, dynamic>{
         ...e,
-        'likes': _extractUserIds(e['likes']),
-        'coins': _extractUserIds(e['coins']),
+        'likes': likes,
+        'coins': coins,
       });
     }));
   }
@@ -404,8 +454,10 @@ class HomeController extends GetxController {
 
   /// LIKE AND UNLIKE FUNCTION
   void postLike(String userId, String postId, String type, String receiverUid) {
+    profileController.toggleLike(postId, userId);
+
     if (type == 'post') {
-      //Non-sponsored posts
+      // Non-sponsored posts
       final int postIndex =
           posts.indexWhere((PostModel element) => element.postId == postId);
       if (postIndex != -1) {
@@ -419,6 +471,7 @@ class HomeController extends GetxController {
         }
       }
 
+      // Promoted posts
       final int promotedPostIndex = promotedPosts
           .indexWhere((PostModel element) => element.postId == postId);
       if (promotedPostIndex != -1) {
@@ -433,7 +486,23 @@ class HomeController extends GetxController {
         }
       }
 
-      //Sponsored posts
+      // Profile posts
+      final int profilePostIndex = profileController.posts
+          .indexWhere((PostModel element) => element.postId == postId);
+      if (profilePostIndex != -1) {
+        final bool checkLiked =
+            profileController.posts[profilePostIndex].likes!.contains(userId);
+        if (checkLiked) {
+          profileController.posts[profilePostIndex]
+              .likes!
+              .removeWhere((String element) => element == userId);
+        } else {
+          profileController.posts[profilePostIndex].likes!.add(userId);
+        }
+        profileController.update();
+      }
+
+      // Sponsored posts
       final int spIndex = sponsoredPosts.indexWhere(
           (Map<String, dynamic> post) =>
               post['shouldCount'] == null &&
@@ -451,36 +520,43 @@ class HomeController extends GetxController {
         }
       }
     } else if (type == 'course') {
+      // Global courses
       final int courseIndex =
-          usercourses.indexWhere((CourseModel course) => course.id == postId);
+          courses.indexWhere((CourseModel element) => element.id == postId);
       if (courseIndex != -1) {
-        final bool checkLiked =
-            usercourses[courseIndex].likes!.contains(userId);
+        final bool checkLiked = courses[courseIndex].likes!.contains(userId);
         if (checkLiked) {
-          usercourses[courseIndex].likes?.remove(userId);
+          courses[courseIndex].likes!.remove(userId);
         } else {
-          usercourses[courseIndex].likes?.add(userId);
+          courses[courseIndex].likes!.add(userId);
         }
       }
-    }
-    // else {
-    //   final int postIndex = mixedPosts.indexWhere(
-    //       (Map<String, dynamic> post) => post['shouldCount'] == null);
-    //   if (postIndex != -1) {
-    //     final bool checkLiked =
-    //         mixedPosts[postIndex]['data'].likes!.contains(userId);
-    //     if (checkLiked) {
-    //       mixedPosts[postIndex]['data']
-    //           .likes!
-    //           .removeWhere((element) => element == userId);
-    //     } else {
-    //       mixedPosts[postIndex]['data'].likes!.add(userId);
-    //     }
-    //   }
-    // }
-
-    // --- FIX: Forum like ---
-    if (type == 'forum') {
+      // Promoted courses
+      final int promotedCourseIndex = promotedCourses
+          .indexWhere((CourseModel element) => element.id == postId);
+      if (promotedCourseIndex != -1) {
+        final bool checkLiked =
+            promotedCourses[promotedCourseIndex].likes!.contains(userId);
+        if (checkLiked) {
+          promotedCourses[promotedCourseIndex].likes!.remove(userId);
+        } else {
+          promotedCourses[promotedCourseIndex].likes!.add(userId);
+        }
+      }
+      // User courses
+      final int uCourseIndex =
+          usercourses.indexWhere((CourseModel course) => course.id == postId);
+      if (uCourseIndex != -1) {
+        final bool checkLiked =
+            usercourses[uCourseIndex].likes!.contains(userId);
+        if (checkLiked) {
+          usercourses[uCourseIndex].likes?.remove(userId);
+        } else {
+          usercourses[uCourseIndex].likes?.add(userId);
+        }
+      }
+    } else if (type == 'forum') {
+      // Global forums
       final int forumIndex =
           forums.indexWhere((ForumModel element) => element.forumId == postId);
       if (forumIndex != -1) {
@@ -493,18 +569,62 @@ class HomeController extends GetxController {
           forums[forumIndex].likes!.add(userId);
         }
       }
-    }
-
-// --- FIX: Course like (global courses feed) ---
-    if (type == 'course') {
-      final int courseIndex =
-          courses.indexWhere((CourseModel element) => element.id == postId);
-      if (courseIndex != -1) {
-        final bool checkLiked = courses[courseIndex].likes!.contains(userId);
+      // ForumController sync (if active)
+      if (Get.isRegistered<ForumController>()) {
+        final ForumController forumCtrl = Get.find<ForumController>();
+        final int fIndex = forumCtrl.forums
+            .indexWhere((ForumModel element) => element.forumId == postId);
+        if (fIndex != -1) {
+          final bool checkLiked =
+              forumCtrl.forums[fIndex].likes!.contains(userId);
+          if (checkLiked) {
+            forumCtrl.forums[fIndex].likes!
+                .removeWhere((String e) => e == userId);
+          } else {
+            forumCtrl.forums[fIndex].likes!.add(userId);
+          }
+          forumCtrl.update();
+        }
+      }
+      // BossUpController sync (if active)
+      if (Get.isRegistered<BossUpController>()) {
+        final BossUpController bossUpCtrl = Get.find<BossUpController>();
+        final int fIndex = bossUpCtrl.forums
+            .indexWhere((ForumModel element) => element.forumId == postId);
+        if (fIndex != -1) {
+          final bool checkLiked =
+              bossUpCtrl.forums[fIndex].likes!.contains(userId);
+          if (checkLiked) {
+            bossUpCtrl.forums[fIndex].likes!
+                .removeWhere((String e) => e == userId);
+          } else {
+            bossUpCtrl.forums[fIndex].likes!.add(userId);
+          }
+          bossUpCtrl.update();
+        }
+      }
+    } else if (type == 'donation') {
+      // Global donations
+      final int donationIndex =
+          donations.indexWhere((DonationModel element) => element.id == postId);
+      if (donationIndex != -1) {
+        final bool checkLiked = donations[donationIndex].likes!.contains(userId);
         if (checkLiked) {
-          courses[courseIndex].likes!.remove(userId);
+          donations[donationIndex].likes!.remove(userId);
         } else {
-          courses[courseIndex].likes!.add(userId);
+          donations[donationIndex].likes!.add(userId);
+        }
+      }
+      // User donations
+      final int uDonationIndex = userdonations
+          .indexWhere((DonationModel element) => element.id == postId);
+      if (uDonationIndex != -1) {
+        final bool checkLiked =
+            userdonations[uDonationIndex].likes!.contains(userId);
+        if (checkLiked) {
+          userdonations[uDonationIndex].likes!.remove(userId);
+        } else {
+          userdonations[uDonationIndex].likes!.add(userId);
         }
       }
     }
@@ -565,8 +685,10 @@ class HomeController extends GetxController {
   /// COIN AND UNCOIN FUNCTION
   void postCoin(String userId, String postId,
       ProfileController profileController, String type, String receiverUid) {
+    profileController.toggleCoin(postId, userId);
+
     if (type == 'post') {
-      //Non-sponsored Posts
+      // Non-sponsored Posts
       final int postIndex =
           posts.indexWhere((PostModel element) => element.postId == postId);
       if (postIndex != -1) {
@@ -582,6 +704,7 @@ class HomeController extends GetxController {
         }
       }
 
+      // Promoted Posts
       final int promotedPostIndex = promotedPosts
           .indexWhere((PostModel element) => element.postId == postId);
       if (promotedPostIndex != -1) {
@@ -598,7 +721,25 @@ class HomeController extends GetxController {
         }
       }
 
-      //sponsored posts
+      // Profile posts
+      final int profilePostIndex = profileController.posts
+          .indexWhere((PostModel element) => element.postId == postId);
+      if (profilePostIndex != -1) {
+        final bool checkIfCoined =
+            profileController.posts[profilePostIndex].coins!.contains(userId);
+        if (checkIfCoined) {
+          profileController.updateCoinCount(1);
+          profileController.posts[profilePostIndex]
+              .coins!
+              .removeWhere((String element) => element == userId);
+        } else {
+          profileController.updateCoinCount(-1);
+          profileController.posts[profilePostIndex].coins!.add(userId);
+        }
+        profileController.update();
+      }
+
+      // Sponsored posts
       final int spIndex = sponsoredPosts.indexWhere(
           (Map<String, dynamic> item) =>
               item['shouldCount'] == null &&
@@ -617,9 +758,8 @@ class HomeController extends GetxController {
           sponsoredPosts[spIndex]['data'].coins!.add(userId);
         }
       }
-    }
-    // --- FIX: Forum coin ---
-    if (type == 'forum') {
+    } else if (type == 'forum') {
+      // Global forums
       final int forumIndex =
           forums.indexWhere((ForumModel element) => element.forumId == postId);
       if (forumIndex != -1) {
@@ -634,10 +774,42 @@ class HomeController extends GetxController {
           forums[forumIndex].coins!.add(userId);
         }
       }
-    }
-
-// --- FIX: Course coin (UI only toggle) ---
-    if (type == 'course') {
+      // ForumController sync
+      if (Get.isRegistered<ForumController>()) {
+        final ForumController forumCtrl = Get.find<ForumController>();
+        final int fIndex = forumCtrl.forums
+            .indexWhere((ForumModel element) => element.forumId == postId);
+        if (fIndex != -1) {
+          final bool checkIfCoined =
+              forumCtrl.forums[fIndex].coins!.contains(userId);
+          if (checkIfCoined) {
+            forumCtrl.forums[fIndex].coins!
+                .removeWhere((String e) => e == userId);
+          } else {
+            forumCtrl.forums[fIndex].coins!.add(userId);
+          }
+          forumCtrl.update();
+        }
+      }
+      // BossUpController sync
+      if (Get.isRegistered<BossUpController>()) {
+        final BossUpController bossUpCtrl = Get.find<BossUpController>();
+        final int fIndex = bossUpCtrl.forums
+            .indexWhere((ForumModel element) => element.forumId == postId);
+        if (fIndex != -1) {
+          final bool checkIfCoined =
+              bossUpCtrl.forums[fIndex].coins!.contains(userId);
+          if (checkIfCoined) {
+            bossUpCtrl.forums[fIndex].coins!
+                .removeWhere((String e) => e == userId);
+          } else {
+            bossUpCtrl.forums[fIndex].coins!.add(userId);
+          }
+          bossUpCtrl.update();
+        }
+      }
+    } else if (type == 'course') {
+      // Global courses
       final int courseIndex =
           courses.indexWhere((CourseModel element) => element.id == postId);
       if (courseIndex != -1) {
@@ -648,6 +820,29 @@ class HomeController extends GetxController {
         } else {
           profileController.updateCoinCount(-1);
           courses[courseIndex].coins!.add(userId);
+        }
+      }
+      // Promoted courses
+      final int promotedCourseIndex = promotedCourses
+          .indexWhere((CourseModel element) => element.id == postId);
+      if (promotedCourseIndex != -1) {
+        final bool checkIfCoined =
+            promotedCourses[promotedCourseIndex].coins!.contains(userId);
+        if (checkIfCoined) {
+          promotedCourses[promotedCourseIndex].coins!.remove(userId);
+        } else {
+          promotedCourses[promotedCourseIndex].coins!.add(userId);
+        }
+      }
+      // User courses
+      final int uCourseIndex =
+          usercourses.indexWhere((CourseModel element) => element.id == postId);
+      if (uCourseIndex != -1) {
+        final bool checkIfCoined = usercourses[uCourseIndex].coins!.contains(userId);
+        if (checkIfCoined) {
+          usercourses[uCourseIndex].coins!.remove(userId);
+        } else {
+          usercourses[uCourseIndex].coins!.add(userId);
         }
       }
     }
@@ -694,8 +889,10 @@ class HomeController extends GetxController {
   /// REPOST AND UNDO REPOST FUNCTION
   Future<void> postRepost(String userId, String postId, String type,
       int timestamp, String receiverUid, int? oldtimestamp) async {
+    profileController.toggleRepost(postId, userId);
+
     if (type == 'post') {
-      //Non-sponsored posts
+      // Non-sponsored posts
       final int postIndex =
           posts.indexWhere((PostModel element) => element.postId == postId);
       if (postIndex != -1) {
@@ -718,7 +915,38 @@ class HomeController extends GetxController {
         }
       }
 
-      //Sponsored posts
+      // Promoted posts
+      final int promotedPostIndex = promotedPosts
+          .indexWhere((PostModel element) => element.postId == postId);
+      if (promotedPostIndex != -1) {
+        final bool checkReposted =
+            promotedPosts[promotedPostIndex].reposts!.contains(userId);
+        if (checkReposted) {
+          promotedPosts[promotedPostIndex]
+              .reposts!
+              .removeWhere((String element) => element == userId);
+        } else {
+          promotedPosts[promotedPostIndex].reposts!.add(userId);
+        }
+      }
+
+      // Profile posts
+      final int profilePostIndex = profileController.posts
+          .indexWhere((PostModel element) => element.postId == postId);
+      if (profilePostIndex != -1) {
+        final bool checkReposted =
+            profileController.posts[profilePostIndex].reposts!.contains(userId);
+        if (checkReposted) {
+          profileController.posts[profilePostIndex]
+              .reposts!
+              .removeWhere((String element) => element == userId);
+        } else {
+          profileController.posts[profilePostIndex].reposts!.add(userId);
+        }
+        profileController.update();
+      }
+
+      // Sponsored posts
       final int spIndex = sponsoredPosts.indexWhere(
           (Map<String, dynamic> post) =>
               post['shouldCount'] == null &&
@@ -1068,11 +1296,37 @@ class HomeController extends GetxController {
       loadingMore(true);
     }
     update();
+
+    // Interaction state preservation for pagination
+    final Map<String, List<String>> currentLikes = <String, List<String>>{};
+    final Map<String, List<String>> currentCoins = <String, List<String>>{};
+    final Map<String, List<String>> currentReposts = <String, List<String>>{};
+
+    for (final PostModel post in posts) {
+      currentLikes[post.postId] = List<String>.from(post.likes ?? <String>[]);
+      currentCoins[post.postId] = List<String>.from(post.coins ?? <String>[]);
+      currentReposts[post.postId] =
+          List<String>.from(post.reposts ?? <String>[]);
+    }
+
     final ApiResponseModel response = await HomeRepository.fetchPosts(
         paginationPage.value, posts[posts.length - 1].timestamp);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
       processPostsAndCoursesData(response.data);
+
+      // Restore interactions for known posts to prevent flickering/revert
+      for (final PostModel post in posts) {
+        if (currentLikes.containsKey(post.postId)) {
+          post.likes?.assignAll(currentLikes[post.postId]!);
+        }
+        if (currentCoins.containsKey(post.postId)) {
+          post.coins?.assignAll(currentCoins[post.postId]!);
+        }
+        if (currentReposts.containsKey(post.postId)) {
+          post.reposts?.assignAll(currentReposts[post.postId]!);
+        }
+      }
     } else {
       // showSnackbar(
       //     title: 'OOPS!',
@@ -1139,23 +1393,124 @@ class HomeController extends GetxController {
   }
 
   void updateViews(PostModel post) {
-    HomeRepository.updateViews(post.postId, post.views! + 1);
+    HomeRepository.updateViews(post.postId);
     final int postIndex =
         posts.indexWhere((PostModel element) => element.postId == post.postId);
     if (postIndex != -1) {
       // Increment the view count of the post by 1
       posts[postIndex].setViews(post.views! + 1);
+      posts.refresh();
+    }
+  }
+
+  void updateForumViews(ForumModel forum) {
+    HomeRepository.updateForumViews(forum.forumId);
+    final int forumIndex = forums
+        .indexWhere((ForumModel element) => element.forumId == forum.forumId);
+    if (forumIndex != -1) {
+      forums[forumIndex].setViews(forum.views! + 1);
+      forums.refresh();
     }
   }
 
   /// LOAD POSTS FROM REMOTE SOURCE
   Future<void> loadData() async {
-    loading(true);
-    error(false);
-    update();
+    // 🔥 Check for cached data first
+    final dynamic cachedData = sandBox.read('home_data');
+    final dynamic cachedPromoted = sandBox.read('promoted_data');
 
+    if (cachedData != null) {
+      try {
+        _processAllData(cachedData, cachedPromoted);
+        loading(false);
+        error(false);
+        update();
+      } catch (e) {
+        debugPrint('Error processing cached data: $e');
+      }
+    } else {
+      loading(true);
+      error(false);
+      update();
+    }
+
+    // 🔥 Background fetch (or initial fetch if no cache)
+    _fetchAndCache();
+  }
+
+  void _processAllData(dynamic data, dynamic promotedData) {
+    profileController.processDataToState(
+      <dynamic, dynamic>{...data['user'], 'connecteds': data['connecteds']},
+      data['interests'],
+      data['userRanking'],
+    );
+
+    partnerOfTheWeek = data['partnerOfTheWeek'];
+
+    _chatController.processDataToState(
+        data['chats'], profileController.myProfile.uid);
+
+    // --- Promoted Data ---
+    if (promotedData != null) {
+      promotedPosts.clear();
+      promotedCourses.clear();
+      processPromotedPostsToState(promotedData['promotedPosts']?['rows']);
+      processPromotedCoursesToState(promotedData['promotedCourses']?['rows']);
+    }
+
+    // --- Posts & Courses ---
+    posts.clear();
+    courses.clear();
+    forums.clear();
+    donations.clear();
+    processPostsAndCoursesData(data['posts']);
+
+    // --- Profile Setup ---
+    if (profileController.myProfile.bio == null) {
+      Get.off(() => UpdateProfileScreen(user: profileController.myProfile));
+    }
+
+    // --- Courses ---
+    usercourses.clear();
+    final List<Map<String, dynamic>> courseRows =
+        List<Map<String, dynamic>>.from(
+            data['courses']?['rows'] ?? <dynamic>[]);
+    usercourses.addAll(courseRows.map((Map<String, dynamic> e) {
+      final List<String> likes = List<String>.from(_extractUserIds(e['likes']));
+      final List<String> coins = List<String>.from(_extractUserIds(e['coins']));
+      profileController.updateInteractionState(e['id'].toString(),
+          likes: likes, coins: coins);
+      return CourseModel.fromMap(<String, dynamic>{
+        ...e,
+        'likes': likes,
+        'coins': coins,
+      });
+    }));
+
+    // --- Donations ---
+    userdonations.clear();
+    final List<Map<String, dynamic>> donationRows =
+        List<Map<String, dynamic>>.from(
+            data['donations']?['rows'] ?? <dynamic>[]);
+    userdonations.addAll(donationRows.map((Map<String, dynamic> e) {
+      final List<String> likes = List<String>.from(_extractUserIds(e['likes']));
+      profileController.updateInteractionState(e['id'].toString(),
+          likes: likes);
+      return DonationModel.fromMap(<String, dynamic>{
+        ...e,
+        'likes': likes,
+      });
+    }));
+
+    // --- Remaining Setup ---
+    processBossToState(data['bossOfTheWeek']);
+    processMentorToState(data['mentorOfTheWeek']);
+    processBackerToState(data['backerOfTheWeek']);
+    processAmbassadorToState(data['ambassadorOfTheWeek']);
+  }
+
+  Future<void> _fetchAndCache() async {
     try {
-      // Run multiple API calls concurrently
       final List<ApiResponseModel> results =
           await Future.wait(<Future<ApiResponseModel>>[
         HomeRepository.fetchData(),
@@ -1165,88 +1520,70 @@ class HomeController extends GetxController {
       final ApiResponseModel response = results[0];
       final ApiResponseModel promoted = results[1];
 
+      // Keep track of current interactions before overwriting state
+      final Map<String, List<String>> currentLikes = <String, List<String>>{};
+      final Map<String, List<String>> currentCoins = <String, List<String>>{};
+      final Map<String, List<String>> currentReposts = <String, List<String>>{};
+
+      for (final PostModel post in posts) {
+        currentLikes[post.postId] = List<String>.from(post.likes ?? <String>[]);
+        currentCoins[post.postId] = List<String>.from(post.coins ?? <String>[]);
+        currentReposts[post.postId] =
+            List<String>.from(post.reposts ?? <String>[]);
+      }
+
       if (!response.success) {
         if (response.message == 'send a valid token') {
           await ApiService().logout();
           showAccessTokenDialog();
         }
-        error(true);
-        cError(true);
+        if (posts.isEmpty) {
+          error(true);
+          cError(true);
+        }
         loading(false);
         update();
         socket.disconnect();
         return;
       }
 
-      // --- Main Data Processing ---
-      final dynamic data = response.data;
+      // Store in cache
+      await sandBox.write('home_data', response.data);
+      if (promoted.success) {
+        await sandBox.write('promoted_data', promoted.data);
+      }
 
-      profileController.processDataToState(
-        <dynamic, dynamic>{...data['user'], 'connecteds': data['connecteds']},
-        data['interests'],
-        data['userRanking'],
-      );
+      // Process new data
+      _processAllData(response.data, promoted.success ? promoted.data : null);
 
-      partnerOfTheWeek = response.data['partnerOfTheWeek'];
+      // Restore interactions for posts that are still in the list to prevent flickering/revert
+      for (final PostModel post in posts) {
+        if (currentLikes.containsKey(post.postId)) {
+          post.likes?.assignAll(currentLikes[post.postId]!);
+        }
+        if (currentCoins.containsKey(post.postId)) {
+          post.coins?.assignAll(currentCoins[post.postId]!);
+        }
+        if (currentReposts.containsKey(post.postId)) {
+          post.reposts?.assignAll(currentReposts[post.postId]!);
+        }
+      }
 
-      _chatController.processDataToState(
-          data['chats'], profileController.myProfile.uid);
       socket.emit('handshake', profileController.myProfile.uid);
 
-      // --- Promoted Data ---
-      if (promoted.success) {
-        processPromotedPostsToState(promoted.data['promotedPosts']['rows']);
-        processPromotedCoursesToState(promoted.data['promotedCourses']['rows']);
-        processPostsAndCoursesData(data['posts']);
-      }
-
-      // --- Profile Setup ---
-      if (profileController.myProfile.bio == null) {
-        Get.off(() => UpdateProfileScreen(user: profileController.myProfile));
-      }
-
-      // --- Courses ---
-      final List<Map<String, dynamic>> courseRows =
-          List<Map<String, dynamic>>.from(
-              data['courses']?['rows'] ?? <dynamic>[]);
-      usercourses.addAll(
-          courseRows.map((Map<String, dynamic> e) => CourseModel.fromMap(e)));
-
-      // --- Donations ---
-      final List<Map<String, dynamic>> donationRows =
-          List<Map<String, dynamic>>.from(
-              data['donations']?['rows'] ?? <dynamic>[]);
-      userdonations.addAll(donationRows.map((Map<String, dynamic> e) {
-        return DonationModel.fromMap(<String, dynamic>{
-          ...e,
-          'likes': (e['likes'] as List<dynamic>)
-              .map((dynamic like) => like['userId'].toString())
-              .toList(),
-        });
-      }));
-
-      // --- Remaining Setup ---
-      processBossToState(data['bossOfTheWeek']);
-      processMentorToState(data['mentorOfTheWeek']);
-      processBackerToState(data['backerOfTheWeek']);
-      processAmbassadorToState(data['ambassadorOfTheWeek']);
       if (profileController.myProfile.hasShop) {
         await Get.find<ShopController>().initShop();
       }
 
-      // Final UI updates & background tasks
       loading(false);
       update();
 
       addCoinDaily();
       _showMyDialog();
-      // Fire and forget: send device token
 
-      // Fire and forget: send device token
+      // Device token logic
       try {
-        // Check platform first
         if (Platform.isIOS) {
-          // On iOS, check if APNS token is available first
           final String? apnsToken =
               await FirebaseMessaging.instance.getAPNSToken();
           if (apnsToken != null) {
@@ -1257,7 +1594,6 @@ class HomeController extends GetxController {
                   body: <String, dynamic>{'deviceToken': token});
             }
           } else {
-            // APNS token not ready yet, listen for it
             FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
               ApiService.post(
                   path: 'users/add-device-token',
@@ -1265,7 +1601,6 @@ class HomeController extends GetxController {
             });
           }
         } else {
-          // Android - direct token retrieval
           final String? token = await FirebaseMessaging.instance.getToken();
           if (token != null) {
             ApiService.post(
@@ -1275,14 +1610,21 @@ class HomeController extends GetxController {
         }
       } catch (e) {
         debugPrint('Failed to get FCM token: $e');
-        // Non-critical error, app can continue without push token
       }
+
       await impactController.loadData(
           profileController.myProfile.uid, profileController.myProfile.uid);
       loadMyRequests();
+
+      // Also refresh marketplace data
+      if (Get.isRegistered<MarketController>()) {
+        Get.find<MarketController>().initMarket();
+      }
     } catch (e, st) {
-      debugPrint('Error loading data: $e\n$st');
-      error(true);
+      debugPrint('Error fetching data: $e\n$st');
+      if (posts.isEmpty) {
+        error(true);
+      }
       loading(false);
       update();
     }
@@ -1333,17 +1675,17 @@ class HomeController extends GetxController {
   }
 
   Future<void> updateCourseViews(String id, int views) async {
-    Map<String, dynamic> course = <String, dynamic>{'views': views};
     final ApiResponseModel response =
-        await ApiService.put(path: 'courses/update-course/$id', body: course);
+        await HomeRepository.updateCourseViews(id);
 
     if (response.success) {
       int index = usercourses.indexWhere((CourseModel c) => c.id == id);
       if (index != -1) {
         usercourses[index] = CourseModel.fromMap(<String, dynamic>{
           ...usercourses[index].toMap(),
-          ...course,
+          'views': views + 1,
         });
+        usercourses.refresh();
       }
       update();
     }
@@ -1383,6 +1725,7 @@ class HomeController extends GetxController {
   // }
 
   void processBossToState(dynamic userData) {
+    if (userData == null) return;
     final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
       ...userData,
       'connections': <dynamic>[],
@@ -1393,6 +1736,7 @@ class HomeController extends GetxController {
   }
 
   void processMentorToState(dynamic userData) {
+    if (userData == null) return;
     final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
       ...userData,
       'connections': <dynamic>[],
@@ -1403,6 +1747,7 @@ class HomeController extends GetxController {
   }
 
   void processBackerToState(dynamic userData) {
+    if (userData == null) return;
     final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
       ...userData,
       'connections': <dynamic>[],
@@ -1413,6 +1758,7 @@ class HomeController extends GetxController {
   }
 
   void processAmbassadorToState(dynamic userData) {
+    if (userData == null) return;
     final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
       ...userData,
       'connections': <dynamic>[],
@@ -1463,8 +1809,8 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    profileController = Get.put(ProfileController());
-    _chatController = Get.put(ChatController());
+    profileController = Get.find<ProfileController>();
+    _chatController = Get.find<ChatController>();
 
     initSocket(); // only ONE socket setup
 

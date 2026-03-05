@@ -200,7 +200,18 @@ class CourseController extends GetxController {
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         if (response.data['rows'][i]['user'] != null) {
-          courses.add(CourseModel.fromMap(response.data['rows'][i]));
+          final Map<String, dynamic> row = response.data['rows'][i];
+          final List<String> likes = List<String>.from((row['likes'] as List<dynamic>?)
+                  ?.map((dynamic like) => like['userId'].toString()) ??
+              <dynamic>[]);
+          final List<String> coins = List<String>.from((row['coins'] as List<dynamic>?)
+                  ?.map((dynamic coin) => coin['userId'].toString()) ??
+              <dynamic>[]);
+
+          profileController.updateInteractionState(row['id'].toString(),
+              likes: likes, coins: coins);
+
+          courses.add(CourseModel.fromMap(row));
         }
       }
     } else {
@@ -299,11 +310,19 @@ class CourseController extends GetxController {
         if (response.data['rows'] != null) {
           // Check if response.data['rows'] is not null
           for (int i = 0; i < response.data['rows'].length; i++) {
+            final Map<String, dynamic> row = response.data['rows'][i];
+            final List<String> likes = List<String>.from((row['likes'] as List<dynamic>?)
+                    ?.map((dynamic like) => like['userId'].toString()) ??
+                <dynamic>[]);
+            final List<String> coins = List<String>.from((row['coins'] as List<dynamic>?)
+                    ?.map((dynamic coin) => coin['userId'].toString()) ??
+                <dynamic>[]);
+
+            profileController.updateInteractionState(row['id'].toString(),
+                likes: likes, coins: coins);
+
             CourseModel usercourse = CourseModel.fromMap(<String, dynamic>{
-              ...response.data['rows'][i],
-              // 'likes': response.data['rows'][i]['likes']
-              //     .map((dynamic like) => like['userId'].toString())
-              //     .toList(),
+              ...row,
             });
 
             usercourses.add(usercourse);
@@ -431,21 +450,12 @@ class CourseController extends GetxController {
       } else {
         courses[courseIndex].likes?.add(userId);
       }
-      update();
     }
 
-    final int homeCourseIndex = homeController.usercourses
-        .indexWhere((CourseModel course) => course.id == postId);
-    if (homeCourseIndex != -1) {
-      final bool checkLiked =
-          homeController.usercourses[homeCourseIndex].likes!.contains(userId);
-      if (checkLiked) {
-        homeController.usercourses[homeCourseIndex].likes?.remove(userId);
-      } else {
-        homeController.usercourses[homeCourseIndex].likes?.add(userId);
-      }
-      update();
-    }
+    // Sync with HomeController
+    homeController.postLike(userId, postId, 'course', receiverUid);
+
+    update();
 
     if (profileController.myProfile.uid != receiverUid) {
       socket.emit('like', <String, dynamic>{
@@ -475,8 +485,11 @@ class CourseController extends GetxController {
       } else {
         courses[courseIndex].coins?.add(userId);
       }
-      update();
     }
+
+    // Sync with HomeController
+    homeController.postCoin(userId, postId, profileController, 'course', receiverUid);
+
     update();
     if (profileController.myProfile.uid != receiverUid) {
       socket.emit('coin', <String, dynamic>{

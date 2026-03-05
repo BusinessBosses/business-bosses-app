@@ -44,34 +44,7 @@ String formatPrice(double price) {
 class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
   @override
   Widget build(BuildContext context) {
-    final List<Object>? items;
-    if (widget.combinedList != null) {
-      items = widget.combinedList!.where((Object object) {
-        if (object is Product) {
-          return object.images != null &&
-              object.images!.isNotEmpty &&
-              object.images!.first.isNotEmpty &&
-              (object).user!.isSubscribed;
-        } else if (object is Service) {
-          if (object.user!.isSubscribed) {
-            return object.images != null &&
-                object.images!.isNotEmpty &&
-                object.images!.first.isNotEmpty &&
-                (object).user!.isSubscribed;
-          }
-        }
-        return false;
-      }).toList();
-    } else {
-      items = widget.products
-              ?.where((Product product) => product.user!.isSubscribed)
-              .take(10)
-              .toList() ??
-          widget.services
-              ?.where((Service service) => service.user!.isSubscribed)
-              .take(10)
-              .toList();
-    }
+    final List<Object>? items = widget.combinedList;
     return GestureDetector(
       onTap: () {
         Get.to(() => ProshopdealsScreen(

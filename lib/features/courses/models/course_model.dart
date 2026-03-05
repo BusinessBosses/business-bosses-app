@@ -157,12 +157,20 @@ class CourseModel {
               : map['averageRating'] as double)
           : 0.0,
       likes: map['likes'] != null
-          ? List<String>.from(
-              map['likes'].map((dynamic like) => like['userId'].toString()))
+          ? List<String>.from(map['likes'].map((dynamic like) {
+              if (like is Map<String, dynamic>) {
+                return like['userId'].toString();
+              }
+              return like.toString();
+            }))
           : null,
       coins: map['coins'] != null
-          ? List<String>.from(
-              map['coins'].map((dynamic coin) => coin['userId'].toString()))
+          ? List<String>.from(map['coins'].map((dynamic coin) {
+              if (coin is Map<String, dynamic>) {
+                return coin['userId'].toString();
+              }
+              return coin.toString();
+            }))
           : null,
       paymentMethod:
           map['paymentMethod'] != null ? map['paymentMethod'] as String : null,

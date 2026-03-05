@@ -17,6 +17,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
+import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -284,6 +285,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               SliverStickyHeader(
                                   sticky: false,
                                   header: Column(children: <Widget>[
+                                    if (widget.ismyshop == true &&
+                                        shopController
+                                                .userShop!.verificationStatus !=
+                                            'approved')
+                                      _buildVerificationBanner(),
                                     // const SizedBox(
                                     //   height: 10.0,
                                     // ),
@@ -405,6 +411,46 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                     Icons.verified,
                                                     color: Colors.blue,
                                                     size: 16,
+                                                  ),
+                                                )
+                                              else if (widget.ismyshop == true)
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0),
+                                                  child: InkWell(
+                                                    onTap: () => Get.to(() =>
+                                                        VerifyBusinessScreen(
+                                                          shop: shopController
+                                                              .userShop,
+                                                        )),
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 8,
+                                                          vertical: 4),
+                                                      decoration: BoxDecoration(
+                                                        color: primaryColorLT
+                                                            .withValues(
+                                                                alpha: 0.1),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                        border: Border.all(
+                                                            color:
+                                                                primaryColorLT,
+                                                            width: 0.5),
+                                                      ),
+                                                      child: const Text(
+                                                        'Get Verified',
+                                                        style: TextStyle(
+                                                          fontSize: 10,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: primaryColorLT,
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                             ],
@@ -1114,5 +1160,68 @@ class _UserShopScreenState extends State<UserShopScreen> {
 
   Widget _buildDivider() {
     return Container(color: Colors.black12, height: 0.5);
+  }
+
+  Widget _buildVerificationBanner() {
+    final String status = shopController.userShop!.verificationStatus;
+
+    String message =
+        'Get your Biz-Center verified to build trust and increase reach.';
+    if (status == 'pending') {
+      message = 'Biz-Center verification is pending review.';
+    } else if (status == 'rejected') {
+      message = 'Verification rejected. Tap to update documents.';
+    }
+
+    return GestureDetector(
+      onTap: () => Get.to(() => const VerifyBusinessScreen()),
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+        decoration: BoxDecoration(
+          color: status == 'rejected'
+              ? Colors.red.withValues(alpha: 0.1)
+              : primaryColorLT.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: status == 'rejected'
+                ? Colors.red.withValues(alpha: 0.3)
+                : primaryColorLT.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              status == 'pending' ? Icons.hourglass_top : Icons.verified_user,
+              color: status == 'rejected' ? Colors.red : primaryColorLT,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    status == 'rejected'
+                        ? 'Action Required'
+                        : 'Get Verified Badge',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: status == 'rejected' ? Colors.red : primaryColorLT,
+                    ),
+                  ),
+                  Text(
+                    message,
+                    style: TextStyle(fontSize: 12, color: Colors.grey[800]),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.chevron_right, color: Colors.grey[600]),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -14,6 +14,7 @@ import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
+import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
@@ -212,6 +213,8 @@ class _ShopScreenState extends State<ShopScreen> {
             SliverStickyHeader(
                 sticky: false,
                 header: Column(children: <Widget>[
+                  if (shopController.shop!.verificationStatus != 'approved')
+                    _buildVerificationBanner(),
                   if (widget.isPro != null)
                     const SizedBox(
                       height: 10.0,
@@ -827,6 +830,69 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Widget _buildDivider() {
     return Container(color: Colors.black12, height: 0.5);
+  }
+
+  Widget _buildVerificationBanner() {
+    final String status = shopController.shop!.verificationStatus;
+
+    String message =
+        'Get your Biz-Center verified to build trust and increase reach.';
+    if (status == 'pending') {
+      message = 'Biz-Center verification is pending review.';
+    } else if (status == 'rejected') {
+      message = 'Verification rejected. Tap to update documents.';
+    }
+
+    return GestureDetector(
+      onTap: () => Get.to(() => const VerifyBusinessScreen()),
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+        decoration: BoxDecoration(
+          color: status == 'rejected'
+              ? Colors.red.withValues(alpha: 0.1)
+              : primaryColorLT.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: status == 'rejected'
+                ? Colors.red.withValues(alpha: 0.3)
+                : primaryColorLT.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              status == 'pending' ? Icons.hourglass_top : Icons.verified_user,
+              color: status == 'rejected' ? Colors.red : primaryColorLT,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    status == 'rejected'
+                        ? 'Action Required'
+                        : 'Get Verified Badge',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: status == 'rejected' ? Colors.red : primaryColorLT,
+                    ),
+                  ),
+                  Text(
+                    message,
+                    style: TextStyle(fontSize: 12, color: Colors.grey[800]),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.chevron_right, color: Colors.grey[600]),
+          ],
+        ),
+      ),
+    );
   }
 
   void _sharePost() {

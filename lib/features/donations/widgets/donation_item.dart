@@ -691,36 +691,38 @@ class _DonationItemState extends State<DonationItem> {
             // const SizedBox(
             //   height: 10,
             // ),
-            Row(
-              children: <Widget>[
-                TextButton.icon(
-                  onPressed: () async {
-                    donationsController.postLike(
-                      profileController.myProfile.uid,
-                      widget.donation.id,
-                      widget.donation.user!.uid,
-                    );
-                    setState(() {});
-                  },
-                  icon: widget.donation.likes
-                              ?.contains(profileController.myProfile.uid) ==
-                          true
-                      ? SvgPicture.asset(
-                          'assets/svgs/likefilled.svg',
-                          height: 15,
-                        )
-                      : SvgPicture.asset(
-                          'assets/svgs/like.svg',
-                          height: 15,
-                        ),
-                  label: Text(
-                    widget.donation.likes!.length.toString(),
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: textColor.withValues(alpha: 0.8),
-                        ),
+            Obx(() {
+              final List<String> donationLikes = profileController.getLikes(
+                  widget.donation.id, widget.donation.likes);
+
+              return Row(
+                children: <Widget>[
+                  TextButton.icon(
+                    onPressed: () async {
+                      donationsController.postLike(
+                        profileController.myProfile.uid,
+                        widget.donation.id,
+                        widget.donation.user!.uid,
+                      );
+                    },
+                    icon: donationLikes
+                                .contains(profileController.myProfile.uid)
+                        ? SvgPicture.asset(
+                            'assets/svgs/likefilled.svg',
+                            height: 15,
+                          )
+                        : SvgPicture.asset(
+                            'assets/svgs/like.svg',
+                            height: 15,
+                          ),
+                    label: Text(
+                      '${donationLikes.length}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: textColor.withValues(alpha: 0.8),
+                          ),
+                    ),
                   ),
-                ),
                 TextButton.icon(
                   onPressed: () {
                     showModalBottomSheet(
@@ -804,18 +806,19 @@ class _DonationItemState extends State<DonationItem> {
                     ),
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.only(right: 15),
-                //   child: Text(
-                //     formattedDifference,
-                //     style: Theme.of(context)
-                //         .textTheme
-                //         .bodyMedium
-                //         ?.copyWith(color: textColor.withValues(alpha: 0.4)),
-                //   ),
-                // )
-              ],
-            ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(right: 15),
+                  //   child: Text(
+                  //     formattedDifference,
+                  //     style: Theme.of(context)
+                  //         .textTheme
+                  //         .bodyMedium
+                  //         ?.copyWith(color: textColor.withValues(alpha: 0.4)),
+                  //   ),
+                  // )
+                ],
+              );
+            }),
             Container(
               color: backgroundcolorinterface,
               height: 7,

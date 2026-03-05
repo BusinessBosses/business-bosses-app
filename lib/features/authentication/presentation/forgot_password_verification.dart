@@ -73,33 +73,29 @@ class _ForgotPasswordVerificationScreenState
               ),
 
               const SizedBox(height: 36.0),
-              PinCodeTextField(
-                appContext: context,
+              MaterialPinField(
                 length: 6,
                 mainAxisAlignment: MainAxisAlignment.center,
-                pinTheme: PinTheme(
-                  shape: PinCodeFieldShape.box,
+                theme: MaterialPinTheme(
+                  shape: MaterialPinShape.outlined,
                   borderRadius: BorderRadius.circular(10),
                   // fieldHeight: 60,
                   // fieldWidth: 50,
-                  inactiveFillColor: Colors.white,
-                  activeFillColor: Colors.white,
-                  selectedFillColor: Colors.white,
+                  fillColor: Colors.white,
+                  focusedFillColor: Colors.white,
+                  filledFillColor: Colors.white,
                   disabledColor: Colors.red,
-                  inactiveColor: Colors.black12,
-                  selectedColor: Colors.black,
+                  borderColor: Colors.black12,
+                  focusedBorderColor: Colors.black,
                   borderWidth: 1.0,
-                  fieldOuterPadding: const EdgeInsets.all(6.0),
+                  spacing: 6,
+                  textStyle: const TextStyle(fontSize: 20, height: 1.6),
                 ),
-                textStyle: const TextStyle(fontSize: 20, height: 1.6),
                 onCompleted: (String v) {},
                 onChanged: (String value) {
                   setState(() {
                     currentText = value;
                   });
-                },
-                beforeTextPaste: (String? text) {
-                  return true;
                 },
               ),
               //field user name or email

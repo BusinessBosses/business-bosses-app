@@ -14,6 +14,7 @@ import 'package:business_bosses_v2/features/marketplace/controllers/market_contr
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ShopController extends GetxController {
   final ProfileController profileController = Get.find();
@@ -36,17 +37,32 @@ class ShopController extends GetxController {
   ShopStats? shopStats;
   ShopGraphData? shopGraph;
   ApiResponseModel? error;
+  final GetStorage sandBox = GetStorage();
 
   Future<bool> initShop() async {
+    final String uid = profileController.myProfile.uid;
+    final dynamic cachedShop = sandBox.read('user_shop_$uid');
+    if (cachedShop != null) {
+      shop = Shop.fromMap(<String, dynamic>{
+        ...cachedShop,
+        'user': profileController.myProfile.toMap(),
+      });
+      loading.value = false;
+      update();
+    }
+
     try {
       final ApiResponseModel response = await ApiService.get(
-        path: 'shops/user-shops/${profileController.myProfile.uid}',
+        path: 'shops/user-shops/$uid',
       );
 
       if (!response.success || response.data['rows'].isEmpty) return false;
 
+      final dynamic shopData = response.data['rows'][0];
+      await sandBox.write('user_shop_$uid', shopData);
+
       shop = Shop.fromMap(<String, dynamic>{
-        ...response.data['rows'][0],
+        ...shopData,
         'user': profileController.myProfile.toMap(),
       });
 
@@ -59,10 +75,35 @@ class ShopController extends GetxController {
 
   Future<bool> initShopData() async {
     try {
+      final String uid = profileController.myProfile.uid;
+
+      // Synchronously load shop from cache if possible
+      final dynamic cachedShop = sandBox.read('user_shop_$uid');
+      if (cachedShop != null) {
+        shop = Shop.fromMap(<String, dynamic>{
+          ...cachedShop,
+          'user': profileController.myProfile.toMap(),
+        });
+      }
+
+      // 🔥 Check cache first
+      final dynamic cachedProducts = sandBox.read('user_products_$uid');
+      final dynamic cachedServices = sandBox.read('user_services_$uid');
+      final dynamic cachedCustomItems = sandBox.read('user_custom_items_$uid');
+      final dynamic cachedVendors = sandBox.read('user_vendors_$uid');
+
+      if (cachedProducts != null ||
+          cachedServices != null ||
+          cachedCustomItems != null ||
+          cachedVendors != null) {
+        _processCachedShopData(
+            cachedProducts, cachedServices, cachedCustomItems, cachedVendors);
+        loading.value = false;
+        update();
+      }
+
       final bool hasShop = await initShop();
       if (!hasShop) return false;
-
-      final String uid = profileController.myProfile.uid;
 
       // Fetch data in parallel
       final List<Future<ApiResponseModel>> requests =
@@ -80,52 +121,26 @@ class ShopController extends GetxController {
       final ApiResponseModel customResponse = responses[2];
       final ApiResponseModel vendorsResponse = responses[3];
 
-      // Map products
-      products
-        ..clear()
-        ..addAll(
-          _parseRows<Product>(
-            response: productResponse,
-            fromMap: (dynamic data) => Product.fromJson(data),
-          ),
-        );
+      // 🔥 Update cache
+      if (productResponse.success) {
+        await sandBox.write('user_products_$uid', productResponse.data);
+      }
+      if (servicesResponse.success) {
+        await sandBox.write('user_services_$uid', servicesResponse.data);
+      }
+      if (customResponse.success) {
+        await sandBox.write('user_custom_items_$uid', customResponse.data);
+      }
+      if (vendorsResponse.success) {
+        await sandBox.write('user_vendors_$uid', vendorsResponse.data);
+      }
 
-      // Map services
-      services
-        ..clear()
-        ..addAll(
-          _parseRows<Service>(
-            response: servicesResponse,
-            fromMap: (dynamic data) => Service.fromJson(data),
-          ),
-        );
-
-      // Map custom items
-      customItems
-        ..clear()
-        ..addAll(
-          _parseAnyList<Customitem>(
-            response: customResponse,
-            fromMap: (dynamic data) => Customitem.fromJson(data),
-          ),
-        );
-
-      // Combine items and sort
-      items
-        ..clear()
-        ..addAll(<Object>[...products, ...services, ...customItems])
-        ..sort((Object a, Object b) =>
-            _getCreatedAt(b).compareTo(_getCreatedAt(a)));
-
-      // Map vendors
-      suppliers
-        ..clear()
-        ..addAll(
-          _parseRows<Vendor>(
-            response: vendorsResponse,
-            fromMap: (dynamic data) => Vendor.fromMap(data),
-          ),
-        );
+      _processCachedShopData(
+        productResponse.success ? productResponse.data : null,
+        servicesResponse.success ? servicesResponse.data : null,
+        customResponse.success ? customResponse.data : null,
+        vendorsResponse.success ? vendorsResponse.data : null,
+      );
 
       update();
       return true;
@@ -134,31 +149,89 @@ class ShopController extends GetxController {
     }
   }
 
-// Parse rows under 'data['rows']'
-  List<T> _parseRows<T>({
-    required ApiResponseModel response,
+  void _processCachedShopData(dynamic productData, dynamic servicesData,
+      dynamic customData, dynamic vendorsData) {
+    // Map products
+    if (productData != null) {
+      products
+        ..clear()
+        ..addAll(
+          _parseRowsFromData<Product>(
+            data: productData,
+            fromMap: (dynamic data) => Product.fromJson(data),
+          ),
+        );
+    }
+
+    // Map services
+    if (servicesData != null) {
+      services
+        ..clear()
+        ..addAll(
+          _parseRowsFromData<Service>(
+            data: servicesData,
+            fromMap: (dynamic data) => Service.fromJson(data),
+          ),
+        );
+    }
+
+    // Map custom items
+    if (customData != null) {
+      customItems
+        ..clear()
+        ..addAll(
+          _parseAnyListFromData<Customitem>(
+            data: customData,
+            fromMap: (dynamic data) => Customitem.fromJson(data),
+          ),
+        );
+    }
+
+    // Combine items and sort
+    items
+      ..clear()
+      ..addAll(<Object>[...products, ...services, ...customItems])
+      ..sort(
+          (Object a, Object b) => _getCreatedAt(b).compareTo(_getCreatedAt(a)));
+
+    // Map vendors
+    if (vendorsData != null) {
+      suppliers
+        ..clear()
+        ..addAll(
+          _parseRowsFromData<Vendor>(
+            data: vendorsData,
+            fromMap: (dynamic data) => Vendor.fromMap(data),
+          ),
+        );
+    }
+  }
+
+  List<T> _parseRowsFromData<T>({
+    required dynamic data,
     required T Function(dynamic) fromMap,
   }) {
-    if (response.success && response.data['rows'] is List) {
-      return (response.data['rows'] as List<dynamic>)
+    if (data != null && data['rows'] is List) {
+      return (data['rows'] as List<dynamic>)
           .map((dynamic item) => fromMap(item))
           .toList();
     }
     return <T>[];
   }
 
-// Parse any List under data, useful for custom items
-  List<T> _parseAnyList<T>({
-    required ApiResponseModel response,
+  List<T> _parseAnyListFromData<T>({
+    required dynamic data,
     required T Function(dynamic) fromMap,
   }) {
-    if (response.success && response.data is List) {
-      return (response.data as List<dynamic>)
-          .map((dynamic item) => fromMap(item))
-          .toList();
+    if (data != null && data is List) {
+      return (data).map((dynamic item) => fromMap(item)).toList();
     }
     return <T>[];
   }
+
+// Parse rows under 'data['rows']'
+
+// Parse any List under data, useful for custom items
 
 // Extract createdAt from different types
   DateTime _getCreatedAt(Object item) {
@@ -571,9 +644,46 @@ class ShopController extends GetxController {
   }
 
   Future<void> loadStatistics() async {
+    final String? shopId = shop?.id;
+    if (shopId != null) {
+      final dynamic cachedOrderStats = sandBox.read('order_stats_$shopId');
+      final dynamic cachedShopStats =
+          sandBox.read('shop_stats_${profileController.myProfile.uid}');
+      final dynamic cachedShopGraph = sandBox.read('shop_graph_$shopId');
+
+      if (cachedOrderStats != null) {
+        orderStats = OrderStats.fromJson(cachedOrderStats);
+      }
+      if (cachedShopStats != null) {
+        shopStats = ShopStats.fromMap(cachedShopStats);
+      }
+      if (cachedShopGraph != null) {
+        shopGraph = ShopGraphData.fromJson(cachedShopGraph);
+      }
+
+      if (orderStats != null || shopStats != null || shopGraph != null) {
+        loadingData(false);
+        update();
+      }
+    }
+
     await loadOrderData();
     await loadShopData();
     await loadShopGraph();
+
+    if (shop?.id != null) {
+      if (orderStats != null) {
+        await sandBox.write('order_stats_${shop!.id}', orderStats!.toJson());
+      }
+      if (shopStats != null) {
+        await sandBox.write('shop_stats_${profileController.myProfile.uid}',
+            shopStats!.toMap());
+      }
+      if (shopGraph != null) {
+        await sandBox.write('shop_graph_${shop!.id}', shopGraph!.toJson());
+      }
+    }
+
     loadingData(false);
     update();
   }

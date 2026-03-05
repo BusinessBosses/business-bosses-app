@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.d
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../common/models/user_model.dart';
@@ -22,6 +23,9 @@ class MarketController extends GetxController {
   RxList<Product> proProducts = <Product>[].obs;
   RxList<Service> proServices = <Service>[].obs;
   RxList<Object> proItems = <Object>[].obs;
+  RxList<Product> featuredProducts = <Product>[].obs;
+  RxList<Service> featuredServices = <Service>[].obs;
+  RxList<Object> featuredItems = <Object>[].obs;
   RxList<Order> orders = <Order>[].obs;
 
   // Filtering and search
@@ -72,6 +76,14 @@ class MarketController extends GetxController {
   String donationDescription = '';
   RxInt totalItemCount = 0.obs; // keeps the total number of products+services
   RxBool hasMoreItems = true.obs; // indicates if more items are available
+  final GetStorage sandBox = GetStorage();
+  bool _isInitializing = false;
+
+  @override
+  void onInit() {
+    super.onInit();
+    initMarket();
+  }
 
   // ============================
   // ===== Basic Utilities ======
@@ -253,19 +265,55 @@ class MarketController extends GetxController {
   // ============================
 
   Future<void> initMarket() async {
+    if (_isInitializing) return;
+    _isInitializing = true;
     try {
-      loading(true);
+      // 1. Load cache immediately (Synchronous operations from GetStorage)
+      final dynamic cachedProducts = sandBox.read('market_products');
+      final dynamic cachedServices = sandBox.read('market_services');
+      if (cachedProducts != null || cachedServices != null) {
+        _processCachedItems(cachedProducts, cachedServices);
+      }
+
+      final dynamic cachedFeaturedProducts = sandBox.read('featured_products');
+      final dynamic cachedFeaturedServices = sandBox.read('featured_services');
+      if (cachedFeaturedProducts != null || cachedFeaturedServices != null) {
+        _processFeaturedItems(cachedFeaturedProducts, cachedFeaturedServices);
+      }
+
+      // Show UI immediately if we have cache
+      if (proItems.isNotEmpty || featuredItems.isNotEmpty) {
+        loading(false);
+      } else {
+        loading(true);
+      }
       error(false);
-      await initProItems();
+      update();
+
+      // 2. Refresh from network in background
+      await Future.wait(<Future<void>>[
+        initProItems(isBackgroundRefresh: true),
+        initFeaturedItems(isBackgroundRefresh: true),
+      ]);
     } catch (e) {
-      log(e.toString());
-      error(true);
+      log('❌ initMarket error: ${e.toString()}');
+      if (proItems.isEmpty) {
+        error(true);
+      }
     } finally {
+      _isInitializing = false;
       loading(false);
+      update();
     }
   }
 
   Future<void> initDescription() async {
+    final dynamic cachedAdmin = sandBox.read('admin_data');
+    if (cachedAdmin != null) {
+      _processAdminData(cachedAdmin);
+      update();
+    }
+
     final List<ApiResponseModel> responses =
         await Future.wait(<Future<ApiResponseModel>>[
       HomeRepository.fetchMarketDescription(),
@@ -274,34 +322,51 @@ class MarketController extends GetxController {
     final ApiResponseModel description = responses.first;
 
     if (description.success) {
-      final List<dynamic> rows = description.data['rows'];
-      final dynamic marketEntry = rows.firstWhere(
-        (dynamic e) => e['title'] == 'market',
-        orElse: () => null,
-      );
-      final dynamic donationEntry = rows.firstWhere(
-        (dynamic e) => e['title'] == 'donation',
-        orElse: () => null,
-      );
-      final dynamic popUpEntry = rows.firstWhere(
-        (dynamic e) => e['id'] == 6,
-        orElse: () => null,
-      );
-
-      marketDescription = marketEntry?['description'] ?? '';
-      donationDescription = donationEntry?['description'] ?? '';
-      _homeController.notificationStatus = popUpEntry?['title'] ?? '';
-      _homeController.notificationDescription =
-          popUpEntry?['description'] ?? '';
+      await sandBox.write('admin_data', description.data);
+      _processAdminData(description.data);
+      update();
     } else {
       marketDescription = '';
     }
   }
 
-  Future<void> initProItems({int page = 1, int size = 10}) async {
+  void _processAdminData(dynamic data) {
+    final List<dynamic> rows = data['rows'] ?? <dynamic>[];
+    final dynamic marketEntry = rows.firstWhere(
+      (dynamic e) => e['title'] == 'market',
+      orElse: () => null,
+    );
+    final dynamic donationEntry = rows.firstWhere(
+      (dynamic e) => e['title'] == 'donation',
+      orElse: () => null,
+    );
+    final dynamic popUpEntry = rows.firstWhere(
+      (dynamic e) => e['id'] == 6,
+      orElse: () => null,
+    );
+
+    marketDescription = marketEntry?['description'] ?? '';
+    donationDescription = donationEntry?['description'] ?? '';
+    _homeController.notificationStatus = popUpEntry?['title'] ?? '';
+    _homeController.notificationDescription = popUpEntry?['description'] ?? '';
+  }
+
+  Future<void> initProItems({int page = 1, int size = 10, bool isBackgroundRefresh = false}) async {
     error(false);
-    if (!loadingMore.value) {
-      loading(true);
+    if (!loadingMore.value && !isBackgroundRefresh) {
+      if (page == 1) {
+        final dynamic cachedProducts = sandBox.read('market_products');
+        final dynamic cachedServices = sandBox.read('market_services');
+        if (cachedProducts != null || cachedServices != null) {
+          _processCachedItems(cachedProducts, cachedServices);
+          loading(false);
+          update();
+        } else {
+          loading(true);
+        }
+      } else {
+        loading(true);
+      }
     }
 
     try {
@@ -316,15 +381,33 @@ class MarketController extends GetxController {
 
       // Clear existing items only after successful fetch for first page
       if (page == 1) {
-        proProducts.clear();
-        proServices.clear();
-        proItems.clear();
-        hasMoreItems(true);
-        paginationPage.value = 1;
-        totalItemCount.value = (responseProducts.data['count'] ?? 0) +
-            (responseServices.data['count'] ?? 0);
+        // 🔥 Update cache only if successful
+        if (responseProducts.success) {
+          await sandBox.write('market_products', responseProducts.data);
+        }
+        if (responseServices.success) {
+          await sandBox.write('market_services', responseServices.data);
+        }
+
+        if (responseProducts.success || responseServices.success) {
+          proProducts.clear();
+          proServices.clear();
+          proItems.clear();
+          hasMoreItems(true);
+          paginationPage.value = 1;
+
+          int count = 0;
+          if (responseProducts.success && responseProducts.data is Map) {
+            count += (responseProducts.data['count'] ?? 0) as int;
+          }
+          if (responseServices.success && responseServices.data is Map) {
+            count += (responseServices.data['count'] ?? 0) as int;
+          }
+          totalItemCount.value = count;
+        }
       }
 
+      final List<Product> addedProducts = <Product>[];
       if (responseProducts.success) {
         final List<dynamic> productRows =
             responseProducts.data['rows'] ?? <dynamic>[];
@@ -336,16 +419,14 @@ class MarketController extends GetxController {
         // Prevent duplicates
         final Set<int> existingProductIds =
             proProducts.map((Product p) => p.id).toSet();
-        final List<Product> uniqueProducts = newProducts
+        addedProducts.addAll(newProducts
             .where((Product p) => !existingProductIds.contains(p.id))
-            .toList();
+            .toList());
 
-        proProducts.addAll(uniqueProducts);
-        if (!isfiltered.value) {
-          proItems.addAll(uniqueProducts);
-        }
+        proProducts.addAll(addedProducts);
       }
 
+      final List<Service> addedServices = <Service>[];
       if (responseServices.success) {
         final List<dynamic> serviceRows =
             responseServices.data['rows'] ?? <dynamic>[];
@@ -357,21 +438,38 @@ class MarketController extends GetxController {
         // Prevent duplicates
         final Set<int> existingServiceIds =
             proServices.map((Service s) => s.id).toSet();
-        final List<Service> uniqueServices = newServices
+        addedServices.addAll(newServices
             .where((Service s) => !existingServiceIds.contains(s.id))
-            .toList();
+            .toList());
 
-        proServices.addAll(uniqueServices);
-        if (!isfiltered.value) {
-          proItems.addAll(uniqueServices);
-        }
+        proServices.addAll(addedServices);
+      }
+
+      // Update proItems and activeMarketItems atomically if first page
+      if (page == 1 && (responseProducts.success || responseServices.success)) {
+        final List<Object> combined = <Object>[];
+        combined.addAll(proProducts);
+        combined.addAll(proServices);
+        proItems.assignAll(combined);
 
         if (!isSearching.value &&
             selectedCategory == null &&
             searchQuery.isEmpty) {
-          activeMarketItems
-            ..clear()
-            ..addAll(proItems);
+          activeMarketItems.assignAll(combined);
+        }
+      } else if (page > 1) {
+        // Append for pagination
+        if (addedProducts.isNotEmpty || addedServices.isNotEmpty) {
+          final List<Object> newItems = <Object>[];
+          newItems.addAll(addedProducts);
+          newItems.addAll(addedServices);
+
+          proItems.addAll(newItems);
+          if (!isSearching.value &&
+              selectedCategory == null &&
+              searchQuery.isEmpty) {
+            activeMarketItems.addAll(newItems);
+          }
         }
       }
 
@@ -381,11 +479,11 @@ class MarketController extends GetxController {
         paginationPage.value = page;
       }
     } catch (e) {
-      error(true);
+      if (proItems.isEmpty) error(true);
       debugPrint('❌ initProItems error: $e');
     } finally {
       loading(false);
-      update(); // Ensure UI is updated
+      update();
     }
   }
 
@@ -404,15 +502,26 @@ class MarketController extends GetxController {
   }
 
   Future<void> initOrder() async {
-    orders.clear();
-    final ApiResponseModel responseOrders = await ApiService.get(
-        path: 'orders/user-orders/${_profileController.myProfile.uid}');
+    final String uid = _profileController.myProfile.uid;
+    final dynamic cachedOrders = sandBox.read('user_orders_$uid');
+
+    if (cachedOrders != null) {
+      orders.clear();
+      orders.addAll((cachedOrders['rows'] as List<dynamic>)
+          .map<Order>((dynamic json) => Order.fromJson(json))
+          .toList());
+      update();
+    }
+
+    final ApiResponseModel responseOrders =
+        await ApiService.get(path: 'orders/user-orders/$uid');
     if (responseOrders.success) {
+      await sandBox.write('user_orders_$uid', responseOrders.data);
+      orders.clear();
       orders.addAll(responseOrders.data['rows']
           .map<Order>((dynamic json) => Order.fromJson(json))
           .toList());
-    } else {
-      throw Exception('Failed to fetch orders.');
+      update();
     }
   }
 
@@ -584,6 +693,14 @@ class MarketController extends GetxController {
     return '';
   }
 
+  // Extract createdAt from different types
+  DateTime _getCreatedAt(Object item) {
+    if (item is Product) return item.createdAt;
+    if (item is Service) return item.createdAt;
+    if (item is Customitem) return item.createdAt;
+    throw Exception('Unknown item type: $item');
+  }
+
   // ============================
   // ===== Migration Reminder ===
   // ============================
@@ -608,5 +725,107 @@ class MarketController extends GetxController {
     final String uid = _profileController.myProfile.uid;
     final int now = DateTime.now().millisecondsSinceEpoch;
     await prefs.setInt('migration_remind_$uid', now);
+  }
+
+  void _processCachedItems(dynamic productsData, dynamic servicesData) {
+    final List<Product> cachedProducts = <Product>[];
+    final List<Service> cachedServices = <Service>[];
+
+    if (productsData != null) {
+      final List<dynamic> productRows = productsData['rows'] ?? <dynamic>[];
+      cachedProducts.addAll(productRows
+          .map((dynamic e) => Product.fromJson(e as Map<String, dynamic>))
+          .where((Product p) => p.isActive));
+    }
+
+    if (servicesData != null) {
+      final List<dynamic> serviceRows = servicesData['rows'] ?? <dynamic>[];
+      cachedServices.addAll(serviceRows
+          .map((dynamic e) => Service.fromJson(e as Map<String, dynamic>))
+          .where((Service s) => s.isActive));
+    }
+
+    proProducts.assignAll(cachedProducts);
+    proServices.assignAll(cachedServices);
+
+    final List<Object> combined = <Object>[];
+    combined.addAll(cachedProducts);
+    combined.addAll(cachedServices);
+    proItems.assignAll(combined);
+
+    activeMarketItems.assignAll(combined);
+
+    totalItemCount.value =
+        ((productsData?['count'] ?? 0) as int) + ((servicesData?['count'] ?? 0) as int);
+  }
+
+  Future<void> initFeaturedItems({bool isBackgroundRefresh = false}) async {
+    // 🔥 Check cache first
+    dynamic cachedFeaturedProducts = sandBox.read('featured_products');
+    dynamic cachedFeaturedServices = sandBox.read('featured_services');
+
+    if (!isBackgroundRefresh) {
+      if (cachedFeaturedProducts != null || cachedFeaturedServices != null) {
+        _processFeaturedItems(cachedFeaturedProducts, cachedFeaturedServices);
+        update();
+      }
+    }
+
+    try {
+      final List<ApiResponseModel> responses =
+          await Future.wait(<Future<ApiResponseModel>>[
+        ApiService.get(path: 'goods/featured'),
+        ApiService.get(path: 'services/featured'),
+      ]);
+
+      final ApiResponseModel resProd = responses[0];
+      final ApiResponseModel resServ = responses[1];
+
+      if (resProd.success) {
+        await sandBox.write('featured_products', resProd.data);
+      }
+      if (resServ.success) {
+        await sandBox.write('featured_services', resServ.data);
+      }
+
+      _processFeaturedItems(
+        resProd.success ? resProd.data : cachedFeaturedProducts,
+        resServ.success ? resServ.data : cachedFeaturedServices,
+      );
+
+      update();
+    } catch (e) {
+      debugPrint('❌ initFeaturedItems error: $e');
+    }
+  }
+
+  void _processFeaturedItems(dynamic productsData, dynamic servicesData) {
+    final List<Product> newFeaturedProducts = <Product>[];
+    final List<Service> newFeaturedServices = <Service>[];
+
+    if (productsData != null) {
+      final List<dynamic> productRows = productsData['rows'] ?? <dynamic>[];
+      newFeaturedProducts.addAll(productRows
+          .map((dynamic e) => Product.fromJson(e as Map<String, dynamic>))
+          .where((Product p) => p.isActive));
+    }
+
+    if (servicesData != null) {
+      final List<dynamic> serviceRows = servicesData['rows'] ?? <dynamic>[];
+      newFeaturedServices.addAll(serviceRows
+          .map((dynamic e) => Service.fromJson(e as Map<String, dynamic>))
+          .where((Service s) => s.isActive));
+    }
+
+    featuredProducts.assignAll(newFeaturedProducts);
+    featuredServices.assignAll(newFeaturedServices);
+
+    final List<Object> combined = <Object>[];
+    combined.addAll(newFeaturedProducts);
+    combined.addAll(newFeaturedServices);
+    combined.sort((Object a, Object b) =>
+        _getCreatedAt(b).compareTo(_getCreatedAt(a)));
+
+    featuredItems.assignAll(combined);
   }
 }

@@ -1247,101 +1247,110 @@ class _PostTileState extends State<PostTile> {
                     ],
                   ),
                 ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.only(right: 0.0),
-                      child: TextButton.icon(
-                        onPressed: () async {
-                          widget.controller.postLike(
-                              profileController.myProfile.uid,
-                              widget.post.postId,
-                              'post',
-                              widget.post.user!.uid);
-                          setState(() {});
-                        },
-                        icon: widget.post.likes!
-                                .contains(profileController.myProfile.uid)
-                            ? SvgPicture.asset(
-                                'assets/svgs/likefilled.svg',
-                                height: 15,
-                              )
-                            : SvgPicture.asset(
-                                'assets/svgs/like.svg',
-                                height: 15,
-                              ),
-                        label: Text(
-                          '${widget.post.likes?.length ?? 0}',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: textColor.withValues(alpha: 0.8),
-                                  ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 0.0),
-                      child: TextButton.icon(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                PostLikeCommentItem(
-                              post: widget.post,
-                              onComment: (CommentModel newComment) async {},
-                            ),
-                          );
-                        },
-                        icon: SvgPicture.asset('assets/svgs/comment.svg',
-                            height: 15),
-                        label: Text(
-                          '${widget.post.comments?.length ?? 0}',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: textColor.withValues(alpha: 0.8),
-                                  ),
-                        ),
-                      ),
-                    ),
-                    // widget.post.user!.uid != profileController.myProfile.uid
-                    Container(
-                      padding: const EdgeInsets.only(right: 0.0),
-                      child: TextButton.icon(
-                        onPressed: () async {
-                          if (widget.post.user!.uid !=
-                              profileController.myProfile.uid) {
-                            homeController.postCoin(
+                Obx(() {
+                  final List<String> postLikes = profileController.getLikes(
+                      widget.post.postId, widget.post.likes);
+                  final List<String> postCoins = profileController.getCoins(
+                      widget.post.postId, widget.post.coins);
+
+                  return Row(
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.only(right: 0.0),
+                        child: TextButton.icon(
+                          onPressed: () async {
+                            widget.controller.postLike(
                                 profileController.myProfile.uid,
                                 widget.post.postId,
-                                profileController,
                                 'post',
                                 widget.post.user!.uid);
-                          }
-                          setState(() {});
-                        },
-                        icon: widget.post.coins?.contains(
-                                    profileController.myProfile.uid) ==
-                                true
-                            ? SvgPicture.asset(
-                                'assets/svgs/coin.svg',
-                                height: 20,
-                              )
-                            : SvgPicture.asset(
-                                'assets/svgs/coin.svg',
-                                height: 20,
-                              ),
-                        label: Text(
-                          '${widget.post.coins?.length ?? 0}',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: textColor.withValues(alpha: 0.8),
-                                  ),
+                          },
+                          icon: postLikes.contains(
+                                  profileController.myProfile.uid)
+                              ? SvgPicture.asset(
+                                  'assets/svgs/likefilled.svg',
+                                  height: 15,
+                                )
+                              : SvgPicture.asset(
+                                  'assets/svgs/like.svg',
+                                  height: 15,
+                                ),
+                          label: Text(
+                            '${postLikes.length}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor.withValues(alpha: 0.8),
+                                ),
+                          ),
                         ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 0.0),
+                        child: TextButton.icon(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  PostLikeCommentItem(
+                                post: widget.post,
+                                onComment: (CommentModel newComment) async {},
+                              ),
+                            );
+                          },
+                          icon: SvgPicture.asset('assets/svgs/comment.svg',
+                              height: 15),
+                          label: Text(
+                            '${widget.post.comments?.length ?? 0}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor.withValues(alpha: 0.8),
+                                ),
+                          ),
+                        ),
+                      ),
+                      // widget.post.user!.uid != profileController.myProfile.uid
+                      Container(
+                        padding: const EdgeInsets.only(right: 0.0),
+                        child: TextButton.icon(
+                          onPressed: () async {
+                            if (widget.post.user!.uid !=
+                                profileController.myProfile.uid) {
+                              homeController.postCoin(
+                                  profileController.myProfile.uid,
+                                  widget.post.postId,
+                                  profileController,
+                                  'post',
+                                  widget.post.user!.uid);
+                            }
+                          },
+                          icon: postCoins.contains(
+                                  profileController.myProfile.uid)
+                              ? SvgPicture.asset(
+                                  'assets/svgs/coin.svg',
+                                  height: 20,
+                                )
+                              : SvgPicture.asset(
+                                  'assets/svgs/coin.svg',
+                                  height: 20,
+                                ),
+                          label: Text(
+                            '${postCoins.length}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor.withValues(alpha: 0.8),
+                                ),
+                          ),
+                        ),
+                      ),
                     TextButton.icon(
                       onPressed: () async {},
                       icon: const Icon(Icons.remove_red_eye_outlined,
@@ -1580,11 +1589,16 @@ class _PostTileState extends State<PostTile> {
                                                 title: Text(
                                                   index == 0
                                                       ? 'Share Post'
-                                                      : widget.post.reposts?.contains(
+                                                      : profileController
+                                                              .getReposts(
+                                                                  widget.post
+                                                                      .postId,
+                                                                  widget.post
+                                                                      .reposts)
+                                                              .contains(
                                                                   profileController
                                                                       .myProfile
-                                                                      .uid) ==
-                                                              true
+                                                                      .uid)
                                                           ? 'Undo Repost'
                                                           : 'Repost',
                                                   style: const TextStyle(
@@ -1621,7 +1635,8 @@ class _PostTileState extends State<PostTile> {
                       )
                     ],
                   ],
-                )
+                );
+                }),
               ],
             ),
           ),

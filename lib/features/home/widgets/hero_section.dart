@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/common/widgets/user_avatar_with_badge.dart';
 import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
@@ -99,7 +100,7 @@ class _HeroSectionState extends State<HeroSection> {
   static const Map<String, WinnerCardConfig> cardConfigs =
       <String, WinnerCardConfig>{
     'boss': WinnerCardConfig(
-      title: 'Top Ranking this Week',
+      title: 'My Ranking this Week',
       icon: LucideIcons.trophy,
       gradientColors: <Color>[backgroundColor, backgroundColor],
       iconColor: Color(0xFFFCD34D),
@@ -154,7 +155,18 @@ class _HeroSectionState extends State<HeroSection> {
     backer = homeController.backerOfTheWeek;
     ambassador = homeController.ambassadorOfTheWeek;
     partner = homeController.partnerOfTheWeek;
-    industry = challengeController.categories[0];
+
+    if (challengeController.categories.isNotEmpty) {
+      industry = challengeController.categories[0];
+    } else {
+      industry = Industry(
+        industryId: '',
+        industry: '',
+        categoryId: '',
+        description: '',
+      );
+    }
+
     _startAutoRotation();
     homeController.fetchRankWinner();
     _initializeHeroItems();
@@ -167,10 +179,12 @@ class _HeroSectionState extends State<HeroSection> {
         type: 'boss',
         icon: 'assets/images/app_logo_2.png',
         title: 'Top Ranking of the Week',
-        subtitle: user?.name ?? user!.username,
+        subtitle: user?.name ?? user?.username ?? '',
         description: user?.bio ?? '',
         image: user?.photoUrl ?? '',
-        action: _profileController.myProfile.connecteds!.contains(user!.uid)
+        action: (user != null &&
+                _profileController.myProfile.connecteds != null &&
+                _profileController.myProfile.connecteds!.contains(user!.uid))
             ? 'Refer'
             : 'Follow',
         action2: 'Get Featured',
@@ -180,10 +194,12 @@ class _HeroSectionState extends State<HeroSection> {
         type: 'mentor',
         icon: 'assets/images/app_logo_2.png',
         title: 'Mentor of the Week',
-        subtitle: mentor?.name ?? mentor!.username,
+        subtitle: mentor?.name ?? mentor?.username ?? '',
         image: mentor?.photoUrl ?? '',
         description: mentor?.bio ?? '',
-        action: _profileController.myProfile.connecteds!.contains(mentor!.uid)
+        action: (mentor != null &&
+                _profileController.myProfile.connecteds != null &&
+                _profileController.myProfile.connecteds!.contains(mentor!.uid))
             ? 'Refer'
             : 'Follow',
         action2: 'Share Learning',
@@ -193,10 +209,12 @@ class _HeroSectionState extends State<HeroSection> {
         type: 'backer',
         icon: 'assets/images/app_logo_2.png',
         title: 'Backer of the Week',
-        subtitle: backer?.name ?? backer!.username,
+        subtitle: backer?.name ?? backer?.username ?? '',
         image: backer?.photoUrl ?? '',
         description: backer?.bio ?? '',
-        action: _profileController.myProfile.connecteds!.contains(backer!.uid)
+        action: (backer != null &&
+                _profileController.myProfile.connecteds != null &&
+                _profileController.myProfile.connecteds!.contains(backer!.uid))
             ? 'Refer'
             : 'Follow',
         action2: 'Fund Project',
@@ -206,9 +224,10 @@ class _HeroSectionState extends State<HeroSection> {
         type: 'partner',
         title: 'Partner of the Week',
         icon: 'assets/images/app_logo_2.png',
-        subtitle: partner['companyName'] ?? '',
-        image: partner['companyPhoto'],
-        description: partner['companyDescription'] ?? '',
+        subtitle: partner != null ? (partner['companyName'] ?? '') : '',
+        image: partner != null ? (partner['companyPhoto'] ?? '') : '',
+        description:
+            partner != null ? (partner['companyDescription'] ?? '') : '',
         action: 'Claim Deal',
         action2: 'Become a Partner',
       ),
@@ -217,7 +236,7 @@ class _HeroSectionState extends State<HeroSection> {
         type: 'ambassador',
         title: 'Ambassador of the Week',
         icon: 'assets/images/app_logo_2.png',
-        subtitle: ambassador?.name ?? ambassador!.username,
+        subtitle: ambassador?.name ?? ambassador?.username ?? '',
         image: ambassador?.photoUrl ?? '',
         description: ambassador?.bio ?? '',
         action: 'Follow',
@@ -553,18 +572,7 @@ class _HeroSectionState extends State<HeroSection> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            if (item.image.isNotEmpty)
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(50),
-                                child: NetworkImageWithPlaceHolder(
-                                  imageUrl: item.image,
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            else
-                              _buildDefaultAvatar(config, item.subtitle),
+                            _buildHeroAvatar(item, config),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(
@@ -688,18 +696,7 @@ class _HeroSectionState extends State<HeroSection> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                if (item.image.isNotEmpty)
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: NetworkImageWithPlaceHolder(
-                                      imageUrl: item.image,
-                                      width: 50,
-                                      height: 50,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                else
-                                  _buildDefaultAvatar(config, item.subtitle),
+                                _buildHeroAvatar(item, config),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
@@ -1069,6 +1066,54 @@ class _HeroSectionState extends State<HeroSection> {
         ),
       ),
     );
+  }
+
+  Widget _buildHeroAvatar(HeroItem item, WinnerCardConfig config) {
+    UserModel? targetUser;
+    bool forceRanked = false;
+    switch (item.type) {
+      case 'boss':
+        targetUser = user;
+        forceRanked = true;
+        break;
+      case 'mentor':
+        targetUser = mentor;
+        break;
+      case 'backer':
+        targetUser = backer;
+        break;
+      case 'ambassador':
+        targetUser = ambassador;
+        break;
+      case 'ranking':
+        targetUser = rankWinner;
+        forceRanked = true;
+        break;
+    }
+
+    if (targetUser != null) {
+      return UserAvatarWithBadge(
+        user: forceRanked ? targetUser.copyWith(isRanked: true) : targetUser,
+        height: 50,
+        width: 50,
+        radius: 50,
+        avatarSize: 18,
+      );
+    }
+
+    if (item.image.isNotEmpty) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(50),
+        child: NetworkImageWithPlaceHolder(
+          imageUrl: item.image,
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover,
+        ),
+      );
+    }
+
+    return _buildDefaultAvatar(config, item.subtitle);
   }
 
   Widget _buildDefaultAvatar(WinnerCardConfig config, String name) {

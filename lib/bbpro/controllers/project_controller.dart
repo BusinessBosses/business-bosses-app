@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ProjectController extends GetxController {
   final ProfileController profileController = Get.find();
@@ -16,32 +17,44 @@ class ProjectController extends GetxController {
   final Map<ProjectStatus, List<Project>> statusProjects =
       <ProjectStatus, List<Project>>{};
   final List<Project> allProjects = <Project>[];
+  final GetStorage sandBox = GetStorage();
 
   Future<void> initProjects(String userId) async {
-    loading(true);
-    update();
-    projects.clear();
-    allProjects.clear();
+    final dynamic cachedProjects = sandBox.read('user_projects_list_$userId');
+    if (cachedProjects != null) {
+      _processProjectsData(cachedProjects);
+      loading.value = false;
+      update();
+    } else {
+      loading(true);
+    }
+
     ApiResponseModel response =
         await ApiService.get(path: 'projects/user-projects/$userId');
     if (response.success) {
-      for (int i = 0; i < response.data['rows'].length; i++) {
-        projects.add(Project.fromMap(response.data['rows'][i]));
-      }
-      // Initialize empty lists for each status
-      for (ProjectStatus status in ProjectStatus.values) {
-        statusProjects[status] = <Project>[];
-      }
-      for (ProjectStatus status in ProjectStatus.values) {
-        List<Project> statusTasks = projects
-            .where((Project project) => project.status == status)
-            .toList();
-        statusProjects[status] = statusTasks;
-        allProjects.addAll(statusTasks);
-      }
+      await sandBox.write('user_projects_list_$userId', response.data);
+      _processProjectsData(response.data);
     }
     loading(false);
     update();
+  }
+
+  void _processProjectsData(dynamic data) {
+    projects.clear();
+    allProjects.clear();
+    for (int i = 0; i < data['rows'].length; i++) {
+      projects.add(Project.fromMap(data['rows'][i]));
+    }
+    // Initialize empty lists for each status
+    for (ProjectStatus status in ProjectStatus.values) {
+      statusProjects[status] = <Project>[];
+    }
+    for (ProjectStatus status in ProjectStatus.values) {
+      List<Project> statusTasks =
+          projects.where((Project project) => project.status == status).toList();
+      statusProjects[status] = statusTasks;
+      allProjects.addAll(statusTasks);
+    }
   }
 
   Future<void> initTasks(String userId) async {

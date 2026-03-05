@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -10,8 +11,38 @@ class ChallengeController extends GetxController {
 
   @override
   void onInit() {
+    // 🔥 Try to load from cache first
+    final dynamic cachedData =
+        Get.find<HomeController>().sandBox.read('industries_cache');
+    if (cachedData != null) {
+      _processCategories(cachedData);
+    }
+
     initCategories();
     super.onInit();
+  }
+
+  void _processCategories(List<dynamic> responseData) {
+    categories = responseData
+        .map((dynamic categoryMap) => Industry.fromMap(categoryMap))
+        .where((Industry category) =>
+            category.categoryId == '-Mos1VMlx3oxZFRaw_BH' &&
+                (category.endedAt == null ||
+                    category.endedAt!.isAfter(DateTime.now()) ||
+                    category.endedAt!.isAtSameMomentAs(DateTime.now())) ||
+            category.industryId == '-MsUOGcOT9oRXGakCcJv')
+        .toList();
+
+    categories.sort((Industry a, Industry b) {
+      if (a.industryId == '-MsUOGcOT9oRXGakCcJv') {
+        return -1;
+      } else if (b.industryId == '-MsUOGcOT9oRXGakCcJv') {
+        return 1;
+      } else {
+        return a.industry!.compareTo(b.industry!);
+      }
+    });
+    update();
   }
 
   void initCategories() async {
@@ -21,30 +52,12 @@ class ChallengeController extends GetxController {
       ApiResponseModel response =
           await ApiService.get(path: 'industry/user-count');
       List<dynamic> responseData = response.data['rows'];
-
-      categories = responseData
-          .map((dynamic categoryMap) => Industry.fromMap(categoryMap))
-          .where((Industry category) =>
-              category.categoryId == '-Mos1VMlx3oxZFRaw_BH' &&
-                  (category.endedAt == null ||
-                      category.endedAt!.isAfter(DateTime.now()) ||
-                      category.endedAt!.isAtSameMomentAs(DateTime.now())) ||
-              category.industryId == '-MsUOGcOT9oRXGakCcJv')
-          .toList();
-      // Assuming data returned is a list of Map<String, dynamic>
-      // Sort categories by placing 'Boss Up Challenge' at the top
-      categories.sort((Industry a, Industry b) {
-        if (a.industryId == '-MsUOGcOT9oRXGakCcJv') {
-          return -1; // 'Boss Up Challenge' comes first
-        } else if (b.industryId == '-MsUOGcOT9oRXGakCcJv') {
-          return 1; // 'Boss Up Challenge' comes after other categories
-        } else {
-          // Sort other categories alphabetically
-          return a.industry!.compareTo(b.industry!);
-        }
-      });
+      _processCategories(responseData);
+      // 🔥 Update cache
+      Get.find<HomeController>()
+          .sandBox
+          .write('industries_cache', responseData);
       error(false);
-      update();
     } catch (e) {
       error(true); // Set error to true if there's an error
       update();

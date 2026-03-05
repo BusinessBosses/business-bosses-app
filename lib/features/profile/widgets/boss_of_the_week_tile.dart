@@ -8,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
-import '../../../common/widgets/network_image_with_placeholder.dart';
+import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
@@ -161,29 +161,13 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                   Get.toNamed(Routes.publicProfile,
                                       arguments: user);
                                 }),
-                                child: SizedBox(
+                                child: UserAvatarWithBadge(
+                                  user: user?.copyWith(isRanked: true),
                                   height: 90.0,
                                   width: 90.0,
-                                  child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(1000),
-                                      child: user?.photoUrl != null
-                                          ? NetworkImageWithPlaceHolder(
-                                              imageUrl: user?.photoUrl,
-                                              height: 90.0,
-                                              width: 90.0,
-                                              radius: radius,
-                                              placeHolder: Icons.person,
-                                              iconSize: 64.0,
-                                            )
-                                          : const CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage: AssetImage(
-                                                  'assets/images/bb_avatar.jpg'),
-                                            ),
-                                    ),
-                                  ),
+                                  radius: 1000,
+                                  iconSize: 64.0,
+                                  avatarSize: 30,
                                 ),
                               ),
                               const SizedBox(width: 20.0),

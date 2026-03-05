@@ -28,9 +28,17 @@ class PostInteractionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(
-      builder: (HomeController controller) {
-        return Container(
+    return Obx(() {
+      final List<String> postLikes =
+          profileController.getLikes(post.postId, post.likes);
+      final List<String> postCoins =
+          profileController.getCoins(post.postId, post.coins);
+      final List<String> postReposts =
+          profileController.getReposts(post.postId, post.reposts);
+
+      return GetBuilder<HomeController>(
+        builder: (HomeController controller) {
+          return Container(
           padding: const EdgeInsets.only(left: 0, right: 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,8 +51,7 @@ class PostInteractionsWidget extends StatelessWidget {
                           post.postId, 'post', post.user!.uid);
                     },
                     icon:
-                        post.likes?.contains(profileController.myProfile.uid) ==
-                                true
+                        postLikes.contains(profileController.myProfile.uid)
                             ? SvgPicture.asset(
                                 'assets/svgs/likefilled.svg',
                                 height: 15,
@@ -54,7 +61,7 @@ class PostInteractionsWidget extends StatelessWidget {
                                 height: 15,
                               ),
                     label: Text(
-                      '${post.likes?.length ?? 0}',
+                      '${postLikes.length}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
                             color: textColor.withValues(alpha: 0.8),
@@ -84,7 +91,7 @@ class PostInteractionsWidget extends StatelessWidget {
                     ),
                   ),
                   TextButton.icon(
-                    onPressed: post.user!.uid == profileController.myProfile.uid
+                    onPressed: post.user!.uid != profileController.myProfile.uid
                         ? () async {
                             controller.postCoin(
                                 profileController.myProfile.uid,
@@ -95,8 +102,7 @@ class PostInteractionsWidget extends StatelessWidget {
                           }
                         : null,
                     icon:
-                        post.coins?.contains(profileController.myProfile.uid) ==
-                                true
+                        postCoins.contains(profileController.myProfile.uid)
                             ? SvgPicture.asset(
                                 'assets/svgs/coin.svg',
                                 height: 20,
@@ -106,7 +112,7 @@ class PostInteractionsWidget extends StatelessWidget {
                                 height: 20,
                               ),
                     label: Text(
-                      '${post.coins?.length ?? 0}',
+                      '${postCoins.length}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
                             color: textColor.withValues(alpha: 0.8),
@@ -175,11 +181,10 @@ class PostInteractionsWidget extends StatelessWidget {
                                             title: Text(
                                               index == 0
                                                   ? 'Share Post'
-                                                  : post.reposts?.contains(
+                                                  : postReposts.contains(
                                                               profileController
                                                                   .myProfile
-                                                                  .uid) ==
-                                                          true
+                                                                  .uid)
                                                       ? 'Undo Repost'
                                                       : 'Repost',
                                               style: const TextStyle(
@@ -219,8 +224,9 @@ class PostInteractionsWidget extends StatelessWidget {
               ),
             ],
           ),
-        );
-      },
-    );
+          );
+        },
+      );
+    });
   }
 }

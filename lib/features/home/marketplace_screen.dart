@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
@@ -23,7 +22,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-import '../../bbpro/models/product_model.dart';
 import '../../utils/theme/theme.dart';
 import '../marketplace/controllers/market_controller.dart';
 import '../marketplace/presentation/marketplace_search_screen.dart';
@@ -111,10 +109,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       _marketController.isSearching(false);
       _marketController.clearFilter();
       _marketController.sortItems();
-      if (_marketController.proItems.isEmpty) {
-        await _marketController.initMarket();
-        _marketController.sortItems();
-      }
+
+      // Always refresh market data when entering the screen
+      await _marketController.initMarket();
+      _marketController.sortItems();
 
       if (shopController.shop == null && _profileController.myProfile.hasShop) {
         await shopController.initShop();
@@ -188,25 +186,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   SliverToBoxAdapter(
                     child: Container(
                       margin: const EdgeInsets.only(top: 10, bottom: 10),
-                      child: ProshopdealsWidget(
-                        title: 'NEW',
-                        combinedList: _marketController.proItems
-                            .where((Object item) {
-                              if (item is Product) {
-                                return item.images != null &&
-                                    item.images!.isNotEmpty &&
-                                    item.images!.first.isNotEmpty &&
-                                    item.user!.isSubscribed;
-                              } else {
-                                final Service service = item as Service;
-                                return service.images != null &&
-                                    service.images!.isNotEmpty &&
-                                    service.images![0].isNotEmpty &&
-                                    service.user!.isSubscribed;
-                              }
-                            })
-                            .take(10)
-                            .toList(),
+                      child: Obx(
+                        () => ProshopdealsWidget(
+                          title: 'NEW',
+                          combinedList:
+                              _marketController.featuredItems.take(10).toList(),
+                        ),
                       ),
                     ),
                   ),

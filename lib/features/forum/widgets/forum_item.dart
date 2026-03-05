@@ -752,125 +752,128 @@ class _ForumItemState extends State<ForumItem> {
                                   : false,
                             ),
                           ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        TextButton.icon(
-                          onPressed: () async {
-                            widget.controller.postLike(
-                                profileController.myProfile.uid,
-                                widget.forum.forumId,
-                                'forum',
-                                widget.forum.user!.uid);
-                            setState(() {});
-                          },
-                          icon: widget.forum.likes?.contains(
-                                      profileController.myProfile.uid) ==
-                                  true
-                              ? SvgPicture.asset(
-                                  'assets/svgs/likefilled.svg',
-                                  height: 15,
-                                )
-                              : SvgPicture.asset('assets/svgs/like.svg',
-                                  height: 15),
-                          label: Text(
-                            '${widget.forum.likes?.length ?? 0}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: textColor.withValues(alpha: 0.8),
-                                ),
-                          ),
-                        ),
-                        TextButton.icon(
-                          onPressed: () {
-                            widget.isBossUp
-                                ? showModalBottomSheet(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        BossUpLikeCommentItem(
-                                      forum: widget.forum,
-                                      onComment:
-                                          (CommentModel newComment) async {},
-                                    ),
+                    Obx(() {
+                      final List<String> forumLikes = profileController.getLikes(
+                          widget.forum.forumId, widget.forum.likes);
+                      final List<String> forumCoins = profileController.getCoins(
+                          widget.forum.forumId, widget.forum.coins);
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          TextButton.icon(
+                            onPressed: () async {
+                              widget.controller.postLike(
+                                  profileController.myProfile.uid,
+                                  widget.forum.forumId,
+                                  'forum',
+                                  widget.forum.user!.uid);
+                            },
+                            icon: forumLikes.contains(
+                                        profileController.myProfile.uid) ==
+                                    true
+                                ? SvgPicture.asset(
+                                    'assets/svgs/likefilled.svg',
+                                    height: 15,
                                   )
-                                : showModalBottomSheet(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        ForumLikeCommentItem(
-                                      forum: widget.forum,
-                                      onComment:
-                                          (CommentModel newComment) async {},
-                                    ),
-                                  );
-                            setState(() {});
-                          },
-                          icon: SvgPicture.asset('assets/svgs/comment.svg',
-                              height: 15),
-                          label: Text(
-                            '${widget.forum.comments!.length}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: textColor.withValues(alpha: 0.8),
-                                ),
+                                : SvgPicture.asset('assets/svgs/like.svg',
+                                    height: 15),
+                            label: Text(
+                              '${forumLikes.length}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withValues(alpha: 0.8),
+                                  ),
+                            ),
                           ),
-                        ),
-                        widget.forum.user!.uid !=
-                                profileController.myProfile.uid
-                            ? TextButton.icon(
-                                onPressed: () async {
-                                  widget.controller.postCoin(
-                                    profileController.myProfile.uid,
-                                    widget.forum.forumId,
-                                    profileController,
-                                    'forum',
-                                    widget.forum.user!.uid,
-                                  );
-                                  setState(() {});
-                                },
-                                icon: widget.forum.coins?.contains(
-                                            profileController.myProfile.uid) !=
-                                        true
-                                    ? SvgPicture.asset('assets/svgs/coin.svg',
-                                        height: 20)
-                                    : SvgPicture.asset('assets/svgs/coin.svg',
-                                        height: 20),
-                                label: Text(
-                                  '${widget.forum.coins?.length ?? 0}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                        color: textColor.withValues(alpha: 0.8),
+                          TextButton.icon(
+                            onPressed: () {
+                              widget.isBossUp
+                                  ? showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          BossUpLikeCommentItem(
+                                        forum: widget.forum,
+                                        onComment:
+                                            (CommentModel newComment) async {},
                                       ),
-                                ))
-                            : Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8.0, right: 10.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    SvgPicture.asset('assets/svgs/coin.svg'),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      '${widget.forum.coins?.length ?? 0}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w700,
-                                            color: textColor.withValues(
-                                                alpha: 0.8),
-                                          ),
-                                    ),
-                                  ],
+                                    )
+                                  : showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          ForumLikeCommentItem(
+                                        forum: widget.forum,
+                                        onComment:
+                                            (CommentModel newComment) async {},
+                                      ),
+                                    );
+                            },
+                            icon: SvgPicture.asset('assets/svgs/comment.svg',
+                                height: 15),
+                            label: Text(
+                              '${widget.forum.comments!.length}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withValues(alpha: 0.8),
+                                  ),
+                            ),
+                          ),
+                          widget.forum.user!.uid !=
+                                  profileController.myProfile.uid
+                              ? TextButton.icon(
+                                  onPressed: () async {
+                                    widget.controller.postCoin(
+                                      profileController.myProfile.uid,
+                                      widget.forum.forumId,
+                                      profileController,
+                                      'forum',
+                                      widget.forum.user!.uid,
+                                    );
+                                  },
+                                  icon: forumCoins.contains(
+                                              profileController.myProfile.uid) !=
+                                          true
+                                      ? SvgPicture.asset('assets/svgs/coin.svg',
+                                          height: 20)
+                                      : SvgPicture.asset('assets/svgs/coin.svg',
+                                          height: 20),
+                                  label: Text(
+                                    '${forumCoins.length}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w700,
+                                          color: textColor.withValues(alpha: 0.8),
+                                        ),
+                                  ))
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 10.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset('assets/svgs/coin.svg'),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        '${forumCoins.length}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              color: textColor.withValues(
+                                                  alpha: 0.8),
+                                            ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
                         TextButton.icon(
                           onPressed: () async {},
                           icon: const Icon(Icons.remove_red_eye_outlined,
@@ -914,10 +917,11 @@ class _ForumItemState extends State<ForumItem> {
                             ),
                           )
                       ],
-                    )
-                  ],
-                ),
+                    );
+                  }),
+                ],
               ),
+            ),
               Container(
                 color: backgroundcolorinterface,
                 height: 7,

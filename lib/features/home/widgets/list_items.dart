@@ -1,5 +1,3 @@
-import 'package:business_bosses_v2/bbpro/models/product_model.dart';
-import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
@@ -48,8 +46,21 @@ class _PostsWidgetState extends State<PostsWidget> {
   @override
   void initState() {
     super.initState();
-    industry =
-        communitiesController.getCategoryIndustries(Constants.LEARNINGID)[2];
+    final List<Industry> industries =
+        communitiesController.getCategoryIndustries(Constants.LEARNINGID);
+    if (industries.length > 2) {
+      industry = industries[2];
+    } else if (industries.isNotEmpty) {
+      industry = industries[0];
+    } else {
+      // Create a dummy industry if none available yet to avoid late initialization error
+      industry = Industry(
+        industryId: '',
+        industry: '',
+        categoryId: Constants.LEARNINGID,
+        description: '',
+      );
+    }
 
     // Add scroll listener
     widget.scrollController.addListener(() {
@@ -121,25 +132,12 @@ class _PostsWidgetState extends State<PostsWidget> {
     if (postIndex == 5) {
       widgets.add(Column(
         children: <Widget>[
-          ProshopdealsWidget(
-            isHome: true,
-            caption: 'Featured Listing',
-            combinedList: <Object>[
-              ...marketController.proItems
-                ..where((Object item) {
-                  if (item is Product) {
-                    return item.images != null &&
-                        item.images!.isNotEmpty &&
-                        item.images!.first.isNotEmpty &&
-                        item.user!.isSubscribed;
-                  } else {
-                    return (item as Service).images != null &&
-                        item.images!.isNotEmpty &&
-                        item.images![0].isNotEmpty &&
-                        item.user!.isSubscribed;
-                  }
-                }).take(10).toList(),
-            ],
+          Obx(
+            () => ProshopdealsWidget(
+              isHome: true,
+              caption: 'Featured Listing',
+              combinedList: marketController.featuredItems.take(10).toList(),
+            ),
           ),
           Container(
             height: 7,
@@ -237,15 +235,26 @@ class _PostsWidgetState extends State<PostsWidget> {
       );
     } else if (currentPost['type'] == 'forum') {
       final ForumModel forumModel = controller.forums[currentPost['index']];
+      final bool hasIncrementedView =
+          controller.itemsWithIncrementedViews.contains(forumModel.forumId);
 
-      postWidget = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          ForumItem(
-            forum: forumModel,
-            controller: controller,
-          )
-        ],
+      postWidget = VisibilityDetector(
+        key: Key(postIndex.toString()),
+        onVisibilityChanged: (VisibilityInfo info) {
+          if (info.visibleFraction == 1.0 && !hasIncrementedView) {
+            controller.updateForumViews(forumModel);
+            controller.itemsWithIncrementedViews.add(forumModel.forumId);
+          }
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ForumItem(
+              forum: forumModel,
+              controller: controller,
+            )
+          ],
+        ),
       );
     } else {
       postWidget = const SizedBox();

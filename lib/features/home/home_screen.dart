@@ -36,19 +36,18 @@ class _HomeScreenState extends State<HomeScreen>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   final AdvancedDrawerController _advancedDrawerController =
       AdvancedDrawerController();
-  final HomeController homeController = Get.put(HomeController());
-  final ProfileController _profileController = Get.find();
+  final HomeController homeController = Get.find<HomeController>();
+  final ProfileController _profileController = Get.find<ProfileController>();
   final CommunitiesController _communitiesController =
-      Get.put(CommunitiesController());
+      Get.find<CommunitiesController>();
   final ChallengeController challengeController =
-      Get.put(ChallengeController());
-  final AiChatController ctrl = Get.put(AiChatController());
+      Get.find<ChallengeController>();
+  final AiChatController ctrl = Get.find<AiChatController>();
   late io.Socket socket;
 
   final ScrollController _scrollController = ScrollController();
-  final MarketController marketController = Get.put(MarketController());
-  final ShopController shopController =
-      Get.put(ShopController(), permanent: true);
+  final MarketController marketController = Get.find<MarketController>();
+  final ShopController shopController = Get.find<ShopController>();
 
   final ValueNotifier<bool> _isScrolledNotifier = ValueNotifier<bool>(true);
 
@@ -232,9 +231,6 @@ class _HomeScreenState extends State<HomeScreen>
                 } else if (homeController.error.value) {
                   return _buildError();
                 } else {
-                  if (marketController.proItems.isEmpty) {
-                    marketController.initProItems();
-                  }
                   return _buildMainContent();
                 }
               }),

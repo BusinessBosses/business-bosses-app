@@ -30,25 +30,21 @@ class PostInteractions extends StatefulWidget {
 }
 
 class _PostInteractionsState extends State<PostInteractions> {
-  late List<String> postLikes;
-  late List<String> postCoins;
-  late List<CommentModel> postComments;
-  late List<String> postReposts;
-
-  @override
-  void initState() {
-    super.initState();
-    postLikes = List<String>.from(widget.post.likes ?? <String>[]);
-    postCoins = List<String>.from(widget.post.coins ?? <String>[]);
-    postComments = List<CommentModel>.from(widget.post.comments ?? <String>[]);
-    postReposts = List<String>.from(widget.post.reposts ?? <String>[]);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(
-      builder: (HomeController controller) {
-        return Container(
+    return Obx(() {
+      final List<String> postLikes = widget.profileController
+          .getLikes(widget.post.postId, widget.post.likes);
+      final List<String> postCoins = widget.profileController
+          .getCoins(widget.post.postId, widget.post.coins);
+      final List<CommentModel> postComments =
+          List<CommentModel>.from(widget.post.comments ?? <CommentModel>[]);
+      final List<String> postReposts = widget.profileController
+          .getReposts(widget.post.postId, widget.post.reposts);
+
+      return GetBuilder<HomeController>(
+        builder: (HomeController controller) {
+          return Container(
           padding: const EdgeInsets.only(left: 0, right: 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,15 +59,6 @@ class _PostInteractionsState extends State<PostInteractions> {
                         'post',
                         widget.post.user!.uid,
                       );
-                      setState(() {
-                        if (postLikes
-                            .contains(widget.profileController.myProfile.uid)) {
-                          postLikes
-                              .remove(widget.profileController.myProfile.uid);
-                        } else {
-                          postLikes.add(widget.profileController.myProfile.uid);
-                        }
-                      });
                     },
                     icon: postLikes
                             .contains(widget.profileController.myProfile.uid)
@@ -124,17 +111,6 @@ class _PostInteractionsState extends State<PostInteractions> {
                               'post',
                               widget.post.user!.uid,
                             );
-
-                            setState(() {
-                              if (postCoins.contains(
-                                  widget.profileController.myProfile.uid)) {
-                                postCoins.remove(
-                                    widget.profileController.myProfile.uid);
-                              } else {
-                                postCoins.add(
-                                    widget.profileController.myProfile.uid);
-                              }
-                            });
                           }
                         : null,
                     icon: postCoins
@@ -201,24 +177,6 @@ class _PostInteractionsState extends State<PostInteractions> {
                                             index == 0
                                                 ? widget.sharePost()
                                                 : widget.repost();
-                                            setState(() {
-                                              if (index == 1) {
-                                                if (postReposts.contains(widget
-                                                    .profileController
-                                                    .myProfile
-                                                    .uid)) {
-                                                  postReposts.remove(widget
-                                                      .profileController
-                                                      .myProfile
-                                                      .uid);
-                                                } else {
-                                                  postReposts.add(widget
-                                                      .profileController
-                                                      .myProfile
-                                                      .uid);
-                                                }
-                                              }
-                                            });
                                           },
                                           minVerticalPadding: 0,
                                           contentPadding:
@@ -279,8 +237,9 @@ class _PostInteractionsState extends State<PostInteractions> {
               ),
             ],
           ),
-        );
-      },
-    );
+          );
+        },
+      );
+    });
   }
 }

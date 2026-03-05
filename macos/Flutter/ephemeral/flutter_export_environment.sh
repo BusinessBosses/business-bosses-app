@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=C:\Users\wadas\fvm\versions\stable"
-export "FLUTTER_APPLICATION_PATH=C:\xampp\htdocs\flutter\business-bosses--v2"
+export "FLUTTER_APPLICATION_PATH=C:\xampp\htdocs\BusinessBossesProject\business-bosses-mobile-app"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=3.0.1"

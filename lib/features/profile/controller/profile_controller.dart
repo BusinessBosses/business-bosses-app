@@ -8,7 +8,9 @@ import 'package:business_bosses_v2/features/home/repository/home_repository.dart
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/repository/profile_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../common/models/comment_model.dart';
@@ -22,6 +24,61 @@ class ProfileController extends GetxController {
   RxBool isLoading = RxBool(false);
   dynamic impact;
   RxString currentMatchType = ''.obs;
+  final GetStorage sandBox = GetStorage();
+
+  // Central interaction state
+  final RxMap<String, List<String>> likesMap = <String, List<String>>{}.obs;
+  final RxMap<String, List<String>> coinsMap = <String, List<String>>{}.obs;
+  final RxMap<String, List<String>> repostsMap = <String, List<String>>{}.obs;
+
+  void updateInteractionState(String id,
+      {List<String>? likes, List<String>? coins, List<String>? reposts}) {
+    if (likes != null) likesMap[id] = List<String>.from(likes);
+    if (coins != null) coinsMap[id] = List<String>.from(coins);
+    if (reposts != null) repostsMap[id] = List<String>.from(reposts);
+  }
+
+  List<String> getLikes(String id, List<String>? fallback) {
+    return likesMap[id] ?? fallback ?? <String>[];
+  }
+
+  List<String> getCoins(String id, List<String>? fallback) {
+    return coinsMap[id] ?? fallback ?? <String>[];
+  }
+
+  List<String> getReposts(String id, List<String>? fallback) {
+    return repostsMap[id] ?? fallback ?? <String>[];
+  }
+
+  void toggleLike(String id, String userId) {
+    final List<String> current = List<String>.from(likesMap[id] ?? <String>[]);
+    if (current.contains(userId)) {
+      current.remove(userId);
+    } else {
+      current.add(userId);
+    }
+    likesMap[id] = current;
+  }
+
+  void toggleCoin(String id, String userId) {
+    final List<String> current = List<String>.from(coinsMap[id] ?? <String>[]);
+    if (current.contains(userId)) {
+      current.remove(userId);
+    } else {
+      current.add(userId);
+    }
+    coinsMap[id] = current;
+  }
+
+  void toggleRepost(String id, String userId) {
+    final List<String> current = List<String>.from(repostsMap[id] ?? <String>[]);
+    if (current.contains(userId)) {
+      current.remove(userId);
+    } else {
+      current.add(userId);
+    }
+    repostsMap[id] = current;
+  }
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
   void processDataToState(
@@ -67,7 +124,7 @@ class ProfileController extends GetxController {
   }
 
   void updatePostViews(PostModel post, int views) {
-    HomeRepository.updateViews(post.postId, views);
+    HomeRepository.updateViews(post.postId);
   }
 
   void updateConnections(String uid) {
@@ -107,24 +164,33 @@ class ProfileController extends GetxController {
     final ApiResponseModel impactResponse = results[1];
 
     if (response.success) {
+      // 🔥 Update cache
+      await sandBox.write('profile_data_$userId', response.data);
+
       if (impactResponse.success) {
         impact = impactResponse.data; // assign impact data
+        await sandBox.write('impact_data_$userId', impactResponse.data);
       } else {
         impact = <dynamic, dynamic>{}; // fallback if error
       }
       final List<dynamic> psts = response.data['posts']['rows'];
       for (int i = 0; i < psts.length; i++) {
+        final List<String> likes = List<String>.from(psts[i]['likes']
+            .map((dynamic like) => like['userId'].toString()));
+        final List<String> reposts = List<String>.from(psts[i]['reposts']
+                ?.map((dynamic repost) => repost['userId'].toString()) ??
+            <dynamic>[]);
+        final List<String> coins = List<String>.from(psts[i]['coins']
+            .map((dynamic coin) => coin['userId'].toString()));
+
+        updateInteractionState(psts[i]['postId'].toString(),
+            likes: likes, reposts: reposts, coins: coins);
+
         posts.add(PostModel.fromMap(<String, dynamic>{
           ...psts[i],
-          'likes': psts[i]['likes']
-              .map((dynamic like) => like['userId'].toString())
-              .toList(),
-          'reposts': psts[i]['reposts']
-              ?.map((dynamic repost) => repost['userId'].toString())
-              .toList(),
-          'coins': psts[i]['coins']
-              .map((dynamic coin) => coin['userId'].toString())
-              .toList()
+          'likes': likes,
+          'reposts': reposts,
+          'coins': coins,
         }));
       }
 
@@ -132,6 +198,15 @@ class ProfileController extends GetxController {
       final List<dynamic> crs =
           response.data['courses']?['rows'] ?? <dynamic>[];
       for (final dynamic c in crs) {
+        final List<String> likes = List<String>.from((c['likes'] as List<dynamic>?)
+                ?.map((dynamic like) => like['userId'].toString()) ??
+            <dynamic>[]);
+        final List<String> coins = List<String>.from((c['coins'] as List<dynamic>?)
+                ?.map((dynamic coin) => coin['userId'].toString()) ??
+            <dynamic>[]);
+
+        updateInteractionState(c['id'].toString(), likes: likes, coins: coins);
+
         courses.add(CourseModel.fromMap(<String, dynamic>{...c}));
       }
 
@@ -139,11 +214,14 @@ class ProfileController extends GetxController {
       final List<dynamic> dns =
           response.data['donations']?['rows'] ?? <dynamic>[];
       for (final dynamic d in dns) {
+        final List<String> likes = List<String>.from(d['likes']
+            .map((dynamic like) => like['userId'].toString()));
+
+        updateInteractionState(d['id'].toString(), likes: likes);
+
         donations.add(DonationModel.fromMap(<String, dynamic>{
           ...d,
-          'likes': d['likes']
-              .map((dynamic like) => like['userId'].toString())
-              .toList(),
+          'likes': likes,
         }));
       }
 
@@ -151,14 +229,18 @@ class ProfileController extends GetxController {
       final List<dynamic> frms =
           response.data['forums']?['rows'] ?? <dynamic>[];
       for (final dynamic f in frms) {
+        final List<String> likes = List<String>.from(f['likes']
+            .map((dynamic like) => like['userId'].toString()));
+        final List<String> coins = List<String>.from(f['coins']
+            .map((dynamic coin) => coin['userId'].toString()));
+
+        updateInteractionState(f['forumId'].toString(),
+            likes: likes, coins: coins);
+
         forums.add(ForumModel.fromMap(<String, dynamic>{
           ...f,
-          'likes': f['likes']
-              .map((dynamic like) => like['userId'].toString())
-              .toList(),
-          'coins': f['coins']
-              .map((dynamic coin) => coin['userId'].toString())
-              .toList(),
+          'likes': likes,
+          'coins': coins,
         }));
       }
 
@@ -197,15 +279,13 @@ class ProfileController extends GetxController {
       for (int i = 0; i < psts.length; i++) {
         posts.add(PostModel.fromMap(<String, dynamic>{
           ...psts[i],
-          'likes': psts[i]['likes']
-              .map((dynamic like) => like['userId'].toString())
-              .toList(),
-          'reposts': psts[i]['reposts']
-              ?.map((dynamic repost) => repost['userId'].toString())
-              .toList(),
-          'coins': psts[i]['coins']
-              .map((dynamic coin) => coin['userId'].toString())
-              .toList()
+          'likes': List<String>.from(psts[i]['likes']
+              .map((dynamic like) => like['userId'].toString())),
+          'reposts': List<String>.from(psts[i]['reposts']
+                  ?.map((dynamic repost) => repost['userId'].toString()) ??
+              <dynamic>[]),
+          'coins': List<String>.from(psts[i]['coins']
+              .map((dynamic coin) => coin['userId'].toString()))
         }));
       }
 
@@ -286,14 +366,78 @@ class ProfileController extends GetxController {
   }
 
   Future<void> fetchData() async {
-    isLoading(true);
-    update();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final Map<String, dynamic> res =
-        await loadData(prefs.getString(Constants.USER_ID)!);
+    final String? userId = prefs.getString(Constants.USER_ID);
+    if (userId == null) return;
 
-    posts = res['posts'] ?? <PostModel>[];
-    isLoading(false);
+    // 🔥 Check for cached data first
+    final dynamic cachedProfile = sandBox.read('profile_data_$userId');
+    final dynamic cachedImpact = sandBox.read('impact_data_$userId');
+
+    if (cachedProfile != null) {
+      _processCachedProfile(cachedProfile);
+      if (cachedImpact != null) {
+        impact = cachedImpact;
+      }
+      isLoading(false);
+      update();
+    } else {
+      isLoading(true);
+      update();
+    }
+
+    // 🔥 Background fetch
+    try {
+      // Keep track of current interactions before overwriting state
+      final Map<String, List<String>> currentLikes = <String, List<String>>{};
+      final Map<String, List<String>> currentCoins = <String, List<String>>{};
+      final Map<String, List<String>> currentReposts = <String, List<String>>{};
+
+      for (final PostModel post in posts) {
+        currentLikes[post.postId] = List<String>.from(post.likes ?? <String>[]);
+        currentCoins[post.postId] = List<String>.from(post.coins ?? <String>[]);
+        currentReposts[post.postId] =
+            List<String>.from(post.reposts ?? <String>[]);
+      }
+
+      final Map<String, dynamic> res = await loadData(userId);
+      posts = res['posts'] ?? <PostModel>[];
+
+      // Restore interactions for posts that are still in the list to prevent flickering/revert
+      for (final PostModel post in posts) {
+        if (currentLikes.containsKey(post.postId)) {
+          post.likes?.assignAll(currentLikes[post.postId]!);
+        }
+        if (currentCoins.containsKey(post.postId)) {
+          post.coins?.assignAll(currentCoins[post.postId]!);
+        }
+        if (currentReposts.containsKey(post.postId)) {
+          post.reposts?.assignAll(currentReposts[post.postId]!);
+        }
+      }
+    } catch (e) {
+      debugPrint('Error fetching profile data: $e');
+    } finally {
+      isLoading(false);
+      update();
+    }
+  }
+
+  void _processCachedProfile(dynamic data) {
+    posts.clear();
+    final List<dynamic> psts = data['posts']?['rows'] ?? <dynamic>[];
+    for (int i = 0; i < psts.length; i++) {
+      posts.add(PostModel.fromMap(<String, dynamic>{
+        ...psts[i],
+        'likes': List<String>.from((psts[i]['likes'] as List<dynamic>)
+            .map((dynamic like) => like['userId'].toString())),
+        'reposts': List<String>.from((psts[i]['reposts'] as List<dynamic>?)
+                ?.map((dynamic repost) => repost['userId'].toString()) ??
+            <dynamic>[]),
+        'coins': List<String>.from((psts[i]['coins'] as List<dynamic>)
+            .map((dynamic coin) => coin['userId'].toString()))
+      }));
+    }
   }
 
   @override

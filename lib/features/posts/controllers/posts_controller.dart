@@ -284,14 +284,12 @@
 
 //   @override
 //   void onInit() {
-//     // TODO: implement onInit
 //     initSocket();
 //     super.onInit();
 //   }
 
 //   @override
 //   void dispose() {
-//     // TODO: implement dispose
 //     socket.disconnect();
 //     socket.dispose();
 //     super.dispose();

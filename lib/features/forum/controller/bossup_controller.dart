@@ -61,14 +61,19 @@ class BossUpController extends GetxController {
 
         for (int i = 0; i < response.data['rows'].length; i++) {
           if (response.data['rows'][i]['user'] != null) {
+            final Map<String, dynamic> row = response.data['rows'][i];
+            final List<String> likes = List<String>.from(row['likes']
+                .map((dynamic like) => like['userId'].toString()));
+            final List<String> coins = List<String>.from(row['coins']
+                .map((dynamic coin) => coin['userId'].toString()));
+
+            _profileController.updateInteractionState(row['forumId'].toString(),
+                likes: likes, coins: coins);
+
             ForumModel forum = ForumModel.fromMap(<String, dynamic>{
-              ...response.data['rows'][i],
-              'likes': response.data['rows'][i]['likes']
-                  .map((dynamic like) => like['userId'].toString())
-                  .toList(),
-              'coins': response.data['rows'][i]['coins']
-                  .map((dynamic coin) => coin['userId'].toString())
-                  .toList()
+              ...row,
+              'likes': likes,
+              'coins': coins,
             });
             if (forum.isRanked != null && forum.isRanked!) {
               rankedForums.add(forum);
@@ -111,7 +116,7 @@ class BossUpController extends GetxController {
       // Increment the view count of the post by 1
       post.setViews(post.views! + 1);
       update();
-      HomeRepository.updateForumViews(post.forumId, post.views!);
+      HomeRepository.updateForumViews(post.forumId);
     }
   }
 
@@ -269,6 +274,10 @@ class BossUpController extends GetxController {
         forums[postIndex].likes!.add(userId);
       }
     }
+
+    // Sync with HomeController
+    _homeController.postLike(userId, postId, type, receiverUid);
+
     update();
     if (_profileController.myProfile.uid != receiverUid) {
       socket.emit('like', <String, String>{
@@ -320,13 +329,11 @@ class BossUpController extends GetxController {
         profileController.updateCoinCount(-1);
         forums[postIndex].coins!.add(userId);
       }
-      socket.emit('coin', <String, String>{
-        'postId': postId,
-        'userId': userId,
-        'type': type,
-        'receiverUid': receiverUid,
-      });
     }
+
+    // Sync with HomeController
+    _homeController.postCoin(userId, postId, profileController, type, receiverUid);
+
     update();
   }
 
