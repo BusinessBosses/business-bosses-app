@@ -75,7 +75,7 @@ class Shop {
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',
       location: json['location'],
-      views: int.parse(json['views'].toString()),
+      views: double.parse(json['views'].toString()).toInt(),
       timestamp:
           json['timestamp'] != null ? DateTime.parse(json['timestamp']) : null,
       payments: json['payments'] ?? <dynamic>[],

@@ -22,7 +22,7 @@ import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_m
 import 'package:business_bosses_v2/features/matching_feature/widgets/premium_prompt.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
-import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -31,7 +31,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ExpandedMatchesScreen extends StatefulWidget {
   final bool? isMarketplace;
@@ -380,32 +380,8 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                           // User has Pro - go to featured listings screen
                           Get.to(() => const ProshopdealsScreen());
                         } else {
-                          // User doesn't have Pro - go to upgrade screen
-                          Get.bottomSheet(
-                            isScrollControlled: true,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20.0),
-                                topRight: Radius.circular(20.0),
-                              ),
-                            ),
-                            SizedBox(
-                              height: Get.height * 0.9,
-                              child: const Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 0.0, top: 0, bottom: 10),
-                                        child: PremiumScreen()),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            backgroundColor: Colors.white,
-                          );
+                          // User doesn't have Pro - show paywall
+                          showPremiumPaywall();
                         }
                       },
                     ),

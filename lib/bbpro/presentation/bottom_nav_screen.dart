@@ -15,7 +15,7 @@ import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class Bottomnavscreen extends StatefulWidget {
   final int? initialindex;
@@ -133,14 +133,12 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                           Expanded(
                               flex: 10,
                               child: BottomTabButton(
-                                icon: _selectedIndex == 7
-                                    ? 'assets/svgs/dashboard.svg'
-                                    : 'assets/svgs/dashboard.svg',
-                                label: 'Home',
+                                icon: 'assets/svgs/back_arrow.svg',
+                                label: 'Back',
                                 onTap: () {
-                                  Get.to(() => HomeScreen());
+                                  Get.back();
                                 },
-                                isActive: _selectedIndex == 7,
+                                isActive: false,
                               )),
                           Expanded(
                               flex: 10,
@@ -233,18 +231,11 @@ class BottomTabButton extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          label == 'Home'
-              ? Container(
-                  width: 35.0,
-                  height: 25.0,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    color: Colors.transparent,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image.asset(
-                    'assets/images/app_logo_2.png',
-                  ),
+          label == 'Back'
+              ? const Icon(
+                  LucideIcons.chevronLeft,
+                  size: 21,
+                  color: textColor,
                 )
               : SvgPicture.asset(
                   icon,
@@ -255,25 +246,16 @@ class BottomTabButton extends StatelessWidget {
                   ),
                 ),
           const SizedBox(height: 4),
-          Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: <Widget>[
-                if (label == 'Home')
-                  Icon(
-                    LucideIcons.chevronLeft,
-                    size: 15,
-                  ),
-                Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w700,
-                    color: isActive ? proprimaryColor : textColor,
-                  ),
-                ),
-              ]),
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w700,
+              color: isActive ? proprimaryColor : textColor,
+            ),
+          ),
         ],
       ),
     );

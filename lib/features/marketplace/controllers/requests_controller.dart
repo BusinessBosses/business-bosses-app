@@ -23,14 +23,26 @@ class BuyerRequestController extends GetxController {
   final ProfileController _profileController = Get.find();
 
   /// Initialize and fetch all buyer requests
-  Future<void> initBuyerRequests() async {
+  Future<void> initBuyerRequests({String? location, String? query}) async {
     buyerRequests.clear();
     loading(true);
     error(false);
     update();
 
-    final ApiResponseModel response =
-        await ApiService.get(path: 'buyer-request');
+    String path = 'buyer-request';
+    final List<String> params = <String>[];
+    if (location != null && location.isNotEmpty) {
+      params.add('location=${Uri.encodeComponent(location)}');
+    }
+    if (query != null && query.isNotEmpty) {
+      params.add('q=${Uri.encodeComponent(query)}');
+    }
+
+    if (params.isNotEmpty) {
+      path += '?${params.join('&')}';
+    }
+
+    final ApiResponseModel response = await ApiService.get(path: path);
 
     if (response.success) {
       processRequestsToState(response.data);

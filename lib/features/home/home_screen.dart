@@ -252,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
         BottomBar(
-          activeIndex: 0,
+          activeIndex: 3,
           scrollControl: _scrollToTop,
         ),
       ],

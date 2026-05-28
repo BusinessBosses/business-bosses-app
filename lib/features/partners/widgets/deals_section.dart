@@ -6,7 +6,7 @@ import 'package:business_bosses_v2/features/partners/presentation/boss_up_partne
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DealsSection extends StatefulWidget {

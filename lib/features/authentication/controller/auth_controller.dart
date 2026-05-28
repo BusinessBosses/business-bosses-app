@@ -230,7 +230,7 @@ class AuthController extends GetxController {
       }
 
       // Navigate to home
-      Get.toNamed(Routes.home);
+      Get.toNamed(Routes.marketPlace);
     }
   }
 

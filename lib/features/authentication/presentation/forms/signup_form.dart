@@ -223,7 +223,7 @@ class _SignUpFormState extends State<SignUpForm> {
         _authusername = prefs.getString('_authusername');
         await logEvents('login', 'Apple SignIn');
         dynamic user = await _handleAppleLogin();
-        Get.offAndToNamed(Routes.home);
+        Get.offAndToNamed(Routes.marketPlace);
         if (user['success'] == false) {
           Get.snackbar('Error', user['error']);
         } else {}

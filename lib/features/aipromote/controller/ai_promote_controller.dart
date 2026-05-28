@@ -12,6 +12,9 @@ class AiPromoteController extends GetxController {
   final RxString description = ''.obs;
   final RxString location = ''.obs;
   final RxString industry = ''.obs;
+  final RxString postType = 'General Post'.obs;
+  final RxString price = ''.obs;
+  final RxString additionalDetails = ''.obs;
 
   /// The user‐edited prompt to send to AI
   final RxString prompt = ''.obs;
@@ -34,20 +37,49 @@ class AiPromoteController extends GetxController {
     required String desc,
     required String loc,
     required String ind,
+    String? type,
+    String? priceVal,
+    String? additionalDetailsVal,
   }) {
     businessName.value = name;
     description.value = desc;
     location.value = loc;
     industry.value = ind;
+    if (type != null) {
+      postType.value = type;
+    }
+    if (priceVal != null) {
+      price.value = priceVal;
+    }
+    if (additionalDetailsVal != null) {
+      additionalDetails.value = additionalDetailsVal;
+    }
+
+    String typeContext = '';
+    String priceContext = '';
+    if (price.value.isNotEmpty) {
+      priceContext = ' priced at ${price.value}';
+    }
+
+    String extraContext = '';
+    if (additionalDetails.value.isNotEmpty) {
+      extraContext = ' Additional details: ${additionalDetails.value}.';
+    }
+
+    if (postType.value == 'Product') {
+      typeContext = 'to sell a product$priceContext';
+    } else if (postType.value == 'Service') {
+      typeContext = 'to sell a service$priceContext';
+    }
 
     // build a default prompt
     prompt.value = profileController.myProfile.isSubscribed
-        ? 'Write a catchy ad for a $industry business '
+        ? 'Write a catchy ad $typeContext for a $industry business '
             'called "$businessName" located in $location that: '
-            '$description.'
-        : 'Write a catchy ad for a $industry business '
+            '$description.$extraContext'
+        : 'Write a catchy ad $typeContext for a $industry business '
             'for the person named "$businessName" located in $location that: '
-            '$description.';
+            '$description.$extraContext';
   }
 
   /// If the user tweaked the prompt in AiPromoteSheet, call this

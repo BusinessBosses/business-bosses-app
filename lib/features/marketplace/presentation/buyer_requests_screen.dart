@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dar
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_request_item.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
@@ -16,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class BuyerRequestsScreen extends StatefulWidget {
   final String? filterByIndustry;
@@ -48,7 +49,9 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   Future<void> _fetchRequests() async {
-    await _buyerRequestController.initBuyerRequests();
+    final MarketController marketController = Get.find();
+    await _buyerRequestController.initBuyerRequests(
+        location: marketController.selectedLocation);
     _applyFilter();
   }
 

@@ -1,7 +1,9 @@
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
@@ -57,7 +59,11 @@ void handleSellOptionTap({
     }
   } else {
     // Option for becoming a partner.
-    Get.to(() => const BecomeaPartnerScreen());
+    if (!profileController.myProfile.isSubscribed) {
+      showPremiumPaywall();
+    } else {
+      Get.to(() => const BecomeaPartnerScreen());
+    }
   }
 }
 
@@ -87,19 +93,37 @@ void sellProduct(BuildContext context) {
                   itemBuilder: (BuildContext context, int index) {
                     // Determine title and SVG asset based on the index.
                     String title;
-                    String svgAsset;
+                    Widget leading;
                     switch (index) {
                       case 0:
                         title = 'Sell your product';
-                        svgAsset = 'assets/svgs/addproduct.svg';
+                        leading = SvgPicture.asset(
+                          'assets/svgs/addproduct.svg',
+                          height: 25,
+                          colorFilter: ColorFilter.mode(
+                            textColor.withValues(alpha: 1),
+                            BlendMode.srcIn,
+                          ),
+                        );
                         break;
                       case 1:
                         title = 'Sell your service';
-                        svgAsset = 'assets/svgs/addservice.svg';
+                        leading = SvgPicture.asset(
+                          'assets/svgs/addservice.svg',
+                          height: 25,
+                          colorFilter: ColorFilter.mode(
+                            textColor.withValues(alpha: 1),
+                            BlendMode.srcIn,
+                          ),
+                        );
                         break;
                       default:
-                        title = 'Become a partner';
-                        svgAsset = 'assets/svgs/addclient.svg';
+                        title = 'Post a Deal';
+                        leading = Icon(
+                          LucideIcons.trophy,
+                          color: textColor.withValues(alpha: 1),
+                          size: 26,
+                        );
                     }
 
                     return ListTile(
@@ -120,14 +144,7 @@ void sellProduct(BuildContext context) {
                       },
                       minVerticalPadding: 0,
                       contentPadding: const EdgeInsets.only(left: 10),
-                      leading: SvgPicture.asset(
-                        svgAsset,
-                        height: 25,
-                        colorFilter: ColorFilter.mode(
-                          textColor.withValues(alpha: 1),
-                          BlendMode.srcIn,
-                        ),
-                      ),
+                      leading: leading,
                       title: Text(
                         title,
                         style: const TextStyle(

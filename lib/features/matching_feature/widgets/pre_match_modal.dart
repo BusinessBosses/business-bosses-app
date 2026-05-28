@@ -1,12 +1,14 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
+import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
+import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 
 class PreMatchModal extends StatefulWidget {
@@ -206,6 +208,9 @@ class _PreMatchModalState extends State<PreMatchModal> {
 
                               // Close the modal
                               Get.back();
+
+                              // Navigate to matches
+                              Get.to(() => ExpandedMatchesScreen());
 
                               // Show success message
                               showSnackbar(

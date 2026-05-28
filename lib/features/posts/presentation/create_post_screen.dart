@@ -24,7 +24,7 @@ import 'package:detectable_text_field/widgets/detectable_text_editing_controller
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../profile/controller/profile_controller.dart';
 import '../models/post_model.dart';

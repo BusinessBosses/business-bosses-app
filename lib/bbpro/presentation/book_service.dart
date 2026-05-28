@@ -1873,7 +1873,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
   Future<void> _shareProduct() async {
     String message = '${widget.service.name}:\n'
         '${widget.service.description}\n'
-        'https://biz-center.io/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
+        'https://bizcenter.ai/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 }

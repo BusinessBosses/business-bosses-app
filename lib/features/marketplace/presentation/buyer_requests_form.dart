@@ -16,7 +16,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class AddBuyerRequests extends StatefulWidget {
   final BuyerRequestModel? request;
@@ -212,17 +212,15 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
         automaticallyImplyLeading: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: const <Widget>[
             Text(
-              widget.request != null
-                  ? 'Edit Buyer Request'
-                  : 'Create Buyer Request',
+              'What do you need?',
               style: TextStyle(
                 color: textColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 5),
+            SizedBox(height: 5),
             Text(
               'Get matched with top service providers or suppliers',
               style: TextStyle(
@@ -249,7 +247,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
               children: <Widget>[
                 const SizedBox(height: 0),
                 CustomDropdownWidget(
-                  caption: 'What do you need to buy',
+                  caption: 'Select',
                   items: _requestTypes,
                   iconName: 'assets/svgs/dropdown.svg',
                   initialValue: _requestType,
@@ -318,6 +316,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                         child: CustomTextWidget(
                           caption: 'Location *',
                           iconName: 'assets/svgs/nexticon.svg',
+                          iconcolor: const Color(0xFFFF1E39),
                           text: country.isEmpty
                               ? (shopController.shop?.location ??
                                   'United Kingdom')

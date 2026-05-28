@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
-import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
@@ -11,7 +11,7 @@ import 'package:business_bosses_v2/features/partners/presentation/boss_up_partne
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ListingSuccessScreen extends StatefulWidget {
   final bool isBuyerRequest;
@@ -187,14 +187,8 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
                     // For now, we show the Premium screen which explains the benefits
                     Get.to(ProshopdealsScreen());
                   } else {
-                    // Not Pro -> Redirect to Upgrade Screen
-                    Get.to(() => const Scaffold(
-                          backgroundColor: Colors.white,
-                          body: SafeArea(
-                            child:
-                                SingleChildScrollView(child: PremiumScreen()),
-                          ),
-                        ));
+                    // Not Pro -> Show Paywall
+                    showPremiumPaywall();
                   }
                 }
               },

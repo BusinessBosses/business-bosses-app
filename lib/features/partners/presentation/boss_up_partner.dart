@@ -2,12 +2,14 @@ import 'dart:core';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/partners/controllers/partners_controller.dart';
 import 'package:business_bosses_v2/features/partners/models/partner_model.dart';
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/partners/widgets/bossup_partner_item.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../utils/theme/theme.dart';
 
@@ -21,6 +23,7 @@ class BossUpPartner extends StatefulWidget {
 
 class _BossUpPartnerState extends State<BossUpPartner> {
   final PartnerController partnerController = Get.put(PartnerController());
+  final ProfileController profileController = Get.find();
   final List<String> categories = const <String>[
     'All',
     'Agriculture, Food & Beverage',
@@ -114,9 +117,7 @@ class _BossUpPartnerState extends State<BossUpPartner> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
-                            category.length > 20
-                                ? '${category.substring(0, 18)}...'
-                                : category,
+                            category,
                             style: TextStyle(
                               color: Colors.black87,
                               fontWeight: isSelected
@@ -199,10 +200,16 @@ class _BossUpPartnerState extends State<BossUpPartner> {
           );
         }
 
-        final List<Partner> filteredPartners = selectedCategory == 'All'
+        final List<Partner> filteredPartners = (widget.isMarketplace == true
+                ? partnerController.selectedCategory.value == 'All'
+                : selectedCategory == 'All')
             ? partnerController.partners
             : partnerController.partners
-                .where((Partner p) => p.category == selectedCategory)
+                .where((Partner p) =>
+                    p.category ==
+                    (widget.isMarketplace == true
+                        ? partnerController.selectedCategory.value
+                        : selectedCategory))
                 .toList();
 
         return Column(
@@ -216,7 +223,7 @@ class _BossUpPartnerState extends State<BossUpPartner> {
                   children: <Widget>[
                     const Expanded(
                       child: Text(
-                        'Partner with us, list deals, get featured & more customers.',
+                        'Become a partner, list deals, get featured & more customers.',
                         maxLines: 3,
                         style: TextStyle(
                           fontSize: 15,
@@ -230,15 +237,26 @@ class _BossUpPartnerState extends State<BossUpPartner> {
                       child: SizedBox(
                         height: 45,
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFF1E39),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
                           child: const Text(
-                            'Become a Partner',
+                            'Post a Deal',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
                             ),
                           ),
                           onPressed: () {
-                            Get.to(() => const BecomeaPartnerScreen());
+                            if (!profileController.myProfile.isSubscribed) {
+                              showPremiumPaywall();
+                            } else {
+                              Get.to(() => const BecomeaPartnerScreen());
+                            }
                           },
                         ),
                       ),
@@ -246,7 +264,7 @@ class _BossUpPartnerState extends State<BossUpPartner> {
                   ],
                 ),
               ),
-            _buildCategoryChips(),
+            if (widget.isMarketplace != true) _buildCategoryChips(),
             if (filteredPartners.isEmpty)
               const Column(
                   mainAxisAlignment: MainAxisAlignment.center,

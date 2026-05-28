@@ -34,7 +34,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserShopScreen extends StatefulWidget {
@@ -117,7 +117,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
   void _shareBizCenter() {
     String message =
         'Have a look at ${shopController.userShop!.user?.username}\'s BizCenter on Business Bosses\n'
-        'https://biz-center.io/${shopController.userShop!.name.toLowerCase().replaceAll(' ', '-')}';
+        'https://bizcenter.ai/${shopController.userShop!.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 

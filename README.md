@@ -1,16 +1,38 @@
-# business_bosses_v2
+# Business Bosses Mobile App
 
-A new Flutter project.
+The official Business Bosses mobile application built with Flutter. It features a marketplace, community feeds, business profile management, and AI-driven growth tools.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- **Marketplace**: Buy and sell products/services, post buyer requests, and explore partner deals.
+- **Boss Up**: Community feed and social interaction for business owners.
+- **Reach Score**: Real-time tracking of your business impact and visibility.
+- **AI Integration**: AI-powered content generation and promotion.
 
-A few resources to get you started if this is your first Flutter project:
- and some few changes
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Setup Instructions
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1.  **Prerequisites**:
+    - Flutter SDK (Version 3.44.0 or compatible)
+    - Android Studio / VS Code with Flutter extension
+    - Java 17
+
+2.  **Environment Setup**:
+    - Create a `.env` file in the root directory.
+    - Ensure you have the necessary signing keys if building for release (see `docs/ANDROID_SIGNING_GUIDE.md`).
+
+3.  **Install Dependencies**:
+    ```bash
+    flutter pub get
+    ```
+
+4.  **Run the App**:
+    ```bash
+    flutter run
+    ```
+
+## Build Release APK
+
+To build a release APK, ensure your environment is configured for signing and run:
+```bash
+flutter build apk --release
+```

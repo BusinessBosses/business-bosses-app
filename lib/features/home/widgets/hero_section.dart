@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -15,9 +16,8 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
-import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -27,7 +27,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WinnerCardConfig {
@@ -87,15 +87,12 @@ class _HeroSectionState extends State<HeroSection> {
   late UserModel? user;
   late UserModel? mentor;
   late UserModel? backer;
-  late UserModel? ambassador;
   dynamic partner;
   final HomeController homeController = Get.find();
   late List<HeroItem> heroItems;
   final ProfileController _profileController = Get.find();
   final ChallengeController challengeController = Get.find();
   late Industry industry;
-
-  late final ReachController controller;
 
   static const Map<String, WinnerCardConfig> cardConfigs =
       <String, WinnerCardConfig>{
@@ -130,13 +127,6 @@ class _HeroSectionState extends State<HeroSection> {
       iconColor: Color(0xFFFDA4AF),
       accentColor: Color(0x33FB7185),
     ),
-    'ambassador': WinnerCardConfig(
-      title: 'Ambassador of the Week',
-      icon: LucideIcons.users,
-      gradientColors: <Color>[Color(0xFFEDE9FE), Color(0xFFEDE9FE)],
-      iconColor: Color(0xFFC4B5FD),
-      accentColor: Color(0x338B5CF6),
-    ),
     'matches': WinnerCardConfig(
       title: 'Matches',
       icon: LucideIcons.users,
@@ -144,16 +134,28 @@ class _HeroSectionState extends State<HeroSection> {
       iconColor: Color(0xFF93C5FD),
       accentColor: Color(0x3360A5FA),
     ),
+    'ai_visibility': WinnerCardConfig(
+      title: 'AI Visibility Score',
+      icon: LucideIcons.bot,
+      gradientColors: <Color>[Color(0xFFF0F9FF), Color(0xFFF0F9FF)],
+      iconColor: Color(0xFF0EA5E9),
+      accentColor: Color(0x3338BDF8),
+    ),
+    'performance': WinnerCardConfig(
+      title: 'My Performance',
+      icon: LucideIcons.trendingUp,
+      gradientColors: <Color>[Color(0xFFF6F5F8), Color(0xFFF6F5F8)],
+      iconColor: primaryColorLT,
+      accentColor: Color(0x335B4DFF),
+    ),
   };
 
   @override
   void initState() {
     super.initState();
-    controller = Get.find<ReachController>();
     user = homeController.bossOfTheWeek;
     mentor = homeController.mentorOfTheWeek;
     backer = homeController.backerOfTheWeek;
-    ambassador = homeController.ambassadorOfTheWeek;
     partner = homeController.partnerOfTheWeek;
 
     if (challengeController.categories.isNotEmpty) {
@@ -174,6 +176,17 @@ class _HeroSectionState extends State<HeroSection> {
 
   void _initializeHeroItems() {
     heroItems = <HeroItem>[
+      HeroItem(
+        id: '6',
+        type: 'performance',
+        title: 'My Performance',
+        icon: 'assets/images/app_logo_2.png',
+        subtitle: '',
+        description: '',
+        image: '',
+        action: 'Increase Visibility',
+        action2: 'Visit BizCenter',
+      ),
       HeroItem(
         id: '0',
         type: 'boss',
@@ -230,17 +243,6 @@ class _HeroSectionState extends State<HeroSection> {
             partner != null ? (partner['companyDescription'] ?? '') : '',
         action: 'Claim Deal',
         action2: 'Become a Partner',
-      ),
-      HeroItem(
-        id: '4',
-        type: 'ambassador',
-        title: 'Ambassador of the Week',
-        icon: 'assets/images/app_logo_2.png',
-        subtitle: ambassador?.name ?? ambassador?.username ?? '',
-        image: ambassador?.photoUrl ?? '',
-        description: ambassador?.bio ?? '',
-        action: 'Follow',
-        action2: 'Become Ambassador',
       ),
       HeroItem(
         id: '5',
@@ -424,20 +426,28 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   void enterpartneroftheweek() {
-    Get.to(() => BecomeaPartnerScreen());
-  }
-
-  void enterambassadoroftheweek() {
-    Get.to(Invitepage());
+    if (!_profileController.myProfile.isSubscribed) {
+      showPremiumPaywall();
+    } else {
+      Get.to(() => const BecomeaPartnerScreen());
+    }
   }
 
   Widget _buildWinnerCard(HeroItem item) {
+    if (item.type == 'performance') {
+      return _buildPerformanceCard(item);
+    }
     final WinnerCardConfig? config = cardConfigs[item.type];
     if (config == null) return const SizedBox();
 
     return GestureDetector(
       onTap: () {
         switch (item.type) {
+          case 'ai_visibility':
+            Get.to(() => ReachScreen(
+                  user: _profileController.myProfile,
+                ));
+            break;
           case 'boss':
             Get.to(() => ReachScreen(
                   user: _profileController.myProfile,
@@ -456,9 +466,6 @@ class _HeroSectionState extends State<HeroSection> {
             break;
           case 'partner':
             Get.to(() => BossUpPartner());
-            break;
-          case 'ambassador':
-            Get.to(Invitepage());
             break;
           case 'matches':
             Get.to(() => const ExpandedMatchesScreen());
@@ -505,17 +512,31 @@ class _HeroSectionState extends State<HeroSection> {
                       Image.asset(item.icon, width: 22, height: 22),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Text(
-                          item.type == 'my_ranking'
-                              ? 'Your Reach Ranking is #${controller.data?['globalRank'] ?? _profileController.myProfile.weeklyRank ?? 'N/A'}'
-                              : config.title,
-                          style: const TextStyle(
-                            color: textColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                        child: item.type == 'my_ranking'
+                            ? GetBuilder<ReachController>(
+                                builder: (ReachController reach) {
+                                final String rank = reach.data?['globalRank']
+                                        ?.toString() ??
+                                    'N/A';
+                                return Text(
+                                  'Your Reach Ranking is #$rank',
+                                  style: const TextStyle(
+                                    color: textColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                );
+                              })
+                            : Text(
+                                config.title,
+                                style: const TextStyle(
+                                  color: textColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                       ),
                       const Icon(LucideIcons.chevronRight,
                           color: textColor, size: 20),
@@ -537,9 +558,6 @@ class _HeroSectionState extends State<HeroSection> {
                             break;
                           case 'backer':
                             targetUser = backer;
-                            break;
-                          case 'ambassador':
-                            targetUser = ambassador;
                             break;
                           case 'partner':
                             partner = homeController.partnerOfTheWeek;
@@ -597,18 +615,6 @@ class _HeroSectionState extends State<HeroSection> {
                                         fontSize: 12,
                                       ),
                                       maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  if (item.type == 'ambassador' &&
-                                      item.metrics != null)
-                                    Text(
-                                      '${item.metrics!['invites']} Invites • ${item.metrics!['conversions']} Conversions',
-                                      style: TextStyle(
-                                        color: Colors.grey[700],
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                 ],
@@ -736,8 +742,9 @@ class _HeroSectionState extends State<HeroSection> {
                   if (item.type == 'my_ranking')
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: Obx(
-                        () => controller.loading.value
+                      child: GetBuilder<ReachController>(
+                        builder: (ReachController reach) =>
+                            reach.loading.value && reach.data == null
                             ? const Center(
                                 child: SizedBox(
                                   height: 20,
@@ -770,21 +777,7 @@ class _HeroSectionState extends State<HeroSection> {
                         onTap: () async {
                           switch (item.action) {
                             case 'Follow':
-                              if (item.type == 'ambassador') {
-                                if (ambassador != null) {
-                                  final bool isConnected = _profileController
-                                              .myProfile.connecteds !=
-                                          null &&
-                                      _profileController.myProfile.connecteds!
-                                          .contains(ambassador!.uid);
-                                  if (!isConnected) {
-                                    await connect(ambassador!.uid);
-                                    _profileController.updateConnections(
-                                      ambassador!.uid,
-                                    );
-                                  }
-                                }
-                              } else if (item.type == 'boss' ||
+                              if (item.type == 'boss' ||
                                   item.type == 'mentor' ||
                                   item.type == 'backer' ||
                                   item.type == 'ranking') {
@@ -872,6 +865,11 @@ class _HeroSectionState extends State<HeroSection> {
                               break;
                             case 'View your Match':
                               Get.to(() => const ExpandedMatchesScreen());
+                              break;
+                            case 'Check Score':
+                              Get.to(() => ReachScreen(
+                                    user: _profileController.myProfile,
+                                  ));
                               break;
                             case 'Claim Deal':
                               final Uri url = Uri.parse(partner['companyUrl']);
@@ -1008,8 +1006,11 @@ class _HeroSectionState extends State<HeroSection> {
                               case 'Become a Partner':
                                 enterpartneroftheweek();
                                 break;
-                              case 'Become Ambassador':
-                                enterambassadoroftheweek();
+                              case 'Visit BizCenter':
+                                final Uri url =
+                                    Uri.parse('https://bizcenter.ai');
+                                launchUrl(url,
+                                    mode: LaunchMode.externalApplication);
                                 break;
                               case 'Share Learning':
                                 entermentoroftheweek();
@@ -1068,7 +1069,266 @@ class _HeroSectionState extends State<HeroSection> {
     );
   }
 
+  Widget _buildPerformanceCard(HeroItem item) {
+    return GetBuilder<ReachController>(
+      builder: (ReachController reachController) {
+        final bool hasShop = _profileController.myProfile.hasShop;
+        final Map<String, dynamic> data =
+            reachController.data ?? <String, dynamic>{};
+
+        String reachScore = '2.1k';
+        String aiVisibility = '0%';
+        String ranking = 'N/A';
+        String opportunity = '0%';
+
+        if (hasShop && data.isNotEmpty) {
+          reachScore = _formatValue(data['totalReachPoints'] as num? ?? 0);
+          aiVisibility = '${(data['aiVisibilityScore'] as num? ?? 0).toInt()}%';
+
+          // Industry rank first, then global
+          final dynamic shopIndustryRank = data['shopIndustryRank'];
+          final dynamic indRank = shopIndustryRank?['industryRank'];
+          final dynamic globRank = data['globalRank'];
+
+          if (indRank != null && indRank != 0) {
+            ranking = '#$indRank';
+          } else if (globRank != null && globRank != 0) {
+            ranking = '#$globRank';
+          } else {
+            ranking = 'N/A';
+          }
+
+          double aiScore = (data['aiVisibilityScore'] as num? ?? 0).toDouble();
+          opportunity = aiScore < 1 ? '75%' : '${(100 - aiScore).toInt()}%';
+        } else {
+          // 🔥 Use stable random numbers to prevent UI jitter on rebuild
+          reachScore = homeController.getStableMetric(
+            'reach',
+            () => '${1 + (DateTime.now().second % 5)}.${DateTime.now().second % 10}k',
+          );
+          aiVisibility = homeController.getStableMetric(
+            'ai',
+            () => '${10 + (DateTime.now().second % 20)}%',
+          );
+          ranking = homeController.getStableMetric(
+            'rank',
+            () => '#${50 + (DateTime.now().second % 100)}',
+          );
+          opportunity = homeController.getStableMetric(
+            'opp',
+            () => '${30 + (DateTime.now().second % 30)}%',
+          );
+        }
+
+        return _buildPerformanceCardLayout(
+          reachScore: reachScore,
+          aiVisibility: aiVisibility,
+          ranking: ranking,
+          opportunity: opportunity,
+          isLoading: reachController.loading.value && data.isEmpty,
+        );
+      },
+    );
+  }
+
+  Widget _buildPerformanceCardLayout({
+    required String reachScore,
+    required String aiVisibility,
+    required String ranking,
+    required String opportunity,
+    required bool isLoading,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => ReachScreen(user: _profileController.myProfile));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 15),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF6F5F8),
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        width: 32,
+                        height: 32,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFE31E24),
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'B',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'My Performance',
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Icon(LucideIcons.chevronRight,
+                      color: Colors.black54, size: 22),
+                ],
+              ),
+              const SizedBox(height: 14),
+              if (isLoading)
+                const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xFFE31E24),
+                    ),
+                  ),
+                )
+              else ...<Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    _buildMetricBox('Reach Score', reachScore),
+                    _buildMetricBox('AI Visibility', aiVisibility),
+                    _buildMetricBox('Ranking', ranking),
+                    _buildMetricBox('Opportunity', opportunity),
+                  ],
+                ),
+                const Spacer(),
+              ],
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(() => ReachScreen(
+                              user: _profileController.myProfile,
+                            ));
+                      },
+                      child: Container(
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Increase Visibility',
+                          style: TextStyle(
+                            color: Color(0xFFE31E24),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    flex: 1,
+                    child: GestureDetector(
+                      onTap: () {
+                        final Uri url = Uri.parse('https://bizcenter.ai');
+                        launchUrl(url, mode: LaunchMode.externalApplication);
+                      },
+                      child: Container(
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE31E24),
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const <Widget>[
+                            Icon(LucideIcons.plus, color: Colors.white, size: 18),
+                            SizedBox(width: 4),
+                            Text(
+                              'Visit BizCenter',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMetricBox(String label, String value) {
+    return Container(
+      width: (Get.width - 80) / 4,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Column(
+        children: <Widget>[
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 9,
+              color: Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildHeroAvatar(HeroItem item, WinnerCardConfig config) {
+    if (item.type == 'performance') return const SizedBox();
+    if (item.type == 'ai_visibility') {
+      return Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: config.iconColor.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(config.icon, color: config.iconColor, size: 28),
+      );
+    }
     UserModel? targetUser;
     bool forceRanked = false;
     switch (item.type) {
@@ -1081,9 +1341,6 @@ class _HeroSectionState extends State<HeroSection> {
         break;
       case 'backer':
         targetUser = backer;
-        break;
-      case 'ambassador':
-        targetUser = ambassador;
         break;
       case 'ranking':
         targetUser = rankWinner;
@@ -1145,6 +1402,7 @@ class _HeroSectionState extends State<HeroSection> {
 
   @override
   Widget build(BuildContext context) {
+    _initializeHeroItems();
     return Container(
       color: Colors.white,
       child: Column(
@@ -1169,7 +1427,7 @@ class _HeroSectionState extends State<HeroSection> {
                   if (item.type == 'matches') {
                     return GestureDetector(
                       onTap: () {
-                        Get.to(() => ExpandedMatchesScreen());
+                        Get.to(() => const ExpandedMatchesScreen());
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 0.0),
@@ -1196,6 +1454,11 @@ class _HeroSectionState extends State<HeroSection> {
                     return GestureDetector(
                       onTap: () {
                         switch (item.type) {
+                          case 'ai_visibility':
+                            Get.to(() => ReachScreen(
+                                  user: _profileController.myProfile,
+                                ));
+                            break;
                           case 'boss':
                             // Navigate to LeaderboardScreen when clicking Top Ranking of the Week
                             Get.to(() => ReachScreen(
@@ -1214,9 +1477,6 @@ class _HeroSectionState extends State<HeroSection> {
                             break;
                           case 'partner':
                             Get.to(() => BossUpPartner());
-                            break;
-                          case 'ambassador':
-                            Get.to(Invitepage());
                             break;
                         }
                       },
@@ -1264,7 +1524,7 @@ class _HeroSectionState extends State<HeroSection> {
                                     Get.toNamed(Routes.allCommunitiesScreen);
                                     break;
                                   case 'View Matches':
-                                    Get.to(() => ExpandedMatchesScreen());
+                                    Get.to(() => const ExpandedMatchesScreen());
                                     break;
                                   default:
                                     Get.toNamed(Routes.liveEvents);
@@ -1328,7 +1588,8 @@ class _HeroSectionState extends State<HeroSection> {
                                               break;
                                             case 'View Matches':
                                               Get.to(
-                                                () => ExpandedMatchesScreen(),
+                                                () =>
+                                                    const ExpandedMatchesScreen(),
                                               );
                                               break;
                                             default:
@@ -1385,10 +1646,15 @@ class _HeroSectionState extends State<HeroSection> {
                                                 ? item.action2
                                                 : '') {
                                               case 'Become a Partner':
+                                              if (!_profileController
+                                                  .myProfile.isSubscribed) {
+                                                showPremiumPaywall();
+                                              } else {
                                                 Get.to(
                                                   () => BecomeaPartnerScreen(),
                                                 );
-                                                break;
+                                              }
+                                              break;
                                               case 'Create an event':
                                                 Get.toNamed(Routes.liveEvents);
                                                 break;
@@ -1479,6 +1745,14 @@ class _HeroSectionState extends State<HeroSection> {
         ],
       ),
     );
+  }
+
+  String _formatValue(num value) {
+    if (value >= 1000) {
+      double formatted = value / 1000;
+      return '${formatted.toStringAsFixed(formatted % 1 == 0 ? 0 : 1)}k';
+    }
+    return value.toString();
   }
 
   String _calculateStartDate(DateTime startAt) {

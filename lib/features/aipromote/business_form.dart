@@ -2,7 +2,7 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
 import 'package:business_bosses_v2/features/aipromote/models/business_info_model.dart';
-import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -36,6 +36,9 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
   final TextEditingController _industryController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _extraDetailsController = TextEditingController();
+  String _selectedType = 'General Post';
 
   // Add FocusNodes
   final FocusNode _nameFocus = FocusNode();
@@ -65,6 +68,8 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     _industryController.addListener(() => _updateMissingFields());
     _bioController.addListener(() => _updateMissingFields());
     _websiteController.addListener(() => _updateMissingFields());
+    _priceController.addListener(() => _updateMissingFields());
+    _extraDetailsController.addListener(() => _updateMissingFields());
   }
 
   void _initializeControllers() async {
@@ -151,11 +156,15 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     _industryController.removeListener(() => _updateMissingFields());
     _bioController.removeListener(() => _updateMissingFields());
     _websiteController.removeListener(() => _updateMissingFields());
+    _priceController.removeListener(() => _updateMissingFields());
+    _extraDetailsController.removeListener(() => _updateMissingFields());
 
     _nameController.dispose();
     _industryController.dispose();
     _bioController.dispose();
     _websiteController.dispose();
+    _priceController.dispose();
+    _extraDetailsController.dispose();
 
     // Dispose FocusNodes
     _nameFocus.dispose();
@@ -178,6 +187,9 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
       desc: _bioController.text.trim(),
       loc: _websiteController.text.trim(), // pass website as "location"
       ind: _industryController.text.trim(),
+      type: _selectedType,
+      priceVal: _priceController.text.trim(),
+      additionalDetailsVal: _extraDetailsController.text.trim(),
     );
     widget.onSubmit(info);
   }
@@ -357,6 +369,52 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           ),
         SizedBox(height: 24),
         widget.infoClicked ? _buildInfoCard() : SizedBox.shrink(),
+        Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Text(
+                'Select type of ad or post',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF4B5563),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF9FAFB),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0xFFD1D5DB)),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: _selectedType,
+                    isExpanded: true,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedType = newValue!;
+                      });
+                    },
+                    items: <String>[
+                      'General Post',
+                      'Product',
+                      'Service',
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         _buildInputGroup(
           '${profileController.myProfile.isSubscribed ? 'Business ' : ''}Name',
           _nameController,
@@ -388,6 +446,19 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           isMissing: missingFields.contains('Website/Contact Link'),
           focusNode: _websiteFocus, // Pass focusNode
         ),
+        if (_selectedType == 'Product' || _selectedType == 'Service')
+          _buildInputGroup(
+            'Price (Optional)',
+            _priceController,
+            placeholder: 'e.g. \$50 or Free',
+          ),
+        if (_selectedType == 'Product' || _selectedType == 'Service')
+          _buildInputGroup(
+            'Other Details (Optional)',
+            _extraDetailsController,
+            placeholder: 'e.g. 20% off for first 10 customers',
+            maxLines: 2,
+          ),
         SizedBox(height: 24),
         SizedBox(
           width: double.infinity,
@@ -396,34 +467,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                 ? null
                 : () {
                     if (widget.limitReached) {
-                      Get.bottomSheet(
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20.0),
-                            topRight: Radius.circular(20.0),
-                          ),
-                        ),
-                        Container(
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20.0),
-                              topRight: Radius.circular(20.0),
-                            ),
-                          ),
-                          height: Get.height * 0.9,
-                          child: const Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                PremiumScreen(),
-                              ],
-                            ),
-                          ),
-                        ),
-                        backgroundColor: Colors.white,
-                      );
+                      showPremiumPaywall();
                       return;
                     }
                     _handleSubmit();
@@ -462,34 +506,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           Center(
             child: GestureDetector(
               onTap: () {
-                Get.bottomSheet(
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0),
-                    ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
-                      ),
-                    ),
-                    height: Get.height * 0.9,
-                    child: const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          PremiumScreen(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  backgroundColor: Colors.white,
-                );
+                showPremiumPaywall();
               },
               child: RichText(
                 text: TextSpan(

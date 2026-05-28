@@ -143,7 +143,7 @@ class _LoginFormState extends State<LoginForm> {
         _authusername = prefs.getString('_authusername');
         await logEvents('login', 'Apple SignIn');
         dynamic user = await _handleAppleLogin();
-        Get.offAndToNamed(Routes.home);
+        Get.offAndToNamed(Routes.marketPlace);
         if (user['success'] == false) {
           Get.snackbar('Error', user['error']);
         } else {}
@@ -200,7 +200,7 @@ class _LoginFormState extends State<LoginForm> {
         // Add RevenueCat login here
         if (user['data']['bio'] != null) {
           // GetStorage().write('isFirstTime', false);
-          Get.offAndToNamed(Routes.home);
+          Get.offAndToNamed(Routes.marketPlace);
         } else {
           Get.off(
               () => UpdateProfileScreen(user: UserModel.fromMap(user['data'])));
@@ -409,7 +409,7 @@ class _LoginFormState extends State<LoginForm> {
                     });
                     if (user['data']['bio'] != null) {
                       // GetStorage().write('isFirstTime', false);
-                      Get.offAndToNamed(Routes.home);
+                      Get.offAndToNamed(Routes.marketPlace);
                     } else {
                       Get.off(() => UpdateProfileScreen(
                           user: UserModel.fromMap(user['data'])));

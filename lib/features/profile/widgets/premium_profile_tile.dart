@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../common/models/user_model.dart';
 import '../../../utils/theme/theme.dart';
 

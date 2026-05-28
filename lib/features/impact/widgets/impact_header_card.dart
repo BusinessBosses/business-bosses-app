@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
+import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
 import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -7,7 +8,7 @@ import 'package:business_bosses_v2/features/profile/presentation/update_profile_
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ReachHeaderCard extends StatefulWidget {
   final dynamic data;
@@ -42,6 +43,8 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
             (dataMap['shopImpactScore'] as num? ?? 0))
         .toDouble();
     final double trustScore = (dataMap['trustReach'] ?? 20).toDouble();
+    final double aiVisibilityScore =
+        (dataMap['aiVisibilityScore'] as num? ?? 0).toDouble();
 
     final int totalLikes = widget.data['totalLikes'] ?? 0;
     final int totalViews = widget.data['totalViews'] ?? 0;
@@ -159,6 +162,14 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   subtitle: 'Verification status',
                   value: _formatValue(trustScore.toInt()),
                 ),
+                _buildReachItem(
+                  icon: LucideIcons.bot,
+                  iconColor: Colors.indigo[400]!,
+                  iconBgColor: backgroundColor,
+                  title: 'AI Visibility',
+                  subtitle: 'Brand discovery by AI',
+                  value: '${aiVisibilityScore.toInt()}%',
+                ),
 
                 // Total Reach Score Section
                 Padding(
@@ -223,6 +234,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   engagementScore,
                   discoveryScore,
                   trustScore,
+                  aiVisibilityScore,
                 ),
               ],
             ),
@@ -301,8 +313,13 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
     );
   }
 
-  Widget _buildImprovementActions(double profileScore, double engagementScore,
-      double discoveryScore, double trustScore) {
+  Widget _buildImprovementActions(
+    double profileScore,
+    double engagementScore,
+    double discoveryScore,
+    double trustScore,
+    double aiVisibilityScore,
+  ) {
     final List<Map<String, dynamic>> allActions = <Map<String, dynamic>>[
       <String, dynamic>{
         'score': profileScore,
@@ -356,6 +373,19 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
         'icon': LucideIcons.badgeCheck,
         'onTap': () {
           Get.to(() => const VerifyBusinessScreen());
+        },
+      },
+      <String, dynamic>{
+        'score': aiVisibilityScore,
+        'title': 'Boost AI Visibility',
+        'subtitle': 'Optimize Brand for AI discovery',
+        'expectedIncrease': 50,
+        'ctaLabel': 'Optimize',
+        'color': Colors.white,
+        'iconColor': primaryColorLT,
+        'icon': LucideIcons.bot,
+        'onTap': () {
+          Get.to(() => ReachScreen(user: profileController.myProfile));
         },
       },
     ];

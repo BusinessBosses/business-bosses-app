@@ -1,26 +1,34 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
-import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
-import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
+import 'package:business_bosses_v2/features/partners/controllers/partners_controller.dart';
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
+import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
+import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
+import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
-import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
+import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
+import 'package:business_bosses_v2/bbpro/widgets/menubutton.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../utils/theme/theme.dart';
 import '../marketplace/controllers/market_controller.dart';
@@ -37,14 +45,19 @@ class MarketplaceScreen extends StatefulWidget {
 
 class _MarketplaceScreenState extends State<MarketplaceScreen>
     with TickerProviderStateMixin {
+  final AdvancedDrawerController _advancedDrawerController =
+      AdvancedDrawerController();
   final MarketController _marketController = Get.find();
   final ShopController shopController = Get.find();
+  final PartnerController partnerController = Get.put(PartnerController());
   final SupplierController supplierController = Get.put(SupplierController());
-  final BuyerRequestController buyerRequestController =
-      Get.put(BuyerRequestController());
+  final BuyerRequestController buyerRequestController = Get.put(
+    BuyerRequestController(),
+  );
   final ProfileController _profileController = Get.find();
 
   late final TabController _marketplaceTabController;
+  int _currentTabIndex = 0;
 
   bool hasOldData = false;
 
@@ -61,7 +74,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     'Security, Safety & Equipment',
     'Technology, Games & Electronic',
     'Vehicle & Transportation',
-    'Business Services & Consulting'
+    'Business Services & Consulting',
   ];
   final ScrollController _categoryScrollController = ScrollController();
   bool _showRightChevron = true;
@@ -69,8 +82,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   @override
   void initState() {
     super.initState();
+    _currentTabIndex = widget.initialIndex;
     _marketplaceTabController = TabController(
-        length: 3, vsync: this, initialIndex: widget.initialIndex);
+      length: 3,
+      vsync: this,
+      initialIndex: widget.initialIndex,
+    );
     _categoryScrollController.addListener(() {
       if (!_categoryScrollController.hasClients) return;
 
@@ -83,24 +100,32 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       });
     });
     _marketplaceTabController.addListener(() {
-      if (_marketplaceTabController.indexIsChanging) {
-        final int index = _marketplaceTabController.index;
+      final int index = _marketplaceTabController.index;
 
-        if (index == 0) {
-          // Reset buyer requests fully
-          buyerRequestController.filterCategory.value = '';
-          buyerRequestController.filterLocation.value = '';
-          buyerRequestController.filterBuyerRequests('');
+      if (index != _currentTabIndex) {
+        if (_marketplaceTabController.indexIsChanging) {
+          if (index == 0) {
+            // Reset buyer requests fully
+            buyerRequestController.filterCategory.value = '';
+            buyerRequestController.filterLocation.value = '';
+            buyerRequestController.filterBuyerRequests('');
+          }
+
+          if (index == 1) {
+            _marketController.selectedCategory = null;
+            _marketController.isSearching(false);
+            _marketController.clearFilter();
+            _marketController.sortItems();
+          }
+
+          if (index == 2) {
+            partnerController.selectedCategory.value = 'All';
+          }
         }
 
-        if (index == 1) {
-          _marketController.selectedCategory = null;
-          _marketController.isSearching(false);
-          _marketController.clearFilter();
-          _marketController.sortItems();
-        }
-
-        setState(() {}); // Rebuild when tab changes to show/hide category chips
+        setState(() {
+          _currentTabIndex = index;
+        });
       }
     });
 
@@ -133,11 +158,22 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   @override
   void dispose() {
     _marketplaceTabController.dispose();
+    _advancedDrawerController.dispose();
     super.dispose();
   }
 
   void selectedLocationChanged(String? name, String? code) {
-    _marketController.changeLocation(name ?? '');
+    _marketController.changeLocation(name ?? '', code: code);
+
+    // If we have an active category or search query, re-fetch data
+    if (_marketController.selectedCategory != null) {
+      _marketController.loadCategory(_marketController.selectedCategory);
+    } else if (_marketController.searchQuery.isNotEmpty) {
+      _marketController.searchMarketplace(_marketController.searchQuery);
+    } else {
+      _marketController.initMarket();
+    }
+
     _marketController.sortItems();
     setState(() {});
   }
@@ -148,268 +184,285 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   @override
   Widget build(BuildContext context) {
-    _marketController.selectedLocation ??=
-        _profileController.myProfile.location;
-
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: Stack(
-        children: <Widget>[
-          NestedScrollView(
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                // Sticky AppBar with search bar
-                SliverAppBar(
-                  pinned: true,
-                  floating: false,
-                  automaticallyImplyLeading: false,
-                  backgroundColor: Colors.white,
-                  elevation: 0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: _buildTopHeader(),
-                    ),
-                  ),
-                ),
-                // Location row - collapses when scrolling
-                SliverToBoxAdapter(
-                  child: _buildLocationRow(),
-                ),
-                // Tabs - collapses when scrolling
-                SliverToBoxAdapter(
-                  child: _buildMainTabs(),
-                ),
-                // Category chips - only for first tab
-                if (_marketplaceTabController.index == 0)
-                  SliverToBoxAdapter(
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 10, bottom: 10),
-                      child: Obx(
-                        () => ProshopdealsWidget(
-                          title: 'NEW',
-                          combinedList:
-                              _marketController.featuredItems.take(10).toList(),
+    return AdvancedDrawer(
+      backdrop: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: <Color>[Colors.white, Colors.white.withValues(alpha: 0.2)],
+          ),
+        ),
+      ),
+      controller: _advancedDrawerController,
+      animationCurve: Curves.easeInOut,
+      animationDuration: const Duration(milliseconds: 300),
+      rtlOpening: false,
+      childDecoration: const BoxDecoration(
+        boxShadow: <BoxShadow>[BoxShadow(color: Colors.black12, blurRadius: 3)],
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
+      drawer: DrawerContent(
+        oncloseclick: () {
+          _advancedDrawerController.hideDrawer();
+        },
+        currentuser: _profileController.myProfile,
+        hasUnreadNotification:
+            _profileController.myProfile.unReadCount != null &&
+                _profileController.myProfile.unReadCount! > 0,
+      ),
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        body: Stack(
+          children: <Widget>[
+            NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  // Sticky AppBar with search bar
+                  SliverAppBar(
+                    pinned: true,
+                    floating: false,
+                    automaticallyImplyLeading: false,
+                    backgroundColor: Colors.white,
+                    elevation: 0,
+                    toolbarHeight: 120,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: _buildCombinedHeader(),
                         ),
                       ),
                     ),
                   ),
-                if (_marketplaceTabController.index == 0 ||
-                    _marketplaceTabController.index == 1 ||
-                    _marketplaceTabController.index == 2)
-                  SliverToBoxAdapter(
-                    child: _buildCategoryChips(),
-                  ),
-              ];
-            },
-            body: TabBarView(
-              controller: _marketplaceTabController,
-              children: <Widget>[
-                // Tab 1: Marketplace Listings
-                const MarketsPage(),
-                const BuyerRequestsScreen(
-                  showAppBar: false,
-                ),
-                LeaderboardScreen(
-                  isMarketplace: true,
-                  selectedCategory: _marketController.selectedCategory,
-                ),
-              ],
-            ),
-          ),
-          // Bottom Bar
-          BottomBar(activeIndex: 3),
-        ],
-      ),
-    );
-  }
-
-  /// Top header with search bar, cart icon, and sell button
-  Widget _buildTopHeader() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Row(
-        children: <Widget>[
-          // Search bar
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                Get.to(() => const MarketplaceSearchScreen());
-              },
-              child: Container(
-                height: 44,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: Colors.black87, width: 1.5),
-                ),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      'Search',
-                      style: TextStyle(
-                        color: Colors.black.withValues(alpha: 0.7),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                  // Tabs - collapses when scrolling
+                  SliverToBoxAdapter(child: _buildMainTabs()),
+                  // Category chips - only for first tab
+                  if (_marketplaceTabController.index == 0)
+                    SliverToBoxAdapter(
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Obx(
+                          () => ProshopdealsWidget(
+                            title: 'NEW',
+                            combinedList: _marketController.featuredItems
+                                .take(10)
+                                .toList(),
+                          ),
+                        ),
                       ),
                     ),
-                    const Spacer(),
-                    const Icon(
-                      LucideIcons.search,
-                      color: Colors.black87,
-                      size: 24,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Shopping bag icon
-          GestureDetector(
-            onTap: () => Get.to(() => const MyOrdersScreen()),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.transparent, // Transparent as per design image
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                LucideIcons.shoppingBag,
-                color: Colors.black87,
-                size: 24,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          // + Sell button
-          GestureDetector(
-            onTap: () => _handleCreateButton(context),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFF1E39), // Vibrant Red
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
+                  if (_marketplaceTabController.index == 0 ||
+                      _marketplaceTabController.index == 1 ||
+                      _marketplaceTabController.index == 2)
+                    SliverToBoxAdapter(child: _buildCategoryChips()),
+                ];
+              },
+              body: TabBarView(
+                controller: _marketplaceTabController,
                 children: <Widget>[
-                  Icon(
-                    _marketplaceTabController.index == 2
-                        ? Icons.add
-                        : Icons.add,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    _marketplaceTabController.index == 2
-                        ? 'Rank'
-                        : _marketplaceTabController.index == 1
-                            ? 'Buy'
-                            : 'Sell',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                    ),
-                  ),
+                  // Tab 1: Marketplace Listings
+                  const MarketsPage(),
+                  const BuyerRequestsScreen(showAppBar: false),
+                  const BossUpPartner(isMarketplace: true),
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Location dropdown and Find Your Match link
-  Widget _buildLocationRow() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(color: Colors.grey.withValues(alpha: 0.15)),
+            // Bottom Bar
+            BottomBar(activeIndex: 0),
+          ],
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          // Location picker
-          Flexible(
-            child: CountryListPick(
-              appBar: AppBar(
-                leading: IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                ),
-                centerTitle: true,
-                title: const Text('Select Location'),
-              ),
-              initialSelection:
-                  _marketController.selectedLocation ?? 'United Kingdom',
-              onChanged: (CountryCode? code) {
-                selectedLocationChanged(code?.name, code?.code);
-              },
-              pickerBuilder: (BuildContext context, CountryCode? code) => Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const Icon(Icons.place, size: 20, color: Color(0xFFFF1E39)),
-                  const SizedBox(width: 5),
-                  Flexible(
-                    child: Text(
-                      _truncateLocation(
-                          _marketController.selectedLocation ?? ''),
-                      style: const TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Icon(Icons.keyboard_arrow_down,
-                      size: 20, color: Colors.grey.shade600),
-                ],
-              ),
-            ),
-          ),
-          // Find Your Match link
-          GestureDetector(
-            onTap: () => Get.to(() => const ExpandedMatchesScreen()),
-            child: const Row(
-              children: <Widget>[
-                Text(
-                  'Find Your Match',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 9, 93, 237),
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                  ),
-                ),
-                SizedBox(width: 4),
-                Icon(Icons.chevron_right, color: Colors.blue, size: 20),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 
-  String _truncateLocation(String location) {
-    if (location.length > 20) {
-      return '${location.substring(0, 18)}...';
-    }
-    return location;
+  Widget _buildCombinedHeader() {
+    return GetBuilder<ProfileController>(builder: (_) {
+      return GetBuilder<MarketController>(builder: (_) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          decoration: const BoxDecoration(color: Colors.white),
+          child: Column(
+            children: <Widget>[
+              // Row 1: Search bar, Shopping Bag, Red Plus, Menu
+              Row(
+                children: <Widget>[
+                  // 1. Search Bar (Rounded)
+                  Expanded(
+                    flex: 3,
+                    child: GestureDetector(
+                      onTap: () =>
+                          Get.to(() => const MarketplaceSearchScreen()),
+                      child: Container(
+                        height: 38,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: Colors.black, width: 1.2),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              'Search',
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const Spacer(),
+                            const Icon(LucideIcons.search,
+                                size: 18, color: Colors.black),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+
+                  // 2. Coin Icon
+                  GestureDetector(
+                    onTap: () => Get.toNamed(Routes.promotionscreen),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: SvgPicture.asset(
+                        'assets/svgs/coin.svg',
+                        height: 24,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+
+                  // 3. Red Square + Button
+                  GestureDetector(
+                    onTap: () => _handleCreateButton(context),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF1E39),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+
+                  // 4. Menu Icon
+                  GestureDetector(
+                    onTap: () => _advancedDrawerController.showDrawer(),
+                    child: const Icon(LucideIcons.menu,
+                        size: 24, color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Row 2: Location Picker and Find Your Match
+              Row(
+                children: <Widget>[
+                  const Icon(Icons.place, size: 18, color: Color(0xFFFF1E39)),
+                  const SizedBox(width: 4),
+
+                  // Location Picker
+                  Flexible(
+                    flex: 2,
+                    child: CountryListPick(
+                      appBar: AppBar(
+                        leading: IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                        ),
+                        centerTitle: true,
+                        title: const Text('Select Location'),
+                      ),
+                      initialSelection:
+                          (_marketController.selectedLocationCode?.isNotEmpty ??
+                                  false)
+                              ? (_marketController.selectedLocationCode == 'UK'
+                                  ? 'GB'
+                                  : _marketController.selectedLocationCode)
+                              : 'GB',
+                      onChanged: (CountryCode? code) {
+                        selectedLocationChanged(code?.name, code?.code);
+                      },
+                      pickerBuilder:
+                          (BuildContext context, CountryCode? code) => Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              code?.name ?? 'United Kingdom',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          const Icon(
+                            Icons.keyboard_arrow_down,
+                            size: 16,
+                            color: Colors.black54,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 8),
+
+                  // Find Your Match
+                  Flexible(
+                    flex: 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.bottomSheet(
+                          PreMatchModal(),
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                        ).then((_) {
+                          // After selecting in PreMatchModal, we can optionally navigate to matches
+                          // but usually PreMatchModal handles its own Search button.
+                          // If we want to automatically go to matches after they close the modal:
+                          // Get.to(() => const ExpandedMatchesScreen());
+                        });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const <Widget>[
+                          Flexible(
+                            child: Text(
+                              'Find Your Match',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Color(0xFF5B4DFF),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.chevron_right,
+                              color: Color(0xFF5B4DFF), size: 16),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      });
+    });
   }
 
   /// Main tabs: Seller Listing, Buyer Request, Ranking Business
@@ -426,10 +479,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         isScrollable: false,
         labelColor: Colors.black87,
         unselectedLabelColor: Colors.black87,
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 12,
-        ),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
         unselectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 12,
@@ -442,12 +492,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
-                Icon(Icons.grid_view, color: Colors.deepOrange, size: 20),
+                Icon(Icons.grid_view, color: Color(0xFFF27121), size: 20),
                 SizedBox(width: 6),
                 Text(
-                  'Seller\nListing',
+                  'I Sell',
                   textAlign: TextAlign.center,
-                  style: TextStyle(height: 1.2),
+                  style: TextStyle(height: 1.2, fontSize: 13),
                 ),
               ],
             ),
@@ -457,12 +507,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
-                Icon(LucideIcons.target, size: 20, color: Colors.deepOrange),
+                Icon(Icons.gps_fixed, size: 20, color: Color(0xFFF27121)),
                 SizedBox(width: 6),
                 Text(
-                  'Buyer\nRequest',
+                  'I Need',
                   textAlign: TextAlign.center,
-                  style: TextStyle(height: 1.2),
+                  style: TextStyle(height: 1.2, fontSize: 13),
                 ),
               ],
             ),
@@ -472,12 +522,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
-                Icon(LucideIcons.trophy, size: 20, color: Colors.deepOrange),
+                Icon(LucideIcons.trophy, size: 20, color: Color(0xFFF27121)),
                 SizedBox(width: 6),
                 Text(
-                  'Ranking\nBusiness',
+                  'Top Deals',
                   textAlign: TextAlign.center,
-                  style: TextStyle(height: 1.2),
+                  style: TextStyle(height: 1.2, fontSize: 13),
                 ),
               ],
             ),
@@ -513,12 +563,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
                       bool isSelected;
 
-                      if (tabIndex == 0 || tabIndex == 2) {
-                        // Seller + Ranking share same category source
+                      if (tabIndex == 0) {
+                        // Seller
                         isSelected = (_marketController.selectedCategory ==
                                     null &&
                                 category == 'All') ||
                             (_marketController.selectedCategory == category);
+                      } else if (tabIndex == 2) {
+                        // Partner deals
+                        isSelected =
+                            (partnerController.selectedCategory.value ==
+                                category);
                       } else {
                         // Buyer request
                         isSelected = (buyerRequestController
@@ -555,16 +610,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
                               buyerRequestController.filterBuyerRequests('');
                             } else if (tabIndex == 2) {
-                              // 🟡 RANKING BUSINESS
-
-                              if (category == 'All') {
-                                _marketController.selectedCategory = null;
-                              } else {
-                                _marketController.selectedCategory = category;
-                              }
-
-                              // IMPORTANT: no market filtering here
-                              // Just update category so Leaderboard rebuilds
+                              // 🟡 PARTNER DEALS
+                              partnerController.selectedCategory.value =
+                                  category;
                             }
                           });
                         },
@@ -581,9 +629,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             // No border typically for these chips in design, or subtle
                           ),
                           child: Text(
-                            category.length > 20
-                                ? '${category.substring(0, 18)}...'
-                                : category,
+                            category,
                             style: TextStyle(
                               color: Colors.black87,
                               fontWeight: isSelected
@@ -639,7 +685,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     if (index == 1) {
       Get.to(() => AddBuyerRequests());
     } else if (index == 2) {
-      Get.to(() => ReachScreen(user: _profileController.myProfile));
+      if (!_profileController.myProfile.isSubscribed) {
+        showPremiumPaywall();
+      } else {
+        Get.to(() => const BecomeaPartnerScreen());
+      }
     } else {
       _showSellOptions(context);
     }
@@ -666,13 +716,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     onTap: () {
                       Navigator.pop(context);
                       if (index == 0) {
-                        Get.to(() => const CreateProductListing(
-                              isMarketplace: true,
-                            ));
+                        Get.to(
+                          () => const CreateProductListing(isMarketplace: true),
+                        );
                       } else {
-                        Get.to(() => const CreateServiceListing(
-                              isMarketplace: true,
-                            ));
+                        Get.to(
+                          () => const CreateServiceListing(isMarketplace: true),
+                        );
                       }
                     },
                     leading: SvgPicture.asset(
@@ -681,12 +731,16 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           : 'assets/svgs/addservice.svg',
                       height: 25,
                       colorFilter: ColorFilter.mode(
-                          textColor.withValues(alpha: 1), BlendMode.srcIn),
+                        textColor.withValues(alpha: 1),
+                        BlendMode.srcIn,
+                      ),
                     ),
                     title: Text(
                       index == 0 ? 'Sell your product' : 'Sell your service',
                       style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w700),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),

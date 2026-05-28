@@ -82,14 +82,15 @@ class HomeController extends GetxController {
   UserModel? bossOfTheWeek = UserModel();
   UserModel? mentorOfTheWeek = UserModel();
   UserModel? backerOfTheWeek = UserModel();
-  UserModel? ambassadorOfTheWeek = UserModel();
   dynamic partnerOfTheWeek;
   RxList<BuyerRequestModel> myRequests = <BuyerRequestModel>[].obs;
   RxBool loadingRequests = false.obs;
   UserModel? rankWinner;
   Shop? rankWinnerShop;
   RxBool loadingRankWinner = true.obs;
-  final ReachController impactController = Get.find<ReachController>();
+
+  /// Holds stable random numbers for non-business users to prevent UI jitter
+  final Map<String, String> _stableMetrics = <String, String>{};
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -170,22 +171,36 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchRankWinner() async {
-    if (rankWinner != null) {
+    // 🔥 1. Load from cache immediately
+    final dynamic cachedWinner = sandBox.read('rank_winner_cache');
+    if (cachedWinner != null) {
+      rankWinnerShop = Shop.fromMap(cachedWinner['shop'] ?? <String, dynamic>{});
+      rankWinner = rankWinnerShop?.user;
       loadingRankWinner.value = false;
-      return;
-    }
-    try {
+      update();
+    } else {
       loadingRankWinner.value = true;
+    }
+
+    try {
+      // 🔥 2. Background fetch
       final ApiResponseModel response =
           await ApiService.get(path: 'impact/top/shops?limit=1');
+
       if (response.success &&
           response.data != null &&
           response.data is List<dynamic> &&
           (response.data as List<dynamic>).isNotEmpty) {
-        final Map<String, dynamic> data =
+        final Map<String, dynamic> winnerData =
             Map<String, dynamic>.from((response.data as List<dynamic>).first);
-        rankWinnerShop = Shop.fromMap(data['shop'] ?? <String, dynamic>{});
+
+        // Update state
+        rankWinnerShop =
+            Shop.fromMap(winnerData['shop'] ?? <String, dynamic>{});
         rankWinner = rankWinnerShop?.user;
+
+        // Save to cache
+        await sandBox.write('rank_winner_cache', winnerData);
       }
     } catch (e) {
       debugPrint('Error fetching rank winner: $e');
@@ -1506,7 +1521,6 @@ class HomeController extends GetxController {
     processBossToState(data['bossOfTheWeek']);
     processMentorToState(data['mentorOfTheWeek']);
     processBackerToState(data['backerOfTheWeek']);
-    processAmbassadorToState(data['ambassadorOfTheWeek']);
   }
 
   Future<void> _fetchAndCache() async {
@@ -1612,7 +1626,7 @@ class HomeController extends GetxController {
         debugPrint('Failed to get FCM token: $e');
       }
 
-      await impactController.loadData(
+      await Get.find<ReachController>().loadData(
           profileController.myProfile.uid, profileController.myProfile.uid);
       loadMyRequests();
 
@@ -1757,15 +1771,11 @@ class HomeController extends GetxController {
     update();
   }
 
-  void processAmbassadorToState(dynamic userData) {
-    if (userData == null) return;
-    final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
-      ...userData,
-      'connections': <dynamic>[],
-      'connecteds': <dynamic>[]
-    });
-    ambassadorOfTheWeek = modelizedData;
-    update();
+  String getStableMetric(String key, String Function() generator) {
+    if (!_stableMetrics.containsKey(key)) {
+      _stableMetrics[key] = generator();
+    }
+    return _stableMetrics[key]!;
   }
 
   void initSocket() {

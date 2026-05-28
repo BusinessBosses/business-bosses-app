@@ -44,29 +44,36 @@ class CompleteSearchController extends GetxController {
         await SearchRepository.search(query.trim());
     if (response.success) {
       searchedUsers.clear();
-      for (int i = 0; i < response.data['users'].length; i++) {
-        final dynamic mapData = response.data['users'][i];
-        final UserModel modelizedData = UserModel.fromMap(mapData);
-        searchedUsers.add(modelizedData);
+      if (response.data['users'] != null) {
+        for (int i = 0; i < response.data['users'].length; i++) {
+          final dynamic mapData = response.data['users'][i];
+          final UserModel modelizedData = UserModel.fromMap(mapData);
+          searchedUsers.add(modelizedData);
+        }
       }
 
-      for (int i = 0; i < response.data['posts']['rows'].length; i++) {
-        final dynamic mapData = response.data['posts']['rows'][i];
-        // final PostModel modelizedData = PostModel.fromMap(mapData);
+      if (response.data['posts'] != null &&
+          response.data['posts']['rows'] != null) {
+        for (int i = 0; i < response.data['posts']['rows'].length; i++) {
+          final dynamic mapData = response.data['posts']['rows'][i];
+          // final PostModel modelizedData = PostModel.fromMap(mapData);
 
-        searchedPosts.add(
-          PostModel.fromMap(
-            <String, dynamic>{
-              ...mapData,
-              'likes': mapData['likes']
-                  .map((dynamic like) => like['userId'].toString())
-                  .toList(),
-              'coins': mapData['likes']
-                  .map((dynamic coin) => coin['userId'].toString())
-                  .toList()
-            },
-          ),
-        );
+          searchedPosts.add(
+            PostModel.fromMap(
+              <String, dynamic>{
+                ...mapData,
+                'likes': mapData['likes']
+                        ?.map((dynamic like) => like['userId'].toString())
+                        ?.toList() ??
+                    <String>[],
+                'coins': mapData['likes']
+                        ?.map((dynamic coin) => coin['userId'].toString())
+                        ?.toList() ??
+                    <String>[]
+              },
+            ),
+          );
+        }
       }
     }
 

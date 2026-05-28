@@ -19,7 +19,6 @@ import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/confirm_create_event.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
-import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/renewconfirmation.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/bookmarked_matches.dart';
@@ -155,7 +154,7 @@ var routes = [
   GetPage(
     name: Routes.marketPlace,
     page: () => const MarketplaceScreen(),
-    binding: BindingsBuilder.put(() => MarketController()),
+    binding: HomeBinding(),
   ),
   GetPage(
     name: Routes.allCommunitiesScreen,

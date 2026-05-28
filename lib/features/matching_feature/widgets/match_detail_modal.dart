@@ -2,7 +2,7 @@ import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 // Your app's theme and the standardized Match model
 import 'package:business_bosses_v2/utils/theme/theme.dart';

@@ -67,7 +67,7 @@ class MatchController extends GetxController {
       errorMessage('');
       matchedSuppliers.clear();
 
-      if (profileController.myProfile.matchType != 'seller') {
+      if (profileController.myProfile.matchType != null) {
         // Make the API call
         final ApiResponseModel response = await ApiService.get(
             path: 'users/${profileController.myProfile.uid}/matches');

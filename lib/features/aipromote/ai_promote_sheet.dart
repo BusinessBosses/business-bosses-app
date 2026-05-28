@@ -224,14 +224,46 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
 
         if (platform == 'homepage') {
           // Safe call with null check
-          await createPostController.createPost(
-            <String, dynamic>{
-              'title': _adContent.trim(),
-              'timestamp': DateTime.now().millisecondsSinceEpoch,
+          if (aiPromoteController.postType.value == 'Product') {
+            await shopController.addProducts(<String, dynamic>{
+              'name': _businessInfo.name,
+              'description': _adContent.trim(),
+              'price': 0, // Placeholder
+              'category': _businessInfo.industry,
+              'location': profileController!.myProfile.location ?? '',
               'images': image != null ? <String>[image] : <dynamic>[],
-            },
-            profileController!, // Using ! since we checked above
-          );
+              'shopId': shopController.shop?.id,
+              'userId': profileController!.myProfile.uid,
+              'itemType': 'product',
+              'isActive': true,
+              'quantity': 1,
+            });
+          } else if (aiPromoteController.postType.value == 'Service') {
+            await shopController.addService(<String, dynamic>{
+              'name': _businessInfo.name,
+              'description': _adContent.trim(),
+              'price': 0, // Placeholder
+              'category': _businessInfo.industry,
+              'location': profileController!.myProfile.location ?? '',
+              'images': image != null ? <String>[image] : <dynamic>[],
+              'shopId': shopController.shop?.id,
+              'userId': profileController!.myProfile.uid,
+              'itemType': 'service',
+              'isActive': true,
+              'serviceType': '1:1',
+              'deliveryTime': 'true',
+              'repeat': 'No (One-time Service)',
+            });
+          } else {
+            await createPostController.createPost(
+              <String, dynamic>{
+                'title': _adContent.trim(),
+                'timestamp': DateTime.now().millisecondsSinceEpoch,
+                'images': image != null ? <String>[image] : <dynamic>[],
+              },
+              profileController!, // Using ! since we checked above
+            );
+          }
         } else {
           await createBossUpController.createForum(<String, dynamic>{
             'title': 'AI Generated Ad for ${_businessInfo.name}',

@@ -7,7 +7,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';

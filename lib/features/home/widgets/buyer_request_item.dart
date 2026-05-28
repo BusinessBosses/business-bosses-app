@@ -2,7 +2,7 @@ import 'package:business_bosses_v2/features/marketplace/models/buyer_request_mod
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class BuyerRequestItem extends StatelessWidget {
   final BuyerRequestModel request;

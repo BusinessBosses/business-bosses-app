@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Dashboard extends StatefulWidget {
   final bool noBack;
@@ -59,7 +60,8 @@ class _DashboardState extends State<Dashboard> {
   final HomeController homeController = Get.find();
   String _selectedfilteritem = 'All Time';
   String _selectedDateFilter = 'all_time';
-  final BuyerRequestController buyerRequestsController = Get.find();
+  final BuyerRequestController buyerRequestsController =
+      Get.put(BuyerRequestController());
   final ReachController reachController = Get.put(ReachController());
 
   @override
@@ -260,7 +262,7 @@ class _DashboardState extends State<Dashboard> {
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 2),
+                                    horizontal: 10, vertical: 4),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(80)),
@@ -278,13 +280,48 @@ class _DashboardState extends State<Dashboard> {
                                       style: const TextStyle(fontSize: 13),
                                     ),
                                     const SizedBox(
-                                      width: 10,
+                                      width: 6,
                                     ),
                                     SvgPicture.asset(
                                       'assets/svgs/dropdown.svg',
                                     ),
                                   ],
                                 ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final Uri url =
+                                  Uri.parse('https://bizcenter.ai/dashboard');
+                              launchUrl(url,
+                                  mode: LaunchMode.externalApplication);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 10, right: 15),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFF1E39),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Row(
+                                children: const <Widget>[
+                                  Text(
+                                    'Get Found on AI',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  SizedBox(width: 6),
+                                  Icon(
+                                    Icons.arrow_forward,
+                                    color: Colors.white,
+                                    size: 14,
+                                  ),
+                                ],
                               ),
                             ),
                           ),

@@ -950,7 +950,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
   void _sharePost() {
     String message =
         'Have a look at ${shopController.userShop!.user?.username}\'s biz-center on Business Bosses\n'
-        'https://biz-center.io/${shopController.userShop?.name.toLowerCase().replaceAll(' ', '-')}';
+        'https://bizcenter.ai/${shopController.userShop?.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 

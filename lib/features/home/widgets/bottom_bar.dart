@@ -7,7 +7,7 @@ import 'package:business_bosses_v2/features/forum/controller/create_bossup_contr
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
-import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/home/sell_product.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -15,8 +15,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({
@@ -136,20 +135,17 @@ class _BottomBarState extends State<BottomBar> {
                   color: Colors.white,
                   child: Row(
                     children: <Widget>[
-                      // Home
+                      // Home (formerly Marketplace)
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
-                          icon: widget.activeIndex == 0
-                              ? 'assets/svgs/homeufilled.svg'
-                              : 'assets/svgs/homeu.svg',
                           label: 'Home',
+                          icon: widget.activeIndex == 0
+                              ? 'assets/svgs/cartufilled.svg'
+                              : 'assets/svgs/cartu.svg',
                           onTap: () {
-                            if (widget.activeIndex == 0) {
-                              widget.scrollControl?.call();
-                              return;
-                            }
-                            Get.toNamed(Routes.home);
+                            if (widget.activeIndex == 0) return;
+                            Get.toNamed(Routes.marketPlace);
                           },
                           isActive: widget.activeIndex == 0,
                         ),
@@ -243,7 +239,23 @@ class _BottomBarState extends State<BottomBar> {
                                             onTap: () async {
                                               Navigator.pop(context);
                                               if (index == 0) {
-                                                enterChallenge();
+                                                showModalBottomSheet(
+                                                  context: context,
+                                                  isScrollControlled: true,
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(20.0),
+                                                      topRight:
+                                                          Radius.circular(20.0),
+                                                    ),
+                                                  ),
+                                                  builder: (BuildContext
+                                                          context) =>
+                                                      const AIPromoteSheet(),
+                                                );
                                               } else if (index == 1) {
                                                 sellProduct(context);
                                               } else if (index == 2) {
@@ -251,12 +263,6 @@ class _BottomBarState extends State<BottomBar> {
                                                     () => AddBuyerRequests());
                                               } else if (index == 3) {
                                                 Get.toNamed(Routes.createPost);
-                                              } else if (index == 4) {
-                                                final Uri url = Uri.parse(
-                                                    'https://businessbosses.news/instant-pr/');
-                                                launchUrl(url,
-                                                    mode: LaunchMode
-                                                        .platformDefault);
                                               }
                                             },
                                             minVerticalPadding: 0,
@@ -264,23 +270,18 @@ class _BottomBarState extends State<BottomBar> {
                                                 const EdgeInsets.only(left: 10),
                                             leading: index == 0
                                                 ? Icon(
-                                                    LucideIcons.trophy,
+                                                    LucideIcons.penTool,
                                                     color: textColor.withValues(
                                                         alpha: 1),
                                                     size: 26,
                                                   )
                                                 : index == 1
-                                                    ? SvgPicture.asset(
-                                                        'assets/svgs/sellicon.svg',
-                                                        height: 25,
-                                                        colorFilter:
-                                                            ColorFilter.mode(
-                                                                textColor
-                                                                    .withValues(
-                                                                        alpha:
-                                                                            1),
-                                                                BlendMode
-                                                                    .srcIn),
+                                                    ? Icon(
+                                                        LucideIcons.tag,
+                                                        color: textColor
+                                                            .withValues(
+                                                                alpha: 1),
+                                                        size: 26,
                                                       )
                                                     : index == 2
                                                         ? Icon(
@@ -291,38 +292,25 @@ class _BottomBarState extends State<BottomBar> {
                                                                     alpha: 1),
                                                             size: 26,
                                                           )
-                                                        : index == 3
-                                                            ? SvgPicture.asset(
-                                                                'assets/svgs/text.svg',
-                                                                height: 25,
-                                                                colorFilter: ColorFilter.mode(
+                                                        : SvgPicture.asset(
+                                                            'assets/svgs/text.svg',
+                                                            height: 25,
+                                                            colorFilter:
+                                                                ColorFilter.mode(
                                                                     textColor.withValues(
                                                                         alpha:
                                                                             1),
                                                                     BlendMode
                                                                         .srcIn),
-                                                              )
-                                                            : Icon(
-                                                                LucideIcons
-                                                                    .globe,
-                                                                color: textColor
-                                                                    .withValues(
-                                                                        alpha:
-                                                                            1),
-                                                                size: 26,
-                                                              ),
+                                                          ),
                                             title: Text(
                                               index == 0
-                                                  ? 'Share business, get featured'
+                                                  ? 'Create ad or post with AI'
                                                   : index == 1
-                                                      ? 'Sell your product & service'
+                                                      ? 'What do you want to sell?'
                                                       : index == 2
-                                                          ? 'Create buyer requests'
-                                                          :
-                                                          // index == 3
-                                                          //     ?
-                                                          'Post content, discussion, etc',
-                                              // : 'Submit news for instant PR',
+                                                          ? 'What do you need?'
+                                                          : 'Post updates, discussion, etc',
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w700,
@@ -342,20 +330,23 @@ class _BottomBarState extends State<BottomBar> {
                         ),
                       ),
 
-                      // Marketplace
+                      // Home
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
-                          label: 'Marketplace',
                           icon: widget.activeIndex == 3
-                              ? 'assets/svgs/cartufilled.svg'
-                              : 'assets/svgs/cartu.svg',
+                              ? 'assets/svgs/homeufilled.svg'
+                              : 'assets/svgs/homeu.svg',
+                          label: 'Boss Up',
                           onTap: () {
-                            if (widget.activeIndex == 3) return;
+                            if (widget.activeIndex == 3) {
+                              widget.scrollControl?.call();
+                              return;
+                            }
                             if (widget.activeIndex == 0) {
-                              Get.to(() => const MarketplaceScreen());
+                              Get.toNamed(Routes.home);
                             } else {
-                              Get.off(() => const MarketplaceScreen());
+                              Get.offAndToNamed(Routes.home);
                             }
                           },
                           isActive: widget.activeIndex == 3,

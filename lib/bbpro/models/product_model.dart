@@ -79,8 +79,9 @@ class Product {
       isActive: json['isActive'],
       storageLocation: json['storageLocation'],
       productNumber: json['productNumber'].toString(),
-      quantity:
-          json['quantity'] != null ? int.parse(json['quantity'].toString()) : 0,
+      quantity: json['quantity'] != null
+          ? double.parse(json['quantity'].toString()).toInt()
+          : 0,
       startAt: json['startAt'] == null ? null : DateTime.parse(json['startAt']),
       endAt: json['endAt'] == null ? null : DateTime.parse(json['endAt']),
       color: json['color'] != null ? List<String>.from(json['color']) : null,

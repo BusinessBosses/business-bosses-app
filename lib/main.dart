@@ -72,7 +72,7 @@ void main() async {
   final String initialRoute =
       (userId == null || userId.isEmpty || token == null || token.isEmpty)
           ? Routes.login
-          : Routes.home;
+          : Routes.marketPlace;
 
   // 🔥 PASS INITIAL ROUTE TO THE APP
   runApp(MyApp(initialRoute: initialRoute));

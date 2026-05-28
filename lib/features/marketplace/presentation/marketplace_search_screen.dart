@@ -6,6 +6,8 @@ import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_request_item.dart';
+import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
+import 'package:business_bosses_v2/features/search/widgets/people_tab.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
@@ -30,6 +32,8 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
   final MarketController _marketController = Get.find();
   final ProfileController _profileController = Get.find();
   final SupplierController _supplierController = Get.find();
+  final CompleteSearchController _peopleSearchController =
+      Get.put(CompleteSearchController());
   final BuyerRequestController _buyerRequestController =
       Get.put(BuyerRequestController());
   final TextEditingController _searchController = TextEditingController();
@@ -38,10 +42,10 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
 
   int _selectedTab = 0;
   final List<String> _tabs = <String>[
-    'All',
+    'People',
     'Products',
     'Services',
-    'Buyer Requests',
+    'I Need',
     'Ranking Business'
   ];
 
@@ -77,9 +81,23 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
   void _onSearchChanged(String query) {
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 450), () {
-      _marketController.searchMarketplace(query);
-      _supplierController.searchSuppliers(query);
-      _buyerRequestController.filterBuyerRequests(query);
+      if (query.isNotEmpty) {
+        if (_selectedTab == 0) {
+          _peopleSearchController.query.value = query;
+          _peopleSearchController.search();
+        } else if (_selectedTab == 1 || _selectedTab == 2) {
+          _marketController.searchMarketplace(query);
+        } else if (_selectedTab == 3) {
+          _buyerRequestController.initBuyerRequests(
+              location: _marketController.selectedLocation, query: query);
+        }
+        _supplierController.searchSuppliers(query);
+      } else {
+        _marketController.clearFilter();
+        _peopleSearchController.clearUserSearch();
+        _buyerRequestController.filterBuyerRequests('');
+      }
+      setState(() {});
     });
   }
 
@@ -285,7 +303,7 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
                   autofocus: true,
                   onChanged: _onSearchChanged,
                   decoration: const InputDecoration(
-                    hintText: 'Search marketplace...',
+                    hintText: 'Search...',
                     border: InputBorder.none,
                     isDense: true,
                     contentPadding: EdgeInsets.zero,
@@ -298,6 +316,8 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
                   onTap: () {
                     _searchController.clear();
                     _marketController.filterItems('');
+                    _peopleSearchController.clearUserSearch();
+                    _buyerRequestController.filterBuyerRequests('');
                   },
                   child:
                       Icon(Icons.close, color: Colors.grey.shade600, size: 20),
@@ -333,6 +353,19 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
                     onSelected: (bool value) {
                       setState(() {
                         _selectedTab = index;
+                        final String query = _searchController.text;
+                        if (query.isNotEmpty) {
+                          if (_selectedTab == 0) {
+                            _peopleSearchController.search();
+                          } else if (_selectedTab == 3) {
+                            _buyerRequestController.initBuyerRequests(
+                              location: _marketController.selectedLocation,
+                              query: query,
+                            );
+                          } else if (_selectedTab == 1 || _selectedTab == 2) {
+                            _marketController.searchMarketplace(query);
+                          }
+                        }
                       });
                     },
                     backgroundColor: Colors.grey.shade100,
@@ -357,9 +390,14 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
   }
 
   Widget _buildContent() {
-    // 0: All, 1: Products, 2: Services, 3: Buyer Requests, 4: Ranking Business
-    if (_selectedTab == 3) {
-      // Buyer Requests
+    // 0: People, 1: Products, 2: Services, 3: I Need, 4: Ranking Business
+    if (_selectedTab == 0) {
+      return PeopleTab(
+        controller: _peopleSearchController,
+        filterTitle: '',
+      );
+    } else if (_selectedTab == 3) {
+      // I Need (Buyer Requests)
       return Obx(() {
         final List<BuyerRequestModel> requests =
             _buyerRequestController.buyerRequests;
@@ -367,6 +405,11 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
           return const Center(child: CircularProgressIndicator());
         }
         if (requests.isEmpty) {
+          if (_searchController.text.isEmpty) {
+            return const Center(
+              child: Text('Enter a search term to find buyer requests'),
+            );
+          }
           return const SafetyModel(
               isLoading: false, title: 'No Buyer Requests Found');
         }
@@ -380,15 +423,7 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
             final BuyerRequestModel request = requests[index];
             return BuyerRequestItem(
               request: request,
-              onTap: () {
-                // Navigate to details or chat?
-                // The original BuyerRequestsScreen logic:
-                // _showRequestDetails(request);
-                // Since this is a search screen, maybe simple details is enough.
-                // For now, let's use the same as BuyerRequestsScreen if we can access the method
-                // or replicate simple navigation.
-                // Using route to chat as primary action or similar.
-              },
+              onTap: () {},
             );
           },
         );
@@ -397,11 +432,10 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
       // Ranking Business (Suppliers)
       return LeaderboardScreen(isMarketplace: true);
     } else {
-      // Products, Services, or All
-      return GetBuilder<MarketController>(
+      // Products, or Services
+      return GetX<MarketController>(
         builder: (MarketController controller) {
-          // 🔥 Correct loader
-          if (controller.searchLoading.value) {
+          if (controller.searchLoading.value || controller.loading.value) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -414,10 +448,16 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
             items = items.whereType<Service>().toList();
           }
 
-          if (items.isEmpty) {
+          if (items.isEmpty && controller.searchQuery.isNotEmpty) {
             return const SafetyModel(
               isLoading: false,
               title: 'No Items Found',
+            );
+          }
+
+          if (items.isEmpty && controller.searchQuery.isEmpty) {
+            return const Center(
+              child: Text('Enter a search term to find products or services'),
             );
           }
 

@@ -18,6 +18,7 @@ class PartnerController extends GetxController {
   final RxList<Partner> partners = <Partner>[].obs;
   final RxList<Partner> myPartners = <Partner>[].obs;
   final RxBool loading = false.obs;
+  final RxString selectedCategory = 'All'.obs;
 
   final String createPath = 'partner';
 

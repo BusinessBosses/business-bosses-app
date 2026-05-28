@@ -3,7 +3,7 @@
 import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
-import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
 import 'package:business_bosses_v2/features/withdrawal/controller/coin_history_controller.dart';
@@ -286,38 +286,10 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  !profileController.myProfile.isSubscribed
-                                      ? Get.bottomSheet(
-                                          isScrollControlled: true,
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(20.0),
-                                              topRight: Radius.circular(20.0),
-                                            ),
-                                          ),
-                                          Container(
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(20.0),
-                                                topRight: Radius.circular(20.0),
-                                              ),
-                                            ),
-                                            height: Get.height * 0.9,
-                                            child: const Center(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  PremiumScreen(),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          backgroundColor: Colors.white,
-                                        )
-                                      : null;
+                                  if (!profileController
+                                      .myProfile.isSubscribed) {
+                                    showPremiumPaywall();
+                                  }
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(

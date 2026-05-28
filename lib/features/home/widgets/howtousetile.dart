@@ -3,7 +3,7 @@ import 'package:business_bosses_v2/features/matching_feature/presentation/expand
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class HowtouseTile extends StatelessWidget {
   final bool? isSearch;

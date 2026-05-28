@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import '../../utils/theme/theme.dart';
 import '../posts/presentation/create_post_screen.dart';
 import '../profile/presentation/my_profile_screen.dart';
+import '../chat/chat_screen.dart';
 import 'all_communities_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';
@@ -134,11 +135,11 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
               child: IndexedStack(
                 index: _activeIndex,
                 children: const <Widget>[
-                  HomeScreen(),
-                  AllCommunitiesScreen(),
-                  LeaderboardScreen(),
-                  MarketplaceScreen(),
-                  MyProfileScreen(),
+                  HomeScreen(), // Index 0: Boss up
+                  ChatScreen(), // Index 1: Inbox
+                  LeaderboardScreen(), // Index 2: Post (+) - wait, post is floating. Index 2 used to be Ranking.
+                  MarketplaceScreen(), // Index 3: Home
+                  MyProfileScreen(), // Index 4: Profile
                 ],
               ),
             ),
@@ -173,50 +174,36 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                               Expanded(
                                 flex: 10,
                                 child: BottomTabButton(
-                                  icon: 'assets/svgs/hom.svg',
+                                  icon: 'assets/svgs/marketplace.svg',
                                   label: 'Home',
                                   onTap: () {
-                                    _onChangePage(0);
+                                    _onChangePage(3);
                                   },
-                                  isActive: _activeIndex == 0,
+                                  isActive: _activeIndex == 3,
                                 ),
                               ),
+                              Expanded(
+                                flex: 10,
+                                child: BottomTabButton(
+                                  icon: 'assets/svgs/messagefilled.svg', // Assuming inbox icon or similar
+                                  onTap: () {
+                                    // Need to find which index is Inbox. Usually 1.
+                                    _onChangePage(1);
+                                  },
+                                  label: 'Inbox',
+                                  isActive: _activeIndex == 1,
+                                ),
+                              ),
+                              // Placeholder for middle button if any, or just skip
                               Expanded(
                                 flex: 10,
                                 child: BottomTabButton(
                                   icon: 'assets/svgs/bossup.svg',
                                   onTap: () {
-                                    _onChangePage(1);
+                                    _onChangePage(0);
                                   },
-                                  label: 'Boss Up',
-                                  isActive: _activeIndex == 1,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 10,
-                                child: BottomTabButton(
-                                  icon: 'assets/svgs/ranking.svg',
-                                  onTap: () {
-                                    _onChangePage(2);
-                                  },
-                                  label: 'Ranking',
-                                  isActive: _activeIndex == 2,
-                                ),
-                              ),
-                              // Container(
-                              //   width: 72.0,
-                              //   height: double.infinity,
-                              //   color: Colors.white,
-                              // ),
-                              Expanded(
-                                flex: 10,
-                                child: BottomTabButton(
-                                  label: 'Marketplace',
-                                  icon: 'assets/svgs/marketplace.svg',
-                                  onTap: () {
-                                    _onChangePage(3);
-                                  },
-                                  isActive: _activeIndex == 3,
+                                  label: 'Boss up',
+                                  isActive: _activeIndex == 0,
                                 ),
                               ),
                               Expanded(
@@ -236,22 +223,34 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                     Positioned(
                       left: 0,
                       right: 0,
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: FloatingActionButton(
-                          heroTag: 'postButton',
-                          child: const Icon(Icons.add),
-                          onPressed: () async {
-                            // log("Hello world");
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<dynamic>(
-                                builder: (BuildContext context) =>
-                                    const CreatePostScreen(),
-                              ),
-                            );
-                          },
-                        ),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            alignment: Alignment.center,
+                            child: FloatingActionButton(
+                              heroTag: 'postButton',
+                              child: const Icon(Icons.add),
+                              onPressed: () async {
+                                // log("Hello world");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute<dynamic>(
+                                    builder: (BuildContext context) =>
+                                        const CreatePostScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const Text(
+                            'Post',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w700,
+                              color: textColor,
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   ],

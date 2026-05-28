@@ -2,7 +2,7 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 
-import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 
 // Your app's theme and model
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -83,34 +83,7 @@ class PremiumPrompt extends StatelessWidget {
   }
 
   void _upgradeToPremium(BuildContext context) {
-    Get.bottomSheet(
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
-        ),
-      ),
-      Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(20.0),
-          ),
-        ),
-        height: Get.height * 0.9,
-        child: const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              PremiumScreen(),
-            ],
-          ),
-        ),
-      ),
-      backgroundColor: Colors.white,
-    );
+    showPremiumPaywall();
   }
 }
 

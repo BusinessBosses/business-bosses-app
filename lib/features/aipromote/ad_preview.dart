@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -421,36 +421,7 @@ class _AdPreviewState extends State<AdPreview> {
 
           !profileController.myProfile.isSubscribed
               ? GestureDetector(
-                  onTap: () => <Future<void>>{
-                    Get.bottomSheet(
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0),
-                        ),
-                      ),
-                      Container(
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20.0),
-                            topRight: Radius.circular(20.0),
-                          ),
-                        ),
-                        height: Get.height * 0.9,
-                        child: const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              PremiumScreen(),
-                            ],
-                          ),
-                        ),
-                      ),
-                      backgroundColor: Colors.white,
-                    )
-                  },
+                  onTap: () => <void>{showPremiumPaywall()},
                   child: Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: Center(

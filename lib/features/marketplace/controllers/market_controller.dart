@@ -14,6 +14,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
+
 import '../../../common/models/user_model.dart';
 import '../../home/repository/home_repository.dart';
 import '../../marketplace/controllers/supplier_controller.dart';
@@ -50,6 +52,7 @@ class MarketController extends GetxController {
 
   // Filter & Sort fields
   String? selectedLocation;
+  String? selectedLocationCode;
   String? selectedCategory;
   String searchQuery = '';
   List<Product> filteredProducts = <Product>[];
@@ -82,7 +85,24 @@ class MarketController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _initializeLocation();
     initMarket();
+  }
+
+  void _initializeLocation() {
+    final String? storedLocation = sandBox.read('selected_location');
+    final String? storedLocationCode = sandBox.read('selected_location_code');
+
+    if (storedLocation != null && storedLocationCode != null) {
+      selectedLocation = storedLocation;
+      selectedLocationCode = storedLocationCode;
+    } else {
+      selectedLocation = _profileController.myProfile.location ?? 'United Kingdom';
+      selectedLocationCode = CountryCodes.nameToCode[selectedLocation!] ?? 'GB';
+    }
+
+    // Standardize GB to UK for consistency with visual requirements
+    if (selectedLocationCode == 'GB') selectedLocationCode = 'UK';
   }
 
   // ============================
@@ -123,8 +143,20 @@ class MarketController extends GetxController {
     update();
   }
 
-  void changeLocation(String name) {
+  void changeLocation(String name, {String? code}) {
     selectedLocation = name;
+    if (code != null) {
+      selectedLocationCode = code;
+    } else {
+      selectedLocationCode = CountryCodes.nameToCode[name];
+    }
+
+    // Standardize GB to UK for consistency with visual requirements
+    if (selectedLocationCode == 'GB') selectedLocationCode = 'UK';
+
+    sandBox.write('selected_location', selectedLocation);
+    sandBox.write('selected_location_code', selectedLocationCode);
+
     update();
   }
 
@@ -149,14 +181,19 @@ class MarketController extends GetxController {
     }
 
     try {
+      String pathSuffix = '';
+      if (selectedLocation != null && selectedLocation!.isNotEmpty) {
+        pathSuffix = '&location=${Uri.encodeQueryComponent(selectedLocation!)}';
+      }
+
       final List<ApiResponseModel> responses =
           await Future.wait(<Future<ApiResponseModel>>[
         ApiService.get(
             path:
-                'goods/search?category=${Uri.encodeQueryComponent(category)}'),
+                'goods/search?category=${Uri.encodeQueryComponent(category)}$pathSuffix'),
         ApiService.get(
             path:
-                'services/search?category=${Uri.encodeQueryComponent(category)}'),
+                'services/search?category=${Uri.encodeQueryComponent(category)}$pathSuffix'),
       ]);
 
       final ApiResponseModel productRes = responses[0];
@@ -189,6 +226,8 @@ class MarketController extends GetxController {
         ..addAll(searchedProducts)
         ..addAll(searchedServices);
 
+      sortItems();
+
       hasMoreItems(false); // category search does not paginate
     } finally {
       loading.value = false;
@@ -219,13 +258,20 @@ class MarketController extends GetxController {
     update();
 
     try {
+      String pathSuffix = '';
+      if (selectedLocation != null && selectedLocation!.isNotEmpty) {
+        pathSuffix = '&location=${Uri.encodeQueryComponent(selectedLocation!)}';
+      }
+
       final List<ApiResponseModel> responses =
           await Future.wait(<Future<ApiResponseModel>>[
         ApiService.get(
-          path: 'goods/search?q=${Uri.encodeQueryComponent(searchQuery)}',
+          path:
+              'goods/search?q=${Uri.encodeQueryComponent(searchQuery)}$pathSuffix',
         ),
         ApiService.get(
-          path: 'services/search?q=${Uri.encodeQueryComponent(searchQuery)}',
+          path:
+              'services/search?q=${Uri.encodeQueryComponent(searchQuery)}$pathSuffix',
         ),
       ]);
 
@@ -248,6 +294,8 @@ class MarketController extends GetxController {
         ..clear()
         ..addAll(searchedProducts)
         ..addAll(searchedServices);
+
+      sortItems();
     } catch (e) {
       debugPrint('Search error: $e');
     } finally {
@@ -351,7 +399,8 @@ class MarketController extends GetxController {
     _homeController.notificationDescription = popUpEntry?['description'] ?? '';
   }
 
-  Future<void> initProItems({int page = 1, int size = 10, bool isBackgroundRefresh = false}) async {
+  Future<void> initProItems(
+      {int page = 1, int size = 10, bool isBackgroundRefresh = false}) async {
     error(false);
     if (!loadingMore.value && !isBackgroundRefresh) {
       if (page == 1) {
@@ -370,10 +419,15 @@ class MarketController extends GetxController {
     }
 
     try {
+      String pathSuffix = '';
+      if (selectedLocation != null && selectedLocation!.isNotEmpty) {
+        pathSuffix = '&location=${Uri.encodeQueryComponent(selectedLocation!)}';
+      }
+
       final List<ApiResponseModel> responses =
           await Future.wait(<Future<ApiResponseModel>>[
-        ApiService.get(path: 'goods/all?page=$page&size=$size'),
-        ApiService.get(path: 'services/all?page=$page&size=$size'),
+        ApiService.get(path: 'goods/all?page=$page&size=$size$pathSuffix'),
+        ApiService.get(path: 'services/all?page=$page&size=$size$pathSuffix'),
       ]);
 
       final ApiResponseModel responseProducts = responses[0];
@@ -457,6 +511,7 @@ class MarketController extends GetxController {
             searchQuery.isEmpty) {
           activeMarketItems.assignAll(combined);
         }
+        sortItems();
       } else if (page > 1) {
         // Append for pagination
         if (addedProducts.isNotEmpty || addedServices.isNotEmpty) {
@@ -650,8 +705,10 @@ class MarketController extends GetxController {
       String aLoc = extractLocation(a).toLowerCase();
       String bLoc = extractLocation(b).toLowerCase();
 
-      bool aIsMyLocation = aLoc == myLocation;
-      bool bIsMyLocation = bLoc == myLocation;
+      bool aIsMyLocation = myLocation != null &&
+          (aLoc.contains(myLocation) || myLocation.contains(aLoc));
+      bool bIsMyLocation = myLocation != null &&
+          (bLoc.contains(myLocation) || myLocation.contains(bLoc));
 
       if (aIsMyLocation && !bIsMyLocation) return -1;
       if (!aIsMyLocation && bIsMyLocation) return 1;
@@ -663,8 +720,10 @@ class MarketController extends GetxController {
       String aLoc = a.location?.toLowerCase() ?? '';
       String bLoc = b.location?.toLowerCase() ?? '';
 
-      bool aIsMyLocation = aLoc == myLocation;
-      bool bIsMyLocation = bLoc == myLocation;
+      bool aIsMyLocation = myLocation != null &&
+          (aLoc.contains(myLocation) || myLocation.contains(aLoc));
+      bool bIsMyLocation = myLocation != null &&
+          (bLoc.contains(myLocation) || myLocation.contains(bLoc));
 
       if (aIsMyLocation && !bIsMyLocation) return -1;
       if (!aIsMyLocation && bIsMyLocation) return 1;
@@ -680,6 +739,7 @@ class MarketController extends GetxController {
       proItems.sort(compareItems);
       proProducts.sort(compareItems);
       proServices.sort(compareItems);
+      activeMarketItems.sort(compareItems);
       if (supplierController.suppliers.isNotEmpty) {
         supplierController.suppliers.sort(compareSuppliers);
       }
@@ -755,8 +815,8 @@ class MarketController extends GetxController {
 
     activeMarketItems.assignAll(combined);
 
-    totalItemCount.value =
-        ((productsData?['count'] ?? 0) as int) + ((servicesData?['count'] ?? 0) as int);
+    totalItemCount.value = ((productsData?['count'] ?? 0) as int) +
+        ((servicesData?['count'] ?? 0) as int);
   }
 
   Future<void> initFeaturedItems({bool isBackgroundRefresh = false}) async {
@@ -823,8 +883,8 @@ class MarketController extends GetxController {
     final List<Object> combined = <Object>[];
     combined.addAll(newFeaturedProducts);
     combined.addAll(newFeaturedServices);
-    combined.sort((Object a, Object b) =>
-        _getCreatedAt(b).compareTo(_getCreatedAt(a)));
+    combined.sort(
+        (Object a, Object b) => _getCreatedAt(b).compareTo(_getCreatedAt(a)));
 
     featuredItems.assignAll(combined);
   }

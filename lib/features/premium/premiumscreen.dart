@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../utils/theme/theme.dart';
@@ -702,7 +702,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                           width: double.infinity,
                           child: ProCustomButton(
                               color: primaryColorLT,
-                              text: 'Start your \$1/month trial',
+                              text: 'Get 2 Months Free',
                               onPressed: () async {
                                 showModalBottomSheet<void>(
                                   context: context,
@@ -840,7 +840,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                               fontSize: 16),
                                                         ),
                                                         Text(
-                                                            '\$9.99/month ( 33% off )',
+                                                            '\$12.49/month ( 2 Months Free )',
                                                             style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -860,7 +860,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                       padding: 0,
                                                       color: primaryColorLT,
                                                       text:
-                                                          'Start your \$1/month trial',
+                                                          '2 Free Months on Pro Yearly',
                                                       loading: modalLoading,
                                                       onPressed: () async {
                                                         setModalState(() {

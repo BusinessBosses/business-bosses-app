@@ -1,12 +1,13 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
+import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profile_picture_display.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../common/widgets/network_image_with_placeholder.dart';
 import '../controller/profile_controller.dart';
@@ -136,7 +137,11 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         if (profileController.myProfile.matchType != null)
                           GestureDetector(
                             onTap: () {
-                              Get.to(() => ExpandedMatchesScreen());
+                              Get.bottomSheet(
+                                PreMatchModal(),
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                              );
                             },
                             child: Wrap(
                               crossAxisAlignment: WrapCrossAlignment.center,
