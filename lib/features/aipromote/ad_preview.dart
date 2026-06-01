@@ -34,7 +34,7 @@ class _AdPreviewState extends State<AdPreview> {
   late FocusNode _editFocusNode;
   final Map<String, bool> _selectedPlatforms = <String, bool>{
     'homepage': true,
-    'challenge': false,
+    'challenge': true,
   };
 
   @override
@@ -176,8 +176,8 @@ class _AdPreviewState extends State<AdPreview> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: 8),
-          Text(
-            'Review and edit your ad before posting it to selected platforms',
+          const Text(
+            'Review and edit content before posting',
             style: TextStyle(
               fontSize: 14,
               color: Color(0xFF6B7280),
@@ -290,46 +290,46 @@ class _AdPreviewState extends State<AdPreview> {
                         ),
                         label: Text(
                           _editMode ? 'Save' : 'Edit',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         style: TextButton.styleFrom(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          backgroundColor: Colors.black.withValues(alpha: 0.2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          backgroundColor: Colors.grey[200],
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                       ),
 
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
 
                       // Add image button
                       TextButton.icon(
                         onPressed: _pickImage,
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.add_photo_alternate,
                           size: 16,
                           color: Colors.black,
                         ),
                         label: Text(
                           _selectedImage != null ? 'Change' : 'Add Image',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         style: TextButton.styleFrom(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          backgroundColor: Colors.black.withValues(alpha: 0.2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          backgroundColor: Colors.grey[200],
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                       ),
@@ -340,21 +340,7 @@ class _AdPreviewState extends State<AdPreview> {
             ),
           ),
           SizedBox(height: 24),
-          Text(
-            'Select where to post:',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1F2937),
-            ),
-          ),
-          SizedBox(height: 12),
-          Wrap(
-            children: <Widget>[
-              _buildPlatformChip('homepage', 'Homepage'),
-              _buildPlatformChip('challenge', 'Boss Up Challenge'),
-            ],
-          ),
+          // Removed manual selection, now automatic
           // TextButton(
           //   onPressed: _selectAll,
           //   child: Text(
@@ -366,7 +352,17 @@ class _AdPreviewState extends State<AdPreview> {
           //     ),
           //   ),
           // ),
-          SizedBox(height: 24),
+          const SizedBox(height: 100),
+          Center(
+            child: const Text(
+              'Post and, get discovered',
+              style: TextStyle(
+                fontSize: 12,
+                color: Color(0xFF6B7280),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -383,21 +379,21 @@ class _AdPreviewState extends State<AdPreview> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryColorLT,
                 disabledBackgroundColor: backgroundColor,
-                padding: EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
               child: widget.isLoading
-                  ? SizedBox(
+                  ? const SizedBox(
                       height: 20,
                       width: 20,
                       child: CircularProgressIndicator(
                         color: Colors.white,
                         strokeWidth: 2,
                       ))
-                  : Text(
-                      'Post Promotion',
+                  : const Text(
+                      'Post',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

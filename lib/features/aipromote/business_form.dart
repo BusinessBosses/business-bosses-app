@@ -36,15 +36,17 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
   final TextEditingController _industryController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _extraDetailsController = TextEditingController();
-  String _selectedType = 'General Post';
+  String _selectedType = 'Promote My Business';
 
   // Add FocusNodes
   final FocusNode _nameFocus = FocusNode();
   final FocusNode _industryFocus = FocusNode();
   final FocusNode _bioFocus = FocusNode();
   final FocusNode _websiteFocus = FocusNode();
+  final FocusNode _locationFocus = FocusNode();
 
   final ProfileController profileController = Get.find();
   final ShopController shopController = Get.find();
@@ -68,6 +70,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     _industryController.addListener(() => _updateMissingFields());
     _bioController.addListener(() => _updateMissingFields());
     _websiteController.addListener(() => _updateMissingFields());
+    _locationController.addListener(() => _updateMissingFields());
     _priceController.addListener(() => _updateMissingFields());
     _extraDetailsController.addListener(() => _updateMissingFields());
   }
@@ -99,33 +102,31 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
         _bioFocus.requestFocus();
       } else if (_websiteController.text.trim().isEmpty) {
         _websiteFocus.requestFocus();
+      } else if (_locationController.text.trim().isEmpty) {
+        _locationFocus.requestFocus();
       }
     });
   }
 
   void _setShopData() {
     if (shopController.shop != null) {
-      _nameController.text = shopController.shop!.name;
+      _nameController.text = ''; // Clear for user to enter title
       _industryController.text = shopController.shop!.category;
-      _bioController.text = shopController.shop!.description;
+      _bioController.text = ''; // Clear for user to enter description
       _websiteController.text = shopController.shop!.url ?? '';
+      _locationController.text = shopController.shop!.location;
     }
   }
 
   void _setProfileData() {
     missingFields.clear();
 
-    // Set name from profile
-    _nameController.text = profile.name ?? '';
-
-    // Set industry from profile (you might need to adjust this based on your profile model)
-    _industryController.text = profile.industry ?? '';
-
-    // Set bio from profile
-    _bioController.text = profile.bio ?? '';
-
-    // Set website from profile
-    _websiteController.text = profile.website ?? '';
+    // Everything should be empty to fill if the user doesn't have a bizcenter shop
+    _nameController.text = '';
+    _industryController.text = '';
+    _bioController.text = '';
+    _websiteController.text = '';
+    _locationController.text = '';
   }
 
   void _updateMissingFields() {
@@ -133,7 +134,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
       missingFields.clear();
 
       if (_nameController.text.trim().isEmpty) {
-        missingFields.add('Business Name');
+        missingFields.add('Title');
       }
 
       if (_industryController.text.trim().isEmpty) {
@@ -144,8 +145,8 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
         missingFields.add('Description/Tagline');
       }
 
-      if (_websiteController.text.trim().isEmpty) {
-        missingFields.add('Website/Contact Link');
+      if (_locationController.text.trim().isEmpty) {
+        missingFields.add('Location');
       }
     });
   }
@@ -156,6 +157,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     _industryController.removeListener(() => _updateMissingFields());
     _bioController.removeListener(() => _updateMissingFields());
     _websiteController.removeListener(() => _updateMissingFields());
+    _locationController.removeListener(() => _updateMissingFields());
     _priceController.removeListener(() => _updateMissingFields());
     _extraDetailsController.removeListener(() => _updateMissingFields());
 
@@ -163,6 +165,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     _industryController.dispose();
     _bioController.dispose();
     _websiteController.dispose();
+    _locationController.dispose();
     _priceController.dispose();
     _extraDetailsController.dispose();
 
@@ -171,6 +174,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     _industryFocus.dispose();
     _bioFocus.dispose();
     _websiteFocus.dispose();
+    _locationFocus.dispose();
 
     super.dispose();
   }
@@ -181,11 +185,13 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
       industry: _industryController.text,
       bio: _bioController.text,
       website: _websiteController.text,
+      location: _locationController.text,
+      postType: _selectedType,
     );
     aiPromoteController.setBusinessDetails(
       name: _nameController.text.trim(),
       desc: _bioController.text.trim(),
-      loc: _websiteController.text.trim(), // pass website as "location"
+      loc: _locationController.text.trim(),
       ind: _industryController.text.trim(),
       type: _selectedType,
       priceVal: _priceController.text.trim(),
@@ -320,11 +326,56 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Text(
+                'Select type of post',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF4B5563),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF9FAFB),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0xFFD1D5DB)),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: _selectedType,
+                    isExpanded: true,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedType = newValue!;
+                      });
+                    },
+                    items: <String>[
+                      'Promote My Business',
+                      'Sell a Product or Service',
+                      'Need a Product or Service',
+                      'Find a Partner',
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         SizedBox(height: 8),
-        Text(
-          hasShop
-              ? 'Confirm your business information below to create your AI-generated promotion'
-              : 'Confirm your profile information below to create your AI-generated promotion',
+        const Text(
+          'Get featured, get matched, and discover new opportunities faster.',
           style: TextStyle(
             fontSize: 14,
             color: Color(0xFF6B7280),
@@ -369,13 +420,20 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           ),
         SizedBox(height: 24),
         widget.infoClicked ? _buildInfoCard() : SizedBox.shrink(),
+        _buildInputGroup(
+          'Title',
+          _nameController,
+          placeholder: 'Enter post title',
+          isMissing: missingFields.contains('Title'),
+          focusNode: _nameFocus, // Pass focusNode
+        ),
         Container(
           margin: const EdgeInsets.only(bottom: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const Text(
-                'Select type of ad or post',
+                'Industry',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -392,17 +450,44 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
-                    value: _selectedType,
+                    value: <String>[
+                      'Agriculture, Food & Beverage',
+                      'Learning & Education',
+                      'Construction & Real Estate',
+                      'Fashion & Beauty',
+                      'Finance & Legal',
+                      'Healthcare & Wellness',
+                      'Home, Gardens & Outdoors',
+                      'Jewellery & Timepieces',
+                      'Media & Entertainment',
+                      'Security, Safety & Equipment',
+                      'Technology, Games & Electronic',
+                      'Vehicle & Transportation',
+                      'Business Services & Consulting',
+                    ].contains(_industryController.text)
+                        ? _industryController.text
+                        : null,
                     isExpanded: true,
+                    hint: const Text('Select Industry'),
                     onChanged: (String? newValue) {
                       setState(() {
-                        _selectedType = newValue!;
+                        _industryController.text = newValue!;
                       });
                     },
                     items: <String>[
-                      'General Post',
-                      'Product',
-                      'Service',
+                      'Agriculture, Food & Beverage',
+                      'Learning & Education',
+                      'Construction & Real Estate',
+                      'Fashion & Beauty',
+                      'Finance & Legal',
+                      'Healthcare & Wellness',
+                      'Home, Gardens & Outdoors',
+                      'Jewellery & Timepieces',
+                      'Media & Entertainment',
+                      'Security, Safety & Equipment',
+                      'Technology, Games & Electronic',
+                      'Vehicle & Transportation',
+                      'Business Services & Consulting',
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -416,49 +501,27 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           ),
         ),
         _buildInputGroup(
-          '${profileController.myProfile.isSubscribed ? 'Business ' : ''}Name',
-          _nameController,
-          placeholder:
-              'Enter your ${profileController.myProfile.isSubscribed ? 'business ' : ''}name',
-          isMissing: missingFields.contains('Business Name'),
-          focusNode: _nameFocus, // Pass focusNode
-        ),
-        _buildInputGroup(
-          'Industry',
-          _industryController,
-          placeholder: 'Enter your industry',
-          isMissing: missingFields.contains('Industry'),
-          focusNode: _industryFocus, // Pass focusNode
-        ),
-        _buildInputGroup(
-          'Tagline/Description',
+          'Description',
           _bioController,
-          placeholder: 'Enter a short description or tagline',
+          placeholder: 'What is your post about?',
           maxLines: 3,
           isMissing: missingFields.contains('Description/Tagline'),
           focusNode: _bioFocus, // Pass focusNode
+        ),
+        _buildInputGroup(
+          'Location',
+          _locationController,
+          placeholder: 'Enter your location',
+          isMissing: missingFields.contains('Location'),
+          focusNode: _locationFocus,
         ),
         _buildInputGroup(
           'Website or Contact Link',
           _websiteController,
           placeholder: 'Enter your website URL / contact link',
           keyboardType: TextInputType.url,
-          isMissing: missingFields.contains('Website/Contact Link'),
           focusNode: _websiteFocus, // Pass focusNode
         ),
-        if (_selectedType == 'Product' || _selectedType == 'Service')
-          _buildInputGroup(
-            'Price (Optional)',
-            _priceController,
-            placeholder: 'e.g. \$50 or Free',
-          ),
-        if (_selectedType == 'Product' || _selectedType == 'Service')
-          _buildInputGroup(
-            'Other Details (Optional)',
-            _extraDetailsController,
-            placeholder: 'e.g. 20% off for first 10 customers',
-            maxLines: 2,
-          ),
         SizedBox(height: 24),
         SizedBox(
           width: double.infinity,
@@ -492,7 +555,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                 : Text(
                     widget.limitReached == true
                         ? 'Limit reached For This Month'
-                        : 'Generate free promotion',
+                        : 'Generate Post with AI',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

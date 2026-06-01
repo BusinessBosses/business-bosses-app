@@ -1200,28 +1200,77 @@ class HomeController extends GetxController {
   }
 
   void showCoinDialog() {
+    String score = '0';
+    if (Get.isRegistered<ReachController>()) {
+      final ReachController reachController = Get.find<ReachController>();
+      final num rawScore = reachController.myReach?['totalReachPoints'] as num? ?? 0;
+      score = rawScore.toInt().toString();
+    }
+
     showDialog(
       context: Get.context!,
-      builder: (BuildContext context) => AlertDialog(
-        title: const TextWidget(
-          text: 'Congratulations',
-          fontWeight: FontWeight.bold,
-          size: 20,
+      builder: (BuildContext context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Text(
+                'Congratulations',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'You earned 1 coin logging in today 🪄',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                'Your reach score is now',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                score,
+                style: const TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: primaryBlue,
+                ),
+              ),
+              const SizedBox(height: 30),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: const Text(
+                    'OK',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-        content: TextWidget(
-          text: 'You have earned 1 coin for logging into Business Bosses today',
-          color: Colors.black.withValues(alpha: .8),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const TextWidget(
-              text: 'OK',
-            ),
-          )
-        ],
       ),
     );
   }
@@ -1592,6 +1641,10 @@ class HomeController extends GetxController {
       loading(false);
       update();
 
+      // Load reach data first to ensure accurate score in dialog
+      await Get.find<ReachController>().loadData(
+          profileController.myProfile.uid, profileController.myProfile.uid);
+
       addCoinDaily();
       _showMyDialog();
 
@@ -1626,8 +1679,6 @@ class HomeController extends GetxController {
         debugPrint('Failed to get FCM token: $e');
       }
 
-      await Get.find<ReachController>().loadData(
-          profileController.myProfile.uid, profileController.myProfile.uid);
       loadMyRequests();
 
       // Also refresh marketplace data

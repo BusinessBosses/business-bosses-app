@@ -264,6 +264,21 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                   ),
                 ),
               ],
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(48),
+                child: TabBar(
+                  controller: tabController,
+                  isScrollable: true,
+                  indicatorColor: primaryColorLT,
+                  labelColor: primaryColorLT,
+                  unselectedLabelColor: Colors.grey,
+                  tabs: <Widget>[
+                    const Tab(text: 'People Matches'),
+                    if (matchController.matchedSuppliers.isNotEmpty)
+                      const Tab(text: 'Matching Suppliers'),
+                  ],
+                ),
+              ),
             ),
       body: Column(
         children: <Widget>[
@@ -288,6 +303,8 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                         )
                       : buildMatchesListSection(),
                 ),
+                if (matchController.matchedSuppliers.isNotEmpty)
+                  buildSuppliersTab(),
               ],
             ),
           ),

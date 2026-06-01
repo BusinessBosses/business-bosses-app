@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'dart:ui';
 
 import 'package:lucide_icons_flutter/lucide_icons.dart';

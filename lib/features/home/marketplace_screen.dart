@@ -13,14 +13,11 @@ import 'package:business_bosses_v2/features/partners/controllers/partners_contro
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
-import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
-import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
-import 'package:business_bosses_v2/bbpro/widgets/menubutton.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:country_list_pick/country_list_pick.dart';
@@ -290,7 +287,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 children: <Widget>[
                   // 1. Search Bar (Rounded)
                   Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: GestureDetector(
                       onTap: () =>
                           Get.to(() => const MarketplaceSearchScreen()),
@@ -324,11 +321,27 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   // 2. Coin Icon
                   GestureDetector(
                     onTap: () => Get.toNamed(Routes.promotionscreen),
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: SvgPicture.asset(
-                        'assets/svgs/coin.svg',
-                        height: 24,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: backgroundcolorinterface,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset('assets/svgs/coin.svg', height: 22),
+                          const SizedBox(width: 4),
+                          Text(
+                            formatCount(
+                                _profileController.myProfile.coinsCount ?? 0),
+                            style: const TextStyle(
+                              color: textColor,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -339,15 +352,32 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     onTap: () => _handleCreateButton(context),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 8),
+                          horizontal: 10, vertical: 8),
                       decoration: BoxDecoration(
                         color: const Color(0xFFFF1E39),
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 24,
+                      child: Row(
+                        children: <Widget>[
+                          const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 2),
+                          Text(
+                            _marketplaceTabController.index == 1
+                                ? 'Need'
+                                : _marketplaceTabController.index == 2
+                                    ? 'Deal'
+                                    : 'Sell',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

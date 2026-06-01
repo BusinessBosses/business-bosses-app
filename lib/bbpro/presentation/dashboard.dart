@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
@@ -21,7 +22,6 @@ import 'package:business_bosses_v2/bbpro/widgets/orderscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/quickactioncard.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
-import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -150,7 +150,7 @@ class _DashboardState extends State<Dashboard> {
                           if (!widget.noBack)
                             GestureDetector(
                               onTap: () {
-                                Get.off(() => const HomeScreen());
+                                Get.off(() => const MarketplaceScreen());
                               },
                               child: Container(
                                 margin:

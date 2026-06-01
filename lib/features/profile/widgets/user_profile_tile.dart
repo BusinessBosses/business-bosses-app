@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
-import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profile_picture_display.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';

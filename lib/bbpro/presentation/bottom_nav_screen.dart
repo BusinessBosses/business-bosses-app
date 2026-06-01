@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:business_bosses_v2/features/home/home_screen.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -133,12 +133,14 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                           Expanded(
                               flex: 10,
                               child: BottomTabButton(
-                                icon: 'assets/svgs/back_arrow.svg',
-                                label: 'Back',
+                                icon: _selectedIndex == 7
+                                    ? 'assets/svgs/dashboard.svg'
+                                    : 'assets/svgs/dashboard.svg',
+                                label: 'Home',
                                 onTap: () {
-                                  Get.back();
+                                  Get.to(() => MarketplaceScreen());
                                 },
-                                isActive: false,
+                                isActive: _selectedIndex == 7,
                               )),
                           Expanded(
                               flex: 10,
@@ -231,11 +233,18 @@ class BottomTabButton extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          label == 'Back'
-              ? const Icon(
-                  LucideIcons.chevronLeft,
-                  size: 21,
-                  color: textColor,
+          label == 'Home'
+              ? Container(
+                  width: 35.0,
+                  height: 25.0,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(
+                    'assets/images/app_logo_2.png',
+                  ),
                 )
               : SvgPicture.asset(
                   icon,
@@ -246,16 +255,25 @@ class BottomTabButton extends StatelessWidget {
                   ),
                 ),
           const SizedBox(height: 4),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 14.0,
-              fontWeight: FontWeight.w700,
-              color: isActive ? proprimaryColor : textColor,
-            ),
-          ),
+          Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: <Widget>[
+                if (label == 'Home')
+                  Icon(
+                    LucideIcons.chevronLeft,
+                    size: 15,
+                  ),
+                Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w700,
+                    color: isActive ? proprimaryColor : textColor,
+                  ),
+                ),
+              ]),
         ],
       ),
     );

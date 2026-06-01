@@ -104,23 +104,17 @@ Now, let's help the user with their next request!
           }),
     ];
 
-    final Map<String, Object> body = <String, Object>{
-      'model': 'gpt-4.1-nano',
-      'input': inputPayload,
-      'text': <String, Map<String, String>>{
-        'format': <String, String>{'type': 'text'}
-      },
-      'reasoning': <String, dynamic>{},
-      'tools': <dynamic>[],
+    final Map<String, dynamic> body = <String, dynamic>{
+      'model': 'gpt-4o-nano',
+      'messages': inputPayload,
       'temperature': 0.7,
-      'max_output_tokens': 1024,
+      'max_tokens': 1024,
       'top_p': 0.9,
-      'store': true,
     };
 
     try {
       final http.Response resp = await http.post(
-        Uri.parse('https://api.openai.com/v1/responses'),
+        Uri.parse('https://api.openai.com/v1/chat/completions'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $_apiKey',
@@ -131,16 +125,12 @@ Now, let's help the user with their next request!
       if (resp.statusCode >= 200 && resp.statusCode < 300) {
         final Map<String, dynamic> data =
             jsonDecode(resp.body) as Map<String, dynamic>;
-        // extract assistant text
-        final List<dynamic> outputs =
-            data['output'] as List<dynamic>? ?? <dynamic>[];
-        if (outputs.isNotEmpty) {
-          final List<Map<String, dynamic>> content =
-              (outputs.first['content'] as List<dynamic>? ?? <dynamic>[])
-                  .cast<Map<String, dynamic>>();
 
-          if (content.isNotEmpty && content.first['text'] is String) {
-            final String assistantResponse = content.first['text'] as String;
+        if (data['choices'] != null && (data['choices'] as List).isNotEmpty) {
+          final String? assistantResponse =
+              data['choices'][0]['message']['content'];
+
+          if (assistantResponse != null) {
             messages.add(AiChatMessage(
               text: assistantResponse,
               isMe: false,
@@ -207,7 +197,7 @@ Generate exactly 3 follow-up questions as a JSON array:
       ];
 
       final Map<String, Object> followUpBody = <String, Object>{
-        'model': 'gpt-3.5-turbo',
+        'model': 'gpt-4o',
         'messages': followUpPayload,
         'temperature': 0.7,
         'max_tokens': 200,

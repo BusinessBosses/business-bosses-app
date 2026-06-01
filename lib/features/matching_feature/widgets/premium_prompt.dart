@@ -9,7 +9,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 
 // --- CORRECTED AND STANDARDIZED IMPORT PATH ---
 import 'package:business_bosses_v2/features/matching_feature/widgets/blurred_match_card.dart';
-import 'package:get/get.dart';
 
 class PremiumPrompt extends StatelessWidget {
   final List<UserModel> blurredMatches;

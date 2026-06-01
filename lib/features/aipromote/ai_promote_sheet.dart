@@ -2,12 +2,15 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/aipromote/ad_preview.dart';
 import 'package:business_bosses_v2/features/aipromote/business_form.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
 import 'package:business_bosses_v2/features/aipromote/models/business_info_model.dart';
 import 'package:business_bosses_v2/features/aipromote/success_screen.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -33,6 +36,8 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     industry: 'Your Industry',
     bio: 'Your business tagline or description',
     website: 'https://yourwebsite.com',
+    location: 'Your Location',
+    postType: 'Promote My Business',
   );
   String _adContent = '';
   bool _loading = false;
@@ -192,7 +197,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
 
   void _handlePostAd(List<String> platforms, File? selectedImage) async {
     // Check if profileController is available when needed
-    if (platforms.contains('homepage') && profileController == null) {
+    if (profileController == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profile controller not available')),
       );
@@ -204,76 +209,76 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     });
 
     try {
-      for (String platform in platforms) {
-        String? image;
-        if (selectedImage != null) {
-          dynamic response = await ApiService.uploadFile(selectedImage);
-          if (response['success']) {
-            image = response['fileUrl'];
-          } else {
-            showSnackbar(
-              message: 'Error while creating supplier!',
-              error: true,
-            );
-            setState(() {
-              _loading = false;
-            });
-            return;
-          }
-        }
-
-        if (platform == 'homepage') {
-          // Safe call with null check
-          if (aiPromoteController.postType.value == 'Product') {
-            await shopController.addProducts(<String, dynamic>{
-              'name': _businessInfo.name,
-              'description': _adContent.trim(),
-              'price': 0, // Placeholder
-              'category': _businessInfo.industry,
-              'location': profileController!.myProfile.location ?? '',
-              'images': image != null ? <String>[image] : <dynamic>[],
-              'shopId': shopController.shop?.id,
-              'userId': profileController!.myProfile.uid,
-              'itemType': 'product',
-              'isActive': true,
-              'quantity': 1,
-            });
-          } else if (aiPromoteController.postType.value == 'Service') {
-            await shopController.addService(<String, dynamic>{
-              'name': _businessInfo.name,
-              'description': _adContent.trim(),
-              'price': 0, // Placeholder
-              'category': _businessInfo.industry,
-              'location': profileController!.myProfile.location ?? '',
-              'images': image != null ? <String>[image] : <dynamic>[],
-              'shopId': shopController.shop?.id,
-              'userId': profileController!.myProfile.uid,
-              'itemType': 'service',
-              'isActive': true,
-              'serviceType': '1:1',
-              'deliveryTime': 'true',
-              'repeat': 'No (One-time Service)',
-            });
-          } else {
-            await createPostController.createPost(
-              <String, dynamic>{
-                'title': _adContent.trim(),
-                'timestamp': DateTime.now().millisecondsSinceEpoch,
-                'images': image != null ? <String>[image] : <dynamic>[],
-              },
-              profileController!, // Using ! since we checked above
-            );
-          }
+      String? image;
+      if (selectedImage != null) {
+        dynamic response = await ApiService.uploadFile(selectedImage);
+        if (response['success']) {
+          image = response['fileUrl'];
         } else {
-          await createBossUpController.createForum(<String, dynamic>{
-            'title': 'AI Generated Ad for ${_businessInfo.name}',
-            'description': _adContent.trim(),
-            'timestamp': DateTime.now().millisecondsSinceEpoch,
-            'industryId': 'industryId',
-            'images': image != null ? <String>[image] : <dynamic>[],
+          showSnackbar(
+            message: 'Error while uploading image!',
+            error: true,
+          );
+          setState(() {
+            _loading = false;
           });
+          return;
         }
       }
+
+      // Automatically update user matchType based on post type
+      String? newMatchType;
+      if (_businessInfo.postType == 'Promote My Business' ||
+          _businessInfo.postType == 'Sell a Product or Service') {
+        newMatchType = 'seller';
+      } else if (_businessInfo.postType == 'Find a Partner') {
+        newMatchType = 'partner';
+      }
+
+      if (newMatchType != null &&
+          profileController!.myProfile.matchType != newMatchType) {
+        await ApiService.put(
+          path: 'users/${profileController!.myProfile.uid}',
+          body: <String, String>{'matchType': newMatchType},
+        );
+        profileController!.myProfile = UserModel.fromMap(<dynamic, dynamic>{
+          ...profileController!.myProfile.toMap(),
+          'matchType': newMatchType
+        });
+      }
+
+      // Automatically post to Boss Up Feed (Old Home)
+      createPostController.shouldPromote.value = false;
+      await createPostController.createPost(
+        <String, dynamic>{
+          'title': _adContent.trim(),
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+          'images': image != null ? <String>[image] : <dynamic>[],
+        },
+        profileController!,
+      );
+
+      // Find matching industry ID
+      String industryId = 'industryId';
+      if (Get.isRegistered<CommunitiesController>()) {
+        final CommunitiesController communitiesController = Get.find();
+        try {
+          final Industry matchingIndustry = communitiesController.industries
+              .firstWhere((Industry i) => i.industry == _businessInfo.industry);
+          industryId = matchingIndustry.industryId ?? 'industryId';
+        } catch (e) {
+          debugPrint('Matching industry not found: $e');
+        }
+      }
+
+      // Automatically post to Find My Match Feed
+      await createBossUpController.createForum(<String, dynamic>{
+        'title': _businessInfo.name,
+        'description': _adContent.trim(),
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'industryId': industryId,
+        'images': image != null ? <String>[image] : <dynamic>[],
+      });
 
       // Success - only update state if widget is still mounted
       if (mounted) {
@@ -430,10 +435,8 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
                           children: <Widget>[
                             Text(
                               _currentStep == PromoteStep.preview
-                                  ? 'Preview Promotion'
-                                  : hasShop
-                                      ? 'Business Info Confirmation'
-                                      : 'Profile Info Confirmation',
+                                  ? 'Preview Post'
+                                  : 'Post with AI. Get Matched',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,

@@ -66,20 +66,14 @@ class AiPromoteController extends GetxController {
       extraContext = ' Additional details: ${additionalDetails.value}.';
     }
 
-    if (postType.value == 'Product') {
-      typeContext = 'to sell a product$priceContext';
-    } else if (postType.value == 'Service') {
-      typeContext = 'to sell a service$priceContext';
-    }
-
-    // build a default prompt
-    prompt.value = profileController.myProfile.isSubscribed
-        ? 'Write a catchy ad $typeContext for a $industry business '
-            'called "$businessName" located in $location that: '
-            '$description.$extraContext'
-        : 'Write a catchy ad $typeContext for a $industry business '
-            'for the person named "$businessName" located in $location that: '
-            '$description.$extraContext';
+    // build a default prompt focusing on a general catchy post
+    prompt.value =
+        'Rewrite the following information into a professional and catchy social media post for a $postType. '
+        'Business Name: $businessName. '
+        'Industry: $industry. '
+        'Location: $location. '
+        'Description: $description. '
+        'NO EMOJIS PLEASE.';
   }
 
   /// If the user tweaked the prompt in AiPromoteSheet, call this
@@ -93,32 +87,27 @@ class AiPromoteController extends GetxController {
     isGenerating.value = true;
     errorMessage.value = null;
 
-    Map<String, Object> body = <String, Object>{};
-
-    body = <String, Object>{
+    final Map<String, dynamic> body = <String, dynamic>{
       'model': 'gpt-4o',
-      'input': <Map<String, String>>[
+      'messages': <Map<String, String>>[
         <String, String>{
           'role': 'system',
           'content': '''
 You are **AiPromoBot**, an expert at writing punchy, high-converting business ads.
 Focus on clarity, engagement, and a strong call-to-action. Leave no placeholders in the output and also no dummy data. Don't use brackets too for businesses name and website.
+STRICT RULE: Do not include any emojis in the generated content.
 '''
         },
         <String, String>{'role': 'user', 'content': prompt.value},
       ],
-      'text': <String, Map<String, String>>{
-        'format': <String, String>{'type': 'text'}
-      },
       'temperature': 0.7,
-      'max_output_tokens': 512,
+      'max_tokens': 512,
       'top_p': 0.9,
-      'store': false,
     };
 
     try {
       final http.Response resp = await http.post(
-        Uri.parse('https://api.openai.com/v1/responses'),
+        Uri.parse('https://api.openai.com/v1/chat/completions'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $_apiKey',
@@ -130,15 +119,9 @@ Focus on clarity, engagement, and a strong call-to-action. Leave no placeholders
         final Map<String, dynamic> data =
             jsonDecode(resp.body) as Map<String, dynamic>;
         log(resp.body.toString());
-        final List<dynamic> outputs =
-            data['output'] as List<dynamic>? ?? <dynamic>[];
-        if (outputs.isNotEmpty) {
-          final List<Map<String, dynamic>> content =
-              (outputs.first['content'] as List<dynamic>?)
-                      ?.cast<Map<String, dynamic>>() ??
-                  <Map<String, dynamic>>[];
-          final String? text =
-              content.isNotEmpty ? content.first['text'] as String : null;
+
+        if (data['choices'] != null && (data['choices'] as List).isNotEmpty) {
+          final String? text = data['choices'][0]['message']['content'];
           if (text != null) {
             adCopy.value = text.trim();
           } else {

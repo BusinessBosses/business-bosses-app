@@ -1,13 +1,16 @@
 import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/expandedsupplierspage.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/request_details_sheet.dart';
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
-import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
+import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -293,7 +296,14 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
           ),
           trailing: const Icon(LucideIcons.chevronRight, size: 16),
           onTap: () {
-            // Navigate to supplier profile if needed
+            if (supplier.isBiz!) {
+              Get.to(
+                () => PublicProfileScreen(currentIndex: 1),
+                arguments: supplier.user,
+              );
+            } else {
+              Get.to(() => ExpandedSuppliersPage(supplier: supplier));
+            }
           },
         ),
       );
@@ -325,7 +335,7 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
           ),
           trailing: const Icon(LucideIcons.chevronRight, size: 16),
           onTap: () {
-            // Navigate to request details if needed
+            RequestDetailsSheet.show(context, request);
           },
         ),
       );
@@ -354,7 +364,7 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
               text: 'Go Home',
               color: primaryColorLT,
               onPressed: () {
-                Get.to(() => HomeScreen());
+                Get.offAllNamed(Routes.marketPlace);
               },
             ),
           ),

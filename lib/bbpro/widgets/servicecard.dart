@@ -316,25 +316,21 @@ class _ServiceCardState extends State<ServiceCard> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context);
             },
             child: const Text('No'),
           ),
           TextButton(
             onPressed: () async {
-              if (widget.shop != null) {
-                final bool delete =
-                    await shopController.deleteService(widget.service!.id);
-                if (delete) {
-                  showSnackbar(message: 'Service deleted successfully!');
-                  Navigator.pop(Get.context!);
-                  Navigator.pop(Get.context!);
-                } else {
-                  showSnackbar(message: 'Error deleting service!', error: true);
-                  Navigator.pop(Get.context!);
-                }
-                setState(() {});
+              final bool delete =
+                  await shopController.deleteService(widget.service!.id);
+              if (delete) {
+                showSnackbar(message: 'Service deleted successfully!');
+                Navigator.pop(context);
+              } else {
+                showSnackbar(message: 'Error deleting service!', error: true);
+                Navigator.pop(context);
               }
+              setState(() {});
             },
             child: const Text('Yes'),
           ),
