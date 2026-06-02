@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/request_details_sheet.dart';
@@ -11,15 +10,6 @@ class SuccessScreen extends StatelessWidget {
   final VoidCallback onCreateAnother;
 
   const SuccessScreen({super.key, required this.onCreateAnother});
-
-  void _handleShare() async {
-    try {
-      socialShare(
-          'Check out my business! I just created a promotion for my business on BusinessBosses.\nhttps://vm.businessbosses.co.uk');
-    } catch (e) {
-      // log('Error sharing: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

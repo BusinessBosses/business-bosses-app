@@ -62,7 +62,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
 
     final ApiResponseModel resp = await partnerController.submitPartner(
       companyName: nameController.text.trim(),
-      companyEmail: profileController.myProfile.email ?? '', // default to user email
+      companyEmail: profileController.myProfile.email, // default to user email
       partnershipType: 'marketplace', // default
       category: selectedCategory,
       location: country.isEmpty ? shopController.shop?.location : country,

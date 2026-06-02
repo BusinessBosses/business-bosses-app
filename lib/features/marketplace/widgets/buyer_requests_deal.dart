@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
@@ -44,14 +43,6 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
       url.isNotEmpty &&
       Uri.parse(url).hasAbsolutePath &&
       (url.startsWith('http'));
-
-  void _navigateToChatScreen(BuyerRequestModel req) {
-    Get.to(
-      () =>
-          const ChatRoomScreen(frommarketplace: false, fromBuyerRequest: true),
-      arguments: <String, Object>{'user': req.user, 'buyerRequest': req},
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -107,22 +107,6 @@ class _AdPreviewState extends State<AdPreview> {
     });
   }
 
-  void _togglePlatform(String platform) {
-    setState(() {
-      final bool currentlySelected = _selectedPlatforms[platform]!;
-      if (!currentlySelected) {
-        // User is trying to select this platform → unselect all others first
-        _selectedPlatforms.forEach((String key, _) {
-          _selectedPlatforms[key] = false;
-        });
-        _selectedPlatforms[platform] = true;
-      } else {
-        // If it’s already selected, tapping will unselect it
-        _selectedPlatforms[platform] = false;
-      }
-    });
-  }
-
   // void _selectAll() {
   //   bool allSelected = _selectedPlatforms.values.every((bool v) => v);
   //   setState(() {
@@ -137,28 +121,6 @@ class _AdPreviewState extends State<AdPreview> {
   // bool get _areAllSelected => _selectedPlatforms.values.every((bool v) => v);
 
   ProfileController profileController = Get.find<ProfileController>();
-
-  Widget _buildPlatformChip(String key, String label) {
-    bool isSelected = _selectedPlatforms[key]!;
-    return GestureDetector(
-      onTap: () => _togglePlatform(key),
-      child: Container(
-        margin: EdgeInsets.only(right: 8, bottom: 8),
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? Color(0xFF6366F1) : Color(0xFFF3F4F6),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            color: isSelected ? Colors.white : Color(0xFF4B5563),
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

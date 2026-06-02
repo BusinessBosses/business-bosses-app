@@ -3,9 +3,7 @@ import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
-import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
-import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -48,64 +46,10 @@ class _BottomBarState extends State<BottomBar> {
     }
   }
 
-  void _showPostOptionsSheet(BuildContext context) {
-    PostOptionsBottomSheet.show(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
     ChatController chatController = Get.find();
-
-    void enterChallenge() {
-      int now = DateTime.now().millisecondsSinceEpoch;
-      int previousStamp =
-          profileController.myProfile.bossOfTheWeekTimeStamp ?? 0;
-
-      if ((previousStamp + 1209600000) > now &&
-          industry.industryId == '-MsUOGcOT9oRXGakCcJv') {
-        const SnackBar snackBar = SnackBar(
-          duration: Duration(seconds: 4),
-          content: Text(
-            'You may have posted in Boss Up Challenge'
-            ' in the past 12 weeks. You can only post once in 12 weeks.',
-          ),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      } else {
-        if (industry.industryId == '-MsUOGcOT9oRXGakCcJv') {
-          Get.to(
-            () => CreateBossUpScreen(industryModel: industry),
-            arguments: <String, Object?>{
-              'isBossUp': true,
-              'industryId': industry.industryId,
-            },
-            binding: BindingsBuilder<CreateBossUpController>.put(
-                () => CreateBossUpController()),
-          );
-        } else {
-          if (profileController.myProfile.postChallenges!
-              .contains(industry.industryId)) {
-            const SnackBar snackBar = SnackBar(
-              duration: Duration(seconds: 4),
-              content: Text('You can only post once in a challenge'),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            return;
-          }
-          Get.to(
-            () => CreateBossUpScreen(industryModel: industry),
-            arguments: <String, Object?>{
-              'isBossUp': true,
-              'industryId': industry.industryId,
-            },
-            binding: BindingsBuilder<CreateBossUpController>.put(
-              () => CreateBossUpController(),
-            ),
-          );
-        }
-      }
-    }
 
     return Align(
       alignment: Alignment.bottomCenter,

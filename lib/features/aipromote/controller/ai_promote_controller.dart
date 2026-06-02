@@ -55,16 +55,9 @@ class AiPromoteController extends GetxController {
       additionalDetails.value = additionalDetailsVal;
     }
 
-    String typeContext = '';
-    String priceContext = '';
-    if (price.value.isNotEmpty) {
-      priceContext = ' priced at ${price.value}';
-    }
+    if (price.value.isNotEmpty) {}
 
-    String extraContext = '';
-    if (additionalDetails.value.isNotEmpty) {
-      extraContext = ' Additional details: ${additionalDetails.value}.';
-    }
+    if (additionalDetails.value.isNotEmpty) {}
 
     // build a default prompt focusing on a general catchy post
     prompt.value =

@@ -334,7 +334,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           const SizedBox(width: 4),
                           Text(
                             formatCount(
-                                _profileController.myProfile.coinsCount ?? 0),
+                                _profileController.myProfile.coinsCount),
                             style: const TextStyle(
                               color: textColor,
                               fontSize: 13,
