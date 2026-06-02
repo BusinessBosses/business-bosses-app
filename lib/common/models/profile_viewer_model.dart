@@ -28,8 +28,10 @@ class ProfileViewerModel {
 
   factory ProfileViewerModel.fromMap(Map<String, dynamic> map) {
     return ProfileViewerModel(
-      uid: map['uid'] as String,
-      timestamp: map['timestamp'] as int,
+      uid: map['uid']?.toString() ?? '',
+      timestamp: map['timestamp'] is int
+          ? map['timestamp'] as int
+          : int.tryParse(map['timestamp']?.toString() ?? '0') ?? 0,
     );
   }
 

@@ -46,49 +46,63 @@ class Industry {
 
   factory Industry.toObject(Map<dynamic, dynamic> map) {
     return Industry(
-      industryId: map['industryId'] as String,
-      industry: map['industry'] as String,
-      photo: map['photo'] as String,
-      description: map['description'] as String,
-      active: map['active'] as bool,
-      timestamp: int.parse(map['timestamp'].toString()),
-      categoryId: map['categoryId'] as String,
+      industryId: map['industryId']?.toString() ?? '',
+      industry: map['industry']?.toString() ?? '',
+      photo: map['photo']?.toString() ?? '',
+      description: map['description']?.toString() ?? '',
+      active: map['active'] == true,
+      timestamp: map['timestamp'] != null
+          ? int.tryParse(map['timestamp'].toString()) ?? 0
+          : 0,
+      categoryId: map['categoryId']?.toString() ?? '',
       joinedUsers: map['joinedUsers'] == null
           ? <String>[]
           : List<String>.from(map['joinedUsers']),
-      criteria: map['criteria'] as String?,
-      award: map['award'] as String?,
-      createTitle: map['createTitle'] as String?,
-      createInfo: map['createInfo'] as String?,
-      createDescription: map['createDescription'] as String?,
+      criteria: map['criteria']?.toString(),
+      award: map['award']?.toString(),
+      createTitle: map['createTitle']?.toString(),
+      createInfo: map['createInfo']?.toString(),
+      createDescription: map['createDescription']?.toString(),
       startAt: map['startAt'] == null
           ? null
-          : DateTime.parse(map['startAt'] as String),
+          : DateTime.tryParse(map['startAt'].toString()),
       endedAt: map['endedAt'] == null
           ? null
-          : DateTime.parse(map['endedAt'] as String),
-      joinedUsersCount: map['joinedUsersCount'] ?? 0,
+          : DateTime.tryParse(map['endedAt'].toString()),
+      joinedUsersCount: map['joinedUsersCount'] is int
+          ? map['joinedUsersCount'] as int
+          : int.tryParse(map['joinedUsersCount']?.toString() ?? '0') ?? 0,
     );
   }
 
   factory Industry.fromMap(Map<String, dynamic> map) {
     return Industry(
-      industryId: map['industryId'],
-      industry: map['industry'],
-      photo: map['photo'],
-      description: map['description'],
-      timestamp: map['timestamp'],
-      active: map['active'],
-      categoryId: map['categoryId'],
-      joinedUsers: List<String>.from(map['joinedUsers'] ?? <String>[]),
-      criteria: map['criteria'],
-      award: map['award'],
-      createTitle: map['createTitle'],
-      createInfo: map['createInfo'],
-      createDescription: map['createDescription'],
-      startAt: map['startAt'] != null ? DateTime.parse(map['startAt']) : null,
-      endedAt: map['endedAt'] != null ? DateTime.parse(map['endedAt']) : null,
-      joinedUsersCount: map['joinedUsersCount'] ?? 0,
+      industryId: map['industryId']?.toString(),
+      industry: map['industry']?.toString(),
+      photo: map['photo']?.toString(),
+      description: map['description']?.toString(),
+      timestamp: map['timestamp'] != null
+          ? int.tryParse(map['timestamp'].toString())
+          : null,
+      active: map['active'] == true,
+      categoryId: map['categoryId']?.toString(),
+      joinedUsers: map['joinedUsers'] != null
+          ? (map['joinedUsers'] as List).map((dynamic e) => e?.toString() ?? '').toList()
+          : <String>[],
+      criteria: map['criteria']?.toString(),
+      award: map['award']?.toString(),
+      createTitle: map['createTitle']?.toString(),
+      createInfo: map['createInfo']?.toString(),
+      createDescription: map['createDescription']?.toString(),
+      startAt: map['startAt'] != null
+          ? DateTime.tryParse(map['startAt'].toString())
+          : null,
+      endedAt: map['endedAt'] != null
+          ? DateTime.tryParse(map['endedAt'].toString())
+          : null,
+      joinedUsersCount: map['joinedUsersCount'] != null
+          ? int.tryParse(map['joinedUsersCount'].toString()) ?? 0
+          : 0,
     );
   }
 

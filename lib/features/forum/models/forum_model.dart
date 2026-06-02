@@ -100,57 +100,51 @@ class ForumModel {
 
   factory ForumModel.fromMap(Map<String, dynamic> map) {
     return ForumModel(
-      forumId: map['forumId'] as String,
-      industryId: map['industryId'] as String,
-      description:
-          map['description'] != null ? map['description'] as String : null,
-      title: map['title'] != null ? map['title'] as String : null,
-      ytUrl: map['ytUrl'] != null ? map['ytUrl'] as String : null,
+      forumId: map['forumId']?.toString() ?? '',
+      industryId: map['industryId']?.toString() ?? '',
+      description: map['description']?.toString(),
+      title: map['title']?.toString(),
+      ytUrl: map['ytUrl']?.toString(),
       industry: map['industry'] != null && map['industry'] is Map
-          ? Industry.fromMap(map['industry'])
+          ? Industry.fromMap(Map<String, dynamic>.from(map['industry']))
           : null,
       images: map['images'] != null && map['images'] != ''
-          ? List<String>.from((map['images']))
-                  .where((String element) => element.isNotEmpty)
-                  .toList()
-                  .isEmpty
-              ? null
-              : List<String>.from((map['images']))
-                  .where((String element) => element.isNotEmpty)
-                  .toList()
+          ? (map['images'] as List)
+              .map((dynamic e) => e?.toString() ?? '')
+              .where((String e) => e.isNotEmpty)
+              .toList()
           : null,
       timestamp: map['timestamp'] != null
-          ? int.parse(map['timestamp'].toString())
+          ? int.tryParse(map['timestamp'].toString())
           : null,
       likes: map['likes'] != null
-          ? List<String>.from(map['likes'].map((dynamic like) {
+          ? (map['likes'] as List).map((dynamic like) {
               if (like is Map<String, dynamic>) {
-                return like['userId'].toString();
+                return like['userId']?.toString() ?? '';
               }
-              return like.toString();
-            }))
+              return like?.toString() ?? '';
+            }).where((String e) => e.isNotEmpty).toList()
           : null,
       coins: map['coins'] != null
-          ? List<String>.from(map['coins'].map((dynamic coin) {
+          ? (map['coins'] as List).map((dynamic coin) {
               if (coin is Map<String, dynamic>) {
-                return coin['userId'].toString();
+                return coin['userId']?.toString() ?? '';
               }
-              return coin.toString();
-            }))
+              return coin?.toString() ?? '';
+            }).where((String e) => e.isNotEmpty).toList()
           : null,
-      promote: map['promote'] as bool,
-      approved: map['approved'] as bool,
+      promote: map['promote'] == true,
+      approved: map['approved'] == true,
       comments: map['comments'] != null
-          ? List<dynamic>.from(map['comments'])
-              .map((dynamic e) =>
-                  CommentModel.fromMap(e as Map<String, dynamic>))
+          ? (map['comments'] as List)
+              .map((dynamic e) => CommentModel.fromMap(Map<String, dynamic>.from(e)))
               .toList()
           : <CommentModel>[],
       user: map['user'] != null
-          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          ? UserModel.fromMap(Map<String, dynamic>.from(map['user']))
           : null,
-      views: map['views'] != null ? map['views'] as int : 0,
-      isRanked: map['isRanked'] ?? false,
+      views: map['views'] != null ? int.tryParse(map['views'].toString()) ?? 0 : 0,
+      isRanked: map['isRanked'] == true,
     );
   }
 

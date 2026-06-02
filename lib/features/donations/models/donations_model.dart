@@ -118,57 +118,56 @@ class DonationModel {
 
   factory DonationModel.fromMap(Map<String, dynamic> map) {
     return DonationModel(
-      id: map['id'] as String,
-      categoryId: map['categoryId'] as String,
-      description:
-          map['description'] != null ? map['description'] as String : null,
-      title: map['title'] != null ? map['title'] as String : null,
-      youtubeUrls:
-          map['youtubeUrls'] != null ? map['youtubeUrls'] as String : null,
-      targetAmount:
-          map['targetAmount'] != null ? map['targetAmount'] as int : null,
-      amountRecieved:
-          map['amountRecieved'] != null ? map['amountRecieved'] as int : 0,
-      photo: map['photo'] != null ? map['photo'] as String : null,
+      id: map['id']?.toString() ?? '',
+      categoryId: map['categoryId']?.toString() ?? '',
+      description: map['description']?.toString(),
+      title: map['title']?.toString(),
+      youtubeUrls: map['youtubeUrls']?.toString(),
+      targetAmount: map['targetAmount'] != null
+          ? int.tryParse(map['targetAmount'].toString())
+          : null,
+      amountRecieved: map['amountRecieved'] != null
+          ? int.tryParse(map['amountRecieved'].toString()) ?? 0
+          : 0,
+      photo: map['photo']?.toString(),
       timestamp: map['timestamp'] != null
-          ? int.parse(map['timestamp'].toString())
+          ? int.tryParse(map['timestamp'].toString())
           : null,
       likes: map['likes'] != null
-          ? List<String>.from(map['likes'].map((dynamic like) {
+          ? (map['likes'] as List).map((dynamic like) {
               if (like is Map<String, dynamic>) {
-                return like['userId'].toString();
+                return like['userId']?.toString() ?? '';
               }
-              return like.toString();
-            }))
+              return like?.toString() ?? '';
+            }).where((String e) => e.isNotEmpty).toList()
           : null,
       coins: map['coins'] != null
-          ? List<String>.from(map['coins'].map((dynamic coin) {
+          ? (map['coins'] as List).map((dynamic coin) {
               if (coin is Map<String, dynamic>) {
-                return coin['userId'].toString();
+                return coin['userId']?.toString() ?? '';
               }
-              return coin.toString();
-            }))
+              return coin?.toString() ?? '';
+            }).where((String e) => e.isNotEmpty).toList()
           : null,
       comments: map['comments'] != null
-          ? List<dynamic>.from(map['comments'])
-              .map((dynamic e) =>
-                  CommentModel.fromMap(e as Map<String, dynamic>))
+          ? (map['comments'] as List)
+              .map((dynamic e) => CommentModel.fromMap(Map<String, dynamic>.from(e)))
               .toList()
           : null,
       user: map['user'] != null
-          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          ? UserModel.fromMap(Map<String, dynamic>.from(map['user']))
           : null,
-      views: map['views'] != null ? map['views'] as int : 0,
-      isApproved: map['isApproved'] ?? false,
-      isSuspended: map['isSuspended'] ?? false,
-      isCashoutApproved: map['isCashoutApproved'] ?? false,
-      images:
-          map['images'] != null ? List<String>.from(map['images']) : <String>[],
+      views: map['views'] != null ? int.tryParse(map['views'].toString()) ?? 0 : 0,
+      isApproved: map['isApproved'] == true,
+      isSuspended: map['isSuspended'] == true,
+      isCashoutApproved: map['isCashoutApproved'] == true,
+      images: map['images'] != null
+          ? (map['images'] as List).map((dynamic e) => e?.toString() ?? '').toList()
+          : <String>[],
       transactions: map['transactions'] != null
-          ? List<dynamic>.from(map['transactions'])
-              .where((dynamic t) => t != null) // Filter out null elements
-              .map((dynamic t) =>
-                  DonationTransaction.fromMap(t as Map<String, dynamic>))
+          ? (map['transactions'] as List)
+              .where((dynamic t) => t != null)
+              .map((dynamic t) => DonationTransaction.fromMap(Map<String, dynamic>.from(t)))
               .toList()
           : <DonationTransaction>[],
     );
@@ -200,11 +199,15 @@ class DonationTransaction {
 
   factory DonationTransaction.fromMap(Map<String, dynamic> map) {
     return DonationTransaction(
-      id: map['id'] as String,
-      date: DateTime.parse(map['date']),
-      amount: int.parse(map['amount']),
-      description: map['description'] as String?,
-      type: map['type'] as String,
+      id: map['id']?.toString() ?? '',
+      date: map['date'] != null
+          ? DateTime.tryParse(map['date'].toString()) ?? DateTime.now()
+          : DateTime.now(),
+      amount: map['amount'] != null
+          ? int.tryParse(map['amount'].toString()) ?? 0
+          : 0,
+      description: map['description']?.toString(),
+      type: map['type']?.toString() ?? '',
     );
   }
 

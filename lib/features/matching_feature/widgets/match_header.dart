@@ -27,13 +27,13 @@ class MatchHeader extends StatelessWidget {
         children: <Widget>[
           Text(
             title == 'investor'
-                ? 'Funding Opportunities'
+                ? 'Funding opportunities for you'
                 : title == 'partner'
-                    ? 'Partners / Suppliers Opportunities'
+                    ? 'Partner Opportunities for you'
                     : title == 'seller'
-                        ? 'Buyers Opportunities'
+                        ? 'Customer opportunities for you'
                         : title == 'mentor'
-                            ? 'Mentorship Opportunities'
+                            ? 'Mentorship opportunities for you'
                             : title,
             style: const TextStyle(
               fontSize: 18,

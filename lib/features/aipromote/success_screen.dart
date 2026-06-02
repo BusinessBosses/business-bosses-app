@@ -47,68 +47,7 @@ class SuccessScreen extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 24),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Color(0xFFF9FAFB),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      '1,000+',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF6366F1),
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'Potential Viewers',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF6B7280),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 1,
-                height: 40,
-                color: Color(0xFFE5E7EB),
-              ),
-              Expanded(
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      'Global',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF6366F1),
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'Reach',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF6B7280),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+        const SizedBox(height: 24),
         // Showing real matches from the BuyerRequestController
         GetBuilder<BuyerRequestController>(
           init: BuyerRequestController(),

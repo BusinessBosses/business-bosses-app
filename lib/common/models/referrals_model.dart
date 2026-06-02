@@ -38,9 +38,11 @@ class ReferralsModel {
 
   factory ReferralsModel.fromMap(Map<String, dynamic> map) {
     return ReferralsModel(
-      referredUserUid: map['referredUserUid'] as String,
-      referBy: map['referBy'] as String,
-      referTo: List<String>.from((map['referTo'])),
+      referredUserUid: map['referredUserUid']?.toString() ?? '',
+      referBy: map['referBy']?.toString() ?? '',
+      referTo: map['referTo'] != null
+          ? List<String>.from(map['referTo'] as List)
+          : <String>[],
       // timestamp: map['timestamp'] as int,
     );
   }

@@ -395,95 +395,94 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
               // Row 2: Location Picker and Find Your Match
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const Icon(Icons.place, size: 18, color: Color(0xFFFF1E39)),
-                  const SizedBox(width: 4),
-
-                  // Location Picker
-                  Flexible(
-                    flex: 2,
-                    child: CountryListPick(
-                      appBar: AppBar(
-                        leading: IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                        ),
-                        centerTitle: true,
-                        title: const Text('Select Location'),
-                      ),
-                      initialSelection:
-                          (_marketController.selectedLocationCode?.isNotEmpty ??
-                                  false)
-                              ? (_marketController.selectedLocationCode == 'UK'
-                                  ? 'GB'
-                                  : _marketController.selectedLocationCode)
-                              : 'GB',
-                      onChanged: (CountryCode? code) {
-                        selectedLocationChanged(code?.name, code?.code);
-                      },
-                      pickerBuilder:
-                          (BuildContext context, CountryCode? code) => Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
-                              code?.name ?? 'United Kingdom',
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
+                  // Location Picker Section
+                  Expanded(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        const Icon(Icons.place,
+                            size: 18, color: Color(0xFFFF1E39)),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: CountryListPick(
+                            appBar: AppBar(
+                              leading: IconButton(
+                                onPressed: () => Navigator.pop(context),
+                                icon: SvgPicture.asset(
+                                    'assets/svgs/backbutton.svg'),
                               ),
+                              centerTitle: true,
+                              title: const Text('Select Location'),
+                            ),
+                            initialSelection: (_marketController
+                                        .selectedLocationCode?.isNotEmpty ??
+                                    false)
+                                ? (_marketController.selectedLocationCode ==
+                                        'UK'
+                                    ? 'GB'
+                                    : _marketController.selectedLocationCode)
+                                : 'GB',
+                            onChanged: (CountryCode? code) {
+                              selectedLocationChanged(code?.name, code?.code);
+                            },
+                            pickerBuilder:
+                                (BuildContext context, CountryCode? code) =>
+                                    Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Flexible(
+                                  child: Text(
+                                    code?.name ?? 'United Kingdom',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 2),
+                                const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 16,
+                                  color: Colors.black54,
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 2),
-                          const Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 16,
-                            color: Colors.black54,
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
 
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 12),
 
-                  // Find Your Match
-                  Flexible(
-                    flex: 2,
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.bottomSheet(
-                          PreMatchModal(),
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                        ).then((_) {
-                          // After selecting in PreMatchModal, we can optionally navigate to matches
-                          // but usually PreMatchModal handles its own Search button.
-                          // If we want to automatically go to matches after they close the modal:
-                          // Get.to(() => const ExpandedMatchesScreen());
-                        });
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const <Widget>[
-                          Flexible(
-                            child: Text(
-                              'Find Your Match',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Color(0xFF5B4DFF),
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13,
-                              ),
-                            ),
+                  // Find Your Match Section
+                  GestureDetector(
+                    onTap: () {
+                      Get.bottomSheet(
+                        PreMatchModal(),
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                      );
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const <Widget>[
+                        Text(
+                          'Find Your Match',
+                          style: TextStyle(
+                            color: Color(0xFF5B4DFF),
+                            fontWeight: FontWeight.w900,
+                            fontSize: 14,
                           ),
-                          SizedBox(width: 4),
-                          Icon(Icons.chevron_right,
-                              color: Color(0xFF5B4DFF), size: 16),
-                        ],
-                      ),
+                        ),
+                        SizedBox(width: 4),
+                        Icon(Icons.chevron_right,
+                            color: Color(0xFF5B4DFF), size: 16),
+                      ],
                     ),
                   ),
                 ],
@@ -509,10 +508,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         isScrollable: false,
         labelColor: Colors.black87,
         unselectedLabelColor: Colors.black87,
-        labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
         unselectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 12,
+          fontWeight: FontWeight.w800,
+          fontSize: 13,
         ),
         indicatorColor: primaryColorLT,
         indicatorWeight: 3,

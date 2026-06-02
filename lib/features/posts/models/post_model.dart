@@ -148,59 +148,66 @@ class PostModel {
 
   factory PostModel.fromMap(Map<String, dynamic> map) {
     return PostModel(
-      postId: map['postId'] as String,
-      title: map['title'] as String,
+      postId: map['postId']?.toString() ?? '',
+      title: map['title']?.toString() ?? '',
       images: map['images'] != null
-          ? List<String>.from((map['images']))
-                  .where((String element) => element.isNotEmpty)
-                  .isEmpty
-              ? null
-              : List<String>.from((map['images']))
-                  .where((String element) => element.isNotEmpty)
-                  .toList()
+          ? (map['images'] as List)
+              .map((dynamic e) => e?.toString() ?? '')
+              .where((String e) => e.isNotEmpty)
+              .toList()
           : null,
-      timestamp: int.parse(map['timestamp'].toString()),
-      oldtimestamp:
-          map['oldtimestamp'] != null ? map['oldtimestamp'] as int : null,
-      likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
-      coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
+      timestamp: map['timestamp'] != null
+          ? int.tryParse(map['timestamp'].toString()) ?? 0
+          : 0,
+      oldtimestamp: map['oldtimestamp'] != null
+          ? int.tryParse(map['oldtimestamp'].toString())
+          : null,
+      likes: map['likes'] != null
+          ? (map['likes'] as List).map((dynamic e) => e?.toString() ?? '').toList()
+          : null,
+      coins: map['coins'] != null
+          ? (map['coins'] as List).map((dynamic e) => e?.toString() ?? '').toList()
+          : null,
       reposts: map['reposts'] != null
-          ? List<String>.from(
-              (map['reposts'] as List<dynamic>).map((dynamic item) {
-                if (item is Map<String, dynamic>) {
-                  return item['userId']?.toString() ?? '';
-                } else if (item is String) {
-                  return item;
-                }
-                return '';
-              }).where((String id) => id.isNotEmpty),
-            )
+          ? (map['reposts'] as List).map((dynamic item) {
+              if (item is Map<String, dynamic>) {
+                return item['userId']?.toString() ?? '';
+              } else {
+                return item?.toString() ?? '';
+              }
+            }).where((String id) => id.isNotEmpty).toList()
           : null,
-      comments: List<dynamic>.from(map['comments'])
-          .map((dynamic e) => CommentModel.fromMap(e as Map<String, dynamic>))
-          .toList(),
+      comments: map['comments'] != null
+          ? (map['comments'] as List)
+              .map((dynamic e) => CommentModel.fromMap(Map<String, dynamic>.from(e)))
+              .toList()
+          : null,
       user: map['user'] != null
-          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          ? UserModel.fromMap(Map<String, dynamic>.from(map['user']))
           : null,
-      videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
+      videoUrl: map['videoUrl']?.toString(),
       donation: map['donation'] != null
-          ? DonationModel.fromMap(map['donation'])
+          ? DonationModel.fromMap(Map<String, dynamic>.from(map['donation']))
           : null,
-      forum: map['forum'] != null ? ForumModel.fromMap(map['forum']) : null,
-      ytUrl: map['ytUrl'] != null ? map['ytUrl'] as String : null,
-      livedata: map['livedata'] != null ? map['livedata'] as String : null,
-      isRanked: map['isRanked'] as bool,
-      views: map['views'] != null ? map['views'] as int : null,
-      promote: map['promote'] != null ? map['promote'] as bool : null,
-      promotionDuration: map['promotionDuration'] as dynamic,
-      plan: map['plan'] != null ? map['plan'] as String : null,
-      approved: map['approved'] != null ? map['approved'] as bool : null,
-      isPolled: map['isPolled'] != null ? map['isPolled'] as bool : null,
-      options: map['options'] != null ? map['options'] as List<dynamic> : null,
+      forum: map['forum'] != null
+          ? ForumModel.fromMap(Map<String, dynamic>.from(map['forum']))
+          : null,
+      ytUrl: map['ytUrl']?.toString(),
+      livedata: map['livedata']?.toString(),
+      isRanked: map['isRanked'] == true,
+      views: map['views'] != null ? int.tryParse(map['views'].toString()) : 0,
+      promote: map['promote'] == true,
+      promotionDuration: map['promotionDuration'],
+      plan: map['plan']?.toString(),
+      approved: map['approved'] == true,
+      isPolled: map['isPolled'] == true,
+      options: map['options'] is List ? map['options'] as List : null,
       pollvotes: map['pollvotes'] != null
-          ? List<Map<String, dynamic>>.from(map['pollvotes'])
+          ? (map['pollvotes'] as List).map((dynamic e) => Map<String, dynamic>.from(e)).toList()
           : null,
-      market: map['market'] != null ? MarketModel.fromMap(map['market']) : null,
+      market: map['market'] != null
+          ? MarketModel.fromMap(Map<String, dynamic>.from(map['market']))
+          : null,
     );
   }
 

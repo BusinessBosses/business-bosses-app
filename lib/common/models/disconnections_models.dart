@@ -33,9 +33,11 @@ class DisconnectionsModel {
 
   factory DisconnectionsModel.fromMap(Map<String, dynamic> map) {
     return DisconnectionsModel(
-      id: map['id'] as String,
-      userId: map['userId'] as String,
-      timeStamp: map['timeStamp'] as int,
+      id: map['id']?.toString() ?? '',
+      userId: map['userId']?.toString() ?? '',
+      timeStamp: map['timeStamp'] is int
+          ? map['timeStamp'] as int
+          : int.tryParse(map['timeStamp']?.toString() ?? '0') ?? 0,
     );
   }
 

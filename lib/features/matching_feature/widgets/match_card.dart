@@ -69,7 +69,10 @@ class _MatchCardState extends State<MatchCard> {
                   spacing: 10,
                   children: <Widget>[
                     NetworkImageWithPlaceHolder(
-                      imageUrl: widget.match.photoUrl,
+                      imageUrl:
+                          (widget.match.hasShop && widget.match.shop != null)
+                              ? widget.match.shop!.image
+                              : widget.match.photoUrl,
                       height: 40,
                       width: 40,
                       radius: 50,
@@ -86,12 +89,16 @@ class _MatchCardState extends State<MatchCard> {
                             children: <Widget>[
                               Flexible(
                                 child: Text(
-                                  widget.match.name ?? widget.match.username,
-                                  maxLines: isExpanded ? 100 : 1,
+                                  (widget.match.hasShop &&
+                                          widget.match.shop != null)
+                                      ? widget.match.shop!.name
+                                      : (widget.match.name ??
+                                          widget.match.username),
+                                  maxLines: widget.isExpanded ? 100 : 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w800,
                                     color: textDark,
                                   ),
                                 ),
@@ -100,7 +107,7 @@ class _MatchCardState extends State<MatchCard> {
                                 const SizedBox(width: 4),
                                 const Icon(
                                   Icons.verified,
-                                  size: 15,
+                                  size: 14,
                                   color: primaryColorLT,
                                 ),
                               ],
@@ -111,10 +118,10 @@ class _MatchCardState extends State<MatchCard> {
                             if (widget.match.matchType == 'partner')
                               Text(
                                 'Partner with me',
-                                maxLines: isExpanded ? 100 : 1,
+                                maxLines: widget.isExpanded ? 100 : 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w600,
                                   color: primaryBlue,
                                 ),
@@ -140,28 +147,28 @@ class _MatchCardState extends State<MatchCard> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 2),
                 Row(
                   children: <Widget>[
-                    const Icon(Icons.star, size: 16, color: premiumGold),
-                    const SizedBox(width: 4),
+                    const Icon(Icons.star, size: 14, color: premiumGold),
+                    const SizedBox(width: 2),
                     Text(
                       widget.match.averageRating.toString(),
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: textDark,
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    const Icon(LucideIcons.mapPin, size: 14, color: textMedium),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 10),
+                    const Icon(LucideIcons.mapPin, size: 13, color: textMedium),
+                    const SizedBox(width: 2),
                     Text(
-                      widget.match.location ?? '',
+                      (widget.match.hasShop && widget.match.shop != null)
+                          ? widget.match.shop!.location
+                          : (widget.match.location ?? ''),
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: textMedium,
                       ),
                     ),
@@ -182,14 +189,17 @@ class _MatchCardState extends State<MatchCard> {
                     // ),
                   ],
                 ),
+                const SizedBox(height: 4),
                 Text(
-                  widget.match.bio ?? '',
-                  maxLines: isExpanded ? 100 : 3,
+                  (widget.match.hasShop && widget.match.shop != null)
+                      ? widget.match.shop!.description
+                      : (widget.match.bio ?? ''),
+                  maxLines: widget.isExpanded ? 100 : 3,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 14,
                     color: textMedium,
-                    height: 1.4,
+                    height: 1.2,
                   ),
                 ),
               ],

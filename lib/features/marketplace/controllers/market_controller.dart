@@ -90,15 +90,22 @@ class MarketController extends GetxController {
   }
 
   void _initializeLocation() {
-    final String? storedLocation = sandBox.read('selected_location');
-    final String? storedLocationCode = sandBox.read('selected_location_code');
-
-    if (storedLocation != null && storedLocationCode != null) {
-      selectedLocation = storedLocation;
-      selectedLocationCode = storedLocationCode;
-    } else {
-      selectedLocation = _profileController.myProfile.location ?? 'United Kingdom';
+    // Priority: Profile location > Stored location > Default
+    if (_profileController.myProfile.location != null &&
+        _profileController.myProfile.location!.isNotEmpty) {
+      selectedLocation = _profileController.myProfile.location;
       selectedLocationCode = CountryCodes.nameToCode[selectedLocation!] ?? 'GB';
+    } else {
+      final String? storedLocation = sandBox.read('selected_location');
+      final String? storedLocationCode = sandBox.read('selected_location_code');
+
+      if (storedLocation != null && storedLocationCode != null) {
+        selectedLocation = storedLocation;
+        selectedLocationCode = storedLocationCode;
+      } else {
+        selectedLocation = 'United Kingdom';
+        selectedLocationCode = 'GB';
+      }
     }
 
     // Standardize GB to UK for consistency with visual requirements
@@ -143,7 +150,7 @@ class MarketController extends GetxController {
     update();
   }
 
-  void changeLocation(String name, {String? code}) {
+  Future<void> changeLocation(String name, {String? code}) async {
     selectedLocation = name;
     if (code != null) {
       selectedLocationCode = code;
@@ -156,6 +163,18 @@ class MarketController extends GetxController {
 
     sandBox.write('selected_location', selectedLocation);
     sandBox.write('selected_location_code', selectedLocationCode);
+
+    // Update Profile Controller and Backend
+    if (_profileController.myProfile.uid.isNotEmpty) {
+      _profileController.myProfile = _profileController.myProfile.copyWith(location: name);
+      _profileController.update();
+
+      // Update backend
+      await ApiService.put(
+        path: 'users/${_profileController.myProfile.uid}',
+        body: <String, dynamic>{'location': name},
+      );
+    }
 
     update();
   }
@@ -315,6 +334,7 @@ class MarketController extends GetxController {
   Future<void> initMarket() async {
     if (_isInitializing) return;
     _isInitializing = true;
+    _initializeLocation(); // Sync with profile location
     try {
       // 1. Load cache immediately (Synchronous operations from GetStorage)
       final dynamic cachedProducts = sandBox.read('market_products');

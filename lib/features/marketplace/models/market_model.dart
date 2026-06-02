@@ -112,32 +112,33 @@ class MarketModel {
 
   factory MarketModel.fromMap(Map<String, dynamic> map) {
     return MarketModel(
-      description: map['description'] as String,
-      title: map['title'] != null ? map['title'] as String : null,
-      images: map['images'] != null
-          ? List<dynamic>.from((map['images'] as List<dynamic>))
-          : null,
+      description: map['description']?.toString() ?? '',
+      title: map['title']?.toString(),
+      images: map['images'] is List ? map['images'] as List : null,
       user: map['user'] != null
-          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          ? UserModel.fromMap(Map<String, dynamic>.from(map['user']))
           : null,
-      category: map['category'] != null ? map['category'] as String : null,
-      location: map['location'] != null ? map['location'] as String : null,
-      marketId: map['marketId'] as String,
-      price: map['price'] as String,
-      userId: map['userId'] as String,
-      promote: map['promote'] as bool,
-      approved: map['approved'] as bool,
-      views: map['views'] != null ? map['views'] as int : 0,
-      discount: map['discount'] != null ? map['discount'] as String : '0',
-      likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
-      coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
+      category: map['category']?.toString(),
+      location: map['location']?.toString(),
+      marketId: map['marketId']?.toString() ?? '',
+      price: map['price']?.toString() ?? '0',
+      userId: map['userId']?.toString() ?? '',
+      promote: map['promote'] == true,
+      approved: map['approved'] == true,
+      views: map['views'] != null ? int.tryParse(map['views'].toString()) ?? 0 : 0,
+      discount: map['discount']?.toString() ?? '0',
+      likes: map['likes'] != null
+          ? (map['likes'] as List).map((dynamic e) => e?.toString() ?? '').toList()
+          : null,
+      coins: map['coins'] != null
+          ? (map['coins'] as List).map((dynamic e) => e?.toString() ?? '').toList()
+          : null,
       comments: map['comments'] != null
-          ? List<dynamic>.from(map['comments'])
-              .map((dynamic e) =>
-                  CommentModel.fromMap(e as Map<String, dynamic>))
+          ? (map['comments'] as List)
+              .map((dynamic e) => CommentModel.fromMap(Map<String, dynamic>.from(e)))
               .toList()
           : null,
-      isProduct: map['isProduct'] as bool,
+      isProduct: map['isProduct'] == true,
     );
   }
 

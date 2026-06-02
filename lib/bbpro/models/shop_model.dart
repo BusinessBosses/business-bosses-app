@@ -67,37 +67,46 @@ class Shop {
 
   factory Shop.fromMap(Map<String, dynamic> json) {
     return Shop(
-      id: json['id'],
-      userId: json['userId'],
-      name: json['name'],
-      description: json['description'],
-      image: json['image'],
-      email: json['email'] ?? '',
-      phone: json['phone'] ?? '',
-      location: json['location'],
-      views: double.parse(json['views'].toString()).toInt(),
-      timestamp:
-          json['timestamp'] != null ? DateTime.parse(json['timestamp']) : null,
+      id: json['id']?.toString() ?? '',
+      userId: json['userId']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
+      image: json['image']?.toString(),
+      email: json['email']?.toString() ?? '',
+      phone: json['phone']?.toString() ?? '',
+      location: json['location']?.toString() ?? '',
+      views: json['views'] != null
+          ? double.parse(json['views'].toString()).toInt()
+          : 0,
+      timestamp: json['timestamp'] != null
+          ? DateTime.tryParse(json['timestamp'].toString())
+          : null,
       payments: json['payments'] ?? <dynamic>[],
-      promote: json['promote'],
-      promotionDuration: json['promotionDuration'],
-      approved: json['approved'] ?? false,
-      plan: json['plan'],
-      currency: json['currency'],
-      facebook: json['facebook'],
-      twitter: json['twitter'],
-      linkedIn: json['linkedIn'],
-      instagram: json['instagram'],
-      url: json['url'],
-      appId: json['appId'],
-      createdAt: DateTime.parse(json['createdAt']),
-      user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
-      imageType: json['imageType'] ?? 'circle',
-      category: json['category'] ?? '', // Added fromMap mapping
+      promote: json['promote'] == true,
+      promotionDuration: json['promotionDuration'] is int
+          ? json['promotionDuration'] as int
+          : null,
+      approved: json['approved'] == true,
+      plan: json['plan']?.toString(),
+      currency: json['currency']?.toString() ?? 'USD',
+      facebook: json['facebook']?.toString(),
+      twitter: json['twitter']?.toString(),
+      linkedIn: json['linkedIn']?.toString(),
+      instagram: json['instagram']?.toString(),
+      url: json['url']?.toString(),
+      appId: json['appId']?.toString() ?? '',
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now()
+          : DateTime.now(),
+      user: json['user'] != null
+          ? UserModel.fromMap(Map<String, dynamic>.from(json['user']))
+          : null,
+      imageType: json['imageType']?.toString() ?? 'circle',
+      category: json['category']?.toString() ?? '',
       keyIndividualDocs: json['keyIndividualDocs'] ?? <dynamic>[],
       businessRegDocs: json['businessRegDocs'] ?? <dynamic>[],
       proofOfAddressDocs: json['proofOfAddressDocs'] ?? <dynamic>[],
-      verificationStatus: json['verificationStatus'] ?? 'pending',
+      verificationStatus: json['verificationStatus']?.toString() ?? 'pending',
     );
   }
 

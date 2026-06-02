@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/aipromote/models/business_info_model
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -179,7 +180,21 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     super.dispose();
   }
 
-  void _handleSubmit() {
+  Future<void> _handleSubmit() async {
+    _updateMissingFields();
+
+    if (missingFields.isNotEmpty) {
+      Get.snackbar(
+        'Missing Information',
+        'Please fill in all required fields: ${missingFields.join(', ')}',
+        backgroundColor: Colors.amber.shade100,
+        colorText: Colors.black,
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.all(15),
+      );
+      return;
+    }
+
     final BusinessInfo info = BusinessInfo(
       name: _nameController.text,
       industry: _industryController.text,
@@ -188,6 +203,39 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
       location: _locationController.text,
       postType: _selectedType,
     );
+
+    // Centralize location and industry updates
+    if (profileController.myProfile.uid.isNotEmpty) {
+      final String loc = _locationController.text.trim();
+      final String ind = _industryController.text.trim();
+
+      bool needsUpdate = false;
+      final Map<String, dynamic> updateData = <String, dynamic>{};
+
+      if (loc.isNotEmpty && loc != profileController.myProfile.location) {
+        updateData['location'] = loc;
+        needsUpdate = true;
+      }
+      if (ind.isNotEmpty && ind != profileController.myProfile.industry) {
+        updateData['industry'] = ind;
+        needsUpdate = true;
+      }
+
+      if (needsUpdate) {
+        profileController.myProfile = profileController.myProfile.copyWith(
+          location: loc.isNotEmpty ? loc : profileController.myProfile.location,
+          industry: ind.isNotEmpty ? ind : profileController.myProfile.industry,
+        );
+        profileController.update();
+
+        // Update backend
+        await ApiService.put(
+          path: 'users/${profileController.myProfile.uid}',
+          body: updateData,
+        );
+      }
+    }
+
     aiPromoteController.setBusinessDetails(
       name: _nameController.text.trim(),
       desc: _bioController.text.trim(),

@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 
 import 'package:business_bosses_v2/common/models/disconnections_models.dart';
@@ -34,6 +35,7 @@ class UserModel {
   final String? weeklyRank;
   final String? monthlyRank;
   final bool hasShop;
+  final Shop? shop;
   final List<String>? connections;
   final List<String>? connecteds;
   final List<DisconnectionsModel>? disconnections;
@@ -108,6 +110,7 @@ class UserModel {
     this.weeklyRank,
     this.monthlyRank,
     this.hasShop = false,
+    this.shop,
     this.matchType, // ✅
     this.bossCount, // ✅
     this.mentorCount, // ✅
@@ -143,6 +146,7 @@ class UserModel {
     String? weeklyRank,
     String? monthlyRank,
     bool? hasShop,
+    Shop? shop,
     List<String>? connections,
     List<String>? connecteds,
     List<DisconnectionsModel>? disconnections,
@@ -217,6 +221,7 @@ class UserModel {
       monthlyRank: monthlyRank ?? this.monthlyRank,
       isUpdated: isUpdated ?? this.isUpdated,
       hasShop: hasShop ?? this.hasShop,
+      shop: shop ?? this.shop,
       matchType: matchType ?? this.matchType, // ✅
       bossCount: bossCount ?? this.bossCount, // ✅
       mentorCount: mentorCount ?? this.mentorCount, // ✅
@@ -275,6 +280,7 @@ class UserModel {
       'weeklyRank': weeklyRank,
       'monthlyRank': monthlyRank,
       'hasShop': hasShop,
+      'shop': shop?.toMap(),
       'matchType': matchType, // ✅
       'bossCount': bossCount, // ✅
       'mentorCount': mentorCount, // ✅
@@ -288,15 +294,19 @@ class UserModel {
       uid: map['uid']?.toString() ?? '',
       username: map['username']?.toString() ?? '',
       email: map['email']?.toString() ?? '',
-      timestamp: map['timestamp'] is int ? map['timestamp'] as int : null,
-      bossOfTheWeekTimeStamp: map['bossOfTheWeekTimeStamp'] is int
-          ? map['bossOfTheWeekTimeStamp'] as int
+      timestamp: map['timestamp'] != null
+          ? int.tryParse(map['timestamp'].toString())
           : null,
-      bossOfTheWeekUpTimeStamp: map['bossOfTheWeekUpTimeStamp'] is int
-          ? map['bossOfTheWeekUpTimeStamp'] as int
+      bossOfTheWeekTimeStamp: map['bossOfTheWeekTimeStamp'] != null
+          ? int.tryParse(map['bossOfTheWeekTimeStamp'].toString())
+          : null,
+      bossOfTheWeekUpTimeStamp: map['bossOfTheWeekUpTimeStamp'] != null
+          ? int.tryParse(map['bossOfTheWeekUpTimeStamp'].toString())
           : null,
       photoUrl: map['photoUrl']?.toString(),
-      coinscount: map['coinscount'] is int ? map['coinscount'] as int : null,
+      coinscount: map['coinscount'] != null
+          ? int.tryParse(map['coinscount'].toString())
+          : null,
       name: map['name']?.toString(),
       companyName: map['companyName']?.toString(),
       surname: map['surname']?.toString(),
@@ -308,43 +318,60 @@ class UserModel {
       category: map['category']?.toString(),
       location: map['location']?.toString(),
       achievements: map['achievements'] is List
-          ? List<String>.from(map['achievements'])
+          ? (map['achievements'] as List)
+              .map((dynamic e) => e?.toString() ?? '')
+              .toList()
           : null,
       postChallenges: map['postChallenges'] is List
-          ? List<String>.from(map['postChallenges'])
+          ? (map['postChallenges'] as List)
+              .map((dynamic e) => e?.toString() ?? '')
+              .toList()
           : null,
       interests: map['interests'] is List
-          ? (map['interests'] as List<dynamic>)
-              .map((dynamic e) => Industry.toObject(e as Map<String, dynamic>))
+          ? (map['interests'] as List)
+              .map((dynamic e) => Industry.toObject(Map<String, dynamic>.from(e)))
               .toList()
           : null,
       productsandservices: map['productsandservices'] is List
-          ? List<String>.from(map['productsandservices'])
+          ? (map['productsandservices'] as List)
+              .map((dynamic e) => e?.toString() ?? '')
+              .toList()
           : null,
       referals: map['referals'] is List
-          ? (map['referals'] as List<dynamic>)
+          ? (map['referals'] as List)
               .map((dynamic e) =>
-                  ReferralsModel.fromMap(e as Map<String, dynamic>))
+                  ReferralsModel.fromMap(Map<String, dynamic>.from(e)))
               .toList()
           : null,
       connections: map['connections'] is List
-          ? List<String>.from(map['connections'])
+          ? (map['connections'] as List)
+              .map((dynamic e) => e?.toString() ?? '')
+              .toList()
           : null,
       connecteds: map['connecteds'] is List
-          ? List<String>.from(map['connecteds'])
+          ? (map['connecteds'] as List)
+              .map((dynamic e) => e?.toString() ?? '')
+              .toList()
           : null,
       active: map['active'] == true,
       deactivated: map['deactivated'] == true,
       ageRange: map['ageRange']?.toString(),
       gender: map['gender']?.toString(),
-      connectionCount:
-          map['connectionCount'] is int ? map['connectionCount'] as int : null,
-      referalCount:
-          map['referalCount'] is int ? map['referalCount'] as int : null,
-      invitations: map['invitations'] is int ? map['invitations'] as int : null,
-      connectedCount:
-          map['connectedCount'] is int ? map['connectedCount'] as int : null,
-      unReadCount: map['unReadCount'] is int ? map['unReadCount'] as int : 0,
+      connectionCount: map['connectionCount'] != null
+          ? int.tryParse(map['connectionCount'].toString())
+          : null,
+      referalCount: map['referalCount'] != null
+          ? int.tryParse(map['referalCount'].toString())
+          : null,
+      invitations: map['invitations'] != null
+          ? int.tryParse(map['invitations'].toString())
+          : null,
+      connectedCount: map['connectedCount'] != null
+          ? int.tryParse(map['connectedCount'].toString())
+          : null,
+      unReadCount: map['unReadCount'] != null
+          ? int.tryParse(map['unReadCount'].toString()) ?? 0
+          : 0,
       isRanked: map['isRanked'] == true,
       isSubscribed: map['isSubscribed'] == true,
       toPost: map['toPost'] == true,
@@ -353,19 +380,26 @@ class UserModel {
       invitedBy: map['invitedBy']?.toString(),
       weeklyRank: map['weeklyRank']?.toString(),
       monthlyRank: map['monthlyRank']?.toString(),
-      averageRating: map['averageRating'] is num
-          ? (map['averageRating'] as num).toDouble()
+      averageRating: map['averageRating'] != null
+          ? double.tryParse(map['averageRating'].toString()) ?? 0.0
           : 0.0,
       hasShop: map['hasShop'] == true,
+      shop: map['shop'] != null
+          ? Shop.fromMap(Map<String, dynamic>.from(map['shop']))
+          : null,
       matchType: map['matchType']?.toString(),
-      bossCount: map['bossCount'] is int ? map['bossCount'] as int : 0, // ✅
-      mentorCount:
-          map['mentorCount'] is int ? map['mentorCount'] as int : 0, // ✅
-      backerCount:
-          map['backerCount'] is int ? map['backerCount'] as int : 0, // ✅
-      ambassadorCount: map['ambassadorCount'] is int
-          ? map['ambassadorCount'] as int
-          : 0, // ✅
+      bossCount: map['bossCount'] != null
+          ? int.tryParse(map['bossCount'].toString()) ?? 0
+          : 0,
+      mentorCount: map['mentorCount'] != null
+          ? int.tryParse(map['mentorCount'].toString()) ?? 0
+          : 0,
+      backerCount: map['backerCount'] != null
+          ? int.tryParse(map['backerCount'].toString()) ?? 0
+          : 0,
+      ambassadorCount: map['ambassadorCount'] != null
+          ? int.tryParse(map['ambassadorCount'].toString()) ?? 0
+          : 0,
     );
   }
 

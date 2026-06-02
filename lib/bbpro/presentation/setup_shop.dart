@@ -962,8 +962,27 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       }
     }
     if (response) {
-      // ignore: use_build_context_synchronously
-      successDialog(context);
+      // Update central profile location and industry
+      if (profileController.myProfile.uid.isNotEmpty) {
+        profileController.myProfile = profileController.myProfile.copyWith(
+          location: _selectedLocation,
+          industry: category,
+        );
+        profileController.update();
+
+        // Update backend user profile as well for consistency
+        await ApiService.put(
+          path: 'users/${profileController.myProfile.uid}',
+          body: <String, dynamic>{
+            'location': _selectedLocation,
+            'industry': category,
+          },
+        );
+      }
+
+      if (mounted) {
+        successDialog(context);
+      }
     } else {
       showSnackbar(
         title: 'Error while adding shop!',

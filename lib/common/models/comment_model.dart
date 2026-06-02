@@ -50,13 +50,15 @@ class CommentModel {
 
   factory CommentModel.fromMap(Map<String, dynamic> map) {
     return CommentModel(
-      commentId: map['commentId'] != null ? map['commentId'] as String : null,
-      userId: map['userId'] as String,
-      postId: map['postId'] as String,
-      comment: map['comment'] != null ? map['comment'] as String : null,
-      timestamp: int.parse(map['timestamp'].toString()),
+      commentId: map['commentId']?.toString(),
+      userId: map['userId']?.toString(),
+      postId: map['postId']?.toString(),
+      comment: map['comment']?.toString(),
+      timestamp: map['timestamp'] != null
+          ? int.tryParse(map['timestamp'].toString())
+          : null,
       user: map['user'] != null
-          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          ? UserModel.fromMap(Map<String, dynamic>.from(map['user']))
           : null,
     );
   }
