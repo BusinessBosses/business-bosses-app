@@ -8,10 +8,8 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
-import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/suppliers_grid_tile.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
 
@@ -28,7 +26,6 @@ import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -42,63 +39,19 @@ class ExpandedMatchesScreen extends StatefulWidget {
   State<ExpandedMatchesScreen> createState() => _ExpandedMatchesScreenState();
 }
 
-class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
-    with TickerProviderStateMixin {
+class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
   final MatchController matchController = Get.put(MatchController());
   final ProfileController profileController = Get.find();
   final BuyerRequestController buyerRequestController =
       Get.put(BuyerRequestController());
 
-  late TabController tabController;
-  int selectedTabIndex = 0;
-  final ScrollController _controller = ScrollController();
-
   @override
   void initState() {
     super.initState();
 
-    final int length = matchController.matchedSuppliers.isNotEmpty ? 2 : 1;
-
-    tabController = TabController(length: length, vsync: this);
-
-    tabController.addListener(() {
-      if (!tabController.indexIsChanging) {
-        setState(() {
-          selectedTabIndex = tabController.index;
-        });
-      }
-    });
-
-    ever(matchController.matchedSuppliersListenable, (_) {
-      _resetTabController();
-    });
-
-    if (matchController.matchList.isNotEmpty) {
+    if (matchController.matchList.isEmpty) {
       matchController.fetchMatches();
     }
-  }
-
-  void _resetTabController() {
-    int newLength = matchController.matchedSuppliers.isNotEmpty ? 3 : 1;
-
-    tabController.dispose();
-    tabController = TabController(length: newLength, vsync: this);
-
-    if (selectedTabIndex >= newLength) {
-      selectedTabIndex = 0;
-    }
-
-    tabController.index = selectedTabIndex;
-
-    tabController.addListener(() {
-      if (!tabController.indexIsChanging) {
-        setState(() {
-          selectedTabIndex = tabController.index;
-        });
-      }
-    });
-
-    setState(() {});
   }
 
   /// Builds the view for a subscribed user
@@ -112,32 +65,25 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
             isLoading: false,
           ));
     }
-    return Obx(() {
-      // Sort matches by industry - same industry first
-      final String? myIndustry = profileController.myProfile.industry;
-      final List<UserModel> sortedMatches =
-          _sortMatchesByIndustry(matches, myIndustry);
-
-      return ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: sortedMatches.length,
-        itemBuilder: (BuildContext context, int index) {
-          final UserModel match = sortedMatches[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: MatchCard(
-              match: match,
-              userType: match.matchType ?? 'Not Specified',
-              onBookmarkToggle: () {
-                setState(() {});
-              },
-              isBookmarked: matchController.isBookmarked(match.uid),
-            ),
-          );
-        },
-      );
-    });
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: matches.length,
+      itemBuilder: (BuildContext context, int index) {
+        final UserModel match = matches[index];
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: MatchCard(
+            match: match,
+            userType: match.matchType ?? 'Not Specified',
+            onBookmarkToggle: () {
+              setState(() {});
+            },
+            isBookmarked: matchController.isBookmarked(match.uid),
+          ),
+        );
+      },
+    );
   }
 
   /// Free subscription match view
@@ -146,13 +92,8 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
       return const Center(child: Text('No matches to display.'));
     }
 
-    // Sort matches by industry - same industry first
-    final String? myIndustry = profileController.myProfile.industry;
-    final List<UserModel> sortedMatches =
-        _sortMatchesByIndustry(matches, myIndustry);
-
-    final List<UserModel> clearMatches = sortedMatches.take(2).toList();
-    final List<UserModel> blurredMatches = sortedMatches.skip(2).toList();
+    final List<UserModel> clearMatches = matches.take(2).toList();
+    final List<UserModel> blurredMatches = matches.skip(2).toList();
 
     return Column(
       children: <Widget>[
@@ -182,31 +123,6 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
             ),
           ),
       ],
-    );
-  }
-
-  /// Supplier tab content
-  Widget buildSupplierView() {
-    final RxList<SuppliersModel> suppliers = matchController.matchedSuppliers;
-
-    if (suppliers.isEmpty) {
-      return const Center(child: Text('No suppliers found.'));
-    }
-
-    return MasonryGridView.count(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 10),
-      crossAxisCount: 2,
-      crossAxisSpacing: 8.0,
-      mainAxisSpacing: 8.0,
-      controller: _controller,
-      shrinkWrap: true,
-      itemCount: suppliers.length,
-      itemBuilder: (BuildContext context, int index) {
-        final SuppliersModel supplier = suppliers[index];
-        return SuppliersGridTile(
-          supplier: supplier,
-        );
-      },
     );
   }
 
@@ -264,48 +180,28 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
                   ),
                 ),
               ],
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(48),
-                child: TabBar(
-                  controller: tabController,
-                  isScrollable: true,
-                  indicatorColor: primaryColorLT,
-                  labelColor: primaryColorLT,
-                  unselectedLabelColor: Colors.grey,
-                  tabs: <Widget>[
-                    const Tab(text: 'People Matches'),
-                    if (matchController.matchedSuppliers.isNotEmpty)
-                      const Tab(text: 'Matching Suppliers'),
-                  ],
-                ),
-              ),
             ),
       body: Column(
         children: <Widget>[
           /// MATCHHEADER ALWAYS ON TOP
           buildTopSection(),
-
-          /// TABBAR BELOW MATCHHEADER
-
-          // const SizedBox(
-          //   height: 16,
-          // ),
           Expanded(
-            child: TabBarView(
-              controller: tabController,
-              children: <Widget>[
-                Obx(
-                  () => profileController.currentMatchType.value == 'seller'
-                      ? BuyerRequestsScreen(
-                          showAppBar: false,
-                          filterByIndustry:
-                              profileController.myProfile.industry,
-                        )
-                      : buildMatchesListSection(),
-                ),
-                if (matchController.matchedSuppliers.isNotEmpty)
-                  buildSuppliersTab(),
-              ],
+            child: Obx(
+              () {
+                final String matchType =
+                    profileController.currentMatchType.value.toLowerCase();
+                if (matchType == 'seller') {
+                  return BuyerRequestsScreen(
+                    showAppBar: false,
+                    filterByIndustry: profileController.myProfile.industry,
+                    filterByLocation: profileController.myProfile.location,
+                  );
+                } else if (matchType == 'partner') {
+                  return buildCategorizedMatches();
+                } else {
+                  return buildMatchesListSection();
+                }
+              },
             ),
           ),
         ],
@@ -491,6 +387,84 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
     });
   }
 
+  Widget buildCategorizedMatches() {
+    return Obx(() {
+      if (matchController.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      return SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildSectionHeader('Suppliers in your industry'),
+            if (matchController.suppliers.isEmpty)
+              _buildEmptyState('No suppliers found in your area.')
+            else
+              _buildHorizontalList(matchController.suppliers),
+            const SizedBox(height: 25),
+            _buildSectionHeader('Partners'),
+            if (matchController.partners.isEmpty)
+              _buildEmptyState('No partners found in your area.')
+            else
+              _buildHorizontalList(matchController.partners),
+            const SizedBox(height: 150),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(String message) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Text(
+        message,
+        style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+      ),
+    );
+  }
+
+  Widget _buildHorizontalList(List<UserModel> users) {
+    return SizedBox(
+      height: 280,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        itemCount: users.length,
+        itemBuilder: (BuildContext context, int index) {
+          final UserModel user = users[index];
+          return Container(
+            width: 300,
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            child: MatchCard(
+              isExpanded: false,
+              match: user,
+              userType: user.matchType ?? 'Not Specified',
+              onBookmarkToggle: () => setState(() {}),
+              isBookmarked: matchController.isBookmarked(user.uid),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildActionCard({
     required String title,
     required IconData icon,
@@ -564,39 +538,6 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen>
         ),
       );
     });
-  }
-
-  Widget buildSuppliersTab() {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          buildSupplierView(),
-          const SizedBox(height: 200),
-        ],
-      ),
-    );
-  }
-
-  /// Helper method to sort matches by industry
-  /// Users with the same industry as the current user appear first
-  List<UserModel> _sortMatchesByIndustry(
-      List<UserModel> matches, String? myIndustry) {
-    if (myIndustry == null || myIndustry.isEmpty) {
-      return matches; // Return unsorted if user has no industry
-    }
-
-    final List<UserModel> sameIndustry = <UserModel>[];
-    final List<UserModel> otherIndustry = <UserModel>[];
-
-    for (final UserModel match in matches) {
-      if (match.industry?.toLowerCase() == myIndustry.toLowerCase()) {
-        sameIndustry.add(match);
-      } else {
-        otherIndustry.add(match);
-      }
-    }
-
-    return <UserModel>[...sameIndustry, ...otherIndustry];
   }
 
   /// Show bottom sheet with industry selection

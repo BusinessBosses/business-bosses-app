@@ -256,6 +256,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
           'images': image != null ? <String>[image] : <dynamic>[],
         },
         profileController!,
+        skipNavigation: true,
       );
 
       // Find matching industry ID

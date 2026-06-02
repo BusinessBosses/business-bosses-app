@@ -1,5 +1,5 @@
+import 'package:business_bosses_v2/features/home/utils/post_options_sheet.dart';
 import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -11,7 +11,6 @@ import 'package:business_bosses_v2/features/forum/presentation/create_bossup_scr
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
-import 'package:business_bosses_v2/features/home/sell_product.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -23,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DrawerContent extends StatefulWidget {
   final UserModel? currentuser;
@@ -393,137 +391,8 @@ class _DrawerContentState extends State<DrawerContent> {
                               icon: const Icon(Icons.add, color: Colors.white),
                               text: 'Create',
                               onPressed: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(25.0),
-                                    ),
-                                  ),
-                                  builder: (BuildContext context) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          ListView.separated(
-                                            shrinkWrap: true,
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            itemCount: 4,
-                                            separatorBuilder:
-                                                (BuildContext context,
-                                                        int index) =>
-                                                    const Divider(),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return ListTile(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                  if (index == 0) {
-                                                    enterChallenge();
-                                                  } else if (index == 1) {
-                                                    sellProduct(context);
-                                                  } else if (index == 2) {
-                                                    Get.to(() =>
-                                                        AddBuyerRequests());
-                                                  } else if (index == 3) {
-                                                    Get.toNamed(
-                                                        Routes.createPost);
-                                                  } else if (index == 4) {
-                                                    final Uri url = Uri.parse(
-                                                        'https://businessbosses.news/instant-pr/');
-                                                    launchUrl(url,
-                                                        mode: LaunchMode
-                                                            .platformDefault);
-                                                  }
-                                                },
-                                                minVerticalPadding: 0,
-                                                contentPadding:
-                                                    const EdgeInsets.only(
-                                                        left: 10),
-                                                leading: index == 0
-                                                    ? Icon(
-                                                        LucideIcons.trophy,
-                                                        color: textColor
-                                                            .withValues(
-                                                                alpha: 1),
-                                                        size: 26,
-                                                      )
-                                                    : index == 1
-                                                        ? SvgPicture.asset(
-                                                            'assets/svgs/sellicon.svg',
-                                                            height: 25,
-                                                            colorFilter:
-                                                                ColorFilter
-                                                                    .mode(
-                                                              textColor
-                                                                  .withValues(
-                                                                      alpha: 1),
-                                                              BlendMode.srcIn,
-                                                            ),
-                                                          )
-                                                        : index == 2
-                                                            ? Icon(
-                                                                LucideIcons
-                                                                    .shoppingBag,
-                                                                color: textColor
-                                                                    .withValues(
-                                                                        alpha:
-                                                                            1),
-                                                                size: 26,
-                                                              )
-                                                            : index == 3
-                                                                ? SvgPicture
-                                                                    .asset(
-                                                                    'assets/svgs/text.svg',
-                                                                    height: 25,
-                                                                    colorFilter:
-                                                                        ColorFilter
-                                                                            .mode(
-                                                                      textColor.withValues(
-                                                                          alpha:
-                                                                              1),
-                                                                      BlendMode
-                                                                          .srcIn,
-                                                                    ),
-                                                                  )
-                                                                : Icon(
-                                                                    LucideIcons
-                                                                        .globe,
-                                                                    color: textColor
-                                                                        .withValues(
-                                                                            alpha:
-                                                                                1),
-                                                                    size: 26,
-                                                                  ),
-                                                title: Text(
-                                                  index == 0
-                                                      ? 'Share business, get featured'
-                                                      : index == 1
-                                                          ? 'Sell your product & service'
-                                                          : index == 2
-                                                              ? 'Create buyer requests'
-                                                              :
-                                                              // index == 3
-                                                              //     ?
-                                                              'Post content, discussion, etc',
-                                                  // : 'Submit news for instant PR',
-                                                  style: const TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                );
+                                widget.oncloseclick?.call();
+                                PostOptionsBottomSheet.show(context);
                               })),
                     )
                   ],

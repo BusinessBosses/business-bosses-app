@@ -36,10 +36,11 @@ class _MatchCardState extends State<MatchCard> {
         Get.toNamed(Routes.publicProfile, arguments: widget.match);
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 15),
+        margin: widget.isExpanded ? const EdgeInsets.symmetric(horizontal: 15) : EdgeInsets.zero,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
+          border: widget.isExpanded ? null : Border.all(color: Colors.grey.shade200),
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 15, top: 8, bottom: 8, right: 8),

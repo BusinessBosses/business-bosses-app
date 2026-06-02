@@ -15,13 +15,10 @@ import 'package:intl/intl.dart';
 
 class RequestDetailsSheet {
   static void show(BuildContext context, BuyerRequestModel request) {
-    if (request == null) return;
     final bool hasValidImg = _isValidImageUrl(request.imageUrl);
-    final bool hasValidPfp =
-        request.user != null && _isValidImageUrl(request.user.photoUrl);
+    final bool hasValidPfp = _isValidImageUrl(request.user.photoUrl);
     final ProfileController profileController = Get.find();
-    final bool isMine = request.user != null &&
-        request.user.uid == profileController.myProfile.uid;
+    final bool isMine = request.user.uid == profileController.myProfile.uid;
 
     final List<PopupMenuEntry<String>> menuOwner = <PopupMenuEntry<String>>[
       const PopupMenuItem<String>(value: 'Edit', child: Text('Edit')),
@@ -85,9 +82,7 @@ class RequestDetailsSheet {
                                   radius: 20, child: Icon(Icons.person)),
                             const SizedBox(width: 10),
                             Text(
-                              request.user != null
-                                  ? (request.user.name ?? request.user.username)
-                                  : 'Unknown User',
+                              (request.user.name ?? request.user.username),
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             )

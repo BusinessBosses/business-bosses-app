@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
@@ -14,9 +13,9 @@ class MatchController extends GetxController {
   RxBool isLoading = true.obs;
   RxString errorMessage = ''.obs;
   RxList<UserModel> matchList = <UserModel>[].obs;
-  RxList<SuppliersModel> matchedSuppliers = <SuppliersModel>[].obs;
+  RxList<UserModel> suppliers = <UserModel>[].obs;
+  RxList<UserModel> partners = <UserModel>[].obs;
   RxList<UserModel> bookmarkedMatches = <UserModel>[].obs;
-  final RxInt matchedSuppliersListenable = RxInt(0);
 
   static const String _bookmarkKey = 'bookmarked_matches';
 
@@ -65,7 +64,7 @@ class MatchController extends GetxController {
     try {
       isLoading(true);
       errorMessage('');
-      matchedSuppliers.clear();
+      matchList.clear();
 
       if (profileController.myProfile.matchType != null) {
         // Make the API call
@@ -77,34 +76,26 @@ class MatchController extends GetxController {
           // 1. Safely access the list of matches from the JSON response.
           final List<dynamic> matchesData =
               response.data['matches'] ?? <dynamic>[];
-          if (profileController.myProfile.matchType == 'partner') {
-            final List<dynamic> suppliersData =
-                response.data['suppliers'] ?? <dynamic>[];
-            log(suppliersData.toString());
-            final List<SuppliersModel> fetchedSuppliers = suppliersData
-                .map((dynamic json) => SuppliersModel.fromMap(json))
-                .toList();
-
-            matchedSuppliers.assignAll(fetchedSuppliers);
-            matchedSuppliersListenable.value++;
-          }
 
           // 2. Map the raw JSON list to a list of Match objects.
           final List<UserModel> fetchedMatches = matchesData
               .map((dynamic json) => UserModel.fromMap(json))
               .toList();
 
+          // Categorized matches
+          final List<dynamic> suppliersData =
+              response.data['suppliers'] ?? <dynamic>[];
+          final List<dynamic> partnersData =
+              response.data['partners'] ?? <dynamic>[];
+
+          suppliers.assignAll(suppliersData
+              .map((dynamic json) => UserModel.fromMap(json))
+              .toList());
+          partners.assignAll(partnersData
+              .map((dynamic json) => UserModel.fromMap(json))
+              .toList());
+
           // 3. Assign the newly parsed list to our observable.
-          final String myIndustry = profileController.myProfile.industry ?? '';
-          if (myIndustry.isNotEmpty) {
-            fetchedMatches.sort((UserModel a, UserModel b) {
-              final bool aSame = (a.industry == myIndustry);
-              final bool bSame = (b.industry == myIndustry);
-              if (aSame && !bSame) return -1;
-              if (!aSame && bSame) return 1;
-              return 0;
-            });
-          }
           matchList.assignAll(fetchedMatches);
         } else {
           // If the API reports success: false, throw an error to be caught below

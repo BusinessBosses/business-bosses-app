@@ -21,12 +21,14 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class BuyerRequestsScreen extends StatefulWidget {
   final String? filterByIndustry;
+  final String? filterByLocation;
   final bool showOnlyMyRequests;
   final bool showAppBar;
 
   const BuyerRequestsScreen({
     super.key,
     this.filterByIndustry,
+    this.filterByLocation,
     this.showOnlyMyRequests = false,
     this.showAppBar = true,
   });
@@ -46,12 +48,13 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   @override
   void initState() {
     super.initState();
+    _fetchRequests();
   }
 
   Future<void> _fetchRequests() async {
     final MarketController marketController = Get.find();
     await _buyerRequestController.initBuyerRequests(
-        location: marketController.selectedLocation);
+        location: widget.filterByLocation ?? marketController.selectedLocation);
     _applyFilter();
   }
 

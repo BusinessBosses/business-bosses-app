@@ -169,7 +169,8 @@ class CreatePostController extends GetxController {
 
   /// CREATE POST CONTROLLER (REGISTER NEW POST TO REMOTE DATA SOURCE)
   Future<void> createPost(
-      Map<String, dynamic> body, ProfileController profileController) async {
+      Map<String, dynamic> body, ProfileController profileController,
+      {bool skipNavigation = false}) async {
     if (validateCreatePostData(body)) {
       loading(true);
       update();
@@ -190,13 +191,15 @@ class CreatePostController extends GetxController {
             'market': body['market'],
           });
 
-          if (shouldPromote.value == true) {
-            Get.to(() => BoostPost(
-                  postId: response.data['postId'],
-                  postTitle: response.data['title'],
-                ));
-          } else {
-            Get.back();
+          if (!skipNavigation) {
+            if (shouldPromote.value == true) {
+              Get.to(() => BoostPost(
+                    postId: response.data['postId'],
+                    postTitle: response.data['title'],
+                  ));
+            } else {
+              Get.back();
+            }
           }
           Get.snackbar('Success', 'Post created successfully');
         }
@@ -228,13 +231,15 @@ class CreatePostController extends GetxController {
             socket.emit('newPostEvent',
                 <String, String>{'newPost': 'this is the new posts'});
 
-            if (shouldPromote.value == true) {
-              Get.to(() => BoostPost(
-                    postId: response.data['postId'],
-                    postTitle: response.data['title'],
-                  ));
-            } else {
-              Get.back();
+            if (!skipNavigation) {
+              if (shouldPromote.value == true) {
+                Get.to(() => BoostPost(
+                      postId: response.data['postId'],
+                      postTitle: response.data['title'],
+                    ));
+              } else {
+                Get.back();
+              }
             }
             Get.snackbar('Success', 'Post created successfully');
           }
@@ -267,14 +272,16 @@ class CreatePostController extends GetxController {
               'donation': body['donation'],
             });
 
-            if (shouldPromote.value == true) {
-              Get.to(() => BoostPost(
-                    postId: response.data['postId'],
-                    postTitle: response.data['title'],
-                  ));
-            } else {
-              Get.back();
-              // Get.toNamed(Routes.home);
+            if (!skipNavigation) {
+              if (shouldPromote.value == true) {
+                Get.to(() => BoostPost(
+                      postId: response.data['postId'],
+                      postTitle: response.data['title'],
+                    ));
+              } else {
+                Get.back();
+                // Get.toNamed(Routes.home);
+              }
             }
             Get.snackbar('Success', 'Post created successfully');
           }

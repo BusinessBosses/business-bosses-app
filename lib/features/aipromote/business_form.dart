@@ -207,55 +207,57 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     int maxLines = 1,
     TextInputType? keyboardType,
     bool isMissing = false,
-    FocusNode? focusNode, // Add focusNode parameter
+    FocusNode? focusNode,
   }) {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF4B5563),
-                ),
-              ),
-            ],
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1F2937),
+            ),
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 8),
           TextFormField(
             controller: controller,
-            focusNode: focusNode, // Add focusNode to TextFormField
+            focusNode: focusNode,
             maxLines: maxLines,
             keyboardType: keyboardType,
+            style: const TextStyle(color: Colors.black87),
             decoration: InputDecoration(
               hintText: placeholder,
+              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
               filled: true,
-              fillColor: isMissing ? Color(0xFFFEF3C7) : Color(0xFFF9FAFB),
+              fillColor:
+                  isMissing ? const Color(0xFFFEF3C7) : const Color(0xFFF3F4F6),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
                   color: isMissing
-                      ? Color.fromARGB(255, 217, 38, 6)
-                      : Color(0xFFD1D5DB),
+                      ? const Color(0xFFEF4444)
+                      : const Color(0xFFE5E7EB),
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
                   color: isMissing
-                      ? Color.fromARGB(255, 217, 38, 6)
-                      : Color(0xFFD1D5DB),
+                      ? const Color(0xFFEF4444)
+                      : const Color(0xFFE5E7EB),
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Color(0xFF6366F1)),
+                borderRadius: BorderRadius.circular(12),
+                borderSide:
+                    const BorderSide(color: Color(0xFF6366F1), width: 1.5),
               ),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             ),
           ),
         ],
@@ -334,18 +336,18 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
               const Text(
                 'Select type of post',
                 style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF4B5563),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1F2937),
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF9FAFB),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0xFFD1D5DB)),
+                  color: const Color(0xFFF3F4F6),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
@@ -427,78 +429,94 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           isMissing: missingFields.contains('Title'),
           focusNode: _nameFocus, // Pass focusNode
         ),
-        Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text(
-                'Industry',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF4B5563),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      'Industry',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1F2937),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF3F4F6),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFE5E7EB)),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: <String>[
+                            'Agriculture, Food & Beverage',
+                            'Learning & Education',
+                            'Construction & Real Estate',
+                            'Fashion & Beauty',
+                            'Finance & Legal',
+                            'Healthcare & Wellness',
+                            'Home, Gardens & Outdoors',
+                            'Jewellery & Timepieces',
+                            'Media & Entertainment',
+                            'Security, Safety & Equipment',
+                            'Technology, Games & Electronic',
+                            'Vehicle & Transportation',
+                            'Business Services & Consulting',
+                          ].contains(_industryController.text)
+                              ? _industryController.text
+                              : null,
+                          isExpanded: true,
+                          hint: const Text('Select Industry'),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _industryController.text = newValue!;
+                            });
+                          },
+                          items: <String>[
+                            'Agriculture, Food & Beverage',
+                            'Learning & Education',
+                            'Construction & Real Estate',
+                            'Fashion & Beauty',
+                            'Finance & Legal',
+                            'Healthcare & Wellness',
+                            'Home, Gardens & Outdoors',
+                            'Jewellery & Timepieces',
+                            'Media & Entertainment',
+                            'Security, Safety & Equipment',
+                            'Technology, Games & Electronic',
+                            'Vehicle & Transportation',
+                            'Business Services & Consulting',
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 6),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF9FAFB),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0xFFD1D5DB)),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: <String>[
-                      'Agriculture, Food & Beverage',
-                      'Learning & Education',
-                      'Construction & Real Estate',
-                      'Fashion & Beauty',
-                      'Finance & Legal',
-                      'Healthcare & Wellness',
-                      'Home, Gardens & Outdoors',
-                      'Jewellery & Timepieces',
-                      'Media & Entertainment',
-                      'Security, Safety & Equipment',
-                      'Technology, Games & Electronic',
-                      'Vehicle & Transportation',
-                      'Business Services & Consulting',
-                    ].contains(_industryController.text)
-                        ? _industryController.text
-                        : null,
-                    isExpanded: true,
-                    hint: const Text('Select Industry'),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _industryController.text = newValue!;
-                      });
-                    },
-                    items: <String>[
-                      'Agriculture, Food & Beverage',
-                      'Learning & Education',
-                      'Construction & Real Estate',
-                      'Fashion & Beauty',
-                      'Finance & Legal',
-                      'Healthcare & Wellness',
-                      'Home, Gardens & Outdoors',
-                      'Jewellery & Timepieces',
-                      'Media & Entertainment',
-                      'Security, Safety & Equipment',
-                      'Technology, Games & Electronic',
-                      'Vehicle & Transportation',
-                      'Business Services & Consulting',
-                    ].map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildInputGroup(
+                'Country',
+                _locationController,
+                placeholder: 'Select Country',
+                isMissing: missingFields.contains('Location'),
+                focusNode: _locationFocus,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         _buildInputGroup(
           'Description',
@@ -507,13 +525,6 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           maxLines: 3,
           isMissing: missingFields.contains('Description/Tagline'),
           focusNode: _bioFocus, // Pass focusNode
-        ),
-        _buildInputGroup(
-          'Location',
-          _locationController,
-          placeholder: 'Enter your location',
-          isMissing: missingFields.contains('Location'),
-          focusNode: _locationFocus,
         ),
         _buildInputGroup(
           'Website or Contact Link',

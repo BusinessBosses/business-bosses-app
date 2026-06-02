@@ -86,6 +86,11 @@ class PartnerController extends GetxController {
           await ApiService.post(path: createPath, body: body);
       lastResult.value = resp;
 
+      if (resp.success && resp.data != null) {
+        final Partner newPartner = Partner.fromJson(resp.data);
+        myPartners.insert(0, newPartner);
+      }
+
       return resp;
     } catch (e, stack) {
       lastError.value = e.toString();
@@ -151,20 +156,28 @@ class PartnerController extends GetxController {
       final dynamic data = response.data;
       final List<dynamic>? rows = (data is Map) ? data['rows'] : data;
 
-      if (rows == null || rows.isEmpty) return;
+      if (rows == null || rows.isEmpty) {
+        loadMyPartners(); // still try to load my own
+        return;
+      }
 
-      final List<Partner> loaded = rows
+      final List<Partner> allLoaded = rows
           .map((dynamic e) => Partner.fromJson(e))
-          .where((Partner p) => p.approved && p.id != 5)
+          .where((Partner p) => p.id != 5)
           .toList();
 
-      partners.assignAll(loaded);
-      if (partners
+      // Approved partners for the public marketplace view
+      partners.assignAll(allLoaded.where((Partner p) => p.approved).toList());
+
+      // Try to find my deals in the global list first
+      final List<Partner> myDeals = allLoaded
           .where((Partner p) => p.userId == profileController.myProfile.uid)
-          .isNotEmpty) {
-        myPartners.assignAll(partners
-            .where((Partner p) => p.userId == profileController.myProfile.uid)
-            .toList());
+          .toList();
+
+      if (myDeals.isNotEmpty) {
+        myPartners.assignAll(myDeals);
+      } else {
+        loadMyPartners();
       }
     } catch (e, stack) {
       debugPrint('❌ loadPartners failed: $e\n$stack');
@@ -172,6 +185,20 @@ class PartnerController extends GetxController {
           title: 'Error', message: 'Failed to load partners', error: true);
     } finally {
       loading.value = false;
+    }
+  }
+
+  Future<void> loadMyPartners() async {
+    try {
+      final ApiResponseModel response = await ApiService.get(
+          path: 'partner/user/${profileController.myProfile.uid}');
+      if (response.success) {
+        final List<dynamic> rows = response.data;
+        myPartners.assignAll(
+            rows.map((dynamic e) => Partner.fromJson(e)).toList());
+      }
+    } catch (e) {
+      debugPrint('❌ loadMyPartners failed: $e');
     }
   }
 

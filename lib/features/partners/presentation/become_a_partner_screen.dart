@@ -25,9 +25,6 @@ class BecomeaPartnerScreen extends StatefulWidget {
 
 class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController bioController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController urlController = TextEditingController();
   final ProfileController profileController = Get.find();
@@ -65,11 +62,8 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
 
     final ApiResponseModel resp = await partnerController.submitPartner(
       companyName: nameController.text.trim(),
-      companyEmail: emailController.text.trim(),
-      companyPhone: phoneController.text.trim().isEmpty
-          ? null
-          : phoneController.text.trim(),
-      partnershipType: selectedPartnershipType,
+      companyEmail: profileController.myProfile.email ?? '', // default to user email
+      partnershipType: 'marketplace', // default
       category: selectedCategory,
       location: country.isEmpty ? shopController.shop?.location : country,
       companyUrl: urlController.text.trim(),
@@ -93,52 +87,16 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
     if (nameController.text.trim().isEmpty) {
       showSnackbar(
         title: 'Validation',
-        message: 'Company name is required',
+        message: 'Name of Deal is required',
         error: true,
       );
       return false;
     }
-
-    if (emailController.text.trim().isEmpty) {
-      showSnackbar(
-        title: 'Validation',
-        message: 'Company email is required',
-        error: true,
-      );
-      return false;
-    }
-
-    if (!GetUtils.isEmail(emailController.text.trim())) {
-      showSnackbar(
-        title: 'Validation',
-        message: 'Please enter a valid email address',
-        error: true,
-      );
-      return false;
-    }
-
-    // if (phoneController.text.trim().isEmpty) {
-    //   showSnackbar(
-    //     title: 'Validation',
-    //     message: 'Company phone number is required',
-    //     error: true,
-    //   );
-    //   return false;
-    // }
 
     if (country.isEmpty) {
       showSnackbar(
         title: 'Validation',
-        message: 'Please select your company location',
-        error: true,
-      );
-      return false;
-    }
-
-    if (selectedPartnershipType.isEmpty) {
-      showSnackbar(
-        title: 'Validation',
-        message: 'Please select a partnership type',
+        message: 'Please select your location',
         error: true,
       );
       return false;
@@ -147,7 +105,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
     if (selectedCategory.isEmpty) {
       showSnackbar(
         title: 'Validation',
-        message: 'Please select your company category',
+        message: 'Please select your industry category',
         error: true,
       );
       return false;
@@ -162,19 +120,10 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
       return false;
     }
 
-    if (bioController.text.trim().isEmpty) {
-      showSnackbar(
-        title: 'Validation',
-        message: 'Customised message / bio is required',
-        error: true,
-      );
-      return false;
-    }
-
     if (urlController.text.trim().isEmpty) {
       showSnackbar(
         title: 'Validation',
-        message: 'Company website or deal link is required',
+        message: 'Deal link is required',
         error: true,
       );
       return false;
@@ -183,7 +132,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
     if (_attachments.isEmpty) {
       showSnackbar(
         title: 'Validation',
-        message: 'Please upload a company image or file',
+        message: 'Please upload an image',
         error: true,
       );
       return false;
@@ -195,9 +144,6 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
   @override
   void dispose() {
     nameController.dispose();
-    phoneController.dispose();
-    emailController.dispose();
-    bioController.dispose();
     descriptionController.dispose();
     urlController.dispose();
     super.dispose();
@@ -238,38 +184,12 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
           children: <Widget>[
             const SizedBox(height: 15),
             CustomEditText(
-              caption: 'Company Name *',
-              hintText: 'Enter your company name',
+              caption: 'Name of Deal *',
+              hintText: 'Enter your deal name',
               controller: nameController,
               inputType: TextInputType.name,
             ),
-            CustomEditText(
-              caption: 'Company Email Address *',
-              hintText: 'Enter your company email address',
-              controller: emailController,
-              inputType: TextInputType.emailAddress,
-            ),
-            CustomEditText(
-              optionalText: const Text(
-                'Please add your country code. Eg. +44 100 000 0000',
-                style: TextStyle(color: Colors.grey, fontSize: 12),
-              ),
-              caption: 'Company Phone Number (Optional)',
-              hintText: 'Enter your company phone number',
-              controller: phoneController,
-              inputType: TextInputType.phone,
-            ),
             _buildCountrySelector(),
-            CustomDropdownWidget(
-              caption: 'Type of Partnership *',
-              items: const <String>[
-                'Brand deals/Discounts',
-                'Organisation Initiatives',
-                'Government Initiatives'
-              ],
-              iconName: 'assets/svgs/dropdown.svg',
-              onChanged: (String? val) => selectedPartnershipType = val!,
-            ),
             CustomEditText(
               maxLength: 300,
               caption: 'Description of your deal/offering *',
@@ -278,20 +198,13 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
               inputType: TextInputType.text,
             ),
             CustomEditText(
-              maxLength: 300,
-              caption: 'Add customised message, bio or note *',
-              hintText: 'Enter your customised message',
-              controller: bioController,
-              inputType: TextInputType.text,
-            ),
-            CustomEditText(
-              caption: 'Website or link to redeem the deal *',
-              hintText: 'Enter website or link',
+              caption: 'Link to redeem the deal *',
+              hintText: 'Enter link',
               controller: urlController,
               inputType: TextInputType.url,
             ),
             CustomDropdownWidget(
-              caption: 'Company Category *',
+              caption: 'Industry Category *',
               items: const <String>[
                 'Agriculture, Food & Beverage',
                 'Learning & Education',

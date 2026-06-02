@@ -111,12 +111,22 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
         buyerRequests.add(BuyerRequestModel.fromJson(request));
       }
     }
-    if (partnerController.partners
-        .where((Partner p) => p.userId == publicUser.uid)
-        .isNotEmpty) {
-      myPartners.assignAll(partnerController.partners
-          .where((Partner p) => p.userId == publicUser.uid)
-          .toList());
+    // 🟢 Fetch from API to ensure we get all deals (including unapproved ones if viewing own profile)
+    final ApiResponseModel partnerResponse =
+        await ApiService.get(path: 'partner/user/${publicUser.uid}');
+    if (partnerResponse.success) {
+      final List<dynamic> rows = partnerResponse.data;
+      final List<Partner> fetched =
+          rows.map((dynamic e) => Partner.fromJson(e)).toList();
+
+      myPartners.clear();
+      if (publicUser.uid == _profileController.myProfile.uid) {
+        // Owner sees all their deals
+        myPartners.addAll(fetched);
+      } else {
+        // Others only see approved deals
+        myPartners.addAll(fetched.where((Partner p) => p.approved).toList());
+      }
     }
 
     // All state updates at once
@@ -572,32 +582,31 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   }
 
   Widget _buildPartnersTab() {
-    return Obx(() {
-      if (myPartners.isEmpty) {
-        return SafetyModel(
-          title: 'No Partners Found',
-          icon: Icon(Icons.warning),
-        );
-      }
-
-      return ListView.builder(
-        padding: const EdgeInsets.only(top: 10, bottom: 100),
-        itemCount: myPartners.length,
-        itemBuilder: (BuildContext context, int index) {
-          final Partner partner = myPartners[index];
-          return BossuppartnerItem(
-            companyName: partner.companyName,
-            companyDescription: partner.companyDescription ?? '',
-            companyUrl: partner.companyUrl ?? '',
-            companyPhoto: partner.companyPhoto,
-            clicks: partner.clicks,
-            id: partner.id ?? 0,
-            partner: partner,
-            showPartnerMessage: false,
-          );
-        },
+    if (myPartners.isEmpty) {
+      return const SafetyModel(
+        title: 'No Deals Found',
+        icon: Icon(Icons.warning),
+        isLoading: false,
       );
-    });
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.only(top: 10, bottom: 100),
+      itemCount: myPartners.length,
+      itemBuilder: (BuildContext context, int index) {
+        final Partner partner = myPartners[index];
+        return BossuppartnerItem(
+          companyName: partner.companyName,
+          companyDescription: partner.companyDescription ?? '',
+          companyUrl: partner.companyUrl ?? '',
+          companyPhoto: partner.companyPhoto,
+          clicks: partner.clicks,
+          id: partner.id ?? 0,
+          partner: partner,
+          showPartnerMessage: false,
+        );
+      },
+    );
   }
 
   void _showRequestMenu(BuyerRequestModel request) {

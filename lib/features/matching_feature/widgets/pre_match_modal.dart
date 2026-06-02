@@ -208,8 +208,10 @@ class _PreMatchModalState extends State<PreMatchModal> {
                               // Close the modal
                               Get.back();
 
-                              // Navigate to matches
-                              Get.to(() => ExpandedMatchesScreen());
+                            // Navigate to matches only if not already on the screen
+                            if (Get.currentRoute != '/ExpandedMatchesScreen') {
+                              Get.to(() => const ExpandedMatchesScreen());
+                            }
 
                               // Show success message
                               showSnackbar(

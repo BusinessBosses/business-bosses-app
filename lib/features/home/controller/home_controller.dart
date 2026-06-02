@@ -1225,7 +1225,7 @@ class HomeController extends GetxController {
               ),
               const SizedBox(height: 20),
               const Text(
-                'You earned 1 coin logging in today 🪄',
+                'You earned 1 coin logging in today',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
