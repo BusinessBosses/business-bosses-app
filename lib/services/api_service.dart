@@ -228,7 +228,6 @@ class ApiService {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(Constants.ACCESS_TOKEN);
     await prefs.remove(Constants.USER_ID);
-    Get.delete<ShopController>(force: true);
     Get.offAllNamed(Routes.login);
   }
 

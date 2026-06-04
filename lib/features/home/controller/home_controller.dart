@@ -1431,9 +1431,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> removePost(String postId) async {
-    mixedPosts.removeWhere((Map<String, dynamic> element) =>
-        element['type'] == 'post' && element['id'] == postId);
     posts.removeWhere((PostModel element) => element.postId == postId);
+    mixPostandPromoted();
 
     profileController.removePost(postId);
     update();
@@ -1441,9 +1440,8 @@ class HomeController extends GetxController {
 
   Future<void> removeForum(String postId) async {
     await ApiService.delete(path: 'forum/delete/$postId');
-    mixedPosts.removeWhere((Map<String, dynamic> element) =>
-        element['type'] == 'forum' && element['id'] == postId);
     forums.removeWhere((ForumModel element) => element.forumId == postId);
+    mixPostandPromoted();
     update();
   }
 
@@ -1632,7 +1630,11 @@ class HomeController extends GetxController {
         }
       }
 
-      socket.emit('handshake', profileController.myProfile.uid);
+      if (socket.connected) {
+        socket.emit('handshake', profileController.myProfile.uid);
+      } else {
+        socket.connect();
+      }
 
       if (profileController.myProfile.hasShop) {
         await Get.find<ShopController>().initShop();
@@ -1837,6 +1839,9 @@ class HomeController extends GetxController {
     socket.connect();
     socket.onConnect((_) {
       debugPrint('Connection established');
+      if (profileController.myProfile.uid.isNotEmpty) {
+        socket.emit('handshake', profileController.myProfile.uid);
+      }
     });
 
     socket.on('handshake', (dynamic data) {

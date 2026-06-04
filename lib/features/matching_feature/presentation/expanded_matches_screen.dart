@@ -404,7 +404,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
             else
               _buildHorizontalList(matchController.suppliers),
             const SizedBox(height: 25),
-            _buildSectionHeader('Partners'),
+            _buildSectionHeader('Looking For Partners'),
             if (matchController.partners.isEmpty)
               _buildEmptyState('No partners found in your area.')
             else
@@ -442,7 +442,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
 
   Widget _buildHorizontalList(List<UserModel> users) {
     return SizedBox(
-      height: 280,
+      height: 180,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 8),

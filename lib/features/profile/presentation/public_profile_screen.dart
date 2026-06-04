@@ -82,6 +82,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   int tabLength = 2;
 
   Future<void> loadData() async {
+    if (!mounted) return;
     setState(() {
       isLoading = true;
     });
@@ -130,7 +131,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     }
 
     // All state updates at once
-
+    if (!mounted) return;
     setState(() {
       publicUser = updatedUser;
       log(publicUser.toMap().toString());

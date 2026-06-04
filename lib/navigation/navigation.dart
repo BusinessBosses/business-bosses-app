@@ -10,7 +10,6 @@ import 'package:business_bosses_v2/features/donations/presentation/create_donati
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
-import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
@@ -39,7 +38,6 @@ import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.
 import 'package:business_bosses_v2/features/forum/presentation/create_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/specific_user_list_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
-import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/analysescreen.dart';
@@ -104,7 +102,6 @@ var routes = [
   GetPage(
     name: Routes.notifications,
     page: () => const NotificationsScreen(),
-    binding: BindingsBuilder.put(() => NotificationController()),
   ),
   GetPage(
     name: Routes.promotionscreen,
@@ -159,10 +156,6 @@ var routes = [
   GetPage(
     name: Routes.allCommunitiesScreen,
     page: () => const AllCommunitiesScreen(),
-    bindings: [
-      BindingsBuilder.put(() => CommunitiesController()),
-    ],
-    // binding: BindingsBuilder.put(() => BossUpController()),
   ),
   GetPage(
     name: Routes.referalsscreen,

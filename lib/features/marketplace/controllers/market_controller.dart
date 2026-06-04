@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
@@ -166,7 +167,8 @@ class MarketController extends GetxController {
 
     // Update Profile Controller and Backend
     if (_profileController.myProfile.uid.isNotEmpty) {
-      _profileController.myProfile = _profileController.myProfile.copyWith(location: name);
+      _profileController.myProfile =
+          _profileController.myProfile.copyWith(location: name);
       _profileController.update();
 
       // Update backend
@@ -174,6 +176,13 @@ class MarketController extends GetxController {
         path: 'users/${_profileController.myProfile.uid}',
         body: <String, dynamic>{'location': name},
       );
+    }
+
+    // Also update shop location if user has one
+    final ShopController shopController = Get.find();
+    if (shopController.shop != null) {
+      await shopController.updateShop(
+          shopController.shop!.id, <String, dynamic>{'location': name});
     }
 
     update();

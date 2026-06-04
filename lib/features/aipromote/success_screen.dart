@@ -1,21 +1,45 @@
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/request_details_sheet.dart';
+import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-class SuccessScreen extends StatelessWidget {
+class SuccessScreen extends StatefulWidget {
   final VoidCallback onCreateAnother;
+  final String? postType;
 
-  const SuccessScreen({super.key, required this.onCreateAnother});
+  const SuccessScreen(
+      {super.key, required this.onCreateAnother, this.postType});
+
+  @override
+  State<SuccessScreen> createState() => _SuccessScreenState();
+}
+
+class _SuccessScreenState extends State<SuccessScreen> {
+  final MatchController matchController = Get.find<MatchController>();
+  final BuyerRequestController buyerRequestController =
+      Get.find<BuyerRequestController>();
+  final ProfileController profileController = Get.find<ProfileController>();
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch fresh matches when success screen is shown
+    matchController.fetchMatches();
+    buyerRequestController.initBuyerRequests();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Container(
           width: 80,
           height: 80,
@@ -24,9 +48,9 @@ class SuccessScreen extends StatelessWidget {
             color: Color(0xFFE8F5E9),
           ),
           child: const Icon(
-            Icons.check_circle_outline,
+            Icons.check_circle, // Solid check circle
             color: Color(0xFF4CAF50),
-            size: 40,
+            size: 48,
           ),
         ),
         const SizedBox(height: 24),
@@ -39,86 +63,92 @@ class SuccessScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        const Text(
-          'Your post is now live. Here are matched opportunities for you',
-          style: TextStyle(
-            fontSize: 16,
-            color: Color(0xFF4B5563),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            'Your post is now live. Here are matched opportunities for you',
+            style: TextStyle(
+              fontSize: 16,
+              color: Color(0xFF4B5563),
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 24),
-        // Showing real matches from the BuyerRequestController
-        GetBuilder<BuyerRequestController>(
-          init: BuyerRequestController(),
-          builder: (BuyerRequestController controller) {
-            if (controller.loading.value) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (controller.buyerRequests.isEmpty) {
-              return Center(
-                child: Text(
-                  'No matching requests found yet.',
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-              );
-            }
-
-            // Show top 3 matches
-            final List<BuyerRequestModel> matches =
-                controller.buyerRequests.take(3).toList();
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '${matches.length} Match${matches.length > 1 ? "es" : ""} found',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: textColor,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                ...matches.map((BuyerRequestModel request) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border:
-                          Border.all(color: Colors.grey.withValues(alpha: 0.2)),
-                    ),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.orange.withValues(alpha: 0.1),
-                        child: const Icon(Icons.person_outline,
-                            color: Colors.orange),
-                      ),
-                      title: Text(
-                        request.title,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(
-                        request.description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                      trailing: const Icon(Icons.chevron_right, size: 16),
-                      onTap: () {
-                        RequestDetailsSheet.show(context, request);
-                      },
-                    ),
-                  );
-                }),
-              ],
+        const SizedBox(height: 32),
+        Obx(() {
+          if (matchController.isLoading.value ||
+              buyerRequestController.loading.value) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: CircularProgressIndicator(),
+              ),
             );
-          },
-        ),
+          }
+
+          final String? userIndustry = profileController.myProfile.industry;
+
+          // Combine results
+          List<dynamic> combinedResults = <dynamic>[];
+
+          // 1. Add People Matches
+          List<UserModel> people = <UserModel>[];
+          if (widget.postType == 'Find a Partner') {
+            people = matchController.partners.toList();
+          } else {
+            people = matchController.matchList.toList();
+          }
+          combinedResults.addAll(people.take(2));
+
+          // 2. Add Buyer Requests (Filtered by industry for relevance)
+          List<BuyerRequestModel> requests =
+              buyerRequestController.buyerRequests.where((BuyerRequestModel r) {
+            if (userIndustry == null || userIndustry.isEmpty) return true;
+            return r.category.toLowerCase().trim() ==
+                userIndustry.toLowerCase().trim();
+          }).toList();
+
+          if (requests.isEmpty) {
+            requests = buyerRequestController.buyerRequests.take(2).toList();
+          }
+
+          combinedResults.addAll(requests.take(2));
+
+          // Take first 3 total
+          final List<dynamic> finalDisplay = combinedResults.take(3).toList();
+
+          if (finalDisplay.isEmpty) {
+            return Center(
+              child: Text(
+                'No matching opportunities found yet.',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+            );
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                '${finalDisplay.length} Matches found',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
+              ),
+              const SizedBox(height: 16),
+              ...finalDisplay.map((dynamic item) {
+                if (item is UserModel) {
+                  return _buildUserMatchCard(item);
+                } else if (item is BuyerRequestModel) {
+                  return _buildRequestMatchCard(item);
+                }
+                return const SizedBox.shrink();
+              }),
+            ],
+          );
+        }),
         const SizedBox(height: 32),
         SizedBox(
           width: double.infinity,
@@ -145,6 +175,69 @@ class SuccessScreen extends StatelessWidget {
         ),
         const SizedBox(height: 24),
       ],
+    );
+  }
+
+  Widget _buildUserMatchCard(UserModel user) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+      ),
+      child: ListTile(
+        onTap: () {
+          Get.toNamed(Routes.publicProfile, arguments: user);
+        },
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue.withValues(alpha: 0.1),
+          child: const Icon(LucideIcons.user, color: Colors.blue, size: 20),
+        ),
+        title: Text(
+          user.name ?? user.username,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        ),
+        subtitle: Text(
+          user.bio ?? user.industry ?? '',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+        ),
+        trailing: const Icon(LucideIcons.chevronRight, size: 16),
+      ),
+    );
+  }
+
+  Widget _buildRequestMatchCard(BuyerRequestModel request) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+      ),
+      child: ListTile(
+        onTap: () {
+          RequestDetailsSheet.show(context, request);
+        },
+        leading: CircleAvatar(
+          backgroundColor: Colors.orange.withValues(alpha: 0.1),
+          child: const Icon(LucideIcons.shoppingCart,
+              color: Colors.orange, size: 20),
+        ),
+        title: Text(
+          request.title,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        ),
+        subtitle: Text(
+          request.description,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+        ),
+        trailing: const Icon(LucideIcons.chevronRight, size: 16),
+      ),
     );
   }
 }

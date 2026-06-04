@@ -39,8 +39,7 @@ class CreateProductListing extends StatefulWidget {
 class _CreateProductListingState extends State<CreateProductListing> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ProfileController profileController = Get.find();
-  final ShopController shopController =
-      Get.put(ShopController(), permanent: true);
+  final ShopController shopController = Get.find();
   final MarketController marketController = Get.find();
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];

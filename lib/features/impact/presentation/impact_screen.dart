@@ -96,12 +96,13 @@ class _ReachScreenState extends State<ReachScreen> {
   @override
   void initState() {
     super.initState();
-    // Delete any existing controller with this tag to ensure fresh data
+    // Use existing controller if registered, otherwise create one
     if (Get.isRegistered<ReachController>(tag: widget.user.uid)) {
-      Get.delete<ReachController>(tag: widget.user.uid);
+      controller = Get.find<ReachController>(tag: widget.user.uid);
+    } else {
+      controller = Get.put(ReachController(), tag: widget.user.uid);
     }
-    // Create fresh controller instance for this user
-    controller = Get.put(ReachController(), tag: widget.user.uid);
+
     controller.loadData(widget.user.uid, profileController.myProfile.uid);
 
     // Only load connections for current user's profile
@@ -112,8 +113,7 @@ class _ReachScreenState extends State<ReachScreen> {
 
   @override
   void dispose() {
-    // Delete the controller when leaving this screen
-    Get.delete<ReachController>(tag: widget.user.uid);
+    // Do not delete the controller to prevent issues elsewhere in the app
     super.dispose();
   }
 

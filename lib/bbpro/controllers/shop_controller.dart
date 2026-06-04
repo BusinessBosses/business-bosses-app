@@ -18,7 +18,6 @@ import 'package:get_storage/get_storage.dart';
 
 class ShopController extends GetxController {
   final ProfileController profileController = Get.find();
-  final MarketController marketController = Get.put(MarketController());
   Shop? shop;
   Shop? userShop;
   RxBool loading = RxBool(true);
@@ -368,6 +367,7 @@ class ShopController extends GetxController {
     if (response.success) {
       products.add(Product.fromJson(response.data));
       items.add(Product.fromJson(response.data));
+      final MarketController marketController = Get.find();
       marketController.proItems.add(Product.fromJson(response.data));
       marketController.proProducts.add(Product.fromJson(response.data));
       update();
@@ -397,6 +397,7 @@ class ShopController extends GetxController {
         items[objectIndex] = Product.fromJson(response.data);
       }
       // Update in marketController
+      final MarketController marketController = Get.find();
       final int proItemIndex = marketController.proItems
           .indexWhere((Object item) => item is Product && item.id == id);
       if (proItemIndex != -1) {
@@ -425,6 +426,7 @@ class ShopController extends GetxController {
     if (response.success) {
       services.add(Service.fromJson(response.data));
       items.add(Service.fromJson(response.data));
+      final MarketController marketController = Get.find();
       marketController.proItems.add(Service.fromJson(response.data));
       marketController.proServices.add(Service.fromJson(response.data));
       update();
@@ -484,6 +486,7 @@ class ShopController extends GetxController {
           items[objectIndex] = Customitem.fromJson(response.data);
         }
       }
+      final MarketController marketController = Get.find();
       final int proItemIndex = marketController.proItems
           .indexWhere((Object item) => item is Customitem && item.id == id);
       if (proItemIndex != -1) {
@@ -521,6 +524,7 @@ class ShopController extends GetxController {
           items[objectIndex] = Service.fromJson(response.data);
         }
       }
+      final MarketController marketController = Get.find();
       final int proItemIndex = marketController.proItems
           .indexWhere((Object item) => item is Service && item.id == id);
       if (proItemIndex != -1) {
@@ -579,6 +583,7 @@ class ShopController extends GetxController {
       items.removeWhere((Object element) =>
           element is Product &&
           element.id == id); // Remove from marketController lists
+      final MarketController marketController = Get.find();
       marketController.proItems
           .removeWhere((Object item) => item is Product && item.id == id);
       marketController.proProducts
@@ -600,6 +605,7 @@ class ShopController extends GetxController {
       items.removeWhere((Object element) =>
           element is Service &&
           element.id == id); // Remove from marketController lists
+      final MarketController marketController = Get.find();
       marketController.proItems
           .removeWhere((Object item) => item is Service && item.id == id);
       marketController.proServices

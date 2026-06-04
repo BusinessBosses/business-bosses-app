@@ -300,7 +300,7 @@ class _InventoryCardState extends State<InventoryCard> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              Get.back();
             },
             child: const Text('No'),
           ),
@@ -311,12 +311,11 @@ class _InventoryCardState extends State<InventoryCard> {
 
               if (delete) {
                 showSnackbar(message: 'Product deleted successfully!');
-                Navigator.pop(context);
+                Get.back();
               } else {
                 showSnackbar(message: 'Error deleting product!', error: true);
-                Navigator.pop(context);
+                Get.back();
               }
-              setState(() {});
             },
             child: const Text('Yes'),
           ),

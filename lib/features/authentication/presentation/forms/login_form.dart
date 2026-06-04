@@ -154,6 +154,16 @@ class _LoginFormState extends State<LoginForm> {
         Get.snackbar('Success', 'Authentication completed');
         await logEvents('signup', 'email');
 
+        // 🔥 Refresh core controllers after successful login
+        if (Get.isRegistered<ProfileController>()) {
+          Get.find<ProfileController>().fetchData();
+        }
+        if (Get.isRegistered<HomeController>()) {
+          final HomeController homeController = Get.find<HomeController>();
+          homeController.loadData();
+          homeController.fetchRankWinner();
+        }
+
         Get.off(() => UpdateProfileScreen(
                 user: UserModel(
               username: _authusername!,
@@ -191,6 +201,17 @@ class _LoginFormState extends State<LoginForm> {
         await _googleSignIn.disconnect();
       } else {
         await logEvents('login', 'apple');
+
+        // 🔥 Refresh core controllers after successful login
+        if (Get.isRegistered<ProfileController>()) {
+          Get.find<ProfileController>().fetchData();
+        }
+        if (Get.isRegistered<HomeController>()) {
+          final HomeController homeController = Get.find<HomeController>();
+          homeController.loadData();
+          homeController.fetchRankWinner();
+        }
+
         FirebaseMessaging.instance.getToken().then((String? value) async {
           Map<String, dynamic> data = <String, dynamic>{
             'deviceToken': value,
@@ -207,9 +228,11 @@ class _LoginFormState extends State<LoginForm> {
         }
       }
 
-      setState(() {
-        _isProcessing = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isProcessing = false;
+        });
+      }
     } catch (error) {
       // Error occurred during sign in
       // log('Here ->>>>>> ${error.toString()}');
@@ -218,9 +241,11 @@ class _LoginFormState extends State<LoginForm> {
           message: 'Opps!! Something went wrong. Try again');
     }
 
-    setState(() {
-      _isProcessing = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isProcessing = false;
+      });
+    }
   }
 
   @override
@@ -398,6 +423,18 @@ class _LoginFormState extends State<LoginForm> {
                     Get.snackbar('Error', user['error']);
                   } else {
                     await logEvents('login', 'email');
+
+                    // 🔥 Refresh core controllers after successful login
+                    if (Get.isRegistered<ProfileController>()) {
+                      Get.find<ProfileController>().fetchData();
+                    }
+                    if (Get.isRegistered<HomeController>()) {
+                      final HomeController homeController =
+                          Get.find<HomeController>();
+                      homeController.loadData();
+                      homeController.fetchRankWinner();
+                    }
+
                     FirebaseMessaging.instance
                         .getToken()
                         .then((String? value) async {

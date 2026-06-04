@@ -31,10 +31,9 @@ class OptionsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
       if (isExpanded == true)
-        PopupMenuItem<String>(
-          onTap: onView,
+        const PopupMenuItem<String>(
           value: 'View',
-          child: const Text(
+          child: Text(
             'View',
             style: bodyText2,
           ),
@@ -44,10 +43,9 @@ class OptionsButton extends StatelessWidget {
           height: 0.0,
         ),
       if (isEdit == true)
-        PopupMenuItem<String>(
+        const PopupMenuItem<String>(
           value: 'Edit',
-          onTap: onEdit,
-          child: const Text(
+          child: Text(
             'Edit',
             style: bodyText2,
           ),
@@ -56,23 +54,9 @@ class OptionsButton extends StatelessWidget {
         const PopupMenuDivider(
           height: 0.0,
         ),
-      // if (isBoost == true)
-      //   PopupMenuItem<String>(
-      //     onTap: onBoost,
-      //     value: 'Boost',
-      //     child: const Text(
-      //       'Boost',
-      //       style: bodyText2,
-      //     ),
-      //   ),
-      // if (isBoost == true)
-      //   const PopupMenuDivider(
-      //     height: 0.0,
-      //   ),
-      PopupMenuItem<String>(
+      const PopupMenuItem<String>(
         value: 'Delete',
-        onTap: onDelete,
-        child: const Text(
+        child: Text(
           'Delete',
           style: bodyText2,
         ),
@@ -112,9 +96,6 @@ class OptionsButton extends StatelessWidget {
               // Delete action
               if (onDelete != null) {
                 onDelete!();
-              }
-              if (item != null) {
-                // Implement delete logic here
               }
             }
           }

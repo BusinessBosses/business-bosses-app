@@ -53,8 +53,7 @@ class _DashboardState extends State<Dashboard> {
     'Create Orders',
     'Add Customers',
   ];
-  final ShopController shopController =
-      Get.put(ShopController(), permanent: true);
+  final ShopController shopController = Get.find();
   final ClientsController clientsController = Get.put(ClientsController());
   final ProfileController profileController = Get.find();
   final HomeController homeController = Get.find();

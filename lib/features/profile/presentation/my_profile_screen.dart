@@ -144,7 +144,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       Bottomnavscreen(
                         initialindex: 0,
                         onTabChanged: (int index) {
-                          setState(() => _selectedIndex = index);
+                          setState(() {
+                            _selectedIndex = index;
+                            if (index == 3) {
+                              // If switched to Boss Up within My Biz, reset PageView
+                              _currentIndex = 0;
+                              _pageController.jumpToPage(0);
+                            }
+                          });
                         },
                       ),
                     ],
@@ -159,7 +166,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     final bool showHeader = _selectedIndex == 0 || _selectedIndex == 4;
 
     return PreferredSize(
-      preferredSize: Size.fromHeight(showHeader ? kToolbarHeight : 0),
+      preferredSize: Size.fromHeight(showHeader ? kToolbarHeight + 50 : 0),
       child: showHeader
           ? Padding(
               padding: const EdgeInsets.only(top: 50.0),
@@ -802,54 +809,56 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   }
 
   Widget _buildPostsTab() {
-    final List<UnifiedFeedItem> combinedItems = <UnifiedFeedItem>[];
+    return GetBuilder<ProfileController>(builder: (ProfileController controller) {
+      final List<UnifiedFeedItem> combinedItems = <UnifiedFeedItem>[];
 
-    // Add normal posts
-    for (final PostModel post in profileController.posts) {
-      combinedItems.add(UnifiedFeedItem(
-        data: post,
-        type: FeedType.post,
-        createdAt: DateTime.fromMillisecondsSinceEpoch(post.timestamp),
-      ));
-    }
-
-    // Add donations
-    for (final DonationModel donation in homeController.userdonations) {
-      if (donation.timestamp != null) {
+      // Add normal posts
+      for (final PostModel post in controller.posts) {
         combinedItems.add(UnifiedFeedItem(
-          data: donation,
-          type: FeedType.donation,
-          createdAt:
-              DateTime.fromMillisecondsSinceEpoch(donation.timestamp ?? 0),
+          data: post,
+          type: FeedType.post,
+          createdAt: DateTime.fromMillisecondsSinceEpoch(post.timestamp),
         ));
       }
-    }
 
-    // Add courses
-    for (final CourseModel course in homeController.usercourses) {
-      if (course.timestamp != null) {
-        combinedItems.add(UnifiedFeedItem(
-          data: course,
-          type: FeedType.course,
-          createdAt: DateTime.fromMillisecondsSinceEpoch(course.timestamp ?? 0),
-        ));
+      // Add donations
+      for (final DonationModel donation in homeController.userdonations) {
+        if (donation.timestamp != null) {
+          combinedItems.add(UnifiedFeedItem(
+            data: donation,
+            type: FeedType.donation,
+            createdAt:
+                DateTime.fromMillisecondsSinceEpoch(donation.timestamp ?? 0),
+          ));
+        }
       }
-    }
 
-    // Sort DESC by createdAt
-    combinedItems.sort(
-      (UnifiedFeedItem a, UnifiedFeedItem b) =>
-          b.createdAt.compareTo(a.createdAt),
-    );
+      // Add courses
+      for (final CourseModel course in homeController.usercourses) {
+        if (course.timestamp != null) {
+          combinedItems.add(UnifiedFeedItem(
+            data: course,
+            type: FeedType.course,
+            createdAt:
+                DateTime.fromMillisecondsSinceEpoch(course.timestamp ?? 0),
+          ));
+        }
+      }
 
-    if (combinedItems.isEmpty) {
-      return _emptyState('No Posts Found', 'assets/svgs/text.svg');
-    }
+      // Sort DESC by createdAt
+      combinedItems.sort(
+        (UnifiedFeedItem a, UnifiedFeedItem b) =>
+            b.createdAt.compareTo(a.createdAt),
+      );
 
-    return ListView.builder(
-      padding: const EdgeInsets.only(top: 15, bottom: 120),
-      itemCount: combinedItems.length,
-      itemBuilder: (_, int i) {
+      if (combinedItems.isEmpty) {
+        return _emptyState('No Posts Found', 'assets/svgs/text.svg');
+      }
+
+      return ListView.builder(
+        padding: const EdgeInsets.only(top: 15, bottom: 120),
+        itemCount: combinedItems.length,
+        itemBuilder: (_, int i) {
         final UnifiedFeedItem item = combinedItems[i];
 
         switch (item.type) {
@@ -892,9 +901,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
           default:
             return const SizedBox.shrink();
-        }
-      },
-    );
+          }
+        },
+      );
+    });
   }
 
   // Widget _buildDonationsTab() {

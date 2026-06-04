@@ -82,33 +82,34 @@ class _PostsWidgetState extends State<PostsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => ListView.builder(
-          shrinkWrap: true,
-          controller: widget.scrollController,
-          itemCount: controller.mixedPosts.length +
-              2 +
-              (controller.loadingMore.value ? 1 : 0),
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Column(children: <Widget>[]);
-            }
+    return GetBuilder<HomeController>(
+        builder: (HomeController controller) => ListView.builder(
+              shrinkWrap: true,
+              controller: widget.scrollController,
+              itemCount: controller.mixedPosts.length +
+                  2 +
+                  (controller.loadingMore.value ? 1 : 0),
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0) {
+                  return Column(children: <Widget>[]);
+                }
 
-            if (index == 1) {
-              return HeroSection();
-            }
+                if (index == 1) {
+                  return HeroSection();
+                }
 
-            // Loader at the bottom when loadingMore is true
-            if (index == controller.mixedPosts.length + 2 &&
-                controller.loadingMore.value) {
-              return const Padding(
-                padding: EdgeInsets.only(bottom: 100),
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
+                // Loader at the bottom when loadingMore is true
+                if (index == controller.mixedPosts.length + 2 &&
+                    controller.loadingMore.value) {
+                  return const Padding(
+                    padding: EdgeInsets.only(bottom: 100),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
 
-            return _buildPostWidget(index - 2);
-          },
-        ));
+                return _buildPostWidget(index - 2);
+              },
+            ));
   }
 
   Widget _buildPostWidget(int postIndex) {

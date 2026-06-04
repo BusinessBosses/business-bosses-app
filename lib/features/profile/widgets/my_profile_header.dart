@@ -17,12 +17,7 @@ class MyProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ReachController reachController = Get.find();
-    final Map<String, dynamic>? dataMap = reachController.myReach is Map
-        ? reachController.myReach
-        : <String, dynamic>{};
 
-    final int totalReachScore =
-        (dataMap?['totalReachPoints'] as num? ?? 0).toInt();
     return Column(
       children: <Widget>[
         if (myProfile.matchType == null)
@@ -82,17 +77,35 @@ class MyProfileHeader extends StatelessWidget {
                       value: myProfile.connecteds?.length ?? 0,
                     )),
                     Expanded(
-                      child: reachController.loading.value
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : CustomChildButton(
-                              value: totalReachScore,
-                              caption: 'Reach',
-                              onPressed: () {
-                                Get.to(() => ReachScreen(user: myProfile));
-                              },
+                      child: Obx(() {
+                        final Map<String, dynamic>? dataMap =
+                            (reachController.myReach != null &&
+                                    reachController.myReach is Map)
+                                ? reachController.myReach
+                                : <String, dynamic>{};
+
+                        if (reachController.loading.value &&
+                            (dataMap == null || dataMap.isEmpty)) {
+                          return const Center(
+                            child: SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
                             ),
+                          );
+                        }
+
+                        final int totalReachScore =
+                            (dataMap?['totalReachPoints'] as num? ?? 0).toInt();
+
+                        return CustomChildButton(
+                          value: totalReachScore,
+                          caption: 'Reach',
+                          onPressed: () {
+                            Get.to(() => ReachScreen(user: myProfile));
+                          },
+                        );
+                      }),
                     ),
                   ],
                 ),

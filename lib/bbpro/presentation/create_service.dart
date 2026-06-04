@@ -42,8 +42,7 @@ class CreateServiceListing extends StatefulWidget {
 class _CreateServiceListingState extends State<CreateServiceListing>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ShopController shopController =
-      Get.put(ShopController(), permanent: true);
+  final ShopController shopController = Get.find();
   final MarketController marketController = Get.find();
   final ProfileController profileController = Get.find();
   final ImagePicker _picker = ImagePicker();

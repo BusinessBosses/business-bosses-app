@@ -233,6 +233,22 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           path: 'users/${profileController.myProfile.uid}',
           body: updateData,
         );
+
+        // Also update shop if location or industry changed
+        if (shopController.shop != null) {
+          final Map<String, dynamic> shopUpdateData = <String, dynamic>{};
+          if (updateData.containsKey('location')) {
+            shopUpdateData['location'] = updateData['location'];
+          }
+          if (updateData.containsKey('industry')) {
+            shopUpdateData['category'] = updateData['industry'];
+          }
+
+          if (shopUpdateData.isNotEmpty) {
+            await shopController.updateShop(
+                shopController.shop!.id, shopUpdateData);
+          }
+        }
       }
     }
 

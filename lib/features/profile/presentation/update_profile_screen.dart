@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -97,6 +98,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     'Technology, Games & Electronic',
     'Vehicle & Transportation'
   ];
+
+  final ShopController shopController = Get.find();
 
   final List<String> _ageRanges = <String>[
     '18-24',
@@ -1575,10 +1578,32 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       Get.snackbar('Success', 'Profile Updated Succesfully');
       if (Get.isRegistered<ProfileController>()) {
         final ProfileController profileController = Get.find();
-        profileController.updateProfile(
-            {...profileController.myProfile.toMap(), ...updateData});
+        profileController.updateProfile(<String, dynamic>{
+          ...profileController.myProfile.toMap(),
+          ...updateData
+        });
         // Get.back();
         // return;
+      }
+
+      // Also update shop if location or industry changed
+      if (shopController.shop != null) {
+        bool needsShopUpdate = false;
+        final Map<String, dynamic> shopUpdateData = <String, dynamic>{};
+
+        if (_location != null && _location != shopController.shop!.location) {
+          shopUpdateData['location'] = _location;
+          needsShopUpdate = true;
+        }
+        if (_industry != null && _industry != shopController.shop!.category) {
+          shopUpdateData['category'] = _industry;
+          needsShopUpdate = true;
+        }
+
+        if (needsShopUpdate) {
+          await shopController.updateShop(
+              shopController.shop!.id, shopUpdateData);
+        }
       }
       FirebaseMessaging.instance.getToken().then((String? value) {
         Map<String, dynamic> data = <String, dynamic>{

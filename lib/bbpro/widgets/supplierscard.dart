@@ -123,6 +123,7 @@ class _SuppliersCardState extends State<SuppliersCard> {
                 OptionsButton(
                   item: widget.supplier,
                   onEdit: _onEdit,
+                  onDelete: onDelete,
                 ),
               ],
             ),
@@ -152,11 +153,12 @@ class _SuppliersCardState extends State<SuppliersCard> {
                   await shopController.deleteSupplier(widget.supplier.id);
               if (delete) {
                 showSnackbar(message: 'Supplier deleted successfully!');
+                Navigator.pop(context);
               } else {
                 showSnackbar(message: 'Error deleting supplier!', error: true);
+                Navigator.pop(context);
               }
               setState(() {});
-              Navigator.pop(Get.context!);
             },
             child: const Text('Yes'),
           ),

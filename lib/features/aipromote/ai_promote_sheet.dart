@@ -391,7 +391,9 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
           remainingPromos: remaining,
         );
       case PromoteStep.success:
-        return SuccessScreen(onCreateAnother: _handleCreateAnother);
+        return SuccessScreen(
+            onCreateAnother: _handleCreateAnother,
+            postType: _businessInfo.postType);
     }
   }
 
