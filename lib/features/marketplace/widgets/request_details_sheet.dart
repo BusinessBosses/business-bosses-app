@@ -1,8 +1,10 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -108,9 +110,19 @@ class RequestDetailsSheet {
                           final bool? confirmed =
                               await _showDeleteConfirmation();
                           if (confirmed == true) {
-                            ApiService.delete(
-                                path: 'buyerrequest/${request.id}');
-                            Get.back();
+                            final BuyerRequestController
+                                buyerRequestController = Get.find();
+                            final bool success = await buyerRequestController
+                                .deleteBuyerRequest(request.id!);
+                            if (success) {
+                              showSnackbar(
+                                  message: 'Request deleted successfully!');
+                              Get.back(); // Close bottom sheet
+                            } else {
+                              showSnackbar(
+                                  message: 'Error deleting request!',
+                                  error: true);
+                            }
                           }
                         } else if (val == 'Block') {
                           ApiService.post(

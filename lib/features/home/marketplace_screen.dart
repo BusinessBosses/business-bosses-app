@@ -2,6 +2,9 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
@@ -52,6 +55,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     BuyerRequestController(),
   );
   final ProfileController _profileController = Get.find();
+  final HomeController homeController = Get.find<HomeController>();
+  final CommunitiesController _communitiesController =
+      Get.find<CommunitiesController>();
 
   late final TabController _marketplaceTabController;
   int _currentTabIndex = 0;
@@ -181,95 +187,190 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   @override
   Widget build(BuildContext context) {
-    return AdvancedDrawer(
-      backdrop: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: <Color>[Colors.white, Colors.white.withValues(alpha: 0.2)],
+    return Obx(() {
+      bool shouldDisableDrawer = homeController.loading.value ||
+          homeController.noConnection.value ||
+          homeController.error.value;
+      return AdvancedDrawer(
+        backdrop: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[Colors.white, Colors.white.withValues(alpha: 0.2)],
+            ),
           ),
         ),
-      ),
-      controller: _advancedDrawerController,
-      animationCurve: Curves.easeInOut,
-      animationDuration: const Duration(milliseconds: 300),
-      rtlOpening: false,
-      childDecoration: const BoxDecoration(
-        boxShadow: <BoxShadow>[BoxShadow(color: Colors.black12, blurRadius: 3)],
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
-      drawer: DrawerContent(
-        oncloseclick: () {
-          _advancedDrawerController.hideDrawer();
-        },
-        currentuser: _profileController.myProfile,
-        hasUnreadNotification:
-            _profileController.myProfile.unReadCount != null &&
-                _profileController.myProfile.unReadCount! > 0,
-      ),
-      child: Scaffold(
-        backgroundColor: backgroundColor,
-        body: Stack(
-          children: <Widget>[
-            NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  // Sticky AppBar with search bar
-                  SliverAppBar(
-                    pinned: true,
-                    floating: false,
-                    automaticallyImplyLeading: false,
-                    backgroundColor: Colors.white,
-                    elevation: 0,
-                    toolbarHeight: 120,
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: SafeArea(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: _buildCombinedHeader(),
-                        ),
+        controller: _advancedDrawerController,
+        animationCurve: Curves.easeInOut,
+        animationDuration: const Duration(milliseconds: 300),
+        rtlOpening: false,
+        disabledGestures: shouldDisableDrawer,
+        childDecoration: const BoxDecoration(
+          boxShadow: <BoxShadow>[
+            BoxShadow(color: Colors.black12, blurRadius: 3)
+          ],
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+        drawer: DrawerContent(
+          oncloseclick: () {
+            _advancedDrawerController.hideDrawer();
+          },
+          currentuser: _profileController.myProfile,
+          hasUnreadNotification:
+              _profileController.myProfile.unReadCount != null &&
+                  _profileController.myProfile.unReadCount! > 0,
+        ),
+        child: Scaffold(
+          backgroundColor: backgroundColor,
+          body: Obx(() {
+            if (homeController.loading.value) {
+              return _buildLoading();
+            } else if (homeController.noConnection.value) {
+              return _buildNoConnection();
+            } else if (homeController.error.value) {
+              return _buildError();
+            } else {
+              return _buildMainContent();
+            }
+          }),
+        ),
+      );
+    });
+  }
+
+  Widget _buildMainContent() {
+    return Stack(
+      children: <Widget>[
+        NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              // Sticky AppBar with search bar
+              SliverAppBar(
+                pinned: true,
+                floating: false,
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.white,
+                elevation: 0,
+                toolbarHeight: 120,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: _buildCombinedHeader(),
+                    ),
+                  ),
+                ),
+              ),
+              // Tabs - collapses when scrolling
+              SliverToBoxAdapter(child: _buildMainTabs()),
+              // Category chips - only for first tab
+              if (_marketplaceTabController.index == 0)
+                SliverToBoxAdapter(
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: Obx(
+                      () => ProshopdealsWidget(
+                        title: 'NEW',
+                        combinedList:
+                            _marketController.featuredItems.take(10).toList(),
                       ),
                     ),
                   ),
-                  // Tabs - collapses when scrolling
-                  SliverToBoxAdapter(child: _buildMainTabs()),
-                  // Category chips - only for first tab
-                  if (_marketplaceTabController.index == 0)
-                    SliverToBoxAdapter(
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Obx(
-                          () => ProshopdealsWidget(
-                            title: 'NEW',
-                            combinedList: _marketController.featuredItems
-                                .take(10)
-                                .toList(),
-                          ),
-                        ),
-                      ),
+                ),
+              if (_marketplaceTabController.index == 0 ||
+                  _marketplaceTabController.index == 1 ||
+                  _marketplaceTabController.index == 2)
+                SliverToBoxAdapter(child: _buildCategoryChips()),
+            ];
+          },
+          body: TabBarView(
+            controller: _marketplaceTabController,
+            children: <Widget>[
+              // Tab 1: Marketplace Listings
+              const MarketsPage(),
+              const BuyerRequestsScreen(showAppBar: false),
+              const BossUpPartner(isMarketplace: true),
+            ],
+          ),
+        ),
+        // Bottom Bar
+        BottomBar(activeIndex: 0),
+      ],
+    );
+  }
+
+  Widget _buildLoading() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 120.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      'assets/app/app_logo_2.png',
+                      height: 40,
+                      width: 40,
                     ),
-                  if (_marketplaceTabController.index == 0 ||
-                      _marketplaceTabController.index == 1 ||
-                      _marketplaceTabController.index == 2)
-                    SliverToBoxAdapter(child: _buildCategoryChips()),
-                ];
-              },
-              body: TabBarView(
-                controller: _marketplaceTabController,
-                children: <Widget>[
-                  // Tab 1: Marketplace Listings
-                  const MarketsPage(),
-                  const BuyerRequestsScreen(showAppBar: false),
-                  const BossUpPartner(isMarketplace: true),
-                ],
-              ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 45,
+                  height: 45,
+                  child: CircularProgressIndicator(),
+                ),
+              ],
             ),
-            // Bottom Bar
-            BottomBar(activeIndex: 0),
+            const Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: Text(
+                'Access Business Opportunities Worldwide',
+                style: TextStyle(fontSize: 16),
+              ),
+            )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildNoConnection() {
+    return SafetyModel(
+      isLoading: false,
+      title: 'Error While Loading Data\nCheck your Internet Connection',
+      subTitle: 'Try Reloading Again',
+      clickableText: 'Refresh',
+      onTap: () {
+        homeController.loadData();
+        _profileController.fetchData();
+        _communitiesController.fetchIndustries();
+      },
+      icon: const Icon(
+        Icons.warning,
+        size: 60,
+      ),
+    );
+  }
+
+  Widget _buildError() {
+    return SafetyModel(
+      isLoading: false,
+      title: 'Error While Loading Data',
+      subTitle: 'Try Reloading Again',
+      clickableText: 'Refresh',
+      onTap: () {
+        homeController.loadData();
+        _profileController.fetchData();
+        _communitiesController.fetchIndustries();
+      },
+      icon: const Icon(
+        Icons.warning,
+        size: 60,
       ),
     );
   }

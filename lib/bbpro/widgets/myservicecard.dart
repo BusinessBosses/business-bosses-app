@@ -315,14 +315,13 @@ class _MyServiceCardState extends State<MyServiceCard> {
           ),
           TextButton(
             onPressed: () async {
+              Get.back(); // Close dialog immediately
               final bool delete =
                   await shopController.deleteService(widget.service.id);
               if (delete) {
                 showSnackbar(message: 'Service deleted successfully!');
-                Get.back();
               } else {
                 showSnackbar(message: 'Error deleting service!', error: true);
-                Get.back();
               }
             },
             child: const Text('Yes'),

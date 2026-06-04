@@ -306,15 +306,14 @@ class _InventoryCardState extends State<InventoryCard> {
           ),
           TextButton(
             onPressed: () async {
+              Get.back(); // Close dialog immediately
               final bool delete =
                   await shopController.deleteProduct(widget.product!.id);
 
               if (delete) {
                 showSnackbar(message: 'Product deleted successfully!');
-                Get.back();
               } else {
                 showSnackbar(message: 'Error deleting product!', error: true);
-                Get.back();
               }
             },
             child: const Text('Yes'),

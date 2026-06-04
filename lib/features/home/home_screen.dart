@@ -179,61 +179,43 @@ class _HomeScreenState extends State<HomeScreen>
                       _profileController.myProfile.unReadCount! > 0,
             ),
 
-            // ⭐⭐ FIX APPLIED HERE ⭐⭐
             child: Scaffold(
               backgroundColor: Colors.white,
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(kToolbarHeight),
-                child: Obx(() {
-                  if (homeController.loading.value) {
-                    return Container();
-                  }
+                child: GetBuilder<ChatController>(
+                  builder: (ChatController chatController) {
+                    final List<MessageModel> unseenChats =
+                        chatController.chats.where((MessageModel msg) {
+                      return msg.receiverUid ==
+                              homeController.profileController.myProfile.uid &&
+                          !msg.seen;
+                    }).toList();
+                    final bool hasBadge = unseenChats.isNotEmpty;
 
-                  return GetBuilder<ChatController>(
-                    builder: (ChatController chatController) {
-                      final List<MessageModel> unseenChats =
-                          chatController.chats.where((MessageModel msg) {
-                        return msg.receiverUid ==
-                                homeController
-                                    .profileController.myProfile.uid &&
-                            !msg.seen;
-                      }).toList();
-                      final bool hasBadge = unseenChats.isNotEmpty;
-
-                      return GetBuilder<ProfileController>(
-                        builder: (ProfileController profileController) {
-                          return HomeAppBar(
-                            onMenuClick: shouldDisableDrawer
-                                ? null
-                                : () {
-                                    _advancedDrawerController.showDrawer();
-                                  },
-                            hasBadge: hasBadge,
-                            coinsCount: profileController.myProfile.coinscount
-                                    ?.toString() ??
-                                '0',
-                            hasUnreadNotification: profileController
-                                        .myProfile.unReadCount !=
-                                    null &&
-                                profileController.myProfile.unReadCount! > 0,
-                          );
-                        },
-                      );
-                    },
-                  );
-                }),
+                    return GetBuilder<ProfileController>(
+                      builder: (ProfileController profileController) {
+                        return HomeAppBar(
+                          onMenuClick: shouldDisableDrawer
+                              ? null
+                              : () {
+                                  _advancedDrawerController.showDrawer();
+                                },
+                          hasBadge: hasBadge,
+                          coinsCount: profileController.myProfile.coinscount
+                                  ?.toString() ??
+                              '0',
+                          hasUnreadNotification: profileController
+                                      .myProfile.unReadCount !=
+                                  null &&
+                              profileController.myProfile.unReadCount! > 0,
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
-              body: Obx(() {
-                if (homeController.loading.value) {
-                  return _buildLoading();
-                } else if (homeController.noConnection.value) {
-                  return _buildNoConnection();
-                } else if (homeController.error.value) {
-                  return _buildError();
-                } else {
-                  return _buildMainContent();
-                }
-              }),
+              body: _buildMainContent(),
             ),
           );
         }),
@@ -259,78 +241,4 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _buildLoading() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 120.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/app/app_logo_2.png',
-                      height: 40,
-                      width: 40,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 45,
-                  height: 45,
-                  child: CircularProgressIndicator(),
-                ),
-              ],
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 20.0),
-              child: Text(
-                'Access Business Opportunities Worldwide',
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNoConnection() {
-    return SafetyModel(
-      isLoading: false,
-      title: 'Error While Loading Data\nCheck your Internet Connection',
-      subTitle: 'Try Reloading Again',
-      clickableText: 'Refresh',
-      onTap: () {
-        homeController.loadData();
-        _profileController.fetchData();
-        _communitiesController.fetchIndustries();
-      },
-      icon: const Icon(
-        Icons.warning,
-        size: 60,
-      ),
-    );
-  }
-
-  Widget _buildError() {
-    return SafetyModel(
-      isLoading: false,
-      title: 'Error While Loading Data',
-      subTitle: 'Try Reloading Again',
-      clickableText: 'Refresh',
-      onTap: () {
-        homeController.loadData();
-        _profileController.fetchData();
-        _communitiesController.fetchIndustries();
-      },
-      icon: const Icon(
-        Icons.warning,
-        size: 60,
-      ),
-    );
-  }
 }

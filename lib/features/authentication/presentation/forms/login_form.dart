@@ -6,6 +6,8 @@ import 'dart:math' show Random;
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
     show TextWidget;
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:crypto/crypto.dart';

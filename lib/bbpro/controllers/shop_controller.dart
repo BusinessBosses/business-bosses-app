@@ -577,19 +577,24 @@ class ShopController extends GetxController {
 
 // Delete Product
   Future<bool> deleteProduct(int id) async {
+    // 🛡️ Guard: verify item exists before deletion
+    if (!products.any((Product p) => p.id == id)) return false;
+
     ApiResponseModel response = await ApiService.delete(path: 'goods/$id');
     if (response.success) {
       products.removeWhere((Product element) => element.id == id);
-      items.removeWhere((Object element) =>
-          element is Product &&
-          element.id == id); // Remove from marketController lists
-      final MarketController marketController = Get.find();
-      marketController.proItems
-          .removeWhere((Object item) => item is Product && item.id == id);
-      marketController.proProducts
-          .removeWhere((Product product) => product.id == id);
+      items.removeWhere((Object element) => element is Product && element.id == id);
+
+      if (Get.isRegistered<MarketController>()) {
+        final MarketController marketController = Get.find();
+        marketController.proItems
+            .removeWhere((Object item) => item is Product && item.id == id);
+        marketController.proProducts
+            .removeWhere((Product product) => product.id == id);
+        marketController.update();
+      }
+
       update(); // Update the UI
-      marketController.update();
       return true;
     } else {
       log(response.toMap().toString());
@@ -599,19 +604,24 @@ class ShopController extends GetxController {
 
 // Delete Service
   Future<bool> deleteService(int id) async {
+    // 🛡️ Guard: verify item exists before deletion
+    if (!services.any((Service s) => s.id == id)) return false;
+
     ApiResponseModel response = await ApiService.delete(path: 'services/$id');
     if (response.success) {
       services.removeWhere((Service element) => element.id == id);
-      items.removeWhere((Object element) =>
-          element is Service &&
-          element.id == id); // Remove from marketController lists
-      final MarketController marketController = Get.find();
-      marketController.proItems
-          .removeWhere((Object item) => item is Service && item.id == id);
-      marketController.proServices
-          .removeWhere((Service service) => service.id == id);
+      items.removeWhere((Object element) => element is Service && element.id == id);
+
+      if (Get.isRegistered<MarketController>()) {
+        final MarketController marketController = Get.find();
+        marketController.proItems
+            .removeWhere((Object item) => item is Service && item.id == id);
+        marketController.proServices
+            .removeWhere((Service service) => service.id == id);
+        marketController.update();
+      }
+
       update(); // Update the UI
-      marketController.update();
       return true;
     } else {
       log(response.toMap().toString());
