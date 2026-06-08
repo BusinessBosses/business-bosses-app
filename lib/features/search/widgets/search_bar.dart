@@ -46,17 +46,7 @@ class Searchbar extends StatelessWidget {
           decoration: inputDecoration.copyWith(
             contentPadding: const EdgeInsets.all(0.0),
             hintText: hintText,
-            prefixIcon: hasSearchIcon == false
-                ? null
-                : Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12.0, horizontal: 0.0),
-                    child: SvgPicture.asset(
-                      'assets/svgs/search.svg',
-                      colorFilter:
-                          const ColorFilter.mode(hintColor, BlendMode.srcIn),
-                    ),
-                  ),
+            prefixIcon: hasSearchIcon == false ? SizedBox() : SizedBox(),
           ),
         ),
         if (ismarketplace!)

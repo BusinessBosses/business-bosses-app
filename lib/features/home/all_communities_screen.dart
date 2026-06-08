@@ -182,54 +182,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
           ),
 
           child: Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: true,
-              leading: IconButton(
-                onPressed: () {
-                  Get.off(() => HomeScreen());
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              ),
-              title: _isSearching
-                  ? Searchbar(
-                      hintText: 'Search',
-                      onChange: (String query) {
-                        if (query.isEmpty) {
-                          controller.clearIIndustriesSearch();
-                          controller.clearIndustriesPostSearch();
-                        }
-                        setState(() {});
-                      },
-                      onSubmit: (String query) {
-                        controller.onsearchIndustries(query);
-                        controller.onsearchPosts(query);
-                      },
-                    )
-                  : _isSearchingDonations && _pageTabController.index == 2
-                      ? Searchbar(
-                          hintText: 'Search Donations Members or Posts',
-                          onChange: (String query) {
-                            if (query.isEmpty) {
-                              donationsController.clearUserSearch();
-                              donationsController.clearPostSearch();
-                            }
-                            setState(() {});
-                          },
-                          onSubmit: (String query) {
-                            donationsController.searchUsers(query);
-                            donationsController.searchPosts(query);
-                            setState(() {});
-                          },
-                        )
-                      : const Text(
-                          'Boss Up',
-                          style: TextStyle(
-                              color: textColor,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 20),
-                        ),
-              actions: mActions,
-            ),
             body: SizedBox(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
@@ -372,7 +324,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   const BossupChallenge(
                                                     ishome: false,
                                                     backgroundColor:
-                                                        backgroundColor,
+                                                        Colors.white,
                                                   ),
                                                 ],
                                               ),

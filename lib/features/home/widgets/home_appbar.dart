@@ -59,12 +59,6 @@ class HomeAppBar extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                Image.asset(
-                                  'assets/app/app_logo.png',
-                                  height: 25,
-                                  width: 25,
-                                ),
-                                const SizedBox(width: 8),
                                 Flexible(
                                   child: Text(
                                     'Boss Up & Grow',

@@ -31,25 +31,23 @@ class _BossupChallengeState extends State<BossupChallenge> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: widget.backgroundColor ?? Colors.white,
-      appBar: widget.ishome == true
-          ? null
-          : AppBar(
-              backgroundColor: widget.backgroundColor ?? Colors.white,
-              elevation: 0,
-              leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              ),
-              title: const Text(
-                'Boss Up Challenge',
-                style: TextStyle(
-                  color: textColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              centerTitle: true,
-            ),
+      appBar: AppBar(
+        backgroundColor: widget.backgroundColor ?? Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        ),
+        title: const Text(
+          'Boss Up Challenge',
+          style: TextStyle(
+            color: textColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: GetBuilder<ChallengeController>(
         init: ChallengeController(),
         builder: (ChallengeController controller) {
