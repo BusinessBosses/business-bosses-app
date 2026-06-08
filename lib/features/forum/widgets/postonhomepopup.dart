@@ -152,20 +152,23 @@ class _PostonhomePopUpState extends State<PostonhomePopUp> {
               combinedResults.addAll(people.take(2));
 
               // 2. Add Buyer Requests
-              List<BuyerRequestModel> requests =
-                  buyerRequestController.buyerRequests.where((BuyerRequestModel r) {
+              List<BuyerRequestModel> requests = buyerRequestController
+                  .buyerRequests
+                  .where((BuyerRequestModel r) {
                 if (userIndustry == null || userIndustry.isEmpty) return true;
                 return r.category.toLowerCase().trim() ==
                     userIndustry.toLowerCase().trim();
               }).toList();
 
               if (requests.isEmpty) {
-                requests = buyerRequestController.buyerRequests.take(2).toList();
+                requests =
+                    buyerRequestController.buyerRequests.take(2).toList();
               }
 
               combinedResults.addAll(requests.take(2));
 
-              final List<dynamic> finalDisplay = combinedResults.take(3).toList();
+              final List<dynamic> finalDisplay =
+                  combinedResults.take(3).toList();
 
               if (finalDisplay.isEmpty) {
                 return Center(
@@ -269,14 +272,14 @@ class _PostonhomePopUpState extends State<PostonhomePopUp> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.withOpacity(0.1)),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
       ),
       child: ListTile(
         onTap: () {
           Get.toNamed(Routes.publicProfile, arguments: user);
         },
         leading: CircleAvatar(
-          backgroundColor: Colors.blue.withOpacity(0.1),
+          backgroundColor: Colors.blue.withValues(alpha: 0.1),
           child: const Icon(LucideIcons.user, color: Colors.blue, size: 20),
         ),
         title: Text(
@@ -300,14 +303,14 @@ class _PostonhomePopUpState extends State<PostonhomePopUp> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.withOpacity(0.1)),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
       ),
       child: ListTile(
         onTap: () {
           RequestDetailsSheet.show(context, request);
         },
         leading: CircleAvatar(
-          backgroundColor: Colors.orange.withOpacity(0.1),
+          backgroundColor: Colors.orange.withValues(alpha: 0.1),
           child: const Icon(LucideIcons.shoppingCart,
               color: Colors.orange, size: 20),
         ),

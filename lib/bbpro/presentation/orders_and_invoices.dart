@@ -95,30 +95,29 @@ class _OrdersScreenState extends State<OrdersScreen>
     setState(() {});
   }
 
-
   Widget _buildMyOrdersView() {
     final Size screenSize = MediaQuery.of(context).size;
     return Column(
-      children: [
+      children: <Widget>[
         const SizedBox(height: 10),
         Obx(() => CustomTabBarWidget<OrderStatus>(
-          tabController: _ordersTabController,
-          scrollToSection: (int index) {
-            _scrollToSection(index, _ordersScrollController);
-          },
-          proprimaryColor: proprimaryColor,
-          backgroundColor: <Color>[
-            backgroundColor,
-            Colors.amber.withOpacity(0.1),
-            Colors.blue.withOpacity(0.1),
-            Colors.green.withOpacity(0.1)
-          ],
-          listofitems: OrderStatus.values.toList(),
-          itemToString: (OrderStatus status) {
-            String title = status.displayTitle;
-            return '$title (${status == OrderStatus.allorders ? _marketController.orders.length : _marketController.orders.where((order) => order.status == status).length})';
-          },
-        )),
+              tabController: _ordersTabController,
+              scrollToSection: (int index) {
+                _scrollToSection(index, _ordersScrollController);
+              },
+              proprimaryColor: proprimaryColor,
+              backgroundColor: <Color>[
+                backgroundColor,
+                Colors.amber.withValues(alpha: 0.1),
+                Colors.blue.withValues(alpha: 0.1),
+                Colors.green.withValues(alpha: 0.1)
+              ],
+              listofitems: OrderStatus.values.toList(),
+              itemToString: (OrderStatus status) {
+                String title = status.displayTitle;
+                return '$title (${status == OrderStatus.allorders ? _marketController.orders.length : _marketController.orders.where((Order order) => order.status == status).length})';
+              },
+            )),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(bottom: 10),
@@ -139,42 +138,43 @@ class _OrdersScreenState extends State<OrdersScreen>
                         slivers: <Widget>[
                           ...OrderStatus.values.map(
                             (OrderStatus status) => SliverToBoxAdapter(
-                                child: Obx(() => RowStatusCard(
-                                orders: _marketController.orders
-                                    .where((Order order) =>
-                                        order.status == status ||
-                                        status == OrderStatus.allorders)
-                                    .toList(),
-                                orderStatus: status,
-                                screenSize: screenSize,
-                                isSales: false,
-                                  onLoadMore: () {
-                                    _marketController.loadMoreMyOrders();
-                                  },
-                                orderAccepted: (Order order,
-                                    OrderStatus newStatus) {
-                                  orderController.updateOrder(
-                                      order.id, <String, dynamic>{
-                                    'status': newStatus.toString(),
-                                  }).then((success) {
-                                    if (success) {
-                                      _marketController.initOrder();
-                                    }
-                                  });
-                                },
-                                onDrag: (bool isRight) {
-                                  if (_lastMoveRight == isRight) {
-                                    return;
-                                  }
-                                  _lastMoveRight = isRight;
-                                  _moveMainList(isRight, _ordersScrollController);
-                                },
-                                cancelDrag: () {
-                                  _lastMoveRight = null;
-                                  _timer?.cancel();
-                                },
-                                allorders: _marketController.orders,
-                                )),
+                              child: Obx(() => RowStatusCard(
+                                    orders: _marketController.orders
+                                        .where((Order order) =>
+                                            order.status == status ||
+                                            status == OrderStatus.allorders)
+                                        .toList(),
+                                    orderStatus: status,
+                                    screenSize: screenSize,
+                                    isSales: false,
+                                    onLoadMore: () {
+                                      _marketController.loadMoreMyOrders();
+                                    },
+                                    orderAccepted:
+                                        (Order order, OrderStatus newStatus) {
+                                      orderController.updateOrder(
+                                          order.id, <String, dynamic>{
+                                        'status': newStatus.toString(),
+                                      }).then((bool success) {
+                                        if (success) {
+                                          _marketController.initOrder();
+                                        }
+                                      });
+                                    },
+                                    onDrag: (bool isRight) {
+                                      if (_lastMoveRight == isRight) {
+                                        return;
+                                      }
+                                      _lastMoveRight = isRight;
+                                      _moveMainList(
+                                          isRight, _ordersScrollController);
+                                    },
+                                    cancelDrag: () {
+                                      _lastMoveRight = null;
+                                      _timer?.cancel();
+                                    },
+                                    allorders: _marketController.orders,
+                                  )),
                             ),
                           )
                         ],
@@ -205,7 +205,7 @@ class _OrdersScreenState extends State<OrdersScreen>
           ),
         ),
         centerTitle: true,
-        actions: [
+        actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
             child: ProIconButton(
@@ -247,16 +247,18 @@ class _OrdersScreenState extends State<OrdersScreen>
           labelColor: Colors.blue,
           unselectedLabelColor: textColor,
           indicatorColor: Colors.blue,
-          labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-          tabs: [
+          labelStyle:
+              const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          tabs: <Widget>[
             Obx(() => Tab(text: 'My Sales (${orderController.orders.length})')),
-            Obx(() => Tab(text: 'My Orders (${_marketController.orders.length})')),
+            Obx(() =>
+                Tab(text: 'My Orders (${_marketController.orders.length})')),
           ],
         ),
       ),
       body: TabBarView(
         controller: _mainTabController,
-        children: [
+        children: <Widget>[
           _buildMySalesView(),
           _buildMyOrdersView(),
         ],
@@ -267,29 +269,29 @@ class _OrdersScreenState extends State<OrdersScreen>
   Widget _buildMySalesView() {
     final Size screenSize = MediaQuery.of(context).size;
     return Column(
-      children: [
+      children: <Widget>[
         const SizedBox(height: 10),
         Obx(() => CustomTabBarWidget<OrderStatus>(
-          tabController: _salesTabController,
-          scrollToSection: (int index) {
-            _scrollToSection(index, _salesScrollController);
-          },
-          proprimaryColor: proprimaryColor,
-          backgroundColor: <Color>[
-            backgroundColor,
-            Colors.amber.withOpacity(0.1),
-            Colors.blue.withOpacity(0.1),
-            Colors.green.withOpacity(0.1)
-          ],
-          listofitems: OrderStatus.values.toList(),
-          itemToString: (OrderStatus status) {
-            String title = status.displayTitle;
-            if (status == OrderStatus.allorders) {
-              title = 'All Sales';
-            }
-            return '$title (${status == OrderStatus.allorders ? orderController.orders.length : (orderController.ordersStatus[status] == null ? '0' : orderController.ordersStatus[status]!.length.toString())})';
-          },
-        )),
+              tabController: _salesTabController,
+              scrollToSection: (int index) {
+                _scrollToSection(index, _salesScrollController);
+              },
+              proprimaryColor: proprimaryColor,
+              backgroundColor: <Color>[
+                backgroundColor,
+                Colors.amber.withValues(alpha: 0.1),
+                Colors.blue.withValues(alpha: 0.1),
+                Colors.green.withValues(alpha: 0.1)
+              ],
+              listofitems: OrderStatus.values.toList(),
+              itemToString: (OrderStatus status) {
+                String title = status.displayTitle;
+                if (status == OrderStatus.allorders) {
+                  title = 'All Sales';
+                }
+                return '$title (${status == OrderStatus.allorders ? orderController.orders.length : (orderController.ordersStatus[status] == null ? '0' : orderController.ordersStatus[status]!.length.toString())})';
+              },
+            )),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(bottom: 10),
@@ -315,44 +317,46 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 slivers: <Widget>[
                                   ...OrderStatus.values.map(
                                     (OrderStatus status) => SliverToBoxAdapter(
-                                child: Obx(() => RowStatusCard(
-                                        orders: orderController.orders
-                                            .where((Order order) =>
-                                                order.status == status ||
-                                                status == OrderStatus.allorders)
-                                            .toList(),
-                                        orderStatus: status,
-                                        screenSize: screenSize,
-                                        isSales: true,
-                                  onLoadMore: () {
-                                    orderController.loadMoreOrders(
-                                        shopController.shop!.id);
-                                  },
-                                        orderAccepted: (Order order,
-                                            OrderStatus newStatus) {
-                                          orderController.updateOrder(
-                                              order.id, <String, dynamic>{
-                                            'status': newStatus.toString(),
-                                          }).then((success) {
-                                            if (success) {
-                                              orderController.initOrders(
+                                      child: Obx(() => RowStatusCard(
+                                            orders: orderController.orders
+                                                .where((Order order) =>
+                                                    order.status == status ||
+                                                    status ==
+                                                        OrderStatus.allorders)
+                                                .toList(),
+                                            orderStatus: status,
+                                            screenSize: screenSize,
+                                            isSales: true,
+                                            onLoadMore: () {
+                                              orderController.loadMoreOrders(
                                                   shopController.shop!.id);
-                                            }
-                                          });
-                                        },
-                                        onDrag: (bool isRight) {
-                                          if (_lastMoveRight == isRight) {
-                                            return;
-                                          }
-                                          _lastMoveRight = isRight;
-                                          _moveMainList(isRight, _salesScrollController);
-                                        },
-                                        cancelDrag: () {
-                                          _lastMoveRight = null;
-                                          _timer?.cancel();
-                                        },
-                                        allorders: orderController.orders,
-                                )),
+                                            },
+                                            orderAccepted: (Order order,
+                                                OrderStatus newStatus) {
+                                              orderController.updateOrder(
+                                                  order.id, <String, dynamic>{
+                                                'status': newStatus.toString(),
+                                              }).then((bool success) {
+                                                if (success) {
+                                                  orderController.initOrders(
+                                                      shopController.shop!.id);
+                                                }
+                                              });
+                                            },
+                                            onDrag: (bool isRight) {
+                                              if (_lastMoveRight == isRight) {
+                                                return;
+                                              }
+                                              _lastMoveRight = isRight;
+                                              _moveMainList(isRight,
+                                                  _salesScrollController);
+                                            },
+                                            cancelDrag: () {
+                                              _lastMoveRight = null;
+                                              _timer?.cancel();
+                                            },
+                                            allorders: orderController.orders,
+                                          )),
                                     ),
                                   )
                                 ],
@@ -364,13 +368,11 @@ class _OrdersScreenState extends State<OrdersScreen>
     );
   }
 
-
   void _moveMainList(bool isRight, ScrollController scrollController) {
     _timer?.cancel();
     _timer = Timer(const Duration(milliseconds: 100), () {
       if (scrollController.offset <= 20 && !isRight ||
-          scrollController.offset >
-              scrollController.position.maxScrollExtent) {
+          scrollController.offset > scrollController.position.maxScrollExtent) {
         _timer?.cancel();
         return;
       }
@@ -429,7 +431,9 @@ class _RowStatusCardState extends State<RowStatusCard> {
     if (searchQuery.isNotEmpty) {
       filteredOrders = widget.allorders.where((Order order) {
         return order.client != null
-            ? order.client!.name.toLowerCase().contains(searchQuery.toLowerCase())
+            ? order.client!.name
+                .toLowerCase()
+                .contains(searchQuery.toLowerCase())
             : order.user != null
                 ? order.user!.username
                     .toLowerCase()
@@ -501,8 +505,9 @@ class _RowStatusCardState extends State<RowStatusCard> {
                               contentPadding: 10,
                               backgroundColor: backgroundColor,
                               hasSearchIcon: false,
-                              hintText:
-                                  widget.isSales ? 'Search Sales' : 'Search Orders',
+                              hintText: widget.isSales
+                                  ? 'Search Sales'
+                                  : 'Search Orders',
                               onChange: (String query) {
                                 setState(() {
                                   searchQuery =
@@ -669,7 +674,8 @@ class ListStatusColumnWidget extends StatelessWidget {
 
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification scrollInfo) {
-        if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 200) {
+        if (scrollInfo.metrics.pixels >=
+            scrollInfo.metrics.maxScrollExtent - 200) {
           if (onLoadMore != null) {
             onLoadMore!();
           }
@@ -678,57 +684,57 @@ class ListStatusColumnWidget extends StatelessWidget {
       },
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index) {
-        final Widget itemWidget = isSales
-            ? OrderWidget(
-                order: orders[index],
-                bgcolor: orders[index].status.backgroundColor,
-              )
-            : MyOrderWidget(
-                order: orders[index],
-                bgcolor: orders[index].status.backgroundColor,
-                myShop: false,
-                shop: orders[index].shop,
-                showChange: false,
-              );
+          final Widget itemWidget = isSales
+              ? OrderWidget(
+                  order: orders[index],
+                  bgcolor: orders[index].status.backgroundColor,
+                )
+              : MyOrderWidget(
+                  order: orders[index],
+                  bgcolor: orders[index].status.backgroundColor,
+                  myShop: false,
+                  shop: orders[index].shop,
+                  showChange: false,
+                );
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: LongPressDraggable<Order>(
-            data: orders[index],
-            dragAnchorStrategy: (Draggable<Object> draggable,
-                BuildContext context, Offset position) {
-              return pointerDragAnchorStrategy(draggable, context, position);
-            },
-            onDragUpdate: (DragUpdateDetails details) {
-              if (details.globalPosition.dx > screenSize.width * 0.8) {
-                onDrag(true);
-              } else if (details.globalPosition.dx < screenSize.width * 0.2) {
-                onDrag(false);
-              } else {
-                cancelDrag();
-              }
-            },
-            onDragEnd: (_) => cancelDrag(),
-            onDragCompleted: () => cancelDrag(),
-            onDraggableCanceled: (Velocity velocity, Offset offset) =>
-                cancelDrag(),
-            childWhenDragging: Opacity(
-              opacity: 0.2,
-              child: itemWidget,
-            ),
-            feedback: Material(
-              color: Colors.transparent,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: screenSize.width * 0.8,
-                ),
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: LongPressDraggable<Order>(
+              data: orders[index],
+              dragAnchorStrategy: (Draggable<Object> draggable,
+                  BuildContext context, Offset position) {
+                return pointerDragAnchorStrategy(draggable, context, position);
+              },
+              onDragUpdate: (DragUpdateDetails details) {
+                if (details.globalPosition.dx > screenSize.width * 0.8) {
+                  onDrag(true);
+                } else if (details.globalPosition.dx < screenSize.width * 0.2) {
+                  onDrag(false);
+                } else {
+                  cancelDrag();
+                }
+              },
+              onDragEnd: (_) => cancelDrag(),
+              onDragCompleted: () => cancelDrag(),
+              onDraggableCanceled: (Velocity velocity, Offset offset) =>
+                  cancelDrag(),
+              childWhenDragging: Opacity(
+                opacity: 0.2,
                 child: itemWidget,
               ),
+              feedback: Material(
+                color: Colors.transparent,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: screenSize.width * 0.8,
+                  ),
+                  child: itemWidget,
+                ),
+              ),
+              child: itemWidget,
             ),
-            child: itemWidget,
-          ),
-        );
-      },
+          );
+        },
         itemCount: orders.length,
       ),
     );

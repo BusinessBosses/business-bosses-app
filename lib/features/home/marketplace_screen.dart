@@ -102,7 +102,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       initialIndex: widget.initialIndex,
     );
 
-    _sliderTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    _sliderTimer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (_sliderPageController.hasClients) {
         int nextIndex = (_sliderIndex + 1) % 2;
         _sliderPageController.animateToPage(
@@ -854,13 +854,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   Widget _buildTopSlider() {
     return Column(
-      children: [
+      children: <Widget>[
         SizedBox(
           height: 205,
           child: PageView(
             controller: _sliderPageController,
-            onPageChanged: (index) => setState(() => _sliderIndex = index),
-            children: [
+            onPageChanged: (int index) => setState(() => _sliderIndex = index),
+            children: <Widget>[
               _buildInsightSlide(),
               _buildFeaturedListingSlide(),
             ],
@@ -869,7 +869,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(2, (index) {
+          children: List.generate(2, (int index) {
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
               width: 8,
@@ -889,10 +889,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   Widget _buildInsightSlide() {
     return GetBuilder<ReachController>(
-      builder: (reach) {
-        final data = reach.myReach ?? {};
-        final reachScore = _formatReachScore(data['totalReachPoints'] ?? 0);
-        final matchesCount = '${_matchController.matchList.length}';
+      builder: (ReachController reach) {
+        final Map<String, dynamic> data = reach.myReach ?? <String, dynamic>{};
+        final String reachScore =
+            _formatReachScore(data['totalReachPoints'] ?? 0);
+        final String matchesCount = '${_matchController.matchList.length}';
 
         // Prioritize industry rank, then global rank
         String ranking = 'N/A';
@@ -918,7 +919,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -931,7 +932,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: <Widget>[
                     _buildInsightMetric('Reach Score', reachScore),
                     _buildInsightMetric('Matches', matchesCount),
                     _buildInsightMetric('Ranking', ranking),
@@ -939,7 +940,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 ),
                 const Spacer(),
                 Row(
-                  children: [
+                  children: <Widget>[
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -968,8 +969,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         ),
                         onPressed: () {
                           if (_profileController.myProfile.isSubscribed) {
-                            Get.to(() =>
-                                ReachScreen(user: _profileController.myProfile));
+                            Get.to(() => ReachScreen(
+                                user: _profileController.myProfile));
                           } else {
                             showPremiumPaywall();
                           }
@@ -1005,7 +1006,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
-        children: [
+        children: <Widget>[
           Text(
             value,
             style: const TextStyle(

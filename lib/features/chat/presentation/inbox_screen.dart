@@ -29,9 +29,11 @@ class InboxScreen extends StatefulWidget {
   State<InboxScreen> createState() => _InboxScreenState();
 }
 
-class _InboxScreenState extends State<InboxScreen> with SingleTickerProviderStateMixin {
+class _InboxScreenState extends State<InboxScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final AdvancedDrawerController _advancedDrawerController = AdvancedDrawerController();
+  final AdvancedDrawerController _advancedDrawerController =
+      AdvancedDrawerController();
   final ProfileController _profileController = Get.find();
 
   @override
@@ -59,7 +61,7 @@ class _InboxScreenState extends State<InboxScreen> with SingleTickerProviderStat
             end: Alignment.bottomRight,
             colors: <Color>[
               Colors.white,
-              Colors.white.withOpacity(0.2),
+              Colors.white.withValues(alpha: 0.2),
             ],
           ),
         ),
@@ -82,8 +84,9 @@ class _InboxScreenState extends State<InboxScreen> with SingleTickerProviderStat
       drawer: DrawerContent(
         oncloseclick: () => _advancedDrawerController.hideDrawer(),
         currentuser: _profileController.myProfile,
-        hasUnreadNotification: _profileController.myProfile.unReadCount != null &&
-            _profileController.myProfile.unReadCount! > 0,
+        hasUnreadNotification:
+            _profileController.myProfile.unReadCount != null &&
+                _profileController.myProfile.unReadCount! > 0,
       ),
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -98,7 +101,7 @@ class _InboxScreenState extends State<InboxScreen> with SingleTickerProviderStat
               fontSize: 20,
             ),
           ),
-          actions: [
+          actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 15.0),
               child: GestureDetector(
@@ -112,18 +115,19 @@ class _InboxScreenState extends State<InboxScreen> with SingleTickerProviderStat
             labelColor: primaryColorLT,
             unselectedLabelColor: Colors.grey,
             indicatorColor: primaryColorLT,
-            labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            tabs: const [
+            labelStyle:
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            tabs: const <Widget>[
               Tab(text: 'Chat'),
               Tab(text: 'Notifications'),
             ],
           ),
         ),
         body: Stack(
-          children: [
+          children: <Widget>[
             TabBarView(
               controller: _tabController,
-              children: [
+              children: <Widget>[
                 _buildChatTab(),
                 _buildNotificationsTab(),
               ],
@@ -137,32 +141,38 @@ class _InboxScreenState extends State<InboxScreen> with SingleTickerProviderStat
 
   Widget _buildChatTab() {
     return GetBuilder<ChatController>(
-      builder: (controller) {
+      builder: (ChatController controller) {
         return controller.chats.isEmpty
             ? SafetyModel(
                 isLoading: false,
                 icon: SvgPicture.asset(
                   'assets/svgs/message.svg',
-                  colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+                  colorFilter:
+                      const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
                   height: 80,
                 ),
                 title: 'No chat found',
-                subTitle: 'Search for friends or connections and chat with them',
+                subTitle:
+                    'Search for friends or connections and chat with them',
               )
             : Column(
-                children: [
+                children: <Widget>[
                   _buildSearchBar(),
                   const SizedBox(height: 5),
-                  Divider(height: 0.5, color: Colors.grey.withOpacity(0.3)),
+                  Divider(
+                      height: 0.5, color: Colors.grey.withValues(alpha: 0.3)),
                   Expanded(
                     child: ListView.separated(
                       padding: const EdgeInsets.only(bottom: 120),
                       itemCount: controller.chats.length,
-                      separatorBuilder: (context, index) => Padding(
+                      separatorBuilder: (BuildContext context, int index) =>
+                          Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Divider(height: 0.5, color: Colors.grey.withOpacity(0.05)),
+                        child: Divider(
+                            height: 0.5,
+                            color: Colors.grey.withValues(alpha: 0.05)),
                       ),
-                      itemBuilder: (context, i) {
+                      itemBuilder: (BuildContext context, int i) {
                         return ChatItem(
                           myChatUser: controller.chats[i],
                           chatController: controller,
@@ -186,7 +196,7 @@ class _InboxScreenState extends State<InboxScreen> with SingleTickerProviderStat
           color: backgroundColor,
         ),
         child: Row(
-          children: [
+          children: <Widget>[
             SvgPicture.asset(
               'assets/svgs/homesearch.svg',
               colorFilter: const ColorFilter.mode(textColor, BlendMode.srcIn),
@@ -209,7 +219,7 @@ class _InboxScreenState extends State<InboxScreen> with SingleTickerProviderStat
 
   Widget _buildNotificationsTab() {
     return GetBuilder<NotificationController>(
-      builder: (controller) {
+      builder: (NotificationController controller) {
         if (controller.loading.value) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -225,7 +235,7 @@ class _InboxScreenState extends State<InboxScreen> with SingleTickerProviderStat
         return controller.notifications.isEmpty
             ? noNotificationsFoundWidget('notifications')
             : CustomScrollView(
-                slivers: [
+                slivers: <Widget>[
                   SliverStickyHeader(
                     sticky: false,
                     header: Container(
@@ -236,11 +246,13 @@ class _InboxScreenState extends State<InboxScreen> with SingleTickerProviderStat
                     ),
                   ),
                   SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 10),
                     sliver: SliverToBoxAdapter(
                       child: const Text(
                         'Activity',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 22),
                       ),
                     ),
                   ),
@@ -248,38 +260,56 @@ class _InboxScreenState extends State<InboxScreen> with SingleTickerProviderStat
                     padding: const EdgeInsets.only(bottom: 120),
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
-                        (context, i) {
-                        String formattedDate = TimeFormat.toDayFormat(controller.notifications[i].timestamp);
-                        bool showDateHeader = i == 0 ||
-                            formattedDate != TimeFormat.toDayFormat(controller.notifications[i - 1].timestamp);
+                        (BuildContext context, int i) {
+                          String formattedDate = TimeFormat.toDayFormat(
+                              controller.notifications[i].timestamp);
+                          bool showDateHeader = i == 0 ||
+                              formattedDate !=
+                                  TimeFormat.toDayFormat(controller
+                                      .notifications[i - 1].timestamp);
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (showDateHeader)
-                              Container(
-                                padding: const EdgeInsets.only(left: 16.0, top: 10, bottom: 5),
-                                child: Text(formattedDate, style: bodyText1),
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              if (showDateHeader)
+                                Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 16.0, top: 10, bottom: 5),
+                                  child: Text(formattedDate, style: bodyText1),
+                                ),
+                              NotificationItem(
+                                controller.notifications[i],
+                                onTap: () {
+                                  if (controller
+                                          .notifications[i].notificationType ==
+                                      'order') {
+                                    Get.to(() => ExpandedOrdersView(
+                                        order: controller
+                                            .notifications[i].dataId!));
+                                  } else if (controller.notifications[i].title
+                                      .contains('New Message')) {
+                                    Get.to(
+                                        () => const ChatRoomScreen(
+                                            frommarketplace: false),
+                                        arguments:
+                                            controller.notifications[i].user!);
+                                  } else if (controller.notifications[i].title
+                                      .contains('New Referral')) {
+                                    Get.toNamed(Routes.referalsscreen,
+                                        arguments:
+                                            _profileController.myProfile.uid);
+                                  } else {
+                                    Get.toNamed(Routes.publicProfile,
+                                        arguments:
+                                            controller.notifications[i].user!);
+                                  }
+                                },
                               ),
-                            NotificationItem(
-                              controller.notifications[i],
-                              onTap: () {
-                                if (controller.notifications[i].notificationType == 'order') {
-                                  Get.to(() => ExpandedOrdersView(order: controller.notifications[i].dataId!));
-                                } else if (controller.notifications[i].title.contains('New Message')) {
-                                  Get.to(() => const ChatRoomScreen(frommarketplace: false),
-                                      arguments: controller.notifications[i].user!);
-                                } else if (controller.notifications[i].title.contains('New Referral')) {
-                                  Get.toNamed(Routes.referalsscreen, arguments: _profileController.myProfile.uid);
-                                } else {
-                                  Get.toNamed(Routes.publicProfile, arguments: controller.notifications[i].user!);
-                                }
-                              },
-                            ),
-                            const Divider(height: 0.5, indent: 12.0, endIndent: 12.0),
-                          ],
-                        );
-                      },
+                              const Divider(
+                                  height: 0.5, indent: 12.0, endIndent: 12.0),
+                            ],
+                          );
+                        },
                         childCount: controller.notifications.length,
                       ),
                     ),

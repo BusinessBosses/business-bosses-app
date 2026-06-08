@@ -1342,7 +1342,7 @@ class _HeroSectionState extends State<HeroSection> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
-      builder: (controller) {
+      builder: (HomeController controller) {
         user = controller.bossOfTheWeek;
         final HeroItem bossOfTheWeekItem = HeroItem(
           id: '0',
