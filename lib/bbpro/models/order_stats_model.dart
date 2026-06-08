@@ -6,7 +6,7 @@ class OrderStats {
   final num failed;
   final num pending;
   final num processed;
-  final num cancelled;
+  final num completed;
   final num paid;
 
   OrderStats({
@@ -17,7 +17,7 @@ class OrderStats {
     this.failed = 0,
     this.pending = 0,
     this.processed = 0,
-    this.cancelled = 0,
+    this.completed = 0,
     this.paid = 0,
   });
 
@@ -37,7 +37,7 @@ class OrderStats {
       processed: json['processed'] == null
           ? 0
           : num.parse(json['processed'].toString()),
-      cancelled: json['cancelled'] == null
+      completed: json['cancelled'] == null
           ? 0
           : num.parse(json['cancelled'].toString()),
       paid: json['paid'] == null ? 0 : num.parse(json['paid'].toString()),
@@ -53,7 +53,7 @@ class OrderStats {
       'failed': failed,
       'pending': pending,
       'processed': processed,
-      'cancelled': cancelled,
+      'cancelled': completed, // Maintain 'cancelled' key for backend compatibility
       'paid': paid,
     };
   }

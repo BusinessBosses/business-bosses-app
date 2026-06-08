@@ -158,7 +158,7 @@ enum OrderStatus {
   allorders,
   pending,
   paid,
-  cancelled;
+  completed;
 
   static OrderStatus fromString(String status) {
     switch (status) {
@@ -169,7 +169,8 @@ enum OrderStatus {
       case 'paid':
         return OrderStatus.paid;
       case 'cancelled':
-        return OrderStatus.cancelled;
+      case 'completed':
+        return OrderStatus.completed;
       default:
         throw ArgumentError('Unknown status: $status');
     }
@@ -183,7 +184,7 @@ enum OrderStatus {
         return 'Pending';
       case OrderStatus.paid:
         return 'Paid';
-      case OrderStatus.cancelled:
+      case OrderStatus.completed:
         return 'Completed';
     }
   }
@@ -193,11 +194,11 @@ enum OrderStatus {
       case OrderStatus.allorders:
         return Colors.white;
       case OrderStatus.pending:
-        return Colors.amber.withValues(alpha: 0.1);
+        return Colors.amber.withOpacity(0.1);
       case OrderStatus.paid:
-        return Colors.blue.withValues(alpha: 0.1);
-      case OrderStatus.cancelled:
-        return Colors.green.withValues(alpha: 0.1);
+        return Colors.blue.withOpacity(0.1);
+      case OrderStatus.completed:
+        return Colors.green.withOpacity(0.1);
     }
   }
 
@@ -210,7 +211,7 @@ enum OrderStatus {
         return 'pending';
       case OrderStatus.paid:
         return 'paid';
-      case OrderStatus.cancelled:
+      case OrderStatus.completed:
         return 'cancelled';
     }
   }

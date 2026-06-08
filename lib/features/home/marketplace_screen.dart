@@ -33,6 +33,11 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../utils/theme/theme.dart';
 import '../marketplace/controllers/market_controller.dart';
 import '../marketplace/presentation/marketplace_search_screen.dart';
+import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
+import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
+import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/orders_and_invoices.dart';
+import 'dart:async';
 
 /// Marketplace main screen
 class MarketplaceScreen extends StatefulWidget {
@@ -58,9 +63,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   final HomeController homeController = Get.find<HomeController>();
   final CommunitiesController _communitiesController =
       Get.find<CommunitiesController>();
+  final MatchController _matchController = Get.put(MatchController());
 
   late final TabController _marketplaceTabController;
   int _currentTabIndex = 0;
+
+  final PageController _sliderPageController = PageController();
+  int _sliderIndex = 0;
+  Timer? _sliderTimer;
 
   bool hasOldData = false;
 
@@ -91,6 +101,18 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       vsync: this,
       initialIndex: widget.initialIndex,
     );
+
+    _sliderTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_sliderPageController.hasClients) {
+        int nextIndex = (_sliderIndex + 1) % 2;
+        _sliderPageController.animateToPage(
+          nextIndex,
+          duration: const Duration(milliseconds: 900),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+
     _categoryScrollController.addListener(() {
       if (!_categoryScrollController.hasClients) return;
 
@@ -142,6 +164,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       await _marketController.initMarket();
       _marketController.sortItems();
 
+      // Load reach data for the current user
+      Get.find<ReachController>().loadData(
+        _profileController.myProfile.uid,
+        _profileController.myProfile.uid,
+      );
+
+      // Fetch matches if not already fetched
+      if (_matchController.matchList.isEmpty) {
+        _matchController.fetchMatches();
+      }
+
       if (shopController.shop == null && _profileController.myProfile.hasShop) {
         await shopController.initShop();
       }
@@ -160,6 +193,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   @override
   void dispose() {
+    _sliderTimer?.cancel();
+    _sliderPageController.dispose();
     _marketplaceTabController.dispose();
     _advancedDrawerController.dispose();
     super.dispose();
@@ -197,7 +232,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: <Color>[Colors.white, Colors.white.withValues(alpha: 0.2)],
+              colors: <Color>[
+                Colors.white,
+                Colors.white.withValues(alpha: 0.2)
+              ],
             ),
           ),
         ),
@@ -264,20 +302,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               ),
               // Tabs - collapses when scrolling
               SliverToBoxAdapter(child: _buildMainTabs()),
-              // Category chips - only for first tab
-              if (_marketplaceTabController.index == 0)
-                SliverToBoxAdapter(
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 10, bottom: 10),
-                    child: Obx(
-                      () => ProshopdealsWidget(
-                        title: 'NEW',
-                        combinedList:
-                            _marketController.featuredItems.take(10).toList(),
-                      ),
-                    ),
-                  ),
-                ),
+              // Slider at the top of Marketplace
+              SliverToBoxAdapter(child: _buildTopSlider()),
+
               if (_marketplaceTabController.index == 0 ||
                   _marketplaceTabController.index == 1 ||
                   _marketplaceTabController.index == 2)
@@ -823,6 +850,186 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     } else {
       _showSellOptions(context);
     }
+  }
+
+  Widget _buildTopSlider() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 205,
+          child: PageView(
+            controller: _sliderPageController,
+            onPageChanged: (index) => setState(() => _sliderIndex = index),
+            children: [
+              _buildInsightSlide(),
+              _buildFeaturedListingSlide(),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(2, (index) {
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    _sliderIndex == index ? Colors.black : Colors.grey.shade300,
+              ),
+            );
+          }),
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget _buildInsightSlide() {
+    return GetBuilder<ReachController>(
+      builder: (reach) {
+        final data = reach.myReach ?? {};
+        final reachScore = _formatReachScore(data['totalReachPoints'] ?? 0);
+        final matchesCount = '${_matchController.matchList.length}';
+
+        // Prioritize industry rank, then global rank
+        String ranking = 'N/A';
+        final dynamic shopIndustryRank = data['shopIndustryRank'];
+        final dynamic indRank = shopIndustryRank?['industryRank'];
+        final dynamic globRank = data['globalRank'];
+
+        if (indRank != null && indRank != 0) {
+          ranking = '#$indRank';
+        } else if (globRank != null && globRank != 0) {
+          ranking = '#$globRank';
+        }
+
+        return GestureDetector(
+          onTap: () =>
+              Get.to(() => ReachScreen(user: _profileController.myProfile)),
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFEF2F2),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    const Text('View Insight',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16)),
+                    const Icon(Icons.chevron_right, size: 20),
+                  ],
+                ),
+                const SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildInsightMetric('Reach Score', reachScore),
+                    _buildInsightMetric('Matches', matchesCount),
+                    _buildInsightMetric('Ranking', ranking),
+                  ],
+                ),
+                const Spacer(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.red,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: const BorderSide(color: Color(0xFFFECACA)),
+                          ),
+                        ),
+                        onPressed: () => Get.to(() => const OrdersScreen()),
+                        child: const Text('Sales & Orders',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        onPressed: () => Get.to(() =>
+                            ReachScreen(user: _profileController.myProfile)),
+                        child: const Text('Boost Visibility',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String _formatReachScore(num value) {
+    if (value >= 1000) {
+      double formatted = value / 1000;
+      return '${formatted.toStringAsFixed(formatted % 1 == 0 ? 0 : 1)}k';
+    }
+    return value.toString();
+  }
+
+  Widget _buildInsightMetric(String label, String value) {
+    return Container(
+      width: (Get.width - 70) / 3,
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        children: [
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w900,
+              color: Color(0xFFB91C1C),
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFEF4444),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeaturedListingSlide() {
+    return Obx(() {
+      return ProshopdealsWidget(
+        isHome: false,
+        caption: 'Featured Listing',
+        combinedList: _marketController.featuredItems.take(10).toList(),
+      );
+    });
   }
 
   void _showSellOptions(BuildContext context) {

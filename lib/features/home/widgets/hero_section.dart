@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/common/widgets/user_avatar_with_badge.dart';
 import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
@@ -24,7 +25,6 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -97,7 +97,7 @@ class _HeroSectionState extends State<HeroSection> {
   static const Map<String, WinnerCardConfig> cardConfigs =
       <String, WinnerCardConfig>{
     'boss': WinnerCardConfig(
-      title: 'My Ranking this Week',
+      title: 'Boss of The Week',
       icon: LucideIcons.trophy,
       gradientColors: <Color>[backgroundColor, backgroundColor],
       iconColor: Color(0xFFFCD34D),
@@ -449,9 +449,7 @@ class _HeroSectionState extends State<HeroSection> {
                 ));
             break;
           case 'boss':
-            Get.to(() => ReachScreen(
-                  user: _profileController.myProfile,
-                ));
+            Get.to(() => const BossupChallenge(ishome: false));
             break;
           case 'ranking':
             Get.to(() => ReachScreen(
@@ -515,9 +513,9 @@ class _HeroSectionState extends State<HeroSection> {
                         child: item.type == 'my_ranking'
                             ? GetBuilder<ReachController>(
                                 builder: (ReachController reach) {
-                                final String rank = reach.data?['globalRank']
-                                        ?.toString() ??
-                                    'N/A';
+                                final String rank =
+                                    reach.data?['globalRank']?.toString() ??
+                                        'N/A';
                                 return Text(
                                   'Your Reach Ranking is #$rank',
                                   style: const TextStyle(
@@ -743,8 +741,9 @@ class _HeroSectionState extends State<HeroSection> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       child: GetBuilder<ReachController>(
-                        builder: (ReachController reach) =>
-                            reach.loading.value && reach.data == null
+                        builder: (ReachController reach) => reach
+                                    .loading.value &&
+                                reach.data == null
                             ? const Center(
                                 child: SizedBox(
                                   height: 20,
@@ -929,70 +928,8 @@ class _HeroSectionState extends State<HeroSection> {
                             switch (
                                 item.action2.isNotEmpty ? item.action2 : '') {
                               case 'Get Featured':
-                                if (item.id == '0' || item.id == '6') {
-                                  DateTime now = DateTime.now();
-                                  if (industry.startAt != null &&
-                                      now.isBefore(industry.startAt!)) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text(
-                                            'How It Works!',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              decoration:
-                                                  TextDecoration.underline,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              if (industry.criteria != null)
-                                                Text(
-                                                  industry.criteria!,
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              const SizedBox(height: 10),
-                                              Text(
-                                                _calculateStartDate(
-                                                  industry.startAt!,
-                                                ),
-                                                style: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              child: const Text('OK'),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                    return;
-                                  }
-                                  enterChallenge();
-                                } else if (item.id == '1') {
-                                  enterChallenge();
-                                } else if (item.id == '2') {
-                                  entermentoroftheweek();
-                                } else if (item.id == '3') {
-                                  enterbackeroftheweek();
-                                } else {
-                                  enterpartneroftheweek();
-                                }
+                                Get.to(
+                                    () => const BossupChallenge(ishome: false));
                                 break;
                               case 'View your Match':
                                 Get.to(() => const ExpandedMatchesScreen());
@@ -1104,7 +1041,8 @@ class _HeroSectionState extends State<HeroSection> {
           // 🔥 Use stable random numbers to prevent UI jitter on rebuild
           reachScore = homeController.getStableMetric(
             'reach',
-            () => '${1 + (DateTime.now().second % 5)}.${DateTime.now().second % 10}k',
+            () =>
+                '${1 + (DateTime.now().second % 5)}.${DateTime.now().second % 10}k',
           );
           aiVisibility = homeController.getStableMetric(
             'ai',
@@ -1255,7 +1193,8 @@ class _HeroSectionState extends State<HeroSection> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const <Widget>[
-                            Icon(LucideIcons.plus, color: Colors.white, size: 18),
+                            Icon(LucideIcons.plus,
+                                color: Colors.white, size: 18),
                             SizedBox(width: 4),
                             Text(
                               'Visit BizCenter',
@@ -1402,348 +1341,31 @@ class _HeroSectionState extends State<HeroSection> {
 
   @override
   Widget build(BuildContext context) {
-    _initializeHeroItems();
-    return Container(
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: <Widget>[
-          GestureDetector(
-            onTap: _onUserInteraction,
-            onPanDown: (_) => _onUserInteraction(),
-            child: SizedBox(
-              height: 185,
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: heroItems.length,
-                onPageChanged: (int index) {
-                  setState(() => _currentIndex = index);
-                  _onUserInteraction();
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  final HeroItem item = heroItems[index];
-                  // Handle matches card click navigation
-                  if (item.type == 'matches') {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.to(() => const ExpandedMatchesScreen());
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 0.0),
-                        child: _buildWinnerCard(item),
-                      ),
-                    );
-                  }
+    return GetBuilder<HomeController>(
+      builder: (controller) {
+        user = controller.bossOfTheWeek;
+        final HeroItem bossOfTheWeekItem = HeroItem(
+          id: '0',
+          type: 'boss',
+          icon: 'assets/images/app_logo_2.png',
+          title: 'Boss of the week',
+          subtitle: user?.name ?? user?.username ?? '',
+          description: user?.bio ?? '',
+          image: user?.photoUrl ?? '',
+          action: (user != null &&
+                  _profileController.myProfile.connecteds != null &&
+                  _profileController.myProfile.connecteds!.contains(user!.uid))
+              ? 'Refer'
+              : 'Follow',
+          action2: 'Get Featured',
+        );
 
-                  if (item.type == 'ranking') {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.to(() => ReachScreen(
-                              user: _profileController.myProfile,
-                            ));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 0.0),
-                        child: _buildWinnerCard(item),
-                      ),
-                    );
-                  }
-
-                  if (cardConfigs.containsKey(item.type)) {
-                    return GestureDetector(
-                      onTap: () {
-                        switch (item.type) {
-                          case 'ai_visibility':
-                            Get.to(() => ReachScreen(
-                                  user: _profileController.myProfile,
-                                ));
-                            break;
-                          case 'boss':
-                            // Navigate to LeaderboardScreen when clicking Top Ranking of the Week
-                            Get.to(() => ReachScreen(
-                                  user: _profileController.myProfile,
-                                ));
-                            break;
-                          case 'mentor':
-                            Get.to(
-                              () => const AllLearningPostsScreen(
-                                isCoursesTile: false,
-                              ),
-                            );
-                            break;
-                          case 'backer':
-                            Get.to(() => DonationsPage(ishome: false));
-                            break;
-                          case 'partner':
-                            Get.to(() => BossUpPartner());
-                            break;
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 0.0),
-                        child: _buildWinnerCard(item),
-                      ),
-                    );
-                  }
-
-                  // Original card style for other types (if any)
-                  return GestureDetector(
-                    onTap: () => _onSlideTap(item),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: <Widget>[
-                            if (item.image.isNotEmpty)
-                              CachedNetworkImage(
-                                key: ValueKey<String>(item.title),
-                                imageUrl: item.image,
-                                fit: BoxFit.cover,
-                                memCacheHeight: 1000,
-                                errorWidget: (
-                                  BuildContext context,
-                                  String url,
-                                  Object error,
-                                ) =>
-                                    const Icon(Icons.error),
-                              ),
-                            GestureDetector(
-                              onTap: () {
-                                switch (item.action) {
-                                  case 'View Deals':
-                                    Get.to(() => const BossUpPartner());
-                                    break;
-                                  case 'View Challenges':
-                                    Get.toNamed(Routes.allCommunitiesScreen);
-                                    break;
-                                  case 'View Matches':
-                                    Get.to(() => const ExpandedMatchesScreen());
-                                    break;
-                                  default:
-                                    Get.toNamed(Routes.liveEvents);
-                                    break;
-                                }
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: <Color>[
-                                      Colors.transparent,
-                                      Colors.black87,
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: <Widget>[
-                                      Text(
-                                        item.title,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      Text(
-                                        item.subtitle,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 12),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          switch (item.action) {
-                                            case 'View Deals':
-                                              Get.to(
-                                                () => const BossUpPartner(),
-                                              );
-                                              break;
-                                            case 'View Challenges':
-                                              Get.toNamed(
-                                                Routes.allCommunitiesScreen,
-                                              );
-                                              break;
-                                            case 'View Matches':
-                                              Get.to(
-                                                () =>
-                                                    const ExpandedMatchesScreen(),
-                                              );
-                                              break;
-                                            default:
-                                              Get.toNamed(Routes.liveEvents);
-                                              break;
-                                          }
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(
-                                              20,
-                                            ),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 10,
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Icon(
-                                                item.action == 'View Events'
-                                                    ? LucideIcons.calendar
-                                                    : item.action ==
-                                                            'View Deals'
-                                                        ? LucideIcons
-                                                            .arrowUpRight
-                                                        : item.action ==
-                                                                'View Challenges'
-                                                            ? LucideIcons.trophy
-                                                            : LucideIcons.users,
-                                                size: 16,
-                                                color: textColor,
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                item.action,
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: textColor,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      if (item.action2.isNotEmpty) ...<Widget>[
-                                        const SizedBox(height: 8),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            switch (item.action2.isNotEmpty
-                                                ? item.action2
-                                                : '') {
-                                              case 'Become a Partner':
-                                              if (!_profileController
-                                                  .myProfile.isSubscribed) {
-                                                showPremiumPaywall();
-                                              } else {
-                                                Get.to(
-                                                  () => BecomeaPartnerScreen(),
-                                                );
-                                              }
-                                              break;
-                                              case 'Create an event':
-                                                Get.toNamed(Routes.liveEvents);
-                                                break;
-                                              default:
-                                                break;
-                                            }
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.white12,
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              border: Border.all(
-                                                color: Colors.white,
-                                                width: 1,
-                                              ),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 10,
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                Icon(
-                                                  LucideIcons.plus,
-                                                  size: 16,
-                                                  color: Colors.white,
-                                                ),
-                                                const SizedBox(width: 5),
-                                                Text(
-                                                  item.action2.isNotEmpty
-                                                      ? item.action2
-                                                      : '',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List<Widget>.generate(heroItems.length, (int index) {
-              final bool isActive = index == _currentIndex;
-              return GestureDetector(
-                onTap: () {
-                  _pageController.animateToPage(
-                    index,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                  setState(() => _currentIndex = index);
-                  _onUserInteraction();
-                },
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isActive ? Colors.black : const Color(0xFFD1D5DB),
-                  ),
-                ),
-              );
-            }),
-          ),
-          const SizedBox(height: 10),
-        ],
-      ),
+        return Container(
+          color: Colors.white,
+          padding: const EdgeInsets.only(top: 10, bottom: 15),
+          child: _buildWinnerCard(bossOfTheWeekItem),
+        );
+      },
     );
   }
 

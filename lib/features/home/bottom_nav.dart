@@ -1,6 +1,6 @@
+import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
-import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/home/utils/post_options_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -11,7 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../utils/theme/theme.dart';
 import '../profile/presentation/my_profile_screen.dart';
-import '../chat/chat_screen.dart';
+import '../chat/presentation/inbox_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';
 
@@ -90,6 +90,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController = Get.find();
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, dynamic result) {
@@ -122,137 +123,150 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         });
       },
       child: Scaffold(
+          drawer: DrawerContent(
+            oncloseclick: () => Scaffold.of(context).closeDrawer(),
+            currentuser: profileController.myProfile,
+            hasUnreadNotification:
+                profileController.myProfile.unReadCount != null &&
+                    profileController.myProfile.unReadCount! > 0,
+          ),
           body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              color: Colors.white,
-              child: IndexedStack(
-                index: _activeIndex,
-                children: const <Widget>[
-                  HomeScreen(), // Index 0: Boss up
-                  ChatScreen(), // Index 1: Inbox
-                  LeaderboardScreen(), // Index 2: Post (+) - wait, post is floating. Index 2 used to be Ranking.
-                  MarketplaceScreen(), // Index 3: Home
-                  MyProfileScreen(), // Index 4: Profile
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 103.0,
-                decoration: BoxDecoration(
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
-                      spreadRadius: 10,
-                      blurRadius: 50,
-                      offset: const Offset(0, 7), // changes position of shadow
-                    ),
-                  ],
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.white,
+                  child: IndexedStack(
+                    index: _activeIndex,
+                    children: const <Widget>[
+                      MarketplaceScreen(), // Index 0: Home
+                      InboxScreen(), // Index 1: Inbox
+                      SizedBox(), // Index 2: Post (Placeholder for FAB)
+                      HomeScreen(), // Index 3: Boss up
+                      MyProfileScreen(), // Index 4: Profile
+                    ],
+                  ),
                 ),
-                child: Stack(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          height: 20.0,
-                          color: Colors.transparent,
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: 103.0,
+                    decoration: BoxDecoration(
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.08),
+                          spreadRadius: 10,
+                          blurRadius: 50,
+                          offset:
+                              const Offset(0, 7), // changes position of shadow
                         ),
-                        Container(
-                          height: 83.0,
-                          padding: const EdgeInsets.only(bottom: 20),
-                          color: Colors.white,
-                          child: Row(
+                      ],
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              height: 20.0,
+                              color: Colors.transparent,
+                            ),
+                            Container(
+                              height: 83.0,
+                              padding: const EdgeInsets.only(bottom: 20),
+                              color: Colors.white,
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 10,
+                                    child: BottomTabButton(
+                                      icon: _activeIndex == 0
+                                          ? 'assets/svgs/homeufilled.svg'
+                                          : 'assets/svgs/homeu.svg',
+                                      label: 'Home',
+                                      onTap: () {
+                                        _onChangePage(0);
+                                      },
+                                      isActive: _activeIndex == 0,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 10,
+                                    child: BottomTabButton(
+                                      icon: _activeIndex == 1
+                                          ? 'assets/svgs/messagefilled.svg'
+                                          : 'assets/svgs/bottombarchat.svg',
+                                      onTap: () {
+                                        _onChangePage(1);
+                                      },
+                                      label: 'Inbox',
+                                      isActive: _activeIndex == 1,
+                                    ),
+                                  ),
+                                  const Spacer(flex: 10),
+                                  Expanded(
+                                    flex: 10,
+                                    child: BottomTabButton(
+                                      icon: _activeIndex == 3
+                                          ? 'assets/svgs/bossupu.svg'
+                                          : 'assets/svgs/bossup.svg',
+                                      onTap: () {
+                                        _onChangePage(3);
+                                      },
+                                      label: 'Boss up',
+                                      isActive: _activeIndex == 3,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 10,
+                                    child: BottomTabButton(
+                                      icon: 'assets/svgs/profilebottom.svg',
+                                      onTap: () => _onChangePage(4),
+                                      isActive: _activeIndex == 4,
+                                      label: 'Profile',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          child: Column(
                             children: <Widget>[
-                              Expanded(
-                                flex: 10,
-                                child: BottomTabButton(
-                                  icon: 'assets/svgs/marketplace.svg',
-                                  label: 'Home',
-                                  onTap: () {
-                                    _onChangePage(3);
-                                  },
-                                  isActive: _activeIndex == 3,
+                              Container(
+                                alignment: Alignment.center,
+                                child: FloatingActionButton(
+                                  heroTag: 'postButton',
+                                  child: const Icon(Icons.add),
+                                  onPressed: () =>
+                                      _showPostOptionsSheet(context),
                                 ),
                               ),
-                              Expanded(
-                                flex: 10,
-                                child: BottomTabButton(
-                                  icon:
-                                      'assets/svgs/messagefilled.svg', // Assuming inbox icon or similar
-                                  onTap: () {
-                                    // Need to find which index is Inbox. Usually 1.
-                                    _onChangePage(1);
-                                  },
-                                  label: 'Inbox',
-                                  isActive: _activeIndex == 1,
-                                ),
-                              ),
-                              // Placeholder for middle button if any, or just skip
-                              Expanded(
-                                flex: 10,
-                                child: BottomTabButton(
-                                  icon: 'assets/svgs/bossup.svg',
-                                  onTap: () {
-                                    _onChangePage(0);
-                                  },
-                                  label: 'Boss up',
-                                  isActive: _activeIndex == 0,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 10,
-                                child: BottomTabButton(
-                                  icon: 'assets/svgs/profilebottom.svg',
-                                  onTap: () => _onChangePage(4),
-                                  isActive: _activeIndex == 4,
-                                  label: 'Profile',
+                              const Text(
+                                'Post',
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor,
                                 ),
                               ),
                             ],
                           ),
-                        ),
+                        )
                       ],
                     ),
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            alignment: Alignment.center,
-                            child: FloatingActionButton(
-                              heroTag: 'postButton',
-                              child: const Icon(Icons.add),
-                              onPressed: () => _showPostOptionsSheet(context),
-                            ),
-                          ),
-                          const Text(
-                            'Post',
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w700,
-                              color: textColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
+                  ),
+                )
 
-            //navbar
-          ],
-        ),
-      )),
+                //navbar
+              ],
+            ),
+          )),
     );
   }
 

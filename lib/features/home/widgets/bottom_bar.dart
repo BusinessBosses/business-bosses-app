@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/features/home/utils/post_options_sheet.dart';
-import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/chat/presentation/inbox_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
@@ -107,9 +107,9 @@ class _BottomBarState extends State<BottomBar> {
                             onTap: () {
                               if (widget.activeIndex == 1) return;
                               if (widget.activeIndex == 0) {
-                                Get.to(() => const ChatScreen());
+                                Get.to(() => const InboxScreen());
                               } else {
-                                Get.off(() => const ChatScreen());
+                                Get.off(() => const InboxScreen());
                               }
                             },
                             isActive: widget.activeIndex == 1,

@@ -91,22 +91,21 @@ class MarketController extends GetxController {
   }
 
   void _initializeLocation() {
-    // Priority: Profile location > Stored location > Default
-    if (_profileController.myProfile.location != null &&
+    // Priority: Stored location > Profile location > Default
+    // Using stored location first ensures that if a user manually changes location in the marketplace, it's remembered.
+    final String? storedLocation = sandBox.read('selected_location');
+    final String? storedLocationCode = sandBox.read('selected_location_code');
+
+    if (storedLocation != null && storedLocationCode != null) {
+      selectedLocation = storedLocation;
+      selectedLocationCode = storedLocationCode;
+    } else if (_profileController.myProfile.location != null &&
         _profileController.myProfile.location!.isNotEmpty) {
       selectedLocation = _profileController.myProfile.location;
       selectedLocationCode = CountryCodes.nameToCode[selectedLocation!] ?? 'GB';
     } else {
-      final String? storedLocation = sandBox.read('selected_location');
-      final String? storedLocationCode = sandBox.read('selected_location_code');
-
-      if (storedLocation != null && storedLocationCode != null) {
-        selectedLocation = storedLocation;
-        selectedLocationCode = storedLocationCode;
-      } else {
-        selectedLocation = 'United Kingdom';
-        selectedLocationCode = 'GB';
-      }
+      selectedLocation = 'United Kingdom';
+      selectedLocationCode = 'GB';
     }
 
     // Standardize GB to UK for consistency with visual requirements
@@ -586,6 +585,10 @@ class MarketController extends GetxController {
   }
 
   Future<void> initOrder() async {
+    // Yield to the event loop so the synchronous cache branch (and its
+    // update()) never runs during the caller's build/initState phase.
+    await Future<void>.delayed(Duration.zero);
+
     final String uid = _profileController.myProfile.uid;
     final dynamic cachedOrders = sandBox.read('user_orders_$uid');
 

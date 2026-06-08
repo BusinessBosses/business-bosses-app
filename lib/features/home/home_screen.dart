@@ -1,10 +1,8 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
 import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
-import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/controllers/ai_chat_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
-import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +36,6 @@ class _HomeScreenState extends State<HomeScreen>
       AdvancedDrawerController();
   final HomeController homeController = Get.find<HomeController>();
   final ProfileController _profileController = Get.find<ProfileController>();
-  final CommunitiesController _communitiesController =
-      Get.find<CommunitiesController>();
   final ChallengeController challengeController =
       Get.find<ChallengeController>();
   final AiChatController ctrl = Get.find<AiChatController>();
@@ -178,7 +174,6 @@ class _HomeScreenState extends State<HomeScreen>
                   _profileController.myProfile.unReadCount != null &&
                       _profileController.myProfile.unReadCount! > 0,
             ),
-
             child: Scaffold(
               backgroundColor: Colors.white,
               appBar: PreferredSize(
@@ -205,10 +200,9 @@ class _HomeScreenState extends State<HomeScreen>
                           coinsCount: profileController.myProfile.coinscount
                                   ?.toString() ??
                               '0',
-                          hasUnreadNotification: profileController
-                                      .myProfile.unReadCount !=
-                                  null &&
-                              profileController.myProfile.unReadCount! > 0,
+                          hasUnreadNotification:
+                              profileController.myProfile.unReadCount != null &&
+                                  profileController.myProfile.unReadCount! > 0,
                         );
                       },
                     );
@@ -240,5 +234,4 @@ class _HomeScreenState extends State<HomeScreen>
       ],
     );
   }
-
 }

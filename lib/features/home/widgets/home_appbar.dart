@@ -59,10 +59,11 @@ class HomeAppBar extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                SvgPicture.asset('assets/svgs/bossupu.svg',
-                                    colorFilter: const ColorFilter.mode(
-                                        textColor, BlendMode.srcIn),
-                                    height: 19),
+                                Image.asset(
+                                  'assets/app/app_logo.png',
+                                  height: 25,
+                                  width: 25,
+                                ),
                                 const SizedBox(width: 8),
                                 Flexible(
                                   child: Text(

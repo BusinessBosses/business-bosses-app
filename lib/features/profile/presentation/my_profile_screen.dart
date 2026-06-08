@@ -146,11 +146,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         onTabChanged: (int index) {
                           setState(() {
                             _selectedIndex = index;
-                            if (index == 3) {
-                              // If switched to Boss Up within My Biz, reset PageView
-                              _currentIndex = 0;
-                              _pageController.jumpToPage(0);
-                            }
                           });
                         },
                       ),
@@ -162,14 +157,18 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget? _buildAppBar() {
     final bool showHeader = _selectedIndex == 0 || _selectedIndex == 4;
 
+    // Return null (not a zero-height bar) when hidden so the outer Scaffold
+    // doesn't strip the top MediaQuery padding from the body — otherwise the
+    // nested My Biz screens (e.g. Orders) lose their SafeArea inset.
+    if (!showHeader) return null;
+
     return PreferredSize(
-      preferredSize: Size.fromHeight(showHeader ? kToolbarHeight + 50 : 0),
-      child: showHeader
-          ? Padding(
-              padding: const EdgeInsets.only(top: 50.0),
+      preferredSize: const Size.fromHeight(kToolbarHeight + 20),
+      child: SafeArea(
+              bottom: false,
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
@@ -225,8 +224,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   ),
                 ],
               ),
-            )
-          : const SizedBox.shrink(),
+            ),
     );
   }
 

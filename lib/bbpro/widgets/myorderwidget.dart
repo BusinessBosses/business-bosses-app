@@ -764,16 +764,16 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                     case OrderStatus.pending:
                                       availableStatuses = <OrderStatus>[
                                         OrderStatus.paid,
-                                        OrderStatus.cancelled
+                                        OrderStatus.completed
                                       ];
                                       break;
                                     case OrderStatus.paid:
                                       availableStatuses = <OrderStatus>[
                                         OrderStatus.pending,
-                                        OrderStatus.cancelled
+                                        OrderStatus.completed
                                       ];
                                       break;
-                                    case OrderStatus.cancelled:
+                                    case OrderStatus.completed:
                                       availableStatuses = <OrderStatus>[
                                         OrderStatus.pending,
                                         OrderStatus.paid

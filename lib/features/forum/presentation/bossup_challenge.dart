@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -30,6 +31,25 @@ class _BossupChallengeState extends State<BossupChallenge> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: widget.backgroundColor ?? Colors.white,
+      appBar: widget.ishome == true
+          ? null
+          : AppBar(
+              backgroundColor: widget.backgroundColor ?? Colors.white,
+              elevation: 0,
+              leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
+              title: const Text(
+                'Boss Up Challenge',
+                style: TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              centerTitle: true,
+            ),
       body: GetBuilder<ChallengeController>(
         init: ChallengeController(),
         builder: (ChallengeController controller) {

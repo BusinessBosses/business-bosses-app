@@ -64,6 +64,7 @@ class _ClientsScreenState extends State<ClientsScreen>
     clientsController.initClients(profileController.myProfile.uid).then((_) {
       clientsController.initCampaigns(profileController.myProfile.uid).then(
         (__) {
+          if (!mounted) return;
           setState(() {
             loading = false;
             filteredCampaign.addAll(clientsController.campaigns);

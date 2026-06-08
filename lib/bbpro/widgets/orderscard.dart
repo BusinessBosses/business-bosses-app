@@ -203,9 +203,9 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                 PieChartSectionData(
                                   color: Colors.green,
                                   value: double.parse(
-                                      shopController.orderStats?.cancelled !=
+                                      shopController.orderStats?.completed !=
                                               null
-                                          ? shopController.orderStats!.cancelled
+                                          ? shopController.orderStats!.completed
                                               .toString()
                                           : '0'),
                                   title: '',
@@ -277,7 +277,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                               text: 'Completed',
                               value: int.parse(
                                   shopController.orderStats?.online != null
-                                      ? shopController.orderStats!.cancelled
+                                      ? shopController.orderStats!.completed
                                           .toString()
                                       : '0'),
                             ),

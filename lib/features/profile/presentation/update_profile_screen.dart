@@ -382,6 +382,96 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     const SizedBox(
                                       height: 20,
                                     ),
+                                    const Text('Location',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700)),
+                                    const SizedBox(height: 10.0),
+                                    CountryListPick(
+                                      appBar: AppBar(
+                                        leading: IconButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          icon: SvgPicture.asset(
+                                              'assets/svgs/backbutton.svg'),
+                                        ),
+                                        centerTitle: true,
+                                        // ignore: prefer_const_constructors
+                                        title: Text(
+                                          'Select Country',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      initialSelection: _location ?? 'GB',
+                                      pickerBuilder: (BuildContext context,
+                                          CountryCode? countryCode) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: backgroundcolorinterface,
+                                            borderRadius: BorderRadius.circular(
+                                                radiusValue),
+                                          ),
+                                          child: ListTile(
+                                            leading: _location != null
+                                                ? Text(_location!)
+                                                : Text(
+                                                    'select a location',
+                                                    style: bodyText2.copyWith(
+                                                        color: hintColor),
+                                                  ),
+                                            trailing: const Icon(
+                                                Icons.keyboard_arrow_right),
+                                          ),
+                                        );
+                                      },
+                                      onChanged: (CountryCode? code) {
+                                        setState(() {
+                                          _location = code!.name;
+                                        });
+                                      },
+                                      useSafeArea: false,
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    const Text('Industry',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: textColor,
+                                            fontWeight: FontWeight.w700)),
+                                    const SizedBox(height: 10.0),
+                                    DropdownButton<String>(
+                                      value: _industry,
+                                      borderRadius:
+                                          BorderRadius.circular(radius),
+                                      isExpanded: true,
+                                      icon: const Icon(
+                                          Icons.keyboard_arrow_down_sharp),
+                                      iconSize: 24,
+                                      elevation: 16,
+                                      underline: Container(
+                                        height: 1,
+                                        color: hintColor,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          _industry = newValue;
+                                        });
+                                      },
+                                      items: categories
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     const Text(
                                       'Name',
                                       style: TextStyle(
@@ -803,47 +893,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                const Text('Industry',
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: textColor,
-                                                        fontWeight:
-                                                            FontWeight.w700)),
-                                                const SizedBox(height: 10.0),
-                                                DropdownButton<String>(
-                                                  value: _industry,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          radius),
-                                                  isExpanded: true,
-                                                  icon: const Icon(Icons
-                                                      .keyboard_arrow_down_sharp),
-                                                  iconSize: 24,
-                                                  elevation: 16,
-                                                  underline: Container(
-                                                    height: 1,
-                                                    color: hintColor,
-                                                  ),
-                                                  onChanged:
-                                                      (String? newValue) {
-                                                    setState(() {
-                                                      _industry = newValue;
-                                                    });
-                                                  },
-                                                  items: categories.map<
-                                                          DropdownMenuItem<
-                                                              String>>(
-                                                      (String value) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value: value,
-                                                      child: Text(value),
-                                                    );
-                                                  }).toList(),
-                                                ),
-                                                const SizedBox(
-                                                  height: 20,
-                                                ),
                                                 const Text('Website',
                                                     style: TextStyle(
                                                         fontSize: 14,
@@ -1055,68 +1104,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                   child: Text(value),
                                                 );
                                               }).toList(),
-                                            ),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            const Text('Location',
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.w700)),
-                                            const SizedBox(height: 10.0),
-                                            CountryListPick(
-                                              appBar: AppBar(
-                                                leading: IconButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  icon: SvgPicture.asset(
-                                                      'assets/svgs/backbutton.svg'),
-                                                ),
-                                                centerTitle: true,
-                                                // ignore: prefer_const_constructors
-                                                title: Text(
-                                                  'Select Country',
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      fontSize: 16),
-                                                ),
-                                              ),
-                                              initialSelection:
-                                                  _location ?? 'GB',
-                                              pickerBuilder: (BuildContext
-                                                      context,
-                                                  CountryCode? countryCode) {
-                                                return Container(
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        backgroundcolorinterface,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            radiusValue),
-                                                  ),
-                                                  child: ListTile(
-                                                    leading: _location != null
-                                                        ? Text(_location!)
-                                                        : Text(
-                                                            'select a location',
-                                                            style: bodyText2
-                                                                .copyWith(
-                                                                    color:
-                                                                        hintColor),
-                                                          ),
-                                                    trailing: const Icon(Icons
-                                                        .keyboard_arrow_right),
-                                                  ),
-                                                );
-                                              },
-                                              onChanged: (CountryCode? code) {
-                                                setState(() {
-                                                  _location = code!.name;
-                                                });
-                                              },
-                                              useSafeArea: false,
                                             ),
                                             const SizedBox(
                                               height: 20,
@@ -1534,6 +1521,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       showSnackBar(
         context,
         message: 'Please enter a bio',
+      );
+      return;
+    }
+    if (_location == null || _location?.trim() == '') {
+      setState(() {
+        _isProcessing = false;
+      });
+      showSnackBar(
+        context,
+        message: 'Please select a location',
       );
       return;
     }

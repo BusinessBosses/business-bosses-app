@@ -30,6 +30,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class HomeController extends GetxController {
@@ -174,7 +175,8 @@ class HomeController extends GetxController {
     // 🔥 1. Load from cache immediately
     final dynamic cachedWinner = sandBox.read('rank_winner_cache');
     if (cachedWinner != null) {
-      rankWinnerShop = Shop.fromMap(cachedWinner['shop'] ?? <String, dynamic>{});
+      rankWinnerShop =
+          Shop.fromMap(cachedWinner['shop'] ?? <String, dynamic>{});
       rankWinner = rankWinnerShop?.user;
       loadingRankWinner.value = false;
       update();
@@ -508,8 +510,7 @@ class HomeController extends GetxController {
         final bool checkLiked =
             profileController.posts[profilePostIndex].likes!.contains(userId);
         if (checkLiked) {
-          profileController.posts[profilePostIndex]
-              .likes!
+          profileController.posts[profilePostIndex].likes!
               .removeWhere((String element) => element == userId);
         } else {
           profileController.posts[profilePostIndex].likes!.add(userId);
@@ -623,7 +624,8 @@ class HomeController extends GetxController {
       final int donationIndex =
           donations.indexWhere((DonationModel element) => element.id == postId);
       if (donationIndex != -1) {
-        final bool checkLiked = donations[donationIndex].likes!.contains(userId);
+        final bool checkLiked =
+            donations[donationIndex].likes!.contains(userId);
         if (checkLiked) {
           donations[donationIndex].likes!.remove(userId);
         } else {
@@ -744,8 +746,7 @@ class HomeController extends GetxController {
             profileController.posts[profilePostIndex].coins!.contains(userId);
         if (checkIfCoined) {
           profileController.updateCoinCount(1);
-          profileController.posts[profilePostIndex]
-              .coins!
+          profileController.posts[profilePostIndex].coins!
               .removeWhere((String element) => element == userId);
         } else {
           profileController.updateCoinCount(-1);
@@ -853,7 +854,8 @@ class HomeController extends GetxController {
       final int uCourseIndex =
           usercourses.indexWhere((CourseModel element) => element.id == postId);
       if (uCourseIndex != -1) {
-        final bool checkIfCoined = usercourses[uCourseIndex].coins!.contains(userId);
+        final bool checkIfCoined =
+            usercourses[uCourseIndex].coins!.contains(userId);
         if (checkIfCoined) {
           usercourses[uCourseIndex].coins!.remove(userId);
         } else {
@@ -952,8 +954,7 @@ class HomeController extends GetxController {
         final bool checkReposted =
             profileController.posts[profilePostIndex].reposts!.contains(userId);
         if (checkReposted) {
-          profileController.posts[profilePostIndex]
-              .reposts!
+          profileController.posts[profilePostIndex].reposts!
               .removeWhere((String element) => element == userId);
         } else {
           profileController.posts[profilePostIndex].reposts!.add(userId);
@@ -1203,7 +1204,8 @@ class HomeController extends GetxController {
     String score = '0';
     if (Get.isRegistered<ReachController>()) {
       final ReachController reachController = Get.find<ReachController>();
-      final num rawScore = reachController.myReach?['totalReachPoints'] as num? ?? 0;
+      final num rawScore =
+          reachController.myReach?['totalReachPoints'] as num? ?? 0;
       score = rawScore.toInt().toString();
     }
 
@@ -1595,8 +1597,12 @@ class HomeController extends GetxController {
 
       if (!response.success) {
         if (response.message == 'send a valid token') {
-          await ApiService().logout();
-          showAccessTokenDialog();
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          final String? token = prefs.getString(Constants.ACCESS_TOKEN);
+          if (token != null && token.isNotEmpty) {
+            await ApiService().logout();
+            showAccessTokenDialog();
+          }
         }
         if (posts.isEmpty) {
           error(true);

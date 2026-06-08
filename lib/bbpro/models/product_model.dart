@@ -70,7 +70,7 @@ class Product {
       description: json['description'],
       notes: json['notes'],
       category: json['category'],
-      location: json['location'] ?? 'Nigeria',
+      location: json['location'] ?? 'United Kingdom',
       paymentMethod: json['paymentMethod'],
       deliveryMethod: json['deliveryMethod'],
       url: json['url'],

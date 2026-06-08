@@ -162,17 +162,12 @@ class _DashboardState extends State<Dashboard> {
                                 child: Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: <Widget>[
-                                    const Icon(
-                                      Icons.chevron_left,
-                                      color: primaryColorLT,
-                                      size: 24,
-                                    ),
                                     Image.asset(
                                       'assets/images/app_logo_2.png',
                                       height: 25,
                                     ),
                                     const Text(
-                                      '  Go back to BB',
+                                      '  Business Bosses',
                                       style: TextStyle(fontSize: 13),
                                     )
                                   ],
