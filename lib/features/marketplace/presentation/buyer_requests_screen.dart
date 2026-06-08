@@ -52,9 +52,31 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   Future<void> _fetchRequests() async {
-    final MarketController marketController = Get.find();
+    // If we're showing only my requests or have specific filters, we use them.
+    // Otherwise, if we're in the general marketplace context (no specific filter),
+    // we fetch ALL requests to satisfy the requirement "SHOW ALL THE REQUEST by all users".
+    String? locationFilter;
+
+    if (widget.showOnlyMyRequests) {
+      locationFilter = null; // Don't filter by location for "My Requests"
+    } else if (widget.filterByLocation != null &&
+        widget.filterByLocation!.isNotEmpty) {
+      locationFilter = widget.filterByLocation;
+    } else if (widget.showAppBar) {
+      // If it's a dedicated screen (not embedded in marketplace tabs),
+      // or if it was explicitly requested with a location.
+      final MarketController marketController = Get.find();
+      locationFilter = marketController.selectedLocation;
+    } else {
+      // embedded in marketplace "I Need" tab, show all
+      locationFilter = null;
+    }
+
     await _buyerRequestController.initBuyerRequests(
-        location: widget.filterByLocation ?? marketController.selectedLocation);
+      location: locationFilter,
+      priorityLocation:
+          locationFilter == null ? Get.find<MarketController>().selectedLocation : null,
+    );
     _applyFilter();
   }
 

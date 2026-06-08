@@ -89,7 +89,10 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
           _marketController.searchMarketplace(query);
         } else if (_selectedTab == 3) {
           _buyerRequestController.initBuyerRequests(
-              location: _marketController.selectedLocation, query: query);
+            location: null,
+            query: query,
+            priorityLocation: _marketController.selectedLocation,
+          );
         }
         _supplierController.searchSuppliers(query);
       } else {
@@ -359,8 +362,9 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
                             _peopleSearchController.search();
                           } else if (_selectedTab == 3) {
                             _buyerRequestController.initBuyerRequests(
-                              location: _marketController.selectedLocation,
+                              location: null,
                               query: query,
+                              priorityLocation: _marketController.selectedLocation,
                             );
                           } else if (_selectedTab == 1 || _selectedTab == 2) {
                             _marketController.searchMarketplace(query);

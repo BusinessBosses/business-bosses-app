@@ -23,7 +23,8 @@ class BuyerRequestController extends GetxController {
   final ProfileController _profileController = Get.find();
 
   /// Initialize and fetch all buyer requests
-  Future<void> initBuyerRequests({String? location, String? query}) async {
+  Future<void> initBuyerRequests(
+      {String? location, String? query, String? priorityLocation}) async {
     buyerRequests.clear();
     loading(true);
     error(false);
@@ -36,6 +37,9 @@ class BuyerRequestController extends GetxController {
     }
     if (query != null && query.isNotEmpty) {
       params.add('q=${Uri.encodeComponent(query)}');
+    }
+    if (priorityLocation != null && priorityLocation.isNotEmpty) {
+      params.add('priorityLocation=${Uri.encodeComponent(priorityLocation)}');
     }
 
     if (params.isNotEmpty) {

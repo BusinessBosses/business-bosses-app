@@ -107,7 +107,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         int nextIndex = (_sliderIndex + 1) % 2;
         _sliderPageController.animateToPage(
           nextIndex,
-          duration: const Duration(milliseconds: 900),
+          duration: const Duration(seconds: 9),
           curve: Curves.easeInOut,
         );
       }
