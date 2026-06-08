@@ -102,7 +102,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       initialIndex: widget.initialIndex,
     );
 
-    _sliderTimer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+    _sliderTimer = Timer.periodic(const Duration(seconds: 9), (Timer timer) {
       if (_sliderPageController.hasClients) {
         int nextIndex = (_sliderIndex + 1) % 2;
         _sliderPageController.animateToPage(

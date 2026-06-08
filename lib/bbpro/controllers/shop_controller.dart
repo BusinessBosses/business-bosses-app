@@ -591,6 +591,14 @@ class ShopController extends GetxController {
             .removeWhere((Object item) => item is Product && item.id == id);
         marketController.proProducts
             .removeWhere((Product product) => product.id == id);
+        marketController.activeMarketItems
+            .removeWhere((Object item) => item is Product && item.id == id);
+        marketController.featuredItems
+            .removeWhere((Object item) => item is Product && item.id == id);
+        marketController.featuredProducts
+            .removeWhere((Product product) => product.id == id);
+        marketController.searchedProducts
+            .removeWhere((Product product) => product.id == id);
         marketController.update();
       }
 
@@ -617,6 +625,14 @@ class ShopController extends GetxController {
         marketController.proItems
             .removeWhere((Object item) => item is Service && item.id == id);
         marketController.proServices
+            .removeWhere((Service service) => service.id == id);
+        marketController.activeMarketItems
+            .removeWhere((Object item) => item is Service && item.id == id);
+        marketController.featuredItems
+            .removeWhere((Object item) => item is Service && item.id == id);
+        marketController.featuredServices
+            .removeWhere((Service service) => service.id == id);
+        marketController.searchedServices
             .removeWhere((Service service) => service.id == id);
         marketController.update();
       }

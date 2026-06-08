@@ -251,10 +251,7 @@ class MarketController extends GetxController {
       }
 
       // 🔥 THIS IS THE KEY
-      activeMarketItems
-        ..clear()
-        ..addAll(searchedProducts)
-        ..addAll(searchedServices);
+      activeMarketItems.assignAll(<Object>[...searchedProducts, ...searchedServices]);
 
       sortItems();
 
@@ -320,10 +317,7 @@ class MarketController extends GetxController {
       );
 
       // ✅ single source of truth for UI
-      activeMarketItems
-        ..clear()
-        ..addAll(searchedProducts)
-        ..addAll(searchedServices);
+      activeMarketItems.assignAll(<Object>[...searchedProducts, ...searchedServices]);
 
       sortItems();
     } catch (e) {
