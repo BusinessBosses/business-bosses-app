@@ -169,7 +169,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                               icon: _selectedIndex == 2
                                   ? 'assets/svgs/ordersinvoices.svg'
                                   : 'assets/svgs/ordersinvoices.svg',
-                              label: 'Orders',
+                              label: 'Sales',
                               onTap: () => _onItemTapped(2),
                               isActive: _selectedIndex == 2,
                             ),

@@ -30,6 +30,8 @@ class MarketController extends GetxController {
   RxList<Service> featuredServices = <Service>[].obs;
   RxList<Object> featuredItems = <Object>[].obs;
   RxList<Order> orders = <Order>[].obs;
+  int currentOrderPage = 1;
+  bool hasMoreOrders = true;
 
   // Filtering and search
   List<UserModel> searchedUsers = <UserModel>[];
@@ -60,6 +62,7 @@ class MarketController extends GetxController {
   List<Service> filteredServices = <Service>[];
   List<Object> allFilteredItems = <Object>[];
   RxBool hasOldData = false.obs;
+  RxBool loadingMoreOrders = false.obs;
 
   // Controller dependencies
   final HomeController _homeController = Get.find();
@@ -589,6 +592,9 @@ class MarketController extends GetxController {
     // update()) never runs during the caller's build/initState phase.
     await Future<void>.delayed(Duration.zero);
 
+    currentOrderPage = 1;
+    hasMoreOrders = true;
+
     final String uid = _profileController.myProfile.uid;
     final dynamic cachedOrders = sandBox.read('user_orders_$uid');
 
@@ -601,7 +607,7 @@ class MarketController extends GetxController {
     }
 
     final ApiResponseModel responseOrders =
-        await ApiService.get(path: 'orders/user-orders/$uid');
+        await ApiService.get(path: 'orders/user-orders/$uid?page=1&limit=15');
     if (responseOrders.success) {
       await sandBox.write('user_orders_$uid', responseOrders.data);
       orders.clear();
@@ -610,6 +616,31 @@ class MarketController extends GetxController {
           .toList());
       update();
     }
+  }
+
+  Future<void> loadMoreMyOrders() async {
+    if (loadingMoreOrders.value || !hasMoreOrders) return;
+    loadingMoreOrders(true);
+    update();
+
+    final String uid = _profileController.myProfile.uid;
+    int nextPage = currentOrderPage + 1;
+    final ApiResponseModel responseOrders =
+        await ApiService.get(path: 'orders/user-orders/$uid?page=$nextPage&limit=15');
+
+    if (responseOrders.success) {
+      List<dynamic> rows = responseOrders.data['rows'];
+      if (rows.isEmpty) {
+        hasMoreOrders = false;
+      } else {
+        currentOrderPage = nextPage;
+        orders.addAll(rows
+            .map<Order>((dynamic json) => Order.fromJson(json))
+            .toList());
+      }
+    }
+    loadingMoreOrders(false);
+    update();
   }
 
   Future<bool> migrateOldMarketplaceData() async {

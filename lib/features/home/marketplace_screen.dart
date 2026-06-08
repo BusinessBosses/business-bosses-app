@@ -966,8 +966,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                         ),
-                        onPressed: () => Get.to(() =>
-                            ReachScreen(user: _profileController.myProfile)),
+                        onPressed: () {
+                          if (_profileController.myProfile.isSubscribed) {
+                            Get.to(() =>
+                                ReachScreen(user: _profileController.myProfile));
+                          } else {
+                            showPremiumPaywall();
+                          }
+                        },
                         child: const Text('Boost Visibility',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),

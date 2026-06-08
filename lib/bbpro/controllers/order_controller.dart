@@ -11,17 +11,22 @@ class OrderController extends GetxController {
   final ShopController shopController = Get.find();
   RxList<Order> orders = RxList<Order>(<Order>[]);
   RxBool loading = RxBool(true);
+  RxBool loadingMore = RxBool(false);
   RxBool orderLoading = RxBool(true);
   Order? orderView;
   final List<Order> allorders = <Order>[];
+  int currentPage = 1;
+  bool hasMore = true;
   final Map<OrderStatus, List<Order>> ordersStatus =
       <OrderStatus, List<Order>>{};
   final GetStorage sandBox = GetStorage();
 
   Future<void> initOrders(String shopId) async {
+    currentPage = 1;
+    hasMore = true;
     final dynamic cachedOrders = sandBox.read('shop_orders_$shopId');
     if (cachedOrders != null) {
-      _processOrdersData(cachedOrders);
+      _processOrdersData(cachedOrders, isRefresh: true);
       loading.value = false;
       update();
     } else {
@@ -29,33 +34,56 @@ class OrderController extends GetxController {
     }
 
     ApiResponseModel response =
-        await ApiService.get(path: 'orders/shop-orders/$shopId');
+        await ApiService.get(path: 'orders/shop-orders/$shopId?page=1&limit=15');
     if (response.success) {
       await sandBox.write('shop_orders_$shopId', response.data);
-      _processOrdersData(response.data);
+      _processOrdersData(response.data, isRefresh: true);
     }
     loading(false);
     update();
   }
 
-  void _processOrdersData(dynamic data) {
-    orders.clear();
-    allorders.clear();
-    orders.addAll((data['rows'] as List<dynamic>)
-        .map((dynamic order) => Order.fromJson(order))
-        .toList());
+  Future<void> loadMoreOrders(String shopId) async {
+    if (loadingMore.value || !hasMore) return;
+    loadingMore(true);
+    update();
 
-    // Initialize ordersStatus map
-    for (OrderStatus status in OrderStatus.values) {
-      ordersStatus[status] = <Order>[];
+    int nextPage = currentPage + 1;
+    ApiResponseModel response = await ApiService.get(
+        path: 'orders/shop-orders/$shopId?page=$nextPage&limit=15');
+
+    if (response.success) {
+      List<dynamic> rows = response.data['rows'];
+      if (rows.isEmpty) {
+        hasMore = false;
+      } else {
+        currentPage = nextPage;
+        _processOrdersData(response.data, isRefresh: false);
+      }
+    }
+    loadingMore(false);
+    update();
+  }
+
+  void _processOrdersData(dynamic data, {bool isRefresh = false}) {
+    if (isRefresh) {
+      orders.clear();
+      allorders.clear();
+      for (OrderStatus status in OrderStatus.values) {
+        ordersStatus[status] = <Order>[];
+      }
     }
 
+    List<Order> newOrders = (data['rows'] as List<dynamic>)
+        .map((dynamic order) => Order.fromJson(order))
+        .toList();
+
+    orders.addAll(newOrders);
+
     // Group orders by status and populate allorders
-    for (OrderStatus status in OrderStatus.values) {
-      List<Order> statusOrders =
-          orders.where((Order order) => order.status == status).toList();
-      ordersStatus[status] = statusOrders;
-      allorders.addAll(statusOrders);
+    for (Order order in newOrders) {
+      ordersStatus[order.status]?.add(order);
+      allorders.add(order);
     }
   }
 
