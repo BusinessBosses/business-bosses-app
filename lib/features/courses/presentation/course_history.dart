@@ -111,7 +111,7 @@ class _CourseHistoryState extends State<CourseHistory> {
                             padding: const EdgeInsets.all(5),
                             children: const <int, Widget>{
                               0: Text('All'),
-                              1: Text('Sales'),
+                              1: Text('Leads'),
                               2: Text('Purchases'),
                             },
                             onValueChanged: (int? value) {
@@ -143,7 +143,7 @@ class _CourseHistoryState extends State<CourseHistory> {
                           AllTransactions(
                             history: courseController.myHistory,
                           ),
-                          Sales(history: courseController.myHistoryReceived),
+                          Leads(history: courseController.myHistoryReceived),
                           Purchases(history: courseController.myHistoryOut),
                         ],
                       ),

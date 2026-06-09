@@ -953,7 +953,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           ),
                         ),
                         onPressed: () => Get.to(() => const OrdersScreen()),
-                        child: const Text('Sales & Orders',
+                        child: const Text('Leads & Orders',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ),

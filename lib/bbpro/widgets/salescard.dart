@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class SalesWidget extends StatefulWidget {
-  const SalesWidget({super.key});
+class LeadsWidget extends StatefulWidget {
+  const LeadsWidget({super.key});
 
   @override
-  State<SalesWidget> createState() => _SalesWidgetState();
+  State<LeadsWidget> createState() => _LeadsWidgetState();
 }
 
-class _SalesWidgetState extends State<SalesWidget> {
+class _LeadsWidgetState extends State<LeadsWidget> {
   bool isHidden = false;
   final OrderController orderController = Get.put(OrderController());
   final ShopController shopController = Get.find();
@@ -77,7 +77,7 @@ class _SalesWidgetState extends State<SalesWidget> {
                       const Wrap(
                         children: <Widget>[
                           Text(
-                            'Sales',
+                                'Leads',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -116,7 +116,7 @@ class _SalesWidgetState extends State<SalesWidget> {
                                   children: <Widget>[
                                     RichText(
                                       text: TextSpan(
-                                        text: 'View All Sales ',
+                                        text: 'View All Leads ',
                                         style: const TextStyle(
                                           color: proprimaryColor,
                                           fontSize: 12,

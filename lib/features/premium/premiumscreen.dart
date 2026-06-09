@@ -29,8 +29,8 @@ class PremiumScreen extends StatefulWidget {
 }
 
 class _PremiumScreenState extends State<PremiumScreen> {
-  final int _currentIndex = 0;
-  String paymentMethodId = 'Promonth';
+  int _currentIndex = 0;
+  String paymentMethodId = 'Proyear';
 
   bool isCoin = false;
   bool loading = false;
@@ -41,12 +41,12 @@ class _PremiumScreenState extends State<PremiumScreen> {
   late String duration;
   List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
     <String, dynamic>{
-      'price': dotenv.env['TEST_MONTHLY_PRICE'],
-      'plan': 'monthly',
-    },
-    <String, dynamic>{
       'price': dotenv.env['TEST_YEARLY_PRICE'],
       'plan': 'annually',
+    },
+    <String, dynamic>{
+      'price': dotenv.env['TEST_MONTHLY_PRICE'],
+      'plan': 'monthly',
     },
   ];
 
@@ -729,6 +729,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                             },
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 Row(
                                                   mainAxisAlignment:
@@ -761,94 +762,129 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                   onTap: () {
                                                     setModalState(() {
                                                       paymentMethodId =
-                                                          'Promonth';
+                                                          'Proyear';
+                                                      _currentIndex = 0;
                                                     });
                                                   },
                                                   child: Container(
+                                                    margin: const EdgeInsets.only(bottom: 15),
+                                                    padding: const EdgeInsets.all(12),
                                                     decoration: BoxDecoration(
                                                       border: Border.all(
-                                                        color: paymentMethodId ==
-                                                                'Promonth'
+                                                        color: paymentMethodId == 'Proyear'
                                                             ? primaryColorLT
-                                                            : Colors
-                                                                .transparent,
+                                                            : Colors.grey.shade300,
                                                         width: 2,
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
+                                                      borderRadius: BorderRadius.circular(15),
                                                     ),
-                                                    child:
-                                                        RadioListTile<String>(
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                              right: 10),
-                                                      title: const Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: <Widget>[
-                                                          Text(
-                                                            'Pro Monthly',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                fontSize: 16),
+                                                    child: Row(
+                                                      children: <Widget>[
+                                                        Radio<String>(
+                                                          value: 'Proyear',
+                                                          groupValue: paymentMethodId,
+                                                          activeColor: primaryColorLT,
+                                                          onChanged: (String? value) {
+                                                            setModalState(() {
+                                                              paymentMethodId = value!;
+                                                              _currentIndex = 0;
+                                                            });
+                                                          },
+                                                        ),
+                                                        Expanded(
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: <Widget>[
+                                                              Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: <Widget>[
+                                                                  const Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    children: <Widget>[
+                                                                      Text('Pro yearly', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                                                      Text('Best value · Save 33%', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                                                                    ],
+                                                                  ),
+                                                                  Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                                    children: <Widget>[
+                                                                      const Text('\$9.99/mo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                                                                      Text('\$119.88/year', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              const SizedBox(height: 10),
+                                                              Container(
+                                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                                                decoration: BoxDecoration(
+                                                                  color: Colors.green.shade50,
+                                                                  borderRadius: BorderRadius.circular(8),
+                                                                ),
+                                                                child: const Row(
+                                                                  mainAxisSize: MainAxisSize.min,
+                                                                  children: <Widget>[
+                                                                    Icon(Icons.card_giftcard, size: 16, color: Colors.green),
+                                                                    SizedBox(width: 5),
+                                                                    Text('2 months free included', style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.w600)),
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            ],
                                                           ),
-                                                          Text('\$14.99/month',
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w200,
-                                                                  fontSize:
-                                                                      16)),
-                                                        ],
-                                                      ),
-                                                      value: 'Promonth',
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: paymentMethodId ==
-                                                              'Proyear'
-                                                          ? primaryColorLT
-                                                          : Colors.transparent,
-                                                      width: 2,
+                                                InkWell(
+                                                  onTap: () {
+                                                    setModalState(() {
+                                                      paymentMethodId = 'Promonth';
+                                                      _currentIndex = 1;
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(12),
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                        color: paymentMethodId == 'Promonth'
+                                                            ? primaryColorLT
+                                                            : Colors.grey.shade300,
+                                                        width: 2,
+                                                      ),
+                                                      borderRadius: BorderRadius.circular(15),
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                  ),
-                                                  child: RadioListTile<String>(
-                                                    contentPadding:
-                                                        const EdgeInsets.only(
-                                                            right: 10),
-                                                    title: const Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
+                                                    child: Row(
                                                       children: <Widget>[
-                                                        Text(
-                                                          'Pro Yearly',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              fontSize: 16),
+                                                        Radio<String>(
+                                                          value: 'Promonth',
+                                                          groupValue: paymentMethodId,
+                                                          activeColor: primaryColorLT,
+                                                          onChanged: (String? value) {
+                                                            setModalState(() {
+                                                              paymentMethodId = value!;
+                                                              _currentIndex = 1;
+                                                            });
+                                                          },
                                                         ),
-                                                        Text(
-                                                            '\$12.49/month ( 2 Months Free )',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w200,
-                                                                fontSize: 16)),
+                                                        const Expanded(
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: <Widget>[
+                                                              Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: <Widget>[
+                                                                  Text('Pro monthly', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                                                  Text('Cancel anytime', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                                                                ],
+                                                              ),
+                                                              Text('\$14.99/mo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                                                            ],
+                                                          ),
+                                                        ),
                                                       ],
                                                     ),
-                                                    value: 'Proyear',
                                                   ),
                                                 ),
                                                 const SizedBox(

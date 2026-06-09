@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,9 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
   bool isHidden = false;
   final OrderController orderController = Get.put(OrderController());
   final ShopController shopController = Get.find();
+  final MatchController matchController = Get.isRegistered<MatchController>()
+      ? Get.find<MatchController>()
+      : Get.put(MatchController());
 
   // String _formatNumber(int number) {
   //   if (number >= 1000) {
@@ -70,7 +74,7 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                     Wrap(
                       children: <Widget>[
                         Text(
-                          'Financial Analysis',
+                          'Financial Projection',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -101,7 +105,7 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           child: Center(
                             child: Text(
                               textAlign: TextAlign.center,
-                              'Sales from \n All Orders',
+                              'Leads from \n All Orders',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -111,7 +115,7 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           child: Center(
                             child: Text(
                               textAlign: TextAlign.center,
-                              'Performance from Matched Buyers',
+                              'Matched Buyers',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -150,25 +154,14 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
-                            child: Text(
-                              shopController.shopStats != null
-                                  ? shopController.shop!.currency +
-                                      (shopController
-                                                  .shopStats!.totalExpenses >=
-                                              1000000
-                                          ? '${(shopController.shopStats!.totalExpenses / 1000000).toStringAsFixed(1)}M'
-                                          : shopController.shopStats!
-                                                      .totalExpenses >=
-                                                  1000
-                                              ? '${(shopController.shopStats!.totalExpenses / 1000).toStringAsFixed(1)}K'
-                                              : shopController
-                                                  .shopStats!.totalExpenses
-                                                  .toStringAsFixed(1))
-                                  : '0',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: textColor,
+                            child: Obx(
+                              () => Text(
+                                matchController.matchList.length.toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: textColor,
+                                ),
                               ),
                             ),
                           ),

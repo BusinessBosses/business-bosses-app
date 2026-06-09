@@ -151,7 +151,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   iconColor: Colors.orange[400]!,
                   iconBgColor: backgroundColor,
                   title: 'Bizcenter Buyer Activity',
-                  subtitle: 'Sales Intent & Buyer Demand',
+                  subtitle: 'Lead Intent & Buyer Demand',
                   value: _formatValue(discoveryScore.toInt()),
                 ),
                 _buildReachItem(

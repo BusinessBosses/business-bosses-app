@@ -259,7 +259,9 @@ class _OrdersScreenState extends State<OrdersScreen>
               const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           tabs: [
             GetBuilder<OrderController>(
-              builder: (ctrl) => Tab(text: 'My Sales (${ctrl.orders.length})'),
+              builder: (ctrl) => Tab(
+                  text:
+                      'My Leads (${ctrl.shopController.orderStats?.totalOrders.toInt() ?? ctrl.orders.length})'),
             ),
             GetBuilder<MarketController>(
               builder: (ctrl) => Tab(text: 'My Orders (${ctrl.orders.length})'),
@@ -270,14 +272,14 @@ class _OrdersScreenState extends State<OrdersScreen>
       body: TabBarView(
         controller: _mainTabController,
         children: [
-          _buildMySalesView(),
+          _buildMyLeadsView(),
           _buildMyOrdersView(),
         ],
       ),
     );
   }
 
-  Widget _buildMySalesView() {
+  Widget _buildMyLeadsView() {
     final Size screenSize = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -300,9 +302,32 @@ class _OrdersScreenState extends State<OrdersScreen>
               itemToString: (OrderStatus status) {
                 String title = status.displayTitle;
                 if (status == OrderStatus.allorders) {
-                  title = 'All Sales';
+                  title = 'All Leads';
                 }
-                return '$title (${status == OrderStatus.allorders ? orderCtrl.orders.length : (orderCtrl.ordersStatus[status] == null ? '0' : orderCtrl.ordersStatus[status]!.length.toString())})';
+                int count;
+                switch (status) {
+                  case OrderStatus.allorders:
+                    count = orderCtrl.shopController.orderStats?.totalOrders
+                            .toInt() ??
+                        orderCtrl.orders.length;
+                    break;
+                  case OrderStatus.pending:
+                    count = orderCtrl.shopController.orderStats?.pending
+                            .toInt() ??
+                        (orderCtrl.ordersStatus[status]?.length ?? 0);
+                    break;
+                  case OrderStatus.paid:
+                    count =
+                        orderCtrl.shopController.orderStats?.paid.toInt() ??
+                            (orderCtrl.ordersStatus[status]?.length ?? 0);
+                    break;
+                  case OrderStatus.completed:
+                    count = orderCtrl.shopController.orderStats?.completed
+                            .toInt() ??
+                        (orderCtrl.ordersStatus[status]?.length ?? 0);
+                    break;
+                }
+                return '$title ($count)';
               },
             );
           },
@@ -497,7 +522,7 @@ class _RowStatusCardState extends State<RowStatusCard> {
                       ),
                     Text(
                       widget.orderStatus == OrderStatus.allorders
-                          ? (widget.isSales ? 'All Sales' : 'All Orders')
+                          ? (widget.isSales ? 'All Leads' : 'All Orders')
                           : widget.orderStatus.displayTitle,
                       style: const TextStyle(
                         color: Colors.black,
@@ -524,7 +549,7 @@ class _RowStatusCardState extends State<RowStatusCard> {
                               backgroundColor: backgroundColor,
                               hasSearchIcon: false,
                               hintText: widget.isSales
-                                  ? 'Search Sales'
+                                  ? 'Search Leads'
                                   : 'Search Orders',
                               onChange: (String query) {
                                 setState(() {
@@ -649,7 +674,7 @@ class ListStatusColumnWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(radius)),
             child: Center(
               child: Text(
-                isSales ? 'Drag a sale here' : 'Drag an order here',
+                isSales ? 'Drag a lead here' : 'Drag an order here',
                 style: const TextStyle(color: Colors.black38),
               ),
             ),
