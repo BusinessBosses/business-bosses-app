@@ -15,7 +15,6 @@ import 'package:business_bosses_v2/utils/time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/impact/widgets/ranking_card.dart';
@@ -154,40 +153,6 @@ class _ReachScreenState extends State<ReachScreen> {
                 //     ),
                 //   ),
                 // ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: GestureDetector(
-                    onTap: () async {
-                      const String url = 'https://bizcenter.ai';
-                      if (await canLaunchUrlString(url)) {
-                        await launchUrlString(url,
-                            mode: LaunchMode.externalApplication);
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: primaryColorLT,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Row(
-                        children: <Widget>[
-                          Icon(LucideIcons.globe, color: Colors.white, size: 14),
-                          SizedBox(width: 4),
-                          Text(
-                            'BizCenter AI',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.only(right: 15.0),
                   child: GestureDetector(

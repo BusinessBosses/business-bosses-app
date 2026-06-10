@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dar
 import 'package:business_bosses_v2/features/forum/widgets/challengeitem.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,63 @@ class _BossupChallengeState extends State<BossupChallenge> {
           ),
         ),
         centerTitle: true,
+        actions: widget.ishome == true
+            ? null
+            : <Widget>[
+                // Connect with people
+                Padding(
+                  padding: const EdgeInsets.only(right: 12.0, top: 8, bottom: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.completesearchingscreen);
+                    },
+                    child: CircleAvatar(
+                      radius: 16,
+                      backgroundColor: backgroundColor,
+                      child: SvgPicture.asset('assets/svgs/collaborator.svg',
+                          height: 15),
+                    ),
+                  ),
+                ),
+                // Upgrade to Pro
+                if (!profileController.myProfile.isSubscribed)
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(right: 15.0, top: 8, bottom: 8),
+                    child: GestureDetector(
+                      onTap: () {
+                        showPremiumPaywall();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: backgroundcolorinterface,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            SvgPicture.asset(
+                              'assets/svgs/growfilled.svg',
+                              height: 15,
+                              colorFilter: const ColorFilter.mode(
+                                  primaryColorLT, BlendMode.srcIn),
+                            ),
+                            const SizedBox(width: 5),
+                            const Text(
+                              'Grow',
+                              style: TextStyle(
+                                color: primaryColorLT,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
       ),
       body: GetBuilder<ChallengeController>(
         init: ChallengeController(),

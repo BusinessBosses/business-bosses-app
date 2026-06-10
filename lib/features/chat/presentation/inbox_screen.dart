@@ -35,11 +35,18 @@ class _InboxScreenState extends State<InboxScreen>
   final AdvancedDrawerController _advancedDrawerController =
       AdvancedDrawerController();
   final ProfileController _profileController = Get.find();
+  final NotificationController _notificationController =
+      Get.isRegistered<NotificationController>()
+          ? Get.find<NotificationController>()
+          : Get.put(NotificationController());
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    // Refresh notifications when the inbox opens so the Notifications tab shows
+    // data immediately instead of requiring a manual reload.
+    _notificationController.loadNotifications();
   }
 
   @override

@@ -19,37 +19,53 @@ class NotificationController extends GetxController {
         'Always give without remembering and always receive without forgetting.',
   );
 
+  /// Guard so the two concurrent callers (onInit + the screen's initState)
+  /// don't race on shared state and so we never get stuck mid-flight.
+  bool _isLoading = false;
+
   /// LOAD NOTIFICATIONS FROM REMOTE SOURCE
   Future<void> loadNotifications() async {
+    if (_isLoading) return;
+    _isLoading = true;
     loading(true);
     error(false);
     update();
-    final ApiResponseModel response =
-        await NotificationRepository.fetchNotifications(_page.value);
-    if (response.success) {
-      if (response.data['quote'] != null) {
-        quote = Quote.fromMap(response.data['quote']);
-      }
-      for (int i = 0; i < response.data['notifications']['rows'].length; i++) {
-        MyNotification newNotification =
-            MyNotification.fromMap(response.data['notifications']['rows'][i]);
-        if (newNotification.notificationType == 'order') {
-          ordersNotification.add(newNotification);
+    try {
+      _page(0);
+      final ApiResponseModel response =
+          await NotificationRepository.fetchNotifications(_page.value);
+      if (response.success) {
+        if (response.data['quote'] != null) {
+          quote = Quote.fromMap(response.data['quote']);
         }
-        notifications.add(newNotification);
-
-        _page(_page.value + 1);
+        // Rebuild the lists from scratch so a reload doesn't duplicate items.
+        notifications.clear();
+        ordersNotification.clear();
+        final List<dynamic> rows =
+            (response.data['notifications']?['rows'] as List<dynamic>?) ??
+                <dynamic>[];
+        for (final dynamic row in rows) {
+          final MyNotification newNotification = MyNotification.fromMap(row);
+          if (newNotification.notificationType == 'order') {
+            ordersNotification.add(newNotification);
+          }
+          notifications.add(newNotification);
+        }
+        _profileController.updateProfile(<String, dynamic>{
+          ..._profileController.myProfile.toMap(),
+          'unReadCount': 0
+        });
+      } else {
+        error(true);
       }
-      _profileController.updateProfile(<String, dynamic>{
-        ..._profileController.myProfile.toMap(),
-        'unReadCount': 0
-      });
-    } else {
+    } catch (_) {
       error(true);
+    } finally {
+      // Always release the spinner, even if parsing threw.
+      loading(false);
+      _isLoading = false;
+      update();
     }
-
-    loading(false);
-    update();
   }
 
   @override

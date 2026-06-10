@@ -4,11 +4,13 @@ import 'package:business_bosses_v2/features/impact/presentation/impact_screen.da
 import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ReachHeaderCard extends StatefulWidget {
   final dynamic data;
@@ -153,6 +155,9 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   title: 'Bizcenter Buyer Activity',
                   subtitle: 'Lead Intent & Buyer Demand',
                   value: _formatValue(discoveryScore.toInt()),
+                  onTap: () {
+                    Get.to(() => const MyProfileScreen(currentIndex: 1));
+                  },
                 ),
                 _buildReachItem(
                   icon: LucideIcons.shieldCheck,
@@ -169,6 +174,13 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   title: 'AI Visibility',
                   subtitle: 'Brand discovery by AI',
                   value: '${aiVisibilityScore.toInt()}%',
+                  onTap: () async {
+                    const String url = 'https://bizcenter.ai';
+                    if (await canLaunchUrlString(url)) {
+                      await launchUrlString(url,
+                          mode: LaunchMode.externalApplication);
+                    }
+                  },
                 ),
 
                 // Total Reach Score Section
@@ -250,8 +262,9 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
     required String title,
     required String subtitle,
     required String value,
+    VoidCallback? onTap,
   }) {
-    return Container(
+    final Widget item = Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -308,8 +321,26 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
               color: Colors.grey[900],
             ),
           ),
+          if (onTap != null) ...<Widget>[
+            const SizedBox(width: 4),
+            Icon(
+              LucideIcons.chevronRight,
+              size: 16,
+              color: Colors.grey[400],
+            ),
+          ],
         ],
       ),
+    );
+
+    if (onTap == null) {
+      return item;
+    }
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: item,
     );
   }
 

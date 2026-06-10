@@ -21,6 +21,7 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/bbpro/widgets/custom_tabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/myorderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
@@ -61,19 +62,32 @@ class _OrdersScreenState extends State<OrdersScreen>
     _salesTabController = TabController(length: 4, vsync: this);
     _ordersTabController = TabController(length: 4, vsync: this);
 
-    orderController.initOrders(shopController.shop!.id).then((_) {
-      setState(() {
-        loading = false;
-        orderController.loading.value = false;
+    // Only load shop leads when the user actually has a BizCenter (shop).
+    // Otherwise `shopController.shop!` throws and aborts initState before
+    // "My Orders" can load — leaving it showing stale/leftover data.
+    if (_hasBizCenter) {
+      orderController.initOrders(shopController.shop!.id).then((_) {
+        if (!mounted) return;
+        setState(() {
+          loading = false;
+          orderController.loading.value = false;
+        });
       });
-    });
+    } else {
+      loading = false;
+    }
 
+    // Always load the orders the user placed on other people's shops.
     _marketController.initOrder().then((_) {
+      if (!mounted) return;
       setState(() {
         loadingMyOrders = false;
       });
     });
   }
+
+  bool get _hasBizCenter =>
+      _profileController.myProfile.hasShop && shopController.shop != null;
 
   @override
   void dispose() {
@@ -245,7 +259,7 @@ class _OrdersScreenState extends State<OrdersScreen>
           ),
           NotificationButton(
             hasUnreadNotification:
-                shopController.shop!.user!.unReadCount != null &&
+                shopController.shop?.user?.unReadCount != null &&
                     shopController.shop!.user!.unReadCount! > 0,
           ),
           const SizedBox(width: 10),
@@ -280,6 +294,11 @@ class _OrdersScreenState extends State<OrdersScreen>
   }
 
   Widget _buildMyLeadsView() {
+    // Leads come from the user's BizCenter (shop). Prompt the user to set one
+    // up if they haven't yet, instead of showing an empty/broken leads board.
+    if (!_hasBizCenter) {
+      return _buildSetupBizCenterPrompt();
+    }
     final Size screenSize = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -408,6 +427,71 @@ class _OrdersScreenState extends State<OrdersScreen>
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSetupBizCenterPrompt() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: prosemibackColor,
+                shape: BoxShape.circle,
+              ),
+              child: SvgPicture.asset(
+                'assets/svgs/setupshop.svg',
+                height: 40,
+                colorFilter:
+                    const ColorFilter.mode(proprimaryColor, BlendMode.srcIn),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Set up your BizCenter',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Create your BizCenter to start receiving leads and managing orders from customers.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                Get.to(() => const Setupshop());
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: proprimaryColor,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'Set up BizCenter',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
