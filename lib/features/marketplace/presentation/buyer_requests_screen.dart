@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/features/marketplace/controllers/market_contr
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
+import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -25,12 +26,18 @@ class BuyerRequestsScreen extends StatefulWidget {
   final bool showOnlyMyRequests;
   final bool showAppBar;
 
+  /// When true, free (non-Pro) users see only the first [_kFreeMatchLimit]
+  /// matched requests followed by an upgrade prompt; Pro users see all. Used
+  /// for the buyer-match contexts ("Matched Buyer" tile / "I need customers").
+  final bool gateForFreeUsers;
+
   const BuyerRequestsScreen({
     super.key,
     this.filterByIndustry,
     this.filterByLocation,
     this.showOnlyMyRequests = false,
     this.showAppBar = true,
+    this.gateForFreeUsers = false,
   });
 
   @override
@@ -44,6 +51,9 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
 
   final String _selectedFilter = 'All';
   List<BuyerRequestModel> _filteredRequests = <BuyerRequestModel>[];
+
+  /// Number of matched requests a free user can see before the upgrade prompt.
+  static const int _kFreeMatchLimit = 2;
 
   @override
   void initState() {
@@ -682,28 +692,101 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
           if (mounted) _applyFilter();
         });
 
+        // Free users see only the first few matches; Pro users see all.
+        final bool gated = widget.gateForFreeUsers &&
+            !profileController.myProfile.isSubscribed;
+        final List<BuyerRequestModel> visibleRequests = gated
+            ? _filteredRequests.take(_kFreeMatchLimit).toList()
+            : _filteredRequests;
+        final int hiddenCount =
+            _filteredRequests.length - visibleRequests.length;
+
         return _filteredRequests.isEmpty
             ? _buildEmptyState()
             : RefreshIndicator(
                 onRefresh: _fetchRequests,
-                child: MasonryGridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  padding: const EdgeInsets.only(
-                      left: 15, right: 15, top: 10, bottom: 100),
-                  itemCount: _filteredRequests.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final BuyerRequestModel request = _filteredRequests[index];
-                    return BuyerRequestItem(
-                      request: request,
-                      onApply: () => _navigateToChatScreen(request),
-                      onTap: () => _showRequestDetails(request),
-                    );
-                  },
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: MasonryGridView.count(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        padding: const EdgeInsets.only(
+                            left: 15, right: 15, top: 10, bottom: 100),
+                        itemCount: visibleRequests.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final BuyerRequestModel request =
+                              visibleRequests[index];
+                          return BuyerRequestItem(
+                            request: request,
+                            onApply: () => _navigateToChatScreen(request),
+                            onTap: () => _showRequestDetails(request),
+                          );
+                        },
+                      ),
+                    ),
+                    if (gated && hiddenCount > 0)
+                      _buildUpgradePrompt(hiddenCount),
+                  ],
                 ),
               );
       }),
+    );
+  }
+
+  Widget _buildUpgradePrompt(int hiddenCount) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: <Color>[premiumGold, Color(0xFFD97706)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            '$hiddenCount more buyer ${hiddenCount == 1 ? 'request' : 'requests'} matched',
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Upgrade to Pro to see all your buyer matches',
+            style: TextStyle(color: Colors.white70, fontSize: 13),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => showPremiumPaywall(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: premiumGold,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'Upgrade to Pro',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

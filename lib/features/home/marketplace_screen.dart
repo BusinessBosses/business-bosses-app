@@ -166,6 +166,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         _matchController.fetchMatches();
       }
 
+      // "Matches" on the performance card = buyer requests in my industry &
+      // location (same dataset as the dashboard "Matched Buyer" tile and
+      // "Find my match → I need customers").
+      buyerRequestController.fetchMatchCount(
+        category: _profileController.myProfile.industry,
+        location: _profileController.myProfile.location,
+      );
+
       if (shopController.shop == null && _profileController.myProfile.hasShop) {
         await shopController.initShop();
       }
@@ -905,7 +913,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         final Map<String, dynamic> data = reach.myReach ?? <String, dynamic>{};
         final String reachScore =
             _formatReachScore(data['totalReachPoints'] ?? 0);
-        final String matchesCount = '${_matchController.matchList.length}';
 
         // Prioritize industry rank, then global rank
         String ranking = 'N/A';
@@ -946,7 +953,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     _buildInsightMetric('Reach Score', reachScore),
-                    _buildInsightMetric('Matches', matchesCount),
+                    // Shop owners (sellers) see buyer-request matches in their
+                    // industry/location — consistent with the dashboard
+                    // "Matched Buyer" tile. Non-shop users keep their own
+                    // match list, for which buyer requests aren't meaningful.
+                    Obx(() => _buildInsightMetric(
+                        'Matches',
+                        _profileController.myProfile.hasShop
+                            ? '${buyerRequestController.matchCount.value}'
+                            : '${_matchController.matchList.length}')),
                     _buildInsightMetric('Ranking', ranking),
                   ],
                 ),

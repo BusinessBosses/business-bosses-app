@@ -64,7 +64,11 @@ class MatchController extends GetxController {
     try {
       isLoading(true);
       errorMessage('');
+      // Reset ALL lists so results from a previously selected match type can
+      // never leak into the new one.
       matchList.clear();
+      suppliers.clear();
+      partners.clear();
 
       if (profileController.myProfile.matchType != null) {
         // Make the API call

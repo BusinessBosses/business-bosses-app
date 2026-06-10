@@ -86,41 +86,16 @@ class _SuccessScreenState extends State<SuccessScreen> {
             );
           }
 
-          final String? userIndustry = profileController.myProfile.industry;
+          final String postType = widget.postType ?? 'Promote My Business';
 
-          // Combine results
-          List<dynamic> combinedResults = <dynamic>[];
-
-          // 1. Add People Matches
-          List<UserModel> people = <UserModel>[];
-          if (widget.postType == 'Find a Partner') {
-            people = matchController.partners.toList();
-          } else {
-            people = matchController.matchList.toList();
-          }
-          combinedResults.addAll(people.take(2));
-
-          // 2. Add Buyer Requests (Filtered by industry for relevance)
-          List<BuyerRequestModel> requests =
-              buyerRequestController.buyerRequests.where((BuyerRequestModel r) {
-            if (userIndustry == null || userIndustry.isEmpty) return true;
-            return r.category.toLowerCase().trim() ==
-                userIndustry.toLowerCase().trim();
-          }).toList();
-
-          if (requests.isEmpty) {
-            requests = buyerRequestController.buyerRequests.take(2).toList();
-          }
-
-          combinedResults.addAll(requests.take(2));
-
-          // Take first 3 total
-          final List<dynamic> finalDisplay = combinedResults.take(3).toList();
+          // The match source + items shown depend on the type of post.
+          final String matchSourceLabel = _matchSourceLabel(postType);
+          final List<dynamic> finalDisplay = _matchesForPostType(postType);
 
           if (finalDisplay.isEmpty) {
             return Center(
               child: Text(
-                'No matching opportunities found yet.',
+                'No matches found yet.',
                 style: TextStyle(color: Colors.grey[600]),
               ),
             );
@@ -130,11 +105,19 @@ class _SuccessScreenState extends State<SuccessScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                '${finalDisplay.length} Matches found',
+                matchSourceLabel,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: textColor,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                '${finalDisplay.length} matches found',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
                 ),
               ),
               const SizedBox(height: 16),
@@ -176,6 +159,49 @@ class _SuccessScreenState extends State<SuccessScreen> {
         const SizedBox(height: 24),
       ],
     );
+  }
+
+  /// The label describing where the matches come from, based on the post type.
+  String _matchSourceLabel(String postType) {
+    switch (postType) {
+      case 'Need a Product or Service':
+        return 'Matches from Sellers listing';
+      case 'Find a Partner':
+        return 'Matches from Sellers/partner with me';
+      case 'Promote My Business':
+      case 'Sell a Product or Service':
+      default:
+        return 'Matches from buyer request';
+    }
+  }
+
+  /// Returns the relevant matches for the given post type:
+  /// - Promote / Sell  -> people who posted buyer requests
+  /// - Need            -> sellers (suppliers) listings
+  /// - Find a Partner  -> partners willing to partner up
+  List<dynamic> _matchesForPostType(String postType) {
+    switch (postType) {
+      case 'Find a Partner':
+        return matchController.partners.take(3).toList();
+      case 'Need a Product or Service':
+        return matchController.suppliers.take(3).toList();
+      case 'Promote My Business':
+      case 'Sell a Product or Service':
+      default:
+        final String? userIndustry = profileController.myProfile.industry;
+        // Prefer buyer requests in the user's own industry, fall back to all.
+        List<BuyerRequestModel> requests =
+            buyerRequestController.buyerRequests.where((BuyerRequestModel r) {
+          if (userIndustry == null || userIndustry.isEmpty) return true;
+          return r.category.toLowerCase().trim() ==
+              userIndustry.toLowerCase().trim();
+        }).toList();
+
+        if (requests.isEmpty) {
+          requests = buyerRequestController.buyerRequests.toList();
+        }
+        return requests.take(3).toList();
+    }
   }
 
   Widget _buildUserMatchCard(UserModel user) {

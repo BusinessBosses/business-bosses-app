@@ -15,6 +15,10 @@ class BuyerRequestController extends GetxController {
   final RxBool loading = false.obs;
   final RxBool error = false.obs;
   final RxBool loadingMore = false.obs;
+  // Server-computed count of buyer requests matching a seller's industry +
+  // location (the "Matched Buyer" total). Kept separate from [buyerRequests]
+  // so the number stays accurate regardless of what's currently loaded/filtered.
+  final RxInt matchCount = 0.obs;
   final RxString filterCategory = ''.obs;
   final RxString filterLocation = ''.obs;
   final RxList<BuyerRequestModel> _allRequests = <BuyerRequestModel>[].obs;
@@ -56,6 +60,38 @@ class BuyerRequestController extends GetxController {
 
     loading(false);
     update();
+  }
+
+  /// Fetch the exact count of buyer requests matching [category] + [location].
+  /// Mirrors the filtering used by "Find my match → I need customers" so the
+  /// "Matched Buyer" tile shows a number that agrees with the list it opens.
+  Future<void> fetchMatchCount({String? category, String? location}) async {
+    final List<String> params = <String>[];
+    if (category != null && category.isNotEmpty) {
+      params.add('category=${Uri.encodeQueryComponent(category)}');
+    }
+    if (location != null && location.isNotEmpty) {
+      params.add('location=${Uri.encodeQueryComponent(location)}');
+    }
+
+    String path = 'buyer-request/match-count';
+    if (params.isNotEmpty) {
+      path += '?${params.join('&')}';
+    }
+
+    try {
+      final ApiResponseModel response = await ApiService.get(path: path);
+      if (response.success && response.data != null) {
+        matchCount.value = (response.data['count'] ?? 0) as int;
+        update();
+      } else {
+        log('fetchMatchCount failed: ${response.message}');
+      }
+    } catch (e) {
+      // Leave the previous count in place; surface the failure for debugging
+      // rather than silently swallowing it.
+      log('fetchMatchCount error: $e');
+    }
   }
 
   /// Process fetched buyer requests into state

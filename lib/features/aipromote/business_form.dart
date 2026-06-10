@@ -101,8 +101,6 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
         _industryFocus.requestFocus();
       } else if (_bioController.text.trim().isEmpty) {
         _bioFocus.requestFocus();
-      } else if (_websiteController.text.trim().isEmpty) {
-        _websiteFocus.requestFocus();
       } else if (_locationController.text.trim().isEmpty) {
         _locationFocus.requestFocus();
       }
@@ -199,7 +197,8 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
       name: _nameController.text,
       industry: _industryController.text,
       bio: _bioController.text,
-      website: _websiteController.text,
+      // Website/contact link removed from the form; the AI writes its own CTA.
+      website: '',
       location: _locationController.text,
       postType: _selectedType,
     );
@@ -590,13 +589,8 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           isMissing: missingFields.contains('Description/Tagline'),
           focusNode: _bioFocus, // Pass focusNode
         ),
-        _buildInputGroup(
-          'Website or Contact Link',
-          _websiteController,
-          placeholder: 'Enter your website URL / contact link',
-          keyboardType: TextInputType.url,
-          focusNode: _websiteFocus, // Pass focusNode
-        ),
+        // Website/Contact link removed — the AI generates a call-to-action that
+        // the user can edit themselves on the preview screen.
         SizedBox(height: 24),
         SizedBox(
           width: double.infinity,

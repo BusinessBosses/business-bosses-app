@@ -49,9 +49,10 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
   void initState() {
     super.initState();
 
-    if (matchController.matchList.isEmpty) {
-      matchController.fetchMatches();
-    }
+    // Always refresh so the displayed matches reflect the CURRENT match type.
+    // Relying on `matchList.isEmpty` left stale results from a previously
+    // selected type (the controller is a singleton that persists across screens).
+    matchController.fetchMatches();
   }
 
   /// Builds the view for a subscribed user
@@ -195,6 +196,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                     showAppBar: false,
                     filterByIndustry: profileController.myProfile.industry,
                     filterByLocation: profileController.myProfile.location,
+                    gateForFreeUsers: true,
                   );
                 } else if (matchType == 'partner') {
                   return buildCategorizedMatches();

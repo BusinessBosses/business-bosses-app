@@ -231,6 +231,9 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
       if (_businessInfo.postType == 'Promote My Business' ||
           _businessInfo.postType == 'Sell a Product or Service') {
         newMatchType = 'seller';
+      } else if (_businessInfo.postType == 'Need a Product or Service') {
+        // Buyers looking for products/services are matched against sellers.
+        newMatchType = 'buyer';
       } else if (_businessInfo.postType == 'Find a Partner') {
         newMatchType = 'partner';
       }
@@ -245,6 +248,10 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
           ...profileController!.myProfile.toMap(),
           'matchType': newMatchType
         });
+        // Keep the match-type the matches screen renders from in sync with the
+        // stored matchType, otherwise the view shows one type while the fetched
+        // data is for another.
+        profileController!.currentMatchType.value = newMatchType;
       }
 
       // Automatically post to Boss Up Feed (Old Home)
