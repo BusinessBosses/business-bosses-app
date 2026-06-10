@@ -16,7 +16,7 @@ class ProNotifications extends StatefulWidget {
 
 class _ProNotificationsState extends State<ProNotifications> {
   final NotificationController notificationController =
-      Get.put(NotificationController());
+      Get.find<NotificationController>();
 
   @override
   void initState() {
@@ -71,11 +71,19 @@ class _ProNotificationsState extends State<ProNotifications> {
             ? const SafetyModel(
                 isLoading: true,
               )
-            : notificationController.ordersNotification.isEmpty
-                ? const SafetyModel(
-                    title: 'No Notifications Received Yet!',
+            : notificationController.error.value
+                ? SafetyModel(
                     isLoading: false,
+                    title: 'OOPS! Something went Wrong',
+                    subTitle: 'Could not get notifications',
+                    clickableText: 'Reload',
+                    onTap: notificationController.loadNotifications,
                   )
+                : notificationController.ordersNotification.isEmpty
+                    ? const SafetyModel(
+                        title: 'No Notifications Received Yet!',
+                        isLoading: false,
+                      )
                 : Column(
                     children: <Widget>[
                       const SizedBox(

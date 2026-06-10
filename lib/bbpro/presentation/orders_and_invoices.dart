@@ -131,7 +131,7 @@ class _OrdersScreenState extends State<OrdersScreen>
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) {
                 String title = status.displayTitle;
-                return '$title (${status == OrderStatus.allorders ? marketController.orders.length : marketController.orders.where((order) => order.status == status).length})';
+                return '$title (${status == OrderStatus.allorders ? marketController.totalOrderCount.value : marketController.orders.where((order) => order.status == status).length})';
               },
             );
           },
@@ -278,7 +278,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                       'My Leads (${ctrl.shopController.orderStats?.totalOrders.toInt() ?? ctrl.orders.length})'),
             ),
             GetBuilder<MarketController>(
-              builder: (ctrl) => Tab(text: 'My Orders (${ctrl.orders.length})'),
+              builder: (ctrl) =>
+                  Tab(text: 'My Orders (${ctrl.totalOrderCount.value})'),
             ),
           ],
         ),

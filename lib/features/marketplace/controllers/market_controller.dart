@@ -32,6 +32,10 @@ class MarketController extends GetxController {
   RxList<Order> orders = <Order>[].obs;
   int currentOrderPage = 1;
   bool hasMoreOrders = true;
+  // Server-reported total count of the user's orders (matches the backend's
+  // findAndCountAll count, already filtered for deleted users/shops). Use this
+  // for the displayed length so it's correct before pagination loads everything.
+  RxInt totalOrderCount = 0.obs;
 
   // Filtering and search
   List<UserModel> searchedUsers = <UserModel>[];
@@ -594,9 +598,12 @@ class MarketController extends GetxController {
 
     if (cachedOrders != null) {
       orders.clear();
-      orders.addAll((cachedOrders['rows'] as List<dynamic>)
+      final List<Order> cachedList = (cachedOrders['rows'] as List<dynamic>)
           .map<Order>((dynamic json) => Order.fromJson(json))
-          .toList());
+          .toList();
+      cachedList.sort((Order a, Order b) => b.createdAt.compareTo(a.createdAt));
+      orders.addAll(cachedList);
+      totalOrderCount.value = (cachedOrders['count'] ?? cachedList.length) as int;
       update();
     }
 
@@ -605,9 +612,13 @@ class MarketController extends GetxController {
     if (responseOrders.success) {
       await sandBox.write('user_orders_$uid', responseOrders.data);
       orders.clear();
-      orders.addAll(responseOrders.data['rows']
+      final List<Order> responseList = (responseOrders.data['rows'] as List<dynamic>)
           .map<Order>((dynamic json) => Order.fromJson(json))
-          .toList());
+          .toList();
+      responseList.sort((Order a, Order b) => b.createdAt.compareTo(a.createdAt));
+      orders.addAll(responseList);
+      totalOrderCount.value =
+          (responseOrders.data['count'] ?? responseList.length) as int;
       update();
     }
   }

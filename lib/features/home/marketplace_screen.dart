@@ -102,16 +102,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       initialIndex: widget.initialIndex,
     );
 
-    _sliderTimer = Timer.periodic(const Duration(seconds: 9), (Timer timer) {
-      if (_sliderPageController.hasClients) {
-        int nextIndex = (_sliderIndex + 1) % 2;
-        _sliderPageController.animateToPage(
-          nextIndex,
-          duration: const Duration(seconds: 9),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
+    _startSliderTimer();
 
     _categoryScrollController.addListener(() {
       if (!_categoryScrollController.hasClients) return;
@@ -187,6 +178,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       if (oldData) {
         setState(() => hasOldData = true);
         await _marketController.checkMigrationReminder();
+      }
+    });
+  }
+
+  void _startSliderTimer() {
+    _sliderTimer?.cancel();
+    _sliderTimer = Timer.periodic(const Duration(seconds: 9), (Timer timer) {
+      if (_sliderPageController.hasClients) {
+        final int nextIndex = (_sliderIndex + 1) % 2;
+        _sliderPageController.animateToPage(
+          nextIndex,
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.easeInOut,
+        );
       }
     });
   }
@@ -859,7 +864,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
           height: 205,
           child: PageView(
             controller: _sliderPageController,
-            onPageChanged: (int index) => setState(() => _sliderIndex = index),
+            physics: const AlwaysScrollableScrollPhysics(),
+            pageSnapping: true,
+            onPageChanged: (int index) {
+              setState(() => _sliderIndex = index);
+              // Restart the auto-advance timer so a manual swipe isn't
+              // immediately overridden by the next automatic transition.
+              _startSliderTimer();
+            },
             children: <Widget>[
               _buildInsightSlide(),
               _buildFeaturedListingSlide(),
@@ -923,7 +935,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    const Text('View Insight',
+                    const Text('My Performance',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16)),
                     const Icon(Icons.chevron_right, size: 20),

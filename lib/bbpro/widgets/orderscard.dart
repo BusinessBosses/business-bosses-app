@@ -52,7 +52,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Orders',
+                        'Leads',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -88,7 +88,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                               children: <Widget>[
                                 RichText(
                                   text: TextSpan(
-                                    text: 'View All Orders ',
+                                    text: 'View All Leads ',
                                     style: const TextStyle(
                                         color: textColor,
                                         fontSize: 12,

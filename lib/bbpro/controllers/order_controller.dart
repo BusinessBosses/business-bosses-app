@@ -108,10 +108,10 @@ class OrderController extends GetxController {
         'id': response.data['id'],
         ...response.data,
       });
-      orders.add(
+      orders.insert(0,
           newClient); // Add to ordersStatus based on the new order's status
-      ordersStatus[newClient.status]?.add(newClient);
-      allorders.add(newClient); // Add to all orders
+      ordersStatus[newClient.status]?.insert(0, newClient);
+      allorders.insert(0, newClient); // Add to all orders
       update();
       shopController.loadStatistics();
       return true;
@@ -169,9 +169,9 @@ class OrderController extends GetxController {
           Order updatedOrder = Order.fromJson(response.data);
 
           // Add the updated order to all lists
-          orders.add(updatedOrder);
-          allorders.add(updatedOrder);
-          ordersStatus[updatedOrder.status]?.add(updatedOrder);
+          orders.insert(0, updatedOrder);
+          allorders.insert(0, updatedOrder);
+          ordersStatus[updatedOrder.status]?.insert(0, updatedOrder);
 
           update(); // Notify listeners
           shopController.loadStatistics();

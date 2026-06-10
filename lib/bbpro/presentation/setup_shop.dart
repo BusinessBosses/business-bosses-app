@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -509,19 +510,19 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
           ),
         ],
         // backgroundColor: probackgroundColor,
-        leading: widget.shop != null || widget.backToHome
-            ? IconButton(
-                onPressed: () {
-                  if (!widget.backToHome) {
-                    Navigator.pop(context);
-                  } else {
-                    Get.off(() => const HomeScreen());
-                  }
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              )
-            : null,
-        automaticallyImplyLeading: widget.shop != null ? true : false,
+        leading: IconButton(
+          onPressed: () {
+            if (widget.backToHome) {
+              Get.off(() => const MarketplaceScreen(initialIndex: 1));
+            } else if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              Get.off(() => const MarketplaceScreen(initialIndex: 1));
+            }
+          },
+          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        ),
+        automaticallyImplyLeading: true,
         title: Text(
           widget.shop != null ? 'Edit' : 'Set Up Shop',
           style: const TextStyle(

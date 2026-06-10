@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,9 +16,6 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
   bool isHidden = false;
   final OrderController orderController = Get.put(OrderController());
   final ShopController shopController = Get.find();
-  final MatchController matchController = Get.isRegistered<MatchController>()
-      ? Get.find<MatchController>()
-      : Get.put(MatchController());
 
   // String _formatNumber(int number) {
   //   if (number >= 1000) {
@@ -91,43 +87,24 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                     color: textColor,
                   ),
                   children: <TableRow>[
-                    const TableRow(
-                      decoration: BoxDecoration(
+                    TableRow(
+                      decoration: const BoxDecoration(
                         color: probackgroundColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          topRight: Radius.circular(10.0),
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
                       children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
+                        const Padding(
+                          padding: EdgeInsets.all(12.0),
                           child: Center(
                             child: Text(
                               textAlign: TextAlign.center,
-                              'Leads from \n All Orders',
+                              'Leads from\nAll Orders',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              textAlign: TextAlign.center,
-                              'Matched Buyers',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(12.0),
                           child: Center(
                             child: Text(
                               shopController.shopStats != null
@@ -147,21 +124,6 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
                                 color: textColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Obx(
-                              () => Text(
-                                matchController.matchList.length.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: textColor,
-                                ),
                               ),
                             ),
                           ),

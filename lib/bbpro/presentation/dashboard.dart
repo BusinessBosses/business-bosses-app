@@ -1,8 +1,8 @@
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
+import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
-import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
@@ -62,6 +62,9 @@ class _DashboardState extends State<Dashboard> {
   final BuyerRequestController buyerRequestsController =
       Get.put(BuyerRequestController());
   final ReachController reachController = Get.put(ReachController());
+  final MatchController matchController = Get.isRegistered<MatchController>()
+      ? Get.find<MatchController>()
+      : Get.put(MatchController());
 
   @override
   void initState() {
@@ -372,14 +375,7 @@ class _DashboardState extends State<Dashboard> {
                                                 .toString()
                                             : '0'
                                         : index == 2
-                                            ? buyerRequestsController
-                                                .buyerRequests
-                                                .where((BuyerRequestModel r) =>
-                                                    r.category.toLowerCase() ==
-                                                    shopController
-                                                        .shop!.category
-                                                        .toLowerCase())
-                                                .length
+                                            ? matchController.matchList.length
                                                 .toString()
                                             : '0',
                               ));

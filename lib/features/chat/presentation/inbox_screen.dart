@@ -225,11 +225,11 @@ class _InboxScreenState extends State<InboxScreen>
   }
 
   Widget _buildNotificationsTab() {
-    return GetBuilder<NotificationController>(
-      builder: (NotificationController controller) {
-        if (controller.loading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return Obx(() {
+      final NotificationController controller = _notificationController;
+      if (controller.loading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
         if (controller.error.value) {
           return SafetyModel(
             isLoading: false,
@@ -239,9 +239,9 @@ class _InboxScreenState extends State<InboxScreen>
             onTap: controller.loadNotifications,
           );
         }
-        return controller.notifications.isEmpty
-            ? noNotificationsFoundWidget('notifications')
-            : CustomScrollView(
+      return controller.notifications.isEmpty
+          ? noNotificationsFoundWidget('notifications')
+          : CustomScrollView(
                 slivers: <Widget>[
                   SliverStickyHeader(
                     sticky: false,
@@ -321,9 +321,8 @@ class _InboxScreenState extends State<InboxScreen>
                       ),
                     ),
                   ),
-                ],
-              );
-      },
-    );
+              ],
+            );
+    });
   }
 }

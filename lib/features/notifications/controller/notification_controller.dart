@@ -3,14 +3,15 @@ import 'package:business_bosses_v2/common/models/quote.dart';
 import 'package:business_bosses_v2/features/notifications/models/my_notification.dart';
 import 'package:business_bosses_v2/features/notifications/repository/notification_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class NotificationController extends GetxController {
   RxBool error = RxBool(false);
   final ProfileController _profileController = Get.find();
   RxBool loading = RxBool(false);
-  final List<MyNotification> notifications = <MyNotification>[];
-  final List<MyNotification> ordersNotification = <MyNotification>[];
+  final RxList<MyNotification> notifications = <MyNotification>[].obs;
+  final RxList<MyNotification> ordersNotification = <MyNotification>[].obs;
   final RxInt _page = RxInt(0);
   Quote quote = Quote(
     id: 1,
@@ -58,7 +59,8 @@ class NotificationController extends GetxController {
       } else {
         error(true);
       }
-    } catch (_) {
+    } catch (e) {
+      debugPrint('Error loading notifications: $e');
       error(true);
     } finally {
       // Always release the spinner, even if parsing threw.

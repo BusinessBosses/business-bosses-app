@@ -37,6 +37,23 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
     filteredOrders = _marketController.orders;
   }
 
+  Future<void> _loadMoreOrders() async {
+    if (_marketController.loadingMoreOrders.value ||
+        !_marketController.hasMoreOrders) {
+      return;
+    }
+    await _marketController.loadMoreMyOrders();
+    if (!mounted) return;
+    setState(() {
+      // Re-sync the displayed list with the controller's now-longer list.
+      // (While searching, filteredOrders holds a filtered snapshot, so it's
+      // only re-pointed at the live list when no search is active.)
+      if (searchQuery.isEmpty) {
+        filteredOrders = _marketController.orders;
+      }
+    });
+  }
+
   // void _showFilterMenu(BuildContext context, Offset position) {
   //   showMenu(
   //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -94,7 +111,10 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         title: Text(
-          'My Orders (${filteredOrders.length})',
+          // When not searching, show the server-reported total so the count is
+          // correct before pagination loads every page. While searching, show
+          // the number of matches in what's currently loaded.
+          'My Orders (${searchQuery.isEmpty ? _marketController.totalOrderCount.value : filteredOrders.length})',
           style: const TextStyle(
             color: textColor,
             fontWeight: FontWeight.bold,
@@ -174,24 +194,53 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                 // Product List
                 Expanded(
                   child: filteredOrders.isNotEmpty
-                      ? ListView.builder(
-                          padding: const EdgeInsets.only(bottom: 100.0),
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: filteredOrders.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final Order order = filteredOrders[index];
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: MyOrderWidget(
-                                quantity: order.quantity,
-                                order: order,
-                                bgcolor: order.status.backgroundColor,
-                                shop: order.shop,
-                                showChange: false,
-                                myShop: false,
-                              ),
-                            );
+                      ? NotificationListener<ScrollNotification>(
+                          onNotification: (ScrollNotification scrollInfo) {
+                            // Only auto-paginate the full list (search filters
+                            // the already-loaded orders, so it manages its own
+                            // result set).
+                            if (searchQuery.isEmpty &&
+                                scrollInfo.metrics.pixels >=
+                                    scrollInfo.metrics.maxScrollExtent - 200) {
+                              _loadMoreOrders();
+                            }
+                            return false;
                           },
+                          child: ListView.builder(
+                            padding: const EdgeInsets.only(bottom: 100.0),
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: filteredOrders.length + 1,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (index == filteredOrders.length) {
+                                // Footer: show a spinner while the next page
+                                // loads, otherwise nothing.
+                                return Obx(
+                                  () => _marketController
+                                          .loadingMoreOrders.value
+                                      ? const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 16.0),
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
+                                );
+                              }
+                              final Order order = filteredOrders[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: MyOrderWidget(
+                                  quantity: order.quantity,
+                                  order: order,
+                                  bgcolor: order.status.backgroundColor,
+                                  shop: order.shop,
+                                  showChange: false,
+                                  myShop: false,
+                                ),
+                              );
+                            },
+                          ),
                         )
                       : Center(
                           child: Column(

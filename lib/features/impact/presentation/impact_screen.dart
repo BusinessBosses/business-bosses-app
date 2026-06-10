@@ -128,8 +128,10 @@ class _ReachScreenState extends State<ReachScreen> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         centerTitle: true,
-        title: const Text(
-          'Reach',
+        title: Text(
+          widget.user.uid == profileController.myProfile.uid
+              ? 'My Reach Performance'
+              : 'Reach',
           textAlign: TextAlign.center,
         ),
         actions: <Widget>[
