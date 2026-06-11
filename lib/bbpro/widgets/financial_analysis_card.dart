@@ -94,6 +94,12 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                 ),
                 const SizedBox(height: 10),
                 Table(
+                  defaultVerticalAlignment:
+                      TableCellVerticalAlignment.middle,
+                  columnWidths: const <int, TableColumnWidth>{
+                    0: FlexColumnWidth(),
+                    1: FlexColumnWidth(),
+                  },
                   border: TableBorder.all(
                     borderRadius: BorderRadius.circular(10.0),
                     color: textColor,

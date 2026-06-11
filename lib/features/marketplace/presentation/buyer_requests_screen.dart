@@ -104,15 +104,19 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
           (widget.filterByLocation ?? '').toLowerCase().trim();
 
       if (industry.isNotEmpty) {
+        final String myUid = profileController.myProfile.uid;
         bool categoryMatch(BuyerRequestModel r) =>
             r.category.toLowerCase().trim() == industry;
         bool locationMatch(BuyerRequestModel r) =>
             location.isNotEmpty &&
             (r.user.location ?? '').toLowerCase().contains(location);
 
+        // Exclude my own requests so the list (and its count) only shows
+        // other people's buyer requests that match me.
         baseRequests = baseRequests
             .where((BuyerRequestModel r) =>
-                categoryMatch(r) || locationMatch(r))
+                r.user.uid != myUid &&
+                (categoryMatch(r) || locationMatch(r)))
             .toList();
 
         int rank(BuyerRequestModel r) {

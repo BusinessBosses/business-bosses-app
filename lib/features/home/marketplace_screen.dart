@@ -72,6 +72,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   int _sliderIndex = 0;
   Timer? _sliderTimer;
 
+  // Keep the loading screen up for a minimum window on entry so it always
+  // shows briefly, even when content is served instantly from cache.
+  bool _minLoadElapsed = false;
+  Timer? _minLoadTimer;
+
   bool hasOldData = false;
 
   final List<String> categories = const <String>[
@@ -103,6 +108,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     );
 
     _startSliderTimer();
+
+    _minLoadTimer = Timer(const Duration(seconds: 2), () {
+      if (mounted) setState(() => _minLoadElapsed = true);
+    });
 
     _categoryScrollController.addListener(() {
       if (!_categoryScrollController.hasClients) return;
@@ -206,6 +215,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   @override
   void dispose() {
     _sliderTimer?.cancel();
+    _minLoadTimer?.cancel();
     _sliderPageController.dispose();
     _marketplaceTabController.dispose();
     _advancedDrawerController.dispose();
@@ -274,7 +284,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         child: Scaffold(
           backgroundColor: backgroundColor,
           body: Obx(() {
-            if (homeController.loading.value) {
+            if (homeController.loading.value || !_minLoadElapsed) {
               return _buildLoading();
             } else if (homeController.noConnection.value) {
               return _buildNoConnection();
@@ -648,10 +658,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         isScrollable: false,
         labelColor: Colors.black87,
         unselectedLabelColor: Colors.black87,
-        labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 11),
         unselectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.w800,
-          fontSize: 13,
+          fontSize: 11,
         ),
         indicatorColor: primaryColorLT,
         indicatorWeight: 3,
@@ -661,12 +671,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
-                Icon(Icons.grid_view, color: Color(0xFFF27121), size: 20),
-                SizedBox(width: 6),
+                Icon(Icons.grid_view, color: Color(0xFFF27121), size: 16),
+                SizedBox(width: 4),
                 Text(
                   'I Sell',
                   textAlign: TextAlign.center,
-                  style: TextStyle(height: 1.2, fontSize: 13),
+                  style: TextStyle(height: 1.2, fontSize: 11),
                 ),
               ],
             ),
@@ -676,12 +686,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
-                Icon(Icons.gps_fixed, size: 20, color: Color(0xFFF27121)),
-                SizedBox(width: 6),
+                Icon(Icons.gps_fixed, size: 16, color: Color(0xFFF27121)),
+                SizedBox(width: 4),
                 Text(
                   'I Need',
                   textAlign: TextAlign.center,
-                  style: TextStyle(height: 1.2, fontSize: 13),
+                  style: TextStyle(height: 1.2, fontSize: 11),
                 ),
               ],
             ),
@@ -691,12 +701,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
-                Icon(LucideIcons.trophy, size: 20, color: Color(0xFFF27121)),
-                SizedBox(width: 6),
-                Text(
-                  'Partner Deals',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(height: 1.2, fontSize: 13),
+                Icon(LucideIcons.trophy, size: 16, color: Color(0xFFF27121)),
+                SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    'Partner Deals',
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.visible,
+                    softWrap: false,
+                    style: TextStyle(height: 1.2, fontSize: 11),
+                  ),
                 ),
               ],
             ),

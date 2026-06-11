@@ -73,6 +73,11 @@ class BuyerRequestController extends GetxController {
     if (location != null && location.isNotEmpty) {
       params.add('location=${Uri.encodeQueryComponent(location)}');
     }
+    // Exclude my own buyer requests so the count matches the list shown.
+    final String myUid = _profileController.myProfile.uid;
+    if (myUid.isNotEmpty) {
+      params.add('excludeUserId=${Uri.encodeQueryComponent(myUid)}');
+    }
 
     String path = 'buyer-request/match-count';
     if (params.isNotEmpty) {
