@@ -72,8 +72,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   int _sliderIndex = 0;
   Timer? _sliderTimer;
 
-  // Keep the loading screen up for a minimum window on entry so it always
-  // shows briefly, even when content is served instantly from cache.
+  // Keep the loading screen up for a minimum window on the FIRST app entry so
+  // it always shows briefly, even when content is served instantly from cache.
+  // Static so it only happens once per app session — not on every time the
+  // user returns to the home tab from Profile/Inbox/etc.
+  static bool _initialLoadShown = false;
   bool _minLoadElapsed = false;
   Timer? _minLoadTimer;
 
@@ -109,9 +112,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
     _startSliderTimer();
 
-    _minLoadTimer = Timer(const Duration(seconds: 2), () {
-      if (mounted) setState(() => _minLoadElapsed = true);
-    });
+    // Only enforce the minimum loader once per app session (first entry).
+    // On later returns to the home tab, skip it so the marketplace shows
+    // immediately from cache.
+    if (_initialLoadShown) {
+      _minLoadElapsed = true;
+    } else {
+      _initialLoadShown = true;
+      _minLoadTimer = Timer(const Duration(seconds: 2), () {
+        if (mounted) setState(() => _minLoadElapsed = true);
+      });
+    }
 
     _categoryScrollController.addListener(() {
       if (!_categoryScrollController.hasClients) return;
@@ -674,7 +685,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 Icon(Icons.grid_view, color: Color(0xFFF27121), size: 16),
                 SizedBox(width: 4),
                 Text(
-                  'I Sell',
+                  'Sellers',
                   textAlign: TextAlign.center,
                   style: TextStyle(height: 1.2, fontSize: 11),
                 ),
@@ -689,7 +700,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 Icon(Icons.gps_fixed, size: 16, color: Color(0xFFF27121)),
                 SizedBox(width: 4),
                 Text(
-                  'I Need',
+                  'Customers',
                   textAlign: TextAlign.center,
                   style: TextStyle(height: 1.2, fontSize: 11),
                 ),

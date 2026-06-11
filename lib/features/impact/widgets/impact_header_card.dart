@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
-import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
 import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -415,8 +414,11 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
         'color': Colors.white,
         'iconColor': primaryColorLT,
         'icon': LucideIcons.bot,
-        'onTap': () {
-          Get.to(() => ReachScreen(user: profileController.myProfile));
+        'onTap': () async {
+          const String url = 'https://bizcenter.ai';
+          if (await canLaunchUrlString(url)) {
+            await launchUrlString(url, mode: LaunchMode.externalApplication);
+          }
         },
       },
     ];
