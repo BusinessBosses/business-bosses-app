@@ -171,7 +171,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       // "Find my match → I need customers").
       buyerRequestController.fetchMatchCount(
         category: _profileController.myProfile.industry,
-        location: _profileController.myProfile.location,
       );
 
       if (shopController.shop == null && _profileController.myProfile.hasShop) {
@@ -695,7 +694,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 Icon(LucideIcons.trophy, size: 20, color: Color(0xFFF27121)),
                 SizedBox(width: 6),
                 Text(
-                  'Top Deals',
+                  'Partner Deals',
                   textAlign: TextAlign.center,
                   style: TextStyle(height: 1.2, fontSize: 13),
                 ),

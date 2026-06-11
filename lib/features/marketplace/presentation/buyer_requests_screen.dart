@@ -83,10 +83,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
     }
 
     await _buyerRequestController.initBuyerRequests(
-      location: locationFilter,
-      priorityLocation:
-          locationFilter == null ? Get.find<MarketController>().selectedLocation : null,
-    );
+        priorityLocation: locationFilter);
     _applyFilter();
   }
 
@@ -97,14 +94,44 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
       List<BuyerRequestModel> baseRequests =
           List<BuyerRequestModel>.from(allRequests);
 
-      // Filter by industry if specified (for seller matches)
-      if (widget.filterByIndustry != null &&
-          widget.filterByIndustry!.isNotEmpty) {
+      // Buyer-match mode (seller / "Matched Buyer"): keep requests that match
+      // my industry OR my location, ranked both-match first, then industry-only,
+      // then location-only (most recent first within each tier). Gated on
+      // industry being set so location-only browse contexts are unaffected.
+      final String industry =
+          (widget.filterByIndustry ?? '').toLowerCase().trim();
+      final String location =
+          (widget.filterByLocation ?? '').toLowerCase().trim();
+
+      if (industry.isNotEmpty) {
+        bool categoryMatch(BuyerRequestModel r) =>
+            r.category.toLowerCase().trim() == industry;
+        bool locationMatch(BuyerRequestModel r) =>
+            location.isNotEmpty &&
+            (r.user.location ?? '').toLowerCase().contains(location);
+
         baseRequests = baseRequests
             .where((BuyerRequestModel r) =>
-                r.category.toLowerCase() ==
-                widget.filterByIndustry!.toLowerCase())
+                categoryMatch(r) || locationMatch(r))
             .toList();
+
+        int rank(BuyerRequestModel r) {
+          final bool c = categoryMatch(r);
+          final bool l = locationMatch(r);
+          if (c && l) return 0; // both → top
+          if (c) return 1; // industry only
+          return 2; // location only
+        }
+
+        DateTime created(BuyerRequestModel r) =>
+            DateTime.tryParse(r.createdAt ?? '') ??
+            DateTime.fromMillisecondsSinceEpoch(0);
+
+        baseRequests.sort((BuyerRequestModel a, BuyerRequestModel b) {
+          final int byRank = rank(a).compareTo(rank(b));
+          if (byRank != 0) return byRank;
+          return created(b).compareTo(created(a)); // newer first within a tier
+        });
       }
 
       // Filter by my requests if specified

@@ -76,7 +76,6 @@ class _DashboardState extends State<Dashboard> {
       // the tile's number agrees with the list it opens.
       buyerRequestsController.fetchMatchCount(
         category: profileController.myProfile.industry,
-        location: profileController.myProfile.location,
       );
     }
     super.initState();

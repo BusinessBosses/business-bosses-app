@@ -43,6 +43,18 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
   Widget build(BuildContext context) {
     return GetBuilder<ShopController>(
       builder: (_) {
+        // Still fetching statistics and nothing loaded yet → show a loader
+        // rather than a £0 total that looks like real (empty) data.
+        if (shopController.loadingData.value &&
+            shopController.shopStats == null) {
+          return const Padding(
+            padding: EdgeInsets.all(30),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
         if (shopController.shopGraph == null) {
           return const Padding(
             padding: EdgeInsets.all(15),
