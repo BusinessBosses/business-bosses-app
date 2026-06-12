@@ -17,6 +17,7 @@ import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
@@ -667,12 +668,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       child: TabBar(
         controller: _marketplaceTabController,
         isScrollable: false,
+        // Tighten the per-tab padding so the slightly larger labels (esp.
+        // "Partner Deals") still fit on one line in three equal-width tabs.
+        labelPadding: const EdgeInsets.symmetric(horizontal: 2),
         labelColor: Colors.black87,
         unselectedLabelColor: Colors.black87,
-        labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 11),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12),
         unselectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.w800,
-          fontSize: 11,
+          fontSize: 12,
         ),
         indicatorColor: primaryColorLT,
         indicatorWeight: 3,
@@ -687,7 +691,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 Text(
                   'Sellers',
                   textAlign: TextAlign.center,
-                  style: TextStyle(height: 1.2, fontSize: 11),
+                  style: TextStyle(height: 1.2, fontSize: 12),
                 ),
               ],
             ),
@@ -702,7 +706,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 Text(
                   'Customers',
                   textAlign: TextAlign.center,
-                  style: TextStyle(height: 1.2, fontSize: 11),
+                  style: TextStyle(height: 1.2, fontSize: 12),
                 ),
               ],
             ),
@@ -721,7 +725,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     maxLines: 1,
                     overflow: TextOverflow.visible,
                     softWrap: false,
-                    style: TextStyle(height: 1.2, fontSize: 11),
+                    style: TextStyle(height: 1.2, fontSize: 12),
                   ),
                 ),
               ],
@@ -1021,8 +1025,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         ),
                         onPressed: () {
                           if (_profileController.myProfile.isSubscribed) {
-                            Get.to(() => ReachScreen(
-                                user: _profileController.myProfile));
+                            Get.to(() =>
+                                const CreatePostScreen(fromBoost: true));
                           } else {
                             showPremiumPaywall();
                           }

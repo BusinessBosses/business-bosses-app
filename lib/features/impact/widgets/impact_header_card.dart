@@ -389,7 +389,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
         'iconColor': primaryColorLT,
         'icon': LucideIcons.rocket,
         'onTap': () {
-          Get.to(CreatePostScreen());
+          Get.to(() => const CreatePostScreen(fromBoost: true));
         },
       },
       <String, dynamic>{
@@ -415,10 +415,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
         'iconColor': primaryColorLT,
         'icon': LucideIcons.bot,
         'onTap': () async {
-          const String url = 'https://bizcenter.ai';
-          if (await canLaunchUrlString(url)) {
-            await launchUrlString(url, mode: LaunchMode.externalApplication);
-          }
+          Get.to(() => const CreatePostScreen(fromBoost: true));
         },
       },
     ];

@@ -37,6 +37,10 @@ class CreatePostScreen extends StatefulWidget {
   final PostModel? postDetail;
   final bool? isGrow;
 
+  /// When entered via "Boost a Post", the screen replaces the Post button with
+  /// an inline Boost prompt (Yes → boost screen, No → post directly).
+  final bool fromBoost;
+
   /// SCREEN CONSTRUCTOR
   const CreatePostScreen(
       {super.key,
@@ -44,7 +48,8 @@ class CreatePostScreen extends StatefulWidget {
       this.post,
       this.images,
       this.postDetail,
-      this.isGrow});
+      this.isGrow,
+      this.fromBoost = false});
   static const String routeName = '/create-post';
 
   @override
@@ -487,31 +492,44 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       ),
 
                     if (widget.isGrow != true)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15, right: 15),
-                        child: CustomButton(
-                          buttonType: ButtonType.elevated,
-                          label: widget.postId == null ? 'Post' : 'Update Post',
-                          onPressed: () async {
-                            _formKey.currentState!.save();
-                            if (!_formKey.currentState!.validate()) return;
+                      widget.fromBoost
+                          // Opened via "Boost a Post": show the inline Boost
+                          // prompt in place of the Post button.
+                          ? _buildInlineBoost(controller)
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15, right: 15),
+                              child: CustomButton(
+                                buttonType: ButtonType.elevated,
+                                label: widget.postId == null
+                                    ? 'Post'
+                                    : 'Update Post',
+                                onPressed: () async {
+                                  _formKey.currentState!.save();
+                                  if (!_formKey.currentState!.validate()) {
+                                    return;
+                                  }
 
-                            if (controller.imageFileList.length > 5) {
-                              /// If the user has selected more than five images, show an error message
-                              Get.snackbar(
-                                  'Error', 'You can select up to five images.');
-                            } else {
-                              /// Show bottom sheet for boost option
-                              _showBoostBottomSheet(controller);
-                            }
-                          },
-                          isProcessing: controller.loading.value,
-                        ),
+                                  if (controller.imageFileList.length > 5) {
+                                    /// If the user has selected more than five images, show an error message
+                                    Get.snackbar('Error',
+                                        'You can select up to five images.');
+                                  } else {
+                                    /// Show bottom sheet for boost option
+                                    _showBoostBottomSheet(controller);
+                                  }
+                                },
+                                isProcessing: controller.loading.value,
+                              ),
+                            ),
+                    // Hide the "sell on Marketplace" footer in the simplified
+                    // Boost flow.
+                    if (widget.fromBoost != true)
+                      const SizedBox(
+                        height: 20,
                       ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Center(
+                    if (widget.fromBoost != true)
+                      Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -560,6 +578,94 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  /// Creates (or edits) the post. [promote] = true routes through the boost
+  /// screen via the controller's shouldPromote flag; false posts directly.
+  Future<void> _submitPost(CreatePostController controller,
+      {required bool promote}) async {
+    _createPostController.shouldPromote.value = promote;
+    if (widget.postId == null) {
+      await controller.createPost(<String, dynamic>{
+        'livedata': livedata,
+        'donationId': donationModel?.id,
+        'donation': donationModel?.toMap(),
+        'forumId': forumModel?.forumId,
+        'forum': forumModel?.toMap(),
+        'marketId': marketModel?.marketId,
+        'market': marketModel?.toMap(),
+        'title': _titleCtrl.text.trim(),
+        'ytUrl': _ytUrl,
+        'images': _ytUrl != null && _ytUrl != ''
+            ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
+            : null, // Set images to null if _ytUrl is null or empty
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      }, _profileController);
+    } else {
+      await controller.onEditPost(widget.postDetail, _titleCtrl.text.trim());
+    }
+  }
+
+  /// Validates the form, then submits. Shared by the inline Boost prompt.
+  Future<void> _onInlineBoostChoice(CreatePostController controller,
+      {required bool promote}) async {
+    _formKey.currentState!.save();
+    if (!_formKey.currentState!.validate()) return;
+    if (controller.imageFileList.length > 5) {
+      Get.snackbar('Error', 'You can select up to five images.');
+      return;
+    }
+    await _submitPost(controller, promote: promote);
+  }
+
+  /// Inline Boost prompt shown in place of the Post button when the screen is
+  /// opened via "Boost a Post". Mirrors the boost bottom sheet, but inline.
+  Widget _buildInlineBoost(CreatePostController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const Text(
+            'Do you want to boost this post/listing?',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Reach a wider audience and get more views',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 13,
+              color: Color(0xFF777777),
+            ),
+          ),
+          const SizedBox(height: 28),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // "No" on the left, primary "Yes" on the right.
+            textDirection: TextDirection.rtl,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () =>
+                    _onInlineBoostChoice(controller, promote: true),
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              const SizedBox(width: 10),
+              OutlinedButton(
+                onPressed: () =>
+                    _onInlineBoostChoice(controller, promote: false),
+                child: const Text('No'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -615,31 +721,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                // Reverse layout so "No" sits on the left and the primary "Yes"
+                // on the right, without reordering the button code blocks.
+                textDirection: TextDirection.rtl,
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: () async {
                       Navigator.pop(context);
-                      _createPostController.shouldPromote.value = true;
-                      if (widget.postId == null) {
-                        await controller.createPost(<String, dynamic>{
-                          'livedata': livedata,
-                          'donationId': donationModel?.id,
-                          'donation': donationModel?.toMap(),
-                          'forumId': forumModel?.forumId,
-                          'forum': forumModel?.toMap(),
-                          'marketId': marketModel?.marketId,
-                          'market': marketModel?.toMap(),
-                          'title': _titleCtrl.text.trim(),
-                          'ytUrl': _ytUrl,
-                          'images': _ytUrl != null && _ytUrl != ''
-                              ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
-                              : null, // Set images to null if _ytUrl is null or empty
-                          'timestamp': DateTime.now().millisecondsSinceEpoch,
-                        }, _profileController);
-                      } else {
-                        await controller.onEditPost(
-                            widget.postDetail, _titleCtrl.text.trim());
-                      }
+                      await _submitPost(controller, promote: true);
                     },
                     child: const Text(
                       'Yes',
@@ -652,27 +741,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   OutlinedButton(
                     onPressed: () async {
                       Navigator.pop(context);
-                      _createPostController.shouldPromote.value = false;
-                      if (widget.postId == null) {
-                        await controller.createPost(<String, dynamic>{
-                          'livedata': livedata,
-                          'donationId': donationModel?.id,
-                          'donation': donationModel?.toMap(),
-                          'forumId': forumModel?.forumId,
-                          'forum': forumModel?.toMap(),
-                          'marketId': marketModel?.marketId,
-                          'market': marketModel?.toMap(),
-                          'title': _titleCtrl.text.trim(),
-                          'ytUrl': _ytUrl,
-                          'images': _ytUrl != null && _ytUrl != ''
-                              ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
-                              : null, // Set images to null if _ytUrl is null or empty
-                          'timestamp': DateTime.now().millisecondsSinceEpoch,
-                        }, _profileController);
-                      } else {
-                        await controller.onEditPost(
-                            widget.postDetail, _titleCtrl.text.trim());
-                      }
+                      await _submitPost(controller, promote: false);
                     },
                     child: const Text('No'),
                   ),
