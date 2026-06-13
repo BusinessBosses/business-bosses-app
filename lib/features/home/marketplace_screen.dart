@@ -1025,8 +1025,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         ),
                         onPressed: () {
                           if (_profileController.myProfile.isSubscribed) {
-                            Get.to(() =>
-                                const CreatePostScreen(fromBoost: true));
+                            Get.to(
+                                () => const CreatePostScreen(fromBoost: true));
                           } else {
                             showPremiumPaywall();
                           }

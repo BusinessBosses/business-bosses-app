@@ -40,7 +40,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         title: const Text(
-          'Boss Up Challenge',
+          'Boss Up',
           style: TextStyle(
             color: textColor,
             fontWeight: FontWeight.bold,

@@ -5,6 +5,8 @@ class BusinessInfo {
   final String website;
   final String location;
   final String postType;
+  final String price;
+  final String additionalDetails;
 
   BusinessInfo({
     required this.name,
@@ -13,6 +15,8 @@ class BusinessInfo {
     required this.website,
     required this.location,
     required this.postType,
+    this.price = '',
+    this.additionalDetails = '',
   });
 
   BusinessInfo copyWith({
@@ -22,6 +26,8 @@ class BusinessInfo {
     String? website,
     String? location,
     String? postType,
+    String? price,
+    String? additionalDetails,
   }) {
     return BusinessInfo(
       name: name ?? this.name,
@@ -30,6 +36,8 @@ class BusinessInfo {
       website: website ?? this.website,
       location: location ?? this.location,
       postType: postType ?? this.postType,
+      price: price ?? this.price,
+      additionalDetails: additionalDetails ?? this.additionalDetails,
     );
   }
 }

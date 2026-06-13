@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
 import 'package:business_bosses_v2/features/aipromote/models/business_info_model.dart';
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -51,7 +50,6 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
 
   final ProfileController profileController = Get.find();
   final ShopController shopController = Get.find();
-  final AiPromoteController aiPromoteController = Get.find();
 
   bool hasShop = false;
   List<String> missingFields = <String>[];
@@ -194,72 +192,75 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
     }
 
     final BusinessInfo info = BusinessInfo(
-      name: _nameController.text,
-      industry: _industryController.text,
-      bio: _bioController.text,
+      name: _nameController.text.trim(),
+      industry: _industryController.text.trim(),
+      bio: _bioController.text.trim(),
       // Website/contact link removed from the form; the AI writes its own CTA.
       website: '',
-      location: _locationController.text,
+      location: _locationController.text.trim(),
       postType: _selectedType,
+      price: _priceController.text.trim(),
+      additionalDetails: _extraDetailsController.text.trim(),
     );
 
-    // Centralize location and industry updates
-    if (profileController.myProfile.uid.isNotEmpty) {
-      final String loc = _locationController.text.trim();
-      final String ind = _industryController.text.trim();
+    // Centralize location and industry updates. Wrapped so a network failure
+    // here never aborts the submit — the AI generation (driven by onSubmit)
+    // must still run.
+    try {
+      if (profileController.myProfile.uid.isNotEmpty) {
+        final String loc = _locationController.text.trim();
+        final String ind = _industryController.text.trim();
 
-      bool needsUpdate = false;
-      final Map<String, dynamic> updateData = <String, dynamic>{};
+        bool needsUpdate = false;
+        final Map<String, dynamic> updateData = <String, dynamic>{};
 
-      if (loc.isNotEmpty && loc != profileController.myProfile.location) {
-        updateData['location'] = loc;
-        needsUpdate = true;
-      }
-      if (ind.isNotEmpty && ind != profileController.myProfile.industry) {
-        updateData['industry'] = ind;
-        needsUpdate = true;
-      }
+        if (loc.isNotEmpty && loc != profileController.myProfile.location) {
+          updateData['location'] = loc;
+          needsUpdate = true;
+        }
+        if (ind.isNotEmpty && ind != profileController.myProfile.industry) {
+          updateData['industry'] = ind;
+          needsUpdate = true;
+        }
 
-      if (needsUpdate) {
-        profileController.myProfile = profileController.myProfile.copyWith(
-          location: loc.isNotEmpty ? loc : profileController.myProfile.location,
-          industry: ind.isNotEmpty ? ind : profileController.myProfile.industry,
-        );
-        profileController.update();
+        if (needsUpdate) {
+          profileController.myProfile = profileController.myProfile.copyWith(
+            location:
+                loc.isNotEmpty ? loc : profileController.myProfile.location,
+            industry:
+                ind.isNotEmpty ? ind : profileController.myProfile.industry,
+          );
+          profileController.update();
 
-        // Update backend
-        await ApiService.put(
-          path: 'users/${profileController.myProfile.uid}',
-          body: updateData,
-        );
+          // Update backend
+          await ApiService.put(
+            path: 'users/${profileController.myProfile.uid}',
+            body: updateData,
+          );
 
-        // Also update shop if location or industry changed
-        if (shopController.shop != null) {
-          final Map<String, dynamic> shopUpdateData = <String, dynamic>{};
-          if (updateData.containsKey('location')) {
-            shopUpdateData['location'] = updateData['location'];
-          }
-          if (updateData.containsKey('industry')) {
-            shopUpdateData['category'] = updateData['industry'];
-          }
+          // Also update shop if location or industry changed
+          if (shopController.shop != null) {
+            final Map<String, dynamic> shopUpdateData = <String, dynamic>{};
+            if (updateData.containsKey('location')) {
+              shopUpdateData['location'] = updateData['location'];
+            }
+            if (updateData.containsKey('industry')) {
+              shopUpdateData['category'] = updateData['industry'];
+            }
 
-          if (shopUpdateData.isNotEmpty) {
-            await shopController.updateShop(
-                shopController.shop!.id, shopUpdateData);
+            if (shopUpdateData.isNotEmpty) {
+              await shopController.updateShop(
+                  shopController.shop!.id, shopUpdateData);
+            }
           }
         }
       }
+    } catch (e) {
+      debugPrint('Profile/shop update failed (continuing to AI step): $e');
     }
 
-    aiPromoteController.setBusinessDetails(
-      name: _nameController.text.trim(),
-      desc: _bioController.text.trim(),
-      loc: _locationController.text.trim(),
-      ind: _industryController.text.trim(),
-      type: _selectedType,
-      priceVal: _priceController.text.trim(),
-      additionalDetailsVal: _extraDetailsController.text.trim(),
-    );
+    // The sheet populates the AI controller from `info` and triggers
+    // generation in its onSubmit handler.
     widget.onSubmit(info);
   }
 

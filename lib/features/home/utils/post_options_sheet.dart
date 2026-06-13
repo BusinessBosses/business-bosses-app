@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/features/home/sell_product.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class PostOptionsBottomSheet {
@@ -58,14 +57,8 @@ class PostOptionsBottomSheet {
                     children: <Widget>[
                       Container(
                         padding: const EdgeInsets.all(10),
-                        child: SvgPicture.asset(
-                          'assets/svgs/ai_pencil.svg',
-                          height: 30,
-                          width: 30,
-                          placeholderBuilder: (BuildContext context) =>
-                              const Icon(Icons.auto_awesome,
-                                  color: Color(0xFF0D47A1), size: 30),
-                        ),
+                        child: const Icon(Icons.auto_awesome,
+                            color: Color(0xFF0D47A1), size: 30),
                       ),
                       const SizedBox(width: 15),
                       Expanded(
@@ -198,14 +191,7 @@ class PostOptionsBottomSheet {
                 color: iconColor,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: SvgPicture.asset(
-                iconPath,
-                height: 24,
-                width: 24,
-                colorFilter: ColorFilter.mode(iconTintColor, BlendMode.srcIn),
-                placeholderBuilder: (BuildContext context) =>
-                    Icon(iconData, color: iconTintColor, size: 24),
-              ),
+              child: Icon(iconData, color: iconTintColor, size: 24),
             ),
             const SizedBox(width: 15),
             Expanded(

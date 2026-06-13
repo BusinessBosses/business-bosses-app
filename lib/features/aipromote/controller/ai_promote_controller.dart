@@ -1,6 +1,7 @@
 // lib/features/promotion/controllers/ai_promote_controller.dart
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -27,8 +28,8 @@ class AiPromoteController extends GetxController {
   final RxBool isPosting = false.obs;
   final RxnString errorMessage = RxnString();
 
-  /// Your OpenAI key from `.env`
-  final String _apiKey = dotenv.env['OPENAI_KEY']!;
+  /// Your OpenAI key from `.env` (may be missing/empty if not configured).
+  final String? _apiKey = dotenv.env['OPENAI_KEY'];
   final ProfileController profileController = Get.find();
 
   /// Call this once BusinessForm is valid
@@ -55,18 +56,29 @@ class AiPromoteController extends GetxController {
       additionalDetails.value = additionalDetailsVal;
     }
 
-    if (price.value.isNotEmpty) {}
+    // Build the prompt from ALL the details captured on the form. Price and
+    // additional details were previously collected but never added here, so
+    // they never reached the AI (the two if-blocks were empty).
+    final StringBuffer promptBuffer = StringBuffer()
+      ..write(
+          'Rewrite the following information into a professional and catchy social media post for a ${postType.value}. ')
+      // The first field is a free-form Title (not necessarily the business
+      // name), matching the "Title" label on the form.
+      ..write('Title: ${businessName.value}. ')
+      ..write('Industry: ${industry.value}. ')
+      ..write('Location: ${location.value}. ')
+      ..write('Description: ${description.value}. ');
 
-    if (additionalDetails.value.isNotEmpty) {}
+    if (price.value.isNotEmpty) {
+      promptBuffer.write('Price: ${price.value}. ');
+    }
+    if (additionalDetails.value.isNotEmpty) {
+      promptBuffer.write('Additional details: ${additionalDetails.value}. ');
+    }
 
-    // build a default prompt focusing on a general catchy post
-    prompt.value =
-        'Rewrite the following information into a professional and catchy social media post for a $postType. '
-        'Business Name: $businessName. '
-        'Industry: $industry. '
-        'Location: $location. '
-        'Description: $description. '
-        'NO EMOJIS PLEASE.';
+    promptBuffer.write('NO EMOJIS PLEASE.');
+
+    prompt.value = promptBuffer.toString();
   }
 
   /// If the user tweaked the prompt in AiPromoteSheet, call this
@@ -76,7 +88,24 @@ class AiPromoteController extends GetxController {
 
   /// Sends [prompt] to OpenAI and populates [adCopy]
   Future<void> generateAd() async {
-    if (prompt.value.trim().isEmpty) return;
+    debugPrint('🟦 generateAd() called. promptLen=${prompt.value.trim().length} '
+        'apiKeyLen=${_apiKey?.trim().length ?? 0}');
+
+    if (prompt.value.trim().isEmpty) {
+      errorMessage.value = 'Nothing to generate — please fill in the details.';
+      debugPrint('❌ generateAd aborted: prompt is empty');
+      return;
+    }
+
+    // Fail loudly when the key isn't configured instead of sending an empty
+    // Bearer token (which 401s) and silently showing a placeholder.
+    if (_apiKey == null || _apiKey!.trim().isEmpty) {
+      errorMessage.value =
+          'OpenAI API key not configured. Add OPENAI_KEY to your .env file.';
+      debugPrint('❌ generateAd aborted: OPENAI_KEY is missing/empty in .env');
+      return;
+    }
+
     isGenerating.value = true;
     errorMessage.value = null;
 
@@ -99,6 +128,7 @@ STRICT RULE: Do not include any emojis in the generated content.
     };
 
     try {
+      debugPrint('🟦 generateAd: POST https://api.openai.com/v1/chat/completions');
       final http.Response resp = await http.post(
         Uri.parse('https://api.openai.com/v1/chat/completions'),
         headers: <String, String>{
@@ -108,28 +138,37 @@ STRICT RULE: Do not include any emojis in the generated content.
         body: jsonEncode(body),
       );
 
+      debugPrint('🟦 generateAd: status=${resp.statusCode} bodyLen=${resp.body.length}');
+
       if (resp.statusCode >= 200 && resp.statusCode < 300) {
         final Map<String, dynamic> data =
             jsonDecode(resp.body) as Map<String, dynamic>;
         log(resp.body.toString());
 
-        if (data['choices'] != null && (data['choices'] as List).isNotEmpty) {
+        if (data['choices'] != null &&
+            (data['choices'] as List<dynamic>).isNotEmpty) {
           final String? text = data['choices'][0]['message']['content'];
           if (text != null) {
             adCopy.value = text.trim();
+            debugPrint('✅ generateAd: adCopy set (len=${adCopy.value.length})');
           } else {
             errorMessage.value = 'No text in AI response.';
+            debugPrint('❌ generateAd: no content field in response');
           }
         } else {
           errorMessage.value = 'Empty AI output.';
+          debugPrint('❌ generateAd: no choices in response');
         }
       } else {
         errorMessage.value = 'Error ${resp.statusCode}: ${resp.body}';
+        debugPrint('❌ generateAd: HTTP ${resp.statusCode} -> ${resp.body}');
       }
     } catch (e) {
       errorMessage.value = 'Exception: $e';
+      debugPrint('❌ generateAd: exception -> $e');
     } finally {
       isGenerating.value = false;
+      debugPrint('🟦 generateAd: done. errorMessage=${errorMessage.value}');
     }
   }
 

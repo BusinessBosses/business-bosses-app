@@ -928,8 +928,8 @@ class _HeroSectionState extends State<HeroSection> {
                             switch (
                                 item.action2.isNotEmpty ? item.action2 : '') {
                               case 'Get Featured':
-                                Get.to(
-                                    () => const BossupChallenge(ishome: false));
+                                // Go straight to the "enter the challenge" page.
+                                enterChallenge();
                                 break;
                               case 'View your Match':
                                 Get.to(() => const ExpandedMatchesScreen());

@@ -164,14 +164,42 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     });
 
     try {
-      // Simulate AI generation with error handling
+      // Populate the controller this sheet generates from, directly from the
+      // submitted form data — so the prompt is always built and generateAd is
+      // never run against an empty/stale instance.
+      aiPromoteController.setBusinessDetails(
+        name: info.name,
+        desc: info.bio,
+        loc: info.location,
+        ind: info.industry,
+        type: info.postType,
+        priceVal: info.price,
+        additionalDetailsVal: info.additionalDetails,
+      );
+
       await aiPromoteController.generateAd();
 
+      final String generated = aiPromoteController.adCopy.value.trim();
+
+      // Generation failed (e.g. missing API key / network) → surface the real
+      // reason instead of silently advancing to a placeholder preview.
+      if (generated.isEmpty) {
+        setState(() => _loading = false);
+        if (mounted && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                aiPromoteController.errorMessage.value ??
+                    'Could not generate content. Please try again.',
+              ),
+            ),
+          );
+        }
+        return;
+      }
+
       setState(() {
-        // Safe access to adCopy with null check
-        _adContent = (aiPromoteController.adCopy.value.isNotEmpty)
-            ? aiPromoteController.adCopy.value
-            : 'AI generated ad content will appear here.';
+        _adContent = generated;
         _loading = false;
         _currentStep = PromoteStep.preview;
       });
