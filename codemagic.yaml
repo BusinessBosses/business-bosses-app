@@ -1,0 +1,95 @@
+# Codemagic CI/CD — iOS / TestFlight deployment for Business Bosses
+#
+# ── ONE-TIME SETUP IN THE CODEMAGIC UI (required, cannot live in this file) ──
+# 1. App Store Connect integration:
+#       Team settings → Integrations → App Store Connect → connect an
+#       App Store Connect API key (Issuer ID + Key ID + .p8 private key,
+#       role: App Manager or Admin). Give the integration a NAME and put
+#       that name below under  integrations.app_store_connect.
+#       (Referenced here as "BBPro App Store Connect" — rename to match.)
+#
+# 2. Environment variable group named "bbpro_secrets" (mark all "Secure"):
+#       APP_STORE_APP_ID   → the NUMERIC Apple app id from App Store Connect
+#                            (App → App Information → "Apple ID"). Needed to
+#                            auto-pick the next build number.
+#       OPENAI_KEY, STRIPE_PUB_KEY, STRIPE_SEC_KEY,
+#       PAYSTACK_PUBLIC_KEY  → values written into the .env at build time.
+#       (Add/remove keys to match your real .env — see "Generate .env" below.)
+#
+# 3. The app's bundle id (xyz.codexia.businessbosses) must already exist in
+#    App Store Connect with at least one app record.
+# ─────────────────────────────────────────────────────────────────────────
+
+workflows:
+  ios-testflight:
+    name: iOS – TestFlight
+    instance_type: mac_mini_m2
+    max_build_duration: 90
+
+    integrations:
+      # Must match the App Store Connect integration name from step 1 above.
+      app_store_connect: BBPro App Store Connect
+
+    environment:
+      groups:
+        - bbpro_secrets            # from step 2 above
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: xyz.codexia.businessbosses
+      flutter: 3.44.0              # pinned to the version this repo builds with
+      xcode: latest
+      cocoapods: default
+
+    cache:
+      cache_paths:
+        - $HOME/.pub-cache
+        - $HOME/Library/Caches/CocoaPods
+
+    scripts:
+      - name: Generate .env (gitignored but a required Flutter asset)
+        script: |
+          set -e
+          cat > "$CM_BUILD_DIR/.env" <<EOF
+          OPENAI_KEY=${OPENAI_KEY:-placeholder}
+          STRIPE_PUB_KEY=${STRIPE_PUB_KEY:-placeholder}
+          STRIPE_SEC_KEY=${STRIPE_SEC_KEY:-placeholder}
+          PAYSTACK_PUBLIC_KEY=${PAYSTACK_PUBLIC_KEY:-placeholder}
+          EOF
+          echo "Wrote .env:"; sed 's/=.*/=***/' "$CM_BUILD_DIR/.env"
+
+      - name: Flutter pub get
+        script: flutter pub get
+
+      - name: Set up code signing for Xcode (uses the App Store Connect integration)
+        script: xcode-project use-profiles
+
+      - name: Build IPA (build number = latest TestFlight build + 1)
+        script: |
+          set -e
+          BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID") + 1))
+          echo "Using build number: $BUILD_NUMBER"
+          flutter build ipa --release \
+            --build-number="$BUILD_NUMBER" \
+            --export-options-plist=/Users/builder/export_options.plist
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        # Optional: auto-distribute to a TestFlight group. The group must
+        # already exist in App Store Connect. Remove this block to only
+        # upload the build (no group assignment).
+        beta_groups:
+          - Internal Testers
+
+      email:
+        recipients:
+          - iyeritufu@gmail.com
+        notify:
+          success: true
+          failure: true
