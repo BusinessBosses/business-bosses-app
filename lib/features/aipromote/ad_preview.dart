@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class AdPreview extends StatefulWidget {
+  final String title;
   final String content;
   final Function(String) onEdit;
   final Function(List<String> platforms, File? selectedImage) onPost;
@@ -15,6 +16,7 @@ class AdPreview extends StatefulWidget {
 
   const AdPreview({
     super.key,
+    this.title = '',
     required this.content,
     required this.onEdit,
     required this.onPost,
@@ -207,6 +209,19 @@ class _AdPreviewState extends State<AdPreview> {
                     ),
                   ],
 
+                  // Refined headline shown above the content.
+                  if (widget.title.trim().isNotEmpty) ...<Widget>[
+                    Text(
+                      widget.title.trim(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+
                   // Text content
                   _editMode
                       ? TextFormField(
@@ -330,6 +345,13 @@ class _AdPreviewState extends State<AdPreview> {
             child: ElevatedButton(
               onPressed: (_isAnyPlatformSelected && !widget.isLoading)
                   ? () {
+                      // Push the latest edited text up before posting, so an
+                      // edit made without tapping "Save" is still used.
+                      widget.onEdit(_editController.text);
+                      if (_editMode) {
+                        setState(() => _editMode = false);
+                      }
+
                       // collect keys with true value
                       final List<String> selected = _selectedPlatforms.entries
                           .where((MapEntry<String, bool> e) => e.value)

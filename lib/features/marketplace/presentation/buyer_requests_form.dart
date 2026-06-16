@@ -88,6 +88,14 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
       currencyController.text = 'USD';
       _existingAttachments =
           List<String>.from(widget.request?.attachments ?? <dynamic>[]);
+    } else {
+      // Create mode: pre-fill industry/country from the user's profile.
+      final String pIndustry = (profileController.myProfile.industry ?? '').trim();
+      final String pLocation = (profileController.myProfile.location ?? '').trim();
+      _selectedCategory = pIndustry;
+      country = pLocation.isNotEmpty
+          ? pLocation
+          : (shopController.shop?.location ?? '');
     }
   }
 

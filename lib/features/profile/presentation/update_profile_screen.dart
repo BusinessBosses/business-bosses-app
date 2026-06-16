@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -1601,6 +1602,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           await shopController.updateShop(
               shopController.shop!.id, shopUpdateData);
         }
+      }
+
+      // Keep the marketplace's selected location in sync with this profile
+      // change, otherwise it keeps showing the previously cached location.
+      if (_location != null &&
+          _location!.trim().isNotEmpty &&
+          Get.isRegistered<MarketController>()) {
+        Get.find<MarketController>().syncSelectedLocation(_location!);
       }
       FirebaseMessaging.instance.getToken().then((String? value) {
         Map<String, dynamic> data = <String, dynamic>{

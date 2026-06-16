@@ -895,8 +895,10 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                     child: ProCustomButton(
                                                       padding: 0,
                                                       color: primaryColorLT,
-                                                      text:
-                                                          '2 Free Months on Pro Yearly',
+                                                      text: paymentMethodId ==
+                                                              'Proyear'
+                                                          ? '2 Free Months on Pro Yearly'
+                                                          : 'Subscribe to Pro Monthly',
                                                       loading: modalLoading,
                                                       onPressed: () async {
                                                         setModalState(() {

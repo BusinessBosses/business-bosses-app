@@ -1,10 +1,9 @@
 // lib/features/chat/controllers/ai_chat_controller.dart
-import 'dart:convert';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import '../models/ai_chat_message.dart';
 
 class AiChatController extends GetxController {
@@ -18,42 +17,44 @@ class AiChatController extends GetxController {
   final RxList<String> followUpQuestions = <String>[].obs;
   final RxBool isGeneratingFollowUps = false.obs;
 
-  // Safe API key initialization
-  String? _apiKey;
+  // Backend endpoints. The AI provider/keys live server-side.
+  static const String _messagePath = 'ai-chat/message';
+  static const String _followUpsPath = 'ai-chat/follow-ups';
 
-  @override
-  void onInit() {
-    super.onInit();
-    _initializeApiKey();
-  }
+  /// Builds the system prompt (personalized with the user's profile).
+  String get _systemPrompt => '''
+You are **Smartchat AI**, a friendly and expert business advisor. You specialize in:
 
-  void _initializeApiKey() {
-    _apiKey = dotenv.env['OPENAI_KEY'];
-    if (_apiKey == null || _apiKey!.isEmpty) {
-      errorMessage.value =
-          'OpenAI API key not configured. Please check your .env file.';
-      if (kDebugMode) {
-        print('ERROR: OPENAI_KEY not found in environment variables');
-      }
-    } else {
-      if (kDebugMode) {
-        print('OpenAI API key loaded successfully');
-      }
-    }
-  }
+  • Strategy
+  • Finance
+  • Marketing
+  • Operations
+  • Entrepreneurship
+
+When you respond, follow these guidelines:
+
+1. **Focus.**  Only answer questions about business topics.
+2. **Personalize.**  Use the user's profile data below to tailor your advice:
+   ${profileController.myProfile.toMap()}
+3. **Tone.**  Be clear, concise, and actionable. Use a professional yet approachable style.
+4. **Off-topic fallback.**  If the user's request isn't business-related, reply **exactly**:
+   "❌ I'm sorry, but I can only answer business-related questions."
+5. **Allowed digressions.**  You may graciously accept:
+   - **Compliments** (e.g. "Thanks!")
+   - **Meta-questions** (e.g. "Who are you?")
+   - **Casual greetings** (e.g. "hi," "hello," "good morning")
+
+   For greetings, respond with a brief, friendly welcome.
+   _Example_:
+   **User**: "Hi!"
+   **SmartChat AI**: "Hello there! 👋 How can I help you with your business today?"
+
+Now, let's help the user with their next request!
+''';
 
   /// Call this to send a new user message and fetch a reply.
   Future<void> sendMessage(String text) async {
     if (text.trim().isEmpty) return;
-
-    followUpQuestions.clear();
-
-    // Check if API key is available
-    if (_apiKey == null || _apiKey!.isEmpty) {
-      errorMessage.value =
-          'OpenAI API key not configured. Please add OPENAI_KEY to your .env file.';
-      return;
-    }
 
     // Clear previous follow-up questions when sending a new message
     followUpQuestions.clear();
@@ -63,92 +64,30 @@ class AiChatController extends GetxController {
     isLoading.value = true;
     errorMessage.value = null;
 
-    // 2) build the payload for the Responses API
+    // 2) build the conversation payload (system prompt + full history)
     final List<Map<String, String>> inputPayload = <Map<String, String>>[
-      <String, String>{
-        'role': 'system',
-        'content': '''
-You are **Smartchat AI**, a friendly and expert business advisor. You specialize in:
-
-  • Strategy  
-  • Finance  
-  • Marketing  
-  • Operations  
-  • Entrepreneurship  
-
-When you respond, follow these guidelines:
-
-1. **Focus.**  Only answer questions about business topics.  
-2. **Personalize.**  Use the user's profile data below to tailor your advice:  
-   ${profileController.myProfile.toMap()}  
-3. **Tone.**  Be clear, concise, and actionable. Use a professional yet approachable style.  
-4. **Off-topic fallback.**  If the user's request isn't business-related, reply **exactly**:  
-   "❌ I'm sorry, but I can only answer business-related questions."  
-5. **Allowed digressions.**  You may graciously accept:  
-   - **Compliments** (e.g. "Thanks!")  
-   - **Meta-questions** (e.g. "Who are you?")  
-   - **Casual greetings** (e.g. "hi," "hello," "good morning")  
-
-   For greetings, respond with a brief, friendly welcome.  
-   _Example_:  
-   **User**: "Hi!"  
-   **SmartChat AI**: "Hello there! 👋 How can I help you with your business today?"
-
-Now, let's help the user with their next request!
-'''
-      },
-      // then all chat so far
+      <String, String>{'role': 'system', 'content': _systemPrompt},
       ...messages.map((AiChatMessage m) => <String, String>{
             'role': m.isMe ? 'user' : 'assistant',
             'content': m.text,
           }),
     ];
 
-    final Map<String, dynamic> body = <String, dynamic>{
-      'model': 'gpt-4o-nano',
-      'messages': inputPayload,
-      'temperature': 0.7,
-      'max_tokens': 1024,
-      'top_p': 0.9,
-    };
-
     try {
-      final http.Response resp = await http.post(
-        Uri.parse('https://api.openai.com/v1/chat/completions'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $_apiKey',
-        },
-        body: jsonEncode(body),
+      final ApiResponseModel res = await ApiService.post(
+        path: _messagePath,
+        body: <String, dynamic>{'messages': inputPayload},
       );
 
-      if (resp.statusCode >= 200 && resp.statusCode < 300) {
-        final Map<String, dynamic> data =
-            jsonDecode(resp.body) as Map<String, dynamic>;
-
-        if (data['choices'] != null && (data['choices'] as List).isNotEmpty) {
-          final String? assistantResponse =
-              data['choices'][0]['message']['content'];
-
-          if (assistantResponse != null) {
-            messages.add(AiChatMessage(
-              text: assistantResponse,
-              isMe: false,
-            ));
-
-            // Generate follow-up questions after getting the response
-            _generateFollowUpQuestions(text, assistantResponse);
-          } else {
-            errorMessage.value = 'No valid response content received from API';
-          }
-        } else {
-          errorMessage.value = 'Empty response received from API';
-        }
+      final String assistantResponse = _contentOf(res);
+      if (res.success && assistantResponse.trim().isNotEmpty) {
+        messages.add(AiChatMessage(text: assistantResponse, isMe: false));
+        // Generate follow-up questions after getting the response
+        _generateFollowUpQuestions(text, assistantResponse);
       } else {
-        errorMessage.value = 'Error ${resp.statusCode}: ${resp.body}';
-        if (kDebugMode) {
-          print('API Error: ${resp.statusCode} - ${resp.body}');
-        }
+        errorMessage.value = res.message.isNotEmpty
+            ? res.message
+            : 'No valid response received. Please try again.';
       }
     } catch (e) {
       errorMessage.value = 'Network error: ${e.toString()}';
@@ -160,111 +99,33 @@ Now, let's help the user with their next request!
     }
   }
 
-  /// Generate follow-up questions based on the conversation context
+  /// Generate follow-up questions based on the conversation context.
   Future<void> _generateFollowUpQuestions(
       String userQuestion, String assistantResponse) async {
-    if (_apiKey == null || _apiKey!.isEmpty) return;
-
     isGeneratingFollowUps.value = true;
     followUpQuestions.clear();
 
     try {
-      final List<Map<String, String>> followUpPayload = <Map<String, String>>[
-        <String, String>{
-          'role': 'system',
-          'content': '''
-You are helping generate natural follow-up questions that a business user might ask after receiving this advice. 
-Generate exactly 3 concise follow-up questions (12-15 words max) that:
-1. A user would naturally ask next about this topic
-2. Are from the user's perspective ("How do I...") 
-3. Dive deeper into practical implementation
-4. Are directly related to the current response
-5. Would help the user take action
-
-Return ONLY a valid JSON array like this:
-["question1", "question2", "question3"]
-'''
+      final ApiResponseModel res = await ApiService.post(
+        path: _followUpsPath,
+        body: <String, dynamic>{
+          'userQuestion': userQuestion,
+          'assistantResponse': assistantResponse,
         },
-        <String, String>{
-          'role': 'user',
-          'content': '''
-Original question: "$userQuestion"
-AI response: "$assistantResponse"
-
-Generate exactly 3 follow-up questions as a JSON array:
-'''
-        },
-      ];
-
-      final Map<String, Object> followUpBody = <String, Object>{
-        'model': 'gpt-4o',
-        'messages': followUpPayload,
-        'temperature': 0.7,
-        'max_tokens': 200,
-      };
-
-      final http.Response resp = await http.post(
-        Uri.parse('https://api.openai.com/v1/chat/completions'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $_apiKey',
-        },
-        body: jsonEncode(followUpBody),
       );
 
-      if (resp.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(resp.body);
-        final String content = data['choices'][0]['message']['content'];
-
-        // First try to parse as direct JSON array
-        try {
-          final List<dynamic> questions = jsonDecode(content) as List<dynamic>;
-          followUpQuestions.assignAll(
-              questions.take(3).map((dynamic q) => q.toString()).toList());
-          return;
-        } catch (e) {
-          if (kDebugMode) {
-            print('Direct array parse failed, trying alternative methods: $e');
-          }
-        }
-
-        // Fallback 1: Try to find JSON array in text response
-        try {
-          final RegExp jsonArrayExp = RegExp(r'\[.*\]');
-          final String? maybeJson = jsonArrayExp.firstMatch(content)?.group(0);
-          if (maybeJson != null) {
-            final List<dynamic> questions =
-                jsonDecode(maybeJson) as List<dynamic>;
-            followUpQuestions.assignAll(
-                questions.take(3).map((dynamic q) => q.toString()).toList());
-            return;
-          }
-        } catch (e) {
-          if (kDebugMode) {
-            print('JSON array extraction failed: $e');
-          }
-        }
-
-        // Fallback 2: Extract questions between quotes
-        try {
-          final List<String> questions = _extractQuestionsFromText(content);
-          if (questions.isNotEmpty) {
-            followUpQuestions.assignAll(questions);
-            return;
-          }
-        } catch (e) {
-          if (kDebugMode) {
-            print('Text extraction failed: $e');
-          }
-        }
-
-        // Final fallback: Use default questions
-        followUpQuestions.assignAll(<String>[
-          'How do I apply this to my specific business?',
-          'What are the first steps I should take?',
-          'Where can I learn more about this?'
-        ]);
+      final List<String> questions = _questionsOf(res);
+      if (questions.isNotEmpty) {
+        followUpQuestions.assignAll(questions.take(3));
+        return;
       }
+
+      // Fallback: default questions when the backend returns none.
+      followUpQuestions.assignAll(<String>[
+        'How do I apply this to my specific business?',
+        'What are the first steps I should take?',
+        'Where can I learn more about this?'
+      ]);
     } catch (e) {
       if (kDebugMode) {
         print('Error generating follow-ups: $e');
@@ -279,44 +140,34 @@ Generate exactly 3 follow-up questions as a JSON array:
     }
   }
 
-  List<String> _extractQuestionsFromText(String content) {
-    // Extract text between quotes or after numbers
-    final RegExp exp = RegExp(r'(?:"([^"]+)"|(?:\d+\.\s*)(.+))');
-    return exp
-        .allMatches(content)
-        .map((RegExpMatch match) => match.group(1) ?? match.group(2) ?? '')
-        .where((String q) => q.trim().isNotEmpty)
-        .take(3)
-        .toList();
+  /// Extracts the assistant text from the backend response.
+  String _contentOf(ApiResponseModel res) {
+    final dynamic data = res.data;
+    if (data is String) return data;
+    if (data is Map) {
+      final dynamic c = data['content'] ?? data['text'];
+      if (c is String) return c;
+    }
+    return '';
   }
 
-  // List<String> _parseTextFollowUps(String content) {
-  //   // Extract questions between quotes if JSON parsing failed
-  //   final RegExp exp = RegExp(r'"([^"]*)"');
-  //   return exp
-  //       .allMatches(content)
-  //       .map((RegExpMatch match) => match.group(1)!)
-  //       .where((String q) => q.length > 10 && q.length < 100)
-  //       .take(3)
-  //       .toList();
-  // }
+  /// Extracts the follow-up questions list from the backend response.
+  List<String> _questionsOf(ApiResponseModel res) {
+    final dynamic data = res.data;
+    if (data is Map && data['questions'] is List) {
+      return (data['questions'] as List<dynamic>)
+          .map((dynamic q) => q.toString())
+          .where((String q) => q.trim().isNotEmpty)
+          .toList();
+    }
+    return <String>[];
+  }
 
   /// Send a follow-up question
   Future<void> sendFollowUpQuestion(String question) async {
     // Clear the follow-up questions when one is selected
     followUpQuestions.clear();
     await sendMessage(question);
-  }
-
-  /// Helper method to check if the controller is properly configured
-  bool get isConfigured => _apiKey != null && _apiKey!.isNotEmpty;
-
-  /// Method to manually set API key (for testing or dynamic configuration)
-  void setApiKey(String apiKey) {
-    _apiKey = apiKey;
-    if (errorMessage.value?.contains('API key not configured') == true) {
-      errorMessage.value = null;
-    }
   }
 
   /// Clear all messages and reset to initial state

@@ -203,6 +203,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       // _updateSelectedDates();
       _startTimeSelected = true;
       _endTimeSelected = true;
+    } else {
+      // Create mode: pre-fill industry/country from the user's profile.
+      final String pIndustry = (profileController.myProfile.industry ?? '').trim();
+      final String pLocation = (profileController.myProfile.location ?? '').trim();
+      category = pIndustry.isNotEmpty ? pIndustry : null;
+      location = pLocation.isNotEmpty
+          ? pLocation
+          : (shopController.shop?.location ?? '');
     }
     currencyController.text = shopController.shop?.location != null
         ? '${currencyValues[shopController.shop!.location.toString()]}'

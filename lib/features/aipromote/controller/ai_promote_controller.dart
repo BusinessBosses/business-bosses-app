@@ -1,11 +1,9 @@
 // lib/features/promotion/controllers/ai_promote_controller.dart
-import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/foundation.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 class AiPromoteController extends GetxController {
   /// Business details collected from BusinessForm
@@ -20,17 +18,24 @@ class AiPromoteController extends GetxController {
   /// The user‐edited prompt to send to AI
   final RxString prompt = ''.obs;
 
-  /// The AI‐generated ad copy
+  /// The AI‐generated ad copy (body)
   final RxString adCopy = ''.obs;
+
+  /// A short, refined headline derived from the entered title, shown above the
+  /// content in the preview/post.
+  final RxString adTitle = ''.obs;
 
   /// Loading & error states
   final RxBool isGenerating = false.obs;
   final RxBool isPosting = false.obs;
   final RxnString errorMessage = RxnString();
 
-  /// Your OpenAI key from `.env` (may be missing/empty if not configured).
-  final String? _apiKey = dotenv.env['OPENAI_KEY'];
   final ProfileController profileController = Get.find();
+
+  /// Backend endpoint that performs the generation. The AI provider
+  /// (openai vs vercel) is selected server-side via the POST_AI_PROVIDER env
+  /// var — the app never holds an AI key.
+  static const String _generatePath = 'ai-promote/generate';
 
   /// Call this once BusinessForm is valid
   void setBusinessDetails({
@@ -60,13 +65,18 @@ class AiPromoteController extends GetxController {
     // additional details were previously collected but never added here, so
     // they never reached the AI (the two if-blocks were empty).
     final StringBuffer promptBuffer = StringBuffer()
-      ..write(
-          'Rewrite the following information into a professional and catchy social media post for a ${postType.value}. ')
+      ..write('Write a professional and catchy social media post. ')
+      // Perspective MUST match the post type, otherwise a buyer "Need a
+      // Product or Service" request reads like a seller advertising it.
+      ..write(_intentDirective)
+      ..write('Use the following details. ')
+      ..write('Post type: ${postType.value}. ')
       // The first field is a free-form Title (not necessarily the business
       // name), matching the "Title" label on the form.
       ..write('Title: ${businessName.value}. ')
       ..write('Industry: ${industry.value}. ')
-      ..write('Location: ${location.value}. ')
+      // Location is intentionally NOT included — the generated content should
+      // not mention the user's location.
       ..write('Description: ${description.value}. ');
 
     if (price.value.isNotEmpty) {
@@ -76,9 +86,37 @@ class AiPromoteController extends GetxController {
       promptBuffer.write('Additional details: ${additionalDetails.value}. ');
     }
 
-    promptBuffer.write('NO EMOJIS PLEASE.');
+    promptBuffer
+      ..write('Do NOT mention any location, city, or country. NO EMOJIS PLEASE. ')
+      // Ask for a refined headline (from the entered title) plus the body,
+      // in a strict format we can parse on the client.
+      ..write('Respond EXACTLY in this format and nothing else:\n')
+        ..write('TITLE: <a short, catchy, refined headline based on the title above, max 8 words, no quotes>\n')
+        ..write('BODY: <the post content>');
 
     prompt.value = promptBuffer.toString();
+  }
+
+  /// Perspective instruction tailored to the selected post type so the AI
+  /// writes from the right point of view (buyer vs seller vs partner).
+  String get _intentDirective {
+    switch (postType.value) {
+      case 'Need a Product or Service':
+        return 'Write from the perspective of a BUYER who is SEEKING/LOOKING FOR '
+            'this product or service. The author NEEDS it and wants suppliers or '
+            'providers to reach out — they are NOT the one offering it. Phrase it '
+            'as a clear request (e.g. "Looking for...", "In need of...") and invite '
+            'suppliers to get in touch. ';
+      case 'Find a Partner':
+        return 'Write from the perspective of someone SEEKING a business partner or '
+            'collaborator. Invite suitable partners to connect — do not frame it as '
+            'a product sales ad. ';
+      case 'Sell a Product or Service':
+      case 'Promote My Business':
+      default:
+        return 'Write from the perspective of the SELLER/PROVIDER promoting what they '
+            'offer, with a strong call-to-action for potential customers. ';
+    }
   }
 
   /// If the user tweaked the prompt in AiPromoteSheet, call this
@@ -86,10 +124,11 @@ class AiPromoteController extends GetxController {
     prompt.value = newPrompt;
   }
 
-  /// Sends [prompt] to OpenAI and populates [adCopy]
+  /// Generates the ad copy via the backend. The AI provider (openai vs vercel)
+  /// is chosen server-side by the POST_AI_PROVIDER env var, so the app holds no
+  /// AI keys and the choice can change without an app release.
   Future<void> generateAd() async {
-    debugPrint('🟦 generateAd() called. promptLen=${prompt.value.trim().length} '
-        'apiKeyLen=${_apiKey?.trim().length ?? 0}');
+    debugPrint('🟦 generateAd() called. promptLen=${prompt.value.trim().length}');
 
     if (prompt.value.trim().isEmpty) {
       errorMessage.value = 'Nothing to generate — please fill in the details.';
@@ -97,107 +136,70 @@ class AiPromoteController extends GetxController {
       return;
     }
 
-    // Fail loudly when the key isn't configured instead of sending an empty
-    // Bearer token (which 401s) and silently showing a placeholder.
-    if (_apiKey == null || _apiKey!.trim().isEmpty) {
-      errorMessage.value =
-          'OpenAI API key not configured. Add OPENAI_KEY to your .env file.';
-      debugPrint('❌ generateAd aborted: OPENAI_KEY is missing/empty in .env');
-      return;
-    }
-
     isGenerating.value = true;
     errorMessage.value = null;
 
-    final Map<String, dynamic> body = <String, dynamic>{
-      'model': 'gpt-4o',
-      'messages': <Map<String, String>>[
-        <String, String>{
-          'role': 'system',
-          'content': '''
-You are **AiPromoBot**, an expert at writing punchy, high-converting business ads.
-Focus on clarity, engagement, and a strong call-to-action. Leave no placeholders in the output and also no dummy data. Don't use brackets too for businesses name and website.
-STRICT RULE: Do not include any emojis in the generated content.
-'''
-        },
-        <String, String>{'role': 'user', 'content': prompt.value},
-      ],
-      'temperature': 0.7,
-      'max_tokens': 512,
-      'top_p': 0.9,
-    };
-
     try {
-      debugPrint('🟦 generateAd: POST https://api.openai.com/v1/chat/completions');
-      final http.Response resp = await http.post(
-        Uri.parse('https://api.openai.com/v1/chat/completions'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $_apiKey',
-        },
-        body: jsonEncode(body),
+      debugPrint('🟦 generateAd: POST $_generatePath');
+      final ApiResponseModel res = await ApiService.post(
+        path: _generatePath,
+        body: <String, dynamic>{'prompt': prompt.value},
       );
 
-      debugPrint('🟦 generateAd: status=${resp.statusCode} bodyLen=${resp.body.length}');
-
-      if (resp.statusCode >= 200 && resp.statusCode < 300) {
-        final Map<String, dynamic> data =
-            jsonDecode(resp.body) as Map<String, dynamic>;
-        log(resp.body.toString());
-
-        if (data['choices'] != null &&
-            (data['choices'] as List<dynamic>).isNotEmpty) {
-          final String? text = data['choices'][0]['message']['content'];
-          if (text != null) {
-            adCopy.value = text.trim();
-            debugPrint('✅ generateAd: adCopy set (len=${adCopy.value.length})');
-          } else {
-            errorMessage.value = 'No text in AI response.';
-            debugPrint('❌ generateAd: no content field in response');
-          }
-        } else {
-          errorMessage.value = 'Empty AI output.';
-          debugPrint('❌ generateAd: no choices in response');
-        }
+      final String text = _extractContent(res);
+      if (res.success && text.trim().isNotEmpty) {
+        _applyGenerated(text.trim());
+        debugPrint('✅ generateAd: title="${adTitle.value}" '
+            'adCopy set (len=${adCopy.value.length})');
       } else {
-        errorMessage.value = 'Error ${resp.statusCode}: ${resp.body}';
-        debugPrint('❌ generateAd: HTTP ${resp.statusCode} -> ${resp.body}');
+        errorMessage.value = res.message.isNotEmpty
+            ? res.message
+            : 'Could not generate content. Please try again.';
+        debugPrint('❌ generateAd failed: ${errorMessage.value}');
       }
     } catch (e) {
       errorMessage.value = 'Exception: $e';
       debugPrint('❌ generateAd: exception -> $e');
     } finally {
       isGenerating.value = false;
-      debugPrint('🟦 generateAd: done. errorMessage=${errorMessage.value}');
+      debugPrint('🟦 generateAd: done. adCopyLen=${adCopy.value.length} '
+          'errorMessage=${errorMessage.value}');
     }
   }
 
-  /// Simulates posting the ad to your backend or social channel
-  Future<void> postAd() async {
-    if (adCopy.value.trim().isEmpty) return;
-    isPosting.value = true;
-    errorMessage.value = null;
+  /// Splits the model's `TITLE: ...` / `BODY: ...` response into [adTitle] and
+  /// [adCopy]. Falls back to the entered title + raw text if the model didn't
+  /// follow the format.
+  void _applyGenerated(String text) {
+    final RegExpMatch? titleMatch =
+        RegExp(r'TITLE:\s*(.+)', caseSensitive: false).firstMatch(text);
+    final RegExpMatch? bodyMatch =
+        RegExp(r'BODY:\s*([\s\S]+)', caseSensitive: false).firstMatch(text);
 
-    try {
-      // Replace with your real post API
-      final http.Response resp = await http.post(
-        Uri.parse('https://api.yourapp.com/promotions'),
-        headers: <String, String>{'Content-Type': 'application/json'},
-        body: jsonEncode(<String, String>{
-          'businessName': businessName.value,
-          'adCopy': adCopy.value,
-        }),
-      );
-
-      if (resp.statusCode >= 200 && resp.statusCode < 300) {
-        // success → navigate to SuccessScreen in your UI layer
-      } else {
-        errorMessage.value = 'Post failed: ${resp.body}';
-      }
-    } catch (e) {
-      errorMessage.value = 'Exception: $e';
-    } finally {
-      isPosting.value = false;
+    if (bodyMatch != null) {
+      adTitle.value = (titleMatch?.group(1) ?? businessName.value).trim();
+      adCopy.value = bodyMatch.group(1)!.trim();
+    } else {
+      // Model ignored the format — keep the whole output as the body and use
+      // the entered title as the headline.
+      adTitle.value = businessName.value.trim();
+      adCopy.value = text;
     }
+  }
+
+  /// Reads the generated copy out of the backend response. Accepts
+  /// `data.content` (preferred), `data` as a raw string, or `data.text`.
+  String _extractContent(ApiResponseModel res) {
+    final dynamic data = res.data;
+    if (data is String) {
+      return data;
+    }
+    if (data is Map) {
+      final dynamic content = data['content'] ?? data['text'] ?? data['adCopy'];
+      if (content is String) {
+        return content;
+      }
+    }
+    return '';
   }
 }

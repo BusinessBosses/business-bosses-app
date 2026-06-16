@@ -153,6 +153,15 @@ class _CreateProductListingState extends State<CreateProductListing> {
         images = widget.product!.images;
         // If you have the image paths, you can convert them to File and add them to _selectedImages.
       }
+    } else {
+      // Create mode: pre-fill industry/country from the user's profile so they
+      // match what the user set on their profile.
+      final String pIndustry = (profileController.myProfile.industry ?? '').trim();
+      final String pLocation = (profileController.myProfile.location ?? '').trim();
+      category = pIndustry.isNotEmpty ? pIndustry : null;
+      country = pLocation.isNotEmpty
+          ? pLocation
+          : (shopController.shop?.location ?? '');
     }
   }
 

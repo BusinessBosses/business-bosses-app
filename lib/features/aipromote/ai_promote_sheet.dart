@@ -8,9 +8,6 @@ import 'package:business_bosses_v2/features/aipromote/business_form.dart';
 import 'package:business_bosses_v2/features/aipromote/controller/ai_promote_controller.dart';
 import 'package:business_bosses_v2/features/aipromote/models/business_info_model.dart';
 import 'package:business_bosses_v2/features/aipromote/success_screen.dart';
-import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
-import 'package:business_bosses_v2/features/forum/models/industry.dart';
-import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -19,6 +16,9 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum PromoteStep { info, preview, success }
+
+/// Monthly "Post with AI" promotions allowed for non-Pro (free) users.
+const int kFreeMonthlyPromotions = 4;
 
 class AIPromoteSheet extends StatefulWidget {
   const AIPromoteSheet({super.key});
@@ -40,13 +40,13 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     postType: 'Promote My Business',
   );
   String _adContent = '';
+  String _adTitle = '';
   bool _loading = false;
 
   // Safe controller initialization
   late final AiPromoteController aiPromoteController;
   ProfileController? profileController;
   late final CreatePostController createPostController;
-  late final CreateBossUpController createBossUpController;
   int _promoCount = 0;
   bool _prefsLoaded = false;
   bool hasShop = false;
@@ -70,7 +70,6 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     }
 
     createPostController = Get.put(CreatePostController());
-    createBossUpController = Get.put(CreateBossUpController());
 
     _loadPromoPrefs();
   }
@@ -118,7 +117,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
       return true;
     }
 
-    const int maxUses = 8;
+    const int maxUses = kFreeMonthlyPromotions;
     if (count >= maxUses) {
       return false;
     }
@@ -128,7 +127,9 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
   }
 
   void _handleInfoSubmit(BusinessInfo info) async {
-    final bool isSubscribed = profileController?.myProfile.isSubscribed ?? true;
+    // Default to NOT subscribed when the profile is unavailable, so a missing
+    // profile can never silently grant unlimited free promotions.
+    final bool isSubscribed = profileController?.myProfile.isSubscribed ?? false;
 
     if (!isSubscribed) {
       final bool allowed = await _canUsePromotion(isSubscribed: isSubscribed);
@@ -200,6 +201,7 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
 
       setState(() {
         _adContent = generated;
+        _adTitle = aiPromoteController.adTitle.value.trim();
         _loading = false;
         _currentStep = PromoteStep.preview;
       });
@@ -282,39 +284,24 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
         profileController!.currentMatchType.value = newMatchType;
       }
 
-      // Automatically post to Boss Up Feed (Old Home)
+      // Post once to the Boss Up Feed (Old Home). We intentionally do NOT also
+      // create a Find-My-Match forum here — the Boss Up/home feed merges posts
+      // and forums, so a second write would surface the same content twice.
+      // The post stores a single text field, so put the refined headline first
+      // (above the content) when one is present.
+      final String postText = _adTitle.trim().isNotEmpty
+          ? '${_adTitle.trim()}\n\n${_adContent.trim()}'
+          : _adContent.trim();
       createPostController.shouldPromote.value = false;
       await createPostController.createPost(
         <String, dynamic>{
-          'title': _adContent.trim(),
+          'title': postText,
           'timestamp': DateTime.now().millisecondsSinceEpoch,
           'images': image != null ? <String>[image] : <dynamic>[],
         },
         profileController!,
         skipNavigation: true,
       );
-
-      // Find matching industry ID
-      String industryId = 'industryId';
-      if (Get.isRegistered<CommunitiesController>()) {
-        final CommunitiesController communitiesController = Get.find();
-        try {
-          final Industry matchingIndustry = communitiesController.industries
-              .firstWhere((Industry i) => i.industry == _businessInfo.industry);
-          industryId = matchingIndustry.industryId ?? 'industryId';
-        } catch (e) {
-          debugPrint('Matching industry not found: $e');
-        }
-      }
-
-      // Automatically post to Find My Match Feed
-      await createBossUpController.createForum(<String, dynamic>{
-        'title': _businessInfo.name,
-        'description': _adContent.trim(),
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-        'industryId': industryId,
-        'images': image != null ? <String>[image] : <dynamic>[],
-      });
 
       // Success - only update state if widget is still mounted
       if (mounted) {
@@ -398,9 +385,10 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
     int remaining = 0;
     if (_currentStep == PromoteStep.preview) {
       final bool isSubscribed =
-          profileController?.myProfile.isSubscribed ?? true;
-      final int maxUses =
-          isSubscribed ? 9999 : 8; // Or hide UI completely for subscribed
+          profileController?.myProfile.isSubscribed ?? false;
+      final int maxUses = isSubscribed
+          ? 9999
+          : kFreeMonthlyPromotions; // Or hide UI completely for subscribed
 
       remaining = (_promoCount >= maxUses) ? 0 : (maxUses - _promoCount);
     }
@@ -412,13 +400,14 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
           remainingPromos: remaining,
           limitReached: profileController!.myProfile.isSubscribed
               ? false
-              : _promoCount >= 8,
+              : _promoCount >= kFreeMonthlyPromotions,
           initialInfo: _businessInfo,
           onSubmit: _handleInfoSubmit,
           isLoading: _loading,
         );
       case PromoteStep.preview:
         return AdPreview(
+          title: _adTitle,
           content: _adContent,
           onEdit: _handleAdEdit,
           onPost: _handlePostAd,

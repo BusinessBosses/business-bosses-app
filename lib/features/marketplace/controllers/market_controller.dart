@@ -194,6 +194,22 @@ class MarketController extends GetxController {
     update();
   }
 
+  /// Sync the marketplace's selected location to a change made elsewhere (e.g.
+  /// the edit-profile screen). The caller has already persisted the change to
+  /// the backend/profile/shop, so this only updates the in-memory value and the
+  /// cached `selected_location` (otherwise the stale cache keeps winning in
+  /// [_initializeLocation]) and refreshes listeners.
+  void syncSelectedLocation(String name, {String? code}) {
+    if (name.trim().isEmpty) return;
+    selectedLocation = name;
+    selectedLocationCode = code ?? CountryCodes.nameToCode[name] ?? 'GB';
+    if (selectedLocationCode == 'GB') selectedLocationCode = 'UK';
+
+    sandBox.write('selected_location', selectedLocation);
+    sandBox.write('selected_location_code', selectedLocationCode);
+    update();
+  }
+
   void updateFiltered() {
     isfiltered(false);
   }

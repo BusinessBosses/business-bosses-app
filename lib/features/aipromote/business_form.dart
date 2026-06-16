@@ -99,8 +99,6 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
         _industryFocus.requestFocus();
       } else if (_bioController.text.trim().isEmpty) {
         _bioFocus.requestFocus();
-      } else if (_locationController.text.trim().isEmpty) {
-        _locationFocus.requestFocus();
       }
     });
   }
@@ -108,22 +106,31 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
   void _setShopData() {
     if (shopController.shop != null) {
       _nameController.text = ''; // Clear for user to enter title
-      _industryController.text = shopController.shop!.category;
+      // Prefer the profile's industry/location (what the user edits) and only
+      // fall back to the shop record, so a stale shop can't override the
+      // profile (e.g. showing "Fashion & Beauty" after the profile changed).
+      final String ind = (profile.industry ?? '').trim();
+      final String loc = (profile.location ?? '').trim();
+      _industryController.text =
+          ind.isNotEmpty ? ind : shopController.shop!.category;
       _bioController.text = ''; // Clear for user to enter description
       _websiteController.text = shopController.shop!.url ?? '';
-      _locationController.text = shopController.shop!.location;
+      _locationController.text =
+          loc.isNotEmpty ? loc : shopController.shop!.location;
     }
   }
 
   void _setProfileData() {
     missingFields.clear();
 
-    // Everything should be empty to fill if the user doesn't have a bizcenter shop
+    // Title/description/website are left blank for the user to fill, but
+    // pre-fill industry and location from the profile so the user's saved
+    // values show instead of an empty/defaulted dropdown.
     _nameController.text = '';
-    _industryController.text = '';
+    _industryController.text = (profile.industry ?? '').trim();
     _bioController.text = '';
     _websiteController.text = '';
-    _locationController.text = '';
+    _locationController.text = (profile.location ?? '').trim();
   }
 
   void _updateMissingFields() {
@@ -140,10 +147,6 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
 
       if (_bioController.text.trim().isEmpty) {
         missingFields.add('Description/Tagline');
-      }
-
-      if (_locationController.text.trim().isEmpty) {
-        missingFields.add('Location');
       }
     });
   }
@@ -493,94 +496,78 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
           isMissing: missingFields.contains('Title'),
           focusNode: _nameFocus, // Pass focusNode
         ),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Text(
-                      'Industry',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF1F2937),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF3F4F6),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFE5E7EB)),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: <String>[
-                            'Agriculture, Food & Beverage',
-                            'Learning & Education',
-                            'Construction & Real Estate',
-                            'Fashion & Beauty',
-                            'Finance & Legal',
-                            'Healthcare & Wellness',
-                            'Home, Gardens & Outdoors',
-                            'Jewellery & Timepieces',
-                            'Media & Entertainment',
-                            'Security, Safety & Equipment',
-                            'Technology, Games & Electronic',
-                            'Vehicle & Transportation',
-                            'Business Services & Consulting',
-                          ].contains(_industryController.text)
-                              ? _industryController.text
-                              : null,
-                          isExpanded: true,
-                          hint: const Text('Select Industry'),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _industryController.text = newValue!;
-                            });
-                          },
-                          items: <String>[
-                            'Agriculture, Food & Beverage',
-                            'Learning & Education',
-                            'Construction & Real Estate',
-                            'Fashion & Beauty',
-                            'Finance & Legal',
-                            'Healthcare & Wellness',
-                            'Home, Gardens & Outdoors',
-                            'Jewellery & Timepieces',
-                            'Media & Entertainment',
-                            'Security, Safety & Equipment',
-                            'Technology, Games & Electronic',
-                            'Vehicle & Transportation',
-                            'Business Services & Consulting',
-                          ].map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ),
-                  ],
+        Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Text(
+                'Industry',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1F2937),
                 ),
               ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: _buildInputGroup(
-                'Country',
-                _locationController,
-                placeholder: 'Select Country',
-                isMissing: missingFields.contains('Location'),
-                focusNode: _locationFocus,
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF3F4F6),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: <String>[
+                      'Agriculture, Food & Beverage',
+                      'Learning & Education',
+                      'Construction & Real Estate',
+                      'Fashion & Beauty',
+                      'Finance & Legal',
+                      'Healthcare & Wellness',
+                      'Home, Gardens & Outdoors',
+                      'Jewellery & Timepieces',
+                      'Media & Entertainment',
+                      'Security, Safety & Equipment',
+                      'Technology, Games & Electronic',
+                      'Vehicle & Transportation',
+                      'Business Services & Consulting',
+                    ].contains(_industryController.text)
+                        ? _industryController.text
+                        : null,
+                    isExpanded: true,
+                    hint: const Text('Select Industry'),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _industryController.text = newValue!;
+                      });
+                    },
+                    items: <String>[
+                      'Agriculture, Food & Beverage',
+                      'Learning & Education',
+                      'Construction & Real Estate',
+                      'Fashion & Beauty',
+                      'Finance & Legal',
+                      'Healthcare & Wellness',
+                      'Home, Gardens & Outdoors',
+                      'Jewellery & Timepieces',
+                      'Media & Entertainment',
+                      'Security, Safety & Equipment',
+                      'Technology, Games & Electronic',
+                      'Vehicle & Transportation',
+                      'Business Services & Consulting',
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         _buildInputGroup(
           'Description',

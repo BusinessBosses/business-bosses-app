@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/firebase_analytics.dart';
+import 'package:business_bosses_v2/services/push_notification_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -64,6 +65,9 @@ void main() async {
   FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
   FirebaseMessaging.instance.getInitialMessage().then(_handleInitialMessage);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // Show notifications while the app is in the foreground (Android won't
+  // display them automatically; iOS uses presentation options set here).
+  await PushNotificationService.instance.init();
 
   // 🔥 LOAD PREFS BEFORE runApp
   final String? userId = prefs.getString(Constants.USER_ID);
