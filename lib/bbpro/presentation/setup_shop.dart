@@ -16,6 +16,7 @@ import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   final TextEditingController lslController = TextEditingController();
   final TextEditingController xslController = TextEditingController();
   final TextEditingController cslController = TextEditingController();
+  final TextEditingController referralRewardController = TextEditingController();
+  bool isReferralRewardActive = false;
 
   final TextEditingController bankNameController = TextEditingController();
   final TextEditingController bankCountryController = TextEditingController();
@@ -257,12 +260,27 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     }
   }
 
+  void _fetchReferralReward() async {
+    try {
+      final response = await ApiService.get(path: 'shop-referral/${widget.shop!.id}');
+      if (response.success == true && response.data != null) {
+        setState(() {
+          isReferralRewardActive = response.data['active'] ?? false;
+          referralRewardController.text = (response.data['coinsPerReferral'] ?? 0).toString();
+        });
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _viewController =
         TabController(length: widget.shop != null ? 2 : 1, vsync: this);
     if (widget.shop != null) {
+      _fetchReferralReward();
       nameController.text = widget.shop!.name;
       descriptionController.text = widget.shop!.description;
       phoneController.text = widget.shop!.phone ?? '';
@@ -818,6 +836,34 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                       pm5controller: cslController,
                     ),
                     const SizedBox(
+                      height: 15,
+                    ),
+                    if (widget.shop != null) ...[
+                      const Divider(),
+                      const SizedBox(height: 10),
+                      const Text('Shop Referral Reward', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 5),
+                      const Text('Reward users with coins when they refer a buyer to your shop. The reward is credited when a referred user makes a purchase.', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      const SizedBox(height: 10),
+                      SwitchListTile(
+                        title: const Text('Enable Referral Rewards'),
+                        value: isReferralRewardActive,
+                        onChanged: (bool value) {
+                          setState(() {
+                            isReferralRewardActive = value;
+                          });
+                        },
+                      ),
+                      if (isReferralRewardActive)
+                        CustomEditText(
+                          maxLength: 10,
+                          caption: 'Coins Per Successful Referral',
+                          hintText: 'e.g., 50',
+                          controller: referralRewardController,
+                        ),
+                      const SizedBox(height: 15),
+                    ],
+                    const SizedBox(
                       height: 30,
                     ),
                     SizedBox(
@@ -907,6 +953,28 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       }
     }
 
+    if (widget.shop != null) {
+      try {
+        final int referralCoins =
+            int.tryParse(referralRewardController.text) ?? 0;
+        final ApiResponseModel refRes = await ApiService.post(
+            path: 'shop-referral/${widget.shop!.id}',
+            body: <String, dynamic>{
+              'coinsPerReferral': referralCoins,
+              'active': isReferralRewardActive,
+            });
+        if (refRes.success != true) {
+          Get.snackbar(
+              'Referral reward',
+              refRes.message.isNotEmpty
+                  ? refRes.message
+                  : 'Could not update referral reward.');
+        }
+      } catch (e) {
+        Get.snackbar('Referral reward', 'Could not update referral reward.');
+      }
+    }
+
     final Map<String, dynamic> data = <String, dynamic>{
       'userId': profileController.myProfile.uid,
       'name': nameController.text,
@@ -928,6 +996,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       'imageType': imageType?.toLowerCase(),
       'category': category,
     };
+
 
     final Map<String, dynamic> dataUpdate = <String, dynamic>{
       'name': nameController.text,

@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_graph_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -20,18 +21,9 @@ class _LeadsWidgetState extends State<LeadsWidget> {
   final OrderController orderController = Get.put(OrderController());
   final ShopController shopController = Get.find();
 
-  String _formatNumber(int number) {
-    if (number >= 1000) {
-      double numberInK = number / 1000;
-      if (numberInK >= 1000) {
-        return '${(numberInK / 1000).toStringAsFixed(1)}K';
-      } else {
-        return '${numberInK.toStringAsFixed(1)}K';
-      }
-    } else {
-      return number.toString();
-    }
-  }
+  // Converts a fiat amount (in the shop's currency) to coins for the sales chart.
+  int _toCoins(num fiat) => CurrencyFormatter.coinsForPrice(fiat,
+      currencyCode: shopController.shop?.currency);
 
   @override
   void initState() {
@@ -124,7 +116,7 @@ class _LeadsWidgetState extends State<LeadsWidget> {
                                         children: <TextSpan>[
                                           TextSpan(
                                             text:
-                                                '${shopController.shop!.currency}${_formatNumber(shopController.shopGraph!.totalSales)}',
+                                                '${CurrencyFormatter.formatCoins(_toCoins(shopController.shopGraph!.totalSales))} coins',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -177,15 +169,18 @@ class _LeadsWidgetState extends State<LeadsWidget> {
                                   1)
                               .toDouble(), // Dynamically set maxX based on data length
                           minY: 0,
-                          maxY: shopController.shopGraph!.totalSales
-                              .toDouble(), // Dynamically set maxY based on totalSales
+                          maxY: _toCoins(shopController.shopGraph!.totalSales)
+                              .toDouble(), // maxY based on total sales in coins
                           titlesData: FlTitlesData(
                             leftTitles: AxisTitles(
                               sideTitles: SideTitles(
                                 showTitles: true,
-                                interval: shopController.shopGraph!.totalSales >
+                                interval: _toCoins(shopController
+                                            .shopGraph!.totalSales) >
                                         0
-                                    ? shopController.shopGraph!.totalSales / 5
+                                    ? _toCoins(shopController
+                                            .shopGraph!.totalSales) /
+                                        5
                                     : 100,
                                 getTitlesWidget:
                                     defaultGetTitle, // Use the default or provide your own function
@@ -193,8 +188,9 @@ class _LeadsWidgetState extends State<LeadsWidget> {
                             ),
                             bottomTitles: AxisTitles(
                               sideTitles: SideTitles(
-                                showTitles:
-                                    shopController.shopGraph!.totalSales > 0,
+                                showTitles: _toCoins(
+                                        shopController.shopGraph!.totalSales) >
+                                    0,
                                 getTitlesWidget:
                                     (double value, TitleMeta meta) {
                                   // Ensure value index is within bounds and map date label to the X-axis
@@ -227,7 +223,8 @@ class _LeadsWidgetState extends State<LeadsWidget> {
                                   .entries
                                   .map((MapEntry<int, GraphDataPoint> entry) =>
                                       FlSpot(entry.key.toDouble(),
-                                          entry.value.totalAmount.toDouble()))
+                                          _toCoins(entry.value.totalAmount)
+                                              .toDouble()))
                                   .toList(),
                               isCurved: true,
                               color: proprimaryColor,

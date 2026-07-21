@@ -1,4 +1,6 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/common/widgets/coin_price.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
@@ -115,7 +117,11 @@ class _BookServiceScreenState extends State<BookServiceScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    paymentMethods = widget.shop.payments;
+    paymentMethods = List<dynamic>.from(widget.shop.payments);
+    paymentMethods!.add(<String, dynamic>{
+      'paymentMethod': 'Pay with Coins',
+      'details': 'Deducted from your wallet, held until you receive the service'
+    });
     if (paymentMethods!.isNotEmpty) {
       activePaymentMethod = paymentMethods![0]['paymentMethod'] ?? '';
     }
@@ -667,38 +673,37 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                if (widget.service.discount > 0)
-                                  Row(
-                                    children: <Widget>[
-                                      Text(
-                                        '${formatServiceDuration(widget.service.serviceDuration)}${widget.shop.currency}${((widget.service.price * (1 - widget.service.discount / 100)) * 100).round() / 100}',
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text(
+                                      formatServiceDuration(
+                                          widget.service.serviceDuration),
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
                                       ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        '${widget.shop.currency}${widget.service.price.toStringAsFixed(2)}',
-                                        style: const TextStyle(
-                                          color: Colors.red,
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                else
-                                  Text(
-                                    '${formatServiceDuration(widget.service.serviceDuration)}${widget.shop.currency}${widget.service.price.toStringAsFixed(2)}',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
                                     ),
-                                  ),
+                                    const SizedBox(width: 4),
+                                    CoinPriceLabel(
+                                      price: widget.service.discount > 0
+                                          ? widget.service.price *
+                                              (1 -
+                                                  widget.service.discount / 100)
+                                          : widget.service.price,
+                                      originalPrice: widget.service.discount > 0
+                                          ? widget.service.price
+                                          : null,
+                                      currencyCode: widget.shop.currency,
+                                      priceStyle: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                             // Text('Category: ${widget.service.category}'),
@@ -1259,7 +1264,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                             activeColor: Colors.black,
                                             title: Text(package['name']),
                                             subtitle: Text(
-                                                '${widget.shop.currency}${package['price']}'),
+                                                '${CurrencyFormatter.formatCoins(CurrencyFormatter.coinsForPrice(package['price'] as num?, currencyCode: widget.shop.currency))} coins'),
                                             value: selectedItems.any(
                                                 (Map<String, dynamic> item) =>
                                                     item['id'] ==
@@ -1547,9 +1552,41 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                 'status': 'pending',
                                 'notes': noteController.text,
                               };
-                              bool response =
+                              final String? newOrderId =
                                   await orderController.addOrder(orderData);
-                              if (response) {
+                              if (newOrderId == null) {
+                                showSnackbar(
+                                    message: 'Error creating order!',
+                                    error: true);
+                                setState(() {
+                                  isSubmit = false;
+                                });
+                                return;
+                              }
+                              // Coin settlement (escrow) only when paying with coins.
+                              if (activePaymentMethod == 'Pay with Coins') {
+                                final ApiResponseModel payRes =
+                                    await orderController
+                                        .payOrderWithCoins(newOrderId);
+                                if (!payRes.success) {
+                                  showSnackbar(
+                                      message: payRes.message.isNotEmpty
+                                          ? payRes.message
+                                          : 'Coin payment failed. Please check your balance.',
+                                      error: true);
+                                  setState(() {
+                                    isSubmit = false;
+                                  });
+                                  return;
+                                }
+                                final int paid = int.tryParse(
+                                        '${payRes.data?['coinAmount'] ?? 0}') ??
+                                    0;
+                                if (paid > 0) {
+                                  profileController.updateCoinCount(-paid);
+                                }
+                              }
+                              {
                                 setState(() {
                                   isSubmit = false;
                                 });
@@ -1585,14 +1622,6 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                     ],
                                   ),
                                 );
-                              } else {
-                                showSnackbar(
-                                  message: 'Error creating order!',
-                                  error: true,
-                                );
-                                setState(() {
-                                  isSubmit = false;
-                                });
                               }
                             },
                             text: 'Book Service',

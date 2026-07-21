@@ -100,7 +100,15 @@ class BuyerRequestController extends GetxController {
   }
 
   /// Process fetched buyer requests into state
-  void processRequestsToState(List<dynamic> rows) {
+  void processRequestsToState(dynamic data) {
+    // The list endpoint is paginated and returns { count, rows }, while other
+    // endpoints return a bare array. Accept both so a shape change on the
+    // backend can't crash the feed.
+    final List<dynamic> rows = data is List
+        ? data
+        : (data is Map && data['rows'] is List
+            ? data['rows'] as List<dynamic>
+            : <dynamic>[]);
     buyerRequests.clear();
     _allRequests.clear(); // store backup
     for (dynamic item in rows) {

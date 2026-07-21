@@ -120,15 +120,22 @@ class OrderController extends GetxController {
     }
   }
 
-  Future<bool> addOrder(Map<String, dynamic> data) async {
+  /// Creates an order and returns its id (null on failure).
+  Future<String?> addOrder(Map<String, dynamic> data) async {
     ApiResponseModel response =
         await ApiService.post(path: 'orders', body: data);
     if (response.success) {
-      // Convert the response data to a Client object and add it to the list
-      return true;
-    } else {
-      return false;
+      return response.data['id']?.toString();
     }
+    return null;
+  }
+
+  /// Settles an existing order with coins (escrow-held until delivery).
+  /// The backend derives the coin amount server-side; only the orderId is sent.
+  Future<ApiResponseModel> payOrderWithCoins(String orderId) async {
+    return await ApiService.post(
+        path: 'marketplace/purchase',
+        body: <String, dynamic>{'orderId': orderId});
   }
 
   Future<bool> deleteOrder(String id) async {

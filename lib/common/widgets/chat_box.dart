@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/chat/models/my_message.dart';
@@ -14,7 +13,6 @@ class ChatBox extends StatelessWidget {
   final ChatTextSize? chatTextSize;
   final String myUid;
   final Function()? onTap;
-  final MarketModel? post;
 
   // ignore: public_member_api_docs
   const ChatBox(
@@ -23,7 +21,6 @@ class ChatBox extends StatelessWidget {
     this.chatTextSize,
     required this.myUid,
     this.onTap,
-    this.post,
   });
 
   @override

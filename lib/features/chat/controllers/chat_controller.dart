@@ -32,10 +32,6 @@ class ChatController extends GetxController {
         .toList();
   }
 
-  // void addMarketPost(MarketModel marketPost){
-  //   chatMessages.insert(marketPost);
-  // }
-
   /// SET SEEN STATUS TO A CHAT TO TRUE
   void seen(String counterId, Socket socket) {
     final List<MessageModel> userConversations = chatMessages
@@ -164,28 +160,6 @@ class ChatController extends GetxController {
       ...data,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
       'messageId': const Uuid().v4(),
-      'seen': false
-    };
-
-    chatMessages.insert(0,
-        MessageModel.fromMap(<String, dynamic>{...body, 'user': user.toMap()}));
-    extractChats(data['senderUid']);
-    homeController.socket.emit('new-message', <String, Map<String, dynamic>>{
-      'data': body,
-      'sender': _profileController.myProfile.toMap()
-    });
-    update();
-  }
-
-  void addNewChatMarket(
-      Map<String, dynamic> data, UserModel user, String marketId) {
-    final HomeController homeController = Get.find();
-
-    final Map<String, dynamic> body = <String, dynamic>{
-      ...data,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-      'messageId': const Uuid().v4(),
-      'marketId': marketId,
       'seen': false
     };
 

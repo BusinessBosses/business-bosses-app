@@ -24,6 +24,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_links/app_links.dart';
 import 'package:business_bosses_v2/navigation/bindings.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 
 final PurchasesConfiguration _configuration = Platform.isIOS
     ? PurchasesConfiguration('appl_fpKOUqIrKWZpOCQbxcYdfiIMgjj')
@@ -45,6 +46,7 @@ void main() async {
     Purchases.configure(_configuration),
     FlutterDownloader.initialize(),
     SharedPreferences.getInstance(),
+    CurrencyFormatter.initRates(),
   ]);
 
   final SharedPreferences prefs = results[5] as SharedPreferences;

@@ -24,6 +24,8 @@ import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
 import '../../services/revenuecat_service.dart';
 import '../posts/widgets/settings_item.dart';
+import 'preferred_currency_screen.dart';
+import '../referrals/referral_earnings_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -510,7 +512,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _onTab(String label) {
-    if ('Edit Profile' == label) {
+    if ('Preferred Currency' == label) {
+      Get.to(() => const PreferredCurrencyScreen());
+    } else if ('Referral Earnings' == label) {
+      Get.to(() => const ReferralEarningsScreen());
+    } else if ('Edit Profile' == label) {
     } else if ('Change password' == label) {
       Get.toNamed(Routes.changePassword);
     } else if (label == 'Community Rules') {
@@ -581,6 +587,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // }
 
   static List<MySettingsItem> item = [
+    MySettingsItem(
+      isTitle: false,
+      label: 'Preferred Currency',
+    ),
+    MySettingsItem(
+      isTitle: false,
+      label: 'Referral Earnings',
+    ),
     MySettingsItem(
       isTitle: false,
       label: 'Community Rules',

@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
-import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 
 class PostModel {
   final String postId;
@@ -29,11 +28,9 @@ class PostModel {
   final bool? isPolled;
   final List<dynamic>? options;
   final DonationModel? donation;
-  final MarketModel? market;
   final ForumModel? forum;
   final List<Map<String, dynamic>>? pollvotes;
   PostModel({
-    this.market,
     this.donation,
     this.forum,
     required this.postId,
@@ -84,7 +81,6 @@ class PostModel {
     List<dynamic>? options,
     List<Map<String, dynamic>>? pollvotes,
     DonationModel? donation,
-    MarketModel? market,
     ForumModel? forum,
   }) {
     return PostModel(
@@ -112,7 +108,6 @@ class PostModel {
       pollvotes: pollvotes ?? this.pollvotes,
       donation: donation ?? this.donation,
       forum: forum ?? this.forum,
-      market: market ?? this.market,
     );
   }
 
@@ -142,7 +137,6 @@ class PostModel {
       'pollvotes': pollvotes,
       'donation': donation,
       'forum': forum,
-      'market': market,
     };
   }
 
@@ -163,23 +157,31 @@ class PostModel {
           ? int.tryParse(map['oldtimestamp'].toString())
           : null,
       likes: map['likes'] != null
-          ? (map['likes'] as List).map((dynamic e) => e?.toString() ?? '').toList()
+          ? (map['likes'] as List)
+              .map((dynamic e) => e?.toString() ?? '')
+              .toList()
           : null,
       coins: map['coins'] != null
-          ? (map['coins'] as List).map((dynamic e) => e?.toString() ?? '').toList()
+          ? (map['coins'] as List)
+              .map((dynamic e) => e?.toString() ?? '')
+              .toList()
           : null,
       reposts: map['reposts'] != null
-          ? (map['reposts'] as List).map((dynamic item) {
-              if (item is Map<String, dynamic>) {
-                return item['userId']?.toString() ?? '';
-              } else {
-                return item?.toString() ?? '';
-              }
-            }).where((String id) => id.isNotEmpty).toList()
+          ? (map['reposts'] as List)
+              .map((dynamic item) {
+                if (item is Map<String, dynamic>) {
+                  return item['userId']?.toString() ?? '';
+                } else {
+                  return item?.toString() ?? '';
+                }
+              })
+              .where((String id) => id.isNotEmpty)
+              .toList()
           : null,
       comments: map['comments'] != null
           ? (map['comments'] as List)
-              .map((dynamic e) => CommentModel.fromMap(Map<String, dynamic>.from(e)))
+              .map((dynamic e) =>
+                  CommentModel.fromMap(Map<String, dynamic>.from(e)))
               .toList()
           : null,
       user: map['user'] != null
@@ -203,10 +205,9 @@ class PostModel {
       isPolled: map['isPolled'] == true,
       options: map['options'] is List ? map['options'] as List : null,
       pollvotes: map['pollvotes'] != null
-          ? (map['pollvotes'] as List).map((dynamic e) => Map<String, dynamic>.from(e)).toList()
-          : null,
-      market: map['market'] != null
-          ? MarketModel.fromMap(Map<String, dynamic>.from(map['market']))
+          ? (map['pollvotes'] as List)
+              .map((dynamic e) => Map<String, dynamic>.from(e))
+              .toList()
           : null,
     );
   }

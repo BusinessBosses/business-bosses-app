@@ -45,6 +45,7 @@ class UserModel {
   final String? ageRange;
   final String? gender;
   final List<ProfileViewerModel>? profileViews;
+  final String? preferredCurrency;
   late final int? connectionCount;
   final int? connectedCount;
   final int? referalCount;
@@ -94,6 +95,7 @@ class UserModel {
     this.ageRange,
     this.gender,
     this.profileViews,
+    this.preferredCurrency,
     this.connectionCount,
     this.connectedCount,
     this.unReadCount,
@@ -204,6 +206,7 @@ class UserModel {
       ageRange: ageRange ?? this.ageRange,
       gender: gender ?? this.gender,
       profileViews: profileViews ?? this.profileViews,
+      preferredCurrency: preferredCurrency ?? preferredCurrency,
       connectionCount: connectionCount ?? this.connectionCount,
       referalCount: referalCount ?? this.referalCount,
       invitations: invitations ?? this.invitations,
@@ -265,6 +268,7 @@ class UserModel {
       'gender': gender,
       'profileViews':
           profileViews?.map((ProfileViewerModel x) => x.toMap()).toList(),
+      'preferredCurrency': preferredCurrency,
       'connectionCount': connectionCount,
       'referalCount': referalCount,
       'invitations': invitations,
@@ -307,6 +311,7 @@ class UserModel {
       coinscount: map['coinscount'] != null
           ? int.tryParse(map['coinscount'].toString())
           : null,
+      preferredCurrency: map['preferredCurrency']?.toString(),
       name: map['name']?.toString(),
       companyName: map['companyName']?.toString(),
       surname: map['surname']?.toString(),
@@ -329,7 +334,8 @@ class UserModel {
           : null,
       interests: map['interests'] is List
           ? (map['interests'] as List)
-              .map((dynamic e) => Industry.toObject(Map<String, dynamic>.from(e)))
+              .map((dynamic e) =>
+                  Industry.toObject(Map<String, dynamic>.from(e)))
               .toList()
           : null,
       productsandservices: map['productsandservices'] is List

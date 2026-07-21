@@ -381,9 +381,15 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
         await ApiService.get(path: 'post/reposts/$postId');
     debugPrint(response.toMap().toString());
     if (response.success) {
-      if (response.data != null) {
-        for (int i = 0; i < response.data.length; i++) {
-          _reposters.add(UserModel.fromMap(response.data['user']));
+      // The endpoint returns the post object with a nested `reposts` array of
+      // users, not a bare list. Read the array defensively so a shape change
+      // can't crash or produce garbage.
+      final dynamic data = response.data;
+      final List<dynamic> reposts =
+          (data is Map && data['reposts'] is List) ? data['reposts'] as List<dynamic> : <dynamic>[];
+      for (final dynamic user in reposts) {
+        if (user is Map<String, dynamic>) {
+          _reposters.add(UserModel.fromMap(user));
         }
       }
     }

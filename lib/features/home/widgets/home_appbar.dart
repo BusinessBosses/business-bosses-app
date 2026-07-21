@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../utils/currency_format.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
@@ -116,6 +117,15 @@ class HomeAppBar extends StatelessWidget {
                               color: textColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            CurrencyFormatter.coinEquivalent(int.tryParse(coinsCount)),
+                            style: const TextStyle(
+                              color: textColor,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ],

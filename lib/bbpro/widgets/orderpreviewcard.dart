@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -64,7 +65,7 @@ class OrderPreviewCard extends StatelessWidget {
                 if (color != null && color!.isNotEmpty) Text('Color: $color'),
                 const SizedBox(height: 5.0),
                 Text(
-                  '${shop == null ? shopController.shop!.currency : shop!.currency}${price.toStringAsFixed(2)}',
+                  CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(price, currencyCode: shop == null ? shopController.shop!.currency : shop!.currency)),
                   style: const TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,

@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/common/widgets/coin_price.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -129,39 +130,19 @@ class _ServiceCardState extends State<ServiceCard> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          if (widget.service?.discount != null &&
-                              widget.service!.discount > 0)
-                            Wrap(
-                              spacing: 5,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  '${currencyValues[widget.service!.location.toString()]}${formatPrice(widget.service!.price * (1 - widget.service!.discount / 100))}',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Text(
-                                  '${currencyValues[widget.service!.location.toString()]}${formatPrice(widget.service!.price)}',
-                                  style: const TextStyle(
-                                    color: primaryColorLT,
-                                    decoration: TextDecoration.lineThrough,
-                                    fontSize: 11,
-                                  ),
-                                ),
-                              ],
-                            )
-                          else
-                            Text(
-                              '${currencyValues[widget.service!.location.toString()]}${formatPrice(widget.service!.price)}',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 13,
-                              ),
-                            ),
+                          CoinPriceLabel(
+                            price: (widget.service?.discount != null &&
+                                    widget.service!.discount > 0)
+                                ? widget.service!.price *
+                                    (1 - widget.service!.discount / 100)
+                                : widget.service!.price,
+                            originalPrice: (widget.service?.discount != null &&
+                                    widget.service!.discount > 0)
+                                ? widget.service!.price
+                                : null,
+                            currencyCode: currencyValues[
+                                widget.service!.location.toString()],
+                          ),
                           if (widget.myShop == false)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -8,7 +8,6 @@ import 'package:business_bosses_v2/features/donations/models/donations_model.dar
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
-import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
@@ -75,7 +74,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   String? livedata;
   DonationModel? donationModel;
   ForumModel? forumModel;
-  MarketModel? marketModel;
 
   void onDetectionFinished() {
     _overlayEntry?.remove();
@@ -106,12 +104,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
       forumModel = forumData;
     }
-    if (arguments?['marketdata'] != null) {
-      final dynamic marketData = arguments?['marketdata'];
-
-      marketModel = marketData;
-    }
-
     if (widget.isGrow == true) {
       _createPostController.shouldPromote.value = true;
     }
@@ -594,8 +586,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         'donation': donationModel?.toMap(),
         'forumId': forumModel?.forumId,
         'forum': forumModel?.toMap(),
-        'marketId': marketModel?.marketId,
-        'market': marketModel?.toMap(),
         'title': _titleCtrl.text.trim(),
         'ytUrl': _ytUrl,
         'images': _ytUrl != null && _ytUrl != ''

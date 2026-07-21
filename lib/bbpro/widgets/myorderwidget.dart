@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
@@ -113,7 +114,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                 ),
                                 if (widget.quantity != null)
                                   Text(
-                                    '${widget.quantity!.toInt()} ${widget.quantity!.toInt() > 1 ? 'items' : 'item'} - ${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency} ${(calculateTotalPrice() * widget.quantity!).toStringAsFixed(2)}',
+                                    '${widget.quantity!.toInt()} ${widget.quantity!.toInt() > 1 ? 'items' : 'item'} - ${CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(calculateTotalPrice() * widget.quantity!, currencyCode: widget.shop == null ? shopController.shop!.currency : widget.shop!.currency))}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 13,
@@ -121,7 +122,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                   ),
                                 if (widget.quantity == null)
                                   Text(
-                                    '${calculateTotalItems().toInt()} ${calculateTotalItems().toInt() > 1 ? 'items' : 'item'} - ${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency} ${calculateTotalPrice().toStringAsFixed(2)}',
+                                    '${calculateTotalItems().toInt()} ${calculateTotalItems().toInt() > 1 ? 'items' : 'item'} - ${CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(calculateTotalPrice(), currencyCode: widget.shop == null ? shopController.shop!.currency : widget.shop!.currency))}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 13,

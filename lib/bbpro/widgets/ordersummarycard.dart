@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/common/widgets/coin_price.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -85,37 +87,33 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        if (widget.discount > 0)
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                '${formatServiceDuration(widget.serviceDuration)}${widget.currency}${((widget.price * (1 - widget.discount / 100)) * 100).round() / 100}',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              formatServiceDuration(widget.serviceDuration),
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
                               ),
-                              const SizedBox(width: 5),
-                              Text(
-                                '${widget.currency}${widget.price.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  decoration: TextDecoration.lineThrough,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          )
-                        else
-                          Text(
-                            '${formatServiceDuration(widget.serviceDuration)}${widget.currency}${widget.price.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
                             ),
-                          ),
+                            const SizedBox(width: 4),
+                            CoinPriceLabel(
+                              price: widget.discount > 0
+                                  ? widget.price * (1 - widget.discount / 100)
+                                  : widget.price,
+                              originalPrice:
+                                  widget.discount > 0 ? widget.price : null,
+                              currencyCode: widget.currency,
+                              priceStyle: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   if (widget.timeofservice != null)
@@ -154,7 +152,7 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                   style: TextStyle(fontSize: 13),
                 ),
                 Text(
-                  widget.currency + widget.price.toString(),
+                  CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(widget.price, currencyCode: widget.currency)),
                   style: const TextStyle(fontSize: 13),
                 ),
               ],
@@ -183,7 +181,7 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                     style: TextStyle(fontSize: 13),
                   ),
                   Text(
-                    '${widget.currency}${widget.packagesprice.toString()}',
+                    CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(widget.packagesprice, currencyCode: widget.currency)),
                     style: const TextStyle(fontSize: 13),
                   ),
                 ],
@@ -196,9 +194,11 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                   'Total:',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Text(
-                  '${widget.currency} ${widget.total.toStringAsFixed(2)}',
-                  style: const TextStyle(
+                CoinPriceLabel(
+                  price: widget.total,
+                  currencyCode: widget.currency,
+                  alignment: CrossAxisAlignment.end,
+                  priceStyle: const TextStyle(
                       fontWeight: FontWeight.w900,
                       color: Colors.black,
                       fontSize: 18),

@@ -1,15 +1,11 @@
 import 'dart:async';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
-import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
-import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
-import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,14 +14,11 @@ import 'package:get/get.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
-import 'package:business_bosses_v2/bbpro/models/product_model.dart';
-import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/bbpro/widgets/custom_tabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/myorderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
-import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 
@@ -49,7 +42,6 @@ class _OrdersScreenState extends State<OrdersScreen>
   final OrderController orderController = Get.put(OrderController());
   final MarketController _marketController = Get.put(MarketController());
   final ShopController shopController = Get.find();
-  final MatchController _matchController = Get.put(MatchController());
   final ProfileController _profileController = Get.find();
 
   bool loading = true;
@@ -332,14 +324,13 @@ class _OrdersScreenState extends State<OrdersScreen>
                         orderCtrl.orders.length;
                     break;
                   case OrderStatus.pending:
-                    count = orderCtrl.shopController.orderStats?.pending
-                            .toInt() ??
-                        (orderCtrl.ordersStatus[status]?.length ?? 0);
+                    count =
+                        orderCtrl.shopController.orderStats?.pending.toInt() ??
+                            (orderCtrl.ordersStatus[status]?.length ?? 0);
                     break;
                   case OrderStatus.paid:
-                    count =
-                        orderCtrl.shopController.orderStats?.paid.toInt() ??
-                            (orderCtrl.ordersStatus[status]?.length ?? 0);
+                    count = orderCtrl.shopController.orderStats?.paid.toInt() ??
+                        (orderCtrl.ordersStatus[status]?.length ?? 0);
                     break;
                   case OrderStatus.completed:
                     count = orderCtrl.shopController.orderStats?.completed
@@ -360,7 +351,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                     child: CircularProgressIndicator(),
                   )
                 : GetBuilder<OrderController>(
-                    builder: (orderCtrl) {
+                    builder: (OrderController orderCtrl) {
                       return orderCtrl.loading.value
                           ? const Center(
                               child: CircularProgressIndicator(),
@@ -398,7 +389,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                             orderCtrl.updateOrder(
                                                 order.id, <String, dynamic>{
                                               'status': newStatus.toString(),
-                                            }).then((success) {
+                                            }).then((bool success) {
                                               if (success) {
                                                 orderCtrl.initOrders(
                                                     shopController.shop!.id);

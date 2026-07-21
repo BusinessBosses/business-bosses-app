@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import '../../common/widgets/coin_price.dart';
 
 class OrderProductScreen extends StatefulWidget {
   final bool? ismarketplace;
@@ -82,7 +83,16 @@ class _OrderProductScreenState extends State<OrderProductScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _focusNode = FocusNode();
-    paymentMethods = widget.shop.payments;
+    paymentMethods = List.from(widget.shop.payments);
+
+    // Check if item has a valid price and we have enough coins, optionally we could
+    // do the check on the backend, but we can do a UI pre-check here to enable/disable it.
+    // For now we just add the "Pay with coins" option if they have coins.
+    paymentMethods!.add({
+      'paymentMethod': 'Pay with Coins',
+      'details': 'Deducted directly from your wallet balance'
+    });
+
     log(widget.shop.toMap().toString());
     if (paymentMethods!.isNotEmpty) {
       activePaymentMethod = paymentMethods![0]['paymentMethod'] ?? '';
@@ -647,38 +657,24 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              if (widget.product.discount != null &&
-                                  widget.product.discount! > 0)
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      '${widget.shop.currency}${((widget.product.price * (1 - widget.product.discount! / 100)) * 100).round() / 100}',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w900,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      '${widget.shop.currency}${widget.product.price.toStringAsFixed(2)}',
-                                      style: const TextStyle(
-                                        color: Colors.red,
-                                        decoration: TextDecoration.lineThrough,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              else
-                                Text(
-                                  '${widget.shop.currency}${widget.product.price.toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 16,
-                                  ),
+                              CoinPriceLabel(
+                                price: (widget.product.discount != null &&
+                                        widget.product.discount! > 0)
+                                    ? widget.product.price *
+                                        (1 - widget.product.discount! / 100)
+                                    : widget.product.price,
+                                originalPrice:
+                                    (widget.product.discount != null &&
+                                            widget.product.discount! > 0)
+                                        ? widget.product.price
+                                        : null,
+                                currencyCode: widget.shop.currency,
+                                priceStyle: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 18,
                                 ),
+                              ),
                             ],
                           ),
                           const SizedBox(
@@ -925,17 +921,22 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                 fontSize: 16, fontWeight: FontWeight.w700),
                           ),
                         ),
-                        widget.shop.payments.isNotEmpty
+                        paymentMethods!.isNotEmpty
                             ? Padding(
                                 padding: const EdgeInsets.all(15),
                                 child: Column(
                                   children: paymentMethods!
-                                      .map((dynamic payment) =>
-                                          ProPaymentOptionCard(
+                                      .map((dynamic payment) {
+
+                                        String detailsText = 'Details: ${payment['details'] ?? 'N/A'}';
+                                        if (payment['paymentMethod'] == 'Pay with Coins') {
+                                          detailsText = payment['details'] ?? '';
+                                        }
+
+                                        return ProPaymentOptionCard(
                                             option:
                                                 payment['paymentMethod'] ?? '',
-                                            subtext:
-                                                'Details: ${payment['details'] ?? 'N/A'}',
+                                            subtext: detailsText,
                                             activeoption: activePaymentMethod,
                                             onTap: (String newOption) {
                                               setState(() {
@@ -948,7 +949,8 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                                 }
                                               });
                                             },
-                                          ))
+                                          );
+                                      })
                                       .toList(),
                                 ),
                               )
@@ -1055,8 +1057,40 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                         'notes': noteController.text,
                         'quantity': int.tryParse(quantityController.text) ?? 1,
                       };
-                      bool response = await orderController.addOrder(orderData);
-                      if (response) {
+                      final String? newOrderId =
+                          await orderController.addOrder(orderData);
+                      if (newOrderId == null) {
+                        showSnackbar(
+                            message: 'Error creating order!', error: true);
+                        setState(() {
+                          isSubmit = false;
+                        });
+                        return;
+                      }
+                      // Coin settlement (escrow-held until delivery) ONLY when the
+                      // buyer chose to pay with coins.
+                      if (activePaymentMethod == 'Pay with Coins') {
+                        final ApiResponseModel payRes = await orderController
+                            .payOrderWithCoins(newOrderId);
+                        if (!payRes.success) {
+                          showSnackbar(
+                              message: payRes.message.isNotEmpty
+                                  ? payRes.message
+                                  : 'Coin payment failed. Please check your balance.',
+                              error: true);
+                          setState(() {
+                            isSubmit = false;
+                          });
+                          return;
+                        }
+                        final int paid = int.tryParse(
+                                '${payRes.data?['coinAmount'] ?? 0}') ??
+                            0;
+                        if (paid > 0) {
+                          profileController.updateCoinCount(-paid);
+                        }
+                      }
+                      {
                         setState(() {
                           isSubmit = false;
                         });
@@ -1092,14 +1126,6 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                             ],
                           ),
                         );
-                      } else {
-                        showSnackbar(
-                          message: 'Error creating order!',
-                          error: true,
-                        );
-                        setState(() {
-                          isSubmit = false;
-                        });
                       }
                     },
                     text: 'Place Order',
