@@ -25,7 +25,7 @@ import '../../services/api_service.dart';
 import '../../services/revenuecat_service.dart';
 import '../posts/widgets/settings_item.dart';
 import 'preferred_currency_screen.dart';
-import '../referrals/referral_earnings_screen.dart';
+import '../referrals/referral_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -515,7 +515,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if ('Preferred Currency' == label) {
       Get.to(() => const PreferredCurrencyScreen());
     } else if ('Referral Earnings' == label) {
-      Get.to(() => const ReferralEarningsScreen());
+      Get.to(() => const ReferralScreen());
     } else if ('Edit Profile' == label) {
     } else if ('Change password' == label) {
       Get.toNamed(Routes.changePassword);

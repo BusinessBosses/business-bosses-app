@@ -6,6 +6,7 @@ import '../../bbpro/controllers/shop_controller.dart';
 import '../../common/models/api_response_model.dart';
 import '../../features/profile/controller/profile_controller.dart';
 import '../../services/api_service.dart';
+import '../../utils/theme/theme.dart';
 
 /// Lets a shop owner set the coin reward paid to a referrer when someone they
 /// referred completes a purchase at the shop.
@@ -91,24 +92,22 @@ class _ShopReferralRewardScreenState extends State<ShopReferralRewardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Referral Rewards')),
-      body: loading
-          ? const Center(child: CircularProgressIndicator())
-          : shopId == null
-              ? const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Center(
-                    child: Text(
-                      'You need a shop to set up referral rewards.\nCreate a shop first, then come back here.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey),
-                    ),
+    return loading
+        ? const Center(child: CircularProgressIndicator())
+        : shopId == null
+            ? const Padding(
+                padding: EdgeInsets.all(24),
+                child: Center(
+                  child: Text(
+                    'You need a shop to set up referral rewards.\nCreate a shop first, then come back here.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey),
                   ),
-                )
-              : ListView(
-                  padding: const EdgeInsets.all(16),
-                  children: <Widget>[
+                ),
+              )
+            : ListView(
+                padding: const EdgeInsets.all(16),
+                children: <Widget>[
                     const Text(
                       'Reward users with coins when they refer a buyer to your shop. '
                       'The reward is credited after the referred user completes a purchase.',
@@ -117,9 +116,12 @@ class _ShopReferralRewardScreenState extends State<ShopReferralRewardScreen> {
                     const SizedBox(height: 16),
                     SwitchListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: const Text('Enable Referral Rewards'),
+                      title: const Text('Enable Referral Rewards', style: TextStyle(color: Colors.black)),
                       value: active,
                       onChanged: (bool v) => setState(() => active = v),
+                      activeColor: Colors.black,
+                      inactiveThumbColor: Colors.grey.shade400,
+                      inactiveTrackColor: Colors.grey.shade200,
                     ),
                     if (active) ...<Widget>[
                       const SizedBox(height: 8),
@@ -141,18 +143,21 @@ class _ShopReferralRewardScreenState extends State<ShopReferralRewardScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: proprimaryColor,
+                          foregroundColor: Colors.white,
+                        ),
                         onPressed: saving ? null : _save,
                         child: saving
                             ? const SizedBox(
                                 width: 20,
                                 height: 20,
                                 child:
-                                    CircularProgressIndicator(strokeWidth: 2))
-                            : const Text('Save'),
+                                    CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                            : const Text('Save Rewards', style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ],
-                ),
-    );
+                );
   }
 }

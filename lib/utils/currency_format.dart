@@ -42,12 +42,12 @@ class CurrencyFormatter {
   /// The currency to display equivalents in:
   /// 1. the user's explicit (non-default) choice, if set;
   /// 2. otherwise derived from their selected country;
-  /// 3. otherwise USD (e.g. no country set, or country not recognised).
+  /// 3. otherwise GBP (e.g. no country set, or country not recognised).
   static String preferredCurrencyCode() {
     try {
       final UserModel profile = Get.find<ProfileController>().myProfile;
       final String? pref = profile.preferredCurrency;
-      if (pref != null && pref.isNotEmpty && pref.toUpperCase() != 'USD') {
+      if (pref != null && pref.isNotEmpty) {
         return pref.toUpperCase();
       }
       final String? country = profile.location;
@@ -55,9 +55,9 @@ class CurrencyFormatter {
         final String? code = currencyValues[country];
         if (code != null && code.isNotEmpty) return code.toUpperCase();
       }
-      return 'USD';
+      return 'GBP';
     } catch (_) {
-      return 'USD';
+      return 'GBP';
     }
   }
 
@@ -66,8 +66,17 @@ class CurrencyFormatter {
   static String formatCurrency(int? coins) {
     final String code = preferredCurrencyCode();
     final double amount = ((coins ?? 0) / _coinToUsd) * _rateFor(code);
-    if (code == 'USD') return '\$${_money(amount)}';
-    return '$code ${_money(amount)}';
+    final String formattedAmount = _formatAmount(amount);
+    if (code == 'USD') return '\$$formattedAmount';
+    return '$code $formattedAmount';
+  }
+
+  static String _formatAmount(double amount) {
+    final double a = amount.abs();
+    final String sign = amount < 0 ? '-' : '';
+    if (a >= 1000000) return '$sign${_trim(a / 1000000)}M';
+    if (a >= 1000) return '$sign${_trim(a / 1000)}K';
+    return _money(amount);
   }
 
   /// Coins -> chosen display currency with an "≈" prefix, e.g. "≈ NGN 1,234.56".

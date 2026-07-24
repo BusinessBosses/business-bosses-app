@@ -30,6 +30,7 @@ import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../settings/preferred_currency_screen.dart';
 
 import '../../utils/theme/theme.dart';
 import '../marketplace/controllers/market_controller.dart';
@@ -38,6 +39,7 @@ import 'package:business_bosses_v2/features/matching_feature/controllers/match_c
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/orders_and_invoices.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'dart:async';
 
 /// Marketplace main screen
@@ -568,51 +570,92 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             size: 18, color: Color(0xFFFF1E39)),
                         const SizedBox(width: 4),
                         Flexible(
-                          child: CountryListPick(
-                            appBar: AppBar(
-                              leading: IconButton(
-                                onPressed: () => Navigator.pop(context),
-                                icon: SvgPicture.asset(
-                                    'assets/svgs/backbutton.svg'),
-                              ),
-                              centerTitle: true,
-                              title: const Text('Select Location'),
-                            ),
-                            initialSelection: (_marketController
-                                        .selectedLocationCode?.isNotEmpty ??
-                                    false)
-                                ? (_marketController.selectedLocationCode ==
-                                        'UK'
-                                    ? 'GB'
-                                    : _marketController.selectedLocationCode)
-                                : 'GB',
-                            onChanged: (CountryCode? code) {
-                              selectedLocationChanged(code?.name, code?.code);
-                            },
-                            pickerBuilder:
-                                (BuildContext context, CountryCode? code) =>
-                                    Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Flexible(
-                                  child: Text(
-                                    code?.name ?? 'United Kingdom',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 15,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Flexible(
+                                child: CountryListPick(
+                                  appBar: AppBar(
+                                    leading: IconButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      icon: SvgPicture.asset(
+                                          'assets/svgs/backbutton.svg'),
                                     ),
+                                    centerTitle: true,
+                                    title: const Text('Select Location'),
+                                  ),
+                                  initialSelection: (_marketController
+                                              .selectedLocationCode?.isNotEmpty ??
+                                          false)
+                                      ? (_marketController.selectedLocationCode ==
+                                              'UK'
+                                          ? 'GB'
+                                          : _marketController.selectedLocationCode)
+                                      : 'GB',
+                                  onChanged: (CountryCode? code) {
+                                    selectedLocationChanged(code?.name, code?.code);
+                                  },
+                                  pickerBuilder:
+                                      (BuildContext context, CountryCode? code) =>
+                                          Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Flexible(
+                                        child: Text(
+                                          (code?.name ?? 'United Kingdom'),
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 2),
+                                      const Icon(
+                                        Icons.keyboard_arrow_down,
+                                        size: 16,
+                                        color: Colors.black54,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(width: 2),
-                                const Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 16,
-                                  color: Colors.black54,
+                              ),
+                              const Text(
+                                ' • ',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
                                 ),
-                              ],
-                            ),
+                              ),
+                              GestureDetector(
+                                onTap: () => Get.to(() => const PreferredCurrencyScreen()),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    GetBuilder<ProfileController>(
+                                      builder: (ProfileController pc) {
+                                        return Text(
+                                          CurrencyFormatter.preferredCurrencyCode(),
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(width: 2),
+                                    const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      size: 16,
+                                      color: Colors.black54,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

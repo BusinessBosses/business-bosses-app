@@ -42,71 +42,68 @@ class _ReferralEarningsScreenState extends State<ReferralEarningsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Referral Earnings')),
-      body: loading
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: _load,
-              child: ListView(
-                padding: const EdgeInsets.all(16),
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Text('Total referral coins earned',
-                            style:
-                                TextStyle(color: Colors.white70, fontSize: 13)),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: <Widget>[
-                            SvgPicture.asset('assets/svgs/coin.svg',
-                                height: 22, width: 22),
-                            const SizedBox(width: 6),
-                            Text(CurrencyFormatter.formatCoins(total),
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.w800)),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(CurrencyFormatter.coinEquivalent(total),
-                            style: const TextStyle(
-                                color: Colors.white54, fontSize: 12)),
-                      ],
-                    ),
+    return loading
+        ? const Center(child: CircularProgressIndicator())
+        : RefreshIndicator(
+            onRefresh: _load,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  const SizedBox(height: 20),
-                  if (earnings.isEmpty)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 60),
-                      child: Center(
-                        child: Text(
-                          'No referral earnings yet.\nInvite friends — you earn coins when they shop.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey),
-                        ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text('Total referral coins earned',
+                          style:
+                              TextStyle(color: Colors.white70, fontSize: 13)),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: <Widget>[
+                          SvgPicture.asset('assets/svgs/coin.svg',
+                              height: 22, width: 22),
+                          const SizedBox(width: 6),
+                          Text(CurrencyFormatter.formatCoins(total),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.w800)),
+                        ],
                       ),
-                    )
-                  else
-                    ...earnings.map<Widget>(_tile),
-                ],
-              ),
+                      const SizedBox(height: 4),
+                      Text(CurrencyFormatter.coinEquivalent(total),
+                          style: const TextStyle(
+                              color: Colors.white54, fontSize: 12)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                if (earnings.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 60),
+                    child: Center(
+                      child: Text(
+                        'No referral earnings yet.\nInvite friends — you earn coins when they shop.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  )
+                else
+                  ...earnings.map<Widget>(_tile),
+              ],
             ),
-    );
+          );
   }
 
-  Widget _tile(dynamic e) {
-    final int amount = int.tryParse('${e['amount'] ?? 0}') ?? 0;
-    final String shop = (e['shopName'] ?? 'a shop').toString();
-    final String who = (e['referredUser'] ?? 'Someone you referred').toString();
+  Widget _tile(dynamic item) {
+    final int amount = int.tryParse('${item['amount'] ?? 0}') ?? 0;
+    final String shop = (item['shopName'] ?? 'a shop').toString();
+    final String who = (item['referredUser'] ?? 'Someone you referred').toString();
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),

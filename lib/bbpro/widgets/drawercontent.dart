@@ -16,7 +16,7 @@ import 'package:business_bosses_v2/features/profile/presentation/my_profile_scre
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/features/settings/preferred_currency_screen.dart';
 import 'package:business_bosses_v2/features/settings/shop_referral_reward_screen.dart';
-import 'package:business_bosses_v2/features/referrals/referral_earnings_screen.dart';
+import 'package:business_bosses_v2/features/referrals/referral_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -248,25 +248,11 @@ class _DrawerContentState extends State<DrawerContent> {
           height: 25,
           colorFilter: const ColorFilter.mode(textColor, BlendMode.srcIn),
         ),
-        'title': 'Referral Rewards',
-        'description':
-            'Set how many coins a referrer earns when a buyer they referred shops at your store.',
+        'title': 'Referrals',
+        'description': 'See your referral earnings and manage shop referral rewards.',
         'onTileClicked': () {
           widget.oncloseclick?.call();
-          Get.to(() => const ShopReferralRewardScreen());
-        },
-      },
-      <String, dynamic>{
-        'icon': SvgPicture.asset(
-          'assets/svgs/coin.svg',
-          height: 25,
-          colorFilter: const ColorFilter.mode(textColor, BlendMode.srcIn),
-        ),
-        'title': 'Referral Earnings',
-        'description': 'See the coins you have earned from your referrals.',
-        'onTileClicked': () {
-          widget.oncloseclick?.call();
-          Get.to(() => const ReferralEarningsScreen());
+          Get.to(() => const ReferralScreen());
         },
       },
       <String, dynamic>{

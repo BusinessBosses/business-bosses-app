@@ -1451,180 +1451,245 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                       const SizedBox(
                         height: 25,
                       ),
+                      if (activePaymentMethod == 'Pay with Coins') ...<Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const Text('You will pay',
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 12)),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: <Widget>[
+                                    SvgPicture.asset('assets/svgs/coin.svg',
+                                        height: 24, width: 24),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      '${CurrencyFormatter.formatCoins(_coinTotal())} coins',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  CurrencyFormatter.coinEquivalent(_coinTotal()),
+                                  style: const TextStyle(
+                                      color: Colors.white54, fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                      ],
                       // Submit Button
                       Center(
                         child: SizedBox(
                           width: double.infinity,
-                          child: ProCustomButton(
-                            color: Colors.black,
-                            loading: isSubmit,
-                            onPressed: () async {
-                              if (widget.service.availability!['startDate'] ==
-                                  null) {
-                                _startDate = DateTime.now();
-                              }
-                              if (_startDate == null) {
-                                showSnackbar(
-                                  message: 'Please select a date!',
-                                  error: true,
-                                );
-                                return;
-                              }
-                              if (widget.service.availability!['startDate'] !=
-                                      null &&
-                                  selectedSlot == null) {
-                                showSnackbar(
-                                  message: 'Please select a time slot!',
-                                  error: true,
-                                );
-                                return;
-                              }
-                              if (activePaymentMethod.isEmpty) {
-                                showSnackbar(
-                                  message: 'Please select a payment method',
-                                  error: true,
-                                );
-                                return;
-                              }
-
-                              setState(() {
-                                isSubmit = true;
-                              });
-
-                              selectedSlot ??= '9:00 AM - 5:00 PM';
-
-                              List<String> times =
-                                  selectedSlot.toString().split(' - ');
-                              String startTimeString = times[0];
-                              String endTimeString = times[1];
-
-                              DateFormat timeFormat = DateFormat('hh:mm a');
-                              DateTime parsedStartTime =
-                                  timeFormat.parse(startTimeString);
-                              DateTime parsedEndTime =
-                                  timeFormat.parse(endTimeString);
-
-// Use _startDate's year, month, and day for the formatted time
-                              String startFormattedTime =
-                                  DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(
-                                DateTime(
-                                  _startDate!.year, // Use year from _startDate
-                                  _startDate!
-                                      .month, // Use month from _startDate
-                                  _startDate!.day, // Use day from _startDate
-                                  parsedStartTime.hour,
-                                  parsedStartTime.minute,
-                                  parsedStartTime.second,
+                          height: 50,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: proprimaryColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                              );
-
-                              String endFormattedTime =
-                                  DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(
-                                DateTime(
-                                  _startDate!.year, // Use year from _startDate
-                                  _startDate!
-                                      .month, // Use month from _startDate
-                                  _startDate!.day, // Use day from _startDate
-                                  parsedEndTime.hour,
-                                  parsedEndTime.minute,
-                                  parsedEndTime.second,
-                                ),
-                              );
-
-                              final Map<String, dynamic> orderData =
-                                  <String, dynamic>{
-                                'userId': profileController.myProfile.uid,
-                                'shopId': widget.shop.id,
-                                'items': selectedItems,
-                                'deliveryMethod':
-                                    widget.service.deliveryMethod != null &&
-                                            widget.service.deliveryMethod!
-                                                .isNotEmpty
-                                        ? getDeliveryMethod(
-                                            widget.service.deliveryMethod!)
-                                        : 'in_person',
-                                'deliveryDate': '$_startDate',
-                                'startTime': startFormattedTime,
-                                'endTime': endFormattedTime,
-                                'paymentMethod': activePaymentMethod,
-                                'orderDetails': '',
-                                'invoiceOption': 'send_with_payment_link',
-                                'status': 'pending',
-                                'notes': noteController.text,
-                              };
-                              final String? newOrderId =
-                                  await orderController.addOrder(orderData);
-                              if (newOrderId == null) {
-                                showSnackbar(
-                                    message: 'Error creating order!',
-                                    error: true);
-                                setState(() {
-                                  isSubmit = false;
-                                });
-                                return;
-                              }
-                              // Coin settlement (escrow) only when paying with coins.
-                              if (activePaymentMethod == 'Pay with Coins') {
-                                final ApiResponseModel payRes =
-                                    await orderController
-                                        .payOrderWithCoins(newOrderId);
-                                if (!payRes.success) {
+                              ),
+                              onPressed: !isSubmit ? () async {
+                                if (widget.service.availability!['startDate'] ==
+                                    null) {
+                                  _startDate = DateTime.now();
+                                }
+                                if (_startDate == null) {
                                   showSnackbar(
-                                      message: payRes.message.isNotEmpty
-                                          ? payRes.message
-                                          : 'Coin payment failed. Please check your balance.',
+                                    message: 'Please select a date!',
+                                    error: true,
+                                  );
+                                  return;
+                                }
+                                if (widget.service.availability!['startDate'] !=
+                                        null &&
+                                    selectedSlot == null) {
+                                  showSnackbar(
+                                    message: 'Please select a time slot!',
+                                    error: true,
+                                  );
+                                  return;
+                                }
+                                if (activePaymentMethod.isEmpty) {
+                                  showSnackbar(
+                                    message: 'Please select a payment method',
+                                    error: true,
+                                  );
+                                  return;
+                                }
+
+                                setState(() {
+                                  isSubmit = true;
+                                });
+
+                                selectedSlot ??= '9:00 AM - 5:00 PM';
+
+                                List<String> times =
+                                    selectedSlot.toString().split(' - ');
+                                String startTimeString = times[0];
+                                String endTimeString = times[1];
+
+                                DateFormat timeFormat = DateFormat('hh:mm a');
+                                DateTime parsedStartTime =
+                                    timeFormat.parse(startTimeString);
+                                DateTime parsedEndTime =
+                                    timeFormat.parse(endTimeString);
+
+  // Use _startDate's year, month, and day for the formatted time
+                                String startFormattedTime =
+                                    DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(
+                                  DateTime(
+                                    _startDate!.year, // Use year from _startDate
+                                    _startDate!
+                                        .month, // Use month from _startDate
+                                    _startDate!.day, // Use day from _startDate
+                                    parsedStartTime.hour,
+                                    parsedStartTime.minute,
+                                    parsedStartTime.second,
+                                  ),
+                                );
+
+                                String endFormattedTime =
+                                    DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(
+                                  DateTime(
+                                    _startDate!.year, // Use year from _startDate
+                                    _startDate!
+                                        .month, // Use month from _startDate
+                                    _startDate!.day, // Use day from _startDate
+                                    parsedEndTime.hour,
+                                    parsedEndTime.minute,
+                                    parsedEndTime.second,
+                                  ),
+                                );
+
+                                final Map<String, dynamic> orderData =
+                                    <String, dynamic>{
+                                  'userId': profileController.myProfile.uid,
+                                  'shopId': widget.shop.id,
+                                  'items': selectedItems,
+                                  'deliveryMethod':
+                                      widget.service.deliveryMethod != null &&
+                                              widget.service.deliveryMethod!
+                                                  .isNotEmpty
+                                          ? getDeliveryMethod(
+                                              widget.service.deliveryMethod!)
+                                          : 'in_person',
+                                  'deliveryDate': '$_startDate',
+                                  'startTime': startFormattedTime,
+                                  'endTime': endFormattedTime,
+                                  'paymentMethod': activePaymentMethod,
+                                  'orderDetails': '',
+                                  'invoiceOption': 'send_with_payment_link',
+                                  'status': 'pending',
+                                  'notes': noteController.text,
+                                };
+                                final String? newOrderId =
+                                    await orderController.addOrder(orderData);
+                                if (newOrderId == null) {
+                                  showSnackbar(
+                                      message: 'Error creating order!',
                                       error: true);
                                   setState(() {
                                     isSubmit = false;
                                   });
                                   return;
                                 }
-                                final int paid = int.tryParse(
-                                        '${payRes.data?['coinAmount'] ?? 0}') ??
-                                    0;
-                                if (paid > 0) {
-                                  profileController.updateCoinCount(-paid);
+                                // Coin settlement (escrow) only when paying with coins.
+                                if (activePaymentMethod == 'Pay with Coins') {
+                                  final ApiResponseModel payRes =
+                                      await orderController
+                                          .payOrderWithCoins(newOrderId);
+                                  if (!payRes.success) {
+                                    showSnackbar(
+                                        message: payRes.message.isNotEmpty
+                                            ? payRes.message
+                                            : 'Coin payment failed. Please check your balance.',
+                                        error: true);
+                                    setState(() {
+                                      isSubmit = false;
+                                    });
+                                    return;
+                                  }
+                                  final int paid = int.tryParse(
+                                          '${payRes.data?['coinAmount'] ?? 0}') ??
+                                      0;
+                                  if (paid > 0) {
+                                    profileController.updateCoinCount(-paid);
+                                  }
                                 }
-                              }
-                              {
-                                setState(() {
-                                  isSubmit = false;
-                                });
-                                Get.defaultDialog(
-                                  title: '',
-                                  barrierDismissible: false,
-                                  content: Column(
-                                    children: <Widget>[
-                                      const Text(
-                                        'Service booked successfully',
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      LottieBuilder.asset(
-                                        'assets/anim/done.json',
-                                        width: 100,
-                                        height: 100,
-                                      ),
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: ProCustomButton(
-                                            text: 'Done',
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              Get.back();
-                                            }),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                            text: 'Book Service',
+                                {
+                                  setState(() {
+                                    isSubmit = false;
+                                  });
+                                  Get.defaultDialog(
+                                    title: '',
+                                    barrierDismissible: false,
+                                    content: Column(
+                                      children: <Widget>[
+                                        const Text(
+                                          'Service booked successfully',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        ),
+                                        LottieBuilder.asset(
+                                          'assets/anim/done.json',
+                                          width: 100,
+                                          height: 100,
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ProCustomButton(
+                                              text: 'Done',
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                Get.back();
+                                              }),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              } : null,
+                              child: isSubmit
+                                  ? const CircularProgressIndicator(color: Colors.white)
+                                  : (activePaymentMethod == 'Pay with Coins'
+                                      ? Wrap(
+                                          runAlignment: WrapAlignment.center,
+                                          crossAxisAlignment: WrapCrossAlignment.center,
+                                          children: <Widget>[
+                                            const Text('Pay ', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                                            SvgPicture.asset('assets/svgs/coin.svg', width: 20, height: 20),
+                                            const SizedBox(width: 4),
+                                            Text(CurrencyFormatter.formatCoins(_coinTotal()), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                                          ],
+                                        )
+                                      : const Text('Book Service', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold))),
+                            ),
                           ),
                         ),
                       ),
@@ -1897,6 +1962,12 @@ class _BookServiceScreenState extends State<BookServiceScreen>
     }
 
     return blockedDates;
+  }
+
+  int _coinTotal() {
+    double total = (int.tryParse(quantityController.text) ?? 1) * widget.service.price;
+    total = total * (1 - (widget.service.discount / 100)) + selectedpackagesprice;
+    return CurrencyFormatter.coinsForPrice(total, currencyCode: widget.shop.currency);
   }
 
   Future<void> _shareProduct() async {

@@ -63,14 +63,19 @@ class CoinPriceLabel extends StatelessWidget {
             ],
           ],
         ),
-        // Secondary: coin amount.
+        const SizedBox(height: 2),
+        // Secondary: coin amount — kept clearly legible.
         Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            SvgPicture.asset('assets/svgs/coin.svg', height: 12, width: 12),
-            const SizedBox(width: 3),
+            SvgPicture.asset('assets/svgs/coin.svg', height: 15, width: 15),
+            const SizedBox(width: 4),
             Text('${CurrencyFormatter.formatCoins(coins)} coins',
-                style: const TextStyle(fontSize: 10, color: Colors.grey)),
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                )),
           ],
         ),
       ],

@@ -365,11 +365,12 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'goods', body: data);
     if (response.success) {
-      products.add(Product.fromJson(response.data));
-      items.add(Product.fromJson(response.data));
+      products.insert(0, Product.fromJson(response.data));
+      items.insert(0, Product.fromJson(response.data));
       final MarketController marketController = Get.find();
-      marketController.proItems.add(Product.fromJson(response.data));
-      marketController.proProducts.add(Product.fromJson(response.data));
+      marketController.proItems.insert(0, Product.fromJson(response.data));
+      marketController.proProducts.insert(0, Product.fromJson(response.data));
+      marketController.activeMarketItems.insert(0, Product.fromJson(response.data));
       update();
       marketController.update();
       return ProductAddResult(
@@ -424,11 +425,12 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'services', body: data);
     if (response.success) {
-      services.add(Service.fromJson(response.data));
-      items.add(Service.fromJson(response.data));
+      services.insert(0, Service.fromJson(response.data));
+      items.insert(0, Service.fromJson(response.data));
       final MarketController marketController = Get.find();
-      marketController.proItems.add(Service.fromJson(response.data));
-      marketController.proServices.add(Service.fromJson(response.data));
+      marketController.proItems.insert(0, Service.fromJson(response.data));
+      marketController.proServices.insert(0, Service.fromJson(response.data));
+      marketController.activeMarketItems.insert(0, Service.fromJson(response.data));
       update();
       marketController.update();
       return ServiceAddResult(
@@ -443,8 +445,8 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'custom-items', body: data);
     if (response.success) {
-      customItems.add(Customitem.fromJson(response.data));
-      items.add(Customitem.fromJson(response.data));
+      customItems.insert(0, Customitem.fromJson(response.data));
+      items.insert(0, Customitem.fromJson(response.data));
       update();
       return true;
     } else {

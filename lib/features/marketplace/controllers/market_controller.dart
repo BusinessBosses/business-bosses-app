@@ -786,31 +786,12 @@ class MarketController extends GetxController {
               ? b.createdAt
               : (b as Customitem).createdAt;
 
-      String aLoc = extractLocation(a).toLowerCase();
-      String bLoc = extractLocation(b).toLowerCase();
-
-      bool aIsMyLocation = myLocation != null &&
-          (aLoc.contains(myLocation) || myLocation.contains(aLoc));
-      bool bIsMyLocation = myLocation != null &&
-          (bLoc.contains(myLocation) || myLocation.contains(bLoc));
-
-      if (aIsMyLocation && !bIsMyLocation) return -1;
-      if (!aIsMyLocation && bIsMyLocation) return 1;
-
       return bDate.compareTo(aDate);
     }
 
     int compareSuppliers(SuppliersModel a, SuppliersModel b) {
       String aLoc = a.location?.toLowerCase() ?? '';
       String bLoc = b.location?.toLowerCase() ?? '';
-
-      bool aIsMyLocation = myLocation != null &&
-          (aLoc.contains(myLocation) || myLocation.contains(aLoc));
-      bool bIsMyLocation = myLocation != null &&
-          (bLoc.contains(myLocation) || myLocation.contains(bLoc));
-
-      if (aIsMyLocation && !bIsMyLocation) return -1;
-      if (!aIsMyLocation && bIsMyLocation) return 1;
 
       return bLoc.compareTo(aLoc);
     }

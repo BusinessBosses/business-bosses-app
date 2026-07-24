@@ -25,6 +25,7 @@ import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -90,6 +91,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
       });
     });
     reachController.loadShopData(shopController.userShop!.id);
+    _loadReferralReward();
   }
 
   Future<void> connect(String userId) async {
@@ -118,6 +120,37 @@ class _UserShopScreenState extends State<UserShopScreen> {
     String message =
         'Have a look at ${shopController.userShop!.user?.username}\'s BizCenter on Business Bosses\n'
         'https://bizcenter.ai/${shopController.userShop!.name.toLowerCase().replaceAll(' ', '-')}';
+    socialShare(message);
+  }
+
+  /// This shop's active referral reward (coins per successful referral), 0 if none.
+  int _referralReward = 0;
+
+  Future<void> _loadReferralReward() async {
+    try {
+      final String? sid = shopController.userShop?.id;
+      if (sid == null) return;
+      final ApiResponseModel res =
+          await ApiService.get(path: 'shop-referral/$sid');
+      if (res.success == true &&
+          res.data != null &&
+          res.data['active'] == true) {
+        final int coins =
+            int.tryParse('${res.data['coinsPerReferral'] ?? 0}') ?? 0;
+        if (mounted) setState(() => _referralReward = coins);
+      }
+    } catch (_) {
+      // no banner if the reward can't be loaded
+    }
+  }
+
+  void _shareReferral() {
+    final String? shopName = shopController.userShop?.name;
+    if (shopName == null) return;
+    final String message =
+        'Shop at $shopName on Business Bosses!\n'
+        'https://bizcenter.ai/${shopName.toLowerCase().replaceAll(' ', '-')}\n'
+        'Sign up with my invite ID ${profileController.myProfile.inviteId} and shop here — we both earn coins!';
     socialShare(message);
   }
 
@@ -556,6 +589,92 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               }
                                             },
                                           ),
+                                          if (_referralReward > 0 &&
+                                              widget.ismyshop != true)
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15,
+                                                      vertical: 8),
+                                              child: Container(
+                                                width: double.infinity,
+                                                padding:
+                                                    const EdgeInsets.all(14),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black,
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    SvgPicture.asset(
+                                                        'assets/svgs/coin.svg',
+                                                        height: 26,
+                                                        width: 26),
+                                                    const SizedBox(width: 10),
+                                                    Expanded(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: <Widget>[
+                                                          Text(
+                                                            'Refer & earn ${CurrencyFormatter.formatCoins(_referralReward)} coins',
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w800,
+                                                              fontSize: 14,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 2),
+                                                          Text(
+                                                            'Invite a friend with your invite ID — when they buy here you earn ${CurrencyFormatter.coinEquivalent(_referralReward)}',
+                                                            style:
+                                                                const TextStyle(
+                                                              color: Colors
+                                                                  .white70,
+                                                              fontSize: 11,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 8),
+                                                    GestureDetector(
+                                                      onTap: _shareReferral,
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 14,
+                                                                vertical: 8),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                        ),
+                                                        child: const Text(
+                                                          'Refer',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontSize: 13,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,

@@ -28,6 +28,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import '../../common/widgets/coin_price.dart';
+import '../../utils/currency_format.dart';
 
 class OrderProductScreen extends StatefulWidget {
   final bool? ismarketplace;
@@ -1019,116 +1020,181 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                 const SizedBox(
                   height: 15,
                 ),
+                if (activePaymentMethod == 'Pay with Coins') ...<Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text('You will pay',
+                              style: TextStyle(
+                                  color: Colors.white70, fontSize: 12)),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: <Widget>[
+                              SvgPicture.asset('assets/svgs/coin.svg',
+                                  height: 24, width: 24),
+                              const SizedBox(width: 6),
+                              Text(
+                                '${CurrencyFormatter.formatCoins(_coinTotal())} coins',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            CurrencyFormatter.coinEquivalent(_coinTotal()),
+                            style: const TextStyle(
+                                color: Colors.white54, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                ],
                 SizedBox(
                   width: double.infinity,
-                  child: ProCustomButton(
-                    color: Colors.black,
-                    loading: isSubmit,
-                    onPressed: () async {
-                      setState(() {
-                        isSubmit = true;
-                      });
-                      if (activePaymentMethod.isEmpty) {
-                        showSnackbar(
-                          message: 'Please select a payment method',
-                          error: true,
-                        );
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: proprimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      onPressed: !isSubmit ? () async {
                         setState(() {
-                          isSubmit = false;
+                          isSubmit = true;
                         });
-                        return;
-                      }
-                      final Map<String, dynamic> orderData = <String, dynamic>{
-                        'userId': profileController.myProfile.uid,
-                        'shopId': widget.shop.id,
-                        'items': selectedItems,
-                        'deliveryMethod': widget.product.deliveryMethod !=
-                                    null &&
-                                widget.product.deliveryMethod!.isNotEmpty
-                            ? getDeliveryMethod(widget.product.deliveryMethod!)
-                            : 'online',
-                        'deliveryDate': DateTime.now().toString(),
-                        'paymentMethod': activePaymentMethod,
-                        'orderDetails': selectedDetails.isNotEmpty
-                            ? selectedDetails.toString()
-                            : '',
-                        'invoiceOption': 'send_with_payment_link',
-                        'status': 'pending',
-                        'notes': noteController.text,
-                        'quantity': int.tryParse(quantityController.text) ?? 1,
-                      };
-                      final String? newOrderId =
-                          await orderController.addOrder(orderData);
-                      if (newOrderId == null) {
-                        showSnackbar(
-                            message: 'Error creating order!', error: true);
-                        setState(() {
-                          isSubmit = false;
-                        });
-                        return;
-                      }
-                      // Coin settlement (escrow-held until delivery) ONLY when the
-                      // buyer chose to pay with coins.
-                      if (activePaymentMethod == 'Pay with Coins') {
-                        final ApiResponseModel payRes = await orderController
-                            .payOrderWithCoins(newOrderId);
-                        if (!payRes.success) {
+                        if (activePaymentMethod.isEmpty) {
                           showSnackbar(
-                              message: payRes.message.isNotEmpty
-                                  ? payRes.message
-                                  : 'Coin payment failed. Please check your balance.',
-                              error: true);
+                            message: 'Please select a payment method',
+                            error: true,
+                          );
                           setState(() {
                             isSubmit = false;
                           });
                           return;
                         }
-                        final int paid = int.tryParse(
-                                '${payRes.data?['coinAmount'] ?? 0}') ??
-                            0;
-                        if (paid > 0) {
-                          profileController.updateCoinCount(-paid);
+                        final Map<String, dynamic> orderData = <String, dynamic>{
+                          'userId': profileController.myProfile.uid,
+                          'shopId': widget.shop.id,
+                          'items': selectedItems,
+                          'deliveryMethod': widget.product.deliveryMethod !=
+                                      null &&
+                                  widget.product.deliveryMethod!.isNotEmpty
+                              ? getDeliveryMethod(widget.product.deliveryMethod!)
+                              : 'online',
+                          'deliveryDate': DateTime.now().toString(),
+                          'paymentMethod': activePaymentMethod,
+                          'orderDetails': selectedDetails.isNotEmpty
+                              ? selectedDetails.toString()
+                              : '',
+                          'invoiceOption': 'send_with_payment_link',
+                          'status': 'pending',
+                          'notes': noteController.text,
+                          'quantity': int.tryParse(quantityController.text) ?? 1,
+                        };
+                        final String? newOrderId =
+                            await orderController.addOrder(orderData);
+                        if (newOrderId == null) {
+                          showSnackbar(
+                              message: 'Error creating order!', error: true);
+                          setState(() {
+                            isSubmit = false;
+                          });
+                          return;
                         }
-                      }
-                      {
-                        setState(() {
-                          isSubmit = false;
-                        });
-                        Get.defaultDialog(
-                          title: '',
-                          barrierDismissible: false,
-                          content: Column(
-                            children: <Widget>[
-                              const Text(
-                                'Order placed successfully',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              LottieBuilder.asset(
-                                'assets/anim/done.json',
-                                width: 100,
-                                height: 100,
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ProCustomButton(
-                                    text: 'Done',
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Get.back();
-                                    }),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                    text: 'Place Order',
+                        // Coin settlement (escrow-held until delivery) ONLY when the
+                        // buyer chose to pay with coins.
+                        if (activePaymentMethod == 'Pay with Coins') {
+                          final ApiResponseModel payRes = await orderController
+                              .payOrderWithCoins(newOrderId);
+                          if (!payRes.success) {
+                            showSnackbar(
+                                message: payRes.message.isNotEmpty
+                                    ? payRes.message
+                                    : 'Coin payment failed. Please check your balance.',
+                                error: true);
+                            setState(() {
+                              isSubmit = false;
+                            });
+                            return;
+                          }
+                          final int paid = int.tryParse(
+                                  '${payRes.data?['coinAmount'] ?? 0}') ??
+                              0;
+                          if (paid > 0) {
+                            profileController.updateCoinCount(-paid);
+                          }
+                        }
+                        {
+                          setState(() {
+                            isSubmit = false;
+                          });
+                          Get.defaultDialog(
+                            title: '',
+                            barrierDismissible: false,
+                            content: Column(
+                              children: <Widget>[
+                                const Text(
+                                  'Order placed successfully',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                LottieBuilder.asset(
+                                  'assets/anim/done.json',
+                                  width: 100,
+                                  height: 100,
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ProCustomButton(
+                                      text: 'Done',
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Get.back();
+                                      }),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      } : null,
+                      child: isSubmit
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : (activePaymentMethod == 'Pay with Coins'
+                              ? Wrap(
+                                  runAlignment: WrapAlignment.center,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: <Widget>[
+                                    const Text('Pay ', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                                    SvgPicture.asset('assets/svgs/coin.svg', width: 20, height: 20),
+                                    const SizedBox(width: 4),
+                                    Text(CurrencyFormatter.formatCoins(_coinTotal()), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                                  ],
+                                )
+                              : const Text('Place Order', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold))),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -1165,6 +1231,16 @@ class _OrderProductScreenState extends State<OrderProductScreen>
       return 'pickup';
     }
   }
+
+  /// This order's total converted to coins (for the Pay-with-Coins flow).
+  int _coinTotal() => CurrencyFormatter.coinsForPrice(
+        calculateTotal(
+          quantity: int.tryParse(quantityController.text) ?? 0,
+          price: widget.product.price,
+          discount: widget.product.discount ?? 0,
+        ),
+        currencyCode: widget.shop.currency,
+      );
 
   double calculateTotal({
     required int quantity,
