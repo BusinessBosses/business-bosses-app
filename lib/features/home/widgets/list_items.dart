@@ -27,8 +27,21 @@ import 'package:visibility_detector/visibility_detector.dart';
 class PostsWidget extends StatefulWidget {
   final Function(int)? onPageChange;
   final ScrollController scrollController;
-  const PostsWidget(
-      {super.key, this.onPageChange, required this.scrollController});
+
+  /// Widget pinned above the feed (scrolls with it). Used by the "For you"
+  /// home tab to show the performance / boss of the week cards.
+  final Widget? header;
+
+  /// The rotating hero card is hidden when the caller renders its own header
+  /// (the header already carries the Boss of The Week card).
+  final bool showHero;
+  const PostsWidget({
+    super.key,
+    this.onPageChange,
+    required this.scrollController,
+    this.header,
+    this.showHero = true,
+  });
 
   @override
   State<PostsWidget> createState() => _PostsWidgetState();
@@ -62,18 +75,24 @@ class _PostsWidgetState extends State<PostsWidget> {
       );
     }
 
-    // Add scroll listener
-    widget.scrollController.addListener(() {
-      if (widget.scrollController.position.pixels >=
-              widget.scrollController.position.maxScrollExtent - 300 &&
-          !controller.loadingMore.value) {
-        controller.fetchPosts();
-      }
-    });
+    // Add scroll listener. Kept in a field so it can be removed again — the
+    // controller outlives this widget when it sits inside a TabBarView, and
+    // stacked listeners would fire fetchPosts() once per rebuild.
+    widget.scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!widget.scrollController.hasClients) return;
+    if (widget.scrollController.position.pixels >=
+            widget.scrollController.position.maxScrollExtent - 300 &&
+        !controller.loadingMore.value) {
+      controller.fetchPosts();
+    }
   }
 
   @override
   void dispose() {
+    widget.scrollController.removeListener(_onScroll);
     if (courseListKey.currentState is CourseList) {
       (courseListKey.currentState as dynamic).pauseAllVideos();
     }
@@ -85,17 +104,22 @@ class _PostsWidgetState extends State<PostsWidget> {
     return GetBuilder<HomeController>(
         builder: (HomeController controller) => ListView.builder(
               shrinkWrap: true,
+              // Without this the list inherits the MediaQuery top inset and
+              // leaves a blank band under the tab bar.
+              padding: EdgeInsets.zero,
               controller: widget.scrollController,
               itemCount: controller.mixedPosts.length +
                   2 +
                   (controller.loadingMore.value ? 1 : 0),
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {
-                  return Column(children: <Widget>[]);
+                  return widget.header ?? const SizedBox.shrink();
                 }
 
                 if (index == 1) {
-                  return HeroSection();
+                  return widget.showHero
+                      ? HeroSection()
+                      : const SizedBox.shrink();
                 }
 
                 // Loader at the bottom when loadingMore is true

@@ -1,4 +1,8 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
+import 'package:business_bosses_v2/bbpro/presentation/orders_and_invoices.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
@@ -7,6 +11,8 @@ import 'package:business_bosses_v2/features/home/controller/commumities_controll
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/for_you_top_cards.dart';
+import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 
@@ -17,7 +23,6 @@ import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
-import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
@@ -30,22 +35,27 @@ import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import '../settings/preferred_currency_screen.dart';
 
 import '../../utils/theme/theme.dart';
 import '../marketplace/controllers/market_controller.dart';
 import '../marketplace/presentation/marketplace_search_screen.dart';
 import 'package:business_bosses_v2/features/matching_feature/controllers/match_controller.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
-import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
-import 'package:business_bosses_v2/bbpro/presentation/orders_and_invoices.dart';
-import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'dart:async';
 
-/// Marketplace main screen
+/// Home screen: "For you" feed, Marketplace, Jobs and Deals in one place.
+///
+/// Tab indexes: 0 = For you (boss up feed), 1 = Marketplace (products &
+/// services), 2 = Jobs (buyer requests), 3 = Deals (partner deals).
 class MarketplaceScreen extends StatefulWidget {
   final int initialIndex;
   const MarketplaceScreen({super.key, this.initialIndex = 0});
+
+  /// Tab indexes, so callers don't hard-code magic numbers.
+  static const int forYouTab = 0;
+  static const int marketplaceTab = 1;
+  static const int jobsTab = 2;
+  static const int dealsTab = 3;
 
   @override
   State<MarketplaceScreen> createState() => _MarketplaceScreenState();
@@ -71,9 +81,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   late final TabController _marketplaceTabController;
   int _currentTabIndex = 0;
 
-  final PageController _sliderPageController = PageController();
-  int _sliderIndex = 0;
-  Timer? _sliderTimer;
+  /// Feed scroll controller for the "For you" tab.
+  final ScrollController _feedScrollController = ScrollController();
 
   // Keep the loading screen up for a minimum window on the FIRST app entry so
   // it always shows briefly, even when content is served instantly from cache.
@@ -108,12 +117,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     super.initState();
     _currentTabIndex = widget.initialIndex;
     _marketplaceTabController = TabController(
-      length: 3,
+      length: 4,
       vsync: this,
       initialIndex: widget.initialIndex,
     );
-
-    _startSliderTimer();
 
     // Only enforce the minimum loader once per app session (first entry).
     // On later returns to the home tab, skip it so the marketplace shows
@@ -143,21 +150,19 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
       if (index != _currentTabIndex) {
         if (_marketplaceTabController.indexIsChanging) {
-          if (index == 0) {
+          if (index == MarketplaceScreen.marketplaceTab) {
             // Reset buyer requests fully
             buyerRequestController.filterCategory.value = '';
             buyerRequestController.filterLocation.value = '';
             buyerRequestController.filterBuyerRequests('');
-          }
 
-          if (index == 1) {
             _marketController.selectedCategory = null;
             _marketController.isSearching(false);
             _marketController.clearFilter();
             _marketController.sortItems();
           }
 
-          if (index == 2) {
+          if (index == MarketplaceScreen.dealsTab) {
             partnerController.selectedCategory.value = 'All';
           }
         }
@@ -169,6 +174,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Resume a pending order the user paid for outside the app.
+      checkOrderVisit();
+
       _marketController.selectedCategory = null;
       _marketController.isSearching(false);
       _marketController.clearFilter();
@@ -212,28 +220,25 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     });
   }
 
-  void _startSliderTimer() {
-    _sliderTimer?.cancel();
-    _sliderTimer = Timer.periodic(const Duration(seconds: 9), (Timer timer) {
-      if (_sliderPageController.hasClients) {
-        final int nextIndex = (_sliderIndex + 1) % 2;
-        _sliderPageController.animateToPage(
-          nextIndex,
-          duration: const Duration(milliseconds: 800),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
-  }
-
   @override
   void dispose() {
-    _sliderTimer?.cancel();
     _minLoadTimer?.cancel();
-    _sliderPageController.dispose();
+    _feedScrollController.dispose();
     _marketplaceTabController.dispose();
     _advancedDrawerController.dispose();
     super.dispose();
+  }
+
+  /// Opens the order screen when the user returns from an external payment.
+  void checkOrderVisit() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool? visit = prefs.getBool('visited');
+    final String? orderId = prefs.getString('orderId');
+    // Both flags must be present — a stale 'visited' without an order id would
+    // otherwise blow up on the landing screen.
+    if (visit == false && orderId != null && orderId.isNotEmpty) {
+      Get.to(() => ExpandedOrdersView(order: orderId));
+    }
   }
 
   void selectedLocationChanged(String? name, String? code) {
@@ -295,19 +300,24 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               _profileController.myProfile.unReadCount != null &&
                   _profileController.myProfile.unReadCount! > 0,
         ),
-        child: Scaffold(
-          backgroundColor: backgroundColor,
-          body: Obx(() {
-            if (homeController.loading.value || !_minLoadElapsed) {
-              return _buildLoading();
-            } else if (homeController.noConnection.value) {
-              return _buildNoConnection();
-            } else if (homeController.error.value) {
-              return _buildError();
-            } else {
-              return _buildMainContent();
-            }
-          }),
+        child: UpgradeAlert(
+          upgrader: Upgrader(
+            durationUntilAlertAgain: const Duration(minutes: 1),
+          ),
+          child: Scaffold(
+            backgroundColor: backgroundColor,
+            body: Obx(() {
+              if (homeController.loading.value || !_minLoadElapsed) {
+                return _buildLoading();
+              } else if (homeController.noConnection.value) {
+                return _buildNoConnection();
+              } else if (homeController.error.value) {
+                return _buildError();
+              } else {
+                return _buildMainContent();
+              }
+            }),
+          ),
         ),
       );
     });
@@ -326,11 +336,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 automaticallyImplyLeading: false,
                 backgroundColor: Colors.white,
                 elevation: 0,
-                toolbarHeight: 120,
+                // Only Marketplace renders the second row (location + Sales &
+                // Leads). Every other tab needs the short bar, otherwise the
+                // header leaves a blank strip where that row used to be.
+                toolbarHeight: _currentTabIndex ==
+                        MarketplaceScreen.marketplaceTab
+                    ? 120
+                    : 62,
                 flexibleSpace: FlexibleSpaceBar(
                   background: SafeArea(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
+                      padding: const EdgeInsets.only(top: 6.0),
                       child: _buildCombinedHeader(),
                     ),
                   ),
@@ -338,21 +354,32 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               ),
               // Tabs - collapses when scrolling
               SliverToBoxAdapter(child: _buildMainTabs()),
-              // Slider at the top of Marketplace
-              SliverToBoxAdapter(child: _buildTopSlider()),
 
-              if (_marketplaceTabController.index == 0 ||
-                  _marketplaceTabController.index == 1 ||
-                  _marketplaceTabController.index == 2)
+              // Featured listing only belongs to the Marketplace tab; the
+              // "For you" tab carries its own cards inside the feed.
+              if (_currentTabIndex == MarketplaceScreen.marketplaceTab)
+                SliverToBoxAdapter(child: _buildFeaturedListingSlide()),
+
+              if (_currentTabIndex == MarketplaceScreen.jobsTab)
+                SliverToBoxAdapter(child: _buildJobsBanner()),
+
+              if (_currentTabIndex == MarketplaceScreen.dealsTab)
+                SliverToBoxAdapter(child: _buildDealsBanner()),
+
+              if (_currentTabIndex != MarketplaceScreen.forYouTab)
                 SliverToBoxAdapter(child: _buildCategoryChips()),
             ];
           },
           body: TabBarView(
             controller: _marketplaceTabController,
             children: <Widget>[
-              // Tab 1: Marketplace Listings
+              // Tab 0: For you — the boss up feed (incl. boosted posts)
+              _buildForYouFeed(),
+              // Tab 1: Product & service listings
               const MarketsPage(),
+              // Tab 2: Jobs / buyer requests
               const BuyerRequestsScreen(showAppBar: false),
+              // Tab 3: Partner deals
               const BossUpPartner(isMarketplace: true),
             ],
           ),
@@ -511,41 +538,40 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   ),
                   const SizedBox(width: 8),
 
-                  // 3. Red Square + Button
-                  GestureDetector(
-                    onTap: () => _handleCreateButton(context),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFF1E39),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 2),
-                          Text(
-                            _marketplaceTabController.index == 1
-                                ? 'Need'
-                                : _marketplaceTabController.index == 2
-                                    ? 'Deal'
-                                    : 'Sell',
-                            style: const TextStyle(
+                  // 3. Red Square + Button (Marketplace only — Jobs and Deals
+                  // have their own banner actions, For you has the FAB).
+                  if (_currentTabIndex == MarketplaceScreen.marketplaceTab) ...<Widget>[
+                    GestureDetector(
+                      onTap: () => _handleCreateButton(context),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFF1E39),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Row(
+                          children: const <Widget>[
+                            Icon(
+                              Icons.add,
                               color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
+                              size: 20,
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 2),
+                            Text(
+                              'Sell',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
+                    const SizedBox(width: 8),
+                  ],
 
                   // 4. Menu Icon
                   GestureDetector(
@@ -555,9 +581,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   ),
                 ],
               ),
+              // Row 2: Location + Sales & Leads — Marketplace only. The feed,
+              // Jobs and Deals tabs are not location filtered.
+              if (_currentTabIndex ==
+                  MarketplaceScreen.marketplaceTab) ...<Widget>[
               const SizedBox(height: 12),
-
-              // Row 2: Location Picker and Find Your Match
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -621,40 +649,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                   ),
                                 ),
                               ),
-                              const Text(
-                                ' • ',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () => Get.to(() => const PreferredCurrencyScreen()),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    GetBuilder<ProfileController>(
-                                      builder: (ProfileController pc) {
-                                        return Text(
-                                          CurrencyFormatter.preferredCurrencyCode(),
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    const SizedBox(width: 2),
-                                    const Icon(
-                                      Icons.keyboard_arrow_down,
-                                      size: 16,
-                                      color: Colors.black54,
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ],
                           ),
                         ),
@@ -664,34 +658,23 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
                   const SizedBox(width: 12),
 
-                  // Find Your Match Section
+                  // Sales & Leads
                   GestureDetector(
-                    onTap: () {
-                      Get.bottomSheet(
-                        PreMatchModal(),
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                      );
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const <Widget>[
-                        Text(
-                          'Find Your Match',
-                          style: TextStyle(
-                            color: Color(0xFF5B4DFF),
-                            fontWeight: FontWeight.w900,
-                            fontSize: 14,
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Icon(Icons.chevron_right,
-                            color: Color(0xFF5B4DFF), size: 16),
-                      ],
+                    onTap: () => Get.to(() => const OrdersScreen()),
+                    child: const Text(
+                      'Sales & Leads',
+                      style: TextStyle(
+                        color: Color(0xFFFF1E39),
+                        fontWeight: FontWeight.w900,
+                        fontSize: 14,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Color(0xFFFF1E39),
+                      ),
                     ),
                   ),
                 ],
               ),
+              ],
             ],
           ),
         );
@@ -699,7 +682,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     });
   }
 
-  /// Main tabs: Seller Listing, Buyer Request, Ranking Business
+  /// Main tabs: For you, Marketplace, Jobs, Deals — plus the Find Match link.
   Widget _buildMainTabs() {
     return Container(
       decoration: BoxDecoration(
@@ -708,70 +691,143 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
           bottom: BorderSide(color: Colors.grey.withValues(alpha: 0.1)),
         ),
       ),
-      child: TabBar(
-        controller: _marketplaceTabController,
-        isScrollable: false,
-        // Tighten the per-tab padding so the slightly larger labels (esp.
-        // "Partner Deals") still fit on one line in three equal-width tabs.
-        labelPadding: const EdgeInsets.symmetric(horizontal: 2),
-        labelColor: Colors.black87,
-        unselectedLabelColor: Colors.black87,
-        labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12),
-        unselectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w800,
-          fontSize: 12,
-        ),
-        indicatorColor: primaryColorLT,
-        indicatorWeight: 3,
-        tabs: <Widget>[
-          Tab(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                Icon(Icons.grid_view, color: Color(0xFFF27121), size: 16),
-                SizedBox(width: 4),
-                Text(
-                  'Sellers',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(height: 1.2, fontSize: 12),
-                ),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: TabBar(
+              controller: _marketplaceTabController,
+              isScrollable: false,
+              labelPadding: const EdgeInsets.symmetric(horizontal: 2),
+              labelColor: Colors.black87,
+              unselectedLabelColor: Colors.black87,
+              labelStyle:
+                  const TextStyle(fontWeight: FontWeight.w900, fontSize: 12),
+              unselectedLabelStyle: const TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 12,
+              ),
+              indicatorColor: primaryColorLT,
+              indicatorWeight: 3,
+              tabs: const <Widget>[
+                Tab(child: _TabLabel('For you')),
+                Tab(child: _TabLabel('Marketplace')),
+                Tab(child: _TabLabel('Jobs')),
+                Tab(child: _TabLabel('Deals')),
               ],
             ),
           ),
-          Tab(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                Icon(Icons.gps_fixed, size: 16, color: Color(0xFFF27121)),
-                SizedBox(width: 4),
-                Text(
-                  'Customers',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(height: 1.2, fontSize: 12),
-                ),
-              ],
-            ),
-          ),
-          Tab(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                Icon(LucideIcons.trophy, size: 16, color: Color(0xFFF27121)),
-                SizedBox(width: 4),
-                Flexible(
-                  child: Text(
-                    'Partner Deals',
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.visible,
-                    softWrap: false,
-                    style: TextStyle(height: 1.2, fontSize: 12),
+          // Find Match sits beside the tabs — it opens the matching flow
+          // instead of switching tabs.
+          GestureDetector(
+            onTap: () {
+              Get.bottomSheet(
+                PreMatchModal(),
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+              );
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(left: 6, right: 12),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Find Match',
+                    style: TextStyle(
+                      color: Color(0xFF5B4DFF),
+                      fontWeight: FontWeight.w900,
+                      fontSize: 12,
+                    ),
                   ),
-                ),
-              ],
+                  Icon(Icons.chevron_right,
+                      color: Color(0xFF5B4DFF), size: 14),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// "For you" tab — the boss up feed, with the performance / boss of the
+  /// week cards as its header. Boosted (promoted) posts are part of this feed.
+  Widget _buildForYouFeed() {
+    return RefreshIndicator(
+      onRefresh: () async {
+        await homeController.loadData();
+      },
+      child: PostsWidget(
+        scrollController: _feedScrollController,
+        header: const ForYouTopCards(),
+        showHero: false,
+      ),
+    );
+  }
+
+  /// Banner above the Jobs tab.
+  Widget _buildJobsBanner() {
+    return _buildActionBanner(
+      message:
+          'List work or job position and connect with active job seekers.',
+      actionLabel: 'Post a Job',
+      onTap: () => Get.to(() => AddBuyerRequests()),
+    );
+  }
+
+  /// Banner above the Deals tab.
+  Widget _buildDealsBanner() {
+    return _buildActionBanner(
+      message:
+          'Become a partner, list deals, get featured & more customers.',
+      actionLabel: 'Post a Deal',
+      onTap: () {
+        if (!_profileController.myProfile.isSubscribed) {
+          showPremiumPaywall();
+        } else {
+          Get.to(() => const BecomeaPartnerScreen());
+        }
+      },
+    );
+  }
+
+  Widget _buildActionBanner({
+    required String message,
+    required String actionLabel,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFF1E39),
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            onPressed: onTap,
+            child: Text(
+              actionLabel,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
             ),
           ),
         ],
@@ -805,13 +861,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
                       bool isSelected;
 
-                      if (tabIndex == 0) {
+                      if (tabIndex == MarketplaceScreen.marketplaceTab) {
                         // Seller
                         isSelected = (_marketController.selectedCategory ==
                                     null &&
                                 category == 'All') ||
                             (_marketController.selectedCategory == category);
-                      } else if (tabIndex == 2) {
+                      } else if (tabIndex == MarketplaceScreen.dealsTab) {
                         // Partner deals
                         isSelected =
                             (partnerController.selectedCategory.value ==
@@ -830,7 +886,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           final int tabIndex = _marketplaceTabController.index;
 
                           setState(() {
-                            if (tabIndex == 0) {
+                            if (tabIndex == MarketplaceScreen.marketplaceTab) {
                               // 🔵 SELLER LISTING (MarketController)
 
                               if (category == 'All') {
@@ -841,7 +897,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                               } else {
                                 _marketController.loadCategory(category);
                               }
-                            } else if (tabIndex == 1) {
+                            } else if (tabIndex == MarketplaceScreen.jobsTab) {
                               // 🟢 BUYER REQUEST (BuyerRequestController)
 
                               if (category == 'All') {
@@ -851,7 +907,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                               }
 
                               buyerRequestController.filterBuyerRequests('');
-                            } else if (tabIndex == 2) {
+                            } else if (tabIndex ==
+                                MarketplaceScreen.dealsTab) {
                               // 🟡 PARTNER DEALS
                               partnerController.selectedCategory.value =
                                   category;
@@ -914,219 +971,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     );
   }
 
-  /// Handles creation button press logic (moved from big nested ifs)
+  /// Handles the header "+ Sell" button (Marketplace tab only).
   void _handleCreateButton(BuildContext context) async {
-    final int index = _marketplaceTabController.index;
-
-    // Redirect only for index 0 and 3 (example)
-    if (!_profileController.myProfile.hasShop && (index == 0 || index == 3)) {
+    // Selling requires a shop first.
+    if (!_profileController.myProfile.hasShop) {
       Get.to(() => const MyProfileScreen(currentIndex: 1));
       return;
     }
 
-    if (index == 1) {
-      Get.to(() => AddBuyerRequests());
-    } else if (index == 2) {
-      if (!_profileController.myProfile.isSubscribed) {
-        showPremiumPaywall();
-      } else {
-        Get.to(() => const BecomeaPartnerScreen());
-      }
-    } else {
-      _showSellOptions(context);
-    }
+    _showSellOptions(context);
   }
 
-  Widget _buildTopSlider() {
-    return Column(
-      children: <Widget>[
-        SizedBox(
-          height: 205,
-          child: PageView(
-            controller: _sliderPageController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            pageSnapping: true,
-            onPageChanged: (int index) {
-              setState(() => _sliderIndex = index);
-              // Restart the auto-advance timer so a manual swipe isn't
-              // immediately overridden by the next automatic transition.
-              _startSliderTimer();
-            },
-            children: <Widget>[
-              _buildInsightSlide(),
-              _buildFeaturedListingSlide(),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(2, (int index) {
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color:
-                    _sliderIndex == index ? Colors.black : Colors.grey.shade300,
-              ),
-            );
-          }),
-        ),
-        const SizedBox(height: 10),
-      ],
-    );
-  }
-
-  Widget _buildInsightSlide() {
-    return GetBuilder<ReachController>(
-      builder: (ReachController reach) {
-        final Map<String, dynamic> data = reach.myReach ?? <String, dynamic>{};
-        final String reachScore =
-            _formatReachScore(data['totalReachPoints'] ?? 0);
-
-        // Prioritize industry rank, then global rank
-        String ranking = 'N/A';
-        final dynamic shopIndustryRank = data['shopIndustryRank'];
-        final dynamic indRank = shopIndustryRank?['industryRank'];
-        final dynamic globRank = data['globalRank'];
-
-        if (indRank != null && indRank != 0) {
-          ranking = '#$indRank';
-        } else if (globRank != null && globRank != 0) {
-          ranking = '#$globRank';
-        }
-
-        return GestureDetector(
-          onTap: () =>
-              Get.to(() => ReachScreen(user: _profileController.myProfile)),
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFEF2F2),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    const Text('My Performance',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
-                    const Icon(Icons.chevron_right, size: 20),
-                  ],
-                ),
-                const SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _buildInsightMetric('Reach Score', reachScore),
-                    // Shop owners (sellers) see buyer-request matches in their
-                    // industry/location — consistent with the dashboard
-                    // "Matched Buyer" tile. Non-shop users keep their own
-                    // match list, for which buyer requests aren't meaningful.
-                    Obx(() => _buildInsightMetric(
-                        'Matches',
-                        _profileController.myProfile.hasShop
-                            ? '${buyerRequestController.matchCount.value}'
-                            : '${_matchController.matchList.length}')),
-                    _buildInsightMetric('Ranking', ranking),
-                  ],
-                ),
-                const Spacer(),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.red,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: const BorderSide(color: Color(0xFFFECACA)),
-                          ),
-                        ),
-                        onPressed: () => Get.to(() => const OrdersScreen()),
-                        child: const Text('Leads & Orders',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        onPressed: () {
-                          if (_profileController.myProfile.isSubscribed) {
-                            Get.to(
-                                () => const CreatePostScreen(fromBoost: true));
-                          } else {
-                            showPremiumPaywall();
-                          }
-                        },
-                        child: const Text('Boost Visibility',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  String _formatReachScore(num value) {
-    if (value >= 1000) {
-      double formatted = value / 1000;
-      return '${formatted.toStringAsFixed(formatted % 1 == 0 ? 0 : 1)}k';
-    }
-    return value.toString();
-  }
-
-  Widget _buildInsightMetric(String label, String value) {
-    return Container(
-      width: (Get.width - 70) / 3,
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        children: <Widget>[
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w900,
-              color: Color(0xFFB91C1C),
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFFEF4444),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildFeaturedListingSlide() {
     return Obx(() {
@@ -1191,6 +1046,26 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Single-line tab label used by the home tab bar.
+class _TabLabel extends StatelessWidget {
+  const _TabLabel(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        maxLines: 1,
+        style: const TextStyle(height: 1.2, fontSize: 12),
       ),
     );
   }

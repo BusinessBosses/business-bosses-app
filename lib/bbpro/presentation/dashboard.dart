@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
@@ -292,7 +293,7 @@ class _DashboardState extends State<Dashboard> {
                           GestureDetector(
                             onTap: () {
                               final Uri url =
-                                  Uri.parse('https://bizcenter.ai/dashboard');
+                                  Uri.parse('$bizCenterBaseUrl/dashboard');
                               launchUrl(url,
                                   mode: LaunchMode.externalApplication);
                             },

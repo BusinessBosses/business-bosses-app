@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/features/promotions/widgets/coinpopup.dart';
 import 'package:business_bosses_v2/features/withdrawal/presentation/deposit_screen.dart';
 import 'package:business_bosses_v2/features/withdrawal/presentation/withdrawal_screen.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +100,15 @@ class _PromotionScreenState extends State<PromotionScreen> {
                           color: textColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        CurrencyFormatter.coinEquivalent(_profileController.myProfile.coinscount ?? 0),
+                        style: const TextStyle(
+                          color: textColor,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ]))),

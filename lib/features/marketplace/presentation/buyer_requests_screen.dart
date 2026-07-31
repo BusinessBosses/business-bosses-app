@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/features/home/widgets/buyer_request_item.dart
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/apply_with_cv_sheet.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -58,7 +59,11 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchRequests();
+    // Deferred to after the frame: fetching clears the shared Rx lists, and
+    // doing that from initState marks other live Obx widgets dirty mid-build.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _fetchRequests();
+    });
   }
 
   Future<void> _fetchRequests() async {
@@ -170,13 +175,19 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
     });
   }
 
-  void _navigateToChatScreen(BuyerRequestModel request) {
+  /// Applying opens the CV sheet first — attaching one is optional.
+  Future<void> _navigateToChatScreen(BuyerRequestModel request) async {
+    final JobApplication? application = await showApplyWithCvSheet(request);
+    if (application == null) return;
+
     Get.to(
       () =>
           const ChatRoomScreen(frommarketplace: false, fromBuyerRequest: true),
-      arguments: <String, Object>{
+      arguments: <String, Object?>{
         'user': request.user,
         'buyerRequest': request,
+        'cvUrl': application.cvUrl,
+        'cvName': application.cvName,
       },
     );
   }
@@ -190,7 +201,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   void _shareRequest(BuyerRequestModel request) {
-    String message = 'Check out this buyer request on Business Bosses\n'
+    String message = 'Check out this job on Business Bosses\n'
         'Title: ${request.title}\n'
         'Budget: \$${request.budgetStart.toStringAsFixed(0)} - \$${request.budgetEnd.toStringAsFixed(0)}\n'
         'https://vm.businessbosses.co.uk/share/post';
@@ -223,7 +234,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
               },
               contentPadding: EdgeInsets.zero,
               title: const TextWidget(
-                text: 'Report this request',
+                text: 'Report this job',
                 color: Colors.red,
               ),
             )
@@ -245,7 +256,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         ),
         content: TextWidget(
           text:
-              'You will no longer see this user\'s buyer requests on your feed',
+              'You will no longer see this user\'s jobs on your feed',
           centralize: true,
           color: Colors.black.withValues(alpha: .6),
         ),
@@ -503,7 +514,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                               if (success) {
                                 Get.snackbar(
                                   'Deleted',
-                                  'Request deleted successfully!',
+                                  'Job deleted successfully!',
                                   snackPosition: SnackPosition.BOTTOM,
                                   backgroundColor: Colors.green[100],
                                   colorText: Colors.green[900],
@@ -515,7 +526,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                               } else {
                                 Get.snackbar(
                                   'Error',
-                                  'Failed to delete request.',
+                                  'Failed to delete job.',
                                   snackPosition: SnackPosition.BOTTOM,
                                   backgroundColor: Colors.red[100],
                                   colorText: Colors.red[900],
@@ -535,7 +546,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                             Get.back();
                             Get.snackbar(
                               'Blocked',
-                              'Request has been blocked',
+                              'Job has been blocked',
                               snackPosition: SnackPosition.BOTTOM,
                               backgroundColor: Colors.grey[100],
                               colorText: Colors.grey[900],
@@ -581,7 +592,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                   ),
                   const SizedBox(height: 12),
                   _buildDetailRow(Icons.attach_money, 'Budget',
-                      '\$${request.budgetStart} - \$${request.budgetEnd}'),
+                      '${CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(request.budgetStart, currencyCode: 'USD'))} - ${CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(request.budgetEnd, currencyCode: 'USD'))}'),
                   const SizedBox(height: 8),
                   if (request.deadline.isNotEmpty) ...<Widget>[
                     _buildDetailRow(
@@ -595,49 +606,27 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                   ],
                   _buildDetailRow(Icons.category, 'Category', request.category),
                   const SizedBox(height: 16),
-                  if (!isMyRequest) ...<Widget>[
-                    if (profileController.myProfile.hasShop) ...<Widget>[
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => _navigateToChatScreen(request),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColorLT,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text(
-                            'Send Proposal',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
+                  // Anyone can apply to a job — no shop required.
+                  if (!isMyRequest)
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => _navigateToChatScreen(request),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColorLT,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                      ),
-                    ] else ...<Widget>[
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => Get.to(() => Setupshop()),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColorLT,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text(
-                            'Setup Shop to Send Proposal',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
+                        child: const Text(
+                          'Apply with your CV',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       ),
-                    ],
-                  ],
+                    ),
                 ],
               ),
             ),
@@ -651,7 +640,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
     return await Get.dialog(
       AlertDialog(
         title: const Text('Confirm Delete'),
-        content: const Text('Are you sure you want to delete this request?'),
+        content: const Text('Are you sure you want to delete this job?'),
         actions: <Widget>[
           TextButton(
             onPressed: () => Get.back(result: false),
@@ -700,7 +689,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
     return Scaffold(
       appBar: widget.showAppBar
           ? AppBar(
-              title: const Text('Matched Buyer Requests'),
+              title: const Text('Matched Jobs'),
             )
           : null,
       backgroundColor: backgroundColor,
@@ -712,7 +701,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         if (_buyerRequestController.error.value) {
           return Center(
             child: Text(
-              'Error loading requests',
+              'Error loading jobs',
               style: TextStyle(color: Colors.grey[700]),
             ),
           );
@@ -783,7 +772,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
-            '$hiddenCount more buyer ${hiddenCount == 1 ? 'request' : 'requests'} matched',
+            '$hiddenCount more ${hiddenCount == 1 ? 'job' : 'jobs'} matched',
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -793,7 +782,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
           ),
           const SizedBox(height: 4),
           const Text(
-            'Upgrade to Pro to see all your buyer matches',
+            'Upgrade to Pro to see all your job matches',
             style: TextStyle(color: Colors.white70, fontSize: 13),
             textAlign: TextAlign.center,
           ),
@@ -826,7 +815,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         SizedBox(height: 16),
-        Text('No Requests found',
+        Text('No Jobs found',
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -843,7 +832,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Text(
-            "We'll notify you when we find a buyer request match for you",
+            "We'll notify you when we find a job match for you",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18,

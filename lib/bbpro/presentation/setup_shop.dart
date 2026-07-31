@@ -10,7 +10,6 @@ import 'package:business_bosses_v2/bbpro/widgets/selectionboxes.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
@@ -531,11 +530,11 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
         leading: IconButton(
           onPressed: () {
             if (widget.backToHome) {
-              Get.off(() => const MarketplaceScreen(initialIndex: 1));
+              Get.off(() => const MarketplaceScreen(initialIndex: MarketplaceScreen.marketplaceTab));
             } else if (Navigator.canPop(context)) {
               Navigator.pop(context);
             } else {
-              Get.off(() => const MarketplaceScreen(initialIndex: 1));
+              Get.off(() => const MarketplaceScreen(initialIndex: MarketplaceScreen.marketplaceTab));
             }
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),

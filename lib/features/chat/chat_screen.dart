@@ -504,8 +504,11 @@ class _ChatItemState extends State<ChatItem> {
                                   : widget.myChatUser.messageText != null
                                       ? widget.myChatUser.messageText!
                                               .startsWith('BUYER_REQUEST::')
-                                          ? Text('Buyer Request')
-                                          : Text(
+                                          ? Text('Job Application')
+                                          : widget.myChatUser.messageText!
+                                                  .startsWith('JOB_CV::')
+                                              ? Text('CV attached')
+                                              : Text(
                                               widget.myChatUser.messageText ??
                                                   'Image',
                                               maxLines: 1,

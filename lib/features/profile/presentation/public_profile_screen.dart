@@ -457,7 +457,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   ),
                                   if (buyerRequests.isNotEmpty)
                                     const Tab(
-                                      text: 'Requests',
+                                      text: 'Jobs',
                                     ),
                                   if (myPartners.isNotEmpty)
                                     const Tab(
@@ -968,7 +968,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                           ),
                         ),
                         child: const Text(
-                          'Edit Request',
+                          'Edit Job',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),
@@ -1034,7 +1034,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                           ),
                         ),
                         child: const Text(
-                          'Delete Request',
+                          'Delete Job',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),

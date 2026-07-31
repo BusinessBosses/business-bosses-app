@@ -423,10 +423,11 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                           // Sort the list based on the 'date' key in each map in descending order
                                           coinHistoryController
                                               .coinwithdrawalHistory
-                                              .sort((dynamic a, dynamic b) =>
-                                                  DateTime.parse(b['date'])
-                                                      .compareTo(DateTime.parse(
-                                                          a['date'])));
+                                              .sort((dynamic a, dynamic b) {
+                                            final String dateA = a['createdAt'] ?? a['date'] ?? DateTime.now().toString();
+                                            final String dateB = b['createdAt'] ?? b['date'] ?? DateTime.now().toString();
+                                            return DateTime.parse(dateB).compareTo(DateTime.parse(dateA));
+                                          });
 
                                           return WithdrawalItem(
                                             item: coinHistoryController

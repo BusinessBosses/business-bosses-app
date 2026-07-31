@@ -1591,6 +1591,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   location: location.isEmpty
                       ? shopController.shop!.location
                       : location,
+                  isActive: _isSwitched,
                 ));
             showSnackbar(message: 'Service Added Successfully!');
 

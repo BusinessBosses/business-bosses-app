@@ -119,17 +119,8 @@ class HomeAppBar extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          const SizedBox(width: 5),
-                          Text(
-                            CurrencyFormatter.coinEquivalent(int.tryParse(coinsCount)),
-                            style: const TextStyle(
-                              color: textColor,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
                     ),
                   ),
 

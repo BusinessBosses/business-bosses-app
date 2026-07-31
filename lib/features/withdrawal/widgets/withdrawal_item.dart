@@ -16,7 +16,7 @@ class WithdrawalItem extends StatefulWidget {
 class _WithdrawalItemState extends State<WithdrawalItem> {
   @override
   Widget build(BuildContext context) {
-    String dateTimeString = widget.item['date'];
+    String dateTimeString = widget.item['createdAt'] ?? widget.item['date'] ?? DateTime.now().toString();
     return Column(
       children: [
         Padding(

@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/common/widgets/coin_price.dart';
 import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
@@ -1264,7 +1265,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                             activeColor: Colors.black,
                                             title: Text(package['name']),
                                             subtitle: Text(
-                                                '${CurrencyFormatter.formatCoins(CurrencyFormatter.coinsForPrice(package['price'] as num?, currencyCode: widget.shop.currency))} coins'),
+                                                CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(package['price'] as num?, currencyCode: widget.shop.currency))),
                                             value: selectedItems.any(
                                                 (Map<String, dynamic> item) =>
                                                     item['id'] ==
@@ -1973,7 +1974,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
   Future<void> _shareProduct() async {
     String message = '${widget.service.name}:\n'
         '${widget.service.description}\n'
-        'https://bizcenter.ai/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
+        '$bizCenterBaseUrl/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 }

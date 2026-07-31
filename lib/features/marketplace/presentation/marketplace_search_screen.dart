@@ -45,7 +45,7 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
     'People',
     'Products',
     'Services',
-    'I Need',
+    'Jobs',
     'Ranking Business'
   ];
 
@@ -411,11 +411,11 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
         if (requests.isEmpty) {
           if (_searchController.text.isEmpty) {
             return const Center(
-              child: Text('Enter a search term to find buyer requests'),
+              child: Text('Enter a search term to find jobs'),
             );
           }
           return const SafetyModel(
-              isLoading: false, title: 'No Buyer Requests Found');
+              isLoading: false, title: 'No Jobs Found');
         }
         return MasonryGridView.count(
           crossAxisCount: 2,

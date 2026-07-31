@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
@@ -951,7 +952,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
   void _sharePost() {
     String message =
         'Have a look at ${shopController.userShop!.user?.username}\'s biz-center on Business Bosses\n'
-        'https://bizcenter.ai/${shopController.userShop?.name.toLowerCase().replaceAll(' ', '-')}';
+        '$bizCenterBaseUrl/${shopController.userShop?.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 

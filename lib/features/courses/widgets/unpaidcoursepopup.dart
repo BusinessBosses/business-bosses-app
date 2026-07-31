@@ -1,8 +1,8 @@
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
@@ -171,8 +171,8 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
                     const Text('Buy Course for '),
-                    SvgPicture.asset('assets/svgs/coin.svg'),
-                    Text('${widget.course.price}'),
+                    Text(CurrencyFormatter.formatCurrency(
+                        num.tryParse('${widget.course.price}')?.round() ?? 0)),
                   ],
                 ),
               ),

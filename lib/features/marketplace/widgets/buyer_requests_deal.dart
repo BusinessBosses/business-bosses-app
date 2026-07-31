@@ -16,7 +16,7 @@ class BuyerRequestDealsWidget extends StatefulWidget {
 
   const BuyerRequestDealsWidget({
     super.key,
-    this.title = 'Buyer Requests',
+    this.title = 'Jobs',
     this.isHome = false,
   });
 
@@ -53,7 +53,7 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
           .toList();
 
       return GestureDetector(
-        onTap: () => Get.to(() => const MarketplaceScreen(initialIndex: 1)),
+        onTap: () => Get.to(() => const MarketplaceScreen(initialIndex: MarketplaceScreen.jobsTab)),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -88,7 +88,7 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
                     ? SafetyModel()
                     : requests.isEmpty
                         ? Center(
-                            child: Text('No requests available',
+                            child: Text('No jobs available',
                                 style: TextStyle(color: Colors.grey[600])),
                           )
                         : ListView.builder(

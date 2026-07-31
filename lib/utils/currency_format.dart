@@ -16,10 +16,12 @@ class CurrencyFormatter {
       final ApiResponseModel response =
           await ApiService.get(path: 'currency/rates');
       if (response.success == true && response.data != null) {
-        _ratesCache =
-            Map<String, dynamic>.from(response.data as Map<String, dynamic>);
+        if (response.data is Map) {
+          _ratesCache = Map<String, dynamic>.from(response.data as Map<dynamic, dynamic>);
+        }
       }
     } catch (e) {
+      print('CurrencyFormatter.initRates error: $e');
       // ignore — callers fall back to the 100:1 default
     }
   }
@@ -31,8 +33,7 @@ class CurrencyFormatter {
   /// rate isn't available so callers never crash / divide by zero.
   static double _rateFor(String code) {
     if (code == 'USD') return 1.0;
-    final Map<String, dynamic> rates =
-        (_ratesCache?['rates'] as Map<String, dynamic>?) ?? <String, dynamic>{};
+    final Map rates = (_ratesCache?['rates'] as Map?) ?? {};
     final dynamic v = rates[code];
     if (v is num && v > 0) return v.toDouble();
     final double? parsed = double.tryParse('$v');

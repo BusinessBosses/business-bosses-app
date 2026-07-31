@@ -1,6 +1,7 @@
 // ignore_for_file: empty_catches
 
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
@@ -119,7 +120,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
   void _shareBizCenter() {
     String message =
         'Have a look at ${shopController.userShop!.user?.username}\'s BizCenter on Business Bosses\n'
-        'https://bizcenter.ai/${shopController.userShop!.name.toLowerCase().replaceAll(' ', '-')}';
+        '$bizCenterBaseUrl/${shopController.userShop!.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 
@@ -149,7 +150,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
     if (shopName == null) return;
     final String message =
         'Shop at $shopName on Business Bosses!\n'
-        'https://bizcenter.ai/${shopName.toLowerCase().replaceAll(' ', '-')}\n'
+        '$bizCenterBaseUrl/${shopName.toLowerCase().replaceAll(' ', '-')}\n'
         'Sign up with my invite ID ${profileController.myProfile.inviteId} and shop here — we both earn coins!';
     socialShare(message);
   }

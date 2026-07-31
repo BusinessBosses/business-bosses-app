@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/forum/controller/challenge_controlle
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/challengeitem.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
@@ -19,7 +20,16 @@ import 'package:intl/intl.dart';
 class BossupChallenge extends StatefulWidget {
   final Color? backgroundColor;
   final bool? ishome;
-  const BossupChallenge({super.key, this.ishome, this.backgroundColor});
+
+  /// When shown as the Boss Up bottom-nav tab there is nothing to pop back to,
+  /// so the back button goes to the home screen instead.
+  final bool isTab;
+  const BossupChallenge({
+    super.key,
+    this.ishome,
+    this.backgroundColor,
+    this.isTab = false,
+  });
 
   @override
   State<BossupChallenge> createState() => _BossupChallengeState();
@@ -35,10 +45,15 @@ class _BossupChallengeState extends State<BossupChallenge> {
       appBar: AppBar(
         backgroundColor: widget.backgroundColor ?? Colors.white,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-        ),
+        // As a bottom-nav destination there is nothing to go back to, so the
+        // back button is dropped and the title sits left.
+        automaticallyImplyLeading: !widget.isTab,
+        leading: widget.isTab
+            ? null
+            : IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
         title: const Text(
           'Boss Up',
           style: TextStyle(
@@ -47,7 +62,8 @@ class _BossupChallengeState extends State<BossupChallenge> {
             fontSize: 18,
           ),
         ),
-        centerTitle: true,
+        centerTitle: !widget.isTab,
+        titleSpacing: widget.isTab ? 20 : NavigationToolbar.kMiddleSpacing,
         actions: widget.ishome == true
             ? null
             : <Widget>[
@@ -131,8 +147,8 @@ class _BossupChallengeState extends State<BossupChallenge> {
                 scrollDirection:
                     widget.ishome! == true ? Axis.horizontal : Axis.vertical,
 
-                // UPDATED: added events (+4 instead of +3)
-                itemCount: controller.categories.length + 4,
+                // Challenges + Marketplace, Events, Crowdfund, Mentor, Partner
+                itemCount: controller.categories.length + 5,
 
                 itemBuilder: (BuildContext context, int index) {
                   if (index < controller.categories.length) {
@@ -207,7 +223,21 @@ class _BossupChallengeState extends State<BossupChallenge> {
 
                   // REMOVED: Ambassador challenge block
 
+                  // Marketplace keeps a home in Boss Up so users who knew it as
+                  // a separate section can still find it.
                   else if (index == controller.categories.length) {
+                    return Challengeitem(
+                      isMarketplace: true,
+                      onTap: () {
+                        Get.to(() => const MarketplaceScreen(
+                              initialIndex: MarketplaceScreen.marketplaceTab,
+                            ));
+                      },
+                      title: 'Marketplace',
+                      description: 'List or find product and services',
+                      imageurl: 'assets/images/marketplace.png',
+                    );
+                  } else if (index == controller.categories.length + 1) {
                     return Challengeitem(
                       isEvents: true,
                       onTap: () {
@@ -217,7 +247,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       description: 'Join or share events online & in person',
                       imageurl: 'assets/images/live_event.png',
                     );
-                  } else if (index == controller.categories.length + 1) {
+                  } else if (index == controller.categories.length + 2) {
                     return Challengeitem(
                       isCrowdfund: true,
                       onTap: () {
@@ -230,7 +260,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       title: 'Crowdfund',
                       imageurl: 'assets/images/donationpic.png',
                     );
-                  } else if (index == controller.categories.length + 2) {
+                  } else if (index == controller.categories.length + 3) {
                     return Challengeitem(
                       isMentor: true,
                       onTap: () {

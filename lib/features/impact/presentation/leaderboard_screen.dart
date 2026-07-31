@@ -96,10 +96,18 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
     if (!widget.isMarketplace) {
       _tabController = TabController(length: _filters.length, vsync: this);
-      loadUsers();
-    } else {
-      _loadMarketplaceData();
     }
+
+    // Deferred to after the frame: both paths call setState / controller
+    // update() synchronously, which marks widgets dirty mid-build.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (!widget.isMarketplace) {
+        loadUsers();
+      } else {
+        _loadMarketplaceData();
+      }
+    });
   }
 
   Future<void> _loadMarketplaceData() async {

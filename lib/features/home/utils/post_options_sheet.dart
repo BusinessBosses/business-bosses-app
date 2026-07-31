@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
 import 'package:business_bosses_v2/features/home/sell_product.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -34,92 +33,29 @@ class PostOptionsBottomSheet {
               ),
               const SizedBox(height: 30),
 
-              // Post with AI
-              GestureDetector(
+              // Start a Conversation
+              _buildOptionItem(
+                iconPath: 'assets/svgs/chat_bubble.svg',
+                iconData: Icons.auto_awesome,
+                iconColor: const Color(0xFFEEF2FF),
+                iconTintColor: const Color(0xFF6366F1),
+                title: 'Start a Conversation',
+                subtitle: 'Share content and updates. Get featured.',
                 onTap: () {
                   Navigator.pop(context);
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (BuildContext context) => const AIPromoteSheet(),
-                  );
+                  Get.toNamed(Routes.createPost);
                 },
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF0F7FF),
-                    border:
-                        Border.all(color: const Color(0xFF0D47A1), width: 1.5),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        child: const Icon(Icons.auto_awesome,
-                            color: Color(0xFF0D47A1), size: 30),
-                      ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                const Text(
-                                  'Post with AI ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Color(0xFF1F2937),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFD54F),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: const Text(
-                                    'Get Matched',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Color(0xFF1F2937),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 5),
-                            const Text(
-                              'Get featured, get matched, and discover new opportunities faster.',
-                              style: TextStyle(
-                                color: Color(0xFF4B5563),
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Icon(Icons.chevron_right, color: Colors.grey),
-                    ],
-                  ),
-                ),
               ),
               const SizedBox(height: 15),
 
-              // Sell my product or service
+              // Sell Product or Services
               _buildOptionItem(
                 iconPath: 'assets/svgs/sell_bag.svg',
                 iconData: Icons.shopping_bag_outlined,
                 iconColor: const Color(0xFFFFEBEE),
                 iconTintColor: const Color(0xFFEF4444),
-                title: 'Sell my product or service',
-                subtitle:
-                    'Showcase what you offer to buyers searching right now',
+                title: 'Sell Product or Services',
+                subtitle: 'Reach customers who are searching right now.',
                 onTap: () {
                   Navigator.pop(context);
                   sellProduct(context);
@@ -127,34 +63,17 @@ class PostOptionsBottomSheet {
               ),
               const SizedBox(height: 15),
 
-              // Need a Product or Service
+              // Post a Job
               _buildOptionItem(
                 iconPath: 'assets/svgs/need_doc.svg',
                 iconData: Icons.description_outlined,
                 iconColor: const Color(0xFFE8F5E9),
                 iconTintColor: const Color(0xFF22C55E),
-                title: 'Need a Product or Service',
-                subtitle:
-                    'Post what you need and get matched with the right supplier',
+                title: 'Post a Job',
+                subtitle: 'Get your work done faster, with the best talent.',
                 onTap: () {
                   Navigator.pop(context);
                   Get.to(() => const AddBuyerRequests());
-                },
-              ),
-              const SizedBox(height: 15),
-
-              // Start a conversation
-              _buildOptionItem(
-                iconPath: 'assets/svgs/chat_bubble.svg',
-                iconData: Icons.chat_bubble_outline,
-                iconColor: const Color(0xFFFFF8E1),
-                iconTintColor: const Color(0xFFF59E0B),
-                title: 'Start a conversation',
-                subtitle:
-                    'Share content, updates, announcements, or discussion.',
-                onTap: () {
-                  Navigator.pop(context);
-                  Get.toNamed(Routes.createPost);
                 },
               ),
               const SizedBox(height: 30),

@@ -838,6 +838,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                 productId: response.product?.id.toString(),
                 location:
                     country.isEmpty ? shopController.shop!.location : country,
+                isActive: _isSwitched,
               ));
           showSnackbar(
             message: 'Product Added Successfully!',

@@ -127,10 +127,18 @@ class _BoostPostState extends State<BoostPost> {
   /// BACKEND UPDATE (UNCHANGED)
   /// -----------------------------
   Future<void> updatePost(String method) async {
+    // A boost only surfaces in the feed when promote AND approved are set,
+    // and it only expires when promotionDuration holds the end date — the
+    // backend cron looks for exactly those three fields.
+    final int days = int.tryParse(initPlan) ?? 3;
+    final DateTime endsAt = DateTime.now().add(Duration(days: days));
+
     await ApiService.put(
       path: 'post/update-post/${widget.postId}',
       body: <String, dynamic>{
         'promote': true,
+        'approved': true,
+        'promotionDuration': endsAt.toIso8601String(),
         'plan': '$initPlan dollars',
         'paymentMethod': method,
       },

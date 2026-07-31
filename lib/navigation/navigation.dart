@@ -10,7 +10,7 @@ import 'package:business_bosses_v2/features/donations/presentation/create_donati
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
-import 'package:business_bosses_v2/features/home/home_screen.dart';
+import 'package:business_bosses_v2/features/home/boss_up_hub_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_learning_posts.dart';
@@ -83,8 +83,14 @@ var routes = [
     page: () => const BossUpPartner(),
   ),
   GetPage(
+    // Home is now the tabbed screen (For you / Marketplace / Jobs / Deals).
     name: Routes.home,
-    page: () => const HomeScreen(),
+    page: () => const MarketplaceScreen(),
+    binding: HomeBinding(),
+  ),
+  GetPage(
+    name: Routes.bossUpHub,
+    page: () => const BossUpHubScreen(),
     binding: HomeBinding(),
   ),
   // GetPage(

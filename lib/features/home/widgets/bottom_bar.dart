@@ -173,9 +173,9 @@ class _BottomBarState extends State<BottomBar> {
                               return;
                             }
                             if (widget.activeIndex == 0) {
-                              Get.toNamed(Routes.home);
+                              Get.toNamed(Routes.bossUpHub);
                             } else {
-                              Get.offAndToNamed(Routes.home);
+                              Get.offAndToNamed(Routes.bossUpHub);
                             }
                           },
                           isActive: widget.activeIndex == 3,

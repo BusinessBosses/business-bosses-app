@@ -121,3 +121,6 @@ enum PasswordField { password, confirmPassword }
 enum EditProfileMode { complete, edit }
 
 enum PostForumStatus { like, comment, delete, update }
+
+/// Public Bizcenter site base URL (Business Bosses is separate from Prodatar).
+const String bizCenterBaseUrl = 'https://www.biz-center.io';

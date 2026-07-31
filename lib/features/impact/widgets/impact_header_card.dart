@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
@@ -170,11 +171,11 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   icon: LucideIcons.bot,
                   iconColor: Colors.indigo[400]!,
                   iconBgColor: backgroundColor,
-                  title: 'AI Visibility',
-                  subtitle: 'Brand discovery by AI',
+                  title: 'Business Health Data',
+                  subtitle: 'Complete readiness score',
                   value: '${aiVisibilityScore.toInt()}%',
                   onTap: () async {
-                    const String url = 'https://bizcenter.ai';
+                    const String url = '$bizCenterBaseUrl';
                     if (await canLaunchUrlString(url)) {
                       await launchUrlString(url,
                           mode: LaunchMode.externalApplication);
@@ -407,10 +408,10 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
       },
       <String, dynamic>{
         'score': aiVisibilityScore,
-        'title': 'Boost AI Visibility',
-        'subtitle': 'Optimize Brand for AI discovery',
+        'title': 'Boost Visibility',
+        'subtitle': 'Reach a wider audience',
         'expectedIncrease': 50,
-        'ctaLabel': 'Optimize',
+        'ctaLabel': 'Boost',
         'color': Colors.white,
         'iconColor': primaryColorLT,
         'icon': LucideIcons.bot,

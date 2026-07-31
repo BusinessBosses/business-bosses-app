@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -99,12 +100,18 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
             Get.arguments as Map<String, dynamic>;
         args = argsMap['user'] as UserModel;
 
-        // If coming from buyer request, auto-send the request details
+        // If coming from a job application, auto-send the job details and the
+        // applicant's CV when they attached one.
         if (widget.fromBuyerRequest && argsMap.containsKey('buyerRequest')) {
           final BuyerRequestModel buyerRequest =
               argsMap['buyerRequest'] as BuyerRequestModel;
+          final String? cvUrl = argsMap['cvUrl'] as String?;
+          final String? cvName = argsMap['cvName'] as String?;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _sendBuyerRequestMessage(buyerRequest);
+            if (cvUrl != null && cvUrl.isNotEmpty) {
+              _sendCvMessage(cvUrl, cvName);
+            }
           });
         }
       } else {
@@ -227,6 +234,87 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
     );
   }
 
+  /// Renders an attached CV as a card the poster can tap to open/download.
+  Widget _buildCvCard(MessageModel message) {
+    String name = 'CV';
+    String url = '';
+
+    try {
+      final Map<String, dynamic> data = jsonDecode(
+        (message.messageText ?? '').replaceFirst('JOB_CV::', ''),
+      ) as Map<String, dynamic>;
+      name = (data['name'] as String?)?.trim().isNotEmpty == true
+          ? data['name'] as String
+          : 'CV';
+      url = (data['url'] as String?) ?? '';
+    } catch (_) {
+      return const SizedBox.shrink();
+    }
+
+    if (url.isEmpty) return const SizedBox.shrink();
+
+    final bool isMine = message.senderUid == _profileController.myProfile.uid;
+
+    return Align(
+      alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
+      child: GestureDetector(
+        onTap: () async {
+          final Uri? uri = Uri.tryParse(url);
+          if (uri == null) return;
+          if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+            _showSnackBar('Could not open this file');
+          }
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+          padding: const EdgeInsets.all(12),
+          constraints: BoxConstraints(maxWidth: Get.width * 0.72),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: primaryColorLT.withValues(alpha: 0.3)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Icon(Icons.description_outlined,
+                  color: primaryColorLT, size: 22),
+              const SizedBox(width: 10),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text(
+                      'CV attached',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: primaryColorLT,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(Icons.download_rounded, size: 18, color: Colors.grey[500]),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildBuyerRequestCard(MessageModel message) {
     bool isValidImageUrl(String? url) {
       if (url == null || url.isEmpty) return false;
@@ -277,7 +365,7 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                   ),
                   const SizedBox(width: 8),
                   const Text(
-                    'Buyer Request',
+                    'Job Application',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -563,6 +651,13 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                                         ?.startsWith('BUYER_REQUEST::') ??
                                     false) {
                                   return _buildBuyerRequestCard(message);
+                                }
+
+                                // Attached CV from a job application
+                                if (message.messageText
+                                        ?.startsWith('JOB_CV::') ??
+                                    false) {
+                                  return _buildCvCard(message);
                                 }
 
                                 // Handle call messages
@@ -950,6 +1045,23 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
         content: Text(message),
         duration: const Duration(seconds: 2),
       ),
+    );
+  }
+
+  /// Sends the applicant's CV as a follow-up message the poster can open.
+  void _sendCvMessage(String url, String? name) {
+    final String cvMessage = 'JOB_CV::${jsonEncode(<String, String>{
+          'url': url,
+          'name': name ?? 'CV',
+        })}';
+
+    _chatController.addNewChat(
+      <String, dynamic>{
+        'senderUid': _profileController.myProfile.uid,
+        'receiverUid': args.uid,
+        'messageText': cvMessage,
+      },
+      args,
     );
   }
 

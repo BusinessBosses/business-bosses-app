@@ -361,11 +361,15 @@ class MarketController extends GetxController {
     _isInitializing = true;
     _initializeLocation(); // Sync with profile location
     try {
-      // 1. Load cache immediately (Synchronous operations from GetStorage)
-      final dynamic cachedProducts = sandBox.read('market_products');
-      final dynamic cachedServices = sandBox.read('market_services');
-      if (cachedProducts != null || cachedServices != null) {
-        _processCachedItems(cachedProducts, cachedServices);
+      // 1. Load cache immediately (Synchronous operations from GetStorage).
+      //    Skipped when the lists are already populated, so re-entering the
+      //    marketplace never replays a stale snapshot over newer live state.
+      if (proItems.isEmpty) {
+        final dynamic cachedProducts = sandBox.read('market_products');
+        final dynamic cachedServices = sandBox.read('market_services');
+        if (cachedProducts != null || cachedServices != null) {
+          _processCachedItems(cachedProducts, cachedServices);
+        }
       }
 
       final dynamic cachedFeaturedProducts = sandBox.read('featured_products');
@@ -449,14 +453,20 @@ class MarketController extends GetxController {
     error(false);
     if (!loadingMore.value && !isBackgroundRefresh) {
       if (page == 1) {
-        final dynamic cachedProducts = sandBox.read('market_products');
-        final dynamic cachedServices = sandBox.read('market_services');
+        // The cache is a cold-start placeholder only. Once the lists hold live
+        // state it must not be replayed over them — a listing just created and
+        // inserted optimistically is not in the cache yet, and assignAll-ing
+        // the stale snapshot here would drop it back off the marketplace.
+        final dynamic cachedProducts =
+            proItems.isEmpty ? sandBox.read('market_products') : null;
+        final dynamic cachedServices =
+            proItems.isEmpty ? sandBox.read('market_services') : null;
         if (cachedProducts != null || cachedServices != null) {
           _processCachedItems(cachedProducts, cachedServices);
           loading(false);
           update();
         } else {
-          loading(true);
+          loading(proItems.isEmpty);
         }
       } else {
         loading(true);
@@ -469,10 +479,15 @@ class MarketController extends GetxController {
         pathSuffix = '&location=${Uri.encodeQueryComponent(selectedLocation!)}';
       }
 
+      // The backend paginates with `offset = page * size`, so its first page is
+      // 0 while this controller counts from 1. Without this shift the newest
+      // `size` listings are skipped and never reach the marketplace.
+      final int apiPage = page - 1;
+
       final List<ApiResponseModel> responses =
           await Future.wait(<Future<ApiResponseModel>>[
-        ApiService.get(path: 'goods/all?page=$page&size=$size$pathSuffix'),
-        ApiService.get(path: 'services/all?page=$page&size=$size$pathSuffix'),
+        ApiService.get(path: 'goods/all?page=$apiPage&size=$size$pathSuffix'),
+        ApiService.get(path: 'services/all?page=$apiPage&size=$size$pathSuffix'),
       ]);
 
       final ApiResponseModel responseProducts = responses[0];
@@ -506,10 +521,17 @@ class MarketController extends GetxController {
         }
       }
 
+      // Rows as returned by the server, before the isActive filter below. These
+      // drive the end-of-list check: the filtered lists can never be compared
+      // against the server's unfiltered totals.
+      int fetchedProductRows = 0;
+      int fetchedServiceRows = 0;
+
       final List<Product> addedProducts = <Product>[];
       if (responseProducts.success) {
         final List<dynamic> productRows =
             responseProducts.data['rows'] ?? <dynamic>[];
+        fetchedProductRows = productRows.length;
         final List<Product> newProducts = productRows
             .map((dynamic e) => Product.fromJson(e as Map<String, dynamic>))
             .where((Product p) => p.isActive)
@@ -529,6 +551,7 @@ class MarketController extends GetxController {
       if (responseServices.success) {
         final List<dynamic> serviceRows =
             responseServices.data['rows'] ?? <dynamic>[];
+        fetchedServiceRows = serviceRows.length;
         final List<Service> newServices = serviceRows
             .map((dynamic e) => Service.fromJson(e as Map<String, dynamic>))
             .where((Service s) => s.isActive)
@@ -570,12 +593,22 @@ class MarketController extends GetxController {
               searchQuery.isEmpty) {
             activeMarketItems.addAll(newItems);
           }
+          // Goods and services are paginated independently, so an appended page
+          // has to be merged back into newest-first order rather than tacked on.
+          sortItems();
         }
       }
 
-      if (proItems.length >= totalItemCount.value) {
-        hasMoreItems(false);
-      } else {
+      // Goods and services are paginated independently, so there is another
+      // page as long as either endpoint filled the one it just returned. This
+      // deliberately ignores proItems.length/totalItemCount: proItems holds
+      // only isActive rows (plus any optimistic local insert) while the server
+      // count is unfiltered, so the two are not comparable and the list would
+      // never reach its end.
+      // A failed request returns no rows, which must not be read as "end of
+      // list" — leave pagination untouched so a retry can still load more.
+      if (responseProducts.success || responseServices.success) {
+        hasMoreItems(fetchedProductRows >= size || fetchedServiceRows >= size);
         paginationPage.value = page;
       }
     } catch (e) {

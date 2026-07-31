@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
 import 'package:intl/intl.dart';
@@ -945,7 +946,7 @@ class _HeroSectionState extends State<HeroSection> {
                                 break;
                               case 'Visit BizCenter':
                                 final Uri url =
-                                    Uri.parse('https://bizcenter.ai');
+                                    Uri.parse('$bizCenterBaseUrl');
                                 launchUrl(url,
                                     mode: LaunchMode.externalApplication);
                                 break;
@@ -1180,7 +1181,7 @@ class _HeroSectionState extends State<HeroSection> {
                     flex: 1,
                     child: GestureDetector(
                       onTap: () {
-                        final Uri url = Uri.parse('https://bizcenter.ai');
+                        final Uri url = Uri.parse('$bizCenterBaseUrl');
                         launchUrl(url, mode: LaunchMode.externalApplication);
                       },
                       child: Container(

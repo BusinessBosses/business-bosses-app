@@ -1,11 +1,12 @@
 import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/apply_with_cv_sheet.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
@@ -116,11 +117,11 @@ class RequestDetailsSheet {
                                 .deleteBuyerRequest(request.id!);
                             if (success) {
                               showSnackbar(
-                                  message: 'Request deleted successfully!');
+                                  message: 'Job deleted successfully!');
                               Get.back(); // Close bottom sheet
                             } else {
                               showSnackbar(
-                                  message: 'Error deleting request!',
+                                  message: 'Error deleting job!',
                                   error: true);
                             }
                           }
@@ -163,7 +164,7 @@ class RequestDetailsSheet {
                 Text(request.description),
                 const SizedBox(height: 12),
                 _detail(Icons.attach_money, 'Budget',
-                    '\$${request.budgetStart} - \$${request.budgetEnd}'),
+                    '${CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(request.budgetStart, currencyCode: 'USD'))} - ${CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(request.budgetEnd, currencyCode: 'USD'))}'),
                 const SizedBox(height: 8),
                 _detail(
                     Icons.calendar_today,
@@ -173,48 +174,27 @@ class RequestDetailsSheet {
                 const SizedBox(height: 8),
                 _detail(Icons.category, 'Category', request.category),
                 const SizedBox(height: 16),
+                // Anyone can apply to a job — no shop required.
                 if (!isMine)
-                  if (profileController.myProfile.hasShop) ...<Widget>[
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => _navigateToChatScreen(request),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColorLT,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Send Proposal',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => _navigateToChatScreen(request),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColorLT,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                    ),
-                  ] else ...<Widget>[
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => Get.to(() => Setupshop()),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColorLT,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Setup Shop to Send Proposal',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
+                      child: const Text(
+                        'Apply with your CV',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
-                  ],
+                  ),
               ],
             ),
           ),
@@ -229,11 +209,20 @@ class RequestDetailsSheet {
       Uri.parse(url).hasAbsolutePath &&
       (url.startsWith('http'));
 
-  static void _navigateToChatScreen(BuyerRequestModel req) {
+  /// Applying opens the CV sheet first — attaching one is optional.
+  static Future<void> _navigateToChatScreen(BuyerRequestModel req) async {
+    final JobApplication? application = await showApplyWithCvSheet(req);
+    if (application == null) return;
+
     Get.to(
       () =>
           const ChatRoomScreen(frommarketplace: false, fromBuyerRequest: true),
-      arguments: <String, Object>{'user': req.user, 'buyerRequest': req},
+      arguments: <String, Object?>{
+        'user': req.user,
+        'buyerRequest': req,
+        'cvUrl': application.cvUrl,
+        'cvName': application.cvName,
+      },
     );
   }
 
@@ -241,7 +230,7 @@ class RequestDetailsSheet {
     return await Get.dialog(
       AlertDialog(
         title: const Text('Confirm Delete'),
-        content: const Text('Are you sure you want to delete this request?'),
+        content: const Text('Are you sure you want to delete this job?'),
         actions: <Widget>[
           TextButton(
             onPressed: () => Get.back(result: false),
@@ -260,7 +249,7 @@ class RequestDetailsSheet {
   }
 
   static void _shareRequest(BuyerRequestModel request) {
-    String message = 'Check out this buyer request on Business Bosses\n'
+    String message = 'Check out this job on Business Bosses\n'
         'Title: ${request.title}\n'
         'Budget: \$${request.budgetStart.toStringAsFixed(0)} - \$${request.budgetEnd.toStringAsFixed(0)}\n'
         'https://vm.businessbosses.co.uk/share/post';

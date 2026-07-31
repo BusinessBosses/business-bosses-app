@@ -1,10 +1,10 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -96,16 +96,13 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
                               : '-',
                           style: const TextStyle(
                               fontWeight: FontWeight.w900, fontSize: 18)),
-                      SvgPicture.asset('assets/svgs/coin.svg'),
-                      Text(widget.history['course']['price'],
+                      Text(
+                          CurrencyFormatter.formatCurrency(
+                              num.tryParse('${widget.history['course']['price']}')
+                                      ?.round() ??
+                                  0),
                           style: const TextStyle(
                               fontWeight: FontWeight.w900, fontSize: 18)),
-                      Text(
-                          ' (\$${(num.parse(widget.history['course']['price']) / 100).toString()})',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18,
-                              color: textColor.withValues(alpha: 0.4)))
                     ],
                   ),
                 ],

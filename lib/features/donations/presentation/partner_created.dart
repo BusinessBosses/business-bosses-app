@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/home/home_screen.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,7 +20,7 @@ class _PartnerCreatedState extends State<PartnerCreated> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.offAll(() => HomeScreen());
+            Get.offAll(() => const MarketplaceScreen());
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
@@ -53,7 +53,7 @@ class _PartnerCreatedState extends State<PartnerCreated> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      Get.offAll(() => HomeScreen());
+                      Get.offAll(() => const MarketplaceScreen());
                     },
                     child: const Text(
                       'Go Back',

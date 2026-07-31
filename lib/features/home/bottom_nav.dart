@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import '../../utils/theme/theme.dart';
 import '../profile/presentation/my_profile_screen.dart';
 import '../chat/presentation/inbox_screen.dart';
-import 'home_screen.dart';
+import 'boss_up_hub_screen.dart';
 import 'marketplace_screen.dart';
 
 /// Bottom Nav Screen is basically where all home screens are navigated through
@@ -145,7 +145,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                       MarketplaceScreen(), // Index 0: Home
                       InboxScreen(), // Index 1: Inbox
                       SizedBox(), // Index 2: Post (Placeholder for FAB)
-                      HomeScreen(), // Index 3: Boss up
+                      BossUpHubScreen(), // Index 3: Boss up
                       MyProfileScreen(), // Index 4: Profile
                     ],
                   ),

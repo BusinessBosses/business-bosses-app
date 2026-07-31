@@ -42,15 +42,12 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
 
   String country = '';
   String _selectedCategory = '';
-  String _requestType = 'I need a service provider';
+  /// The picker was dropped from the job form, but the API still expects a
+  /// request_type, so every job posts as a service-provider request.
+  static const String _requestType = 'I need a service provider';
   DateTime? _selectedDeadline;
   final List<PlatformFile> _attachments = <PlatformFile>[];
   List<String> _existingAttachments = <String>[];
-
-  final List<String> _requestTypes = <String>[
-    'I need a service provider',
-    'I need a product supplier'
-  ];
 
   bool _isExpanded = false;
 
@@ -189,7 +186,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
       if (mounted) {
         showSnackbar(
           message:
-              'Request ${widget.request == null ? 'added' : 'edited'} succesfully!',
+              'Job ${widget.request == null ? 'posted' : 'edited'} successfully!',
         );
       }
       if (widget.request == null) {
@@ -207,7 +204,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
     } else {
       showSnackbar(
           message:
-              'Failed to ${widget.request != null ? 'edit' : 'post'} request.',
+              'Failed to ${widget.request != null ? 'edit' : 'post'} job.',
           error: true);
     }
   }
@@ -222,7 +219,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const <Widget>[
             Text(
-              'What do you need?',
+              'Post a Job',
               style: TextStyle(
                 color: textColor,
                 fontWeight: FontWeight.bold,
@@ -230,7 +227,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
             ),
             SizedBox(height: 5),
             Text(
-              'Get matched with top service providers or suppliers',
+              'Get your work done faster, with the best talent.',
               style: TextStyle(
                 color: textColor,
                 fontSize: 12,
@@ -254,21 +251,10 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 const SizedBox(height: 0),
-                CustomDropdownWidget(
-                  caption: 'Select',
-                  items: _requestTypes,
-                  iconName: 'assets/svgs/dropdown.svg',
-                  initialValue: _requestType,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _requestType = newValue!;
-                    });
-                  },
-                ),
                 CustomEditText(
-                  caption: 'Request name *',
+                  caption: 'Job Title *',
                   maxLength: 30,
-                  hintText: 'Enter the name of what you need to buy',
+                  hintText: 'Enter the name of the job or task',
                   controller: _titleController,
                   validator: (String? value) =>
                       value == null || value.trim().isEmpty
@@ -276,9 +262,9 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                           : null,
                 ),
                 CustomEditText(
-                  caption: 'Description *',
+                  caption: 'Job Description *',
                   hintText:
-                      'Describe what you need to buy. E.g, I need digital marketer, I need fashion designers',
+                      'Enter the job description, qualification or skills required for the job',
                   controller: _descriptionController,
                   maxLength: 300,
                   validator: (String? value) => value == null || value.isEmpty
@@ -450,7 +436,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                             padding: 15,
                             textpadding: 15,
                             hashint: true,
-                            caption: 'When do you need responses by?',
+                            caption: 'When do you need applications by?',
                             iconName: 'assets/svgs/dropdown.svg',
                             text: _selectedDeadline == null
                                 ? 'Select date'
@@ -475,8 +461,8 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                       onPressed: _handleSubmit,
                       isProcessing: buyerRequestController.loading.value,
                       label: widget.request == null
-                          ? 'Post Request'
-                          : 'Edit Request',
+                          ? 'Post Job'
+                          : 'Edit Job',
                     );
                   }),
                 ),

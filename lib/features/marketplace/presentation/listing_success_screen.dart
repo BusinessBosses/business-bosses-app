@@ -23,6 +23,11 @@ class ListingSuccessScreen extends StatefulWidget {
   final String? productId;
   final String? serviceId;
 
+  /// Whether the listing was saved as active. An inactive listing is filtered
+  /// out of the marketplace, so the success screen has to say so — otherwise
+  /// "Listing Created!" is followed by the listing being nowhere to be found.
+  final bool isActive;
+
   const ListingSuccessScreen({
     super.key,
     required this.isBuyerRequest,
@@ -30,6 +35,7 @@ class ListingSuccessScreen extends StatefulWidget {
     required this.location,
     this.productId,
     this.serviceId,
+    this.isActive = true,
   });
 
   @override
@@ -122,7 +128,7 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
         ),
         const SizedBox(height: 16),
         Text(
-          widget.isBuyerRequest ? 'Request Posted!' : 'Listing Created!',
+          widget.isBuyerRequest ? 'Job Posted!' : 'Listing Created!',
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -135,8 +141,8 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
           child: Text(
             widget.isBuyerRequest
                 ? hasResults
-                    ? 'Your request is now live. Here are some suppliers who can help.'
-                    : 'Your request is now live.'
+                    ? 'Your job is now live. Here are some people who can help.'
+                    : 'Your job is now live.'
                 : hasResults
                     ? 'Your listing is now live. Here are some buyers looking for what you offer.'
                     : 'Your listing is now live.',
@@ -147,7 +153,54 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
             ),
           ),
         ),
+        _buildVisibilityNote(),
       ],
+    );
+  }
+
+  /// Tells the user where the listing will actually surface. The marketplace
+  /// grid is filtered by the browsing location, so a listing posted for another
+  /// location won't be in the default view — that is expected, not a failure.
+  Widget _buildVisibilityNote() {
+    final bool isHidden = !widget.isBuyerRequest && !widget.isActive;
+    final String location = widget.location.trim();
+
+    if (!isHidden && location.isEmpty) return const SizedBox.shrink();
+
+    final Color accent = isHidden ? Colors.orange.shade800 : primaryColorLT;
+    final String message = isHidden
+        ? 'Saved as inactive, so it stays hidden from the marketplace. Turn it on from My Biz when you are ready to sell.'
+        : 'Posted in $location. Buyers browsing $location see it first — switch your marketplace location if you do not spot it right away.';
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(30, 16, 30, 0),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+      decoration: BoxDecoration(
+        color: accent.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: accent.withValues(alpha: 0.15)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Icon(
+            isHidden ? LucideIcons.eyeOff : LucideIcons.mapPin,
+            color: accent,
+            size: 18,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              message,
+              style: TextStyle(
+                fontSize: 12,
+                height: 1.4,
+                color: textColor.withValues(alpha: 0.75),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -245,7 +298,7 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
           child: Text(
             widget.isBuyerRequest
                 ? 'Matching Suppliers'
-                : 'Matching Buyer Requests',
+                : 'Matching Jobs',
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

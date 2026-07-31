@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'dart:developer';
 
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
@@ -1267,7 +1268,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
   Future<void> _shareProduct() async {
     String message = '${widget.product.name}:\n'
         '${widget.product.description}\n'
-        'https://bizcenter.ai/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
+        '$bizCenterBaseUrl/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 }

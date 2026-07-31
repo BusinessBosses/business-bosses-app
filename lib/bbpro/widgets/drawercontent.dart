@@ -1,21 +1,17 @@
 import 'package:business_bosses_v2/features/home/utils/post_options_sheet.dart';
-import 'package:business_bosses_v2/features/impact/presentation/leaderboard_screen.dart';
-import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
+import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
-import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
-import 'package:business_bosses_v2/features/settings/preferred_currency_screen.dart';
-import 'package:business_bosses_v2/features/settings/shop_referral_reward_screen.dart';
 import 'package:business_bosses_v2/features/referrals/referral_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -137,23 +133,6 @@ class _DrawerContentState extends State<DrawerContent> {
       },
       <String, dynamic>{
         'icon': SvgPicture.asset(
-          'assets/svgs/cartu.svg',
-          height: 25,
-          colorFilter: const ColorFilter.mode(
-            textColor,
-            BlendMode.srcIn,
-          ),
-        ),
-        'title': 'Marketplace',
-        'description':
-            'Browse and purchase items from other users. You can find a wide variety of items here.',
-        'onTileClicked': () {
-          widget.oncloseclick?.call();
-          Get.to(() => const MarketplaceScreen());
-        },
-      },
-      <String, dynamic>{
-        'icon': SvgPicture.asset(
           'assets/svgs/marketplaceoutlined.svg',
           height: 25,
           colorFilter: const ColorFilter.mode(
@@ -186,12 +165,14 @@ class _DrawerContentState extends State<DrawerContent> {
       },
       <String, dynamic>{
         'icon': const Icon(LucideIcons.trophy, size: 25, color: textColor),
-        'title': 'Ranking',
+        'title': 'Performance',
         'description':
             'See the top ranking business owners and their impact in the community.',
         'onTileClicked': () {
           widget.oncloseclick?.call();
-          Get.to(() => LeaderboardScreen());
+          Get.to(() => ReachScreen(
+                user: Get.find<ProfileController>().myProfile,
+              ));
         },
       },
       <String, dynamic>{
@@ -203,12 +184,14 @@ class _DrawerContentState extends State<DrawerContent> {
             BlendMode.srcIn,
           ),
         ),
-        'title': 'My Orders',
+        'title': 'Marketplace',
         'description':
-            'Discover and attend events hosted by other users. Find events that match your interests and goals.',
+            'Browse products and services from businesses across the community.',
         'onTileClicked': () {
           widget.oncloseclick?.call();
-          Get.to(() => const MyOrdersScreen());
+          Get.to(() => const MarketplaceScreen(
+                initialIndex: MarketplaceScreen.marketplaceTab,
+              ));
         },
       },
       <String, dynamic>{
@@ -229,25 +212,7 @@ class _DrawerContentState extends State<DrawerContent> {
         }
       },
       <String, dynamic>{
-        'icon': SvgPicture.asset(
-          'assets/svgs/coin.svg',
-          height: 25,
-          colorFilter: const ColorFilter.mode(textColor, BlendMode.srcIn),
-        ),
-        'title': 'Preferred Currency',
-        'description':
-            'Choose the currency your coin balances and prices are shown in.',
-        'onTileClicked': () {
-          widget.oncloseclick?.call();
-          Get.to(() => const PreferredCurrencyScreen());
-        },
-      },
-      <String, dynamic>{
-        'icon': SvgPicture.asset(
-          'assets/svgs/partner.svg',
-          height: 25,
-          colorFilter: const ColorFilter.mode(textColor, BlendMode.srcIn),
-        ),
+        'icon': const Icon(LucideIcons.gift, size: 25, color: textColor),
         'title': 'Referrals',
         'description': 'See your referral earnings and manage shop referral rewards.',
         'onTileClicked': () {
@@ -288,7 +253,7 @@ class _DrawerContentState extends State<DrawerContent> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      Get.to(() => const HomeScreen());
+                      Get.to(() => const MarketplaceScreen());
                     },
                     child: Row(
                       children: <Widget>[

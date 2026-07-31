@@ -157,7 +157,7 @@ class BuyerRequestItem extends StatelessWidget {
                           ),
                         ),
                         child: const Text(
-                          'View request',
+                          'View Job',
                           style: TextStyle(
                             fontSize: 13,
                             color: primaryColorLT,
