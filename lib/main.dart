@@ -51,10 +51,17 @@ void main() async {
 
   final SharedPreferences prefs = results[5] as SharedPreferences;
 
-  // Crashlytics setup
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  // Crashlytics setup.
+  //
+  // Neither of these handlers sees an error that actually terminates the app:
+  // a Flutter build error paints an error widget and an uncaught async error
+  // is swallowed by the zone — the app keeps running in both cases. Reporting
+  // them as fatal made every network blip look like a crash, so they are
+  // recorded as non-fatal. Real fatals (native/ANR) are still captured by
+  // Crashlytics itself and remain in the fatal count.
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
     return true;
   };
 
@@ -62,7 +69,13 @@ void main() async {
   // Stripe.publishableKey = dotenv.env['STRIPE_PUB_KEY']!;
   // Stripe.merchantIdentifier = 'merchant.businessbosses';
 
-  FirebaseMessaging.instance.getToken();
+  // FCM can be unreachable (SERVICE_NOT_AVAILABLE) on a flaky network or a
+  // device with stale Play Services. Unhandled here it reaches
+  // PlatformDispatcher.onError and is logged as a fatal crash.
+  FirebaseMessaging.instance.getToken().catchError((Object e) {
+    debugPrint('Failed to get FCM token: $e');
+    return null;
+  });
   FirebaseMessaging.instance.requestPermission();
   FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
   FirebaseMessaging.instance.getInitialMessage().then(_handleInitialMessage);

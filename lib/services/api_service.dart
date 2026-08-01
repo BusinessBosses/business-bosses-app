@@ -200,11 +200,25 @@ class ApiService {
       'username': username,
       'email': email,
     };
-    final http.Response response = await http.post(
-      Uri.parse('${Constants.baseUrl}/auth/email-exist'),
-      headers: <String, String>{'Content-Type': 'application/json'},
-      body: jsonEncode(data),
-    );
+    final http.Response response;
+    try {
+      response = await http.post(
+        Uri.parse('${Constants.baseUrl}/auth/email-exist'),
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: jsonEncode(data),
+      );
+    } catch (e) {
+      // A dropped connection here is a normal network failure, not a crash —
+      // tell the user and let them retry.
+      debugPrint('verifyUnique failed: $e');
+      showSnackbar(
+        title: 'No connection',
+        message: 'Could not reach the server. Please try again.',
+        error: true,
+      );
+      return null;
+    }
+
     if (response.statusCode == 200) {
       dynamic jsonResponse = json.decode(response.body);
       jsonResponse = jsonResponse['success'];

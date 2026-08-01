@@ -1612,10 +1612,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         Get.find<MarketController>().syncSelectedLocation(_location!);
       }
       FirebaseMessaging.instance.getToken().then((String? value) {
+        if (value == null) return;
         Map<String, dynamic> data = <String, dynamic>{
           'deviceToken': value,
         };
         ApiService.post(path: 'users/add-device-token', body: data);
+      }).catchError((Object e) {
+        debugPrint('Failed to register device token: $e');
       });
       widget.isShopedit == null
           ? Get.toNamed(Routes.home)

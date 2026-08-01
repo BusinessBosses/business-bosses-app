@@ -93,6 +93,11 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   void _applyFilter() {
+    // The fetch can outlive the screen — switching home tabs disposes this
+    // widget while the request is still in flight, and setState() on a
+    // disposed State throws.
+    if (!mounted) return;
+
     final RxList<BuyerRequestModel> allRequests =
         _buyerRequestController.buyerRequests;
     setState(() {

@@ -111,6 +111,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         setState(() {
                           _autovalidateMode = AutovalidateMode.always;
                         });
+
+                        // Nothing typed yet — the field validator shows the
+                        // message; carrying on would dereference a null email.
+                        if (_email == null || _email!.trim().isEmpty) {
+                          return;
+                        }
+
                         setState(() {
                           _isProcessing = true;
                         });

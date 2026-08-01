@@ -268,6 +268,11 @@ class _HeroSectionState extends State<HeroSection> {
       final Duration timeSinceLast = DateTime.now().difference(
         _lastInteraction,
       );
+      // The card can be built but never laid out (scrolled out of the feed),
+      // leaving the controller with no attached view — animating it then
+      // throws "Bad state: No element".
+      if (!mounted || !_pageController.hasClients) return;
+
       if (timeSinceLast.inSeconds >= 9) {
         final int nextIndex = (_currentIndex + 1) % heroItems.length;
         _pageController.animateToPage(

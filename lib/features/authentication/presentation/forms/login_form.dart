@@ -215,10 +215,14 @@ class _LoginFormState extends State<LoginForm> {
         }
 
         FirebaseMessaging.instance.getToken().then((String? value) async {
+          if (value == null) return;
           Map<String, dynamic> data = <String, dynamic>{
             'deviceToken': value,
           };
           await ApiService.post(path: 'users/add-device-token', body: data);
+        }).catchError((Object e) {
+          // FCM can be unreachable; login must not fail because of it.
+          debugPrint('Failed to register device token: $e');
         });
         // Add RevenueCat login here
         if (user['data']['bio'] != null) {
@@ -440,11 +444,14 @@ class _LoginFormState extends State<LoginForm> {
                     FirebaseMessaging.instance
                         .getToken()
                         .then((String? value) async {
+                      if (value == null) return;
                       Map<String, dynamic> data = <String, dynamic>{
                         'deviceToken': value,
                       };
                       await ApiService.post(
                           path: 'users/add-device-token', body: data);
+                    }).catchError((Object e) {
+                      debugPrint('Failed to register device token: $e');
                     });
                     if (user['data']['bio'] != null) {
                       // GetStorage().write('isFirstTime', false);
