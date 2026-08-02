@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -126,12 +127,16 @@ class BuyerRequestItem extends StatelessWidget {
                     spacing: 5,
                     runSpacing: 5,
                     children: <Widget>[
-                      // ✅ Budget (Start - End)
-                      _buildInfoChip(
-                        icon: LucideIcons.coins,
-                        label:
-                            '\$${request.budgetStart.toStringAsFixed(0)} - \$${request.budgetEnd.toStringAsFixed(0)}',
-                      ),
+                      // ✅ Budget (Start - End) — hidden when no budget was set,
+                      // shown in the user's location currency otherwise.
+                      if (CurrencyFormatter.budgetRange(
+                              request.budgetStart, request.budgetEnd) !=
+                          null)
+                        _buildInfoChip(
+                          icon: LucideIcons.coins,
+                          label: CurrencyFormatter.budgetRange(
+                              request.budgetStart, request.budgetEnd)!,
+                        ),
 
                       // ✅ Deadline
                       _buildInfoChip(

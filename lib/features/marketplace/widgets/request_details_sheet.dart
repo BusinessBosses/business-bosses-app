@@ -3,15 +3,13 @@ import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
-import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/apply_with_cv_sheet.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/apply_to_job_button.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -163,9 +161,16 @@ class RequestDetailsSheet {
                 const SizedBox(height: 8),
                 Text(request.description),
                 const SizedBox(height: 12),
-                _detail(Icons.attach_money, 'Budget',
-                    '${CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(request.budgetStart, currencyCode: 'USD'))} - ${CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(request.budgetEnd, currencyCode: 'USD'))}'),
-                const SizedBox(height: 8),
+                if (CurrencyFormatter.budgetRange(
+                        request.budgetStart, request.budgetEnd) !=
+                    null) ...<Widget>[
+                  _detail(
+                      Icons.attach_money,
+                      'Budget',
+                      CurrencyFormatter.budgetRange(
+                          request.budgetStart, request.budgetEnd)!),
+                  const SizedBox(height: 8),
+                ],
                 _detail(
                     Icons.calendar_today,
                     'Deadline',
@@ -175,26 +180,7 @@ class RequestDetailsSheet {
                 _detail(Icons.category, 'Category', request.category),
                 const SizedBox(height: 16),
                 // Anyone can apply to a job — no shop required.
-                if (!isMine)
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => _navigateToChatScreen(request),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColorLT,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text(
-                        'Apply with your CV',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ),
+                if (!isMine) ApplyToJobButton(request: request),
               ],
             ),
           ),
@@ -209,22 +195,7 @@ class RequestDetailsSheet {
       Uri.parse(url).hasAbsolutePath &&
       (url.startsWith('http'));
 
-  /// Applying opens the CV sheet first — attaching one is optional.
-  static Future<void> _navigateToChatScreen(BuyerRequestModel req) async {
-    final JobApplication? application = await showApplyWithCvSheet(req);
-    if (application == null) return;
 
-    Get.to(
-      () =>
-          const ChatRoomScreen(frommarketplace: false, fromBuyerRequest: true),
-      arguments: <String, Object?>{
-        'user': req.user,
-        'buyerRequest': req,
-        'cvUrl': application.cvUrl,
-        'cvName': application.cvName,
-      },
-    );
-  }
 
   static Future<bool?> _showDeleteConfirmation() async {
     return await Get.dialog(
@@ -251,7 +222,7 @@ class RequestDetailsSheet {
   static void _shareRequest(BuyerRequestModel request) {
     String message = 'Check out this job on Business Bosses\n'
         'Title: ${request.title}\n'
-        'Budget: \$${request.budgetStart.toStringAsFixed(0)} - \$${request.budgetEnd.toStringAsFixed(0)}\n'
+        'Budget: \$${(request.budgetStart > 0 ? request.budgetStart : request.budgetEnd).toStringAsFixed(0)}\n'
         'https://vm.businessbosses.co.uk/share/post';
     logEvent(request.id ?? '', 'buyer_request');
     socialShare(message);

@@ -40,25 +40,23 @@ class CurrencyFormatter {
     return (parsed != null && parsed > 0) ? parsed : 1.0;
   }
 
-  /// The currency to display equivalents in:
-  /// 1. the user's explicit (non-default) choice, if set;
-  /// 2. otherwise derived from their selected country;
-  /// 3. otherwise GBP (e.g. no country set, or country not recognised).
+  /// The currency to display equivalents in, derived from the user's location:
+  /// 1. the currency of their selected country;
+  /// 2. otherwise USD (no country set, or country not recognised).
+  ///
+  /// Location is the single source of truth — everyone in a country sees one
+  /// currency, so a listing wall never mixes currencies.
   static String preferredCurrencyCode() {
     try {
       final UserModel profile = Get.find<ProfileController>().myProfile;
-      final String? pref = profile.preferredCurrency;
-      if (pref != null && pref.isNotEmpty) {
-        return pref.toUpperCase();
-      }
       final String? country = profile.location;
       if (country != null && country.isNotEmpty) {
-        final String? code = currencyValues[country];
+        final String? code = currencyValues[country.trim()];
         if (code != null && code.isNotEmpty) return code.toUpperCase();
       }
-      return 'GBP';
+      return 'USD';
     } catch (_) {
-      return 'GBP';
+      return 'USD';
     }
   }
 
@@ -82,6 +80,23 @@ class CurrencyFormatter {
 
   /// Coins -> chosen display currency with an "≈" prefix, e.g. "≈ NGN 1,234.56".
   static String coinEquivalent(int? coins) => '≈ ${formatCurrency(coins)}';
+
+  /// A job budget formatted in the user's location currency (the same way
+  /// marketplace prices are shown), or `null` when no budget was set so callers
+  /// can hide the field entirely instead of rendering a misleading "$0".
+  ///
+  /// A job carries a single figure. The API still stores start/end, and older
+  /// records hold a genuine range, so the start is shown (falling back to the
+  /// end) rather than "x - y". [sourceCurrency] is the currency the raw budget
+  /// numbers are stored in (USD today).
+  static String? budgetRange(num? start, num? end,
+      {String sourceCurrency = 'USD'}) {
+    final double s = (start ?? 0).toDouble();
+    final double e = (end ?? 0).toDouble();
+    final double amount = s > 0 ? s : e;
+    if (amount <= 0) return null;
+    return formatCurrency(coinsForPrice(amount, currencyCode: sourceCurrency));
+  }
 
   /// Fiat [price] (in [currencyCode], the listing/shop currency) -> coins,
   /// using the $1 = coinToUsd peg. If the rate for [currencyCode] isn't loaded

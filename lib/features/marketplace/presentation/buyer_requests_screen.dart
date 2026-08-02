@@ -3,12 +3,11 @@ import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
-import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/buyer_request_item.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/apply_with_cv_sheet.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/apply_to_job_button.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -180,22 +179,9 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
     });
   }
 
-  /// Applying opens the CV sheet first — attaching one is optional.
-  Future<void> _navigateToChatScreen(BuyerRequestModel request) async {
-    final JobApplication? application = await showApplyWithCvSheet(request);
-    if (application == null) return;
-
-    Get.to(
-      () =>
-          const ChatRoomScreen(frommarketplace: false, fromBuyerRequest: true),
-      arguments: <String, Object?>{
-        'user': request.user,
-        'buyerRequest': request,
-        'cvUrl': application.cvUrl,
-        'cvName': application.cvName,
-      },
-    );
-  }
+  /// Shared apply flow — see [applyToJob].
+  Future<void> _navigateToChatScreen(BuyerRequestModel request) =>
+      applyToJob(request);
 
   bool _isValidImageUrl(String? url) {
     if (url == null || url.isEmpty) return false;
@@ -208,7 +194,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   void _shareRequest(BuyerRequestModel request) {
     String message = 'Check out this job on Business Bosses\n'
         'Title: ${request.title}\n'
-        'Budget: \$${request.budgetStart.toStringAsFixed(0)} - \$${request.budgetEnd.toStringAsFixed(0)}\n'
+        'Budget: \$${(request.budgetStart > 0 ? request.budgetStart : request.budgetEnd).toStringAsFixed(0)}\n'
         'https://vm.businessbosses.co.uk/share/post';
     logEvent(request.id ?? '', 'buyer_request');
     socialShare(message);
@@ -596,9 +582,16 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  _buildDetailRow(Icons.attach_money, 'Budget',
-                      '${CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(request.budgetStart, currencyCode: 'USD'))} - ${CurrencyFormatter.formatCurrency(CurrencyFormatter.coinsForPrice(request.budgetEnd, currencyCode: 'USD'))}'),
-                  const SizedBox(height: 8),
+                  if (CurrencyFormatter.budgetRange(
+                          request.budgetStart, request.budgetEnd) !=
+                      null) ...<Widget>[
+                    _buildDetailRow(
+                        Icons.attach_money,
+                        'Budget',
+                        CurrencyFormatter.budgetRange(
+                            request.budgetStart, request.budgetEnd)!),
+                    const SizedBox(height: 8),
+                  ],
                   if (request.deadline.isNotEmpty) ...<Widget>[
                     _buildDetailRow(
                       Icons.calendar_today,
@@ -612,26 +605,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                   _buildDetailRow(Icons.category, 'Category', request.category),
                   const SizedBox(height: 16),
                   // Anyone can apply to a job — no shop required.
-                  if (!isMyRequest)
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => _navigateToChatScreen(request),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColorLT,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Apply with your CV',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ),
+                  if (!isMyRequest) ApplyToJobButton(request: request),
                 ],
               ),
             ),

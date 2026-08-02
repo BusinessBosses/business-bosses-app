@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/features/marketplace/models/buyer_request_mod
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -205,12 +206,17 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  buildDetailRow(
-                    Icons.attach_money,
-                    'Budget',
-                    '\$${request.budgetStart} - \$${request.budgetEnd}',
-                  ),
-                  const SizedBox(height: 8),
+                  if (CurrencyFormatter.budgetRange(
+                          request.budgetStart, request.budgetEnd) !=
+                      null) ...<Widget>[
+                    buildDetailRow(
+                      Icons.attach_money,
+                      'Budget',
+                      CurrencyFormatter.budgetRange(
+                          request.budgetStart, request.budgetEnd)!,
+                    ),
+                    const SizedBox(height: 8),
+                  ],
                   buildDetailRow(
                     Icons.category,
                     'Category',
@@ -404,21 +410,26 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
               const SizedBox(height: 8),
               Row(
                 children: <Widget>[
-                  Icon(
-                    Icons.attach_money,
-                    size: 16,
-                    color: Colors.grey[600],
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    '\$${request.budgetStart} - \$${request.budgetEnd}',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[700],
+                  if (CurrencyFormatter.budgetRange(
+                          request.budgetStart, request.budgetEnd) !=
+                      null) ...<Widget>[
+                    Icon(
+                      Icons.attach_money,
+                      size: 16,
+                      color: Colors.grey[600],
                     ),
-                  ),
-                  const SizedBox(width: 12),
+                    const SizedBox(width: 4),
+                    Text(
+                      CurrencyFormatter.budgetRange(
+                          request.budgetStart, request.budgetEnd)!,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                  ],
                   Icon(
                     Icons.category_outlined,
                     size: 16,

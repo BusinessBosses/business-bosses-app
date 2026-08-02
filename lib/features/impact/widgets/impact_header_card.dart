@@ -96,6 +96,15 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                           color: Colors.grey[600],
                         ),
                       ),
+                      const SizedBox(height: 2),
+                      const Text(
+                        'The higher your score, the more opportunities you get',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: primaryColorLT,
+                        ),
+                      ),
                     ],
                   ),
                   Text(

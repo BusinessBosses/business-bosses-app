@@ -158,11 +158,14 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
       'title': _titleController.text.trim(),
       'description': _descriptionController.text.trim(),
       'category': _selectedCategory,
+      // A job carries a single budget figure. The API still models a range, so
+      // both ends are sent as the same amount.
       'budget_start': _startPriceController.text.isEmpty
           ? null
           : _startPriceController.text,
-      'budget_end':
-          _endPriceController.text.isEmpty ? null : _endPriceController.text,
+      'budget_end': _startPriceController.text.isEmpty
+          ? null
+          : _startPriceController.text,
       'deadline': _selectedDeadline?.toIso8601String(),
       'location':
           country.isEmpty ? (shopController.shop?.location ?? '') : country,
@@ -385,30 +388,17 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                                 ),
                               ),
                               Row(
-                                spacing: 10,
                                 children: <Widget>[
                                   const SizedBox(width: 5),
                                   Expanded(
                                     child: CustomEditText(
                                       padding: 5,
                                       currencycontroller: currencyController,
-                                      caption: 'Starting Price',
+                                      caption: 'Budget',
                                       iscurrencyfield: true,
                                       maxLength: 15,
-                                      hintText: 'Enter price',
+                                      hintText: 'Enter amount',
                                       controller: _startPriceController,
-                                      inputType: TextInputType.number,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: CustomEditText(
-                                      padding: 5,
-                                      currencycontroller: currencyController,
-                                      caption: ' Ending Price',
-                                      iscurrencyfield: true,
-                                      maxLength: 15,
-                                      hintText: 'Enter price',
-                                      controller: _endPriceController,
                                       inputType: TextInputType.number,
                                     ),
                                   ),

@@ -8,7 +8,6 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_picker_screen.dart';
-import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -28,15 +27,32 @@ class ForYouTopCards extends StatelessWidget {
     return Container(
       color: backgroundColor,
       padding: const EdgeInsets.fromLTRB(15, 8, 15, 10),
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const <Widget>[
-            Expanded(child: _PerformanceCard()),
-            SizedBox(width: 10),
-            Expanded(child: _BossOfTheWeekCard()),
-          ],
-        ),
+      child: Column(
+        children: <Widget>[
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: const <Widget>[
+                Expanded(child: _PerformanceCard()),
+                SizedBox(width: 10),
+                Expanded(child: _BossOfTheWeekCard()),
+              ],
+            ),
+          ),
+          const SizedBox(height: 6),
+          // Explains the Reach Score; spans both tiles.
+          Text(
+            'One score. Ranks you everywhere',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13.5,
+              fontWeight: FontWeight.w700,
+              // Grey enough to read as a caption — at black87 it competed with
+              // the post title directly beneath it.
+              color: Colors.grey.shade500,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -64,7 +80,7 @@ class _PerformanceCard extends StatelessWidget {
               children: const <Widget>[
                 Expanded(
                   child: Text(
-                    'My Performance',
+                    'My Reach Score',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
@@ -120,13 +136,9 @@ class _PerformanceCard extends StatelessWidget {
                     side: const BorderSide(color: Color(0xFFFECACA)),
                   ),
                 ),
-                onPressed: () {
-                  if (profileController.myProfile.isSubscribed) {
-                    Get.to(() => const BoostPostPickerScreen());
-                  } else {
-                    showPremiumPaywall();
-                  }
-                },
+                // Open to everyone — free users can boost too, they pay for
+                // the boost itself on the next screen.
+                onPressed: () => Get.to(() => const BoostPostPickerScreen()),
                 child: const FittedBox(
                   child: Text(
                     'Boost Visibility',

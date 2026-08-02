@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
@@ -45,7 +44,6 @@ class _DashboardState extends State<Dashboard> {
   final List<String> titles = <String>[
     'Customers',
     'Buyer Activity',
-    'Matched Buyer',
   ];
 
   final List<String> quickactions = <String>[
@@ -338,41 +336,15 @@ class _DashboardState extends State<Dashboard> {
                         padding: const EdgeInsets.symmetric(
                           horizontal: 15.0,
                         ),
-                        crossAxisCount: 3,
+                        crossAxisCount: 2,
                         crossAxisSpacing: 15.0,
                         mainAxisSpacing: 15.0,
                         // controller: _controller,
                         shrinkWrap: true,
-                        itemCount: 3,
+                        itemCount: 2,
                         itemBuilder: (BuildContext context, int index) {
-                          // "Matched Buyer" = buyer requests in my industry &
-                          // location (same dataset as "Find my match → I need
-                          // customers"). Both the count and the screen it opens
-                          // now read from buyer requests so they always agree —
-                          // previously the count came from matched buyer *users*
-                          // while the tap opened buyer *requests* filtered by
-                          // shop.category with no location, so it showed empty.
-                          if (index == 2) {
-                            return Obx(() {
-                              final int matchedCount =
-                                  buyerRequestsController.matchCount.value;
-                              return GestureDetector(
-                                onTap: () => Get.to(
-                                  () => BuyerRequestsScreen(
-                                    filterByIndustry:
-                                        profileController.myProfile.industry,
-                                    filterByLocation:
-                                        profileController.myProfile.location,
-                                    gateForFreeUsers: true,
-                                  ),
-                                ),
-                                child: InfoCard(
-                                  cardName: titles[index],
-                                  value: matchedCount.toString(),
-                                ),
-                              );
-                            });
-                          }
+                          // Matched buyers now live under Find My Match →
+                          // "I Need a Job/Work", so MyBiz no longer shows them.
                           return GestureDetector(
                               onTap: () {
                                 if (index == 0) {

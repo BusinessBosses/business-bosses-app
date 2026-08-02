@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use, always_specify_types
 
-import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
@@ -13,10 +12,10 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-import '../../../navigation/routes.dart';
 
 bool isExpanded = false;
 
@@ -361,8 +360,11 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Get.toNamed(
-                                    Routes.marketPlace,
+                                  Get.to(
+                                    () => const MarketplaceScreen(
+                                      initialIndex:
+                                          MarketplaceScreen.marketplaceTab,
+                                    ),
                                   );
                                 },
                                 child: Container(
@@ -380,66 +382,6 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                     children: <Widget>[
                                       const Text(
                                         'Sell',
-                                        style: TextStyle(
-                                            color: primaryColorLT,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 16),
-                                      ),
-                                      SvgPicture.asset(
-                                          'assets/svgs/nexticon.svg')
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 1,
-                          color: backgroundcolorinterface,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Share & Earn',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 16),
-                                  ),
-                                  Text(
-                                    'Share featured listings & earn',
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w700),
-                                  )
-                                ],
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Get.to(() => const ProshopdealsScreen());
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  width: 120,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 2, color: primaryColorLT),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      const Text(
-                                        'Share',
                                         style: TextStyle(
                                             color: primaryColorLT,
                                             fontWeight: FontWeight.w700,

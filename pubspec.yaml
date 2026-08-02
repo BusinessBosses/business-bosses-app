@@ -97,9 +97,16 @@ flutter:
       fonts:
         - asset: assets/fonts/NunitoSans-Regular.ttf
           weight: 400
+        # 500 and 800 have no dedicated file. Without these aliases iOS falls
+        # back to Regular for them (Android fakes the weight), so w500/w800
+        # text rendered bold on Android and thin on iOS.
+        - asset: assets/fonts/NunitoSans-SemiBold.ttf
+          weight: 500
         - asset: assets/fonts/NunitoSans-SemiBold.ttf
           weight: 600
         - asset: assets/fonts/NunitoSans-Bold.ttf
           weight: 700
+        - asset: assets/fonts/NunitoSans-Bold.ttf
+          weight: 800
         - asset: assets/fonts/NunitoSans-Black.ttf
           weight: 900

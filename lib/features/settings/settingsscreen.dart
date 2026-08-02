@@ -591,10 +591,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       isTitle: false,
       label: 'Preferred Currency',
     ),
-    MySettingsItem(
-      isTitle: false,
-      label: 'Referral Earnings',
-    ),
+    // Hidden for this release: referrals only work for people outside the app,
+    // so the flow is incomplete. Restore once in-app referrals are built.
+    // MySettingsItem(
+    //   isTitle: false,
+    //   label: 'Referral Earnings',
+    // ),
     MySettingsItem(
       isTitle: false,
       label: 'Community Rules',

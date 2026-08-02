@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
@@ -198,9 +199,15 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
             ),
           ),
           const SizedBox(height: 3.0),
-          // Price
+          // Price — always shown in the viewer's own currency, converted from
+          // the seller's, so a listing wall never mixes NGN/IDR/GBP.
           Text(
-            '$currency${formatPrice(double.parse(originalPrice))}',
+            CurrencyFormatter.formatCurrency(
+              CurrencyFormatter.coinsForPrice(
+                double.tryParse(originalPrice) ?? 0,
+                currencyCode: currency,
+              ),
+            ),
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,

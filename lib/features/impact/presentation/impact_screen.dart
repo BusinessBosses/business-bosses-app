@@ -7,8 +7,8 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_child_button.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
+import 'package:business_bosses_v2/features/impact/presentation/about_reach_score_screen.dart';
 import 'package:business_bosses_v2/features/impact/widgets/impact_header_card.dart';
-import 'package:business_bosses_v2/features/invitepage/invitepage.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/utils/time_format.dart';
@@ -155,20 +155,20 @@ class _ReachScreenState extends State<ReachScreen> {
                 //     ),
                 //   ),
                 // ),
+                // Explains how the score is earned, rather than the old invite
+                // shortcut which had nothing to do with this screen.
                 Padding(
                   padding: const EdgeInsets.only(right: 15.0),
                   child: GestureDetector(
-                    onTap: () {
-                      Get.to(Invitepage());
-                    },
+                    onTap: () => Get.to(() => const AboutReachScoreScreen()),
                     child: CircleAvatar(
                       radius: 20,
                       backgroundColor: backgroundColor,
                       child: Icon(
-                        LucideIcons.plus,
+                        LucideIcons.info,
                         size: 20,
                         color: textColor,
-                      ), // Invisible icon to maintain size'),
+                      ),
                     ),
                   ),
                 ),

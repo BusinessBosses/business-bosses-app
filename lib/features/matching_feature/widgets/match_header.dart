@@ -31,7 +31,7 @@ class MatchHeader extends StatelessWidget {
                 : title == 'partner'
                     ? 'Partner Opportunities for you'
                     : title == 'seller'
-                        ? 'Customer opportunities for you'
+                        ? 'Job Opportunities for you'
                         : title == 'mentor'
                             ? 'Mentorship opportunities for you'
                             : title,

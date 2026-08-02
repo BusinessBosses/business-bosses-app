@@ -12,7 +12,8 @@ import 'package:business_bosses_v2/features/partners/presentation/boss_up_partne
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
-import 'package:business_bosses_v2/features/referrals/referral_screen.dart';
+// Referrals are hidden this release; import kept commented for the restore.
+// import 'package:business_bosses_v2/features/referrals/referral_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -211,15 +212,18 @@ class _DrawerContentState extends State<DrawerContent> {
           Get.to(() => const BossUpPartner());
         }
       },
-      <String, dynamic>{
-        'icon': const Icon(LucideIcons.gift, size: 25, color: textColor),
-        'title': 'Referrals',
-        'description': 'See your referral earnings and manage shop referral rewards.',
-        'onTileClicked': () {
-          widget.oncloseclick?.call();
-          Get.to(() => const ReferralScreen());
-        },
-      },
+      // Hidden for this release: referrals only work for people outside the
+      // app, so the flow is incomplete. Restore once in-app referrals exist.
+      // <String, dynamic>{
+      //   'icon': const Icon(LucideIcons.gift, size: 25, color: textColor),
+      //   'title': 'Referrals',
+      //   'description':
+      //       'See your referral earnings and manage shop referral rewards.',
+      //   'onTileClicked': () {
+      //     widget.oncloseclick?.call();
+      //     Get.to(() => const ReferralScreen());
+      //   },
+      // },
       <String, dynamic>{
         'icon': SvgPicture.asset(
           'assets/svgs/settings.svg',

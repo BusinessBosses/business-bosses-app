@@ -1,13 +1,11 @@
 import 'dart:developer';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
@@ -17,6 +15,7 @@ import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/apply_to_job_button.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/partners/controllers/partners_controller.dart';
 import 'package:business_bosses_v2/features/partners/models/partner_model.dart';
@@ -27,6 +26,7 @@ import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.d
 
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -761,16 +761,9 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     );
   }
 
-  void _navigateToChatScreen(BuyerRequestModel request) {
-    Get.to(
-      () =>
-          const ChatRoomScreen(frommarketplace: false, fromBuyerRequest: true),
-      arguments: <String, Object>{
-        'user': request.user,
-        'buyerRequest': request,
-      },
-    );
-  }
+  /// Shared apply flow — see [applyToJob].
+  Future<void> _navigateToChatScreen(BuyerRequestModel request) =>
+      applyToJob(request);
 
   void _showRequestDetails(BuyerRequestModel request) {
     final bool hasValidImage = _isValidImageUrl(request.imageUrl);
@@ -895,9 +888,16 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  _buildDetailRow(Icons.attach_money, 'Budget',
-                      '\$${request.budgetStart} - \$${request.budgetEnd}'),
-                  const SizedBox(height: 8),
+                  if (CurrencyFormatter.budgetRange(
+                          request.budgetStart, request.budgetEnd) !=
+                      null) ...<Widget>[
+                    _buildDetailRow(
+                        Icons.attach_money,
+                        'Budget',
+                        CurrencyFormatter.budgetRange(
+                            request.budgetStart, request.budgetEnd)!),
+                    const SizedBox(height: 8),
+                  ],
                   if (request.deadline.isNotEmpty) ...<Widget>[
                     _buildDetailRow(
                       Icons.calendar_today,
@@ -912,47 +912,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                   const SizedBox(height: 16),
                   if (request.user.uid !=
                       _profileController.myProfile.uid) ...<Widget>[
-                    if (_profileController.myProfile.hasShop) ...<Widget>[
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => _navigateToChatScreen(request),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColorLT,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text(
-                            'Send Proposal',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                    ] else ...<Widget>[
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => Get.to(() => Setupshop()),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColorLT,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text(
-                            'Setup Shop to Send Proposal',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ApplyToJobButton(request: request),
                   ] else ...<Widget>[
                     SizedBox(
                       width: double.infinity,

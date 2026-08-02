@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/marketplace/controllers/requests_con
 import 'package:business_bosses_v2/features/marketplace/widgets/request_details_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:business_bosses_v2/utils/currency_format.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -130,12 +131,19 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
                                             fontSize: 13,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      const SizedBox(height: 3),
-                                      Text(
-                                        '\$${request.budgetStart} - \$${request.budgetEnd}',
-                                        style: const TextStyle(
-                                            fontSize: 12, color: Colors.black),
-                                      ),
+                                      if (CurrencyFormatter.budgetRange(
+                                              request.budgetStart,
+                                              request.budgetEnd) !=
+                                          null) ...<Widget>[
+                                        const SizedBox(height: 3),
+                                        Text(
+                                          CurrencyFormatter.budgetRange(
+                                              request.budgetStart,
+                                              request.budgetEnd)!,
+                                          style: const TextStyle(
+                                              fontSize: 12, color: Colors.black),
+                                        ),
+                                      ],
                                       const SizedBox(height: 2),
                                       Text(
                                         'Due: $deadline',

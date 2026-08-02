@@ -53,7 +53,7 @@ Widget friendProfileHeader(UserModel publicUser) {
             Expanded(
               child: CustomChildButton(
                 value: totalReachScore,
-                caption: 'Reach',
+                caption: 'Reach Score',
                 onPressed: () {
                   Get.to(() => ReachScreen(user: publicUser));
                 },

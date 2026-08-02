@@ -100,7 +100,7 @@ class MyProfileHeader extends StatelessWidget {
 
                         return CustomChildButton(
                           value: totalReachScore,
-                          caption: 'Reach',
+                          caption: 'Reach Score',
                           onPressed: () {
                             Get.to(() => ReachScreen(user: myProfile));
                           },

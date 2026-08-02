@@ -72,15 +72,10 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
         return matchIndustry && matchLocation;
       }).toList();
     } else {
-      // Show buyer requests in their industry/location
-      results =
-          buyerRequestController.buyerRequests.where((BuyerRequestModel r) {
-        final bool matchIndustry = r.category.toLowerCase().trim() ==
-            widget.industry.toLowerCase().trim();
-        final bool matchLocation = r.user.location?.toLowerCase().trim() ==
-            widget.location.toLowerCase().trim();
-        return matchIndustry && matchLocation;
-      }).toList();
+      // A product/service listing shows no jobs — the seller just listed
+      // something, matching them to job posts is noise. They get the
+      // "we'll notify you when a buyer is found" state instead.
+      results = <dynamic>[];
     }
 
     setState(() => isLoading = false);
@@ -222,7 +217,7 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
             const SizedBox(height: 16),
             Text(
               widget.isBuyerRequest
-                  ? 'We’ll notify you when a supplier is found'
+                  ? 'We’ll notify you when an applicant is found'
                   : 'We’ll notify you when a buyer is found',
               textAlign: TextAlign.center,
               style: const TextStyle(
@@ -296,9 +291,9 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
-            widget.isBuyerRequest
-                ? 'Matching Suppliers'
-                : 'Matching Jobs',
+            // Only the job path reaches here now — a listing shows the
+            // "we'll notify you" state instead of a match list.
+            'People who can help',
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

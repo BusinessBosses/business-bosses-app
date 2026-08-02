@@ -419,7 +419,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
             const Padding(
               padding: EdgeInsets.only(top: 20.0),
               child: Text(
-                'Access Business Opportunities Worldwide',
+                'One Reach Score. More opportunities.',
                 style: TextStyle(fontSize: 16),
               ),
             )
@@ -662,7 +662,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   GestureDetector(
                     onTap: () => Get.to(() => const OrdersScreen()),
                     child: const Text(
-                      'Sales & Leads',
+                      'Leads & Orders',
                       style: TextStyle(
                         color: Color(0xFFFF1E39),
                         fontWeight: FontWeight.w900,
@@ -696,14 +696,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
           Expanded(
             child: TabBar(
               controller: _marketplaceTabController,
-              isScrollable: false,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 2),
-              labelColor: Colors.black87,
-              unselectedLabelColor: Colors.black87,
+              // Scrollable so every label renders at the same font size. With
+              // equal-width (non-scrollable) tabs the longer "Marketplace" label
+              // was shrunk by the FittedBox and looked smaller than "Jobs".
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+              labelPadding: const EdgeInsets.symmetric(horizontal: 10),
+              // Selected reads dark + heavy; unselected sits back in grey at a
+              // medium weight, so the active tab is obvious at a glance.
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.black54,
               labelStyle:
                   const TextStyle(fontWeight: FontWeight.w900, fontSize: 12),
               unselectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 fontSize: 12,
               ),
               indicatorColor: primaryColorLT,

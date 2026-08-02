@@ -79,6 +79,12 @@ class Challengeitem extends StatelessWidget {
 
     final bool isNetwork = url.startsWith('http');
 
+    // The Marketplace graphic has its "MARKETPLACE" title along the top edge, so
+    // a centered cover crop clips it. Anchor that card's image to the top so the
+    // heading stays fully visible; other cards keep the default centered crop.
+    final Alignment imageAlignment =
+        isMarketplace == true ? Alignment.topCenter : Alignment.center;
+
     return SizedBox(
       height: 86,
       width: double.infinity,
@@ -86,6 +92,7 @@ class Challengeitem extends StatelessWidget {
           ? CachedNetworkImage(
               imageUrl: url,
               fit: BoxFit.cover,
+              alignment: imageAlignment,
               placeholder: (BuildContext context, _) => const Center(
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
@@ -95,6 +102,7 @@ class Challengeitem extends StatelessWidget {
           : Image.asset(
               url,
               fit: BoxFit.cover,
+              alignment: imageAlignment,
               errorBuilder: (BuildContext context, Object error,
                       StackTrace? stackTrace) =>
                   const Icon(Icons.broken_image, color: Colors.grey),

@@ -19,19 +19,25 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
   final String myUid = profileController.myProfile.uid;
   final bool isMyProfile = myUid == publicUser.uid;
 
-  // Normalize matchType
+  // Interest labels, worded exactly as in the Find My Match sheet so the two
+  // never disagree. ('seller' is the stored key for the jobs option.)
   final String? rawMatchType = publicUser.matchType;
-  String cleanedMatchType = '';
+  String myLabel = '';
+  String theirLabel = '';
   if (rawMatchType == 'seller') {
-    cleanedMatchType = 'customer';
+    myLabel = 'I Need a Job/Work';
+    theirLabel = 'Needs a Job/Work';
   } else if (rawMatchType == 'investor') {
-    cleanedMatchType = 'backer';
+    myLabel = 'I Need Backers / Funding';
+    theirLabel = 'Needs Backers / Funding';
   } else if (rawMatchType == 'partner') {
-    cleanedMatchType = 'partner';
+    myLabel = 'I Need Suppliers/Partners';
+    theirLabel = 'Needs Suppliers/Partners';
   } else if (rawMatchType == 'mentor') {
-    cleanedMatchType = 'mentor';
+    myLabel = 'I Need Mentorship';
+    theirLabel = 'Needs Mentorship';
   }
-  final bool hasMatchType = cleanedMatchType.isNotEmpty;
+  final bool hasMatchType = myLabel.isNotEmpty;
 
   final int bossCount = publicUser.bossCount ?? 0;
   final int mentorCount = publicUser.mentorCount ?? 0;
@@ -196,7 +202,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                           Icon(LucideIcons.chevronRight, color: primaryColorLT),
                     ),
                     title: Text(
-                      'I Need ${cleanedMatchType.capitalizeFirst!}s',
+                      myLabel,
                       style: const TextStyle(
                         color: subtextColor,
                         fontWeight: FontWeight.w700,
@@ -234,7 +240,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(
-                    'Needs ${cleanedMatchType.capitalizeFirst!}s',
+                    theirLabel,
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 15,

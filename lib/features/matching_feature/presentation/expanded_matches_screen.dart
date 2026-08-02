@@ -18,7 +18,6 @@ import 'package:business_bosses_v2/features/matching_feature/widgets/match_card.
 import 'package:business_bosses_v2/features/matching_feature/widgets/match_header.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/premium_prompt.dart';
-import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -218,7 +217,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
       case 'partner':
         return 'Partner Opportunities for you';
       case 'seller':
-        return 'Customer opportunities for you';
+        return 'Job Opportunities for you';
       case 'mentor':
         return 'Mentorship opportunities for you';
       default:
@@ -268,39 +267,15 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: _buildActionCard(
-                      title: 'Create buying Request',
-                      icon: LucideIcons.shoppingCart,
-                      color: Colors.orange,
-                      onTap: () => Get.to(() => AddBuyerRequests()),
-                    ),
-                  ),
-                ] else if (isSeller) ...<Widget>[
-                  Expanded(
-                    child: _buildActionCard(
-                      title: 'Reach More Buyers',
-                      icon: LucideIcons.users,
-                      color: Colors.blue,
-                      onTap: () => Get.to(() => BecomeaPartnerScreen()),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _buildActionCard(
                       title: 'Get Listing Featured',
                       icon: LucideIcons.star,
                       color: Colors.amber,
-                      onTap: () {
-                        // Check if user has Pro/BizCenter
-                        if (profileController.myProfile.hasShop) {
-                          // User has Pro - go to featured listings screen
-                          Get.to(() => const ProshopdealsScreen());
-                        } else {
-                          // User doesn't have Pro - show paywall
-                          showPremiumPaywall();
-                        }
-                      },
+                      onTap: () => _openFeaturedListing(),
                     ),
                   ),
+                ] else if (isSeller) ...<Widget>[
+                  // Jobs: post a job rather than the old seller actions.
+                  Expanded(child: _buildPostAJobBanner()),
                 ] else if (isInvestor) ...<Widget>[
                   Expanded(
                     child: _buildActionCard(
@@ -378,7 +353,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                   profileController.myProfile.industry?.toLowerCase()))
             Padding(
               padding: const EdgeInsets.only(bottom: 0.0),
-              child: Text('Showing buyer requests from your industry',
+              child: Text('Showing matched Job Opportunities',
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey.shade600,
@@ -463,6 +438,53 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  /// Featured listing is a Pro/shop feature — non-shop users see the paywall.
+  void _openFeaturedListing() {
+    if (profileController.myProfile.hasShop) {
+      Get.to(() => const ProshopdealsScreen());
+    } else {
+      showPremiumPaywall();
+    }
+  }
+
+  /// Banner above the job matches: post a job of your own.
+  Widget _buildPostAJobBanner() {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Row(
+        children: <Widget>[
+          const Expanded(
+            child: Text(
+              'List work or job position and connect with active job seekers.',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            ),
+          ),
+          const SizedBox(width: 10),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: primaryColorLT,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            onPressed: () => Get.to(() => const AddBuyerRequests()),
+            child: const Text(
+              'Post a Job',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+            ),
+          ),
+        ],
       ),
     );
   }
