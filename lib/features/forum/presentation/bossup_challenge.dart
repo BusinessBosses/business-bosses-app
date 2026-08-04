@@ -147,8 +147,9 @@ class _BossupChallengeState extends State<BossupChallenge> {
                 scrollDirection:
                     widget.ishome! == true ? Axis.horizontal : Axis.vertical,
 
-                // Challenges + Marketplace, Events, Crowdfund, Mentor, Partner
-                itemCount: controller.categories.length + 5,
+                // Challenges + Marketplace, Job Board, Events, Crowdfund,
+                // Mentor, Partner
+                itemCount: controller.categories.length + 6,
 
                 itemBuilder: (BuildContext context, int index) {
                   if (index < controller.categories.length) {
@@ -239,6 +240,18 @@ class _BossupChallengeState extends State<BossupChallenge> {
                     );
                   } else if (index == controller.categories.length + 1) {
                     return Challengeitem(
+                      isJobBoard: true,
+                      onTap: () {
+                        Get.to(() => const MarketplaceScreen(
+                              initialIndex: MarketplaceScreen.jobsTab,
+                            ));
+                      },
+                      title: 'Job Board',
+                      description: 'Find work or hire the best talent',
+                      imageurl: 'assets/images/job_board.png',
+                    );
+                  } else if (index == controller.categories.length + 2) {
+                    return Challengeitem(
                       isEvents: true,
                       onTap: () {
                         Get.toNamed(Routes.liveEvents);
@@ -247,7 +260,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       description: 'Join or share events online & in person',
                       imageurl: 'assets/images/live_event.png',
                     );
-                  } else if (index == controller.categories.length + 2) {
+                  } else if (index == controller.categories.length + 3) {
                     return Challengeitem(
                       isCrowdfund: true,
                       onTap: () {
@@ -260,7 +273,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       title: 'Crowdfund',
                       imageurl: 'assets/images/donationpic.png',
                     );
-                  } else if (index == controller.categories.length + 3) {
+                  } else if (index == controller.categories.length + 4) {
                     return Challengeitem(
                       isMentor: true,
                       onTap: () {

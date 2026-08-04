@@ -49,7 +49,7 @@ class ForYouTopCards extends StatelessWidget {
               fontWeight: FontWeight.w700,
               // Grey enough to read as a caption — at black87 it competed with
               // the post title directly beneath it.
-              color: Colors.grey.shade500,
+              color: Color(0xFF616161),
             ),
           ),
         ],
@@ -83,7 +83,7 @@ class _PerformanceCard extends StatelessWidget {
                     'My Reach Score',
                     style: TextStyle(
                       fontSize: 13,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                       color: Colors.black,
                     ),
                     maxLines: 1,
@@ -235,7 +235,7 @@ class _BossOfTheWeekCard extends StatelessWidget {
                         'Boss of The Week',
                         style: TextStyle(
                           fontSize: 13,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w700,
                           color: Colors.black,
                         ),
                         maxLines: 1,

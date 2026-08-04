@@ -127,7 +127,7 @@ class DataSelectionScreenState extends State<DataSelectionScreen> {
                     icon: const Icon(
                       Icons.category,
                       size: 80.0,
-                      color: Colors.grey,
+                      color: Color(0xFF616161),
                     ),
                     subTitle: 'There is no $_title for you to select',
                     title: 'There is no $_title found',

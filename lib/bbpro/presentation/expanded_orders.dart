@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
+import 'package:business_bosses_v2/bbpro/widgets/order_payment_status.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
@@ -107,7 +108,9 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               shop: widget.shop,
               buyernotes: widget.order.notes,
             ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 16),
+          OrderPaymentStatus(order: widget.order),
+          const SizedBox(height: 14),
           if (widget.ismyorder == null)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,7 +230,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                 title: Text(
                   service.name,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 leading: _buildServiceImage(service),
@@ -250,7 +253,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                 title: Text(
                   custom['name'],
                   style: const TextStyle(
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 subtitle: Text(
@@ -283,7 +286,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
         ),
         child: Icon(
           Icons.image,
-          color: Colors.grey[400],
+          color: Color(0xFF757575),
         ),
       );
     }
@@ -316,7 +319,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
         ),
         child: Icon(
           Icons.image,
-          color: Colors.grey[400],
+          color: Color(0xFF757575),
         ),
       );
     }

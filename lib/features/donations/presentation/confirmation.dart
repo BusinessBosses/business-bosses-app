@@ -94,7 +94,7 @@ class _ConfirmationState extends State<Confirmation> {
                     width: double.infinity,
                     child: TextWidget(
                       text: 'Well Done!',
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                       size: 20,
                       color: Color(0xff333333),
                       centralize: true,

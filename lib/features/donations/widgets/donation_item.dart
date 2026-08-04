@@ -265,7 +265,7 @@ class _DonationItemState extends State<DonationItem> {
                                   'Visit My Biz-Center',
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 9, 93, 237),
-                                      fontSize: 12),
+                                      fontSize: 12, fontWeight: FontWeight.w700),
                                 ),
                                 const Icon(
                                   LucideIcons.chevronRight,
@@ -301,7 +301,7 @@ class _DonationItemState extends State<DonationItem> {
                           maxLines: 2,
                           widget.donation.description!,
                           style: const TextStyle(
-                              color: Colors.black45, fontSize: 12),
+                              color: Colors.black54, fontSize: 12),
                         ),
                         const SizedBox(
                           height: 10,
@@ -525,7 +525,7 @@ class _DonationItemState extends State<DonationItem> {
                                                         fontWeight:
                                                             FontWeight.w700,
                                                         size: 18,
-                                                        color: Colors.grey,
+                                                        color: Color(0xFF616161),
                                                       ),
                                                     ),
                                                     GestureDetector(
@@ -632,7 +632,7 @@ class _DonationItemState extends State<DonationItem> {
                                                         fontWeight:
                                                             FontWeight.w700,
                                                         size: 18,
-                                                        color: Colors.grey,
+                                                        color: Color(0xFF616161),
                                                       ),
                                                     ),
                                                     GestureDetector(

@@ -509,7 +509,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                 text: 'all in one place',
                                 style: TextStyle(
                                     fontSize: 15,
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w700,
                                     color: primaryColorLT),
                               ),
                             ],
@@ -723,8 +723,14 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                           child: RadioGroup<String>(
                                             groupValue: paymentMethodId,
                                             onChanged: (String? value) {
+                                              if (value == null) return;
                                               setModalState(() {
-                                                paymentMethodId = value!;
+                                                paymentMethodId = value;
+                                                // Kept in step with the plan —
+                                                // the radios used to set this
+                                                // themselves.
+                                                _currentIndex =
+                                                    value == 'Proyear' ? 0 : 1;
                                               });
                                             },
                                             child: Column(
@@ -782,14 +788,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                       children: <Widget>[
                                                         Radio<String>(
                                                           value: 'Proyear',
-                                                          groupValue: paymentMethodId,
                                                           activeColor: primaryColorLT,
-                                                          onChanged: (String? value) {
-                                                            setModalState(() {
-                                                              paymentMethodId = value!;
-                                                              _currentIndex = 0;
-                                                            });
-                                                          },
                                                         ),
                                                         Expanded(
                                                           child: Column(
@@ -802,14 +801,14 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                     children: <Widget>[
                                                                       Text('Pro yearly', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                                                      Text('Best value · Save 33%', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                                                                      Text('Best value · Save 33%', style: TextStyle(color: Color(0xFF616161), fontSize: 13)),
                                                                     ],
                                                                   ),
                                                                   Column(
                                                                     crossAxisAlignment: CrossAxisAlignment.end,
                                                                     children: <Widget>[
                                                                       const Text('\$9.99/mo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                                                                      Text('\$119.88/year', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                                                                      Text('\$119.88/year', style: TextStyle(color: Color(0xFF616161), fontSize: 12)),
                                                                     ],
                                                                   ),
                                                                 ],
@@ -859,14 +858,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                       children: <Widget>[
                                                         Radio<String>(
                                                           value: 'Promonth',
-                                                          groupValue: paymentMethodId,
                                                           activeColor: primaryColorLT,
-                                                          onChanged: (String? value) {
-                                                            setModalState(() {
-                                                              paymentMethodId = value!;
-                                                              _currentIndex = 1;
-                                                            });
-                                                          },
                                                         ),
                                                         const Expanded(
                                                           child: Row(
@@ -876,7 +868,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                 children: <Widget>[
                                                                   Text('Pro monthly', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                                                  Text('Cancel anytime', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                                                                  Text('Cancel anytime', style: TextStyle(color: Color(0xFF616161), fontSize: 13)),
                                                                 ],
                                                               ),
                                                               Text('\$14.99/mo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),

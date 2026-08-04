@@ -39,7 +39,7 @@ PreferredSizeWidget searchAppBar({
         contentPadding: const EdgeInsets.all(0.0),
         hintText: hintText,
         hintStyle: const TextStyle(
-          color: Colors.grey,
+          color: Color(0xFF616161),
           fontSize: 15.0,
           fontWeight: FontWeight.w700,
         ),

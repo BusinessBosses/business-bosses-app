@@ -219,7 +219,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
                 )
               : const Text(
                   'No search results',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(color: Color(0xFF616161), fontSize: 16),
                 ),
         ),
       ],

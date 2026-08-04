@@ -261,7 +261,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
 
   void _fetchReferralReward() async {
     try {
-      final response = await ApiService.get(path: 'shop-referral/${widget.shop!.id}');
+      final ApiResponseModel response =
+          await ApiService.get(path: 'shop-referral/${widget.shop!.id}');
       if (response.success == true && response.data != null) {
         setState(() {
           isReferralRewardActive = response.data['active'] ?? false;
@@ -608,7 +609,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                                 text: 'Free and Easy to Setup.',
                                 style: TextStyle(
                                     fontSize: 15,
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w700,
                                     color: Colors.blueGrey),
                               ),
                             ],
@@ -837,7 +838,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                     const SizedBox(
                       height: 15,
                     ),
-                    if (widget.shop != null) ...[
+                    if (widget.shop != null) ...<Widget>[
                       const Divider(),
                       const SizedBox(height: 10),
                       const Text('Shop Referral Reward', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),

@@ -85,12 +85,12 @@ class _OrderProductScreenState extends State<OrderProductScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _focusNode = FocusNode();
-    paymentMethods = List.from(widget.shop.payments);
+    paymentMethods = List<dynamic>.from(widget.shop.payments);
 
     // Check if item has a valid price and we have enough coins, optionally we could
     // do the check on the backend, but we can do a UI pre-check here to enable/disable it.
     // For now we just add the "Pay with coins" option if they have coins.
-    paymentMethods!.add({
+    paymentMethods!.add(<String, String>{
       'paymentMethod': 'Pay with Coins',
       'details': 'Deducted directly from your wallet balance'
     });
@@ -315,7 +315,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                             text: 'Cancel',
                                             fontWeight: FontWeight.w700,
                                             size: 18,
-                                            color: Colors.grey,
+                                            color: Color(0xFF616161),
                                           ),
                                         ),
                                         GestureDetector(
@@ -393,7 +393,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                           text: 'Cancel',
                                           fontWeight: FontWeight.w700,
                                           size: 18,
-                                          color: Colors.grey,
+                                          color: Color(0xFF616161),
                                         ),
                                       ),
                                       GestureDetector(
@@ -493,7 +493,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                           text: 'Cancel',
                                           fontWeight: FontWeight.w700,
                                           size: 18,
-                                          color: Colors.grey,
+                                          color: Color(0xFF616161),
                                         ),
                                       ),
                                       GestureDetector(
@@ -687,7 +687,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                               Row(
                                 children: <Widget>[
                                   const Icon(Icons.place,
-                                      color: Colors.grey, size: 15),
+                                      color: Color(0xFF616161), size: 15),
                                   const SizedBox(width: 4),
                                   Text(
                                     CountryCodes.nameToCode[
@@ -962,7 +962,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                   child: Text(
                                     'User has not added a payment method yet',
                                     style: TextStyle(
-                                        color: Colors.grey, fontSize: 14),
+                                        color: Color(0xFF616161), fontSize: 14),
                                   ),
                                 ),
                               ),
@@ -1048,7 +1048,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 22,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ],

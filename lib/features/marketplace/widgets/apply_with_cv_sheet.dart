@@ -53,7 +53,7 @@ class _ApplyWithCvSheetState extends State<_ApplyWithCvSheet> {
   static const int _maxBytes = 10 * 1024 * 1024;
 
   Future<void> _pickCv() async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final FilePickerResult? result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: _allowedExtensions,
     );

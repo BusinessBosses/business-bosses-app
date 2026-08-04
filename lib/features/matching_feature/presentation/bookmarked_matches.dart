@@ -192,7 +192,7 @@ class _BookmarkedMatchesState extends State<BookmarkedMatches> {
                 style: TextStyle(
                   color: textColor.withValues(alpha: 0.6),
                   fontSize: 12,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],

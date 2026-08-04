@@ -79,21 +79,25 @@ class _PreferredCurrencyScreenState extends State<PreferredCurrencyScreen> {
           )
         ],
       ),
-      body: ListView.builder(
-        itemCount: uniqueCurrencies.length,
-        itemBuilder: (BuildContext context, int index) {
-          final String currencyCode = uniqueCurrencies[index];
-          return RadioListTile<String>(
-            title: Text(currencyCode),
-            value: currencyCode,
-            groupValue: selectedCurrency,
-            onChanged: (String? value) {
-              setState(() {
-                selectedCurrency = value;
-              });
-            },
-          );
+      // Selection state lives on the RadioGroup now; the tiles only declare
+      // their value (groupValue/onChanged on the tile are deprecated).
+      body: RadioGroup<String>(
+        groupValue: selectedCurrency,
+        onChanged: (String? value) {
+          setState(() {
+            selectedCurrency = value;
+          });
         },
+        child: ListView.builder(
+          itemCount: uniqueCurrencies.length,
+          itemBuilder: (BuildContext context, int index) {
+            final String currencyCode = uniqueCurrencies[index];
+            return RadioListTile<String>(
+              title: Text(currencyCode),
+              value: currencyCode,
+            );
+          },
+        ),
       ),
     );
   }

@@ -263,7 +263,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                                 'Current Country',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.grey,
+                                  color: Color(0xFF616161),
                                 ),
                               ),
                               Text(
@@ -335,7 +335,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                           'Selected Industry',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey,
+                            color: Color(0xFF616161),
                           ),
                         ),
                         Text(

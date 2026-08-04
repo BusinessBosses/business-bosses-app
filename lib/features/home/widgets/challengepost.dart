@@ -175,7 +175,7 @@ class _ActionButton extends StatelessWidget {
           Text(label,
               style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                   color: Colors.grey[600])),
         ],
       ),
@@ -201,7 +201,7 @@ class SellPostCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text(formatPrice(post.price!),
                   style: const TextStyle(
-                      fontWeight: FontWeight.w500, color: Colors.green)),
+                      fontWeight: FontWeight.w600, color: Colors.green)),
             ]),
           const SizedBox(width: 16),
           if (post.location != null)
@@ -210,7 +210,7 @@ class SellPostCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text(post.location!,
                   style: const TextStyle(
-                      fontWeight: FontWeight.w500, color: Colors.grey)),
+                      fontWeight: FontWeight.w600, color: Colors.grey)),
             ]),
         ],
       ),
@@ -234,7 +234,7 @@ class ChallengePostCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text('${post.participantCount} joined',
                   style: const TextStyle(
-                      fontWeight: FontWeight.w500, color: Colors.grey)),
+                      fontWeight: FontWeight.w600, color: Colors.grey)),
             ]),
           const SizedBox(width: 16),
           if (post.endDate != null)
@@ -243,7 +243,7 @@ class ChallengePostCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text('Ends ${formatTimeAgo(post.endDate!)}',
                   style: const TextStyle(
-                      fontWeight: FontWeight.w500, color: Colors.grey)),
+                      fontWeight: FontWeight.w600, color: Colors.grey)),
             ]),
         ],
       ),
@@ -297,7 +297,7 @@ class DealPostCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text(formatPrice(post.price!),
                   style: const TextStyle(
-                      fontWeight: FontWeight.w500, color: Colors.orange)),
+                      fontWeight: FontWeight.w600, color: Colors.orange)),
             ]),
           const SizedBox(width: 16),
           if (post.endDate != null)
@@ -306,7 +306,7 @@ class DealPostCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text('Expires ${formatTimeAgo(post.endDate!)}',
                   style: const TextStyle(
-                      fontWeight: FontWeight.w500, color: Colors.grey)),
+                      fontWeight: FontWeight.w600, color: Colors.grey)),
             ]),
         ],
       ),

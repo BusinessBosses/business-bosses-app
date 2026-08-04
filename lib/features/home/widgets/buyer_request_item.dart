@@ -214,7 +214,7 @@ class BuyerRequestItem extends StatelessWidget {
             style: const TextStyle(
               fontSize: 10,
               color: textColor,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],

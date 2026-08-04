@@ -64,7 +64,7 @@ class CustomCard extends StatelessWidget {
                     subText,
                     style: const TextStyle(
                       fontSize: 12,
-                      color: Colors.grey,
+                      color: Color(0xFF616161),
                     ),
                   ),
                   const SizedBox(height: 10),

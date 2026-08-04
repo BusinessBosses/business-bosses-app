@@ -248,7 +248,7 @@
 //                       TextWidget(
 //                         text: 'Reach\na Wider Audience',
 //                         color: Color(0xFFFFFFFF),
-//                         fontWeight: FontWeight.w800,
+//                         fontWeight: FontWeight.w700,
 //                         size: 20,
 //                       ),
 //                       SizedBox(

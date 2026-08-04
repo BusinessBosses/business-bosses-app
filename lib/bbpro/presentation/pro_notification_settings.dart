@@ -165,7 +165,7 @@ class _ProNotificationSettingsState extends State<ProNotificationSettings> {
                     'Send automatic notification messages and reminder to your customers. View and Edit templates',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.grey,
+                      color: Color(0xFF616161),
                     ),
                   ),
                 ],

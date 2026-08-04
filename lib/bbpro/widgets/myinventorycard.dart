@@ -168,7 +168,7 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
                             Text(
                               '${currencyValues[widget.product!.location.toString()]}${widget.product?.price.toString()}',
                               style: const TextStyle(
-                                color: Colors.grey,
+                                color: Color(0xFF616161),
                                 decoration: TextDecoration.lineThrough,
                                 fontSize: 11,
                               ),

@@ -446,7 +446,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                               child: TabBar(
                                 indicatorColor: primaryColorLT,
                                 labelStyle: const TextStyle(
-                                    fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.w600),
                                 labelColor: Colors.black,
                                 tabs: <Widget>[
                                   const Tab(
@@ -728,7 +728,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
               text: 'Cancel',
               fontWeight: FontWeight.w700,
               size: 18,
-              color: Colors.grey,
+              color: Color(0xFF616161),
             ),
           ),
           GestureDetector(
@@ -1097,7 +1097,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                       text: 'Cancel',
                                       fontWeight: FontWeight.w700,
                                       size: 18,
-                                      color: Colors.grey,
+                                      color: Color(0xFF616161),
                                     ),
                                   ),
                                   GestureDetector(
@@ -1185,7 +1185,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                       text: 'Cancel',
                                       fontWeight: FontWeight.w700,
                                       size: 18,
-                                      color: Colors.grey,
+                                      color: Color(0xFF616161),
                                     ),
                                   ),
                                   GestureDetector(
@@ -1273,7 +1273,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   text: 'Cancel',
                                   fontWeight: FontWeight.w700,
                                   size: 18,
-                                  color: Colors.grey,
+                                  color: Color(0xFF616161),
                                 ),
                               ),
                               GestureDetector(
@@ -1359,7 +1359,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   text: 'Cancel',
                                   fontWeight: FontWeight.w700,
                                   size: 18,
-                                  color: Colors.grey,
+                                  color: Color(0xFF616161),
                                 ),
                               ),
                               GestureDetector(

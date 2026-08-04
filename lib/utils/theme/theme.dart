@@ -16,7 +16,7 @@ final ThemeData appTheme = ThemeData(
     titleTextStyle: TextStyle(
       color: textColor,
       fontSize: 16.0,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
     ),
     iconTheme: IconThemeData(color: textColor),
   ),
@@ -46,10 +46,11 @@ const double radiusValue = 10.0;
 const Color backgroundColor = Color(0xffF4F4F4);
 const Color appBarColor = Color(0xffFAFAFA);
 const double buttonRadius = 30.0;
-const Color iconColor = Color(0xffA9A9A9);
+const Color iconColor = Color(0xff8C8C8C);
 const Color textColor = Color(0xff383838);
-const Color hintColor = Color(0xff8A8A8A);
-const Color subtextColor = Color(0xff707070);
+// Greys darkened for legibility — the old values washed out on device.
+const Color hintColor = Color(0xff6E6E6E);
+const Color subtextColor = Color(0xff595959);
 const Color backgroundcolorinterface = Color(0xfff4f4f4);
 const int hex = 0xffF21C29;
 
@@ -65,8 +66,8 @@ const Color successGreen = Color(0xFF10B981);
 const Color premiumGold = Color(0xFFF59E0B);
 const Color backgroundGray = Color(0xFFF8FAFC);
 const Color textDark = Color(0xFF1F2937);
-const Color textMedium = Color(0xFF6B7280);
-const Color textLight = Color(0xFF9CA3AF);
+const Color textMedium = Color(0xFF52596B);
+const Color textLight = Color(0xFF6B7280);
 
 // ignore: always_specify_types
 const MaterialColor primarySwatch = MaterialColor(hex, {

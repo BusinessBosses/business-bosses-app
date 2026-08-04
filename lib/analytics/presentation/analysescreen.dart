@@ -170,7 +170,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                     Text(
                                       'Invite ID : ${profileController.myProfile.inviteId!}',
                                       style: const TextStyle(
-                                          color: Colors.grey,
+                                          color: Color(0xFF616161),
                                           fontWeight: FontWeight.w700),
                                     )
                                   ],
@@ -249,7 +249,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
           ListTile(
               leading: Icon(
                 LucideIcons.rocket,
-                color: Colors.grey.shade400,
+                color: Color(0xFF757575),
               ),
               title: const Text(
                 'Generate Free Business Promotion',

@@ -173,9 +173,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                             NotificationItem(
                                               controller.notifications[i],
                                               onTap: () {
+                                                // Escrow notifications are typed
+                                                // 'marketplace' but carry the
+                                                // order id, so they open the
+                                                // order too.
                                                 if (controller.notifications[i]
-                                                        .notificationType ==
-                                                    'order') {
+                                                            .dataId !=
+                                                        null &&
+                                                    (controller.notifications[i]
+                                                                .notificationType ==
+                                                            'order' ||
+                                                        controller
+                                                                .notifications[i]
+                                                                .notificationType ==
+                                                            'marketplace')) {
                                                   Get.to(() =>
                                                       ExpandedOrdersView(
                                                           order: controller

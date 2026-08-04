@@ -258,7 +258,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
               text: 'Cancel',
               fontWeight: FontWeight.w700,
               size: 18,
-              color: Colors.grey,
+              color: Color(0xFF616161),
             ),
           ),
           GestureDetector(
@@ -316,7 +316,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
               text: 'Cancel',
               fontWeight: FontWeight.w700,
               size: 18,
-              color: Colors.grey,
+              color: Color(0xFF616161),
             ),
           ),
           GestureDetector(
@@ -805,7 +805,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         Icon(
           LucideIcons.bellRing,
           size: 30,
-          color: Colors.grey[400],
+          color: Color(0xFF757575),
         ),
         const SizedBox(height: 16),
         Padding(
@@ -825,7 +825,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
           'Check back soon for new opportunities',
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey[500],
+            color: Color(0xFF616161),
           ),
         ),
       ],

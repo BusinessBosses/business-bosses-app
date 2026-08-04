@@ -93,7 +93,7 @@ class Renewconfirmation extends StatelessWidget {
                       width: double.infinity,
                       child: TextWidget(
                         text: 'Enjoy Pro Subscription!',
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         size: 20,
                         color: Color(0xff333333),
                         centralize: true,

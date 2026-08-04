@@ -18,7 +18,7 @@ class SafetyModel extends StatelessWidget {
     this.icon = const Icon(
       Icons.warning,
       size: 0.0,
-      color: Colors.grey,
+      color: Color(0xFF616161),
     ),
     this.title = 'No data found',
     this.subTitle = '',
@@ -67,7 +67,7 @@ class SafetyModel extends StatelessWidget {
                                   subTitle,
                                   textAlign: TextAlign.center,
                                   style: bodyText2.copyWith(
-                                    color: Colors.grey,
+                                    color: Color(0xFF616161),
                                   ),
                                 ),
                               clickableText != null

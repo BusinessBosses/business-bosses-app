@@ -65,7 +65,7 @@ class HowtouseTile extends StatelessWidget {
                           style: TextStyle(
                             color: textColor,
                             fontSize: 13,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                           textAlign: TextAlign.center,
                         ),

@@ -79,7 +79,7 @@ class _InvitepageState extends State<Invitepage> {
               style: TextStyle(
                 color: Colors.red,
                 fontSize: 20,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
               ),
             ),
 

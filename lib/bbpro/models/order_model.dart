@@ -29,6 +29,9 @@ class Order {
   final DateTime? endTime;
   final int? quantity;
 
+  /// Coin escrow for this order, when it was paid in coins. Null otherwise.
+  final OrderEscrow? escrow;
+
   Order({
     this.quantity,
     required this.id,
@@ -52,6 +55,7 @@ class Order {
     required this.shop,
     this.startTime,
     this.endTime,
+    this.escrow,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -71,6 +75,9 @@ class Order {
       invoiceOption: json['invoiceOption'],
       user: json['user'] == null ? null : UserModel.fromMap(json['user']),
       status: OrderStatus.fromString(json['status']),
+      escrow: json['escrow'] == null
+          ? null
+          : OrderEscrow.fromJson(json['escrow'] as Map<String, dynamic>),
       products: json['products'] != null
           ? (json['products'] as List<dynamic>)
               .map((dynamic item) => Product.fromJson(item))
@@ -215,4 +222,43 @@ enum OrderStatus {
         return 'cancelled';
     }
   }
+}
+
+/// Coin escrow attached to an order: the buyer's coins are held until the
+/// seller delivers, then released after the escrow window.
+class OrderEscrow {
+  const OrderEscrow({
+    required this.status,
+    required this.coinAmount,
+    this.releaseAt,
+    this.buyerId,
+    this.sellerId,
+  });
+
+  /// held | delivered | released | refunded
+  final String status;
+  final int coinAmount;
+  final DateTime? releaseAt;
+  final String? buyerId;
+  final String? sellerId;
+
+  factory OrderEscrow.fromJson(Map<String, dynamic> json) {
+    return OrderEscrow(
+      status: (json['status'] ?? '').toString(),
+      coinAmount: (json['coinAmount'] as num?)?.toInt() ?? 0,
+      releaseAt: json['releaseAt'] == null
+          ? null
+          : DateTime.tryParse(json['releaseAt'].toString()),
+      buyerId: json['buyerId']?.toString(),
+      sellerId: json['sellerId']?.toString(),
+    );
+  }
+
+  /// Coins are paid but not yet the seller's.
+  bool get isOnHold => status == 'held' || status == 'delivered';
+  bool get isReleased => status == 'released';
+  bool get isRefunded => status == 'refunded';
+
+  /// Any escrow record at all means the buyer has paid in coins.
+  bool get isPaid => status.isNotEmpty && !isRefunded;
 }

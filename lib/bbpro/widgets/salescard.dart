@@ -152,7 +152,7 @@ class _LeadsWidgetState extends State<LeadsWidget> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: Colors.grey,
+                            color: Color(0xFF616161),
                           ),
                         ),
                       ),

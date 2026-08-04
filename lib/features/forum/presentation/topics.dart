@@ -165,7 +165,7 @@ class _TopicsPageState extends State<TopicsPage> {
                                             style: const TextStyle(
                                                 fontSize: 15,
                                                 color: Colors.white,
-                                                fontWeight: FontWeight.w500),
+                                                fontWeight: FontWeight.w600),
                                           ),
                                           const SizedBox(
                                             width: 5,

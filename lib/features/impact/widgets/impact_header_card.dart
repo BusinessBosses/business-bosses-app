@@ -61,6 +61,11 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
         SizedBox(
           height: 10,
         ),
+        // Visitors see the headline score and trust only — the itemised
+        // breakdown is the owner's own performance detail.
+        if (!widget.isMe)
+          _buildVisitorSummary(totalReachScore, trustScore)
+        else
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 15),
           decoration: BoxDecoration(
@@ -77,28 +82,24 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Column(
+                  // Expanded so the subtitle can't push the score into the
+                  // ExpansionTile's chevron — that overlap made "7.4k" read
+                  // as "7⌄4k".
+                  Expanded(
+                    child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Reach Score Breakdown',
+                        'Reach Breakdown',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 17,
                           fontWeight: FontWeight.bold,
                           color: Colors.grey[900],
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        'Detailed view of reach and influence',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      const SizedBox(height: 2),
                       const Text(
-                        'The higher your score, the more opportunities you get',
+                        'Higher score, more opportunities.',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -106,7 +107,9 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                         ),
                       ),
                     ],
+                    ),
                   ),
+                  const SizedBox(width: 12),
                   Text(
                     _formatValue(totalReachScore),
                     style: TextStyle(
@@ -184,7 +187,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   subtitle: 'Complete readiness score',
                   value: '${aiVisibilityScore.toInt()}%',
                   onTap: () async {
-                    const String url = '$bizCenterBaseUrl';
+                    const String url = proDatarBaseUrl;
                     if (await canLaunchUrlString(url)) {
                       await launchUrlString(url,
                           mode: LaunchMode.externalApplication);
@@ -264,6 +267,65 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
     );
   }
 
+  /// What another user's profile shows: the total score and their trust
+  /// status, without the per-signal breakdown.
+  Widget _buildVisitorSummary(int totalReachScore, double trustScore) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: primaryColorLT.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(12),
+                border:
+                    Border.all(color: primaryColorLT.withValues(alpha: 0.1)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Total Reach Score',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[900],
+                    ),
+                  ),
+                  Text(
+                    _formatValue(totalReachScore),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: primaryColorLT,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          _buildReachItem(
+            icon: LucideIcons.shieldCheck,
+            iconColor: Colors.teal[400]!,
+            iconBgColor: backgroundColor,
+            title: 'Trust',
+            subtitle: 'Verification status',
+            value: trustScore > 0 ? _formatValue(trustScore.toInt()) : 'Not\nVerified',
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildReachItem({
     required IconData icon,
     required Color iconColor,
@@ -335,7 +397,7 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
             Icon(
               LucideIcons.chevronRight,
               size: 16,
-              color: Colors.grey[400],
+              color: Color(0xFF757575),
             ),
           ],
         ],

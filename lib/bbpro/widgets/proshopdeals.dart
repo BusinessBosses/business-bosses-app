@@ -195,7 +195,7 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
             overflow: TextOverflow.ellipsis, // Handle overflow with ellipsis
             style: const TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 3.0),

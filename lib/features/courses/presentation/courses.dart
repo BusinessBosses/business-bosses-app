@@ -109,7 +109,7 @@ class _CoursesPageState extends State<CoursesPage> {
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.white,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                   const SizedBox(width: 5),

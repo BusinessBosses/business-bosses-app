@@ -65,7 +65,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                         fontSize: 22,
                         color: Colors.black,
-                        fontWeight: FontWeight.w800),
+                        fontWeight: FontWeight.w700),
                   ),
                   SizedBox(
                     height: SizeConfig.safeBlockVertical * 3,
@@ -121,7 +121,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                           Container(
                             height: 0.3,
                             width: SizeConfig.screenWidth,
-                            color: Colors.grey,
+                            color: Color(0xFF616161),
                           ),
                           SizedBox(
                             height: SizeConfig.safeBlockVertical * 3,

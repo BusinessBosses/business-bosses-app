@@ -104,10 +104,10 @@ class _OrdersScreenState extends State<OrdersScreen>
   Widget _buildMyOrdersView() {
     final Size screenSize = MediaQuery.of(context).size;
     return Column(
-      children: [
+      children: <Widget>[
         const SizedBox(height: 10),
         GetBuilder<MarketController>(
-          builder: (marketController) {
+          builder: (MarketController marketController) {
             return CustomTabBarWidget<OrderStatus>(
               tabController: _ordersTabController,
               scrollToSection: (int index) {
@@ -116,14 +116,14 @@ class _OrdersScreenState extends State<OrdersScreen>
               proprimaryColor: proprimaryColor,
               backgroundColor: <Color>[
                 backgroundColor,
-                Colors.amber.withOpacity(0.1),
-                Colors.blue.withOpacity(0.1),
-                Colors.green.withOpacity(0.1)
+                Colors.amber.withValues(alpha: 0.1),
+                Colors.blue.withValues(alpha: 0.1),
+                Colors.green.withValues(alpha: 0.1)
               ],
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) {
                 String title = status.displayTitle;
-                return '$title (${status == OrderStatus.allorders ? marketController.totalOrderCount.value : marketController.orders.where((order) => order.status == status).length})';
+                return '$title (${status == OrderStatus.allorders ? marketController.totalOrderCount.value : marketController.orders.where((Order order) => order.status == status).length})';
               },
             );
           },
@@ -136,7 +136,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                     child: CircularProgressIndicator(),
                   )
                 : GetBuilder<MarketController>(
-                    builder: (marketCtrl) {
+                    builder: (MarketController marketCtrl) {
                       return marketCtrl.orders.isEmpty
                           ? const Center(
                               child: SafetyModel(
@@ -167,7 +167,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                         orderController.updateOrder(
                                             order.id, <String, dynamic>{
                                           'status': newStatus.toString(),
-                                        }).then((success) {
+                                        }).then((bool success) {
                                           if (success) {
                                             marketCtrl.initOrder();
                                           }
@@ -219,7 +219,7 @@ class _OrdersScreenState extends State<OrdersScreen>
           ),
         ),
         centerTitle: true,
-        actions: [
+        actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
             child: ProIconButton(
@@ -263,14 +263,14 @@ class _OrdersScreenState extends State<OrdersScreen>
           indicatorColor: Colors.blue,
           labelStyle:
               const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-          tabs: [
+          tabs: <Widget>[
             GetBuilder<OrderController>(
-              builder: (ctrl) => Tab(
+              builder: (OrderController ctrl) => Tab(
                   text:
                       'My Leads (${ctrl.shopController.orderStats?.totalOrders.toInt() ?? ctrl.orders.length})'),
             ),
             GetBuilder<MarketController>(
-              builder: (ctrl) =>
+              builder: (MarketController ctrl) =>
                   Tab(text: 'My Orders (${ctrl.totalOrderCount.value})'),
             ),
           ],
@@ -278,7 +278,7 @@ class _OrdersScreenState extends State<OrdersScreen>
       ),
       body: TabBarView(
         controller: _mainTabController,
-        children: [
+        children: <Widget>[
           _buildMyLeadsView(),
           _buildMyOrdersView(),
         ],
@@ -294,10 +294,10 @@ class _OrdersScreenState extends State<OrdersScreen>
     }
     final Size screenSize = MediaQuery.of(context).size;
     return Column(
-      children: [
+      children: <Widget>[
         const SizedBox(height: 10),
         GetBuilder<OrderController>(
-          builder: (orderCtrl) {
+          builder: (OrderController orderCtrl) {
             return CustomTabBarWidget<OrderStatus>(
               tabController: _salesTabController,
               scrollToSection: (int index) {
@@ -306,9 +306,9 @@ class _OrdersScreenState extends State<OrdersScreen>
               proprimaryColor: proprimaryColor,
               backgroundColor: <Color>[
                 backgroundColor,
-                Colors.amber.withOpacity(0.1),
-                Colors.blue.withOpacity(0.1),
-                Colors.green.withOpacity(0.1)
+                Colors.amber.withValues(alpha: 0.1),
+                Colors.blue.withValues(alpha: 0.1),
+                Colors.green.withValues(alpha: 0.1)
               ],
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) {
@@ -676,7 +676,7 @@ class _RowStatusCardState extends State<RowStatusCard> {
                         padding: const EdgeInsets.all(8),
                         child: const Icon(
                           Icons.close,
-                          color: Colors.grey,
+                          color: Color(0xFF616161),
                           size: 15,
                         ),
                       ),

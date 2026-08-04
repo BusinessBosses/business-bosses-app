@@ -323,39 +323,39 @@ class UserModel {
       category: map['category']?.toString(),
       location: map['location']?.toString(),
       achievements: map['achievements'] is List
-          ? (map['achievements'] as List)
+          ? (map['achievements'] as List<dynamic>)
               .map((dynamic e) => e?.toString() ?? '')
               .toList()
           : null,
       postChallenges: map['postChallenges'] is List
-          ? (map['postChallenges'] as List)
+          ? (map['postChallenges'] as List<dynamic>)
               .map((dynamic e) => e?.toString() ?? '')
               .toList()
           : null,
       interests: map['interests'] is List
-          ? (map['interests'] as List)
+          ? (map['interests'] as List<dynamic>)
               .map((dynamic e) =>
                   Industry.toObject(Map<String, dynamic>.from(e)))
               .toList()
           : null,
       productsandservices: map['productsandservices'] is List
-          ? (map['productsandservices'] as List)
+          ? (map['productsandservices'] as List<dynamic>)
               .map((dynamic e) => e?.toString() ?? '')
               .toList()
           : null,
       referals: map['referals'] is List
-          ? (map['referals'] as List)
+          ? (map['referals'] as List<dynamic>)
               .map((dynamic e) =>
                   ReferralsModel.fromMap(Map<String, dynamic>.from(e)))
               .toList()
           : null,
       connections: map['connections'] is List
-          ? (map['connections'] as List)
+          ? (map['connections'] as List<dynamic>)
               .map((dynamic e) => e?.toString() ?? '')
               .toList()
           : null,
       connecteds: map['connecteds'] is List
-          ? (map['connecteds'] as List)
+          ? (map['connecteds'] as List<dynamic>)
               .map((dynamic e) => e?.toString() ?? '')
               .toList()
           : null,

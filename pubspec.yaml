@@ -2,7 +2,7 @@ name: business_bosses_v2
 description: A new Flutter project.
 publish_to: "none"
 
-version: 3.1.0+93
+version: 3.2.0+94
 
 environment:
   sdk: ">=2.19.2 <4.0.0"
@@ -14,7 +14,9 @@ dependencies:
   country_picker: ^2.0.20
   crypto: ^3.0.3
   detectable_text_field: ^3.0.2
-  file_picker: ^8.0.0
+  # Latest stable. `pub upgrade --major-versions` picks 12.0.0-beta, which we
+  # don't ship — file_picker backs the CV attachment flow.
+  file_picker: ^11.0.3
   firebase_analytics: ^12.0.0
   firebase_core: ^4.0.0
   firebase_messaging: ^16.0.0
@@ -41,30 +43,35 @@ dependencies:
   shared_preferences: ^2.2.2
   sign_in_with_apple: ^8.0.0
   socket_io_client: ^3.0.2
-  syncfusion_flutter_charts: ^33.2.7
+  syncfusion_flutter_charts: ^34.1.33
   text_scroll: ^0.2.0
   timezone: ^0.11.0
   upgrader: ^13.3.0
   url_launcher: ^6.2.4
   uuid: ^4.2.2
   visibility_detector: ^0.4.0+2
-  youtube_player_flutter: ^9.0.4
+  # Held at 9.x: v10 rewrites the controller/player API (initialVideoId, flags,
+  # ProgressBarColors, listeners all changed) across 4 screens. Worth doing on
+  # its own with device testing, not bundled into a dependency sweep.
+  youtube_player_flutter: ^9.1.3
   flutter_speed_dial: ^7.0.0
   purchases_flutter: ^10.1.1
-  syncfusion_flutter_calendar: ^33.2.7
+  syncfusion_flutter_calendar: ^34.1.33
   flutter_polls: ^0.1.6
   flutter_downloader: ^1.7.3
   pdfx: ^2.6.0
   fl_chart: ^1.0.0
   flutter_advanced_drawer: ^1.4.0
   flutter_native_splash: ^2.3.7
+  # Held at 12.x: share_plus 13 needs win32 ^6, which only the file_picker
+  # 12.0.0-beta supports. Stable file_picker wins over a share_plus major.
   share_plus: ^12.0.2
   yaml: any
   app_links: ^7.0.0
   flutter_markdown_plus: ^1.0.3
   firebase_crashlytics: ^5.0.4
   firebase_performance: ^0.11.1+2
-  lucide_icons_flutter: 3.1.14+1
+  lucide_icons_flutter: ^3.1.15
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.3
@@ -95,18 +102,15 @@ flutter:
   fonts:
     - family: NunitoSans
       fonts:
+        # Only these four faces exist. Aliasing a file to a second weight (500,
+        # 800) does not register on iOS — text asking for a weight with no face
+        # of its own falls back to Regular there while Android fakes it. So the
+        # app must only ever use 400 / 600 / 700 / 900.
         - asset: assets/fonts/NunitoSans-Regular.ttf
           weight: 400
-        # 500 and 800 have no dedicated file. Without these aliases iOS falls
-        # back to Regular for them (Android fakes the weight), so w500/w800
-        # text rendered bold on Android and thin on iOS.
-        - asset: assets/fonts/NunitoSans-SemiBold.ttf
-          weight: 500
         - asset: assets/fonts/NunitoSans-SemiBold.ttf
           weight: 600
         - asset: assets/fonts/NunitoSans-Bold.ttf
           weight: 700
-        - asset: assets/fonts/NunitoSans-Bold.ttf
-          weight: 800
         - asset: assets/fonts/NunitoSans-Black.ttf
           weight: 900

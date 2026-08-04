@@ -149,16 +149,21 @@ class _SuppliersCardState extends State<SuppliersCard> {
           ),
           TextButton(
             onPressed: () async {
+              // Capture before the await — the dialog can be gone by the time
+              // the delete returns, and using its context then is unsafe.
+              final NavigatorState navigator = Navigator.of(context);
               final bool delete =
                   await shopController.deleteSupplier(widget.supplier.id);
-              if (delete) {
-                showSnackbar(message: 'Supplier deleted successfully!');
-                Navigator.pop(context);
-              } else {
-                showSnackbar(message: 'Error deleting supplier!', error: true);
-                Navigator.pop(context);
-              }
-              setState(() {});
+
+              showSnackbar(
+                message: delete
+                    ? 'Supplier deleted successfully!'
+                    : 'Error deleting supplier!',
+                error: !delete,
+              );
+              navigator.pop();
+
+              if (mounted) setState(() {});
             },
             child: const Text('Yes'),
           ),

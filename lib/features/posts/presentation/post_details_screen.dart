@@ -395,7 +395,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.white,
-                                                  fontWeight: FontWeight.w500),
+                                                  fontWeight: FontWeight.w600),
                                             ),
                                             const SizedBox(
                                               width: 5,

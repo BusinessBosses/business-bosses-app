@@ -148,7 +148,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                 Text(
                                   'Find Your Match',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w700,
                                     color: Color.fromARGB(255, 9, 93, 237),
                                   ),
                                 ),

@@ -618,7 +618,7 @@ class _CourseItemState extends State<CourseItem> {
                                                         fontWeight:
                                                             FontWeight.w700,
                                                         size: 18,
-                                                        color: Colors.grey,
+                                                        color: Color(0xFF616161),
                                                       ),
                                                     ),
                                                     GestureDetector(
@@ -726,7 +726,7 @@ class _CourseItemState extends State<CourseItem> {
                                                         fontWeight:
                                                             FontWeight.w700,
                                                         size: 18,
-                                                        color: Colors.grey,
+                                                        color: Color(0xFF616161),
                                                       ),
                                                     ),
                                                     GestureDetector(

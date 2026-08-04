@@ -109,7 +109,7 @@ class ForumModel {
           ? Industry.fromMap(Map<String, dynamic>.from(map['industry']))
           : null,
       images: map['images'] != null && map['images'] != ''
-          ? (map['images'] as List)
+          ? (map['images'] as List<dynamic>)
               .map((dynamic e) => e?.toString() ?? '')
               .where((String e) => e.isNotEmpty)
               .toList()
@@ -118,7 +118,7 @@ class ForumModel {
           ? int.tryParse(map['timestamp'].toString())
           : null,
       likes: map['likes'] != null
-          ? (map['likes'] as List).map((dynamic like) {
+          ? (map['likes'] as List<dynamic>).map((dynamic like) {
               if (like is Map<String, dynamic>) {
                 return like['userId']?.toString() ?? '';
               }
@@ -126,7 +126,7 @@ class ForumModel {
             }).where((String e) => e.isNotEmpty).toList()
           : null,
       coins: map['coins'] != null
-          ? (map['coins'] as List).map((dynamic coin) {
+          ? (map['coins'] as List<dynamic>).map((dynamic coin) {
               if (coin is Map<String, dynamic>) {
                 return coin['userId']?.toString() ?? '';
               }
@@ -136,7 +136,7 @@ class ForumModel {
       promote: map['promote'] == true,
       approved: map['approved'] == true,
       comments: map['comments'] != null
-          ? (map['comments'] as List)
+          ? (map['comments'] as List<dynamic>)
               .map((dynamic e) => CommentModel.fromMap(Map<String, dynamic>.from(e)))
               .toList()
           : <CommentModel>[],

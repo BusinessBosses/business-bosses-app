@@ -114,7 +114,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'icon': Icon(
           LucideIcons.users,
           size: 35,
-          color: Colors.grey,
+          color: Color(0xFF616161),
         ),
         'title': 'Matches',
         'description':
@@ -171,7 +171,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'icon': const Icon(
           Icons.add,
           size: 35,
-          color: Colors.grey,
+          color: Color(0xFF616161),
         ),
         'title': 'Create',
         'description':

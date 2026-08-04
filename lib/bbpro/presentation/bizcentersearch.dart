@@ -211,7 +211,7 @@ class _BizCenterSearchState extends State<BizCenterSearch>
                 ),
                 const Divider(
                   height: 1,
-                  color: Colors.grey,
+                  color: Color(0xFF616161),
                 ),
               ],
             ),

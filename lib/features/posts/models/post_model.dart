@@ -145,7 +145,7 @@ class PostModel {
       postId: map['postId']?.toString() ?? '',
       title: map['title']?.toString() ?? '',
       images: map['images'] != null
-          ? (map['images'] as List)
+          ? (map['images'] as List<dynamic>)
               .map((dynamic e) => e?.toString() ?? '')
               .where((String e) => e.isNotEmpty)
               .toList()
@@ -157,17 +157,17 @@ class PostModel {
           ? int.tryParse(map['oldtimestamp'].toString())
           : null,
       likes: map['likes'] != null
-          ? (map['likes'] as List)
+          ? (map['likes'] as List<dynamic>)
               .map((dynamic e) => e?.toString() ?? '')
               .toList()
           : null,
       coins: map['coins'] != null
-          ? (map['coins'] as List)
+          ? (map['coins'] as List<dynamic>)
               .map((dynamic e) => e?.toString() ?? '')
               .toList()
           : null,
       reposts: map['reposts'] != null
-          ? (map['reposts'] as List)
+          ? (map['reposts'] as List<dynamic>)
               .map((dynamic item) {
                 if (item is Map<String, dynamic>) {
                   return item['userId']?.toString() ?? '';
@@ -179,7 +179,7 @@ class PostModel {
               .toList()
           : null,
       comments: map['comments'] != null
-          ? (map['comments'] as List)
+          ? (map['comments'] as List<dynamic>)
               .map((dynamic e) =>
                   CommentModel.fromMap(Map<String, dynamic>.from(e)))
               .toList()
@@ -203,9 +203,9 @@ class PostModel {
       plan: map['plan']?.toString(),
       approved: map['approved'] == true,
       isPolled: map['isPolled'] == true,
-      options: map['options'] is List ? map['options'] as List : null,
+      options: map['options'] is List ? map['options'] as List<dynamic> : null,
       pollvotes: map['pollvotes'] != null
-          ? (map['pollvotes'] as List)
+          ? (map['pollvotes'] as List<dynamic>)
               .map((dynamic e) => Map<String, dynamic>.from(e))
               .toList()
           : null,

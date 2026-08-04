@@ -117,7 +117,7 @@ class ReachRankingCard extends StatelessWidget {
                                   style: const TextStyle(
                                     color: Colors.white70,
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
@@ -138,7 +138,7 @@ class ReachRankingCard extends StatelessWidget {
                               style: const TextStyle(
                                 color: Colors.white70,
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],

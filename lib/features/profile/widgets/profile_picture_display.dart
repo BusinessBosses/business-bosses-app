@@ -63,7 +63,7 @@ class ProfilePictureDisplay extends StatelessWidget {
       return Container(
         width: 300.0,
         height: 300.0,
-        color: Colors.grey, // Placeholder color
+        color: Color(0xFF616161), // Placeholder color
         child: const Center(
           child: Text(
             'Photo Unavailable',

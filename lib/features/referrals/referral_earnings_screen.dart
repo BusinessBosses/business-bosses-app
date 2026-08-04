@@ -71,7 +71,7 @@ class _ReferralEarningsScreenState extends State<ReferralEarningsScreen> {
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 26,
-                                  fontWeight: FontWeight.w800)),
+                                  fontWeight: FontWeight.w700)),
                         ],
                       ),
                       const SizedBox(height: 4),
@@ -122,7 +122,7 @@ class _ReferralEarningsScreenState extends State<ReferralEarningsScreen> {
                         fontWeight: FontWeight.w600, fontSize: 13)),
                 const SizedBox(height: 2),
                 Text(CurrencyFormatter.coinEquivalent(amount),
-                    style: const TextStyle(color: Colors.grey, fontSize: 11)),
+                    style: const TextStyle(color: Color(0xFF616161), fontSize: 11)),
               ],
             ),
           ),
@@ -132,7 +132,7 @@ class _ReferralEarningsScreenState extends State<ReferralEarningsScreen> {
               const SizedBox(width: 3),
               Text('+${CurrencyFormatter.formatCoins(amount)}',
                   style: const TextStyle(
-                      fontWeight: FontWeight.w800, color: Colors.green)),
+                      fontWeight: FontWeight.w700, color: Colors.green)),
             ],
           ),
         ],

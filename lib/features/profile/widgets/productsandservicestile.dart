@@ -143,7 +143,7 @@ class _ProductsandServicessExpansionTileState
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 15,
-                              fontWeight: FontWeight.w500),
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                       onPressed: () {

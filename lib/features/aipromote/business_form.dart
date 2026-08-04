@@ -298,7 +298,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
             style: const TextStyle(color: Colors.black87),
             decoration: InputDecoration(
               hintText: placeholder,
-              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+              hintStyle: const TextStyle(color: Color(0xFF616161), fontSize: 14),
               filled: true,
               fillColor:
                   isMissing ? const Color(0xFFFEF3C7) : const Color(0xFFF3F4F6),
@@ -381,7 +381,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
               style: TextStyle(
                 fontSize: 12,
                 color: Color.fromARGB(255, 217, 38, 6),
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -643,7 +643,7 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                     TextSpan(
                       text: ' Get Unlimited Promotion',
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         fontSize: 15,
                         color: Color(0xFF6B7280),
                       ),

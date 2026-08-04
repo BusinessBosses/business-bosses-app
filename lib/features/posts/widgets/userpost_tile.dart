@@ -567,7 +567,7 @@ class _PostTileState extends State<PostTile> {
                                 'Visit My Biz-Center',
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 9, 93, 237),
-                                    fontSize: 14),
+                                    fontSize: 14, fontWeight: FontWeight.w700),
                               ),
                               const Icon(
                                 LucideIcons.chevronRight,
@@ -909,7 +909,7 @@ class _PostTileState extends State<PostTile> {
                                             Text(
                                               '$host',
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
+                                                  fontWeight: FontWeight.w600,
                                                   color: Colors.white
                                                       .withAlpha(200)),
                                             ),
@@ -949,7 +949,7 @@ class _PostTileState extends State<PostTile> {
                                           'Attend',
                                           style: TextStyle(
                                               fontSize: 12,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.w600,
                                               color: Colors.white),
                                         ),
                                       ),
@@ -1577,7 +1577,7 @@ class _PostTileState extends State<PostTile> {
                           text: 'Cancel',
                           fontWeight: FontWeight.w700,
                           size: 18,
-                          color: Colors.grey,
+                          color: Color(0xFF616161),
                         ),
                       ),
                       GestureDetector(
@@ -1641,7 +1641,7 @@ class _PostTileState extends State<PostTile> {
                           text: 'Cancel',
                           fontWeight: FontWeight.w700,
                           size: 18,
-                          color: Colors.grey,
+                          color: Color(0xFF616161),
                         ),
                       ),
                       GestureDetector(

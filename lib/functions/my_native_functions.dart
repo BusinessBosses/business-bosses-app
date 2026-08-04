@@ -34,7 +34,7 @@ class MyNativeFunctions {
       bool allowMultiple = true}) async {
     MyResponse res;
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      FilePickerResult? result = await FilePicker.pickFiles(
         type: type,
         allowedExtensions: allowedExtension,
         allowMultiple: true,

@@ -60,7 +60,7 @@
 //                     /// how to use itemBuilder to custom message view
 //                     return Container(
 //                       decoration: const BoxDecoration(
-//                         color: Colors.grey,
+//                         color: Color(0xFF616161),
 //                         borderRadius: BorderRadius.all(Radius.circular(6)),
 //                       ),
 //                       padding: const EdgeInsets.all(10),

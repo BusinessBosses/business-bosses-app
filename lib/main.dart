@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:business_bosses_v2/navigation/navigation.dart';
+import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/firebase_analytics.dart';
 import 'package:business_bosses_v2/services/push_notification_service.dart';
@@ -129,8 +130,19 @@ Future<void> initAppLinks() async {
 }
 
 void _handleMessageOpenedApp(RemoteMessage? message) {
-  if (message?.notification == null) return;
-  final String? title = message!.notification!.title?.toLowerCase();
+  if (message == null) return;
+
+  // Order + escrow pushes carry the order id, so tapping one opens that order
+  // rather than dropping the user on the notifications list.
+  final String? type = message.data['type']?.toString();
+  final String? orderId = message.data['orderId']?.toString();
+  if (type == 'order' && orderId != null && orderId.isNotEmpty) {
+    Get.to(() => ExpandedOrdersView(order: orderId));
+    return;
+  }
+
+  if (message.notification == null) return;
+  final String? title = message.notification!.title?.toLowerCase();
   if (title != null && title.contains('new message')) {
     Get.toNamed(Routes.chat);
   } else {

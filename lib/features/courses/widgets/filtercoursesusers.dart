@@ -90,7 +90,7 @@ class _FilterUsersState extends State<FilterCoursesUsers> {
                           //           child: Text(
                           //             'Donation Members',
                           //             style: TextStyle(
-                          //                 fontWeight: FontWeight.w500,
+                          //                 fontWeight: FontWeight.w600,
                           //                 fontSize: 16),
                           //           ),
                           //         ),

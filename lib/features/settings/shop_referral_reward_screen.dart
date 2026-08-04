@@ -119,7 +119,7 @@ class _ShopReferralRewardScreenState extends State<ShopReferralRewardScreen> {
                       title: const Text('Enable Referral Rewards', style: TextStyle(color: Colors.black)),
                       value: active,
                       onChanged: (bool v) => setState(() => active = v),
-                      activeColor: Colors.black,
+                      activeThumbColor: Colors.black,
                       inactiveThumbColor: Colors.grey.shade400,
                       inactiveTrackColor: Colors.grey.shade200,
                     ),

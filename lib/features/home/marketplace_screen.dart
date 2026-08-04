@@ -495,7 +495,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             Text(
                               'Search',
                               style: TextStyle(
-                                color: Colors.grey.shade600,
+                                color: Color(0xFF757575),
                                 fontSize: 13,
                               ),
                             ),
@@ -705,7 +705,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               // Selected reads dark + heavy; unselected sits back in grey at a
               // medium weight, so the active tab is obvious at a glance.
               labelColor: Colors.black,
-              unselectedLabelColor: Colors.black54,
+              unselectedLabelColor: Color(0xFF595959),
               labelStyle:
                   const TextStyle(fontWeight: FontWeight.w900, fontSize: 12),
               unselectedLabelStyle: const TextStyle(
@@ -939,7 +939,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                               color: Colors.black87,
                               fontWeight: isSelected
                                   ? FontWeight.w700
-                                  : FontWeight.w500,
+                                  : FontWeight.w600,
                               fontSize: 13,
                             ),
                           ),

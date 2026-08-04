@@ -115,7 +115,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                             title: Text(
                               product.name,
                               style: const TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             leading: _buildProductImage(product),
@@ -138,7 +138,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                             title: Text(
                               service.name,
                               style: const TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             leading: _buildServiceImage(service),
@@ -161,7 +161,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                             title: Text(
                               custom['name'],
                               style: const TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             subtitle: Text(

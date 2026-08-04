@@ -1044,7 +1044,7 @@ class _RowStatusCardState extends State<RowStatusCard> {
                       padding: const EdgeInsets.all(8),
                       child: const Icon(
                         Icons.close,
-                        color: Colors.grey,
+                        color: Color(0xFF616161),
                         size: 15,
                       ),
                     ),

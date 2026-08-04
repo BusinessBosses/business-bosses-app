@@ -1224,7 +1224,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                                         : const Icon(
                                             Icons.close,
                                             size: 12,
-                                            color: Colors.grey,
+                                            color: Color(0xFF616161),
                                           ),
                                   ),
                                 ),

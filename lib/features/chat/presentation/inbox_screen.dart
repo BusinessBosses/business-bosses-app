@@ -213,9 +213,9 @@ class _InboxScreenState extends State<InboxScreen>
             const Text(
               'Search chat...',
               style: TextStyle(
-                color: Colors.grey,
+                color: Color(0xFF616161),
                 fontSize: 14.0,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],

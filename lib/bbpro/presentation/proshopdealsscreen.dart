@@ -80,7 +80,7 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
         ),
         bottom: TabBar(
           controller: _tabController,
-          labelStyle: const TextStyle(fontWeight: FontWeight.w500),
+          labelStyle: const TextStyle(fontWeight: FontWeight.w600),
           labelColor: Colors.black,
           indicatorColor: primaryColorLT,
           tabs: const <Widget>[

@@ -134,7 +134,7 @@ class DonationModel {
           ? int.tryParse(map['timestamp'].toString())
           : null,
       likes: map['likes'] != null
-          ? (map['likes'] as List).map((dynamic like) {
+          ? (map['likes'] as List<dynamic>).map((dynamic like) {
               if (like is Map<String, dynamic>) {
                 return like['userId']?.toString() ?? '';
               }
@@ -142,7 +142,7 @@ class DonationModel {
             }).where((String e) => e.isNotEmpty).toList()
           : null,
       coins: map['coins'] != null
-          ? (map['coins'] as List).map((dynamic coin) {
+          ? (map['coins'] as List<dynamic>).map((dynamic coin) {
               if (coin is Map<String, dynamic>) {
                 return coin['userId']?.toString() ?? '';
               }
@@ -150,7 +150,7 @@ class DonationModel {
             }).where((String e) => e.isNotEmpty).toList()
           : null,
       comments: map['comments'] != null
-          ? (map['comments'] as List)
+          ? (map['comments'] as List<dynamic>)
               .map((dynamic e) => CommentModel.fromMap(Map<String, dynamic>.from(e)))
               .toList()
           : null,
@@ -162,10 +162,10 @@ class DonationModel {
       isSuspended: map['isSuspended'] == true,
       isCashoutApproved: map['isCashoutApproved'] == true,
       images: map['images'] != null
-          ? (map['images'] as List).map((dynamic e) => e?.toString() ?? '').toList()
+          ? (map['images'] as List<dynamic>).map((dynamic e) => e?.toString() ?? '').toList()
           : <String>[],
       transactions: map['transactions'] != null
-          ? (map['transactions'] as List)
+          ? (map['transactions'] as List<dynamic>)
               .where((dynamic t) => t != null)
               .map((dynamic t) => DonationTransaction.fromMap(Map<String, dynamic>.from(t)))
               .toList()

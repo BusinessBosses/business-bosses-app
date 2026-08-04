@@ -149,8 +149,8 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
                                         'Due: $deadline',
                                         style: const TextStyle(
                                             fontSize: 10,
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w500),
+                                            color: Color(0xFF616161),
+                                            fontWeight: FontWeight.w600),
                                       ),
                                     ],
                                   ),

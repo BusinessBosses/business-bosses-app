@@ -720,7 +720,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         'Available for new sign-ups only',
                                         style: TextStyle(
                                           fontSize: 12,
-                                          color: Colors.grey,
+                                          color: Color(0xFF616161),
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
@@ -1240,7 +1240,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 15,
-                                              fontWeight: FontWeight.w500),
+                                              fontWeight: FontWeight.w600),
                                         ),
                                       )),
                                 ),
@@ -1378,7 +1378,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       //                       style: TextStyle(
                       //                           color: Colors.white,
                       //                           fontSize: 15,
-                      //                           fontWeight: FontWeight.w500),
+                      //                           fontWeight: FontWeight.w600),
                       //                     ),
                       //                   ),
                       //                   onPressed: () {

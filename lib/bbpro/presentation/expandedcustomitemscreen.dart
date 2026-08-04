@@ -68,7 +68,7 @@ class _ExpandedCustomItemScreenState extends State<ExpandedCustomItemScreen> {
                                         text: 'Cancel',
                                         fontWeight: FontWeight.w700,
                                         size: 18,
-                                        color: Colors.grey,
+                                        color: Color(0xFF616161),
                                       ),
                                     ),
                                     GestureDetector(
@@ -157,7 +157,7 @@ class _ExpandedCustomItemScreenState extends State<ExpandedCustomItemScreen> {
                                         text: 'Cancel',
                                         fontWeight: FontWeight.w700,
                                         size: 18,
-                                        color: Colors.grey,
+                                        color: Color(0xFF616161),
                                       ),
                                     ),
                                     GestureDetector(

@@ -58,7 +58,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
                   style: TextStyle(
                       fontSize: 15,
                       color: primaryColorLT,
-                      fontWeight: FontWeight.w500),
+                      fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -86,7 +86,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
                   style: TextStyle(
                       fontSize: 15,
                       color: primaryColorLT,
-                      fontWeight: FontWeight.w500),
+                      fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -112,7 +112,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
                   style: TextStyle(
                       fontSize: 15,
                       color: primaryColorLT,
-                      fontWeight: FontWeight.w500),
+                      fontWeight: FontWeight.w600),
                 ),
               ],
             ),

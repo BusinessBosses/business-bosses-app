@@ -41,7 +41,7 @@ class ReferralsModel {
       referredUserUid: map['referredUserUid']?.toString() ?? '',
       referBy: map['referBy']?.toString() ?? '',
       referTo: map['referTo'] != null
-          ? List<String>.from(map['referTo'] as List)
+          ? List<String>.from(map['referTo'] as List<dynamic>)
           : <String>[],
       // timestamp: map['timestamp'] as int,
     );

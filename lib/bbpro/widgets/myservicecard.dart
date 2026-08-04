@@ -175,7 +175,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                             Text(
                               '${currencyValues[widget.service.location.toString()]}${widget.service.price.toStringAsFixed(2)}',
                               style: const TextStyle(
-                                color: Colors.grey,
+                                color: Color(0xFF616161),
                                 decoration: TextDecoration.lineThrough,
                                 fontSize: 11,
                               ),

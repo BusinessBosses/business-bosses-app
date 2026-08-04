@@ -117,6 +117,14 @@ class _ReachScreenState extends State<ReachScreen> {
     super.dispose();
   }
 
+  /// First word of their display name, falling back to the username.
+  String _firstName(UserModel user) {
+    final String name = (user.name ?? '').trim();
+    if (name.isNotEmpty) return name.split(RegExp(r'\s+')).first;
+    final String username = user.username.trim();
+    return username.isNotEmpty ? username.split(RegExp(r'\s+')).first : 'User';
+  }
+
   @override
   Widget build(BuildContext context) {
     log(widget.user.uid);
@@ -131,7 +139,8 @@ class _ReachScreenState extends State<ReachScreen> {
         title: Text(
           widget.user.uid == profileController.myProfile.uid
               ? 'My Reach Performance'
-              : 'Reach',
+              // Someone else's page is titled with their first name.
+              : '${_firstName(widget.user)} Reach Score',
           textAlign: TextAlign.center,
         ),
         actions: <Widget>[

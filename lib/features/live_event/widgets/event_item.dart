@@ -255,7 +255,7 @@ class _EventItemState extends State<EventItem> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 5, vertical: 5),
                                       decoration: BoxDecoration(
-                                          color: Colors.grey,
+                                          color: Color(0xFF616161),
                                           borderRadius:
                                               BorderRadius.circular(6)),
                                       child: Text(
@@ -773,7 +773,7 @@ class _EventItemState extends State<EventItem> {
               child: const Text(
                 'Join',
                 style: TextStyle(
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
@@ -798,7 +798,7 @@ class _EventItemState extends State<EventItem> {
                   child: const Text(
                     'Attend',
                     style: TextStyle(
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -819,7 +819,7 @@ class _EventItemState extends State<EventItem> {
                     'Attending',
                     style: TextStyle(
                       fontSize: 10,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),

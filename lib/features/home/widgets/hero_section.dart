@@ -84,7 +84,7 @@ class _HeroSectionState extends State<HeroSection> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
   Timer? _timer;
-  DateTime _lastInteraction = DateTime.now();
+  final DateTime _lastInteraction = DateTime.now();
   late UserModel? user;
   late UserModel? mentor;
   late UserModel? backer;
@@ -287,20 +287,11 @@ class _HeroSectionState extends State<HeroSection> {
     });
   }
 
-  void _onUserInteraction() {
-    _lastInteraction = DateTime.now();
-  }
-
   @override
   void dispose() {
     _timer?.cancel();
     _pageController.dispose();
     super.dispose();
-  }
-
-  void _onSlideTap(HeroItem item) {
-    _onUserInteraction();
-    debugPrint('Navigate to ${item.type}: ${item.title}');
   }
 
   Future<void> onRefer(UserModel publicUser) async {
@@ -766,7 +757,7 @@ class _HeroSectionState extends State<HeroSection> {
                                     style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.black87,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -950,8 +941,7 @@ class _HeroSectionState extends State<HeroSection> {
                                 enterpartneroftheweek();
                                 break;
                               case 'Visit BizCenter':
-                                final Uri url =
-                                    Uri.parse('$bizCenterBaseUrl');
+                                final Uri url = Uri.parse(bizCenterBaseUrl);
                                 launchUrl(url,
                                     mode: LaunchMode.externalApplication);
                                 break;
@@ -1186,7 +1176,7 @@ class _HeroSectionState extends State<HeroSection> {
                     flex: 1,
                     child: GestureDetector(
                       onTap: () {
-                        final Uri url = Uri.parse('$bizCenterBaseUrl');
+                        final Uri url = Uri.parse(bizCenterBaseUrl);
                         launchUrl(url, mode: LaunchMode.externalApplication);
                       },
                       child: Container(
@@ -1250,7 +1240,7 @@ class _HeroSectionState extends State<HeroSection> {
             style: TextStyle(
               fontSize: 9,
               color: Colors.black87,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
             textAlign: TextAlign.center,
             maxLines: 1,

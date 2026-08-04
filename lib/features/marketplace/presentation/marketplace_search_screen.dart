@@ -323,7 +323,7 @@ class _MarketplaceSearchScreenState extends State<MarketplaceSearchScreen> {
                     _buyerRequestController.filterBuyerRequests('');
                   },
                   child:
-                      Icon(Icons.close, color: Colors.grey.shade600, size: 20),
+                      Icon(Icons.close, color: Color(0xFF757575), size: 20),
                 ),
             ],
           ),

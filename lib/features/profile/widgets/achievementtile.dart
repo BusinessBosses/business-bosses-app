@@ -128,7 +128,7 @@ class _AchievementsExpansionTileState extends State<AchievementsExpansionTile> {
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 15,
-                                              fontWeight: FontWeight.w500),
+                                              fontWeight: FontWeight.w600),
                                         ),
                                       )),
                                 ),

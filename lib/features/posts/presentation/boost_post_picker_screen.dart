@@ -74,7 +74,7 @@ class _BoostPostPickerScreenState extends State<BoostPostPickerScreen> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: Colors.black45,
+                    color: Colors.black54,
                   ),
                 ),
               ),

@@ -165,7 +165,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Text(
                           'Invite ID : ${profileController.myProfile.inviteId!}',
                           style: const TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.w700),
+                              color: Color(0xFF616161), fontWeight: FontWeight.w700),
                         )
                       ],
                     ),
@@ -289,7 +289,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       const Text(
                                         'By unsubscribing, you will lose access to the following features:',
                                         style: TextStyle(
-                                            color: Colors.grey, fontSize: 16),
+                                            color: Color(0xFF616161), fontSize: 16),
                                       ),
                                       Column(
                                         mainAxisAlignment:

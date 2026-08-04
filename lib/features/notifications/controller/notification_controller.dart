@@ -47,7 +47,9 @@ class NotificationController extends GetxController {
                 <dynamic>[];
         for (final dynamic row in rows) {
           final MyNotification newNotification = MyNotification.fromMap(row);
-          if (newNotification.notificationType == 'order') {
+          if (newNotification.notificationType == 'order' ||
+              (newNotification.notificationType == 'marketplace' &&
+                  newNotification.dataId != null)) {
             ordersNotification.add(newNotification);
           }
           notifications.add(newNotification);

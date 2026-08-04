@@ -122,7 +122,7 @@ class _BossUpPartnerState extends State<BossUpPartner> {
                               color: Colors.black87,
                               fontWeight: isSelected
                                   ? FontWeight.w700
-                                  : FontWeight.w500,
+                                  : FontWeight.w600,
                               fontSize: 13,
                             ),
                           ),

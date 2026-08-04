@@ -172,7 +172,7 @@ class _BossUpSectionState extends State<BossUpSection>
               )
             : TabBar(
                 controller: _searchTabController,
-                labelStyle: const TextStyle(fontWeight: FontWeight.w500),
+                labelStyle: const TextStyle(fontWeight: FontWeight.w600),
                 labelColor: Colors.black,
                 indicatorColor: primaryColorLT,
                 tabs: const <Widget>[
@@ -544,7 +544,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                         color:
                                                                             primaryColorLT,
                                                                         fontWeight:
-                                                                            FontWeight.w800,
+                                                                            FontWeight.w700,
                                                                       ))),
                                                             ],
                                                           ),

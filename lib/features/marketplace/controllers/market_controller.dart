@@ -805,8 +805,6 @@ class MarketController extends GetxController {
   // ============================
 
   void sortItems() {
-    final String? myLocation = selectedLocation?.toLowerCase();
-
     int compareItems(Object a, Object b) {
       DateTime aDate = (a is Product)
           ? a.createdAt

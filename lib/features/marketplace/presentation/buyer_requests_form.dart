@@ -109,7 +109,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
   Future<void> _pickFiles() async {
     if ((_existingAttachments.length + _attachments.length) >= 5) return;
 
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result = await FilePicker.pickFiles(
       allowMultiple: true,
       type: FileType.custom,
       allowedExtensions: <String>['png', 'jpg', 'jpeg'],

@@ -409,7 +409,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
         InkWell(
           onTap: () async {
             final FilePickerResult? result =
-                await FilePicker.platform.pickFiles(
+                await FilePicker.pickFiles(
               allowMultiple: true,
               type: FileType.custom,
               allowedExtensions: <String>['pdf'],

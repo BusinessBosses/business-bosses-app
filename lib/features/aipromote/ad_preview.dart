@@ -270,7 +270,7 @@ class _AdPreviewState extends State<AdPreview> {
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         style: TextButton.styleFrom(
@@ -298,7 +298,7 @@ class _AdPreviewState extends State<AdPreview> {
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         style: TextButton.styleFrom(
@@ -325,7 +325,7 @@ class _AdPreviewState extends State<AdPreview> {
           //     style: TextStyle(
           //       fontSize: 14,
           //       color: Color(0xFF6366F1),
-          //       fontWeight: FontWeight.w500,
+          //       fontWeight: FontWeight.w600,
           //     ),
           //   ),
           // ),
@@ -420,7 +420,7 @@ class _AdPreviewState extends State<AdPreview> {
                             TextSpan(
                               text: ' Get Unlimited Promotion',
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                                 fontSize: 15,
                                 color: Color(0xFF6B7280),
                               ),

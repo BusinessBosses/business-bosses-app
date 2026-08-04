@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../common/models/user_model.dart';
 import '../features/marketplace/widgets/currency.dart';
@@ -21,7 +22,7 @@ class CurrencyFormatter {
         }
       }
     } catch (e) {
-      print('CurrencyFormatter.initRates error: $e');
+      debugPrint('CurrencyFormatter.initRates error: $e');
       // ignore — callers fall back to the 100:1 default
     }
   }
@@ -33,7 +34,9 @@ class CurrencyFormatter {
   /// rate isn't available so callers never crash / divide by zero.
   static double _rateFor(String code) {
     if (code == 'USD') return 1.0;
-    final Map rates = (_ratesCache?['rates'] as Map?) ?? {};
+    final Map<dynamic, dynamic> rates =
+        (_ratesCache?['rates'] as Map<dynamic, dynamic>?) ??
+            <dynamic, dynamic>{};
     final dynamic v = rates[code];
     if (v is num && v > 0) return v.toDouble();
     final double? parsed = double.tryParse('$v');

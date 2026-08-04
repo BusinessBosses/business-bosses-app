@@ -17,7 +17,6 @@ import 'package:get/get.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../utils/theme/theme.dart';
 import '../forum/models/industry.dart';
-import '../search/widgets/search_bar.dart';
 
 class AllCommunitiesScreen extends StatefulWidget {
   static const String routeName = '/all-communities-screen';
@@ -198,7 +197,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                             TabBar(
                               controller: _donationsearchTabController,
                               labelStyle:
-                                  const TextStyle(fontWeight: FontWeight.w500),
+                                  const TextStyle(fontWeight: FontWeight.w600),
                               labelColor: Colors.black,
                               indicatorColor: primaryColorLT,
                               tabs: const <Widget>[
@@ -210,7 +209,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                             TabBar(
                               controller: _searchTabController,
                               labelStyle:
-                                  const TextStyle(fontWeight: FontWeight.w500),
+                                  const TextStyle(fontWeight: FontWeight.w600),
                               labelColor: Colors.black,
                               tabs: const <Widget>[
                                 Tab(text: 'Posts'),

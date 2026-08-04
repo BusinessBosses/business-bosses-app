@@ -66,7 +66,7 @@ class WinnerCard extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: isMatchCard! ? 8 : 15,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
                         ),
                       ),

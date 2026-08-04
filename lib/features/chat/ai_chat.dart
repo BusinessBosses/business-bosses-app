@@ -275,7 +275,7 @@ class _AiChatScreenState extends State<AiChatScreen>
                             style: const TextStyle(
                               fontSize: 13,
                               color: Colors.black87,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -361,7 +361,7 @@ class _AiChatScreenState extends State<AiChatScreen>
                   'Clear Chat',
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.grey,
+                    color: Color(0xFF616161),
                   ),
                 ),
               ),

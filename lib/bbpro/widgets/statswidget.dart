@@ -30,7 +30,7 @@ class StatsWidget extends StatelessWidget {
             const Text(
               'Tasks completed',
               style: TextStyle(
-                color: Colors.grey,
+                color: Color(0xFF616161),
               ),
             ),
           ],
@@ -48,7 +48,7 @@ class StatsWidget extends StatelessWidget {
             const Text(
               'Completion rate',
               style: TextStyle(
-                color: Colors.grey,
+                color: Color(0xFF616161),
               ),
             ),
           ],

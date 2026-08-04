@@ -55,7 +55,7 @@ class CoinPriceLabel extends StatelessWidget {
                 style: mainStyle.copyWith(
                   fontWeight: FontWeight.w400,
                   fontSize: (mainStyle.fontSize ?? 13) - 2,
-                  color: Colors.grey,
+                  color: Color(0xFF616161),
                   decoration: TextDecoration.lineThrough,
                 ),
               ),

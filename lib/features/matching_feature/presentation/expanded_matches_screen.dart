@@ -326,7 +326,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
               child: Text('Showing backers funding entrepreneurs',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF757575),
                   )),
             ),
           if (isPartner)
@@ -335,7 +335,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
               child: Text('Showing users looking for partnership',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF757575),
                   )),
             ),
           if (isMentor)
@@ -344,7 +344,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
               child: Text('Showing coaches available for mentorship',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF757575),
                   )),
             ),
           if (isSeller &&
@@ -356,7 +356,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
               child: Text('Showing matched Job Opportunities',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF757575),
                   )),
             ),
         ],
@@ -412,7 +412,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Text(
         message,
-        style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+        style: TextStyle(color: Color(0xFF757575), fontSize: 14),
       ),
     );
   }
@@ -732,7 +732,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                         industry.description!,
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey.shade600,
+                          color: Color(0xFF757575),
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -744,7 +744,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
             // Arrow icon
             Icon(
               LucideIcons.chevronRight,
-              color: Colors.grey.shade400,
+              color: Color(0xFF757575),
               size: 20,
             ),
           ],

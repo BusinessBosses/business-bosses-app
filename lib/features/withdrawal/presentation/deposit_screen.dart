@@ -120,7 +120,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   Text(
                                     'Get more coins using cash',
                                     style: TextStyle(
-                                        color: Colors.grey,
+                                        color: Color(0xFF616161),
                                         fontWeight: FontWeight.w700),
                                   )
                                 ],
@@ -249,7 +249,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                       'Buy Coins',
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w600,
                                           fontSize: 16),
                                     )),
                               )
@@ -278,7 +278,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   Text(
                                     'Earn 100 coins monthly',
                                     style: TextStyle(
-                                        color: Colors.grey,
+                                        color: Color(0xFF616161),
                                         fontWeight: FontWeight.w700),
                                   )
                                 ],
@@ -353,7 +353,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   Text(
                                     'Monetise your expertise',
                                     style: TextStyle(
-                                        color: Colors.grey,
+                                        color: Color(0xFF616161),
                                         fontWeight: FontWeight.w700),
                                   )
                                 ],
@@ -418,7 +418,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   Text(
                                     'Invite ID : ${_profileController.myProfile.inviteId!}',
                                     style: const TextStyle(
-                                        color: Colors.grey,
+                                        color: Color(0xFF616161),
                                         fontWeight: FontWeight.w700),
                                   )
                                 ],

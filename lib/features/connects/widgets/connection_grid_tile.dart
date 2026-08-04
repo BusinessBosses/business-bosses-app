@@ -112,7 +112,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 11,
-                      color: Colors.grey,
+                      color: Color(0xFF616161),
                     ),
                   ),
                 ],

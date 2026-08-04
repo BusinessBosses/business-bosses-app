@@ -39,7 +39,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
 
   /// Pick image (single)
   Future<void> _pickFile() async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final FilePickerResult? result = await FilePicker.pickFiles(
       allowMultiple: false,
       type: FileType.image,
     );
@@ -299,7 +299,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
                     'Tap to select file',
                     style: TextStyle(
                       color: Colors.grey[700],
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],

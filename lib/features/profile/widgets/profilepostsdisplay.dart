@@ -45,7 +45,7 @@ Widget profilepostsdisplay(
       //     icon: const Icon(
       //       Icons.edit,
       //       size: 80.0,
-      //       color: Colors.grey,
+      //       color: Color(0xFF616161),
       //     ),
       //     title: 'User does not have a post',
       //     subTitle: 'Posts appear here',

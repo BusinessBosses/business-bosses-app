@@ -335,7 +335,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                           text: 'Cancel',
                                           fontWeight: FontWeight.w700,
                                           size: 18,
-                                          color: Colors.grey,
+                                          color: Color(0xFF616161),
                                         ),
                                       ),
                                       GestureDetector(
@@ -412,7 +412,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                         text: 'Cancel',
                                         fontWeight: FontWeight.w700,
                                         size: 18,
-                                        color: Colors.grey,
+                                        color: Color(0xFF616161),
                                       ),
                                     ),
                                     GestureDetector(
@@ -511,7 +511,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                         text: 'Cancel',
                                         fontWeight: FontWeight.w700,
                                         size: 18,
-                                        color: Colors.grey,
+                                        color: Color(0xFF616161),
                                       ),
                                     ),
                                     GestureDetector(
@@ -714,7 +714,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                 Row(
                                   children: <Widget>[
                                     const Icon(Icons.place,
-                                        color: Colors.grey, size: 15),
+                                        color: Color(0xFF616161), size: 15),
                                     const SizedBox(width: 4),
                                     Text(
                                       CountryCodes.nameToCode[
@@ -814,7 +814,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                           'This service is always available',
                                           style: TextStyle(
                                             fontSize: 13,
-                                            color: Colors.grey,
+                                            color: Color(0xFF616161),
                                           ),
                                         ),
                                       ],
@@ -1389,7 +1389,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                         child: Text(
                                           'User has not added a payment method yet',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize: 14),
+                                              color: Color(0xFF616161), fontSize: 14),
                                         ),
                                       ),
                                     ),
@@ -1479,7 +1479,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 22,
-                                        fontWeight: FontWeight.w800,
+                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                   ],

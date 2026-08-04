@@ -619,7 +619,7 @@ class _CourseItemState extends State<CourseItem> {
                                                         fontWeight:
                                                             FontWeight.w700,
                                                         size: 18,
-                                                        color: Colors.grey,
+                                                        color: Color(0xFF616161),
                                                       ),
                                                     ),
                                                     GestureDetector(
@@ -728,7 +728,7 @@ class _CourseItemState extends State<CourseItem> {
                                                         fontWeight:
                                                             FontWeight.w700,
                                                         size: 18,
-                                                        color: Colors.grey,
+                                                        color: Color(0xFF616161),
                                                       ),
                                                     ),
                                                     GestureDetector(
@@ -859,7 +859,7 @@ class _CourseItemState extends State<CourseItem> {
                             'Visit My Biz-Center',
                             style: TextStyle(
                                 color: Color.fromARGB(255, 9, 93, 237),
-                                fontSize: 12),
+                                fontSize: 12, fontWeight: FontWeight.w700),
                           ),
                           const Icon(
                             LucideIcons.chevronRight,

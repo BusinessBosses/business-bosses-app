@@ -17,6 +17,7 @@ class Challengeitem extends StatelessWidget {
   final bool? isMentor;
   final bool? isEvents;
   final bool? isMarketplace;
+  final bool? isJobBoard;
 
   const Challengeitem({
     super.key,
@@ -33,6 +34,7 @@ class Challengeitem extends StatelessWidget {
     this.isMentor,
     this.isEvents,
     this.isMarketplace,
+    this.isJobBoard,
   });
 
   @override
@@ -138,7 +140,9 @@ class Challengeitem extends StatelessWidget {
                                 ? 'Live Events'
                                 : isMarketplace == true
                                     ? 'Buy & Sell'
-                                    : 'Enter',
+                                    : isJobBoard == true
+                                        ? 'Job Board'
+                                        : 'Enter',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,
@@ -181,7 +185,7 @@ class Challengeitem extends StatelessWidget {
             Text(
               time ?? '',
               style: const TextStyle(
-                color: Colors.grey,
+                color: Color(0xFF616161),
                 fontWeight: FontWeight.w700,
               ),
             ),

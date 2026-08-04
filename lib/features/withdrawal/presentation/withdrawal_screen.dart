@@ -329,7 +329,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                           'Make Withdrawal',
                           style: TextStyle(
                               color: Colors.white,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                               fontSize: 17),
                         ),
                       ),

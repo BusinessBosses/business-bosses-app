@@ -36,7 +36,7 @@ class FilterChallengePosts extends StatelessWidget {
     //                 child: Text(
     //                   'Recommended Posts',
     //                   style:
-    //                       TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+    //                       TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
     //                 ),
     //               ),
     //             ),

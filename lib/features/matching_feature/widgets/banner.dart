@@ -61,7 +61,7 @@ class PersonalizationBanner extends StatelessWidget {
                       text: 'Find My Match',
                       style: const TextStyle(
                         color: Color(0xFF1976D2), // Blue color
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         decoration: TextDecoration.underline,
                       ),
                       // You can add a recognizer here for tap handling

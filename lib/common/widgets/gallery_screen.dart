@@ -470,7 +470,7 @@ import 'package:photo_manager/photo_manager.dart';
 //       children: <Widget>[
 //         if (!isImage)
 //           const Center(
-//               child: Icon(Icons.image, color: Colors.grey, size: 48.0)),
+//               child: Icon(Icons.image, color: Color(0xFF616161), size: 48.0)),
 //         Container(
 //           decoration: BoxDecoration(
 //               border: isSelected
@@ -578,12 +578,12 @@ class MyAssetEntity {
 //         ? const Icon(
 //             Icons.play_arrow,
 //             size: 80.0,
-//             color: Colors.grey,
+//             color: Color(0xFF616161),
 //           )
 //         : const Icon(
 //             Icons.photo_library,
 //             size: 80.0,
-//             color: Colors.grey,
+//             color: Color(0xFF616161),
 //           );
 //     return icon;
 //   }

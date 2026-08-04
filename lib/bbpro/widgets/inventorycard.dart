@@ -168,7 +168,7 @@ class _InventoryCardState extends State<InventoryCard> {
                             Row(
                               children: <Widget>[
                                 const Icon(Icons.place,
-                                    color: Colors.grey, size: 15),
+                                    color: Color(0xFF616161), size: 15),
                                 const SizedBox(width: 4),
                                 Text(
                                   CountryCodes.nameToCode[

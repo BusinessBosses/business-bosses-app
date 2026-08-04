@@ -100,7 +100,11 @@ class _ProNotificationsState extends State<ProNotifications> {
                                     .ordersNotification[index];
                             return GestureDetector(
                               onTap: () {
-                                if (notification.notificationType == 'order') {
+                                if (notification.dataId != null &&
+                                    (notification.notificationType ==
+                                            'order' ||
+                                        notification.notificationType ==
+                                            'marketplace')) {
                                   Get.to(() => ExpandedOrdersView(
                                       order: notification.dataId!));
                                 }

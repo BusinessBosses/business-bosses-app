@@ -382,7 +382,7 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                   Icon(
                     Icons.arrow_forward_ios,
                     size: 14,
-                    color: Colors.grey[400],
+                    color: Color(0xFF757575),
                   ),
                 ],
               ),
@@ -603,7 +603,7 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                                               style: const TextStyle(
                                                 color: primaryColorLT,
                                                 fontSize: 13,
-                                                fontWeight: FontWeight.w500,
+                                                fontWeight: FontWeight.w600,
                                               ),
                                             ),
                                           ),
@@ -639,7 +639,7 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                                 icon: const Icon(
                                   Icons.edit,
                                   size: 80.0,
-                                  color: Colors.grey,
+                                  color: Color(0xFF616161),
                                 ),
                                 title: 'Initiate conversation now!',
                                 subTitle:

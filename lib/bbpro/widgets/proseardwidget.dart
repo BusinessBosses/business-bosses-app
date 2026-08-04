@@ -91,13 +91,13 @@ class ProSearchbar extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radius ?? 100.0),
             borderSide: ismarketplace == true
-                ? const BorderSide(color: Colors.grey, width: 1)
+                ? const BorderSide(color: Color(0xFF616161), width: 1)
                 : BorderSide.none,
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radius ?? 100.0),
             borderSide: ismarketplace == true
-                ? const BorderSide(color: Colors.grey, width: 1)
+                ? const BorderSide(color: Color(0xFF616161), width: 1)
                 : BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(

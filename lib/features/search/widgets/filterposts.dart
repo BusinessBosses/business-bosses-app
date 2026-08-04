@@ -38,7 +38,7 @@ class FilterPosts extends StatelessWidget {
                       EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 0),
                   child: Text(
                     'Recommended Posts',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                 ),
                 GridView.builder(

@@ -112,7 +112,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                                     text: 'Cancel',
                                                     fontWeight: FontWeight.w700,
                                                     size: 18,
-                                                    color: Colors.grey,
+                                                    color: Color(0xFF616161),
                                                   ),
                                                 ),
                                                 GestureDetector(
@@ -210,7 +210,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                                     text: 'Cancel',
                                                     fontWeight: FontWeight.w700,
                                                     size: 18,
-                                                    color: Colors.grey,
+                                                    color: Color(0xFF616161),
                                                   ),
                                                 ),
                                                 GestureDetector(
@@ -714,7 +714,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                                     fontSize: 15,
                                                     color: Colors.white,
                                                     fontWeight:
-                                                        FontWeight.w500),
+                                                        FontWeight.w600),
                                               ),
                                             ],
                                           ),
@@ -763,7 +763,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                                     fontSize: 15,
                                                     color: Colors.white,
                                                     fontWeight:
-                                                        FontWeight.w500),
+                                                        FontWeight.w600),
                                               ),
                                             ],
                                           ),

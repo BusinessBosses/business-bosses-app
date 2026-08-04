@@ -622,7 +622,7 @@ class _ForumItemState extends State<ForumItem> {
                                     'Visit My Biz-Center',
                                     style: TextStyle(
                                         color: Color.fromARGB(255, 9, 93, 237),
-                                        fontSize: 14),
+                                        fontSize: 14, fontWeight: FontWeight.w700),
                                   ),
                                   const Icon(
                                     LucideIcons.chevronRight,
