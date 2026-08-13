@@ -75,18 +75,22 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     await reachController.loadLeaderboardData(
         industry: selectedIndustry, country: selectedCountry);
 
+    // The user can leave while the request is in flight.
+    if (!mounted) return;
     setState(() => isLoading = false);
   }
 
   Future<void> loadCountryLeaders(String country) async {
     setState(() => isCountryLoading = true);
     await reachController.loadLeaderboardData(country: country);
+    if (!mounted) return;
     setState(() => isCountryLoading = false);
   }
 
   Future<void> loadIndustryLeaders(String industry) async {
     setState(() => isIndustryLoading = true);
     await reachController.loadLeaderboardData(industry: industry);
+    if (!mounted) return;
     setState(() => isIndustryLoading = false);
   }
 
@@ -124,6 +128,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
       await reachController.loadLeaderboardData(industry: selectedIndustry);
     }
 
+    if (!mounted) return;
     setState(() => isLoading = false);
   }
 

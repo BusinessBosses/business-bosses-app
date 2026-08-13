@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'dart:math';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
@@ -597,7 +598,7 @@ class _LiveEventState extends State<LiveEvent> {
 
   void _launchURL(String url) async {
     if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+      await openUrl(Uri.parse(url));
     } else {
       throw 'Could not launch $url';
     }

@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 
 import 'package:business_bosses_v2/analytics/presentation/howtouseapp.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
@@ -327,7 +328,7 @@ Future<void> _contactUs() async {
 
   try {
     if (await canLaunchUrl(mailUrl)) {
-      await launchUrl(mailUrl);
+      await openUrl(mailUrl);
     } else {
       throw 'Could not launch $mailUrl';
     }

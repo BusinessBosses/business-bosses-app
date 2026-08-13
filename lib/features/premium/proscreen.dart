@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 
 import '../../../utils/theme/theme.dart';
 import '../profile/controller/profile_controller.dart';
@@ -213,11 +213,8 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                       color: primaryColorLT,
                                       text: 'Partner with us',
                                       onPressed: () async {
-                                        if (await canLaunchUrl(Uri.parse(
-                                            'https://businessbosses.co.uk/landingpageforpartners'))) {
-                                          await launchUrl(Uri.parse(
-                                              'https://businessbosses.co.uk/landingpageforpartners'));
-                                        }
+                                        await openUrlString(
+                                            'https://businessbosses.co.uk/landingpageforpartners');
                                       }),
                                 )),
                             const BossOfWeekProfileTile(

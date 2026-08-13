@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/impact/presentation/verify_business_screen.dart';
@@ -183,13 +184,13 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   icon: LucideIcons.bot,
                   iconColor: Colors.indigo[400]!,
                   iconBgColor: backgroundColor,
-                  title: 'Business Health Data',
+                  title: 'Business Health Check',
                   subtitle: 'Complete readiness score',
                   value: '${aiVisibilityScore.toInt()}%',
                   onTap: () async {
                     const String url = proDatarBaseUrl;
                     if (await canLaunchUrlString(url)) {
-                      await launchUrlString(url,
+                      await openUrlString(url,
                           mode: LaunchMode.externalApplication);
                     }
                   },

@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, library_private_types_in_public_api, always_specify_types, deprecated_member_use
 
 import 'dart:convert';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'dart:io';
 
 import 'package:business_bosses_v2/action/action.dart';
@@ -50,7 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (res.success) {
       if (res.data['isUrl']) {
         if (await canLaunchUrlString(res.data['url'])) {
-          await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+          await openUrlString(res.data, mode: LaunchMode.externalApplication);
         }
       } else if (res.data['isUrl'] == false) {
         showSnackbar(
@@ -541,7 +542,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _launchUrl(String url) async {
     try {
       if (await canLaunchUrlString(url)) {
-        await launchUrlString(url, mode: LaunchMode.externalApplication);
+        await openUrlString(url, mode: LaunchMode.externalApplication);
       } else {
         showSnackbar(
             title: 'OOPS!',
@@ -574,7 +575,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   //   try {
   //     if (await canLaunchUrl(mailUrl)) {
-  //       await launchUrl(mailUrl);
+  //       await openUrl(mailUrl);
   //     } else {
   //       throw 'Could not launch $mailUrl';
   //     }

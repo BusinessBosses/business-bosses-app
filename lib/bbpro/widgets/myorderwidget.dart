@@ -766,13 +766,15 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                     case OrderStatus.pending:
                                       availableStatuses = <OrderStatus>[
                                         OrderStatus.paid,
-                                        OrderStatus.completed
+                                        OrderStatus.completed,
+                                        OrderStatus.cancelled
                                       ];
                                       break;
                                     case OrderStatus.paid:
                                       availableStatuses = <OrderStatus>[
                                         OrderStatus.pending,
-                                        OrderStatus.completed
+                                        OrderStatus.completed,
+                                        OrderStatus.cancelled
                                       ];
                                       break;
                                     case OrderStatus.completed:
@@ -781,8 +783,14 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                         OrderStatus.paid
                                       ];
                                       break;
+                                    case OrderStatus.cancelled:
+                                      availableStatuses = <OrderStatus>[
+                                        OrderStatus.pending,
+                                        OrderStatus.paid
+                                      ];
+                                      break;
                                     case OrderStatus.allorders:
-                                      //
+                                      // Filter tab, not a real status.
                                       break;
                                   }
                                   return SizedBox(

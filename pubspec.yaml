@@ -2,7 +2,7 @@ name: business_bosses_v2
 description: A new Flutter project.
 publish_to: "none"
 
-version: 3.2.0+94
+version: 3.2.2+97
 
 environment:
   sdk: ">=2.19.2 <4.0.0"
@@ -20,6 +20,7 @@ dependencies:
   firebase_analytics: ^12.0.0
   firebase_core: ^4.0.0
   firebase_messaging: ^16.0.0
+  firebase_remote_config: ^6.0.0
   flutter_local_notifications: ^22.0.1
   flutter:
     sdk: flutter

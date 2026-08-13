@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/eventpopup.dart';
@@ -30,8 +31,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
@@ -622,7 +621,7 @@ class _PostTileState extends State<PostTile> {
                               onTap: (String link) async {
                                 String url = MyNativeFunctions.completeURL(
                                     link, MyUrl.url);
-                                await launchUrlString(url);
+                                await openUrlString(url);
                               },
                             ),
                             if (widget.post.isPolled! &&
@@ -1269,7 +1268,7 @@ class _PostTileState extends State<PostTile> {
                                       final Uri eventLink =
                                           Uri.parse(event.link!);
 
-                                      if (!await launchUrl(eventLink)) {
+                                      if (!await openUrl(eventLink)) {
                                         throw Exception(
                                             'Could not launch $eventLink');
                                       }

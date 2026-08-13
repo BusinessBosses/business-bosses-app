@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/eventpopup.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
@@ -18,7 +19,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import 'package:url_launcher/url_launcher.dart';
 import '../../../action/action.dart';
 // import 'package:add_2_calendar/add_2_calendar.dart';
 
@@ -130,19 +130,15 @@ class _EventItemState extends State<EventItem> {
                                 final Uri url = Uri.parse(text);
                                 if ((url.scheme == 'http' ||
                                     url.scheme == 'https')) {
-                                  if (!await launchUrl(url)) {
-                                    throw Exception('Could not launch $url');
-                                  }
+                                  await openUrl(url);
                                 } else if (text.startsWith('wa.me')) {
                                   // Handle "wa.me" links
                                   final Uri whatsappUrl =
                                       Uri.parse('https://$text');
-                                  if (await launchUrl(whatsappUrl)) {
-                                    await launchUrl(whatsappUrl);
-                                  } else {
-                                    throw Exception(
-                                        'Could not launch $whatsappUrl');
-                                  }
+                                  // openUrl reports its own failure. This used
+                                  // to open WhatsApp twice, then throw out of
+                                  // an onTap handler.
+                                  await openUrl(whatsappUrl);
                                 }
                               },
                             ),
@@ -341,20 +337,16 @@ class _EventItemState extends State<EventItem> {
                                         final Uri url = Uri.parse(text);
                                         if ((url.scheme == 'http' ||
                                             url.scheme == 'https')) {
-                                          if (!await launchUrl(url)) {
-                                            throw Exception(
-                                                'Could not launch $url');
-                                          }
+                                          await openUrl(url);
                                         } else if (text.startsWith('wa.me')) {
                                           // Handle "wa.me" links
                                           final Uri whatsappUrl =
                                               Uri.parse('https://$text');
-                                          if (await launchUrl(whatsappUrl)) {
-                                            await launchUrl(whatsappUrl);
-                                          } else {
-                                            throw Exception(
-                                                'Could not launch $whatsappUrl');
-                                          }
+                                          // openUrl reports its own failure.
+                                          // This used to open WhatsApp twice,
+                                          // then throw out of an onTap
+                                          // handler.
+                                          await openUrl(whatsappUrl);
                                         }
                                       },
                                     ),
@@ -763,9 +755,7 @@ class _EventItemState extends State<EventItem> {
               onPressed: () async {
                 if (widget.event.link != null) {
                   final Uri eventlink = Uri.parse(widget.event.link!);
-                  if (!await launchUrl(eventlink)) {
-                    throw Exception('Could not launch $eventlink');
-                  }
+                  await openUrl(eventlink);
                 } else {
                   _showDialogWithLink(context);
                 }

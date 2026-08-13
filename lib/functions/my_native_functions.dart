@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -75,7 +76,7 @@ class MyNativeFunctions {
   static Future<MyResponse> onUrlLaunch(String urlString) async {
     try {
       await canLaunchUrlString(urlString)
-          ? await launchUrlString(urlString)
+          ? await openUrlString(urlString)
           : throw 'Invalid url $urlString';
       return MyResponse(success: true);
     } catch (e) {

@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/projects.dart';
 import 'package:business_bosses_v2/bbpro/presentation/services_management.dart';
@@ -349,7 +350,7 @@ class _SetupState extends State<Setup> {
 
     try {
       if (await canLaunchUrl(mailUrl)) {
-        await launchUrl(mailUrl);
+        await openUrl(mailUrl);
       } else {
         throw 'Could not launch $mailUrl';
       }
@@ -372,7 +373,7 @@ class _SetupState extends State<Setup> {
     String url = Constants.PRIVACY_POLICY_LINK;
     bool canLunchLink = await canLaunchUrlString(url);
     if (canLunchLink) {
-      await launchUrlString(url);
+      await openUrlString(url);
     } else {
       showSnackbar(
           title: 'OOPS!',

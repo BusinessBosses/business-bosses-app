@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/features/home/widgets/winnercard.dart';
 import 'package:business_bosses_v2/features/matching_feature/presentation/expanded_matches_screen.dart';
 
@@ -11,7 +12,6 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import '../../../utils/theme/theme.dart';
 
 Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
@@ -25,8 +25,8 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
   String myLabel = '';
   String theirLabel = '';
   if (rawMatchType == 'seller') {
-    myLabel = 'I Need a Job/Work';
-    theirLabel = 'Needs a Job/Work';
+    myLabel = 'Need Work Done';
+    theirLabel = 'Needs Work Done';
   } else if (rawMatchType == 'investor') {
     myLabel = 'I Need Backers / Funding';
     theirLabel = 'Needs Backers / Funding';
@@ -81,7 +81,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                 onTap: () async {
                   String url = MyNativeFunctions.completeURL(
                       publicUser.website!, MyUrl.url);
-                  await launchUrlString(url);
+                  await openUrlString(url);
                 },
                 child: Row(
                   children: <Widget>[
@@ -101,7 +101,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                 onTap: () async {
                   String url = MyNativeFunctions.completeURL(
                       publicUser.twitter!, MyUrl.twitter);
-                  await launchUrlString(url);
+                  await openUrlString(url);
                 },
                 child: Container(
                   height: 25,
@@ -119,7 +119,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                 onTap: () async {
                   String url = MyNativeFunctions.completeURL(
                       publicUser.instagram!, MyUrl.instagram);
-                  await launchUrlString(url);
+                  await openUrlString(url);
                 },
                 child: Container(
                   height: 25,

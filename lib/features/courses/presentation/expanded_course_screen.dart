@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
@@ -207,7 +208,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                       if (await canLaunchUrl(Uri
                                                           .parse(combinedList[
                                                               selectedVideo]))) {
-                                                        await launchUrl(Uri
+                                                        await openUrl(Uri
                                                             .parse(combinedList[
                                                                 selectedVideo]));
                                                       }
@@ -368,7 +369,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                         if (await canLaunchUrl(Uri
                                                             .parse(combinedList[
                                                                 selectedVideo]))) {
-                                                          await launchUrl(Uri
+                                                          await openUrl(Uri
                                                               .parse(combinedList[
                                                                   selectedVideo]));
                                                         }

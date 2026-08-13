@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'dart:io';
 import 'dart:math';
 
@@ -658,7 +659,7 @@ class _SignUpFormState extends State<SignUpForm> {
     String url = Constants.PRIVACY_POLICY_LINK;
     bool canLunchLink = await canLaunchUrlString(url);
     if (canLunchLink) {
-      await launchUrlString(url);
+      await openUrlString(url);
     } else {
       showSnackbar(
           title: 'OOPS!',
@@ -671,7 +672,7 @@ class _SignUpFormState extends State<SignUpForm> {
     String url = Constants.TERMS_OF_SERVICE_LINK;
     bool canLunchLink = await canLaunchUrlString(url);
     if (canLunchLink) {
-      await launchUrlString(url);
+      await openUrlString(url);
     } else {
       showSnackbar(
           title: 'OOPS!',

@@ -164,8 +164,6 @@ class _SuccessScreenState extends State<SuccessScreen> {
   /// The label describing where the matches come from, based on the post type.
   String _matchSourceLabel(String postType) {
     switch (postType) {
-      case 'Need a Product or Service':
-        return 'Matches from Sellers listing';
       case 'Find a Partner':
         return 'Matches from Sellers/partner with me';
       case 'Promote My Business':
@@ -177,14 +175,11 @@ class _SuccessScreenState extends State<SuccessScreen> {
 
   /// Returns the relevant matches for the given post type:
   /// - Promote / Sell  -> people who posted buyer requests
-  /// - Need            -> sellers (suppliers) listings
   /// - Find a Partner  -> partners willing to partner up
   List<dynamic> _matchesForPostType(String postType) {
     switch (postType) {
       case 'Find a Partner':
         return matchController.partners.take(3).toList();
-      case 'Need a Product or Service':
-        return matchController.suppliers.take(3).toList();
       case 'Promote My Business':
       case 'Sell a Product or Service':
       default:

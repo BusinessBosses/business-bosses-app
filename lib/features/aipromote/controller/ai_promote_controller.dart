@@ -101,12 +101,6 @@ class AiPromoteController extends GetxController {
   /// writes from the right point of view (buyer vs seller vs partner).
   String get _intentDirective {
     switch (postType.value) {
-      case 'Need a Product or Service':
-        return 'Write from the perspective of a BUYER who is SEEKING/LOOKING FOR '
-            'this product or service. The author NEEDS it and wants suppliers or '
-            'providers to reach out — they are NOT the one offering it. Phrase it '
-            'as a clear request (e.g. "Looking for...", "In need of...") and invite '
-            'suppliers to get in touch. ';
       case 'Find a Partner':
         return 'Write from the perspective of someone SEEKING a business partner or '
             'collaborator. Invite suitable partners to connect — do not frame it as '

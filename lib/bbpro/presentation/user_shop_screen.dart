@@ -1,6 +1,7 @@
 // ignore_for_file: empty_catches
 
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
@@ -572,7 +573,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               final Uri url = Uri.parse(text);
                                               if ((url.scheme == 'http' ||
                                                   url.scheme == 'https')) {
-                                                if (!await launchUrl(url)) {
+                                                if (!await openUrl(url)) {
                                                   throw Exception(
                                                       'Could not launch $url');
                                                 }
@@ -580,9 +581,9 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                   .startsWith('wa.me')) {
                                                 final Uri whatsappUrl =
                                                     Uri.parse('https://$text');
-                                                if (await launchUrl(
+                                                if (await openUrl(
                                                     whatsappUrl)) {
-                                                  await launchUrl(whatsappUrl);
+                                                  await openUrl(whatsappUrl);
                                                 } else {
                                                   throw Exception(
                                                       'Could not launch $whatsappUrl');
@@ -933,7 +934,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                                           item.link!);
                                                                   if (await canLaunchUrl(
                                                                       url)) {
-                                                                    await launchUrl(
+                                                                    await openUrl(
                                                                         url,
                                                                         mode: LaunchMode
                                                                             .externalApplication);
@@ -1039,7 +1040,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                 final Uri uri =
                     Uri.parse('mailto:${shopController.userShop!.email}');
                 if (await canLaunchUrl(uri)) {
-                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  await openUrl(uri, mode: LaunchMode.externalApplication);
                 }
               },
             ),
@@ -1068,7 +1069,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                 final Uri uri =
                     Uri.parse('tel:${shopController.userShop!.phone}');
 
-                await launchUrl(uri, mode: LaunchMode.externalApplication);
+                await openUrl(uri, mode: LaunchMode.externalApplication);
               },
             ),
           if (shopController.userShop!.facebook != null ||
@@ -1100,7 +1101,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            await launchUrl(uri,
+                            await openUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -1128,7 +1129,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            await launchUrl(uri,
+                            await openUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -1156,7 +1157,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            await launchUrl(uri,
+                            await openUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -1185,7 +1186,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            await launchUrl(uri,
+                            await openUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -1217,7 +1218,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            await launchUrl(uri,
+                            await openUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}

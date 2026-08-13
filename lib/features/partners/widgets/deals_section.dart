@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/partners/controllers/partners_controller.dart';
 import 'package:business_bosses_v2/features/partners/models/partner_model.dart';
@@ -7,7 +8,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DealsSection extends StatefulWidget {
   const DealsSection({super.key});
@@ -65,9 +65,7 @@ class _DealsSectionState extends State<DealsSection> {
                         return GestureDetector(
                           onTap: () async {
                             final Uri companyUrl = Uri.parse(item.companyUrl!);
-                            if (!await launchUrl(companyUrl)) {
-                              throw Exception('Could not launch $companyUrl');
-                            }
+                            await openUrl(companyUrl);
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width / 4,

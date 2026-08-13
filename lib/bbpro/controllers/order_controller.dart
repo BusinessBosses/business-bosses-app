@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -158,6 +159,15 @@ class OrderController extends GetxController {
 
   Future<bool> updateOrder(String id, Map<String, dynamic> data) async {
     try {
+      // 'all orders' is a filter tab, not a status. It reached the API through
+      // a `.toString()` on the selected filter and stuck two orders in a state
+      // that matches no tab at all, so refuse it at the one choke point every
+      // status change goes through.
+      if (data['status'] == OrderStatus.allorders.toString()) {
+        debugPrint('Refusing to save "all orders" as an order status');
+        return false;
+      }
+
       ApiResponseModel response =
           await ApiService.put(path: 'orders/$id', body: data);
 

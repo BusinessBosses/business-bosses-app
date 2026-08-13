@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/services/app_config.dart';
 import 'package:business_bosses_v2/services/firebase_analytics.dart';
 import 'package:business_bosses_v2/services/push_notification_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -51,6 +52,10 @@ void main() async {
   ]);
 
   final SharedPreferences prefs = results[5] as SharedPreferences;
+
+  // Needs both Firebase and dotenv above, so it cannot join that Future.wait.
+  // Never throws — falls back to the bundled .env when the fetch fails.
+  await AppConfig.init();
 
   // Crashlytics setup.
   //

@@ -18,7 +18,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 enum PromoteStep { info, preview, success }
 
 /// Monthly "Post with AI" promotions allowed for non-Pro (free) users.
-const int kFreeMonthlyPromotions = 4;
+/// Free tier is a single AI post per calendar month; Pro is unlimited.
+const int kFreeMonthlyPromotions = 1;
 
 class AIPromoteSheet extends StatefulWidget {
   const AIPromoteSheet({super.key});
@@ -261,9 +262,6 @@ class _AIPromoteSheetState extends State<AIPromoteSheet>
       if (_businessInfo.postType == 'Promote My Business' ||
           _businessInfo.postType == 'Sell a Product or Service') {
         newMatchType = 'seller';
-      } else if (_businessInfo.postType == 'Need a Product or Service') {
-        // Buyers looking for products/services are matched against sellers.
-        newMatchType = 'buyer';
       } else if (_businessInfo.postType == 'Find a Partner') {
         newMatchType = 'partner';
       }

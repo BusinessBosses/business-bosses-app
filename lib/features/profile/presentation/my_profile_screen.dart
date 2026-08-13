@@ -76,7 +76,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   void initState() {
     super.initState();
 
-    _currentIndex = widget.currentIndex ?? 0;
+    // Only two segments/pages exist; anything else makes groupValue absent
+    // from the segmented control's children, which throws "Bad state: No
+    // element" during layout.
+    _currentIndex = (widget.currentIndex ?? 0).clamp(0, 1);
     _selectedIndex = widget.selectedIndex ?? 0;
 
     _pageController = PageController(initialPage: _currentIndex);
@@ -157,6 +160,24 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     );
   }
 
+  /// The segmented control can be tapped before the PageView exists (the
+  /// body is still the loading placeholder). Once it mounts, move it to the
+  /// tab the user already picked so the two do not disagree.
+  void _syncPageWhenAttached() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (!_pageController.hasClients) {
+        // Still not built — try again after the next frame.
+        if (!loading) return;
+        _syncPageWhenAttached();
+        return;
+      }
+      if (_pageController.page?.round() != _currentIndex) {
+        _pageController.jumpToPage(_currentIndex);
+      }
+    });
+  }
+
   PreferredSizeWidget? _buildAppBar() {
     final bool showHeader = _selectedIndex == 0 || _selectedIndex == 4;
 
@@ -182,16 +203,24 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         1: _segmentLabel('My Biz', _currentIndex == 1),
                       },
                       onValueChanged: (int? v) {
-                        if (v != null) {
-                          setState(() {
-                            _selectedIndex = 0;
-                            _currentIndex = v;
-                            _pageController.animateToPage(
-                              v,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease,
-                            );
-                          });
+                        if (v == null) return;
+                        setState(() {
+                          _selectedIndex = 0;
+                          _currentIndex = v;
+                        });
+                        // The app bar is shown while the body is still the
+                        // loading placeholder, so the PageView may not exist
+                        // yet — animating an unattached controller throws
+                        // "Bad state: No element". The initialPage below
+                        // picks up _currentIndex once it does attach.
+                        if (_pageController.hasClients) {
+                          _pageController.animateToPage(
+                            v,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.ease,
+                          );
+                        } else {
+                          _syncPageWhenAttached();
                         }
                       },
                     ),

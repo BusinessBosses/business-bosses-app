@@ -7,6 +7,7 @@ class OrderStats {
   final num pending;
   final num processed;
   final num completed;
+  final num cancelled;
   final num paid;
 
   OrderStats({
@@ -18,29 +19,30 @@ class OrderStats {
     this.pending = 0,
     this.processed = 0,
     this.completed = 0,
+    this.cancelled = 0,
     this.paid = 0,
   });
 
+  static num _count(dynamic value) =>
+      value == null ? 0 : num.tryParse(value.toString()) ?? 0;
+
   factory OrderStats.fromJson(Map<String, dynamic> json) {
     return OrderStats(
-      totalOrders: json['totalOrders'] == null
-          ? 0
-          : num.parse(json['totalOrders'].toString()),
-      online: json['online'] == null ? 0 : num.parse(json['online'].toString()),
-      inPerson: json['in_person'] != null
-          ? 0
-          : num.parse(json['in_person'].toString()),
-      pickup: json['pickup'] == null ? 0 : num.parse(json['pickup'].toString()),
-      failed: json['failed'] == null ? 0 : num.parse(json['failed'].toString()),
-      pending:
-          json['pending'] == null ? 0 : num.parse(json['pending'].toString()),
-      processed: json['processed'] == null
-          ? 0
-          : num.parse(json['processed'].toString()),
-      completed: json['cancelled'] == null
-          ? 0
-          : num.parse(json['cancelled'].toString()),
-      paid: json['paid'] == null ? 0 : num.parse(json['paid'].toString()),
+      totalOrders: _count(json['totalOrders']),
+      online: _count(json['online']),
+      // The null check was inverted, so this was 0 whenever the server
+      // actually sent a value — which it always does.
+      inPerson: _count(json['in_person']),
+      pickup: _count(json['pickup']),
+      failed: _count(json['failed']),
+      pending: _count(json['pending']),
+      processed: _count(json['processed']),
+      // 'completed' and 'cancelled' are distinct counts now; older cached
+      // payloads only carry 'cancelled', which is why this falls back to 0
+      // rather than reusing it.
+      completed: _count(json['completed']),
+      cancelled: _count(json['cancelled']),
+      paid: _count(json['paid']),
     );
   }
 
@@ -53,7 +55,8 @@ class OrderStats {
       'failed': failed,
       'pending': pending,
       'processed': processed,
-      'cancelled': completed, // Maintain 'cancelled' key for backend compatibility
+      'completed': completed,
+      'cancelled': cancelled,
       'paid': paid,
     };
   }

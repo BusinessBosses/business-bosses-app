@@ -1,11 +1,12 @@
 // ignore_for_file: always_specify_types
 
 import 'dart:io';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:business_bosses_v2/services/app_config.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -42,7 +43,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
 
     if (res.success) {
       if (await canLaunchUrlString(res.data)) {
-        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+        await openUrlString(res.data, mode: LaunchMode.externalApplication);
       }
     } else {
       // ignore: use_build_context_synchronously
@@ -80,7 +81,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
 
       if (res.success) {
         if (await canLaunchUrlString(res.data)) {
-          await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+          await openUrlString(res.data, mode: LaunchMode.externalApplication);
         }
       } else {
         // ignore: use_build_context_synchronously
@@ -102,7 +103,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
 
       if (res.success) {
         if (await canLaunchUrlString(res.data)) {
-          await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+          await openUrlString(res.data, mode: LaunchMode.externalApplication);
         }
       } else {
         // ignore: use_build_context_synchronously
@@ -115,11 +116,11 @@ class _ReviewPaymentState extends State<ReviewPayment> {
 
   List<Map<String, dynamic>> applepayplans = <Map<String, dynamic>>[
     <String, dynamic>{
-      'price': dotenv.env['TEST_MONTHLY_PRICE'],
+      'price': AppConfig.monthlyPrice,
       'planid': '1',
     },
     <String, dynamic>{
-      'price': dotenv.env['TEST_YEARLY_PRICE'],
+      'price': AppConfig.yearlyPrice,
       'planid': '2',
     },
   ];

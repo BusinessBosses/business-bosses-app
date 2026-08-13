@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'dart:convert';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -267,7 +268,7 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
         onTap: () async {
           final Uri? uri = Uri.tryParse(url);
           if (uri == null) return;
-          if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+          if (!await openUrl(uri, mode: LaunchMode.externalApplication)) {
             _showSnackBar('Could not open this file');
           }
         },

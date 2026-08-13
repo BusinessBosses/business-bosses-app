@@ -141,14 +141,33 @@ class _LoginFormState extends State<LoginForm> {
       _authusername =
           '${appleCredential.givenName} ${appleCredential.familyName}';
       if (_authCred == null) {
+        // Apple only returns the email on the very first authorization, so
+        // fall back to the copy saved then. If neither exists there is
+        // nothing to sign in with — _handleAppleLogin would throw on
+        // `_authCred!`.
         _authCred = prefs.getString('_authCred');
         _authusername = prefs.getString('_authusername');
+        if (_authCred == null) {
+          Get.snackbar('Error',
+              'Apple did not share your email. Please sign in with your email address instead.');
+          setState(() {
+            _isProcessing = false;
+          });
+          return;
+        }
         await logEvents('login', 'Apple SignIn');
         dynamic user = await _handleAppleLogin();
-        Get.offAndToNamed(Routes.marketPlace);
-        if (user['success'] == false) {
-          Get.snackbar('Error', user['error']);
-        } else {}
+        // Only navigate once the sign-in actually succeeded — this used to
+        // land on the marketplace even when the call failed.
+        if (user == null || user['success'] == false) {
+          Get.snackbar(
+            'Error',
+            user?['error']?.toString() ??
+                'Could not sign you in. Please try again.',
+          );
+        } else {
+          Get.offAndToNamed(Routes.marketPlace);
+        }
       } else {
         saveToSharedPreferences(_authCred!, '_authCred');
         saveToSharedPreferences(_authusername!, '_authusername');
@@ -198,8 +217,12 @@ class _LoginFormState extends State<LoginForm> {
       _email = googleUser.email;
       _token = auth.idToken;
       dynamic user = await _handleGoogleLogin();
-      if (user['success'] == false) {
-        Get.snackbar('Error', user['error']);
+      if (user == null || user['success'] == false) {
+        Get.snackbar(
+          'Error',
+          user?['error']?.toString() ??
+              'Could not sign you in. Please try again.',
+        );
         await _googleSignIn.disconnect();
       } else {
         await logEvents('login', 'apple');
@@ -225,12 +248,16 @@ class _LoginFormState extends State<LoginForm> {
           debugPrint('Failed to register device token: $e');
         });
         // Add RevenueCat login here
-        if (user['data']['bio'] != null) {
+        final dynamic userData = user['data'];
+        if (userData == null) {
+          Get.snackbar('Error',
+              'Signed in, but your profile could not be loaded. Please try again.');
+        } else if (userData['bio'] != null) {
           // GetStorage().write('isFirstTime', false);
           Get.offAndToNamed(Routes.marketPlace);
         } else {
-          Get.off(
-              () => UpdateProfileScreen(user: UserModel.fromMap(user['data'])));
+          Get.off(() => UpdateProfileScreen(
+              user: UserModel.fromMap(Map<String, dynamic>.from(userData))));
         }
       }
 
@@ -423,10 +450,16 @@ class _LoginFormState extends State<LoginForm> {
                 setState(() {
                   _isProcessing = true;
                 });
-                if (_authCred != null || _password != null) {
+                // Both are dereferenced with `!` in _handleLogin, so both must
+                // be present — `||` let a null credential through and threw.
+                if (_authCred != null && _password != null) {
                   dynamic user = await _handleLogin();
-                  if (user['success'] == false) {
-                    Get.snackbar('Error', user['error']);
+                  if (user == null || user['success'] == false) {
+                    Get.snackbar(
+                      'Error',
+                      user?['error']?.toString() ??
+                          'Could not sign you in. Please try again.',
+                    );
                   } else {
                     await logEvents('login', 'email');
 
@@ -453,12 +486,19 @@ class _LoginFormState extends State<LoginForm> {
                     }).catchError((Object e) {
                       debugPrint('Failed to register device token: $e');
                     });
-                    if (user['data']['bio'] != null) {
+                    // A 200 with a malformed payload would otherwise throw
+                    // here, after the token was already stored.
+                    final dynamic userData = user['data'];
+                    if (userData == null) {
+                      Get.snackbar('Error',
+                          'Signed in, but your profile could not be loaded. Please try again.');
+                    } else if (userData['bio'] != null) {
                       // GetStorage().write('isFirstTime', false);
                       Get.offAndToNamed(Routes.marketPlace);
                     } else {
                       Get.off(() => UpdateProfileScreen(
-                          user: UserModel.fromMap(user['data'])));
+                          user: UserModel.fromMap(
+                              Map<String, dynamic>.from(userData))));
                     }
                   }
                 }

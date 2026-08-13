@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/tiles/custom_tile.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
@@ -8,7 +9,6 @@ import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LearningSection extends StatelessWidget {
   final Function? onTap;
@@ -89,9 +89,7 @@ class LearningSection extends StatelessWidget {
                               onTap: () async {
                                 final Uri url =
                                     Uri.parse('https://business-school.io');
-                                if (!await launchUrl(url)) {
-                                  throw Exception('Could not launch $url');
-                                }
+                                await openUrl(url);
                               },
                               photo: 'assets/images/bbschool.png',
                               isbossup: true,

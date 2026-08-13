@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart';
@@ -44,9 +45,7 @@ class _CustomItemCardState extends State<CustomItemCard> {
       urlString = 'https://$urlString';
     }
     final Uri url = Uri.parse(urlString);
-    if (!await launchUrl(url, mode: LaunchMode.inAppBrowserView)) {
-      throw Exception('Could not launch $urlString');
-    }
+    await openUrl(url, mode: LaunchMode.inAppBrowserView);
   }
 
   @override

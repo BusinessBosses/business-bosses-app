@@ -23,6 +23,7 @@ import 'package:business_bosses_v2/features/posts/controllers/create_post_contro
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -45,6 +46,10 @@ class HomeController extends GetxController {
   final GetStorage sandBox = GetStorage();
   RxBool error = RxBool(false);
   RxBool noConnection = RxBool(false);
+
+  /// Why the last load failed, so the error screen can say something more
+  /// useful than "Error While Loading Data".
+  RxString errorMessage = RxString('');
   List<Industry> industries = <Industry>[];
   List<UserModel> bossupMembers = <UserModel>[];
 
@@ -1596,23 +1601,44 @@ class HomeController extends GetxController {
       }
 
       if (!response.success) {
-        if (response.message == 'send a valid token') {
+        if (response.isUnauthorized) {
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           final String? token = prefs.getString(Constants.ACCESS_TOKEN);
           if (token != null && token.isNotEmpty) {
             await ApiService().logout();
             showAccessTokenDialog();
+          } else {
+            // No token to invalidate — without this the user was stranded on
+            // the error screen with no way back to the login form.
+            await ApiService().clearSession();
+            Get.offAllNamed(Routes.login);
           }
+          loading(false);
+          update();
+          socket.disconnect();
+          return;
         }
         if (posts.isEmpty) {
-          error(true);
-          cError(true);
+          // A dropped connection is not the same as a backend failure; only
+          // the latter should read as "something went wrong on our side".
+          if (response.isNetworkError) {
+            noConnection(true);
+          } else {
+            error(true);
+            cError(true);
+          }
+          errorMessage(response.message);
         }
         loading(false);
         update();
         socket.disconnect();
         return;
       }
+
+      // A retry succeeded — clear whatever the last failure left behind.
+      noConnection(false);
+      error(false);
+      errorMessage('');
 
       // Store in cache
       await sandBox.write('home_data', response.data);
@@ -1696,7 +1722,13 @@ class HomeController extends GetxController {
     } catch (e, st) {
       debugPrint('Error fetching data: $e\n$st');
       if (posts.isEmpty) {
-        error(true);
+        if (e is SocketException) {
+          noConnection(true);
+          errorMessage('Could not reach the server. Check your connection.');
+        } else {
+          error(true);
+          errorMessage(e.toString());
+        }
       }
       loading(false);
       update();

@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
@@ -292,7 +293,7 @@ class _DashboardState extends State<Dashboard> {
                             onTap: () {
                               final Uri url =
                                   Uri.parse('$bizCenterBaseUrl/dashboard');
-                              launchUrl(url,
+                              openUrl(url,
                                   mode: LaunchMode.externalApplication);
                             },
                             child: Container(
@@ -306,7 +307,7 @@ class _DashboardState extends State<Dashboard> {
                               child: Row(
                                 children: const <Widget>[
                                   Text(
-                                    'Get Found on AI',
+                                    'Check Business Health',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700,
@@ -344,7 +345,7 @@ class _DashboardState extends State<Dashboard> {
                         itemCount: 2,
                         itemBuilder: (BuildContext context, int index) {
                           // Matched buyers now live under Find My Match →
-                          // "I Need a Job/Work", so MyBiz no longer shows them.
+                          // "Need Work Done", so MyBiz no longer shows them.
                           return GestureDetector(
                               onTap: () {
                                 if (index == 0) {

@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
@@ -338,8 +339,6 @@ class _ExpandedCustomItemScreenState extends State<ExpandedCustomItemScreen> {
       urlString = 'https://$urlString';
     }
     final Uri url = Uri.parse(urlString);
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch $urlString');
-    }
+    await openUrl(url, mode: LaunchMode.externalApplication);
   }
 }

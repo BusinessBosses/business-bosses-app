@@ -448,10 +448,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   }
 
   Widget _buildError() {
+    final String detail = homeController.errorMessage.value;
     return SafetyModel(
       isLoading: false,
       title: 'Error While Loading Data',
-      subTitle: 'Try Reloading Again',
+      // Show what actually failed instead of a blanket "try again" — the
+      // reason used to be swallowed and only written to the debug log.
+      subTitle: detail.isEmpty ? 'Try Reloading Again' : detail,
       clickableText: 'Refresh',
       onTap: () {
         homeController.loadData();

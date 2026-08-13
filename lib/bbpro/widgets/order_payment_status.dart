@@ -9,9 +9,12 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 /// Shows where an order's coin payment currently stands.
 ///
 /// The buyer's coins are held when they pay, stay held while the seller
-/// delivers, and are credited to the seller after the escrow window. Both sides
+/// delivers, and are credited to the seller after the hold period. Both sides
 /// need to see that: the buyer that the order is paid, the seller that the
 /// coins exist but are not theirs yet.
+///
+/// Copy rule: never use the word "escrow" here — say the coins are held, and
+/// tell the seller for how long.
 class OrderPaymentStatus extends StatelessWidget {
   const OrderPaymentStatus({super.key, required this.order});
 
@@ -52,9 +55,11 @@ class OrderPaymentStatus extends StatelessWidget {
       heading = 'Paid • ${escrow.coinAmount} coins';
       if (isSeller) {
         detail = escrow.status == 'delivered'
-            ? 'Coins are on hold${_releaseSuffix(escrow)}.'
-            : 'Coins are on hold and will be released to you once you deliver '
-                'this order.';
+            ? 'Coins are held for ${escrow.holdDurationLabel}'
+                '${_releaseSuffix(escrow)}.'
+            : 'Coins are on hold. Once you mark this order delivered they are '
+                'held for ${escrow.holdDurationLabel}, then added to your '
+                'wallet.';
       } else {
         detail = 'Your coins are safely on hold until you receive this order.';
       }
@@ -98,9 +103,10 @@ class OrderPaymentStatus extends StatelessWidget {
     );
   }
 
-  /// " until 5 Aug" when a release date is known, otherwise nothing.
+  /// ", in your wallet on 5 Aug" when a release date is known.
   String _releaseSuffix(OrderEscrow escrow) {
     if (escrow.releaseAt == null) return '';
-    return ' until ${DateFormat('d MMM').format(escrow.releaseAt!)}';
+    return ', in your wallet on '
+        '${DateFormat('d MMM').format(escrow.releaseAt!)}';
   }
 }

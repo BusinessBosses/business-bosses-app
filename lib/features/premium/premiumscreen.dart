@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
@@ -7,7 +8,7 @@ import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:business_bosses_v2/services/app_config.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -41,11 +42,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
   late String duration;
   List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
     <String, dynamic>{
-      'price': dotenv.env['TEST_YEARLY_PRICE'],
+      'price': AppConfig.yearlyPrice,
       'plan': 'annually',
     },
     <String, dynamic>{
-      'price': dotenv.env['TEST_MONTHLY_PRICE'],
+      'price': AppConfig.monthlyPrice,
       'plan': 'monthly',
     },
   ];
@@ -212,9 +213,13 @@ class _PremiumScreenState extends State<PremiumScreen> {
         error: true,
       );
     } finally {
-      setState(() {
-        loading = false;
-      });
+      // The purchase sheet can outlive this screen; setState on a disposed
+      // State throws.
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     }
   }
 
@@ -1014,7 +1019,7 @@ Future<void> launchPolicy() async {
   String url = Constants.PRIVACY_POLICY_LINK;
   bool canLunchLink = await canLaunchUrlString(url);
   if (canLunchLink) {
-    await launchUrlString(url);
+    await openUrlString(url);
   } else {
     showSnackbar(
         title: 'OOPS!',
@@ -1027,7 +1032,7 @@ Future<void> launchTermsofService() async {
   String url = Constants.TERMS_OF_SERVICE_LINK;
   bool canLunchLink = await canLaunchUrlString(url);
   if (canLunchLink) {
-    await launchUrlString(url);
+    await openUrlString(url);
   } else {
     showSnackbar(
         title: 'OOPS!',

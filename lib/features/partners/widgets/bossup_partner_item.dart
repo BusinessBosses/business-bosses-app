@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/features/partners/models/partner_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -161,9 +162,7 @@ class BossuppartnerItem extends StatelessWidget {
                     body: <String, dynamic>{'clicks': clicks + 1},
                   );
                   final Uri url = Uri.parse(companyUrl);
-                  if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
-                    throw Exception('Could not launch $url');
-                  }
+                  await openUrl(url, mode: LaunchMode.inAppWebView);
                 },
                 child: const Text(
                   'Claim Deals',

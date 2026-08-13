@@ -125,7 +125,7 @@ Widget sellingGuide(BuildContext context) {
               Text('✅  ', style: bodyText2),
               Expanded(
                 child: Text(
-                    "Business Bosses does not offer an in-built payment feature yet, it's down to you to choose a payment provider that offers buyer protection (e.g PayPal or escrow)",
+                    "Business Bosses does not offer an in-built payment feature yet, it's down to you to choose a payment provider that offers buyer protection (e.g PayPal)",
                     style: bodyText2),
               ),
             ],

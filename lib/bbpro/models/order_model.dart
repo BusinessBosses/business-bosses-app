@@ -162,12 +162,16 @@ class OrderItem {
 }
 
 enum OrderStatus {
+  /// Not a real order status — a pseudo-value used as the "show everything"
+  /// filter tab. It must never be written back to the server; use
+  /// [isPersistable] before sending a status in a request body.
   allorders,
   pending,
   paid,
-  completed;
+  completed,
+  cancelled;
 
-  static OrderStatus fromString(String status) {
+  static OrderStatus fromString(String? status) {
     switch (status) {
       case 'all orders':
         return OrderStatus.allorders;
@@ -175,13 +179,21 @@ enum OrderStatus {
         return OrderStatus.pending;
       case 'paid':
         return OrderStatus.paid;
-      case 'cancelled':
       case 'completed':
         return OrderStatus.completed;
+      case 'cancelled':
+        return OrderStatus.cancelled;
       default:
-        throw ArgumentError('Unknown status: $status');
+        // Legacy/unknown values ('processed', 'failed', null) must not blow
+        // up the whole order list — one bad row used to throw here and take
+        // the entire parse down with it.
+        debugPrint('Unknown order status "$status", treating as pending');
+        return OrderStatus.pending;
     }
   }
+
+  /// False for [allorders], which is a filter, not a status.
+  bool get isPersistable => this != OrderStatus.allorders;
 
   String get displayTitle {
     switch (this) {
@@ -193,6 +205,8 @@ enum OrderStatus {
         return 'Paid';
       case OrderStatus.completed:
         return 'Completed';
+      case OrderStatus.cancelled:
+        return 'Cancelled';
     }
   }
 
@@ -206,9 +220,12 @@ enum OrderStatus {
         return Colors.blue.withValues(alpha: 0.1);
       case OrderStatus.completed:
         return Colors.green.withValues(alpha: 0.1);
+      case OrderStatus.cancelled:
+        return Colors.red.withValues(alpha: 0.1);
     }
   }
 
+  /// The exact string the API stores in `orders.status`.
   @override
   String toString() {
     switch (this) {
@@ -219,13 +236,18 @@ enum OrderStatus {
       case OrderStatus.paid:
         return 'paid';
       case OrderStatus.completed:
+        return 'completed';
+      case OrderStatus.cancelled:
         return 'cancelled';
     }
   }
 }
 
-/// Coin escrow attached to an order: the buyer's coins are held until the
-/// seller delivers, then released after the escrow window.
+/// The coin hold attached to an order: the buyer's coins are held until the
+/// seller delivers, then released after the hold period.
+///
+/// "escrow" is internal naming only — never surface the word in UI copy. Tell
+/// the seller their coins are held for [holdDays] days.
 class OrderEscrow {
   const OrderEscrow({
     required this.status,
@@ -233,6 +255,7 @@ class OrderEscrow {
     this.releaseAt,
     this.buyerId,
     this.sellerId,
+    this.holdDays = 7,
   });
 
   /// held | delivered | released | refunded
@@ -241,6 +264,10 @@ class OrderEscrow {
   final DateTime? releaseAt;
   final String? buyerId;
   final String? sellerId;
+
+  /// Days the coins stay held after delivery. Server-driven so the copy
+  /// matches the actual release schedule.
+  final int holdDays;
 
   factory OrderEscrow.fromJson(Map<String, dynamic> json) {
     return OrderEscrow(
@@ -251,8 +278,13 @@ class OrderEscrow {
           : DateTime.tryParse(json['releaseAt'].toString()),
       buyerId: json['buyerId']?.toString(),
       sellerId: json['sellerId']?.toString(),
+      holdDays: (json['holdDays'] as num?)?.toInt() ?? 7,
     );
   }
+
+  /// "7 days" / "1 day".
+  String get holdDurationLabel =>
+      '$holdDays ${holdDays == 1 ? 'day' : 'days'}';
 
   /// Coins are paid but not yet the seller's.
   bool get isOnHold => status == 'held' || status == 'delivered';

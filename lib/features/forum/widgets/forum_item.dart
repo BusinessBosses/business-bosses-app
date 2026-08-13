@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
@@ -733,7 +733,7 @@ class _ForumItemState extends State<ForumItem> {
                                 onTap: (String link) async {
                                   String url = MyNativeFunctions.completeURL(
                                       link, MyUrl.url);
-                                  await launchUrlString(url);
+                                  await openUrlString(url);
                                 }),
                           ),
                     widget.forum.images == null

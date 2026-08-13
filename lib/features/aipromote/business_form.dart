@@ -428,7 +428,6 @@ class _BusinessInfoFormState extends State<BusinessInfoForm> {
                     items: <String>[
                       'Promote My Business',
                       'Sell a Product or Service',
-                      'Need a Product or Service',
                       'Find a Partner',
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(

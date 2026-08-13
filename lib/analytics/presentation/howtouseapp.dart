@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
@@ -215,7 +216,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                                 // Submit news for instant PR
                                 final Uri url = Uri.parse(
                                     'https://businessbosses.news/submit-your-news/');
-                                launchUrl(url,
+                                openUrl(url,
                                     mode: LaunchMode.platformDefault);
                               }
                             },

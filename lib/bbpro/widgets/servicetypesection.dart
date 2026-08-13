@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ServicetypeSectionWidget extends StatefulWidget {
   final bool? isOnline;
@@ -56,7 +56,7 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
                 Expanded(
                   child: widget.isOnline == true
                       ? InkWell(
-                          onTap: () => launchUrl(Uri.parse(widget.service
+                          onTap: () => openUrl(Uri.parse(widget.service
                               .url!)), // Replace with your actual profile link
                           child: Text(
                             widget.service.url ?? 'N/A',

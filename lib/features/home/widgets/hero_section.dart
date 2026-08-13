@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/features/impact/controllers/impact_controller.dart';
 import 'package:business_bosses_v2/features/impact/presentation/impact_screen.dart';
@@ -569,7 +570,7 @@ class _HeroSectionState extends State<HeroSection> {
                           Uri url = Uri.parse(partner['companyUrl']);
                           canLaunchUrl(url).then((bool canLaunch) {
                             if (canLaunch) {
-                              launchUrl(url);
+                              openUrl(url);
                             }
                           });
                         }
@@ -869,9 +870,7 @@ class _HeroSectionState extends State<HeroSection> {
                               break;
                             case 'Claim Deal':
                               final Uri url = Uri.parse(partner['companyUrl']);
-                              if (!await launchUrl(url)) {
-                                throw Exception('Could not launch $url');
-                              }
+                              await openUrl(url);
                               break;
                             default:
                               Get.toNamed(Routes.liveEvents);
@@ -942,7 +941,7 @@ class _HeroSectionState extends State<HeroSection> {
                                 break;
                               case 'Visit BizCenter':
                                 final Uri url = Uri.parse(bizCenterBaseUrl);
-                                launchUrl(url,
+                                openUrl(url,
                                     mode: LaunchMode.externalApplication);
                                 break;
                               case 'Share Learning':
@@ -1177,7 +1176,7 @@ class _HeroSectionState extends State<HeroSection> {
                     child: GestureDetector(
                       onTap: () {
                         final Uri url = Uri.parse(bizCenterBaseUrl);
-                        launchUrl(url, mode: LaunchMode.externalApplication);
+                        openUrl(url, mode: LaunchMode.externalApplication);
                       },
                       child: Container(
                         height: 48,

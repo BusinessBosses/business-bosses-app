@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -27,56 +28,107 @@ class MediaUploadException implements Exception {
 }
 
 class ApiService {
-  /// LOGIN POINT
-  Future<dynamic> login(String email, String password) async {
-    /// Obtain shared preferences.
+  /// Shape every auth failure the same way the login forms expect:
+  /// `{'success': false, 'error': <human readable>}`.
+  static Map<String, dynamic> _authFailure(String message) =>
+      <String, dynamic>{'success': false, 'error': message};
+
+  /// Decode an auth response body, tolerating the empty/HTML bodies that
+  /// gateways return on 502/504 instead of throwing FormatException.
+  static Map<String, dynamic>? _decodeAuthBody(http.Response response) {
+    if (response.body.trim().isEmpty) {
+      return null;
+    }
+    try {
+      final dynamic decoded = json.decode(response.body);
+      return decoded is Map<String, dynamic> ? decoded : null;
+    } on FormatException catch (e) {
+      debugPrint('Auth response was not JSON (${response.statusCode}): $e');
+      return null;
+    }
+  }
+
+  /// Persist the credentials from a successful auth response. Returns false
+  /// when the payload is missing a token, so callers do not treat a
+  /// malformed 200 as a completed login.
+  static Future<bool> _storeSession(Map<String, dynamic> jsonResponse) async {
+    final dynamic data = jsonResponse['data'];
+    if (data is! Map) {
+      return false;
+    }
+    final String? accessToken = data['accessToken']?.toString();
+    if (accessToken == null || accessToken.isEmpty) {
+      return false;
+    }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    Map<String, dynamic> data = <String, dynamic>{
-      'email': email,
-      'password': password,
-    };
-    final http.Response response = await http.post(
-      Uri.parse('${Constants.baseUrl}/auth/sign-in'),
-      headers: <String, String>{'Content-Type': 'application/json'},
-      body: jsonEncode(data),
-    );
+    await prefs.setString(Constants.ACCESS_TOKEN, accessToken);
+    await prefs.setString(Constants.USER_ID, data['uid'].toString());
+    return true;
+  }
+
+  Future<dynamic> _authenticate({
+    required String path,
+    required Map<String, dynamic> body,
+  }) async {
+    final http.Response response;
+    try {
+      response = await http.post(
+        Uri.parse('${Constants.baseUrl}/$path'),
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: jsonEncode(body),
+      );
+    } on SocketException catch (e) {
+      debugPrint('$path: no connection: $e');
+      return _authFailure(
+          'Could not reach the server. Check your internet connection and try again.');
+    } on HttpException catch (e) {
+      debugPrint('$path: connection failed: $e');
+      return _authFailure(
+          'Could not reach the server. Please try again in a moment.');
+    } catch (e) {
+      debugPrint('$path: request failed: $e');
+      return _authFailure('Something went wrong. Please try again.');
+    }
+
+    final Map<String, dynamic>? jsonResponse = _decodeAuthBody(response);
+
+    // Empty or non-JSON body — a gateway timeout or a crashed backend.
+    // Decoding it blind used to throw FormatException and kill the app.
+    if (jsonResponse == null) {
+      return _authFailure(response.statusCode >= 500
+          ? 'The server is temporarily unavailable. Please try again shortly.'
+          : 'Something went wrong. Please try again.');
+    }
+
     if (response.statusCode == 200) {
-      final dynamic jsonResponse = json.decode(response.body);
-      await prefs.setString(
-          Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
-      await prefs.setString(
-          Constants.USER_ID, jsonResponse['data']['uid'].toString());
-      return jsonResponse;
-    } else {
-      final dynamic jsonResponse = json.decode(response.body);
+      if (!await _storeSession(jsonResponse)) {
+        return _authFailure(
+            'Sign in did not complete. Please try again in a moment.');
+      }
       return jsonResponse;
     }
+
+    // Preserve the backend's own message where it sent one.
+    final String message = jsonResponse['error']?.toString() ??
+        jsonResponse['message']?.toString() ??
+        'Sign in failed. Please check your details and try again.';
+    return <String, dynamic>{...jsonResponse, 'success': false, 'error': message};
+  }
+
+  /// LOGIN POINT
+  Future<dynamic> login(String email, String password) async {
+    return _authenticate(
+      path: 'auth/sign-in',
+      body: <String, dynamic>{'email': email, 'password': password},
+    );
   }
 
   /// GOOGLE LOGIN POINT
   Future<dynamic> googleLogin(String email, String token) async {
-    /// Obtain shared preferences.
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    Map<String, dynamic> data = <String, dynamic>{
-      'email': email,
-      'token': token,
-    };
-    final http.Response response = await http.post(
-      Uri.parse('${Constants.baseUrl}/auth/google-sign-in'),
-      headers: <String, String>{'Content-Type': 'application/json'},
-      body: jsonEncode(data),
+    return _authenticate(
+      path: 'auth/google-sign-in',
+      body: <String, dynamic>{'email': email, 'token': token},
     );
-    if (response.statusCode == 200) {
-      final dynamic jsonResponse = json.decode(response.body);
-      await prefs.setString(
-          Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
-      await prefs.setString(
-          Constants.USER_ID, jsonResponse['data']['uid'].toString());
-      return jsonResponse;
-    } else {
-      final dynamic jsonResponse = json.decode(response.body);
-      return jsonResponse;
-    }
   }
 
   /// UPLOAD FILE
@@ -235,13 +287,102 @@ class ApiService {
     }
   }
 
-  /// LOGOUT
-  Future<void> logout() async {
-    await get(path: 'auth/logout');
+  /// Drop the stored credentials without calling the backend. Used when the
+  /// session is already invalid, so there is nothing to log out of.
+  Future<void> clearSession() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(Constants.ACCESS_TOKEN);
     await prefs.remove(Constants.USER_ID);
+  }
+
+  /// LOGOUT
+  Future<void> logout() async {
+    await get(path: 'auth/logout');
+    await clearSession();
     Get.offAllNamed(Routes.login);
+  }
+
+  /// Run an authenticated request and turn whatever comes back — including
+  /// empty bodies, HTML error pages and dropped connections — into an
+  /// [ApiResponseModel] that says which of those actually happened.
+  static Future<ApiResponseModel> _send(
+    String method,
+    String url,
+    Map<String, dynamic>? body,
+  ) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString(Constants.ACCESS_TOKEN) ?? '';
+    final Map<String, String> headers = <String, String>{
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'bearer $token',
+    };
+    final Uri uri = Uri.parse(url);
+    final String? encoded = body == null ? null : jsonEncode(body);
+
+    final http.Response response;
+    try {
+      switch (method) {
+        case 'GET':
+          response = await http.get(uri, headers: headers);
+          break;
+        case 'POST':
+          response = await http.post(uri, headers: headers, body: encoded);
+          break;
+        case 'PUT':
+          response = await http.put(uri, headers: headers, body: encoded);
+          break;
+        case 'DELETE':
+          response = await http.delete(uri, headers: headers);
+          break;
+        default:
+          throw ArgumentError('Unsupported method $method');
+      }
+    } on SocketException catch (e) {
+      debugPrint('$method $url: no connection: $e');
+      return ApiResponseModel.networkFailure(
+          'Could not reach the server. Check your internet connection.');
+    } on HttpException catch (e) {
+      debugPrint('$method $url: connection failed: $e');
+      return ApiResponseModel.networkFailure(
+          'The connection was interrupted. Please try again.');
+    } on TimeoutException catch (e) {
+      debugPrint('$method $url: timed out: $e');
+      return ApiResponseModel.networkFailure(
+          'The server took too long to respond. Please try again.');
+    } catch (e) {
+      debugPrint('$method $url: request failed: $e');
+      return ApiResponseModel.networkFailure(
+          'Could not reach the server. Please try again.');
+    }
+
+    // The backend answered, so any failure from here is its fault, not the
+    // network's — keep the status code so callers can react to 401 vs 500.
+    if (response.body.trim().isEmpty) {
+      debugPrint('$method $url: empty body (${response.statusCode})');
+      return ApiResponseModel.badResponse(
+        response.statusCode,
+        response.statusCode >= 500
+            ? 'The server is temporarily unavailable (${response.statusCode}).'
+            : 'The server returned an empty response (${response.statusCode}).',
+      );
+    }
+
+    try {
+      final dynamic decoded = jsonDecode(response.body);
+      if (decoded is! Map<String, dynamic>) {
+        return ApiResponseModel.badResponse(
+            response.statusCode, 'Unexpected response from the server.');
+      }
+      return ApiResponseModel.fromMap(decoded, statusCode: response.statusCode);
+    } on FormatException catch (e) {
+      // Typically an HTML error page from a proxy in front of the API.
+      debugPrint('$method $url: body was not JSON (${response.statusCode}): $e');
+      return ApiResponseModel.badResponse(
+        response.statusCode,
+        'The server is temporarily unavailable (${response.statusCode}).',
+      );
+    }
   }
 
   /// HTTP POST CALL
@@ -250,29 +391,15 @@ class ApiService {
     required Map<String, dynamic> body,
     dynamic data,
   }) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString(Constants.ACCESS_TOKEN) ?? '';
-    try {
-      final http.Response response = await http.post(
-        Uri.parse('${Constants.baseUrl}/$path'),
-        body: jsonEncode(body),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'bearer $token'
-        },
-      );
-      log(response.body);
-      return ApiResponseModel.fromMap(jsonDecode(response.body));
-    } catch (e) {
-      debugPrint(e.toString());
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
-      return ApiResponseModel(
-          success: false, message: e.toString(), data: <dynamic, dynamic>{});
+    final ApiResponseModel response =
+        await _send('POST', '${Constants.baseUrl}/$path', body);
+    // Only when the call produced no usable answer. A backend that
+    // deliberately returned success:false is reported by the caller, which
+    // has the context to word it properly.
+    if (response.isTransportFailure) {
+      showSnackbar(title: 'OOPS!', message: response.message, error: true);
     }
+    return response;
   }
 
   static Future<ApiResponseModel> initPost({
@@ -280,53 +407,19 @@ class ApiService {
     required Map<String, dynamic> body,
     dynamic data,
   }) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString(Constants.ACCESS_TOKEN) ?? '';
-    try {
-      final http.Response response = await http.post(
-        Uri.parse('${Constants.initUrl}/$path'),
-        body: jsonEncode(body),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'bearer $token'
-        },
-      );
-      log(response.body);
-      return ApiResponseModel.fromMap(jsonDecode(response.body));
-    } catch (e) {
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
-      return ApiResponseModel(
-          success: false, message: e.toString(), data: <dynamic, dynamic>{});
+    final ApiResponseModel response =
+        await _send('POST', '${Constants.initUrl}/$path', body);
+    if (response.isTransportFailure) {
+      showSnackbar(title: 'OOPS!', message: response.message, error: true);
     }
+    return response;
   }
 
   /// HTTP GET CALL
   static Future<ApiResponseModel> get({
     required String path,
   }) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString(Constants.ACCESS_TOKEN);
-    log(token ?? '');
-    try {
-      final http.Response response = await http.get(
-        Uri.parse('${Constants.baseUrl}/$path'),
-        headers: <String, String>{
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'bearer $token'
-        },
-      );
-      log(ApiResponseModel.fromMap(jsonDecode(response.body)).message);
-      // log((jsonDecode(response.body)).toString());
-      return ApiResponseModel.fromMap(jsonDecode(response.body));
-    } catch (e) {
-      return ApiResponseModel(
-          success: false, message: e.toString(), data: <dynamic, dynamic>{});
-    }
+    return _send('GET', '${Constants.baseUrl}/$path', null);
   }
 
   /// HTTP PUT CALL
@@ -334,52 +427,19 @@ class ApiService {
     required String path,
     required Map<String, dynamic> body,
   }) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString(Constants.ACCESS_TOKEN) ?? '';
-    log(token);
-    try {
-      final http.Response response = await http.put(
-        Uri.parse('${Constants.baseUrl}/$path'),
-        body: jsonEncode(body),
-        headers: <String, String>{
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'bearer $token'
-        },
-      );
-      log(response.body);
-      return ApiResponseModel.fromMap(jsonDecode(response.body));
-    } catch (e) {
-      return ApiResponseModel(
-          success: false, message: e.toString(), data: <dynamic, dynamic>{});
-    }
+    return _send('PUT', '${Constants.baseUrl}/$path', body);
   }
 
   /// HTTP DELETE CALL
   static Future<ApiResponseModel> delete({
     required String path,
   }) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString(Constants.ACCESS_TOKEN) ?? '';
-    try {
-      final http.Response response = await http.delete(
-        Uri.parse('${Constants.baseUrl}/$path'),
-        headers: <String, String>{
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'bearer $token'
-        },
-      );
-      log(response.body);
-      return ApiResponseModel.fromMap(jsonDecode(response.body));
-    } catch (e) {
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
-      return ApiResponseModel(
-          success: false, message: e.toString(), data: <dynamic, dynamic>{});
+    final ApiResponseModel response =
+        await _send('DELETE', '${Constants.baseUrl}/$path', null);
+    if (response.isTransportFailure) {
+      showSnackbar(title: 'OOPS!', message: response.message, error: true);
     }
+    return response;
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
@@ -209,7 +210,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
 
     try {
       if (await canLaunchUrl(mailUrl)) {
-        await launchUrl(mailUrl);
+        await openUrl(mailUrl);
       } else {
         throw 'Could not launch $mailUrl';
       }
@@ -388,16 +389,12 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
             onTap: (String text) async {
               final Uri url = Uri.parse(text);
               if ((url.scheme == 'http' || url.scheme == 'https')) {
-                if (!await launchUrl(url)) {
-                  throw Exception('Could not launch $url');
-                }
+                await openUrl(url);
               } else if (text.startsWith('wa.me')) {
                 final Uri whatsappUrl = Uri.parse('https://$text');
-                if (await launchUrl(whatsappUrl)) {
-                  await launchUrl(whatsappUrl);
-                } else {
-                  throw Exception('Could not launch $whatsappUrl');
-                }
+                // openUrl reports its own failure. This used to open
+                // WhatsApp twice, then throw out of an onTap handler.
+                await openUrl(whatsappUrl);
               }
             },
           ),
@@ -418,9 +415,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
 
     final Uri url = Uri.parse(urlString);
 
-    if (!await launchUrl(url, mode: LaunchMode.platformDefault)) {
-      throw Exception('Could not launch $urlString');
-    }
+    await openUrl(url, mode: LaunchMode.platformDefault);
   }
 
   Widget _buildImageGallery() {

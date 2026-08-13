@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 // import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
@@ -128,7 +129,7 @@ class EventPopUp extends StatelessWidget {
         Uri.tryParse('https://www.google.com/maps/search/?api=1&query=$query');
 
     if (await canLaunchUrl(url!)) {
-      await launchUrl(url);
+      await openUrl(url);
     } else {
       throw 'Could not launch $url';
     }

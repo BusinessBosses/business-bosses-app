@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/chat/models/ai_chat_message.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
@@ -74,7 +75,7 @@ class ChatBubble extends StatelessWidget {
                   // check if the device can handle this URI
                   if (await canLaunchUrl(uri)) {
                     // launch externally (e.g. browser)
-                    await launchUrl(
+                    await openUrl(
                       uri,
                       mode: LaunchMode.externalApplication,
                     );

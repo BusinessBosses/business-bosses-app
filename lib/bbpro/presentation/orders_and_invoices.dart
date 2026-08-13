@@ -337,6 +337,11 @@ class _OrdersScreenState extends State<OrdersScreen>
                             .toInt() ??
                         (orderCtrl.ordersStatus[status]?.length ?? 0);
                     break;
+                  case OrderStatus.cancelled:
+                    count = orderCtrl.shopController.orderStats?.cancelled
+                            .toInt() ??
+                        (orderCtrl.ordersStatus[status]?.length ?? 0);
+                    break;
                 }
                 return '$title ($count)';
               },

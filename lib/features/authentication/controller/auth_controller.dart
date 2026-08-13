@@ -9,7 +9,7 @@ import 'package:business_bosses_v2/services/revenuecat_service.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:business_bosses_v2/services/app_config.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -61,9 +61,9 @@ class AuthController extends GetxController {
   }) async {
     try {
       final int code = Random().nextInt(900000) + 100000;
-      final String? apiKey = dotenv.env['SENDGRILL_API_KEY'];
-      final String? fromEmail = dotenv.env['SENDGRID_EMAIL_ADDRESS'];
-      final String? templateId = dotenv.env['SENDGRID_TEMPLATE_ID'];
+      final String? apiKey = AppConfig.sendgridApiKey;
+      final String? fromEmail = AppConfig.sendgridEmailAddress;
+      final String? templateId = AppConfig.sendgridTemplateId;
       const String subject = 'OTP Verification Code';
 
       if (apiKey == null || fromEmail == null || templateId == null) {
@@ -125,10 +125,18 @@ class AuthController extends GetxController {
     required VoidCallback onError,
   }) async {
     final int code = Random().nextInt(900000) + 100000;
-    final String apiKey = dotenv.env['SENDGRILL_API_KEY']!;
-    final String fromEmail = dotenv.env['SENDGRID_EMAIL_ADDRESS']!;
-    final String templateId = dotenv.env['SENDGRID_FORGOT_TEMPLATE_ID']!;
+    final String? apiKey = AppConfig.sendgridApiKey;
+    final String? fromEmail = AppConfig.sendgridEmailAddress;
+    final String? templateId = AppConfig.sendgridForgotTemplateId;
     const String subject = 'OTP Verification Code';
+
+    // These were dereferenced with `!`, so a missing value crashed the
+    // password-reset flow instead of reporting it.
+    if (apiKey == null || fromEmail == null || templateId == null) {
+      debugPrint('Missing SendGrid configuration for password reset.');
+      onError();
+      return;
+    }
 
     final Uri uri = Uri.parse('https://api.sendgrid.com/v3/mail/send');
     final http.Response response = await http.post(

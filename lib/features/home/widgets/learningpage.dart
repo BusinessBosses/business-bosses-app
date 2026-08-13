@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/common/widgets/tiles/custom_tile.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
@@ -8,7 +9,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LearningPage extends StatefulWidget {
   const LearningPage({super.key});
@@ -81,7 +81,7 @@ class _LearningPageState extends State<LearningPage> {
                                     onTap: () async {
                                       final Uri url = Uri.parse(
                                           'https://business-school.io');
-                                      if (!await launchUrl(url)) {
+                                      if (!await openUrl(url)) {
                                         throw Exception(
                                             'Could not launch $url');
                                       }
