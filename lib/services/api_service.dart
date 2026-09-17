@@ -132,36 +132,93 @@ class ApiService {
   }
 
   /// UPLOAD FILE
+  /// Tries the primary businessbosses.com.ng/upload.php host first; only when
+  /// that fails (network error, non-2xx, or a JSON body without `success`)
+  /// does it fall back to the backend's Backblaze proxy at
+  /// `${Constants.baseUrl}/uploads/fallback`.
   static Future<dynamic> uploadFile(File image) async {
+    try {
+      final Map<String, dynamic>? primaryResult = await _uploadToPrimary(image);
+      if (primaryResult != null && primaryResult['success'] == true) {
+        log(primaryResult.toString());
+        return primaryResult;
+      }
+      debugPrint('Primary upload failed, trying Backblaze fallback: $primaryResult');
+    } catch (e) {
+      debugPrint('Primary upload threw, trying Backblaze fallback: $e');
+    }
+
+    try {
+      final Map<String, dynamic>? fallbackResult = await _uploadToBackblazeFallback(image);
+      if (fallbackResult != null && fallbackResult['success'] == true) {
+        log(fallbackResult.toString());
+        return fallbackResult;
+      }
+      debugPrint(fallbackResult.toString());
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    showSnackbar(
+        title: 'OOPS!',
+        message: 'An error occurred, please try again!',
+        error: true);
+    return null;
+  }
+
+  static Future<Map<String, dynamic>?> _uploadToPrimary(File image) async {
     String uploadUrl = 'https://businessbosses.com.ng/upload.php';
     http.MultipartRequest request =
         http.MultipartRequest('POST', Uri.parse(uploadUrl));
     request.files.add(await http.MultipartFile.fromPath('file', image.path));
     log(image.path);
-    try {
-      final http.StreamedResponse streamedResponse = await request.send();
-
-      Map<dynamic, dynamic> result =
-          json.decode(await streamedResponse.stream.bytesToString());
-      if (result['success']) {
-        log(result.toString());
-        return result;
-      } else {
-        debugPrint(result.toString());
-        showSnackbar(
-            title: 'OOPS!',
-            message: 'An error occurred, please try again!',
-            error: true);
-        return null;
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
+    final http.StreamedResponse streamedResponse =
+        await request.send().timeout(const Duration(seconds: 30));
+    final String body = await streamedResponse.stream.bytesToString();
+    if (streamedResponse.statusCode < 200 || streamedResponse.statusCode >= 300) {
       return null;
     }
+    final dynamic decoded = json.decode(body);
+    return decoded is Map<String, dynamic> ? decoded : null;
+  }
+
+  /// Backblaze fallback, proxied through our own backend so B2 credentials
+  /// never live in the app. Normalizes the response into the same
+  /// `{'success': ..., 'fileUrl': ...}` shape upload.php returns.
+  static Future<Map<String, dynamic>?> _uploadToBackblazeFallback(File image) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? accessToken = prefs.getString(Constants.ACCESS_TOKEN);
+
+    final Uri uploadUrl = Uri.parse('${Constants.baseUrl}/uploads/fallback');
+    final http.MultipartRequest request = http.MultipartRequest('POST', uploadUrl);
+    if (accessToken != null && accessToken.isNotEmpty) {
+      request.headers['Authorization'] = 'Bearer $accessToken';
+    }
+    request.files.add(await http.MultipartFile.fromPath('file', image.path));
+
+    final http.StreamedResponse streamedResponse =
+        await request.send().timeout(const Duration(seconds: 30));
+    final String body = await streamedResponse.stream.bytesToString();
+    if (streamedResponse.statusCode < 200 || streamedResponse.statusCode >= 300) {
+      return null;
+    }
+    final dynamic decoded = json.decode(body);
+    if (decoded is! Map<String, dynamic>) return null;
+    final dynamic data = decoded['data'];
+    final String? url = data is Map ? data['url']?.toString() : null;
+    if (url == null) return null;
+    // Backblaze URLs from this fallback are signed and expire (see
+    // B2_SIGNED_URL_TTL_SECONDS on the backend); `key` lets a caller re-sign
+    // a fresh one later via GET /uploads/resolve?key=... instead of storing
+    // a link that will go dead.
+    final String? key = data is Map ? data['key']?.toString() : null;
+    final dynamic expiresIn = data is Map ? data['expiresIn'] : null;
+    return <String, dynamic>{
+      'success': true,
+      'fileUrl': url,
+      'key': key,
+      'expiresIn': expiresIn,
+    };
   }
 
   /// UPLOAD MEDIA FILES
