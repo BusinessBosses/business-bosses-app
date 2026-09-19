@@ -2,7 +2,7 @@ name: business_bosses_v2
 description: A new Flutter project.
 publish_to: "none"
 
-version: 3.2.2+97
+version: 3.2.1+98
 
 environment:
   sdk: ">=2.19.2 <4.0.0"
