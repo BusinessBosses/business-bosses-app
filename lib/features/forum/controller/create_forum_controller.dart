@@ -152,7 +152,9 @@ class CreateForumController extends GetxController {
 
         if (response.success) {
           _forumController.addNewForum(response.data);
-          // Get.snackbar('Success', 'Post created successfully');
+          Get.snackbar('Success', response.message.isNotEmpty ? response.message : 'Post created successfully');
+          } else {
+            showSnackbar(message: response.message.isNotEmpty ? response.message : 'Failed to create post', error: true, title: 'Error');
         }
       } else {
         if (imageFileList.isNotEmpty &&
@@ -173,7 +175,9 @@ class CreateForumController extends GetxController {
           if (response.success) {
             imageFileList.clear();
             _forumController.addNewForum(response.data);
-            // Get.snackbar('Success', 'Post created successfully');
+            Get.snackbar('Success', response.message.isNotEmpty ? response.message : 'Post created successfully');
+          } else {
+            showSnackbar(message: response.message.isNotEmpty ? response.message : 'Failed to create post', error: true, title: 'Error');
           }
         }
       }

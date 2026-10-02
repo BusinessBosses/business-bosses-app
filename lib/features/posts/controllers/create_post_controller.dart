@@ -199,7 +199,9 @@ class CreatePostController extends GetxController {
               Get.back();
             }
           }
-          Get.snackbar('Success', 'Post created successfully');
+          Get.snackbar('Success', response.message.isNotEmpty ? response.message : 'Post created successfully');
+          } else {
+            showSnackbar(message: response.message.isNotEmpty ? response.message : 'Failed to create post', error: true, title: 'Error');
         }
       } else if (selectedVid != null) {
         if (await uploadFile() == null) {
@@ -239,7 +241,9 @@ class CreatePostController extends GetxController {
                 Get.back();
               }
             }
-            Get.snackbar('Success', 'Post created successfully');
+            Get.snackbar('Success', response.message.isNotEmpty ? response.message : 'Post created successfully');
+          } else {
+            showSnackbar(message: response.message.isNotEmpty ? response.message : 'Failed to create post', error: true, title: 'Error');
           }
         }
       } else {
@@ -281,7 +285,9 @@ class CreatePostController extends GetxController {
                 // Get.toNamed(Routes.home);
               }
             }
-            Get.snackbar('Success', 'Post created successfully');
+            Get.snackbar('Success', response.message.isNotEmpty ? response.message : 'Post created successfully');
+          } else {
+            showSnackbar(message: response.message.isNotEmpty ? response.message : 'Failed to create post', error: true, title: 'Error');
           }
         }
       }

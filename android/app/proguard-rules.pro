@@ -11,3 +11,18 @@
 # AndroidX Window & Sidecar rules for R8
 -dontwarn androidx.window.extensions.**
 -dontwarn androidx.window.sidecar.**
+
+# Preserve native JNI methods (prevents UnsatisfiedLinkError)
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# AndroidX DataStore & Protobuf JNI bindings
+-keep class androidx.datastore.** { *; }
+-dontwarn androidx.datastore.**
+-keep class com.google.protobuf.** { *; }
+-dontwarn com.google.protobuf.**
+
+# Firebase SDKs
+-keep class com.google.firebase.** { *; }
+-dontwarn com.google.firebase.**
