@@ -25,6 +25,7 @@ class BuyerRequestsScreen extends StatefulWidget {
   final String? filterByLocation;
   final bool showOnlyMyRequests;
   final bool showAppBar;
+  final String? title;
 
   /// When true, free (non-Pro) users see only the first [_kFreeMatchLimit]
   /// matched requests followed by an upgrade prompt; Pro users see all. Used
@@ -37,6 +38,7 @@ class BuyerRequestsScreen extends StatefulWidget {
     this.filterByLocation,
     this.showOnlyMyRequests = false,
     this.showAppBar = true,
+    this.title,
     this.gateForFreeUsers = false,
   });
 
@@ -668,10 +670,52 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
     return Scaffold(
       appBar: widget.showAppBar
           ? AppBar(
-              title: const Text('Matched Jobs'),
+              backgroundColor: Colors.white,
+              elevation: 0,
+              centerTitle: true,
+              leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+              ),
+              title: Text(
+                widget.title ?? 'Job Board',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              actions: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  child: TextButton.icon(
+                    onPressed: () => Get.to(() => const AddBuyerRequests()),
+                    icon: const Icon(Icons.add, size: 18, color: primaryColorLT),
+                    label: const Text(
+                      'Post Job',
+                      style: TextStyle(
+                        color: primaryColorLT,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             )
           : null,
       backgroundColor: backgroundColor,
+      floatingActionButton: widget.showAppBar
+          ? FloatingActionButton.extended(
+              onPressed: () => Get.to(() => const AddBuyerRequests()),
+              backgroundColor: primaryColorLT,
+              icon: const Icon(Icons.add, color: Colors.white),
+              label: const Text(
+                'Post a Job',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            )
+          : null,
       body: Obx(() {
         if (_buyerRequestController.loading.value) {
           return const Center(child: CircularProgressIndicator());

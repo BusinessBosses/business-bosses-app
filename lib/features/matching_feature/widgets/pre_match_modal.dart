@@ -36,7 +36,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
     },
     <String, dynamic>{
       'icon': LucideIcons.users,
-      'title': 'Need Work Done',
+      'title': 'I Need Customers',
       'subtitle': 'seller',
     },
     <String, dynamic>{

@@ -16,13 +16,8 @@ import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 
-import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/features/matching_feature/widgets/pre_match_modal.dart';
 import 'package:business_bosses_v2/features/partners/controllers/partners_controller.dart';
-import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
-import 'package:business_bosses_v2/features/partners/presentation/become_a_partner_screen.dart';
-import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
@@ -54,8 +49,8 @@ class MarketplaceScreen extends StatefulWidget {
   /// Tab indexes, so callers don't hard-code magic numbers.
   static const int forYouTab = 0;
   static const int marketplaceTab = 1;
-  static const int jobsTab = 2;
-  static const int dealsTab = 3;
+  static const int jobsTab = 2; // Kept for legacy route compatibility
+  static const int dealsTab = 3; // Kept for legacy route compatibility
 
   @override
   State<MarketplaceScreen> createState() => _MarketplaceScreenState();
@@ -115,11 +110,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   @override
   void initState() {
     super.initState();
-    _currentTabIndex = widget.initialIndex;
+    _currentTabIndex = widget.initialIndex < 2 ? widget.initialIndex : 0;
     _marketplaceTabController = TabController(
-      length: 4,
+      length: 2,
       vsync: this,
-      initialIndex: widget.initialIndex,
+      initialIndex: _currentTabIndex,
     );
 
     // Only enforce the minimum loader once per app session (first entry).
@@ -160,10 +155,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
             _marketController.isSearching(false);
             _marketController.clearFilter();
             _marketController.sortItems();
-          }
-
-          if (index == MarketplaceScreen.dealsTab) {
-            partnerController.selectedCategory.value = 'All';
           }
         }
 
@@ -360,13 +351,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               if (_currentTabIndex == MarketplaceScreen.marketplaceTab)
                 SliverToBoxAdapter(child: _buildFeaturedListingSlide()),
 
-              if (_currentTabIndex == MarketplaceScreen.jobsTab)
-                SliverToBoxAdapter(child: _buildJobsBanner()),
-
-              if (_currentTabIndex == MarketplaceScreen.dealsTab)
-                SliverToBoxAdapter(child: _buildDealsBanner()),
-
-              if (_currentTabIndex != MarketplaceScreen.forYouTab)
+              if (_currentTabIndex == MarketplaceScreen.marketplaceTab)
                 SliverToBoxAdapter(child: _buildCategoryChips()),
             ];
           },
@@ -377,10 +362,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               _buildForYouFeed(),
               // Tab 1: Product & service listings
               const MarketsPage(),
-              // Tab 2: Jobs / buyer requests
-              const BuyerRequestsScreen(showAppBar: false),
-              // Tab 3: Partner deals
-              const BossUpPartner(isMarketplace: true),
             ],
           ),
         ),
@@ -720,13 +701,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               tabs: const <Widget>[
                 Tab(child: _TabLabel('For you')),
                 Tab(child: _TabLabel('Marketplace')),
-                Tab(child: _TabLabel('Jobs')),
-                Tab(child: _TabLabel('Deals')),
               ],
             ),
           ),
-          // Find Match sits beside the tabs — it opens the matching flow
-          // instead of switching tabs.
+          // Find Opportunities sits beside the tabs — it opens the matching flow.
           GestureDetector(
             onTap: () {
               Get.bottomSheet(
@@ -741,13 +719,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
-                    'Find Match',
+                    'Find Opportunities',
                     style: TextStyle(
                       color: Color(0xFF5B4DFF),
                       fontWeight: FontWeight.w900,
                       fontSize: 12,
                     ),
                   ),
+                  SizedBox(width: 2),
                   Icon(Icons.chevron_right,
                       color: Color(0xFF5B4DFF), size: 14),
                 ],
@@ -774,76 +753,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     );
   }
 
-  /// Banner above the Jobs tab.
-  Widget _buildJobsBanner() {
-    return _buildActionBanner(
-      message:
-          'List work or job position and connect with active job seekers.',
-      actionLabel: 'Post a Job',
-      onTap: () => Get.to(() => AddBuyerRequests()),
-    );
-  }
-
-  /// Banner above the Deals tab.
-  Widget _buildDealsBanner() {
-    return _buildActionBanner(
-      message:
-          'Become a partner, list deals, get featured & more customers.',
-      actionLabel: 'Post a Deal',
-      onTap: () {
-        if (!_profileController.myProfile.isSubscribed) {
-          showPremiumPaywall();
-        } else {
-          Get.to(() => const BecomeaPartnerScreen());
-        }
-      },
-    );
-  }
-
-  Widget _buildActionBanner({
-    required String message,
-    required String actionLabel,
-    required VoidCallback onTap,
-  }) {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              message,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFF1E39),
-              foregroundColor: Colors.white,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            onPressed: onTap,
-            child: Text(
-              actionLabel,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   /// Category filter chips
   Widget _buildCategoryChips() {
     // We add "All" to the display categories
@@ -865,62 +774,22 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   child: Row(
                     children: displayCategories.map((String category) {
                       // Check selection
-                      // If selectedCategory is null, 'All' is selected.
-                      final int tabIndex = _marketplaceTabController.index;
-
-                      bool isSelected;
-
-                      if (tabIndex == MarketplaceScreen.marketplaceTab) {
-                        // Seller
-                        isSelected = (_marketController.selectedCategory ==
-                                    null &&
-                                category == 'All') ||
-                            (_marketController.selectedCategory == category);
-                      } else if (tabIndex == MarketplaceScreen.dealsTab) {
-                        // Partner deals
-                        isSelected =
-                            (partnerController.selectedCategory.value ==
-                                category);
-                      } else {
-                        // Buyer request
-                        isSelected = (buyerRequestController
-                                    .filterCategory.value.isEmpty &&
-                                category == 'All') ||
-                            (buyerRequestController.filterCategory.value ==
-                                category);
-                      }
+                      final bool isSelected =
+                          (_marketController.selectedCategory == null &&
+                                  category == 'All') ||
+                              (_marketController.selectedCategory == category);
 
                       return GestureDetector(
                         onTap: () {
-                          final int tabIndex = _marketplaceTabController.index;
-
                           setState(() {
-                            if (tabIndex == MarketplaceScreen.marketplaceTab) {
-                              // 🔵 SELLER LISTING (MarketController)
-
-                              if (category == 'All') {
-                                _marketController.selectedCategory = null;
-                                _marketController.isSearching(false);
-                                _marketController.clearFilter();
-                                _marketController.sortItems();
-                              } else {
-                                _marketController.loadCategory(category);
-                              }
-                            } else if (tabIndex == MarketplaceScreen.jobsTab) {
-                              // 🟢 BUYER REQUEST (BuyerRequestController)
-
-                              if (category == 'All') {
-                                buyerRequestController.filterCategory('');
-                              } else {
-                                buyerRequestController.filterCategory(category);
-                              }
-
-                              buyerRequestController.filterBuyerRequests('');
-                            } else if (tabIndex ==
-                                MarketplaceScreen.dealsTab) {
-                              // 🟡 PARTNER DEALS
-                              partnerController.selectedCategory.value =
-                                  category;
+                            // 🔵 SELLER LISTING (MarketController)
+                            if (category == 'All') {
+                              _marketController.selectedCategory = null;
+                              _marketController.isSearching(false);
+                              _marketController.clearFilter();
+                              _marketController.sortItems();
+                            } else {
+                              _marketController.loadCategory(category);
                             }
                           });
                         },

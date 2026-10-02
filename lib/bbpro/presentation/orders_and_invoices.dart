@@ -51,8 +51,10 @@ class _OrdersScreenState extends State<OrdersScreen>
   void initState() {
     super.initState();
     _mainTabController = TabController(length: 2, vsync: this);
-    _salesTabController = TabController(length: 4, vsync: this);
-    _ordersTabController = TabController(length: 4, vsync: this);
+    _salesTabController =
+        TabController(length: OrderStatus.values.length, vsync: this);
+    _ordersTabController =
+        TabController(length: OrderStatus.values.length, vsync: this);
 
     // Only load shop leads when the user actually has a BizCenter (shop).
     // Otherwise `shopController.shop!` throws and aborts initState before
@@ -118,7 +120,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                 backgroundColor,
                 Colors.amber.withValues(alpha: 0.1),
                 Colors.blue.withValues(alpha: 0.1),
-                Colors.green.withValues(alpha: 0.1)
+                Colors.green.withValues(alpha: 0.1),
+                Colors.red.withValues(alpha: 0.1),
               ],
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) {
@@ -308,7 +311,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                 backgroundColor,
                 Colors.amber.withValues(alpha: 0.1),
                 Colors.blue.withValues(alpha: 0.1),
-                Colors.green.withValues(alpha: 0.1)
+                Colors.green.withValues(alpha: 0.1),
+                Colors.red.withValues(alpha: 0.1),
               ],
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) {

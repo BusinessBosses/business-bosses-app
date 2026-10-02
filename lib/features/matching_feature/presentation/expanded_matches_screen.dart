@@ -217,7 +217,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
       case 'partner':
         return 'Partner Opportunities for you';
       case 'seller':
-        return 'Job Opportunities for you';
+        return 'Customer opportunities for you';
       case 'mentor':
         return 'Mentorship opportunities for you';
       default:

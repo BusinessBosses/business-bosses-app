@@ -184,8 +184,8 @@ class _ReachHeaderCardState extends State<ReachHeaderCard> {
                   icon: LucideIcons.bot,
                   iconColor: Colors.indigo[400]!,
                   iconBgColor: backgroundColor,
-                  title: 'Business Health Check',
-                  subtitle: 'Complete readiness score',
+                  title: 'Business Identity',
+                  subtitle: 'complete system of record',
                   value: '${aiVisibilityScore.toInt()}%',
                   onTap: () async {
                     const String url = proDatarBaseUrl;

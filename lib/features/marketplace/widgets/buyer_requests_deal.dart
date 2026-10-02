@@ -1,7 +1,7 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/requests_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/request_details_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -54,7 +54,10 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
           .toList();
 
       return GestureDetector(
-        onTap: () => Get.to(() => const MarketplaceScreen(initialIndex: MarketplaceScreen.jobsTab)),
+        onTap: () => Get.to(() => const BuyerRequestsScreen(
+              showAppBar: true,
+              title: 'Jobs',
+            )),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,

@@ -8,3 +8,6 @@
 -dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter
 -dontwarn com.stripe.android.pushProvisioning.PushProvisioningEphemeralKeyProvider
 #––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+# AndroidX Window & Sidecar rules for R8
+-dontwarn androidx.window.extensions.**
+-dontwarn androidx.window.sidecar.**

@@ -83,17 +83,20 @@ class CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
                   .map((MapEntry<int, T> entry) {
                 int index = entry.key;
                 T status = entry.value;
+                final bool isLast = index == widget.listofitems.length - 1;
+                final Color itemBg = index < widget.backgroundColor.length
+                    ? widget.backgroundColor[index]
+                    : Colors.grey.withValues(alpha: 0.1);
                 return Tab(
                   child: Padding(
-                    padding: EdgeInsets.only(right: index == 3 ? 40.0 : 0.0),
+                    padding: EdgeInsets.only(right: isLast ? 40.0 : 0.0),
                     child: Container(
                       decoration: BoxDecoration(
                         color: widget._tabController.index == index
                             ? index == 0
                                 ? Colors.black54
-                                : widget.backgroundColor[index]
-                                    .withValues(alpha: 1)
-                            : widget.backgroundColor[index],
+                                : itemBg.withValues(alpha: 1)
+                            : itemBg,
                         borderRadius: BorderRadius.circular(100),
                       ),
                       child: Padding(

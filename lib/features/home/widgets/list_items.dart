@@ -15,7 +15,6 @@ import 'package:business_bosses_v2/features/home/widgets/hero_section.dart';
 import 'package:business_bosses_v2/features/home/widgets/relevant_people_tile.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/buyer_requests_deal.dart';
-import 'package:business_bosses_v2/features/partners/widgets/deals_section.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -139,20 +138,6 @@ class _PostsWidgetState extends State<PostsWidget> {
   Widget _buildPostWidget(int postIndex) {
     List<Widget> widgets = <Widget>[];
 
-    if (postIndex == 3) {
-      widgets.add(Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(bottom: 7.0),
-            child: DealsSection(),
-          ),
-          Container(
-            height: 7,
-            color: backgroundColor,
-          ),
-        ],
-      ));
-    }
 
     if (postIndex == 5) {
       widgets.add(Column(

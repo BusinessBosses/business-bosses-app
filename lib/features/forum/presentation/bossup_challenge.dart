@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/challengeitem.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
@@ -242,8 +243,9 @@ class _BossupChallengeState extends State<BossupChallenge> {
                     return Challengeitem(
                       isJobBoard: true,
                       onTap: () {
-                        Get.to(() => const MarketplaceScreen(
-                              initialIndex: MarketplaceScreen.jobsTab,
+                        Get.to(() => const BuyerRequestsScreen(
+                              showAppBar: true,
+                              title: 'Job Board',
                             ));
                       },
                       title: 'Job Board',
