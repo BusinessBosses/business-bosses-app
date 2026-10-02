@@ -110,12 +110,15 @@ class PartnerController extends GetxController {
       File file;
       if (image.path != null && image.path!.isNotEmpty) {
         file = File(image.path!);
-      } else if (image.bytes != null) {
-        final TempFile tempFile =
-            await _writeBytesToTempFile(image.name, image.bytes!);
-        file = tempFile.file;
       } else {
-        throw Exception('Invalid image file');
+        final Uint8List bytes = await image.readAsBytes();
+        if (bytes.isNotEmpty) {
+          final TempFile tempFile =
+              await _writeBytesToTempFile(image.name, bytes);
+          file = tempFile.file;
+        } else {
+          throw Exception('Invalid image file');
+        }
       }
 
       final dynamic uploadResult = await ApiService.uploadFile(file);

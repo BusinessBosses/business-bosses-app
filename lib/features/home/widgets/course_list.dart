@@ -17,6 +17,7 @@ class CourseListState extends State<CourseList>
     with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   late PageController _pageController;
   late List<YoutubePlayerController> _controllers;
+  late List<bool> _isMuted;
   int _currentPage = 0;
   bool _isVisible = true;
 
@@ -38,24 +39,19 @@ class CourseListState extends State<CourseList>
       'kJQP7kiw5Fk',
     ];
 
+    _isMuted = List<bool>.filled(videoIds.length, true);
+
     _controllers = List<YoutubePlayerController>.generate(
       videoIds.length,
-      (int index) => YoutubePlayerController(
-        initialVideoId: videoIds[index],
-        flags: const YoutubePlayerFlags(
-          autoPlay: false,
+      (int index) => YoutubePlayerController.fromVideoId(
+        videoId: videoIds[index],
+        autoPlay: false,
+        params: const YoutubePlayerParams(
           mute: true,
-          disableDragSeek: true,
-          enableCaption: false,
-          isLive: false,
-          forceHD: false,
-          hideControls: false,
+          showControls: true,
+          showFullscreenButton: false,
         ),
-      )..addListener(() {
-          if (mounted) {
-            setState(() {});
-          }
-        }),
+      ),
     );
   }
 
@@ -64,7 +60,7 @@ class CourseListState extends State<CourseList>
     WidgetsBinding.instance.removeObserver(this);
     _pageController.dispose();
     for (YoutubePlayerController controller in _controllers) {
-      controller.dispose();
+      controller.close();
     }
     super.dispose();
   }
@@ -72,13 +68,13 @@ class CourseListState extends State<CourseList>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      _controllers[_currentPage].pause();
+      _controllers[_currentPage].pauseVideo();
     }
   }
 
   void pauseAllVideos() {
     for (YoutubePlayerController controller in _controllers) {
-      controller.pause();
+      controller.pauseVideo();
     }
   }
 
@@ -178,15 +174,6 @@ class CourseListState extends State<CourseList>
           children: <Widget>[
             YoutubePlayer(
               controller: _controllers[index],
-              showVideoProgressIndicator: true,
-              progressIndicatorColor: Colors.red,
-              progressColors: const ProgressBarColors(
-                playedColor: Colors.red,
-                handleColor: Colors.redAccent,
-              ),
-              onReady: () {
-                _controllers[index].addListener(() {});
-              },
             ),
             Positioned(
               bottom: 10,
@@ -195,18 +182,20 @@ class CourseListState extends State<CourseList>
                 children: <Widget>[
                   IconButton(
                     icon: Icon(
-                      _controllers[index].value.volume == 0
+                      _isMuted[index]
                           ? Icons.volume_off
                           : Icons.volume_up,
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      if (_controllers[index].value.volume == 0) {
+                      if (_isMuted[index]) {
                         _controllers[index].setVolume(100);
                         _controllers[index].unMute();
+                        _isMuted[index] = false;
                       } else {
                         _controllers[index].setVolume(0);
                         _controllers[index].mute();
+                        _isMuted[index] = true;
                       }
                       setState(() {});
                     },

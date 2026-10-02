@@ -40,7 +40,7 @@ class _PDFScreenState extends State<PDFScreen> {
       final http.Response response = await http.get(uri);
       if (response.statusCode == 200) {
         final Uint8List pdfData = response.bodyBytes;
-        return PdfDocument.openData(pdfData);
+        return await PdfDocument.openData(pdfData);
       } else {
         throw Exception('HTTP ${response.statusCode} — Failed to download PDF');
       }

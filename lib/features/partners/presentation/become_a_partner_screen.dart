@@ -39,13 +39,12 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
 
   /// Pick image (single)
   Future<void> _pickFile() async {
-    final FilePickerResult? result = await FilePicker.pickFiles(
-      allowMultiple: false,
+    final PlatformFile? file = await FilePicker.pickFile(
       type: FileType.image,
     );
-    if (result != null && result.files.isNotEmpty) {
+    if (file != null) {
       setState(() {
-        _attachments = <PlatformFile>[result.files.first];
+        _attachments = <PlatformFile>[file];
       });
     }
   }
@@ -329,7 +328,7 @@ class _BecomeaPartnerScreenState extends State<BecomeaPartnerScreen> {
             const SizedBox(width: 12),
             Expanded(child: Text(file.name, overflow: TextOverflow.ellipsis)),
             const SizedBox(width: 8),
-            Text('${(file.size / 1024).toStringAsFixed(1)} KB',
+            Text('${((file.lengthSync() ?? 0) / 1024).toStringAsFixed(1)} KB',
                 style: TextStyle(fontSize: 12, color: Colors.grey[400])),
             IconButton(
               icon: const Icon(Icons.close, color: Colors.red, size: 20),

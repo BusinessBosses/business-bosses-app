@@ -35,23 +35,42 @@ class MyNativeFunctions {
       bool allowMultiple = true}) async {
     MyResponse res;
     try {
-      FilePickerResult? result = await FilePicker.pickFiles(
-        type: type,
-        allowedExtensions: allowedExtension,
-        allowMultiple: true,
-      );
-      if (result != null) {
-        res = MyResponse(
-          success: true,
-          message: 'File picked',
-          data: result,
+      if (allowMultiple) {
+        final List<PlatformFile> result = await FilePicker.pickFiles(
+          type: type,
+          allowedExtensions: allowedExtension,
         );
-        return res;
+        if (result.isNotEmpty) {
+          res = MyResponse(
+            success: true,
+            message: 'File picked',
+            data: result,
+          );
+          return res;
+        } else {
+          return res = MyResponse(
+            success: true,
+            message: 'No image selected',
+          );
+        }
       } else {
-        return res = MyResponse(
-          success: true,
-          message: 'No image selected',
+        final PlatformFile? file = await FilePicker.pickFile(
+          type: type,
+          allowedExtensions: allowedExtension,
         );
+        if (file != null) {
+          res = MyResponse(
+            success: true,
+            message: 'File picked',
+            data: <PlatformFile>[file],
+          );
+          return res;
+        } else {
+          return res = MyResponse(
+            success: true,
+            message: 'No image selected',
+          );
+        }
       }
     } catch (e) {
       res = MyResponse(success: false, message: e.toString());
@@ -59,18 +78,14 @@ class MyNativeFunctions {
     }
   }
 
-  static List<File> toImageFile(FilePickerResult result) {
-    List<File> files = <File>[];
-    // ignore: unnecessary_null_comparison
-    if (result != null) {
-      List<PlatformFile> platformFiles = result.files;
-      for (PlatformFile plf in platformFiles) {
-        files.add(File(plf.path.toString()));
+  static List<File> toImageFile(List<PlatformFile> platformFiles) {
+    final List<File> files = <File>[];
+    for (PlatformFile plf in platformFiles) {
+      if (plf.path != null) {
+        files.add(File(plf.path!));
       }
-      return files;
-    } else {
-      return <File>[];
     }
+    return files;
   }
 
   static Future<MyResponse> onUrlLaunch(String urlString) async {

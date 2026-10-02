@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:file_picker/file_picker.dart';
@@ -188,23 +189,26 @@ class BuyerRequestController extends GetxController {
           } else {
             Get.snackbar('Upload failed', 'Failed to upload ${f.name}');
           }
-        } else if (f.bytes != null) {
-          final Directory temp = Directory.systemTemp;
-          final File tempFile = File(
-              '${temp.path}/${DateTime.now().millisecondsSinceEpoch}_${f.name}');
-          await tempFile.writeAsBytes(f.bytes!);
+        } else {
+          final Uint8List bytes = await f.readAsBytes();
+          if (bytes.isNotEmpty) {
+            final Directory temp = Directory.systemTemp;
+            final File tempFile = File(
+                '${temp.path}/${DateTime.now().millisecondsSinceEpoch}_${f.name}');
+            await tempFile.writeAsBytes(bytes);
 
-          final dynamic uploadResult = await ApiService.uploadFile(tempFile);
-          await tempFile.delete();
+            final dynamic uploadResult = await ApiService.uploadFile(tempFile);
+            await tempFile.delete();
 
-          if (uploadResult != null &&
-              uploadResult is Map &&
-              uploadResult['success'] == true) {
-            final String url = (uploadResult['fileUrl'])?.toString() ??
-                jsonEncode(uploadResult);
-            urls.add(url);
-          } else {
-            Get.snackbar('Upload failed', 'Failed to upload ${f.name}');
+            if (uploadResult != null &&
+                uploadResult is Map &&
+                uploadResult['success'] == true) {
+              final String url = (uploadResult['fileUrl'])?.toString() ??
+                  jsonEncode(uploadResult);
+              urls.add(url);
+            } else {
+              Get.snackbar('Upload failed', 'Failed to upload ${f.name}');
+            }
           }
         }
       } catch (e) {

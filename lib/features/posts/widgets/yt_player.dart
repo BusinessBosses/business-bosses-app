@@ -14,43 +14,32 @@ class YoutubeVideo extends StatefulWidget {
 
 class _YoutubeVideoState extends State<YoutubeVideo> {
   late YoutubePlayerController _controller;
-  final bool _isPlayerReady = false;
   late String videoId;
 
   @override
   void initState() {
     super.initState();
-    videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl)!;
-    _controller = YoutubePlayerController(
-      initialVideoId: videoId,
-      flags: const YoutubePlayerFlags(
+    videoId = YoutubePlayerController.convertUrlToId(widget.youtubeUrl) ?? '';
+    _controller = YoutubePlayerController.fromVideoId(
+      videoId: videoId,
+      autoPlay: true,
+      params: const YoutubePlayerParams(
         mute: false,
-        autoPlay: true,
-        disableDragSeek: false,
-        loop: false,
-        isLive: false,
-        forceHD: false,
-        enableCaption: true,
+        showControls: true,
+        showFullscreenButton: true,
       ),
-    )..addListener(listener);
-  }
-
-  void listener() {
-    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
-      setState(() {});
-    }
+    );
   }
 
   @override
   void deactivate() {
-    // Pauses video while navigating to the next page.
-    _controller.pause();
+    _controller.pauseVideo();
     super.deactivate();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller.close();
     super.dispose();
   }
 
@@ -85,37 +74,8 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
                         right: 8,
                       ),
                       child: YoutubePlayer(
-                        showVideoProgressIndicator: true,
-                        onEnded: (YoutubeMetaData metaData) {},
                         controller: _controller,
                         aspectRatio: 1.5,
-                        progressIndicatorColor: Colors.red,
-                        bottomActions: <Widget>[
-                          const SizedBox(width: 14.0),
-                          CurrentPosition(),
-                          const SizedBox(width: 8.0),
-                          ProgressBar(
-                            isExpanded: true,
-                            colors: const ProgressBarColors(),
-                          ),
-                          RemainingDuration(),
-                          const PlaybackSpeedButton(),
-                          IconButton(
-                            icon: Icon(
-                              orientation == Orientation.landscape
-                                  ? Icons.fullscreen_exit
-                                  : Icons.fullscreen,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              if (orientation == Orientation.landscape) {
-                                portraitModeOnly();
-                              } else {
-                                landscapeModeOnly();
-                              }
-                            },
-                          ),
-                        ],
                       ),
                     ),
                   ),

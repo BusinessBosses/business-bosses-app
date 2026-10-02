@@ -408,18 +408,19 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       children: <Widget>[
         InkWell(
           onTap: () async {
-            final FilePickerResult? result =
+            final List<PlatformFile> result =
                 await FilePicker.pickFiles(
-              allowMultiple: true,
               type: FileType.custom,
               allowedExtensions: <String>['pdf'],
             );
 
-            if (result != null) {
+            if (result.isNotEmpty) {
               setState(() {
-                for (PlatformFile file in result.files) {
+                for (PlatformFile file in result) {
                   selectedFileNames.add(file.name);
-                  selectedFilePaths.add(file.path!);
+                  if (file.path != null) {
+                    selectedFilePaths.add(file.path!);
+                  }
                 }
               });
             }

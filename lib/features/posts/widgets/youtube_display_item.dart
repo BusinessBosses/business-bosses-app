@@ -26,7 +26,7 @@ class _YoutubeDisplayState extends State<YoutubeDisplayItem> {
   @override
   void initState() {
     super.initState();
-    videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl);
+    videoId = YoutubePlayerController.convertUrlToId(widget.youtubeUrl);
     _idController = TextEditingController();
     _seekToController = TextEditingController();
     _loadThumbnail();

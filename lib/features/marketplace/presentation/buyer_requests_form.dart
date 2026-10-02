@@ -109,17 +109,16 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
   Future<void> _pickFiles() async {
     if ((_existingAttachments.length + _attachments.length) >= 5) return;
 
-    FilePickerResult? result = await FilePicker.pickFiles(
-      allowMultiple: true,
+    final List<PlatformFile> result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: <String>['png', 'jpg', 'jpeg'],
     );
 
-    if (result != null) {
+    if (result.isNotEmpty) {
       setState(() {
         final int remainingSlots =
             5 - (_existingAttachments.length + _attachments.length);
-        _attachments.addAll(result.files.take(remainingSlots));
+        _attachments.addAll(result.take(remainingSlots));
       });
     }
   }
@@ -576,7 +575,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        '${(file.size / 1024).toStringAsFixed(1)} KB',
+                        '${((file.lengthSync() ?? 0) / 1024).toStringAsFixed(1)} KB',
                         style: TextStyle(fontSize: 12, color: Colors.grey[400]),
                       ),
                       const SizedBox(width: 8),

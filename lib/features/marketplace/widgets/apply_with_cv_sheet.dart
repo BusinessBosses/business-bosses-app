@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:business_bosses_v2/features/marketplace/models/buyer_request_model.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -53,15 +54,14 @@ class _ApplyWithCvSheetState extends State<_ApplyWithCvSheet> {
   static const int _maxBytes = 10 * 1024 * 1024;
 
   Future<void> _pickCv() async {
-    final FilePickerResult? result = await FilePicker.pickFiles(
+    final PlatformFile? file = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: _allowedExtensions,
     );
 
-    if (result == null || result.files.isEmpty) return;
+    if (file == null) return;
 
-    final PlatformFile file = result.files.first;
-    if (file.size > _maxBytes) {
+    if ((file.lengthSync() ?? 0) > _maxBytes) {
       Get.snackbar('File too large', 'Please choose a CV under 10MB.');
       return;
     }
@@ -95,12 +95,15 @@ class _ApplyWithCvSheetState extends State<_ApplyWithCvSheet> {
 
       if (file.path != null && file.path!.isNotEmpty) {
         toUpload = File(file.path!);
-      } else if (file.bytes != null) {
-        final Directory temp = Directory.systemTemp;
-        toUpload = File(
-          '${temp.path}/${DateTime.now().millisecondsSinceEpoch}_${file.name}',
-        );
-        await toUpload.writeAsBytes(file.bytes!);
+      } else {
+        final Uint8List bytes = await file.readAsBytes();
+        if (bytes.isNotEmpty) {
+          final Directory temp = Directory.systemTemp;
+          toUpload = File(
+            '${temp.path}/${DateTime.now().millisecondsSinceEpoch}_${file.name}',
+          );
+          await toUpload.writeAsBytes(bytes);
+        }
       }
 
       if (toUpload == null) {
