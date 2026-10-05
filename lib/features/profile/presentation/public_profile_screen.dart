@@ -457,7 +457,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   ),
                                   if (buyerRequests.isNotEmpty)
                                     const Tab(
-                                      text: 'Jobs',
+                                      text: 'Requests',
                                     ),
                                   if (myPartners.isNotEmpty)
                                     const Tab(

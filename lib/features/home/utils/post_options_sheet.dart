@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/aipromote/ai_promote_sheet.dart';
+import 'package:business_bosses_v2/features/forum/presentation/get_featured_sheet.dart';
 import 'package:business_bosses_v2/features/home/sell_product.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/buyer_requests_form.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -34,16 +34,14 @@ class PostOptionsBottomSheet {
               ),
               const SizedBox(height: 30),
 
-              // Post with AI — the promoted option, so it leads and carries
-              // the highlighted treatment.
+              // Get featured (AI / Promoted option)
               _buildOptionItem(
                 iconData: Icons.auto_awesome,
-                iconColor: Colors.transparent,
+                iconColor: const Color(0xFFEFF6FF),
                 iconTintColor: const Color(0xFF2563EB),
-                title: 'Post with AI',
-                badge: 'Get Matched',
+                title: 'Get featured',
                 subtitle:
-                    'Get featured, get matched, and discover new opportunities faster.',
+                    'Boost your reach and discover new opportunities faster',
                 highlighted: true,
                 onTap: () {
                   Navigator.pop(sheetContext);
@@ -51,18 +49,18 @@ class PostOptionsBottomSheet {
                     context: context,
                     isScrollControlled: true,
                     backgroundColor: Colors.transparent,
-                    builder: (BuildContext _) => AIPromoteSheet(),
+                    builder: (BuildContext _) => const GetFeaturedSheet(),
                   );
                 },
               ),
               const SizedBox(height: 15),
 
-              // Sell my product or service
+              // Sell product or service
               _buildOptionItem(
                 iconData: Icons.shopping_bag_outlined,
                 iconColor: const Color(0xFFFFEBEE),
                 iconTintColor: const Color(0xFFEF4444),
-                title: 'Sell my product or service',
+                title: 'Sell product or service',
                 subtitle: 'Showcase what you offer to buyers searching right now',
                 onTap: () {
                   Navigator.pop(sheetContext);
@@ -71,14 +69,14 @@ class PostOptionsBottomSheet {
               ),
               const SizedBox(height: 15),
 
-              // Need work done
+              // Create a Request
               _buildOptionItem(
                 iconData: Icons.description_outlined,
                 iconColor: const Color(0xFFE8F5E9),
                 iconTintColor: const Color(0xFF22C55E),
-                title: 'Need work done',
+                title: 'Create a Request',
                 subtitle:
-                    'Post what you need and get matched with the right talent',
+                    'Post what you need and get matched with the right person',
                 onTap: () {
                   Navigator.pop(sheetContext);
                   Get.to(() => const AddBuyerRequests());
@@ -92,7 +90,7 @@ class PostOptionsBottomSheet {
                 iconColor: const Color(0xFFFEF3C7),
                 iconTintColor: const Color(0xFFF59E0B),
                 title: 'Start a conversation',
-                subtitle: 'Share content, updates, announcements, or discussion.',
+                subtitle: 'Ask question, share updates or discussion',
                 onTap: () {
                   Navigator.pop(sheetContext);
                   Get.toNamed(Routes.createPost);

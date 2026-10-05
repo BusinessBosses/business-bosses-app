@@ -464,7 +464,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
         children: <Widget>[
           const Expanded(
             child: Text(
-              'List work or job position and connect with active job seekers.',
+              'Request of what you need and connect with businesses or people that can help.',
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
             ),
           ),
@@ -480,7 +480,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
             ),
             onPressed: () => Get.to(() => const AddBuyerRequests()),
             child: const Text(
-              'Post a Job',
+              'Post Request',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
             ),
           ),

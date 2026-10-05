@@ -227,7 +227,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
               },
               contentPadding: EdgeInsets.zero,
               title: const TextWidget(
-                text: 'Report this job',
+                text: 'Report this request',
                 color: Colors.red,
               ),
             )
@@ -678,7 +678,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                 icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
               ),
               title: Text(
-                widget.title ?? 'Job Board',
+                widget.title ?? 'What People Are Looking For',
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -692,7 +692,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                     onPressed: () => Get.to(() => const AddBuyerRequests()),
                     icon: const Icon(Icons.add, size: 18, color: primaryColorLT),
                     label: const Text(
-                      'Post Job',
+                      'Post Request',
                       style: TextStyle(
                         color: primaryColorLT,
                         fontWeight: FontWeight.w700,
@@ -711,7 +711,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
               backgroundColor: primaryColorLT,
               icon: const Icon(Icons.add, color: Colors.white),
               label: const Text(
-                'Post a Job',
+                'Post Request',
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             )

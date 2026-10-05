@@ -201,7 +201,7 @@ class RequestDetailsSheet {
     return await Get.dialog(
       AlertDialog(
         title: const Text('Confirm Delete'),
-        content: const Text('Are you sure you want to delete this job?'),
+        content: const Text('Are you sure you want to delete this request?'),
         actions: <Widget>[
           TextButton(
             onPressed: () => Get.back(result: false),
@@ -220,7 +220,7 @@ class RequestDetailsSheet {
   }
 
   static void _shareRequest(BuyerRequestModel request) {
-    String message = 'Check out this job on Business Bosses\n'
+    String message = 'Check out this request on Business Bosses\n'
         'Title: ${request.title}\n'
         'Budget: \$${(request.budgetStart > 0 ? request.budgetStart : request.budgetEnd).toStringAsFixed(0)}\n'
         'https://vm.businessbosses.co.uk/share/post';

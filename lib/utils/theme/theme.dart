@@ -147,6 +147,7 @@ final OutlinedButtonThemeData outlinedButtonThemeData = OutlinedButtonThemeData(
 final ElevatedButtonThemeData elevatedButtonThemeData = ElevatedButtonThemeData(
   style: ElevatedButton.styleFrom(
     backgroundColor: primaryColorLT,
+    foregroundColor: Colors.white,
     textStyle: const TextStyle(color: Colors.white),
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     shape: const RoundedRectangleBorder(
@@ -244,3 +245,4 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 }
 */
+

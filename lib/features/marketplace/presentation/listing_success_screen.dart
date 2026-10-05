@@ -123,7 +123,7 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
         ),
         const SizedBox(height: 16),
         Text(
-          widget.isBuyerRequest ? 'Job Posted!' : 'Listing Created!',
+          widget.isBuyerRequest ? 'Request Posted!' : 'Listing Created!',
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -136,8 +136,8 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
           child: Text(
             widget.isBuyerRequest
                 ? hasResults
-                    ? 'Your job is now live. Here are some people who can help.'
-                    : 'Your job is now live.'
+                    ? 'Your request is now live. Here are some people who can help.'
+                    : 'Your request is now live.'
                 : hasResults
                     ? 'Your listing is now live. Here are some buyers looking for what you offer.'
                     : 'Your listing is now live.',

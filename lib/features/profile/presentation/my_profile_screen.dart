@@ -326,7 +326,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   Text('Posts', style: TextStyle(fontWeight: FontWeight.w700))),
           if (homeController.myRequests.isNotEmpty)
             const Tab(
-              child: Text('Jobs',
+              child: Text('Requests',
                   style: TextStyle(fontWeight: FontWeight.w700)),
             ),
           if (partnerController.myPartners.isNotEmpty)
@@ -665,7 +665,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           ),
                         ),
                         child: const Text(
-                          'Edit Job',
+                          'Edit Request',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),
@@ -731,7 +731,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           ),
                         ),
                         child: const Text(
-                          'Delete Job',
+                          'Delete Request',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),

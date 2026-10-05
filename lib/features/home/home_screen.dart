@@ -12,7 +12,7 @@ import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:upgrader/upgrader.dart';
+import 'package:business_bosses_v2/services/app_update_service.dart';
 
 import '../chat/controllers/chat_controller.dart';
 import '../chat/models/my_message.dart';
@@ -58,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen>
       if (marketController.marketDescription.isEmpty) {
         marketController.initDescription();
       }
+      AppUpdateService.checkUpdate(context);
     });
 
     _scrollController.addListener(_onScrollChanged);
@@ -129,11 +130,7 @@ class _HomeScreenState extends State<HomeScreen>
           }
         });
       },
-      child: UpgradeAlert(
-        upgrader: Upgrader(
-          durationUntilAlertAgain: const Duration(minutes: 1),
-        ),
-        child: Obx(() {
+      child: Obx(() {
           bool shouldDisableDrawer = homeController.loading.value ||
               homeController.noConnection.value ||
               homeController.error.value;
@@ -213,8 +210,7 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           );
         }),
-      ),
-    );
+      );
   }
 
   Widget _buildMainContent() {

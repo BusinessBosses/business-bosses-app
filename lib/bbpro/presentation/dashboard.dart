@@ -307,7 +307,7 @@ class _DashboardState extends State<Dashboard> {
                               child: Row(
                                 children: const <Widget>[
                                   Text(
-                                    'Check Business Health',
+                                    'Business Identity',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700,

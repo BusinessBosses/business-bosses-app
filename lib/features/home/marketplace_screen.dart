@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
 import 'package:business_bosses_v2/bbpro/presentation/orders_and_invoices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:upgrader/upgrader.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
@@ -291,11 +290,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               _profileController.myProfile.unReadCount != null &&
                   _profileController.myProfile.unReadCount! > 0,
         ),
-        child: UpgradeAlert(
-          upgrader: Upgrader(
-            durationUntilAlertAgain: const Duration(minutes: 1),
-          ),
-          child: Scaffold(
+        child: Scaffold(
             backgroundColor: backgroundColor,
             body: Obx(() {
               if (homeController.loading.value || !_minLoadElapsed) {
@@ -309,9 +304,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               }
             }),
           ),
-        ),
-      );
-    });
+        );
+      });
   }
 
   Widget _buildMainContent() {
@@ -691,10 +685,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               labelColor: Colors.black,
               unselectedLabelColor: Color(0xFF595959),
               labelStyle:
-                  const TextStyle(fontWeight: FontWeight.w900, fontSize: 12),
+                  const TextStyle(fontWeight: FontWeight.w900, fontSize: 18),
               unselectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
               indicatorColor: primaryColorLT,
               indicatorWeight: 3,
@@ -723,12 +717,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     style: TextStyle(
                       color: Color(0xFF5B4DFF),
                       fontWeight: FontWeight.w900,
-                      fontSize: 12,
+                      fontSize: 17,
                     ),
                   ),
                   SizedBox(width: 2),
                   Icon(Icons.chevron_right,
-                      color: Color(0xFF5B4DFF), size: 14),
+                      color: Color(0xFF5B4DFF), size: 20),
                 ],
               ),
             ),

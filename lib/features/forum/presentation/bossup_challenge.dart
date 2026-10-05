@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/features/forum/presentation/all_learning_post
 import 'package:business_bosses_v2/features/partners/presentation/boss_up_partner.dart';
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/utils/safe_url_launcher.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -68,18 +69,33 @@ class _BossupChallengeState extends State<BossupChallenge> {
         actions: widget.ishome == true
             ? null
             : <Widget>[
-                // Connect with people
+                // Connect with people (Network)
                 Padding(
-                  padding: const EdgeInsets.only(right: 12.0, top: 8, bottom: 8),
+                  padding: const EdgeInsets.only(right: 12.0, top: 4, bottom: 2),
                   child: GestureDetector(
                     onTap: () {
                       Get.toNamed(Routes.completesearchingscreen);
                     },
-                    child: CircleAvatar(
-                      radius: 16,
-                      backgroundColor: backgroundColor,
-                      child: SvgPicture.asset('assets/svgs/collaborator.svg',
-                          height: 15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundColor: backgroundColor,
+                          child: SvgPicture.asset('assets/svgs/collaborator.svg',
+                              height: 14),
+                        ),
+                        const SizedBox(height: 2),
+                        const Text(
+                          'Network',
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -148,9 +164,9 @@ class _BossupChallengeState extends State<BossupChallenge> {
                 scrollDirection:
                     widget.ishome! == true ? Axis.horizontal : Axis.vertical,
 
-                // Challenges + Marketplace, Job Board, Events, Crowdfund,
-                // Mentor, Partner
-                itemCount: controller.categories.length + 6,
+                // Challenges + Marketplace, Events, Job Board, Magazine,
+                // Partner Deals, Learning, Crowdfund
+                itemCount: controller.categories.length + 7,
 
                 itemBuilder: (BuildContext context, int index) {
                   if (index < controller.categories.length) {
@@ -223,10 +239,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                     );
                   }
 
-                  // REMOVED: Ambassador challenge block
-
-                  // Marketplace keeps a home in Boss Up so users who knew it as
-                  // a separate section can still find it.
+                  // Marketplace
                   else if (index == controller.categories.length) {
                     return Challengeitem(
                       isMarketplace: true,
@@ -239,7 +252,21 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       description: 'List or find product and services',
                       imageurl: 'assets/images/marketplace.png',
                     );
-                  } else if (index == controller.categories.length + 1) {
+                  }
+                  // Events
+                  else if (index == controller.categories.length + 1) {
+                    return Challengeitem(
+                      isEvents: true,
+                      onTap: () {
+                        Get.toNamed(Routes.liveEvents);
+                      },
+                      title: 'Events',
+                      description: 'Join or share events online & in person',
+                      imageurl: 'assets/images/live_event.png',
+                    );
+                  }
+                  // Job Board
+                  else if (index == controller.categories.length + 2) {
                     return Challengeitem(
                       isJobBoard: true,
                       onTap: () {
@@ -252,30 +279,34 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       description: 'Find work or hire the best talent',
                       imageurl: 'assets/images/job_board.png',
                     );
-                  } else if (index == controller.categories.length + 2) {
+                  }
+                  // Business Bosses Magazine (Bold Ideas)
+                  else if (index == controller.categories.length + 3) {
                     return Challengeitem(
-                      isEvents: true,
+                      isMagazine: true,
                       onTap: () {
-                        Get.toNamed(Routes.liveEvents);
+                        openUrl(Uri.parse('https://businessbosses.co.uk/magazine'));
                       },
-                      title: 'Events',
-                      description: 'Join or share events online & in person',
-                      imageurl: 'assets/images/live_event.png',
+                      title: 'Business Bosses Magazine',
+                      description: 'For visionary leaders and bold builders',
                     );
-                  } else if (index == controller.categories.length + 3) {
+                  }
+                  // Partner's Deals
+                  else if (index == controller.categories.length + 4) {
                     return Challengeitem(
-                      isCrowdfund: true,
+                      isPartner: true,
                       onTap: () {
-                        Get.to(() => const DonationsPage(
-                              ishome: false,
-                            ));
+                        Get.to(() => BossUpPartner());
                       },
-                      description: 'Share your project to get funding support',
-                      iscustom: true,
-                      title: 'Crowdfund',
-                      imageurl: 'assets/images/donationpic.png',
+                      title: 'Partner\'s Deals',
+                      description:
+                          'Discover & list deals to get more custom...',
+                      imageurl:
+                          'https://images.pexels.com/photos/5520322/pexels-photo-5520322.jpeg',
                     );
-                  } else if (index == controller.categories.length + 4) {
+                  }
+                  // Learning (Bottom 2 Left)
+                  else if (index == controller.categories.length + 5) {
                     return Challengeitem(
                       isMentor: true,
                       onTap: () {
@@ -287,17 +318,20 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       imageurl:
                           'https://images.pexels.com/photos/247819/pexels-photo-247819.jpeg',
                     );
-                  } else {
+                  }
+                  // Funding / Crowdfund (Bottom 2 Right)
+                  else {
                     return Challengeitem(
-                      isPartner: true,
+                      isCrowdfund: true,
                       onTap: () {
-                        Get.to(() => BossUpPartner());
+                        Get.to(() => const DonationsPage(
+                              ishome: false,
+                            ));
                       },
-                      title: 'Partner\'s Deals',
-                      description:
-                          'Discover & list deals to get more customers.',
-                      imageurl:
-                          'https://images.pexels.com/photos/5520322/pexels-photo-5520322.jpeg',
+                      description: 'Share your project to get funding support',
+                      iscustom: true,
+                      title: 'Crowdfund',
+                      imageurl: 'assets/images/donationpic.png',
                     );
                   }
                 },

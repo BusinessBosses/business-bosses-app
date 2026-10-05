@@ -25,8 +25,8 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
   String myLabel = '';
   String theirLabel = '';
   if (rawMatchType == 'seller') {
-    myLabel = 'I Need Customers';
-    theirLabel = 'Needs Customers';
+    myLabel = 'I Need Customers/Clients';
+    theirLabel = 'Needs Customers/Clients';
   } else if (rawMatchType == 'investor') {
     myLabel = 'I Need Backers / Funding';
     theirLabel = 'Needs Backers / Funding';

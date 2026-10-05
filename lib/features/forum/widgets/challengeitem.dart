@@ -18,6 +18,7 @@ class Challengeitem extends StatelessWidget {
   final bool? isEvents;
   final bool? isMarketplace;
   final bool? isJobBoard;
+  final bool? isMagazine;
 
   const Challengeitem({
     super.key,
@@ -35,6 +36,7 @@ class Challengeitem extends StatelessWidget {
     this.isEvents,
     this.isMarketplace,
     this.isJobBoard,
+    this.isMagazine,
   });
 
   @override
@@ -55,7 +57,7 @@ class Challengeitem extends StatelessWidget {
             // ✅ Image container
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: _buildImage(imageurl),
+              child: isMagazine == true ? _buildMagazineBanner() : _buildImage(imageurl),
             ),
 
             // ✅ Description or challenge info
@@ -130,19 +132,21 @@ class Challengeitem extends StatelessWidget {
             child: OutlinedButton(
               onPressed: onTap,
               child: Text(
-                isPartner == true
-                    ? 'Partners Deals'
-                    : isCrowdfund == true
-                        ? 'Fund Project'
-                        : isMentor == true
-                            ? 'Start Learning'
-                            : isEvents == true
-                                ? 'Live Events'
-                                : isMarketplace == true
-                                    ? 'Buy & Sell'
-                                    : isJobBoard == true
-                                        ? 'Job Board'
-                                        : 'Enter',
+                isMagazine == true
+                    ? 'Bold Ideas'
+                    : isPartner == true
+                        ? 'Partners Deals'
+                        : isCrowdfund == true
+                            ? 'Crowdfund'
+                            : isMentor == true
+                                ? 'Learning'
+                                : isEvents == true
+                                    ? 'Live Events'
+                                    : isMarketplace == true
+                                        ? 'Buy & Sell'
+                                        : isJobBoard == true
+                                            ? 'Job Board'
+                                            : 'Enter',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,
@@ -153,6 +157,53 @@ class Challengeitem extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMagazineBanner() {
+    return Container(
+      height: 86,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      color: const Color(0xFF1A1A1A),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const <Widget>[
+          Text(
+            'BUSINESS BOSSES MAGAZINE',
+            style: TextStyle(
+              color: Color(0xFFFACC15),
+              fontSize: 8,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.5,
+            ),
+          ),
+          SizedBox(height: 3),
+          Text(
+            'Tell your story in the next issue',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 11,
+              fontWeight: FontWeight.w900,
+              height: 1.1,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 3),
+          Text(
+            "Founder profiles, The Next Big Idea and Founder's Playbook.",
+            style: TextStyle(
+              color: Color(0xFF94A3B8),
+              fontSize: 7.5,
+              fontWeight: FontWeight.w500,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

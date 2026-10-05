@@ -160,7 +160,7 @@ class _ApplyWithCvSheetState extends State<_ApplyWithCvSheet> {
           ),
           const SizedBox(height: 20),
           const Text(
-            'Apply for this job',
+            'Apply for this request',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
@@ -274,7 +274,7 @@ class _ApplyWithCvSheetState extends State<_ApplyWithCvSheet> {
           const SizedBox(height: 8),
           const Center(
             child: Text(
-              'This opens a chat with the job poster.',
+              'This opens a chat with the request poster.',
               style: TextStyle(fontSize: 11, color: Colors.black54),
             ),
           ),

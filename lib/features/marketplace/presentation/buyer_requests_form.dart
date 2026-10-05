@@ -42,9 +42,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
 
   String country = '';
   String _selectedCategory = '';
-  /// The picker was dropped from the job form, but the API still expects a
-  /// request_type, so every job posts as a service-provider request.
-  static const String _requestType = 'I need a service provider';
+  String _requestType = 'I need customers';
   DateTime? _selectedDeadline;
   final List<PlatformFile> _attachments = <PlatformFile>[];
   List<String> _existingAttachments = <String>[];
@@ -221,15 +219,15 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const <Widget>[
             Text(
-              'Post a Job',
+              'Create a Request',
               style: TextStyle(
                 color: textColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 3),
             Text(
-              'Get your work done faster, with the best talent.',
+              'Get Matched with Suppliers or Freelancers',
               style: TextStyle(
                 color: textColor,
                 fontSize: 12,
@@ -253,20 +251,40 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 const SizedBox(height: 0),
+                CustomDropdownWidget(
+                  caption: 'What are you looking for?',
+                  hintText: 'Select option',
+                  items: const <String>[
+                    '📦 Buy products (Find supplies, products, stock or equipment)',
+                    '👤 Hire Someone (Find freelancers, professional or service providers)',
+                  ],
+                  iconName: 'assets/svgs/dropdown.svg',
+                  initialValue: '📦 Buy products (Find supplies, products, stock or equipment)',
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      if (newValue != null && newValue.contains('Hire')) {
+                        _requestType = 'I need a service provider';
+                        _selectedCategory = 'Business Services & Consulting';
+                      } else {
+                        _requestType = 'I need customers';
+                      }
+                    });
+                  },
+                ),
                 CustomEditText(
-                  caption: 'Job Title *',
-                  maxLength: 30,
-                  hintText: 'Enter the name of the job or task',
+                  caption: 'Request name *',
+                  maxLength: 50,
+                  hintText: 'Enter the name of what you are looking for',
                   controller: _titleController,
                   validator: (String? value) =>
                       value == null || value.trim().isEmpty
-                          ? 'Title is required'
+                          ? 'Request name is required'
                           : null,
                 ),
                 CustomEditText(
-                  caption: 'Job Description *',
+                  caption: 'Description *',
                   hintText:
-                      'Enter the job description, qualification or skills required for the job',
+                      'Tell us more details about what you\'re looking for...',
                   controller: _descriptionController,
                   maxLength: 300,
                   validator: (String? value) => value == null || value.isEmpty
@@ -367,47 +385,44 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                     ),
                   ),
                   children: <Widget>[
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          _buildLabel('Budget (optional)', LucideIcons.dollarSign),
+                          const SizedBox(height: 8),
+                          Row(
                             children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    _buildLabel('Budget (optional)',
-                                        LucideIcons.dollarSign),
-                                    const SizedBox(height: 10),
-                                  ],
+                              Expanded(
+                                child: CustomEditText(
+                                  padding: 0,
+                                  currencycontroller: currencyController,
+                                  caption: 'Starting Price',
+                                  iscurrencyfield: true,
+                                  maxLength: 15,
+                                  hintText: 'Enter price',
+                                  controller: _startPriceController,
+                                  inputType: TextInputType.number,
                                 ),
                               ),
-                              Row(
-                                children: <Widget>[
-                                  const SizedBox(width: 5),
-                                  Expanded(
-                                    child: CustomEditText(
-                                      padding: 5,
-                                      currencycontroller: currencyController,
-                                      caption: 'Budget',
-                                      iscurrencyfield: true,
-                                      maxLength: 15,
-                                      hintText: 'Enter amount',
-                                      controller: _startPriceController,
-                                      inputType: TextInputType.number,
-                                    ),
-                                  ),
-                                ],
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: CustomEditText(
+                                  padding: 0,
+                                  currencycontroller: currencyController,
+                                  caption: 'Ending Price',
+                                  iscurrencyfield: true,
+                                  maxLength: 15,
+                                  hintText: 'Enter price',
+                                  controller: _endPriceController,
+                                  inputType: TextInputType.number,
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                      ],
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Column(
@@ -425,7 +440,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                             padding: 15,
                             textpadding: 15,
                             hashint: true,
-                            caption: 'When do you need applications by?',
+                            caption: 'When do you need responses by?',
                             iconName: 'assets/svgs/dropdown.svg',
                             text: _selectedDeadline == null
                                 ? 'Select date'
@@ -440,8 +455,6 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-
-                  /// ONLY OBSERVING THIS PART
                   child: Obx(() {
                     return CustomButton(
                       buttonType: ButtonType.elevated,
@@ -450,8 +463,8 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                       onPressed: _handleSubmit,
                       isProcessing: buyerRequestController.loading.value,
                       label: widget.request == null
-                          ? 'Post Job'
-                          : 'Edit Job',
+                          ? 'Post Request'
+                          : 'Edit Request',
                     );
                   }),
                 ),

@@ -17,7 +17,7 @@ class BuyerRequestDealsWidget extends StatefulWidget {
 
   const BuyerRequestDealsWidget({
     super.key,
-    this.title = 'Jobs',
+    this.title = 'What People Are Looking For',
     this.isHome = false,
   });
 
@@ -56,7 +56,7 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
       return GestureDetector(
         onTap: () => Get.to(() => const BuyerRequestsScreen(
               showAppBar: true,
-              title: 'Jobs',
+              title: 'What People Are Looking For',
             )),
         child: Container(
           decoration: BoxDecoration(

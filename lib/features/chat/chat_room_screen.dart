@@ -372,7 +372,7 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                   ),
                   const SizedBox(width: 8),
                   const Text(
-                    'Job Application',
+                    'Request Application',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,

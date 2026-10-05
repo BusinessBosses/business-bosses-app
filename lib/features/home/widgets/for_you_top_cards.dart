@@ -9,8 +9,8 @@ import 'package:business_bosses_v2/features/forum/presentation/create_bossup_scr
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/partners/widgets/deals_section.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/forum/presentation/get_featured_sheet.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -58,33 +58,7 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
         : Get.put(ChallengeController());
   }
 
-  Future<void> _connectToUser(UserModel boss) async {
-    final bool isConnected = _profileController.myProfile.connecteds != null &&
-        _profileController.myProfile.connecteds!.contains(boss.uid);
 
-    _profileController.updateConnections(boss.uid);
-    setState(() {});
-
-    if (!isConnected) {
-      await ApiService.post(
-        path: 'connection/connect',
-        body: <String, dynamic>{
-          'userId': _profileController.myProfile.uid,
-          'connectedId': boss.uid,
-          'timestamp': DateTime.now().millisecondsSinceEpoch,
-        },
-      );
-    } else {
-      await ApiService.post(
-        path: 'connection/disconnect',
-        body: <String, dynamic>{
-          'userId': _profileController.myProfile.uid,
-          'connectedId': boss.uid,
-          'timestamp': DateTime.now().millisecondsSinceEpoch,
-        },
-      );
-    }
-  }
 
   void _enterChallenge(BuildContext context) {
     if (_challengeController.categories.isEmpty) return;
@@ -122,17 +96,14 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
       builder: (HomeController homeController) {
         final UserModel? boss = homeController.bossOfTheWeek;
         final bool hasBoss = boss != null && boss.uid.isNotEmpty;
-        final bool isFollowing = hasBoss &&
-            _profileController.myProfile.connecteds != null &&
-            _profileController.myProfile.connecteds!.contains(boss.uid);
 
         return Container(
           color: backgroundColor,
-          padding: const EdgeInsets.fromLTRB(15, 8, 15, 4),
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
           child: Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: const Color(0xFFF2F2F4),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
@@ -144,8 +115,8 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                   child: Row(
                     children: <Widget>[
                       Container(
-                        width: 24.0,
-                        height: 24.0,
+                        width: 26.0,
+                        height: 26.0,
                         clipBehavior: Clip.antiAlias,
                         decoration: const BoxDecoration(
                           color: Colors.transparent,
@@ -153,8 +124,8 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                         ),
                         child: Image.asset(
                           'assets/images/app_logo_2.png',
-                          height: 24,
-                          width: 24,
+                          height: 26,
+                          width: 26,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -162,20 +133,20 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                         child: Text(
                           'Boss of The Week',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 17,
                             fontWeight: FontWeight.w800,
-                            color: Colors.black,
+                            color: Colors.black87,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       const Icon(LucideIcons.chevronRight,
-                          size: 18, color: Colors.black54),
+                          size: 20, color: Colors.black54),
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
 
                 // Boss Info row: Avatar + Name & Bio
                 GestureDetector(
@@ -190,19 +161,19 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                       if (hasBoss)
                         UserAvatarWithBadge(
                           user: boss.copyWith(isRanked: true),
-                          height: 48,
-                          width: 48,
-                          radius: 48,
-                          avatarSize: 18,
+                          height: 54,
+                          width: 54,
+                          radius: 54,
+                          avatarSize: 20,
                         )
                       else
                         const CircleAvatar(
-                          radius: 24,
-                          backgroundColor: Color(0xFFF3F4F6),
+                          radius: 27,
+                          backgroundColor: Color(0xFFE5E7EB),
                           child: Icon(Icons.person,
-                              size: 24, color: Colors.black38),
+                              size: 28, color: Colors.black38),
                         ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,21 +188,22 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                                                 .isEmpty
                                             ? '—'
                                             : (boss.name ?? boss.username))
-                                        : '—',
+                                        : 'MOSES MUTUA',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.w800,
                                       color: Colors.black,
+                                      letterSpacing: 0.2,
                                     ),
                                   ),
                                 ),
                                 if (boss?.isSubscribed == true) ...<Widget>[
-                                  const SizedBox(width: 5),
+                                  const SizedBox(width: 6),
                                   SvgPicture.asset(
                                     'assets/svgs/premiumbadge.svg',
-                                    height: 11,
+                                    height: 13,
                                     colorFilter: const ColorFilter.mode(
                                       primaryColorLT,
                                       BlendMode.srcIn,
@@ -240,15 +212,17 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                                 ],
                               ],
                             ),
-                            const SizedBox(height: 2),
+                            const SizedBox(height: 3),
                             Text(
-                              boss?.bio ?? '',
+                              boss?.bio != null && boss!.bio!.trim().isNotEmpty
+                                  ? boss.bio!
+                                  : 'marketing shoes and more',
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 11,
+                                fontSize: 13,
                                 color: Colors.black54,
-                                height: 1.25,
+                                height: 1.2,
                               ),
                             ),
                           ],
@@ -257,63 +231,49 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
 
-                // Action Buttons row: Follow / Following + "Get Featured & Boost Reach"
+                // Action Buttons row: Boost Reach (white pill) + Get Featured (red pill)
                 Row(
                   children: <Widget>[
-                    // Follow button
+                    // Boost Reach button (replaces Follow button area)
                     Expanded(
-                      flex: 3,
+                      flex: 4,
                       child: SizedBox(
-                        height: 36,
+                        height: 42,
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: primaryColorLT,
                             side: const BorderSide(
-                              color: Color(0xFFFECACA),
-                              width: 1.2,
+                              color: Colors.transparent,
+                              width: 0,
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(22),
                             ),
                           ),
-                          onPressed: hasBoss ? () => _connectToUser(boss) : null,
-                          child: FittedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  isFollowing
-                                      ? LucideIcons.check
-                                      : LucideIcons.userPlus,
-                                  size: 14,
-                                  color: primaryColorLT,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  isFollowing ? 'Following' : 'Follow',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 12,
-                                    color: primaryColorLT,
-                                  ),
-                                ),
-                              ],
+                          onPressed: () => _enterChallenge(context),
+                          child: const Text(
+                            'Boost Reach',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 13,
+                              color: primaryColorLT,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 10),
 
-                    // Get Featured & Boost Reach button
+                    // + Get Featured button (solid red pill)
                     Expanded(
                       flex: 5,
                       child: SizedBox(
-                        height: 36,
+                        height: 42,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: primaryColorLT,
@@ -321,27 +281,32 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(22),
                             ),
                           ),
-                          onPressed: () => _enterChallenge(context),
-                          child: const FittedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(LucideIcons.plus,
-                                    size: 15, color: Colors.white),
-                                SizedBox(width: 4),
-                                Text(
-                                  'Get Featured & Boost Reach',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                  ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (BuildContext _) => const GetFeaturedSheet(),
+                            );
+                          },
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(LucideIcons.plus,
+                                  size: 16, color: Colors.white),
+                              SizedBox(width: 4),
+                              Text(
+                                'Get Featured',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 14,
+                                  color: Colors.white,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
