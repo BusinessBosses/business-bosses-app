@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/user_avatar_with_badge.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
@@ -8,7 +7,6 @@ import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/partners/widgets/deals_section.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/get_featured_sheet.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -47,7 +45,6 @@ class _BossOfTheWeekCard extends StatefulWidget {
 }
 
 class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
-  final ProfileController _profileController = Get.find<ProfileController>();
   late final ChallengeController _challengeController;
 
   @override
@@ -60,35 +57,7 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
 
 
 
-  void _enterChallenge(BuildContext context) {
-    if (_challengeController.categories.isEmpty) return;
-    final Industry industry = _challengeController.categories[0];
 
-    final int now = DateTime.now().millisecondsSinceEpoch;
-    final int previousStamp =
-        _profileController.myProfile.bossOfTheWeekTimeStamp ?? 0;
-
-    if ((previousStamp + 1209600000) > now &&
-        industry.industryId == ForYouTopCards.bossUpChallengeId) {
-      showSnackbar(
-        message:
-            'You may have posted in Boss Up Challenge in the past 12 weeks. You can only post once in 12 weeks.',
-        error: true,
-      );
-      return;
-    }
-
-    Get.to(
-      () => CreateBossUpScreen(industryModel: industry),
-      arguments: <String, Object?>{
-        'isBossUp': true,
-        'industryId': industry.industryId,
-      },
-      binding: BindingsBuilder<CreateBossUpController>.put(
-        () => CreateBossUpController(),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,22 +125,22 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                     }
                   },
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       if (hasBoss)
                         UserAvatarWithBadge(
                           user: boss.copyWith(isRanked: true),
-                          height: 54,
-                          width: 54,
-                          radius: 54,
-                          avatarSize: 20,
+                          height: 58,
+                          width: 58,
+                          radius: 58,
+                          avatarSize: 22,
                         )
                       else
                         const CircleAvatar(
-                          radius: 27,
+                          radius: 29,
                           backgroundColor: Color(0xFFE5E7EB),
                           child: Icon(Icons.person,
-                              size: 28, color: Colors.black38),
+                              size: 30, color: Colors.black38),
                         ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -193,8 +162,8 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       fontSize: 16,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
                                       letterSpacing: 0.2,
                                     ),
                                   ),
@@ -203,7 +172,7 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                                   const SizedBox(width: 6),
                                   SvgPicture.asset(
                                     'assets/svgs/premiumbadge.svg',
-                                    height: 13,
+                                    height: 14,
                                     colorFilter: const ColorFilter.mode(
                                       primaryColorLT,
                                       BlendMode.srcIn,
@@ -212,7 +181,7 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                                 ],
                               ],
                             ),
-                            const SizedBox(height: 3),
+                            const SizedBox(height: 2),
                             Text(
                               boss?.bio != null && boss!.bio!.trim().isNotEmpty
                                   ? boss.bio!
@@ -220,8 +189,8 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 13,
-                                color: Colors.black54,
+                                fontSize: 14,
+                                color: Color(0xFF666666),
                                 height: 1.2,
                               ),
                             ),
@@ -231,7 +200,7 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
 
                 // Action Buttons row: Boost Reach (white pill) + Get Featured (red pill)
                 Row(
@@ -255,7 +224,23 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                               borderRadius: BorderRadius.circular(22),
                             ),
                           ),
-                          onPressed: () => _enterChallenge(context),
+                          onPressed: () {
+                            if (_challengeController.categories.isNotEmpty) {
+                              final Industry industry = _challengeController.categories[0];
+                              Get.to(
+                                () => CreateBossUpScreen(industryModel: industry),
+                                arguments: <String, Object?>{
+                                  'isBossUp': true,
+                                  'industryId': industry.industryId,
+                                },
+                                binding: BindingsBuilder<CreateBossUpController>.put(
+                                  () => CreateBossUpController(),
+                                ),
+                              );
+                            } else {
+                              Get.to(() => const BossupChallenge(ishome: false));
+                            }
+                          },
                           child: const Text(
                             'Boost Reach',
                             style: TextStyle(

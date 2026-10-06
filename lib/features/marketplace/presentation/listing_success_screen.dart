@@ -28,6 +28,8 @@ class ListingSuccessScreen extends StatefulWidget {
   /// "Listing Created!" is followed by the listing being nowhere to be found.
   final bool isActive;
 
+  final bool isFeatureApplication;
+
   const ListingSuccessScreen({
     super.key,
     required this.isBuyerRequest,
@@ -36,6 +38,7 @@ class ListingSuccessScreen extends StatefulWidget {
     this.productId,
     this.serviceId,
     this.isActive = true,
+    this.isFeatureApplication = false,
   });
 
   @override
@@ -123,7 +126,11 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
         ),
         const SizedBox(height: 16),
         Text(
-          widget.isBuyerRequest ? 'Request Posted!' : 'Listing Created!',
+          widget.isFeatureApplication
+              ? 'Application Received!'
+              : widget.isBuyerRequest
+                  ? 'Request Posted!'
+                  : 'Listing Created!',
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -134,13 +141,15 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Text(
-            widget.isBuyerRequest
-                ? hasResults
-                    ? 'Your request is now live. Here are some people who can help.'
-                    : 'Your request is now live.'
-                : hasResults
-                    ? 'Your listing is now live. Here are some buyers looking for what you offer.'
-                    : 'Your listing is now live.',
+            widget.isFeatureApplication
+                ? 'Your feature application has been received. Our editors will review your story and contact you.'
+                : widget.isBuyerRequest
+                    ? hasResults
+                        ? 'Your request is now live. Here are some people who can help.'
+                        : 'Your request is now live.'
+                    : hasResults
+                        ? 'Your listing is now live. Here are some buyers looking for what you offer.'
+                        : 'Your listing is now live.',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: textColor.withValues(alpha: 0.6),
@@ -157,6 +166,7 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
   /// grid is filtered by the browsing location, so a listing posted for another
   /// location won't be in the default view — that is expected, not a failure.
   Widget _buildVisibilityNote() {
+    if (widget.isFeatureApplication) return const SizedBox.shrink();
     final bool isHidden = !widget.isBuyerRequest && !widget.isActive;
     final String location = widget.location.trim();
 
@@ -216,9 +226,11 @@ class _ListingSuccessScreenState extends State<ListingSuccessScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              widget.isBuyerRequest
-                  ? 'We’ll notify you when an applicant is found'
-                  : 'We’ll notify you when a buyer is found',
+              widget.isFeatureApplication
+                  ? 'We’ll notify you when your story is selected'
+                  : widget.isBuyerRequest
+                      ? 'We’ll notify you when an applicant is found'
+                      : 'We’ll notify you when a buyer is found',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,

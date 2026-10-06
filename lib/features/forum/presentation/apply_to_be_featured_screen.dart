@@ -96,6 +96,7 @@ class _ApplyToBeFeaturedScreenState extends State<ApplyToBeFeaturedScreen> {
         showSnackbar(message: 'Feature application submitted successfully!');
         Get.to(() => const ListingSuccessScreen(
               isBuyerRequest: false,
+              isFeatureApplication: true,
               industry: 'Magazine Feature',
               location: 'Digital Magazine',
             ));
