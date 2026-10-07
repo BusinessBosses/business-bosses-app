@@ -670,6 +670,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         ),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
             child: TabBar(
@@ -708,9 +709,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               );
             },
             child: const Padding(
-              padding: EdgeInsets.only(left: 6, right: 12),
+              padding: EdgeInsets.only(left: 6, right: 12, bottom: 4),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
                     'Find Opportunities',
