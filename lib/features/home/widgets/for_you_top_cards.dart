@@ -1,11 +1,9 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/user_avatar_with_badge.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
-import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
-import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/partners/widgets/deals_section.dart';
 import 'package:business_bosses_v2/features/forum/presentation/get_featured_sheet.dart';
