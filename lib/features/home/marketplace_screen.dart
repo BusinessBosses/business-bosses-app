@@ -686,10 +686,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               labelColor: Colors.black,
               unselectedLabelColor: Color(0xFF595959),
               labelStyle:
-                  const TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
+                  const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
               unselectedLabelStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 15,
+                fontSize: 16,
               ),
               indicatorColor: primaryColorLT,
               indicatorWeight: 3,
@@ -719,7 +719,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     style: TextStyle(
                       color: Color(0xFF5B4DFF),
                       fontWeight: FontWeight.w900,
-                      fontSize: 15,
+                      fontSize: 16,
                     ),
                   ),
                   SizedBox(width: 2),
