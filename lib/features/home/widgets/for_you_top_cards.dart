@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/forum/controller/challenge_controlle
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/partners/widgets/deals_section.dart';
@@ -80,7 +81,17 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
               children: <Widget>[
                 // Header row: Logo + "Boss of The Week" + Chevron
                 GestureDetector(
-                  onTap: () => Get.to(() => const BossupChallenge(ishome: false)),
+                  onTap: () {
+                    if (_challengeController.categories.isNotEmpty) {
+                      final Industry category = _challengeController.categories[0];
+                      Get.to(() => BossUpSection(
+                            industry: category,
+                            bossUp: category,
+                          ));
+                    } else {
+                      Get.to(() => const BossupChallenge(ishome: false));
+                    }
+                  },
                   child: Row(
                     children: <Widget>[
                       Container(
