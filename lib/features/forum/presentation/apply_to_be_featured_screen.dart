@@ -85,7 +85,7 @@ class _ApplyToBeFeaturedScreenState extends State<ApplyToBeFeaturedScreen> {
 
       // Submit feature application via API
       await ApiService.post(
-        path: 'forum/apply-featured',
+        path: 'features/apply',
         body: body,
       );
 
