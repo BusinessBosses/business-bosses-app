@@ -92,7 +92,7 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
                     ? SafetyModel()
                     : requests.isEmpty
                         ? Center(
-                            child: Text('No jobs available',
+                            child: Text('No requests available',
                                 style: TextStyle(color: Colors.grey[600])),
                           )
                         : ListView.builder(

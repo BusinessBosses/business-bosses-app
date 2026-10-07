@@ -194,7 +194,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   }
 
   void _shareRequest(BuyerRequestModel request) {
-    String message = 'Check out this job on Business Bosses\n'
+    String message = 'Check out this request on Business Bosses\n'
         'Title: ${request.title}\n'
         'Budget: \$${(request.budgetStart > 0 ? request.budgetStart : request.budgetEnd).toStringAsFixed(0)}\n'
         'https://vm.businessbosses.co.uk/share/post';
@@ -507,7 +507,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                               if (success) {
                                 Get.snackbar(
                                   'Deleted',
-                                  'Job deleted successfully!',
+                                  'Request deleted successfully!',
                                   snackPosition: SnackPosition.BOTTOM,
                                   backgroundColor: Colors.green[100],
                                   colorText: Colors.green[900],
@@ -519,7 +519,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                               } else {
                                 Get.snackbar(
                                   'Error',
-                                  'Failed to delete job.',
+                                  'Failed to delete request.',
                                   snackPosition: SnackPosition.BOTTOM,
                                   backgroundColor: Colors.red[100],
                                   colorText: Colors.red[900],
@@ -539,7 +539,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                             Get.back();
                             Get.snackbar(
                               'Blocked',
-                              'Job has been blocked',
+                              'Request has been blocked',
                               snackPosition: SnackPosition.BOTTOM,
                               backgroundColor: Colors.grey[100],
                               colorText: Colors.grey[900],

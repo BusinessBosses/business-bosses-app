@@ -186,7 +186,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
       if (mounted) {
         showSnackbar(
           message:
-              'Job ${widget.request == null ? 'posted' : 'edited'} successfully!',
+              'Request ${widget.request == null ? 'posted' : 'edited'} successfully!',
         );
       }
       if (widget.request == null) {
@@ -204,7 +204,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
     } else {
       showSnackbar(
           message:
-              'Failed to ${widget.request != null ? 'edit' : 'post'} job.',
+              'Failed to ${widget.request != null ? 'edit' : 'post'} request.',
           error: true);
     }
   }
