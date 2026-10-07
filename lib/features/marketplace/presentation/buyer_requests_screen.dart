@@ -724,7 +724,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         if (_buyerRequestController.error.value) {
           return Center(
             child: Text(
-              'Error loading jobs',
+              'Error loading requests',
               style: TextStyle(color: Colors.grey[700]),
             ),
           );
@@ -795,7 +795,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
-            '$hiddenCount more ${hiddenCount == 1 ? 'job' : 'jobs'} matched',
+            '$hiddenCount more ${hiddenCount == 1 ? 'request' : 'requests'} matched',
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -805,7 +805,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
           ),
           const SizedBox(height: 4),
           const Text(
-            'Upgrade to Pro to see all your job matches',
+            'Upgrade to Pro to see all your request matches',
             style: TextStyle(color: Colors.white70, fontSize: 13),
             textAlign: TextAlign.center,
           ),
@@ -838,7 +838,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         SizedBox(height: 16),
-        Text('No Jobs found',
+        Text('No Requests found',
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -855,7 +855,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Text(
-            "We'll notify you when we find a job match for you",
+            "We'll notify you when we find a request match for you",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18,

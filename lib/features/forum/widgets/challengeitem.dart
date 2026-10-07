@@ -145,7 +145,7 @@ class Challengeitem extends StatelessWidget {
                                     : isMarketplace == true
                                         ? 'Buy & Sell'
                                         : isJobBoard == true
-                                            ? 'Job Board'
+                                            ? 'Request Board'
                                             : 'Enter',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

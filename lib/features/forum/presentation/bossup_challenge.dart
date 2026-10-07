@@ -265,17 +265,17 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       imageurl: 'assets/images/live_event.png',
                     );
                   }
-                  // Job Board
+                  // Request Board
                   else if (index == controller.categories.length + 2) {
                     return Challengeitem(
                       isJobBoard: true,
                       onTap: () {
                         Get.to(() => const BuyerRequestsScreen(
                               showAppBar: true,
-                              title: 'Job Board',
+                              title: 'Request Board',
                             ));
                       },
-                      title: 'Job Board',
+                      title: 'Request Board',
                       description: 'Find work or hire the best talent',
                       imageurl: 'assets/images/job_board.png',
                     );

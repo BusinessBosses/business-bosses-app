@@ -353,7 +353,7 @@ class _ExpandedMatchesScreenState extends State<ExpandedMatchesScreen> {
                   profileController.myProfile.industry?.toLowerCase()))
             Padding(
               padding: const EdgeInsets.only(bottom: 0.0),
-              child: Text('Showing matched Job Opportunities',
+              child: Text('Showing matched Request Opportunities',
                   style: TextStyle(
                     fontSize: 13,
                     color: Color(0xFF757575),
