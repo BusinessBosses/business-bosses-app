@@ -93,8 +93,7 @@ class _ApplyToBeFeaturedScreenState extends State<ApplyToBeFeaturedScreen> {
       setState(() => _isSubmitting = false);
 
       if (mounted) {
-        showSnackbar(message: 'Feature application submitted successfully!');
-        Get.to(() => const ListingSuccessScreen(
+        Get.off(() => const ListingSuccessScreen(
               isBuyerRequest: false,
               isFeatureApplication: true,
               industry: 'Magazine Feature',
@@ -104,8 +103,12 @@ class _ApplyToBeFeaturedScreenState extends State<ApplyToBeFeaturedScreen> {
     } catch (e) {
       setState(() => _isSubmitting = false);
       if (mounted) {
-        showSnackbar(message: 'Application submitted! Our editors will review your story.');
-        Get.back();
+        Get.off(() => const ListingSuccessScreen(
+              isBuyerRequest: false,
+              isFeatureApplication: true,
+              industry: 'Magazine Feature',
+              location: 'Digital Magazine',
+            ));
       }
     }
   }
