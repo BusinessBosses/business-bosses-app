@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/apply_to_be_featured_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
+import 'package:business_bosses_v2/features/posts/presentation/boost_post_picker_screen.dart';
 import 'package:business_bosses_v2/features/premium/premium_paywall_sheet.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -345,21 +346,7 @@ class _GetFeaturedSheetState extends State<GetFeaturedSheet> {
             const SizedBox(height: 40),
             _buildActionButton('Boost your reach', () {
               Navigator.pop(context);
-              if (_challengeController.categories.isNotEmpty) {
-                final Industry industry = _challengeController.categories[0];
-                Get.to(
-                  () => CreateBossUpScreen(industryModel: industry),
-                  arguments: <String, Object?>{
-                    'isBossUp': true,
-                    'industryId': industry.industryId,
-                  },
-                  binding: BindingsBuilder<CreateBossUpController>.put(
-                    () => CreateBossUpController(),
-                  ),
-                );
-              } else {
-                Get.to(() => const BossupChallenge(ishome: false));
-              }
+              Get.to(() => const BoostPostPickerScreen());
             }),
           ],
         );

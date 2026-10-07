@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/features/forum/presentation/create_bossup_scr
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/partners/widgets/deals_section.dart';
 import 'package:business_bosses_v2/features/forum/presentation/get_featured_sheet.dart';
+import 'package:business_bosses_v2/features/posts/presentation/boost_post_picker_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -56,10 +57,6 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
         : Get.put(ChallengeController());
   }
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
@@ -83,7 +80,8 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                 GestureDetector(
                   onTap: () {
                     if (_challengeController.categories.isNotEmpty) {
-                      final Industry category = _challengeController.categories[0];
+                      final Industry category =
+                          _challengeController.categories[0];
                       Get.to(() => BossUpSection(
                             industry: category,
                             bossUp: category,
@@ -236,21 +234,7 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                             ),
                           ),
                           onPressed: () {
-                            if (_challengeController.categories.isNotEmpty) {
-                              final Industry industry = _challengeController.categories[0];
-                              Get.to(
-                                () => CreateBossUpScreen(industryModel: industry),
-                                arguments: <String, Object?>{
-                                  'isBossUp': true,
-                                  'industryId': industry.industryId,
-                                },
-                                binding: BindingsBuilder<CreateBossUpController>.put(
-                                  () => CreateBossUpController(),
-                                ),
-                              );
-                            } else {
-                              Get.to(() => const BossupChallenge(ishome: false));
-                            }
+                            Get.to(() => const BoostPostPickerScreen());
                           },
                           child: const Text(
                             'Boost Reach',
@@ -285,7 +269,8 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                               context: context,
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,
-                              builder: (BuildContext _) => const GetFeaturedSheet(),
+                              builder: (BuildContext _) =>
+                                  const GetFeaturedSheet(),
                             );
                           },
                           child: const Row(
