@@ -717,7 +717,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     style: TextStyle(
                       color: Color(0xFF5B4DFF),
                       fontWeight: FontWeight.w900,
-                      fontSize: 17,
+                      fontSize: 18,
                     ),
                   ),
                   SizedBox(width: 2),
@@ -931,14 +931,11 @@ class _TabLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        maxLines: 1,
-        style: const TextStyle(height: 1.2, fontSize: 12),
-      ),
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      style: const TextStyle(height: 1.2),
     );
   }
 }
