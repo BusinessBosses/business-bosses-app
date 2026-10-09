@@ -249,7 +249,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         ),
         content: TextWidget(
           text:
-              'You will no longer see this user\'s jobs on your feed',
+              'You will no longer see this user\'s requests on your feed',
           centralize: true,
           color: Colors.black.withValues(alpha: .6),
         ),
@@ -621,7 +621,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
     return await Get.dialog(
       AlertDialog(
         title: const Text('Confirm Delete'),
-        content: const Text('Are you sure you want to delete this job?'),
+        content: const Text('Are you sure you want to delete this request?'),
         actions: <Widget>[
           TextButton(
             onPressed: () => Get.back(result: false),
@@ -678,7 +678,7 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
                 icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
               ),
               title: Text(
-                widget.title ?? 'What People Are Looking For',
+                widget.title ?? 'Requests',
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

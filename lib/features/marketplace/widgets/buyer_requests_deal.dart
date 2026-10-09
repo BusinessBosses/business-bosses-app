@@ -56,7 +56,7 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
       return GestureDetector(
         onTap: () => Get.to(() => const BuyerRequestsScreen(
               showAppBar: true,
-              title: 'What People Are Looking For',
+              title: 'Requests',
             )),
         child: Container(
           decoration: BoxDecoration(

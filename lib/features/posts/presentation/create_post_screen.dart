@@ -229,11 +229,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         ? const Text('Post content, discussion, etc')
                         : const Text('Update Discussion'),
                   ),
-            body: GestureDetector(
-              onTap: () => unFocusKeyboard(context),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
+            body: Stack(
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () => unFocusKeyboard(context),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
                     if (widget.isGrow == true)
                       const SizedBox(
                         height: 10,
@@ -560,7 +562,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                 ),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -568,6 +570,46 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 ),
               ),
             ),
+            if (controller.loading.value)
+              Container(
+                color: Colors.black45,
+                child: Center(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 32),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const <Widget>[
+                        CircularProgressIndicator(color: primaryColorLT),
+                        SizedBox(height: 16),
+                        Text(
+                          'Publishing post...',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          'Uploading media & creating your post, please wait.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
           ),
         ),
       ),

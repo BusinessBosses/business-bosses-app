@@ -204,12 +204,13 @@ class CreatePostController extends GetxController {
             showSnackbar(message: response.message.isNotEmpty ? response.message : 'Failed to create post', error: true, title: 'Error');
         }
       } else if (selectedVid != null) {
-        if (await uploadFile() == null) {
+        final Map<String, dynamic>? files = await uploadFile();
+        if (files == null) {
           showSnackbar(message: 'Error Uploading image');
         } else {
-          final Map<String, dynamic>? files = await uploadFile();
-          final dynamic thumbnail = files?['images'];
-          final dynamic videoUrl = files?['videoUrl'];
+
+          final dynamic thumbnail = files['images'];
+          final dynamic videoUrl = files['videoUrl'];
           final ApiResponseModel response =
               await PostRepository.createPost(<String, dynamic>{
             ...body,
@@ -256,12 +257,13 @@ class CreatePostController extends GetxController {
               title: 'OOPS!',
               error: true);
         }
-        if (await uploadFile() == null) {
+        final Map<String, dynamic>? file = await uploadFile();
+        if (file == null) {
           showSnackbar(message: 'Error Uploading video');
         } else {
-          final Map<String, dynamic>? file = await uploadFile();
+
           final ApiResponseModel response = await PostRepository.createPost(
-              <String, dynamic>{...body, 'images': file?['fileUrls']});
+              <String, dynamic>{...body, 'images': file['fileUrls']});
 
           if (response.success) {
             imageFileList.clear();

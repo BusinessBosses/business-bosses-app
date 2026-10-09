@@ -64,11 +64,11 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
 
         return Container(
           color: backgroundColor,
-          padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
+          padding: const EdgeInsets.fromLTRB(12, 2, 12, 2),
           child: Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
-              color: const Color(0xFFF2F2F4),
+              color: const Color(0xFFF7F7F9),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
@@ -109,7 +109,7 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                         child: Text(
                           'Boss of The Week',
                           style: TextStyle(
-                            fontSize: 17,
+                            fontSize: 18,
                             fontWeight: FontWeight.w800,
                             color: Colors.black87,
                           ),
@@ -122,7 +122,7 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
 
                 // Boss Info row: Avatar + Name & Bio
                 GestureDetector(

@@ -88,44 +88,42 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     });
 
     // try {
-    final Map<String, dynamic> res =
-        await _profileController.loadData(publicUser.uid);
+    // Fetch profile data, buyer requests, and partner deals in parallel for fast screen open
+    final List<dynamic> results = await Future.wait<dynamic>(<Future<dynamic>>[
+      _profileController.loadData(publicUser.uid),
+      ApiService.get(path: 'buyer-request/user/${publicUser.uid}'),
+      ApiService.get(path: 'partner/user/${publicUser.uid}'),
+    ]);
 
-    log(res.toString());
+    final Map<String, dynamic> res = results[0] as Map<String, dynamic>;
+    final ApiResponseModel requestResponse = results[1] as ApiResponseModel;
+    final ApiResponseModel partnerResponse = results[2] as ApiResponseModel;
 
-    // Process user model outside of setState
     final UserModel modelizedUser = UserModel.fromMap(
       <dynamic, dynamic>{...res['user'], 'interests': res['industries']},
     );
-    // Assign values locally first
     UserModel updatedUser = modelizedUser;
-    log(updatedUser.toMap.toString());
-    // Initialize shop asynchronously and await result
+
     if (updatedUser.hasShop) {
-      await shopController.initUserShop(modelizedUser);
+      shopController.initUserShop(modelizedUser);
     }
 
-    final ApiResponseModel requestResponse =
-        await ApiService.get(path: 'buyer-request/user/${publicUser.uid}');
-    if (requestResponse.success) {
+    if (requestResponse.success && requestResponse.data is List) {
+      buyerRequests.clear();
       for (dynamic request in requestResponse.data) {
         buyerRequests.add(BuyerRequestModel.fromJson(request));
       }
     }
-    // 🟢 Fetch from API to ensure we get all deals (including unapproved ones if viewing own profile)
-    final ApiResponseModel partnerResponse =
-        await ApiService.get(path: 'partner/user/${publicUser.uid}');
-    if (partnerResponse.success) {
+
+    if (partnerResponse.success && partnerResponse.data is List) {
       final List<dynamic> rows = partnerResponse.data;
       final List<Partner> fetched =
           rows.map((dynamic e) => Partner.fromJson(e)).toList();
 
       myPartners.clear();
       if (publicUser.uid == _profileController.myProfile.uid) {
-        // Owner sees all their deals
         myPartners.addAll(fetched);
       } else {
-        // Others only see approved deals
         myPartners.addAll(fetched.where((Partner p) => p.approved).toList());
       }
     }

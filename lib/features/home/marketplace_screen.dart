@@ -675,21 +675,16 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
           Expanded(
             child: TabBar(
               controller: _marketplaceTabController,
-              // Scrollable so every label renders at the same font size. With
-              // equal-width (non-scrollable) tabs the longer "Marketplace" label
-              // was shrunk by the FittedBox and looked smaller than "Jobs".
               isScrollable: true,
               tabAlignment: TabAlignment.start,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-              // Selected reads dark + heavy; unselected sits back in grey at a
-              // medium weight, so the active tab is obvious at a glance.
+              labelPadding: const EdgeInsets.symmetric(horizontal: 6),
               labelColor: Colors.black,
-              unselectedLabelColor: Color(0xFF595959),
+              unselectedLabelColor: const Color(0xFF595959),
               labelStyle:
-                  const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
               unselectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontWeight: FontWeight.normal,
+                fontSize: 13.5,
               ),
               indicatorColor: primaryColorLT,
               indicatorWeight: 3,
@@ -709,7 +704,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               );
             },
             child: const Padding(
-              padding: EdgeInsets.only(left: 6, right: 12, bottom: 4),
+              padding: EdgeInsets.only(left: 4, right: 8, bottom: 4),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -718,13 +713,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     'Find Opportunities',
                     style: TextStyle(
                       color: Color(0xFF5B4DFF),
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13.5,
                     ),
                   ),
-                  SizedBox(width: 2),
+                  SizedBox(width: 1),
                   Icon(Icons.chevron_right,
-                      color: Color(0xFF5B4DFF), size: 20),
+                      color: Color(0xFF5B4DFF), size: 16),
                 ],
               ),
             ),

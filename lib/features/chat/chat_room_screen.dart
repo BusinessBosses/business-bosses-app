@@ -986,29 +986,144 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                             ),
                           ]),
                   ),
-                  Positioned(
-                    bottom: 20.0,
-                    left: 10.0,
-                    right: 10.0,
-                    child: SendMessageBox(
-                      onPickImage: () {
-                        _chatController.onPickImage();
-                      },
-                      onSendMessage: (
-                        String message,
-                      ) {
-                        _chatController.addNewChat(
-                          <String, dynamic>{
-                            'senderUid': _profileController.myProfile.uid,
-                            'receiverUid': args.uid,
-                            'messageText': message
+                  Builder(
+                    builder: (BuildContext context) {
+                      final String myUid = _profileController.myProfile.uid;
+                      final List<MessageModel> conversations = controller.chatMessages;
+
+                      final bool hasMessages = conversations.isNotEmpty;
+                      final bool recipientHasReplied = conversations.any((MessageModel m) => m.senderUid != conversations.first.senderUid);
+                      final bool isPendingRequest = hasMessages && !recipientHasReplied;
+
+                      if (isPendingRequest) {
+                        final bool isSender = conversations.first.senderUid == myUid;
+
+                        if (isSender) {
+                          // Sender side: waiting for recipient to accept
+                          return Positioned(
+                            bottom: 20.0,
+                            left: 15.0,
+                            right: 15.0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF7F7F9),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey.shade300),
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  const Icon(Icons.hourglass_top_rounded, color: primaryColorLT, size: 20),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      'Message Request Pending. You can send another message once ${args.name ?? "the user"} accepts.',
+                                      style: const TextStyle(fontSize: 12.5, color: Colors.black87, fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        } else {
+                          // Recipient side: Accept or Decline request
+                          return Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.08),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, -2),
+                                  )
+                                ],
+                                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(
+                                    '${args.name ?? "This user"} sent you a message request.',
+                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            foregroundColor: Colors.red,
+                                            side: const BorderSide(color: Colors.red),
+                                            padding: const EdgeInsets.symmetric(vertical: 12),
+                                          ),
+                                          onPressed: () {
+                                            controller.deleteChat(args.uid);
+                                            Get.back();
+                                          },
+                                          child: const Text('Decline'),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: primaryColorLT,
+                                            foregroundColor: Colors.white,
+                                            padding: const EdgeInsets.symmetric(vertical: 12),
+                                          ),
+                                          onPressed: () {
+                                            controller.addNewChat(
+                                              <String, dynamic>{
+                                                'senderUid': myUid,
+                                                'receiverUid': args.uid,
+                                                'messageText': 'Request Accepted',
+                                              },
+                                              args,
+                                            );
+                                          },
+                                          child: const Text('Accept Request'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                      }
+
+                      // Standard message input box
+                      return Positioned(
+                        bottom: 20.0,
+                        left: 10.0,
+                        right: 10.0,
+                        child: SendMessageBox(
+                          onPickImage: () {
+                            _chatController.onPickImage();
                           },
-                          args,
-                        );
-                        _textEditingController.clear();
-                      },
-                      textEditingController: _textEditingController,
-                    ),
+                          onSendMessage: (
+                            String message,
+                          ) {
+                            _chatController.addNewChat(
+                              <String, dynamic>{
+                                'senderUid': _profileController.myProfile.uid,
+                                'receiverUid': args.uid,
+                                'messageText': message
+                              },
+                              args,
+                            );
+                            _textEditingController.clear();
+                          },
+                          textEditingController: _textEditingController,
+                        ),
+                      );
+                    },
                   )
                 ],
               ),

@@ -51,7 +51,7 @@ class ApplyToJobButton extends StatelessWidget {
           ),
         ),
         child: const Text(
-          'Apply with your CV',
+          "I'm interested",
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
