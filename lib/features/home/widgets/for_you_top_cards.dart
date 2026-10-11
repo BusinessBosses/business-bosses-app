@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/user_avatar_with_badge.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
@@ -7,8 +8,9 @@ import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dar
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/partners/widgets/deals_section.dart';
 import 'package:business_bosses_v2/features/forum/presentation/get_featured_sheet.dart';
-import 'package:business_bosses_v2/features/posts/presentation/boost_post_picker_screen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -64,9 +66,9 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
 
         return Container(
           color: backgroundColor,
-          padding: const EdgeInsets.fromLTRB(12, 2, 12, 2),
+          padding: const EdgeInsets.fromLTRB(12, 2, 12, 0),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
             decoration: BoxDecoration(
               color: const Color(0xFFF7F7F9),
               borderRadius: BorderRadius.circular(16),
@@ -209,49 +211,94 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                 ),
                 const SizedBox(height: 12),
 
-                // Action Buttons row: Boost Reach (white pill) + Get Featured (red pill)
+                // Action Buttons row: Follow / Following + "Get Featured & Boost Reach"
                 Row(
                   children: <Widget>[
-                    // Boost Reach button (replaces Follow button area)
+                    // Follow button
                     Expanded(
-                      flex: 4,
+                      flex: 3,
                       child: SizedBox(
-                        height: 42,
+                        height: 36,
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: primaryColorLT,
                             side: const BorderSide(
-                              color: Colors.transparent,
-                              width: 0,
+                              color: Color(0xFFFECACA),
+                              width: 1.2,
                             ),
-                            elevation: 0,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(22),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          onPressed: () {
-                            Get.to(() => const BoostPostPickerScreen());
+                          onPressed: () async {
+                            if (!hasBoss) return;
+                            final ProfileController profileController =
+                                Get.find<ProfileController>();
+                            final bool isFollowing = profileController
+                                    .myProfile.connecteds
+                                    ?.contains(boss.uid) ??
+                                false;
+                            if (!isFollowing) {
+                              profileController.updateConnections(boss.uid);
+                              await ApiService.post(
+                                path: 'connection/connect',
+                                body: <String, dynamic>{
+                                  'connectedId': boss.uid
+                                },
+                              );
+                              setState(() {});
+                            } else {
+                              final String name = boss.name ?? boss.username;
+                              final String message =
+                                  'Check out $name, Boss of the Week on Business Bosses!\nhttps://vm.businessbosses.co.uk/user/${boss.uid}';
+                              socialShare(message);
+                            }
                           },
-                          child: const Text(
-                            'Boost Reach',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 13,
-                              color: primaryColorLT,
-                            ),
+                          child: Builder(
+                            builder: (BuildContext context) {
+                              final ProfileController profileController =
+                                  Get.find<ProfileController>();
+                              final bool isFollowing = hasBoss &&
+                                  (profileController.myProfile.connecteds
+                                          ?.contains(boss.uid) ??
+                                      false);
+                              return FittedBox(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      isFollowing
+                                          ? LucideIcons.check
+                                          : LucideIcons.userPlus,
+                                      size: 14,
+                                      color: primaryColorLT,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      isFollowing ? 'Following' : 'Follow',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12,
+                                        color: primaryColorLT,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
 
                     // + Get Featured button (solid red pill)
                     Expanded(
                       flex: 5,
                       child: SizedBox(
-                        height: 42,
+                        height: 36,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: primaryColorLT,
@@ -259,7 +306,7 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(22),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
                           onPressed: () {

@@ -46,6 +46,7 @@ class ChatScreenState extends State<ChatScreen> {
       AdvancedDrawerController();
 
   bool _isSearching = false;
+  int _selectedTabIndex = 0;
   // final List<LastMessage> _myChats = <LastMessage>[];
 
   @override
@@ -170,105 +171,233 @@ class ChatScreenState extends State<ChatScreen> {
                         )
                       ],
                     ),
-              body: Stack(
-                children: <Widget>[
-                  controller.chatMessages.isEmpty
-                      ? SafetyModel(
-                          isLoading: false,
-                          icon: SvgPicture.asset(
-                            'assets/svgs/message.svg',
-                            colorFilter: const ColorFilter.mode(
-                              Colors.grey,
-                              BlendMode.srcIn,
-                            ),
-                            height: 80,
-                          ),
-                          title: 'No chat found',
-                          subTitle:
-                              'Search for friends or connections and chat with them',
-                          clickableText: 'Search connections',
-                          // onTap: () => navigateTo(
-                          //   context,
-                          //   routeName: UsersSearchScreen.routeName,
-                          // ),
-                        )
-                      : Column(
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                _onChangeSearching();
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0, vertical: 5),
-                                child: Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: backgroundColor,
-                                  ),
-                                  child: Row(
-                                    children: <Widget>[
-                                      CircleAvatar(
-                                        backgroundColor: backgroundColor,
-                                        child: SvgPicture.asset(
-                                          'assets/svgs/homesearch.svg',
-                                          colorFilter: const ColorFilter.mode(
-                                            textColor,
-                                            BlendMode.srcIn,
-                                          ),
-                                          height: 20,
+              body: Builder(
+                builder: (BuildContext context) {
+                  final String myUid = _profileController.myProfile.uid;
+
+                  // Active Chats: Conversations where I sent a message or have replied
+                  final List<MessageModel> activeChats =
+                      controller.chats.where((MessageModel chat) {
+                    final String counterId = chat.senderUid == myUid
+                        ? chat.receiverUid
+                        : chat.senderUid;
+                    final List<MessageModel> conversations =
+                        controller.extractConversations(counterId, myUid);
+                    final bool iHaveReplied = conversations
+                        .any((MessageModel m) => m.senderUid == myUid);
+                    return iHaveReplied;
+                  }).toList();
+
+                  // Requests: Incoming conversations where I have NOT replied yet
+                  final List<MessageModel> requestChats =
+                      controller.chats.where((MessageModel chat) {
+                    final String counterId = chat.senderUid == myUid
+                        ? chat.receiverUid
+                        : chat.senderUid;
+                    final List<MessageModel> conversations =
+                        controller.extractConversations(counterId, myUid);
+                    final bool iHaveReplied = conversations
+                        .any((MessageModel m) => m.senderUid == myUid);
+                    return !iHaveReplied;
+                  }).toList();
+
+                  final List<MessageModel> currentList =
+                      _selectedTabIndex == 0 ? activeChats : requestChats;
+
+                  return Stack(
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              _onChangeSearching();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 5),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 3),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: backgroundColor,
+                                ),
+                                child: Row(
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      backgroundColor: backgroundColor,
+                                      child: SvgPicture.asset(
+                                        'assets/svgs/homesearch.svg',
+                                        colorFilter: const ColorFilter.mode(
+                                          textColor,
+                                          BlendMode.srcIn,
                                         ),
+                                        height: 20,
                                       ),
-                                      const Text(
-                                        'Search Chats',
-                                        style: TextStyle(
-                                          color: textColor,
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                    ),
+                                    const Text(
+                                      'Search Chats',
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w700,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Divider(
-                              height: 0.5,
-                              color: Colors.grey.withValues(alpha: 0.3),
-                            ),
-                            Expanded(
-                              child: ListView.builder(
-                                padding: EdgeInsets.only(bottom: 200),
-                                itemCount: controller.chats.length,
-                                itemBuilder: (BuildContext context, int i) {
-                                  return Column(
-                                    children: <Widget>[
-                                      ChatItem(
-                                        myChatUser: controller.chats[i],
-                                        chatController: controller,
-                                        // key: ValueKey(_myChats[i].user?.uid),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0),
-                                        child: Divider(
-                                          height: 0.5,
-                                          color: Colors.grey
-                                              .withValues(alpha: 0.05),
+                          ),
+                          // Tab Bar: Chats vs Requests
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15.0, vertical: 6.0),
+                            child: Container(
+                              height: 38,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF2F2F4),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () => setState(
+                                          () => _selectedTabIndex = 0),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: _selectedTabIndex == 0
+                                              ? primaryColorLT
+                                              : Colors.transparent,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Text(
+                                          'Chats (${activeChats.length})',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold,
+                                            color: _selectedTabIndex == 0
+                                                ? Colors.white
+                                                : Colors.black87,
+                                          ),
                                         ),
                                       ),
-                                    ],
-                                  );
-                                },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () => setState(
+                                          () => _selectedTabIndex = 1),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: _selectedTabIndex == 1
+                                              ? primaryColorLT
+                                              : Colors.transparent,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text(
+                                              'Requests',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                                color: _selectedTabIndex == 1
+                                                    ? Colors.white
+                                                    : Colors.black87,
+                                              ),
+                                            ),
+                                            if (requestChats.isNotEmpty) ...<Widget>[
+                                              const SizedBox(width: 6),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 6,
+                                                        vertical: 2),
+                                                decoration: BoxDecoration(
+                                                  color: _selectedTabIndex == 1
+                                                      ? Colors.white
+                                                      : primaryColorLT,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: Text(
+                                                  '${requestChats.length}',
+                                                  style: TextStyle(
+                                                    fontSize: 11,
+                                                    fontWeight: FontWeight.bold,
+                                                    color:
+                                                        _selectedTabIndex == 1
+                                                            ? primaryColorLT
+                                                            : Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Divider(
+                            height: 0.5,
+                            color: Colors.grey.withValues(alpha: 0.3),
+                          ),
+                          Expanded(
+                            child: currentList.isEmpty
+                                ? SafetyModel(
+                                    isLoading: false,
+                                    icon: SvgPicture.asset(
+                                      'assets/svgs/message.svg',
+                                      colorFilter: const ColorFilter.mode(
+                                        Colors.grey,
+                                        BlendMode.srcIn,
+                                      ),
+                                      height: 80,
+                                    ),
+                                    title: _selectedTabIndex == 0
+                                        ? 'No chats found'
+                                        : 'No message requests',
+                                    subTitle: _selectedTabIndex == 0
+                                        ? 'Search for friends or connections to start chatting'
+                                        : 'You have no pending message requests',
+                                  )
+                                : ListView.builder(
+                                    padding: const EdgeInsets.only(bottom: 200),
+                                    itemCount: currentList.length,
+                                    itemBuilder: (BuildContext context, int i) {
+                                      return Column(
+                                        children: <Widget>[
+                                          ChatItem(
+                                            myChatUser: currentList[i],
+                                            chatController: controller,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 15.0),
+                                            child: Divider(
+                                              height: 0.5,
+                                              color: Colors.grey
+                                                  .withValues(alpha: 0.05),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                          ),
+                        ],
+                      ),
                   if (_isSearching)
                     Container(
                       color: Theme.of(context).scaffoldBackgroundColor,
@@ -300,13 +429,15 @@ class ChatScreenState extends State<ChatScreen> {
                     ),
                   BottomBar(activeIndex: 1),
                 ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+              );
+            },
+          ),
+        ),
+      );
+    },
+  ),
+);
+}
 
   void _onChangeSearching() {
     setState(() {

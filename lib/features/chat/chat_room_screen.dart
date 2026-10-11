@@ -989,14 +989,22 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
                   Builder(
                     builder: (BuildContext context) {
                       final String myUid = _profileController.myProfile.uid;
-                      final List<MessageModel> conversations = controller.chatMessages;
+                      final List<MessageModel> roomConversations =
+                          controller.extractConversations(args.uid, myUid);
 
-                      final bool hasMessages = conversations.isNotEmpty;
-                      final bool recipientHasReplied = conversations.any((MessageModel m) => m.senderUid != conversations.first.senderUid);
-                      final bool isPendingRequest = hasMessages && !recipientHasReplied;
+                      final bool hasMessages = roomConversations.isNotEmpty;
+                      final MessageModel? initialMessage =
+                          hasMessages ? roomConversations.last : null;
+                      final String? initialSenderUid = initialMessage?.senderUid;
+
+                      final bool recipientHasReplied = hasMessages &&
+                          roomConversations.any(
+                              (MessageModel m) => m.senderUid != initialSenderUid);
+                      final bool isPendingRequest =
+                          hasMessages && !recipientHasReplied;
 
                       if (isPendingRequest) {
-                        final bool isSender = conversations.first.senderUid == myUid;
+                        final bool isSender = initialSenderUid == myUid;
 
                         if (isSender) {
                           // Sender side: waiting for recipient to accept

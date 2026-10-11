@@ -62,13 +62,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 10,
                     ),
                     Flexible(
-                      child: Text(
-                          'One Reach Score. Access more opportunities, everywhere.',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: textColor.withValues(alpha: 0.8),
-                              fontWeight: FontWeight.w700)),
-                    )
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Where business builders grow',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: textColor,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Get trusted, get featured and reach new markets.',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: textColor.withValues(alpha: 0.7),
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 30.0),
@@ -111,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: <Widget>[
                           TextWidget(
-                            text: 'Sign Up for Free',
+                            text: 'Join for Free',
                             color: !_isLogin ? primaryColorLT : iconColor,
                             fontWeight: FontWeight.w700,
                             size: 18,

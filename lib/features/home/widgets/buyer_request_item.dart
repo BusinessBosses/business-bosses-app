@@ -138,11 +138,12 @@ class BuyerRequestItem extends StatelessWidget {
                               request.budgetStart, request.budgetEnd)!,
                         ),
 
-                      // ✅ Deadline
-                      _buildInfoChip(
-                        icon: Icons.calendar_today,
-                        label: formattedDeadline,
-                      ),
+                      // ✅ Deadline (only if non-empty)
+                      if (formattedDeadline.isNotEmpty)
+                        _buildInfoChip(
+                          icon: Icons.calendar_today,
+                          label: formattedDeadline,
+                        ),
                     ],
                   ),
 
@@ -182,12 +183,12 @@ class BuyerRequestItem extends StatelessWidget {
 
   // ✅ Helper: Format deadline date
   String _formatDeadline(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return 'N/A';
+    if (dateStr == null || dateStr.isEmpty || dateStr == 'N/A') return '';
     try {
       final DateTime date = DateTime.parse(dateStr);
       return DateFormat('MMM dd').format(date);
     } catch (e) {
-      return 'Invalid date';
+      return '';
     }
   }
 

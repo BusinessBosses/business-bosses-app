@@ -54,17 +54,54 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
   final String _selectedFilter = 'All';
   List<BuyerRequestModel> _filteredRequests = <BuyerRequestModel>[];
 
+  final List<String> _categories = const <String>[
+    'All',
+    'Agriculture, Food & Beverage',
+    'Business Services & Consulting',
+    'Learning & Education',
+    'Construction & Real Estate',
+    'Fashion & Beauty',
+    'Finance & Legal',
+    'Healthcare & Wellness',
+    'Home, Gardens & Outdoors',
+    'Jewellery & Timepieces',
+    'Media & Entertainment',
+    'Security, Safety & Equipment',
+    'Technology, Games & Electronic',
+    'Vehicle & Transportation',
+  ];
+  String _selectedCategory = 'All';
+  final ScrollController _categoryScrollController = ScrollController();
+  bool _showRightChevron = true;
+
   /// Number of matched requests a free user can see before the upgrade prompt.
   static const int _kFreeMatchLimit = 2;
 
   @override
   void initState() {
     super.initState();
+    _categoryScrollController.addListener(() {
+      if (!_categoryScrollController.hasClients) return;
+      final double maxScroll =
+          _categoryScrollController.position.maxScrollExtent;
+      final double current = _categoryScrollController.offset;
+      if (mounted) {
+        setState(() {
+          _showRightChevron = current < maxScroll - 10;
+        });
+      }
+    });
     // Deferred to after the frame: fetching clears the shared Rx lists, and
     // doing that from initState marks other live Obx widgets dirty mid-build.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _fetchRequests();
     });
+  }
+
+  @override
+  void dispose() {
+    _categoryScrollController.dispose();
+    super.dispose();
   }
 
   Future<void> _fetchRequests() async {
@@ -157,6 +194,14 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
             .toList();
       }
 
+      if (_selectedCategory != 'All') {
+        baseRequests = baseRequests
+            .where((BuyerRequestModel r) =>
+                r.category.trim().toLowerCase() ==
+                _selectedCategory.trim().toLowerCase())
+            .toList();
+      }
+
       if (_selectedFilter == 'All') {
         _filteredRequests = baseRequests;
       } else if (_selectedFilter == 'Active') {
@@ -179,6 +224,84 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
             .toList();
       }
     });
+  }
+
+  Widget _buildCategoryChips() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: _categoryScrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: _categories.map((String category) {
+                      final bool isSelected = _selectedCategory == category;
+
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedCategory = category;
+                            _applyFilter();
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? const Color(0xFFEEEEEE)
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            category,
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontWeight: isSelected
+                                  ? FontWeight.w700
+                                  : FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              if (_showRightChevron)
+                GestureDetector(
+                  onTap: () {
+                    _categoryScrollController.animateTo(
+                      _categoryScrollController.offset + 150,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Icon(
+                      LucideIcons.chevronRight,
+                      color: Colors.black54,
+                      size: 15,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const Divider(height: 1),
+        ],
+      ),
+    );
   }
 
   /// Shared apply flow — see [applyToJob].
@@ -744,36 +867,43 @@ class _BuyerRequestsScreenState extends State<BuyerRequestsScreen> {
         final int hiddenCount =
             _filteredRequests.length - visibleRequests.length;
 
-        return _filteredRequests.isEmpty
-            ? _buildEmptyState()
-            : RefreshIndicator(
-                onRefresh: _fetchRequests,
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: MasonryGridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        padding: const EdgeInsets.only(
-                            left: 15, right: 15, top: 10, bottom: 100),
-                        itemCount: visibleRequests.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final BuyerRequestModel request =
-                              visibleRequests[index];
-                          return BuyerRequestItem(
-                            request: request,
-                            onApply: () => _navigateToChatScreen(request),
-                            onTap: () => _showRequestDetails(request),
-                          );
-                        },
+        return Column(
+          children: <Widget>[
+            _buildCategoryChips(),
+            Expanded(
+              child: _filteredRequests.isEmpty
+                  ? _buildEmptyState()
+                  : RefreshIndicator(
+                      onRefresh: _fetchRequests,
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                            child: MasonryGridView.count(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              padding: const EdgeInsets.only(
+                                  left: 15, right: 15, top: 10, bottom: 100),
+                              itemCount: visibleRequests.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final BuyerRequestModel request =
+                                    visibleRequests[index];
+                                return BuyerRequestItem(
+                                  request: request,
+                                  onApply: () => _navigateToChatScreen(request),
+                                  onTap: () => _showRequestDetails(request),
+                                );
+                              },
+                            ),
+                          ),
+                          if (gated && hiddenCount > 0)
+                            _buildUpgradePrompt(hiddenCount),
+                        ],
                       ),
                     ),
-                    if (gated && hiddenCount > 0)
-                      _buildUpgradePrompt(hiddenCount),
-                  ],
-                ),
-              );
+            ),
+          ],
+        );
       }),
     );
   }

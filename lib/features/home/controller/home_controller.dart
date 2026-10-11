@@ -250,7 +250,18 @@ class HomeController extends GetxController {
       });
     });
 
-    posts.addAll(parsed);
+    for (final PostModel post in parsed) {
+      bool isDuplicate = posts.any((PostModel existing) {
+        if (existing.postId == post.postId) return true;
+        bool sameAuthor = existing.user?.uid == post.user?.uid;
+        bool sameTitle = existing.title.trim().isNotEmpty &&
+            existing.title.trim() == post.title.trim();
+        return sameAuthor && sameTitle;
+      });
+      if (!isDuplicate) {
+        posts.add(post);
+      }
+    }
   }
 
   /// Convert dynamic post list to PostModel list efficiently

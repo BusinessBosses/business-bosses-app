@@ -101,11 +101,6 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
                             padding: const EdgeInsets.only(left: 10),
                             itemBuilder: (BuildContext context, int index) {
                               final BuyerRequestModel request = requests[index];
-                              final String deadline =
-                                  DateFormat('MMM d').format(
-                                DateTime.tryParse(request.deadline) ??
-                                    DateTime.now(),
-                              );
 
                               return GestureDetector(
                                 onTap: () => _showRequestDetails(request),
@@ -147,14 +142,17 @@ class _BuyerRequestDealsWidgetState extends State<BuyerRequestDealsWidget> {
                                               fontSize: 12, color: Colors.black),
                                         ),
                                       ],
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        'Due: $deadline',
-                                        style: const TextStyle(
-                                            fontSize: 10,
-                                            color: Color(0xFF616161),
-                                            fontWeight: FontWeight.w600),
-                                      ),
+                                      if (request.deadline.isNotEmpty &&
+                                          DateTime.tryParse(request.deadline) != null) ...<Widget>[
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          'Due: ${DateFormat('MMM d').format(DateTime.parse(request.deadline))}',
+                                          style: const TextStyle(
+                                              fontSize: 10,
+                                              color: Color(0xFF616161),
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
                                     ],
                                   ),
                                 ),

@@ -394,8 +394,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
             const Padding(
               padding: EdgeInsets.only(top: 20.0),
               child: Text(
-                'One Reach Score. More opportunities.',
-                style: TextStyle(fontSize: 16),
+                'The Community for Business Builders',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: textColor,
+                ),
               ),
             )
           ],

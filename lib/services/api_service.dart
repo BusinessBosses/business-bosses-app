@@ -131,21 +131,25 @@ class ApiService {
     );
   }
 
+  /// Hardcoded flag to control primary PHP upload server usage in frontend.
+  /// Set to false (disabled) so only backend fallback upload is used until enabled.
+  static const bool enablePrimaryUpload = false;
+
   /// UPLOAD FILE
-  /// Tries the primary businessbosses.com.ng/upload.php host first; only when
-  /// that fails (network error, non-2xx, or a JSON body without `success`)
-  /// does it fall back to the backend's Backblaze proxy at
-  /// `${Constants.baseUrl}/uploads/fallback`.
+  /// Uses fallback upload (Backblaze B2 via backend proxy) by default.
+  /// Primary upload is bypassed when [enablePrimaryUpload] is false.
   static Future<dynamic> uploadFile(File image) async {
-    try {
-      final Map<String, dynamic>? primaryResult = await _uploadToPrimary(image);
-      if (primaryResult != null && primaryResult['success'] == true) {
-        log(primaryResult.toString());
-        return primaryResult;
+    if (enablePrimaryUpload) {
+      try {
+        final Map<String, dynamic>? primaryResult = await _uploadToPrimary(image);
+        if (primaryResult != null && primaryResult['success'] == true) {
+          log(primaryResult.toString());
+          return primaryResult;
+        }
+        debugPrint('Primary upload failed, trying Backblaze fallback: $primaryResult');
+      } catch (e) {
+        debugPrint('Primary upload threw, trying Backblaze fallback: $e');
       }
-      debugPrint('Primary upload failed, trying Backblaze fallback: $primaryResult');
-    } catch (e) {
-      debugPrint('Primary upload threw, trying Backblaze fallback: $e');
     }
 
     try {
@@ -224,35 +228,52 @@ class ApiService {
   /// UPLOAD MEDIA FILES
   static Future<MediaUploadResult> uploadMediaFiles(
       File video, File thumbnail) async {
-    String uploadUrl = 'https://businessbosses.com.ng/upload-video.php';
-    http.MultipartRequest request =
-        http.MultipartRequest('POST', Uri.parse(uploadUrl));
-    request.files.add(await http.MultipartFile.fromPath('video', video.path));
-    request.files
-        .add(await http.MultipartFile.fromPath('thumbnail', thumbnail.path));
-    try {
-      final http.StreamedResponse streamedResponse = await request.send();
+    if (enablePrimaryUpload) {
+      try {
+        String uploadUrl = 'https://businessbosses.com.ng/upload-video.php';
+        http.MultipartRequest request =
+            http.MultipartRequest('POST', Uri.parse(uploadUrl));
+        request.files.add(await http.MultipartFile.fromPath('video', video.path));
+        request.files
+            .add(await http.MultipartFile.fromPath('thumbnail', thumbnail.path));
 
-      Map<dynamic, dynamic> result =
-          json.decode(await streamedResponse.stream.bytesToString());
-      if (result['success']) {
-        final dynamic videoUrl = result['video_url'];
-        final dynamic thumbnailUrl = result['thumbnail_url'];
+        final http.StreamedResponse streamedResponse = await request.send();
+
+        Map<dynamic, dynamic> result =
+            json.decode(await streamedResponse.stream.bytesToString());
+        if (result['success'] == true) {
+          final dynamic videoUrl = result['video_url'];
+          final dynamic thumbnailUrl = result['thumbnail_url'];
+          return MediaUploadResult(videoUrl, thumbnailUrl);
+        }
+      } catch (e) {
+        debugPrint('Primary media upload failed, trying fallback: $e');
+      }
+    }
+
+    try {
+      final Map<String, dynamic>? thumbResult =
+          await _uploadToBackblazeFallback(thumbnail);
+      final Map<String, dynamic>? videoResult =
+          await _uploadToBackblazeFallback(video);
+
+      if (thumbResult != null &&
+          thumbResult['success'] == true &&
+          videoResult != null &&
+          videoResult['success'] == true) {
+        final String thumbnailUrl = thumbResult['fileUrl'] as String;
+        final String videoUrl = videoResult['fileUrl'] as String;
         return MediaUploadResult(videoUrl, thumbnailUrl);
-      } else {
-        showSnackbar(
-            title: 'OOPS!',
-            message: 'An error occurred, please try again!',
-            error: true);
-        throw MediaUploadException('Upload failed: ${result['error']}');
       }
     } catch (e) {
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
-      throw MediaUploadException('An error occurred during media upload: $e');
+      debugPrint('Fallback media upload error: $e');
     }
+
+    showSnackbar(
+        title: 'OOPS!',
+        message: 'An error occurred during media upload, please try again!',
+        error: true);
+    throw MediaUploadException('An error occurred during media upload');
   }
 
   /// REGISTER

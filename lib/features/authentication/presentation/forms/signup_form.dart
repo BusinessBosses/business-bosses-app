@@ -306,7 +306,7 @@ class _SignUpFormState extends State<SignUpForm> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconTextButton(
-              label: 'Sign up with Google',
+              label: 'Continue with Google',
               onPressed: _handleGoogleSignUp,
               borderRadius: BorderRadius.circular(20),
             ),
@@ -318,7 +318,7 @@ class _SignUpFormState extends State<SignUpForm> {
               height: 55,
               child: SignInWithAppleButton(
                 height: 40,
-                text: 'Sign up with Apple',
+                text: 'Continue with Apple',
                 onPressed: _handleAppleSignIn,
               ),
             ),
@@ -503,7 +503,7 @@ class _SignUpFormState extends State<SignUpForm> {
           agreementText(context),
           const SizedBox(height: 24.0),
           CustomButton(
-            label: 'Sign Up',
+            label: 'Join free',
             onPressed: () async {
               _formKey.currentState!.save();
               setState(() {
