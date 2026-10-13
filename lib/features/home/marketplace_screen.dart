@@ -681,14 +681,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               controller: _marketplaceTabController,
               isScrollable: true,
               tabAlignment: TabAlignment.start,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 6),
+              labelPadding: const EdgeInsets.symmetric(horizontal: 10),
               labelColor: Colors.black,
               unselectedLabelColor: const Color(0xFF595959),
               labelStyle:
-                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                  const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               unselectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.normal,
-                fontSize: 13.5,
+                fontWeight: FontWeight.w500,
+                fontSize: 15,
               ),
               indicatorColor: primaryColorLT,
               indicatorWeight: 3,
@@ -708,7 +708,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               );
             },
             child: const Padding(
-              padding: EdgeInsets.only(left: 4, right: 8, bottom: 4),
+              padding: EdgeInsets.only(left: 4, right: 10, bottom: 4),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -716,14 +716,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   Text(
                     'Find Opportunities',
                     style: TextStyle(
-                      color: Color(0xFF5B4DFF),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13.5,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
                     ),
                   ),
-                  SizedBox(width: 1),
+                  SizedBox(width: 2),
                   Icon(Icons.chevron_right,
-                      color: Color(0xFF5B4DFF), size: 16),
+                      color: Colors.black, size: 18),
                 ],
               ),
             ),

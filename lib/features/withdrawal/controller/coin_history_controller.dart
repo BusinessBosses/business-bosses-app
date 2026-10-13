@@ -114,7 +114,7 @@ class CoinHistoryController extends GetxController {
     });
 
     socket.onDisconnect((_) => debugPrint('Connection Disconnection'));
-    socket.onConnectError((dynamic err) => debugPrint(err));
-    socket.onError((dynamic err) => debugPrint(err));
+    socket.onConnectError((dynamic err) => debugPrint('$err'));
+    socket.onError((dynamic err) => debugPrint('$err'));
   }
 }

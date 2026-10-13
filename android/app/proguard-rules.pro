@@ -26,3 +26,8 @@
 # Firebase SDKs
 -keep class com.google.firebase.** { *; }
 -dontwarn com.google.firebase.**
+
+# ProfileInstaller
+-keep class androidx.profileinstaller.** { *; }
+-dontwarn androidx.profileinstaller.**
+

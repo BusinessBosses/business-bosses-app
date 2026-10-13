@@ -42,7 +42,7 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
 
   String country = '';
   String _selectedCategory = '';
-  String _requestType = 'I need customers';
+  String _requestType = 'I need a service provider';
   DateTime? _selectedDeadline;
   final List<PlatformFile> _attachments = <PlatformFile>[];
   List<String> _existingAttachments = <String>[];
@@ -255,11 +255,12 @@ class _AddBuyerRequestsState extends State<AddBuyerRequests> {
                   caption: 'What are you looking for?',
                   hintText: 'Select option',
                   items: const <String>[
-                    '📦 Buy products (Find supplies, products, stock or equipment)',
                     '👤 Hire Someone (Find freelancers, professional or service providers)',
+                    '📦 Buy products (Find supplies, products, stock or equipment)',
                   ],
                   iconName: 'assets/svgs/dropdown.svg',
-                  initialValue: '📦 Buy products (Find supplies, products, stock or equipment)',
+                  initialValue:
+                      '👤 Hire Someone (Find freelancers, professional or service providers)',
                   onChanged: (String? newValue) {
                     setState(() {
                       if (newValue != null && newValue.contains('Hire')) {

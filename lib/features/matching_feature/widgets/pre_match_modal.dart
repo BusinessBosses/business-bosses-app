@@ -84,7 +84,7 @@ class _PreMatchModalState extends State<PreMatchModal> {
                     ),
                     SizedBox(height: 12),
                     Text(
-                      'What business match do you need?',
+                      'What opportunity are you looking for?',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

@@ -216,9 +216,9 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                   children: <Widget>[
                     // Follow button
                     Expanded(
-                      flex: 3,
+                      flex: 1,
                       child: SizedBox(
-                        height: 36,
+                        height: 38,
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -229,7 +229,7 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                             ),
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           onPressed: () async {
@@ -280,7 +280,7 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                                       isFollowing ? 'Following' : 'Follow',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w700,
-                                        fontSize: 12,
+                                        fontSize: 13,
                                         color: primaryColorLT,
                                       ),
                                     ),
@@ -294,19 +294,19 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                     ),
                     const SizedBox(width: 8),
 
-                    // + Get Featured button (solid red pill)
+                    // Get Featured button (matches app standard primary button)
                     Expanded(
-                      flex: 5,
+                      flex: 1,
                       child: SizedBox(
-                        height: 36,
+                        height: 38,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: primaryColorLT,
                             foregroundColor: Colors.white,
                             elevation: 0,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           onPressed: () {
@@ -318,21 +318,15 @@ class _BossOfTheWeekCardState extends State<_BossOfTheWeekCard> {
                                   const GetFeaturedSheet(),
                             );
                           },
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(LucideIcons.plus,
-                                  size: 16, color: Colors.white),
-                              SizedBox(width: 4),
-                              Text(
-                                'Get Featured',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
+                          child: const FittedBox(
+                            child: Text(
+                              'Get Featured',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                                color: Colors.white,
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),

@@ -123,7 +123,7 @@ enum EditProfileMode { complete, edit }
 enum PostForumStatus { like, comment, delete, update }
 
 /// Public Bizcenter site base URL (Business Bosses is separate from Prodatar).
-const String bizCenterBaseUrl = 'https://www.biz-center.io';
+const String bizCenterBaseUrl = 'https://www.prodatar.com';
 
 /// Business health / readiness data lives on Prodatar, not Bizcenter.
 const String proDatarBaseUrl = 'https://www.prodatar.com';

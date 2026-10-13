@@ -291,8 +291,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              final Uri url =
-                                  Uri.parse('$bizCenterBaseUrl/dashboard');
+                              final Uri url = Uri.parse(proDatarBaseUrl);
                               openUrl(url,
                                   mode: LaunchMode.externalApplication);
                             },

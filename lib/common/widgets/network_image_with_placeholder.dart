@@ -8,8 +8,8 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
   final double width;
   final double height;
   final double? iconSize;
-  final int cacheHeight;
-  final int cacheWidth;
+  final int? cacheHeight;
+  final int? cacheWidth;
   final double radius;
   final IconData? placeHolder;
   final Color? color;
@@ -26,8 +26,8 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
     this.width = 120.0,
     this.height = 120.0,
     this.iconSize,
-    this.cacheHeight = 900,
-    this.cacheWidth = 900,
+    this.cacheHeight,
+    this.cacheWidth,
     this.radius = 10.0,
     this.color,
     this.borderColor = Colors.black12,
@@ -39,7 +39,13 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // iconSize = iconSize ?? height;
+    // Downsample decoded bitmap in memory to match display dimensions (~2.5x for HD density)
+    // Avoids massive unneeded texture allocations flagged by Google Play Vitals.
+    final int effectiveMemCacheWidth = cacheWidth ??
+        (width.isFinite && width > 0 ? (width * 2.5).clamp(100, 1080).toInt() : 600);
+    final int effectiveMemCacheHeight = cacheHeight ??
+        (height.isFinite && height > 0 ? (height * 2.5).clamp(100, 1080).toInt() : 600);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: Container(
@@ -54,7 +60,8 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(radius),
           child: CachedNetworkImage(
-            memCacheHeight: cacheHeight,
+            memCacheWidth: effectiveMemCacheWidth,
+            memCacheHeight: effectiveMemCacheHeight,
             imageUrl:
                 imageUrl ?? '' /* == null ? 'https://www.error' : imageUrl*/,
             fit: fit,

@@ -40,31 +40,34 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  // 🔥 Parallelize initializations to speed up startup
-  final dynamic results = await Future.wait(<Future<void>>[
+  // 🔥 Parallelize initializations to speed up startup with safe timeouts for network tasks
+  final dynamic results = await Future.wait(<Future<dynamic>>[
     Firebase.initializeApp(),
     GetStorage.init(),
     dotenv.load(),
-    Purchases.configure(_configuration),
-    FlutterDownloader.initialize(),
+    Purchases.configure(_configuration).catchError((Object e) {
+      debugPrint('Purchases configure error: $e');
+    }),
+    FlutterDownloader.initialize().catchError((Object e) {
+      debugPrint('FlutterDownloader initialize error: $e');
+    }),
     SharedPreferences.getInstance(),
-    CurrencyFormatter.initRates(),
+    // Currency rates fetch shouldn't block the splash screen if network is slow/failing
+    CurrencyFormatter.initRates().timeout(
+      const Duration(seconds: 3),
+      onTimeout: () => debugPrint('CurrencyFormatter.initRates timed out'),
+    ),
   ]);
 
   final SharedPreferences prefs = results[5] as SharedPreferences;
 
-  // Needs both Firebase and dotenv above, so it cannot join that Future.wait.
-  // Never throws — falls back to the bundled .env when the fetch fails.
-  await AppConfig.init();
+  // AppConfig init has its own fallback, but cap with a 3s timeout to protect low-end devices
+  await AppConfig.init().timeout(
+    const Duration(seconds: 3),
+    onTimeout: () => debugPrint('AppConfig.init timed out'),
+  );
 
   // Crashlytics setup.
-  //
-  // Neither of these handlers sees an error that actually terminates the app:
-  // a Flutter build error paints an error widget and an uncaught async error
-  // is swallowed by the zone — the app keeps running in both cases. Reporting
-  // them as fatal made every network blip look like a crash, so they are
-  // recorded as non-fatal. Real fatals (native/ANR) are still captured by
-  // Crashlytics itself and remain in the fatal count.
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
@@ -72,23 +75,26 @@ void main() async {
   };
 
   AnalyticsServices();
-  // Stripe.publishableKey = dotenv.env['STRIPE_PUB_KEY']!;
-  // Stripe.merchantIdentifier = 'merchant.businessbosses';
 
-  // FCM can be unreachable (SERVICE_NOT_AVAILABLE) on a flaky network or a
-  // device with stale Play Services. Unhandled here it reaches
-  // PlatformDispatcher.onError and is logged as a fatal crash.
+  // FCM token and permission handling (fully resilient to network unavailability)
   FirebaseMessaging.instance.getToken().catchError((Object e) {
     debugPrint('Failed to get FCM token: $e');
     return null;
   });
-  FirebaseMessaging.instance.requestPermission();
+  FirebaseMessaging.instance.requestPermission().then((_) {}, onError: (Object e) {
+    debugPrint('Failed to request notification permission: $e');
+  });
   FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
   FirebaseMessaging.instance.getInitialMessage().then(_handleInitialMessage);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  // Show notifications while the app is in the foreground (Android won't
-  // display them automatically; iOS uses presentation options set here).
-  await PushNotificationService.instance.init();
+
+  // Push notification foreground service init protected with timeout
+  await PushNotificationService.instance.init().timeout(
+    const Duration(seconds: 2),
+    onTimeout: () => debugPrint('PushNotificationService init timed out'),
+  ).catchError((Object e) {
+    debugPrint('PushNotificationService init error: $e');
+  });
 
   // 🔥 LOAD PREFS BEFORE runApp
   final String? userId = prefs.getString(Constants.USER_ID);
@@ -102,8 +108,11 @@ void main() async {
   // 🔥 PASS INITIAL ROUTE TO THE APP
   runApp(MyApp(initialRoute: initialRoute));
 
-  await initAppLinks();
+  // Remove splash immediately when runApp renders the widget tree
   FlutterNativeSplash.remove();
+
+  // Deep links can be processed asynchronously without holding splash screen
+  unawaited(initAppLinks());
 }
 
 /// INITIALIZE DEEP LINKING VIA app_links

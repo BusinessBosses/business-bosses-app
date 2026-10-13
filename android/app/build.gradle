@@ -104,4 +104,7 @@ dependencies {
     // implementation 'com.facebook.android:facebook-android-sdk:18.0.3'
     implementation "com.android.billingclient:billing:8.0.0"
     implementation 'com.google.android.material:material:1.13.0' // Or a newer stable version
+
+    // Android Baseline Profiles installer (resolves Google Play DEX optimization vital)
+    implementation 'androidx.profileinstaller:profileinstaller:1.4.1'
 }
