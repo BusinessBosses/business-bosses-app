@@ -25,11 +25,25 @@ class ChatController extends GetxController {
 
   /// GET USER CONVERSATIONS WITH A SECOND PARTY
   List<MessageModel> extractConversations(String counterId, String myId) {
-    return chatMessages
+    final List<MessageModel> raw = chatMessages
         .where((MessageModel element) =>
             (element.senderUid == counterId && element.receiverUid == myId) ||
             (element.senderUid == myId && element.receiverUid == counterId))
         .toList();
+
+    // Deduplicate by messageId
+    final Set<String> seenIds = <String>{};
+    final List<MessageModel> unique = <MessageModel>[];
+    for (final MessageModel msg in raw) {
+      if (msg.messageId.isNotEmpty) {
+        if (seenIds.add(msg.messageId)) {
+          unique.add(msg);
+        }
+      } else {
+        unique.add(msg);
+      }
+    }
+    return unique;
   }
 
   /// SET SEEN STATUS TO A CHAT TO TRUE
@@ -137,9 +151,19 @@ class ChatController extends GetxController {
 
   /// MODELIZE RAW JSON DATA AND STORE TO STATE
   void processDataToState(dynamic cht, String myId) {
-    final List<dynamic> chts = cht;
+    final List<dynamic> chts = cht is List ? cht : <dynamic>[];
+    chatMessages.clear();
+    final Set<String> seenIds = <String>{};
+
     for (int i = chts.length - 1; i >= 0; i--) {
-      chatMessages.add(MessageModel.fromMap(chts[i]));
+      final MessageModel msg = MessageModel.fromMap(chts[i]);
+      if (msg.messageId.isNotEmpty) {
+        if (seenIds.add(msg.messageId)) {
+          chatMessages.add(msg);
+        }
+      } else {
+        chatMessages.add(msg);
+      }
     }
     extractChats(myId);
     update();
@@ -147,10 +171,17 @@ class ChatController extends GetxController {
 
   /// ADD ON SOCKET EVENT
   void newMessage(Map<String, dynamic> data) {
-    chatMessages.insert(0, MessageModel.fromMap(data));
-    extractChats(data['receiverUid']);
-
-    update();
+    final MessageModel newMsg = MessageModel.fromMap(data);
+    // Prevent adding duplicate if message already exists in chatMessages
+    final int existingIndex = chatMessages.indexWhere(
+      (MessageModel m) =>
+          m.messageId.isNotEmpty && m.messageId == newMsg.messageId,
+    );
+    if (existingIndex == -1) {
+      chatMessages.insert(0, newMsg);
+      extractChats(data['receiverUid']);
+      update();
+    }
   }
 
   void addNewChat(Map<String, dynamic> data, UserModel user) {
